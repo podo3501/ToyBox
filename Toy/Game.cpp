@@ -1,9 +1,6 @@
-//
-// Game.cpp
-//
-
 #include "pch.h"
 #include "Game.h"
+#include "Utility.h"
 
 extern void ExitGame() noexcept;
 
@@ -30,22 +27,32 @@ Game::~Game()
 }
 
 // Initialize the Direct3D resources required to run.
-void Game::Initialize(HWND window, int width, int height)
+bool Game::Initialize(HWND window, int width, int height)
 {
-    m_deviceResources->SetWindow(window, width, height);
+    try
+    {
+        m_deviceResources->SetWindow(window, width, height);
 
-    m_deviceResources->CreateDeviceResources();
-    CreateDeviceDependentResources();
+        m_deviceResources->CreateDeviceResources();
+        CreateDeviceDependentResources();
 
-    m_deviceResources->CreateWindowSizeDependentResources();
-    CreateWindowSizeDependentResources();
+        m_deviceResources->CreateWindowSizeDependentResources();
+        CreateWindowSizeDependentResources();
 
-    // TODO: Change the timer settings if you want something other than the default variable timestep mode.
-    // e.g. for 60 FPS fixed timestep update logic, call:
-    /*
-    m_timer.SetFixedTimeStep(true);
-    m_timer.SetTargetElapsedSeconds(1.0 / 60);
-    */
+        // TODO: Change the timer settings if you want something other than the default variable timestep mode.
+        // e.g. for 60 FPS fixed timestep update logic, call:
+        /*
+        m_timer.SetFixedTimeStep(true);
+        m_timer.SetTargetElapsedSeconds(1.0 / 60);
+        */
+    }
+    catch(CException e)
+    {
+        MessageBox(nullptr, e.ToString().c_str(), L"HR Failed", MB_OK);
+        return false;
+    }
+
+    return true;
 }
 
 #pragma region Frame Update

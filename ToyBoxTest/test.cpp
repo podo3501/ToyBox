@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 #include <Windows.h>
-#include "../Toy/Main.h"
+#include "../Toy/MainLoop.h"
 
 TEST(Main, Test) 
 {

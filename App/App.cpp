@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "../Toy/Main.h"
+#include "../Toy/MainLoop.h"
 
 void ReportLiveObjects();
 

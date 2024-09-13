@@ -1,6 +1,7 @@
 #pragma once
 
 class Game;
+class GameWindow;
 
 class MainLoop
 {
@@ -11,7 +12,6 @@ public:
 	int Run();
 	
 private:
-	bool CreateGameWindow(HINSTANCE hInstance, RECT& rc, HWND& hwnd);
-
 	std::unique_ptr<Game> m_game;
+	std::unique_ptr<GameWindow> m_window;
 };

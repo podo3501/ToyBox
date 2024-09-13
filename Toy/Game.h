@@ -24,7 +24,7 @@ public:
     Game& operator= (Game const&) = delete;
 
     // Initialization and management
-    void Initialize(HWND window, int width, int height);
+    bool Initialize(HWND window, int width, int height);
 
     // Basic game loop
     void Tick();
