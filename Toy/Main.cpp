@@ -1,10 +1,7 @@
-//
-// Main.cpp
-//
-
 #include "pch.h"
 #include "Main.h"
 #include "Game.h"
+#include "Utility.h"
 
 using namespace DirectX;
 
@@ -24,83 +21,87 @@ extern "C"
 }
 #endif
 
-namespace
-{
-    std::unique_ptr<Game> g_game;
-}
-
 LPCWSTR g_szAppName = L"Toy";
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ExitGame() noexcept;
 
-// Entry point
-//int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
-//{
-//    return MainLoop(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
-//}
+bool WindowRegisterClass(HINSTANCE hInstance)
+{
+    WNDCLASSEXW wcex = {};
+    wcex.cbSize = sizeof(WNDCLASSEXW);
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = WndProc;
+    wcex.hInstance = hInstance;
+    wcex.hIcon = LoadIconW(hInstance, L"IDI_ICON");
+    wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+    wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
+    wcex.lpszClassName = L"ToyWindowClass";
+    wcex.hIconSm = LoadIconW(wcex.hInstance, L"IDI_ICON");
+    if (!RegisterClassExW(&wcex))
+        return false;
 
-int MainLoop(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+    return true;
+}
+
+MainLoop::MainLoop() :
+    m_game{ nullptr } {}
+MainLoop::~MainLoop() = default;
+
+bool MainLoop::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    if (!XMVerifyCPUSupport())
-        return 1;
+    ReturnIfFalse(XMVerifyCPUSupport())
 
 #ifdef __MINGW32__
-    if (FAILED(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED)))
-        return 1;
+    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
 #else
     Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
-    if (FAILED(initialize))
-        return 1;
+    ReturnIfFailed(initialize);
 #endif
 
-    g_game = std::make_unique<Game>();
+    m_game = std::make_unique<Game>();
+    
+    ReturnIfFalse(WindowRegisterClass(hInstance));
 
-    // Register class and create window
-    {
-        // Register class
-        WNDCLASSEXW wcex = {};
-        wcex.cbSize = sizeof(WNDCLASSEXW);
-        wcex.style = CS_HREDRAW | CS_VREDRAW;
-        wcex.lpfnWndProc = WndProc;
-        wcex.hInstance = hInstance;
-        wcex.hIcon = LoadIconW(hInstance, L"IDI_ICON");
-        wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
-        wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-        wcex.lpszClassName = L"ToyWindowClass";
-        wcex.hIconSm = LoadIconW(wcex.hInstance, L"IDI_ICON");
-        if (!RegisterClassExW(&wcex))
-            return 1;
+    HWND hwnd{ 0 };
+    RECT rc{};
+    ReturnIfFalse(CreateGameWindow(hInstance, rc, hwnd));
 
-        // Create window
-        int w, h;
-        g_game->GetDefaultSize(w, h);
+    ShowWindow(hwnd, nCmdShow);
+    // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
 
-        RECT rc = { 0, 0, static_cast<LONG>(w), static_cast<LONG>(h) };
+    GetClientRect(hwnd, &rc);
 
-        AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+    m_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
-        HWND hwnd = CreateWindowExW(0, L"ToyWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
-            nullptr, nullptr, hInstance,
-            g_game.get());
-        // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"ToyWindowClass", g_szAppName, WS_POPUP,
-        // to default to fullscreen.
+    return true;
+}
 
-        if (!hwnd)
-            return 1;
+bool MainLoop::CreateGameWindow(HINSTANCE hInstance, RECT& rc, HWND& hwnd)
+{
+    int w, h;
+    m_game->GetDefaultSize(w, h);
 
-        ShowWindow(hwnd, nCmdShow);
-        // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
+    rc = { 0, 0, static_cast<LONG>(w), static_cast<LONG>(h) };
 
-        GetClientRect(hwnd, &rc);
+    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-        g_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top);
-    }
+    hwnd = CreateWindowExW(0, L"ToyWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
+        nullptr, nullptr, hInstance,
+        m_game.get());
+    // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"ToyWindowClass", g_szAppName, WS_POPUP,
+    // to default to fullscreen.
+    if (!hwnd) return false;
 
+    return true;
+}
+
+int MainLoop::Run()
+{
     // Main message loop
     MSG msg = {};
     while (WM_QUIT != msg.message)
@@ -112,11 +113,11 @@ int MainLoop(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int
         }
         else
         {
-            g_game->Tick();
+            m_game->Tick();
         }
     }
 
-    g_game.reset();
+    m_game.reset();
 
     return static_cast<int>(msg.wParam);
 }

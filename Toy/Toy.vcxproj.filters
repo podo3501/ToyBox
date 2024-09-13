@@ -22,6 +22,7 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

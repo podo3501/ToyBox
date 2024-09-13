@@ -13,7 +13,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 #endif
 
 	//ToDo: 여기에 필요한 것을 초기화
-	auto result = MainLoop(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
+	MainLoop mainLoop;
+	auto initResult = mainLoop.Initialize(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
+	if (!initResult)
+		return 1;
+
+	auto result = mainLoop.Run();
 
 #if defined(DEBUG) | defined(_DEBUG)
 	ReportLiveObjects();
