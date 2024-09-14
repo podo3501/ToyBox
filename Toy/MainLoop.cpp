@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MainLoop.h"
 #include "Game.h"
-#include "GameWindow.h"
+#include "Window.h"
 #include "Utility.h"
 
 using namespace DirectX;
@@ -26,11 +26,8 @@ MainLoop::MainLoop() :
     m_game{ nullptr } {}
 MainLoop::~MainLoop() = default;
 
-bool MainLoop::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
+bool MainLoop::Initialize(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
-
     ReturnIfFalse(XMVerifyCPUSupport())
 
 #ifdef __MINGW32__
@@ -40,8 +37,8 @@ bool MainLoop::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR l
     ReturnIfFailed(initialize);
 #endif
 
-    m_game = std::make_unique<Game>();
-    m_window = std::make_unique<GameWindow>();
+    m_game = std::make_unique<Game>(resPath);
+    m_window = std::make_unique<Window>();
     
     HWND hwnd{ 0 };
     RECT rc{};

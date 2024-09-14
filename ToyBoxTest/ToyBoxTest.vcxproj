@@ -117,6 +117,11 @@
   <ItemGroup>
     <ClInclude Include="Testsuite.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Toy\Toy.vcxproj">
+      <Project>{ce88cfb8-f480-4ead-b13e-d54c92e8fde8}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\gmock.1.11.0\build\native\gmock.targets" Condition="Exists('..\packages\gmock.1.11.0\build\native\gmock.targets')" />

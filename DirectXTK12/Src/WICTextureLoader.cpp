@@ -164,10 +164,18 @@ namespace DirectX
     }
 }
 
+INIT_ONCE s_initOnce = INIT_ONCE_STATIC_INIT;
+
+namespace DirectX
+{
+    void WICOnceInitialize()
+    {
+        s_initOnce = INIT_ONCE_STATIC_INIT;
+    }
+}
+
 IWICImagingFactory2* DirectX::DX12::Internal::GetWIC() noexcept
 {
-    static INIT_ONCE s_initOnce = INIT_ONCE_STATIC_INIT;
-
     IWICImagingFactory2* factory = nullptr;
     if (!InitOnceExecuteOnce(
         &s_initOnce,

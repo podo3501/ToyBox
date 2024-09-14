@@ -14,7 +14,7 @@ class Game final : public DX::IDeviceNotify
 {
 public:
 
-    Game() noexcept(false);
+    Game(const std::wstring& resPath) noexcept(false);
     ~Game();
 
     Game(Game&&) = default;
@@ -55,6 +55,7 @@ private:
     void CreateDeviceDependentResources();
     void CreateWindowSizeDependentResources();
 
+    std::wstring m_resPath{};
     // Device resources.
     std::unique_ptr<DX::DeviceResources>        m_deviceResources;
 

@@ -2,7 +2,19 @@
 #include <Windows.h>
 #include "../Toy/MainLoop.h"
 
-TEST(Main, Test) 
+//여러번 실행해서 오동작이 나는지 확인한다.
+TEST(MainLoop, MultipleInitializeTest)
 {
-	//텍스춰를 가로세로 지정해서 화면에 그린다.	
+	for(int i = 1; i < 5; ++i)
+	{
+		MainLoop mainLoop;
+		EXPECT_TRUE(mainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE));
+	}
+}
+
+TEST(MainLoop, RunTest)
+{
+	MainLoop mainLoop;
+	EXPECT_TRUE(mainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_SHOWDEFAULT));
+	EXPECT_EQ(mainLoop.Run(), 0);
 }

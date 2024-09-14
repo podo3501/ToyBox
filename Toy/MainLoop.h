@@ -1,17 +1,17 @@
 #pragma once
 
 class Game;
-class GameWindow;
+class Window;
 
 class MainLoop
 {
 public:
 	MainLoop();
 	~MainLoop();
-	bool Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow);
+	bool Initialize(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow);
 	int Run();
 	
 private:
 	std::unique_ptr<Game> m_game;
-	std::unique_ptr<GameWindow> m_window;
+	std::unique_ptr<Window> m_window;
 };

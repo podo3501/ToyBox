@@ -8,13 +8,16 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR lpCmdLine,
 	_In_ int nShowCmd)
 {
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
 	//ToDo: 여기에 필요한 것을 초기화
 	MainLoop mainLoop;
-	auto initResult = mainLoop.Initialize(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
+	auto initResult = mainLoop.Initialize(hInstance, L"../Resources/", nShowCmd);
 	if (!initResult)
 		return 1;
 

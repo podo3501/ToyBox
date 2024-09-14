@@ -8,8 +8,11 @@ using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
 
-Game::Game() noexcept(false)
+Game::Game(const std::wstring& resPath) noexcept(false) : 
+    m_resPath{ resPath }
 {
+    WICOnceInitialize();
+
     m_deviceResources = std::make_unique<DX::DeviceResources>();
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
     //   Add DX::DeviceResources::c_AllowTearing to opt-in to variable rate displays.
@@ -227,8 +230,9 @@ void Game::CreateDeviceDependentResources()
 
     resourceUpload.Begin();
 
+    std::wstring filename = m_resPath + std::wstring(L"cat.png");
     DX::ThrowIfFailed(
-        CreateWICTextureFromFile(device, resourceUpload, L"cat.png", m_texture.ReleaseAndGetAddressOf()));
+        CreateWICTextureFromFile(device, resourceUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
 
     CreateShaderResourceView(device, m_texture.Get(), m_resourceDescriptors->GetCpuHandle(Descriptors::Cat));
 

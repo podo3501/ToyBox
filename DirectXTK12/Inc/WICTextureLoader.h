@@ -57,6 +57,9 @@ namespace DirectX
 
     class ResourceUploadBatch;
 
+    //initialize 's_initOnce' static variable for google test 
+    void WICOnceInitialize();
+
     // Standard version
     HRESULT __cdecl LoadWICTextureFromMemory(
         _In_ ID3D12Device* d3dDevice,

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "GameWindow.h"
+#include "Window.h"
 #include "Game.h"
 #include "Utility.h"
 
@@ -8,7 +8,7 @@ LPCWSTR g_szAppName = L"Toy";
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ExitGame() noexcept;
 
-bool WindowRegisterClass(HINSTANCE hInstance)
+bool WindowRegisterClass(HINSTANCE hInstance, const std::wstring& className)
 {
     WNDCLASSEXW wcex = {};
     wcex.cbSize = sizeof(WNDCLASSEXW);
@@ -18,7 +18,7 @@ bool WindowRegisterClass(HINSTANCE hInstance)
     wcex.hIcon = LoadIconW(hInstance, L"IDI_ICON");
     wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
     wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-    wcex.lpszClassName = L"ToyWindowClass";
+    wcex.lpszClassName = className.c_str();
     wcex.hIconSm = LoadIconW(wcex.hInstance, L"IDI_ICON");
     if (!RegisterClassExW(&wcex))
         return false;
@@ -26,10 +26,19 @@ bool WindowRegisterClass(HINSTANCE hInstance)
     return true;
 }
 
-bool GameWindow::Create(HINSTANCE hInstance, int nCmdShow, Game* game, RECT& rc, HWND& hwnd)
+Window::~Window()
 {
-    ReturnIfFalse(WindowRegisterClass(hInstance));
+    DestroyWindow(m_wnd);
+    UnregisterClass(m_className.c_str(), m_hInstance);
+}
+
+bool Window::Create(HINSTANCE hInstance, int nCmdShow, const Game* game, RECT& rc, HWND& hwnd)
+{
+    ReturnIfFalse(WindowRegisterClass(hInstance, m_className));
     ReturnIfFalse(CreateGameWindow(hInstance, game, rc, hwnd));
+
+    m_wnd = hwnd;
+    m_hInstance = hInstance;
 
     ShowWindow(hwnd, nCmdShow);
     // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
@@ -39,7 +48,7 @@ bool GameWindow::Create(HINSTANCE hInstance, int nCmdShow, Game* game, RECT& rc,
     return true;
 }
 
-bool GameWindow::CreateGameWindow(HINSTANCE hInstance, Game* game, RECT& rc, HWND& hwnd)
+bool Window::CreateGameWindow(HINSTANCE hInstance, const Game* game, RECT& rc, HWND& hwnd)
 {
     int w, h;
     game->GetDefaultSize(w, h);
@@ -51,7 +60,7 @@ bool GameWindow::CreateGameWindow(HINSTANCE hInstance, Game* game, RECT& rc, HWN
     hwnd = CreateWindowExW(0, L"ToyWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
         nullptr, nullptr, hInstance,
-        game);
+        const_cast<Game*>(game));
     // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"ToyWindowClass", g_szAppName, WS_POPUP,
     // to default to fullscreen.
     if (!hwnd) return false;

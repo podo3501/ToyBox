@@ -23,7 +23,7 @@
     </ClInclude>
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="Utility.h" />
-    <ClInclude Include="GameWindow.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -32,7 +32,7 @@
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="GameWindow.cpp" />
+    <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
