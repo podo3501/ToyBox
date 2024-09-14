@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+#include "pch.h"
 #include "Testsuite.h"
 #include <windows.h>
 
@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	//쓰레드가 돌아갈때 강제로 종료할 경우 프로그램이 살아있는 경우가 있어서 
 	//다음 테스트에 오동작 하는 경우가 있다. 그럴때를 대비해서 프로그램이 띄워져 있는지 체크
 	HANDLE Mutex;
-	std::wstring progMutex{ L"ToyBox Test" }; // 프로젝트명
+	std::wstring progMutex{ L"Toy Test" }; // 프로젝트명
 	if ((Mutex = OpenMutex(MUTEX_ALL_ACCESS, false, progMutex.c_str())) == NULL)
 		Mutex = CreateMutex(NULL, true, progMutex.c_str());
 	else

@@ -3,3 +3,21 @@
 테스트에서 그 값을 읽으면 초기화가 안 되어서 기대한 값이 아니라 2라는 값이 나오는 것처럼 static 변수
 를 초기화 해야 하는 일이 생겼다. 그래서 WICTextureLoader.h와 cpp를 수정해서 static 변수를 초기화 하는
 WICOnceInitialize함수를 추가했다.
+
+google test(gmock)에서 pch를 사용하는 방법.
+NuGet에서 gmock 패키지를 받아서 설치 했을때 .cc파일이 프로젝트에 합류됨으로써 컴파일을 하면 .pch
+파일을 include 하라고 나오는데 google test가 ms 전용이 아니기 때문에 pch(pre compile header)를 적
+용시킬수는 없기 때문이다. cmake를 사용하면 gmock과 gtest프로젝트등 여러개가 만들어지는데 이렇게
+하면 아마 pch를 사용할 수 있을 것이다. 내가 한 방법은 깃허브에서 코드를 다운 받은후 빈 프로젝트를 
+만들어서 .cc 파일 (gmock-all, gtest-all 두개만 컴파일 하면 된다. 왜냐면 다른 .cc파일을 all 파일이 다 인
+클루드 하기 때문이다)을 추가한후, 그 프로젝트를 Test프로젝트에서 참조했다. Test 프로젝트는 만들때 
+google test 프로젝트로 만든후 NuGet에서 설치돼 있는 gtest(이건 mock이 없다)를 삭제하고 main을 작
+성해 준다.
+--------------요약--------------
+1. 빈 프로젝트 GoogletTestLib 만들기
+2. google test 다운받아서 cc파일 추가하기
+3. include 폴더 디렉토리 설정하기
+4. 컴파일 되는지 확인
+5. google test 프로젝트로 프로젝트 만들기
+6. GoogletTestLib을 참조로 연결
+7. main함수 작성
