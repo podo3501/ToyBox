@@ -1,5 +1,5 @@
-CreateWICTextureFromFile¾È¿¡ GetWICÇÔ¼ö°¡ InitOnceExecuteOnce·Î Factory¸¦ »ý¼ºÇÏ´Âµ¥ ½Ì±ÛÅæ ÆÐÅÏ
-À» ¾²±â ¶§¹®¿¡ Test°¡ µ¶¸³ÀûÀ¸·Î ÀÛµ¿ÇÏÁö ¸øÇÑ´Ù. ¿¹¸¦µé¸é 1¹ø Å×½ºÆ®¿¡¼­ static º¯¼ö¿¡ 2¸¦ ³Ö°í 2¹ø
-Å×½ºÆ®¿¡¼­ ±× °ªÀ» ÀÐÀ¸¸é ÃÊ±âÈ­°¡ ¾È µÇ¾î¼­ ±â´ëÇÑ °ªÀÌ ¾Æ´Ï¶ó 2¶ó´Â °ªÀÌ ³ª¿À´Â °ÍÃ³·³ static º¯¼ö
-¸¦ ÃÊ±âÈ­ ÇØ¾ß ÇÏ´Â ÀÏÀÌ »ý°å´Ù. ±×·¡¼­ WICTextureLoader.h¿Í cpp¸¦ ¼öÁ¤ÇØ¼­ static º¯¼ö¸¦ ÃÊ±âÈ­ ÇÏ´Â
-WICOnceInitializeÇÔ¼ö¸¦ Ãß°¡Çß´Ù.
+ï»¿CreateWICTextureFromFileì•ˆì— GetWICí•¨ìˆ˜ê°€ InitOnceExecuteOnceë¡œ Factoryë¥¼ ìƒì„±í•˜ëŠ”ë° ì‹±ê¸€í†¤ íŒ¨í„´
+ì„ ì“°ê¸° ë•Œë¬¸ì— Testê°€ ë…ë¦½ì ìœ¼ë¡œ ìž‘ë™í•˜ì§€ ëª»í•œë‹¤. ì˜ˆë¥¼ë“¤ë©´ 1ë²ˆ í…ŒìŠ¤íŠ¸ì—ì„œ static ë³€ìˆ˜ì— 2ë¥¼ ë„£ê³  2ë²ˆ
+í…ŒìŠ¤íŠ¸ì—ì„œ ê·¸ ê°’ì„ ì½ìœ¼ë©´ ì´ˆê¸°í™”ê°€ ì•ˆ ë˜ì–´ì„œ ê¸°ëŒ€í•œ ê°’ì´ ì•„ë‹ˆë¼ 2ë¼ëŠ” ê°’ì´ ë‚˜ì˜¤ëŠ” ê²ƒì²˜ëŸ¼ static ë³€ìˆ˜
+ë¥¼ ì´ˆê¸°í™” í•´ì•¼ í•˜ëŠ” ì¼ì´ ìƒê²¼ë‹¤. ê·¸ëž˜ì„œ WICTextureLoader.hì™€ cppë¥¼ ìˆ˜ì •í•´ì„œ static ë³€ìˆ˜ë¥¼ ì´ˆê¸°í™” í•˜ëŠ”
+WICOnceInitializeí•¨ìˆ˜ë¥¼ ì¶”ê°€í–ˆë‹¤.
