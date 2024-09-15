@@ -1,11 +1,10 @@
 #include "pch.h"
-#include <Windows.h>
 #include "../Toy/MainLoop.h"
 
 //여러번 실행해서 오동작이 나는지 확인한다.
 TEST(MainLoop, MultipleInitializeTest)
 {
-	for(int i = 1; i < 5; ++i)
+	for(int i = 1; i < 2; ++i)
 	{
 		MainLoop mainLoop;
 		EXPECT_TRUE(mainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE));

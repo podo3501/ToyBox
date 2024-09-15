@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Testsuite.h"
-#include <windows.h>
 
 GlobalEnv::GlobalEnv() = default;
 GlobalEnv::~GlobalEnv() = default;

@@ -1,4 +1,8 @@
 ﻿--여러번 실행했을때 Initialize 안되는 부분 수정하기(텍스춰를 올릴때 문제가 생기는듯)
 --리소스 디렉토리 맞추기
 --google test에서 pch를 사용하는 방법을 찾아내자.
-message에서 PostQuitMessage 메세지가 남아있어서 다음 테스트에 영향을 미치는듯 하다.
+--message에서 PostQuitMessage 메세지가 남아있어서 다음 테스트에 영향을 미치는듯 하다.
+--wndProcListener 만들기
+--mouse 클래스 연결
+game에서 model과 view를 분리시킨다.
+WndProc정리

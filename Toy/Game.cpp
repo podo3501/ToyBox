@@ -8,8 +8,35 @@ using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
 
+LRESULT Game::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(hWnd);
+
+    switch (message)
+    {
+    case WM_ACTIVATE:
+    case WM_ACTIVATEAPP:
+    case WM_INPUT:
+    case WM_MOUSEMOVE:
+    case WM_LBUTTONDOWN:
+    case WM_LBUTTONUP:
+    case WM_RBUTTONDOWN:
+    case WM_RBUTTONUP:
+    case WM_MBUTTONDOWN:
+    case WM_MBUTTONUP:
+    case WM_MOUSEWHEEL:
+    case WM_XBUTTONDOWN:
+    case WM_XBUTTONUP:
+    case WM_MOUSEHOVER:
+        Mouse::ProcessMessage(message, wParam, lParam);
+        break;
+    }
+
+    return 0;
+}
+
 Game::Game(const std::wstring& resPath) noexcept(false) : 
-    m_resPath{ resPath }
+    m_resPath{ resPath }, m_mouse{ nullptr }
 {
     WICOnceInitialize();
 
@@ -41,6 +68,9 @@ bool Game::Initialize(HWND window, int width, int height)
 
         m_deviceResources->CreateWindowSizeDependentResources();
         CreateWindowSizeDependentResources();
+
+        m_mouse = std::make_unique<Mouse>();
+        m_mouse->SetWindow(window);
 
         // TODO: Change the timer settings if you want something other than the default variable timestep mode.
         // e.g. for 60 FPS fixed timestep update logic, call:
@@ -79,6 +109,12 @@ void Game::Update(DX::StepTimer const& timer)
 
     // TODO: Add your game logic here.
     elapsedTime;
+
+    Mouse::State state = m_mouse->GetState();
+    if (state.x > 0)
+    {
+        int a = 1;
+    }
 
     PIXEndEvent();
 }

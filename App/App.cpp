@@ -34,10 +34,10 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 void ReportLiveObjects()
 {
 	HMODULE dxgidebugdll = GetModuleHandleW(L"dxgidebug.dll");
-	decltype(&DXGIGetDebugInterface) GetDebugInterface = reinterpret_cast<decltype(&DXGIGetDebugInterface)>(GetProcAddress(dxgidebugdll, "DXGIGetDebugInterface"));
+	if (dxgidebugdll == NULL) return;
 
-	if (GetDebugInterface == nullptr)
-		return;
+	decltype(&DXGIGetDebugInterface) GetDebugInterface = reinterpret_cast<decltype(&DXGIGetDebugInterface)>(GetProcAddress(dxgidebugdll, "DXGIGetDebugInterface"));
+	if (GetDebugInterface == nullptr) return;
 
 	IDXGIDebug* debug;
 	GetDebugInterface(IID_PPV_ARGS(&debug));

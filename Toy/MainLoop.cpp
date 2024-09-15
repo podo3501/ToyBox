@@ -28,8 +28,17 @@ MainLoop::~MainLoop() = default;
 
 bool MainLoop::Initialize(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
 {
-    ReturnIfFalse(XMVerifyCPUSupport())
+    ReturnIfFalse(XMVerifyCPUSupport());
+    ReturnIfFalse(InitializeClass(hInstance, resPath, nCmdShow));
 
+    AddWinProcListener();
+
+    return true;
+}
+
+bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
+{
+    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
 #ifdef __MINGW32__
     ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
 #else
@@ -39,13 +48,19 @@ bool MainLoop::Initialize(HINSTANCE hInstance, const std::wstring& resPath, int 
 
     m_game = std::make_unique<Game>(resPath);
     m_window = std::make_unique<Window>();
-    
+
     HWND hwnd{ 0 };
     RECT rc{};
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, m_game.get(), rc, hwnd));
     ReturnIfFalse(m_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top));
 
     return true;
+}
+
+void MainLoop::AddWinProcListener()
+{
+    m_window->AddWndProcListener([&g = m_game](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
+        return g->WndProc(wnd, msg, wp, lp); });
 }
 
 int MainLoop::Run()

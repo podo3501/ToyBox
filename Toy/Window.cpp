@@ -5,31 +5,27 @@
 
 LPCWSTR g_szAppName = L"Toy";
 
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ExitGame() noexcept;
 
-bool WindowRegisterClass(HINSTANCE hInstance, const std::wstring& className)
+//혹시나 있을 큐 안에 메세지 내용을 비운다.
+void ClearWindowMessageQueue()
 {
-    WNDCLASSEXW wcex = {};
-    wcex.cbSize = sizeof(WNDCLASSEXW);
-    wcex.style = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc = WndProc;
-    wcex.hInstance = hInstance;
-    wcex.hIcon = LoadIconW(hInstance, L"IDI_ICON");
-    wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
-    wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-    wcex.lpszClassName = className.c_str();
-    wcex.hIconSm = LoadIconW(wcex.hInstance, L"IDI_ICON");
-    if (!RegisterClassExW(&wcex))
-        return false;
+    MSG msg;
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {}
+}
 
-    return true;
+Window::Window()
+{
+    AddWndProcListener([wnd = this](HWND w, UINT m, WPARAM wp, LPARAM lp)->LRESULT {
+        return wnd->MsgProc(w, m, wp, lp); });
 }
 
 Window::~Window()
 {
+    m_wndProcListeners.clear();
     DestroyWindow(m_wnd);
     UnregisterClass(m_className.c_str(), m_hInstance);
+    ClearWindowMessageQueue();
 }
 
 bool Window::Create(HINSTANCE hInstance, int nCmdShow, const Game* game, RECT& rc, HWND& hwnd)
@@ -44,6 +40,31 @@ bool Window::Create(HINSTANCE hInstance, int nCmdShow, const Game* game, RECT& r
     // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
 
     GetClientRect(hwnd, &rc);
+
+    return true;
+}
+
+Window* gWindow = nullptr;
+bool Window::WindowRegisterClass(HINSTANCE hInstance, const std::wstring& className)
+{
+    gWindow = this;
+    //캡쳐가 있으면( [this]하면 될것 같으나 ) WNDPROC으로 변환이 되지 않는다. 그래서 정적변수활용
+    auto windowProc = [](HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)->LRESULT {
+        return gWindow->WndProc(hwnd, msg, wParam, lParam);
+        };
+
+    WNDCLASSEXW wcex = {};
+    wcex.cbSize = sizeof(WNDCLASSEXW);
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = windowProc;
+    wcex.hInstance = hInstance;
+    wcex.hIcon = LoadIconW(hInstance, L"IDI_ICON");
+    wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+    wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
+    wcex.lpszClassName = className.c_str();
+    wcex.hIconSm = LoadIconW(wcex.hInstance, L"IDI_ICON");
+    if (!RegisterClassExW(&wcex))
+        return false;
 
     return true;
 }
@@ -69,7 +90,20 @@ bool Window::CreateGameWindow(HINSTANCE hInstance, const Game* game, RECT& rc, H
 }
 
 // Windows procedure
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    for (auto wndProcListener : m_wndProcListeners)
+    {
+        LRESULT result{ 0 };
+        result = wndProcListener(hWnd, message, wParam, lParam);
+        if (result != 0)
+            return result;
+    }
+
+    return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+LRESULT CALLBACK Window::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static bool s_in_sizemove = false;
     static bool s_in_suspend = false;
@@ -239,8 +273,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // to any mnemonic or accelerator key. Ignore so we don't produce an error beep.
         return MAKELRESULT(0, MNC_CLOSE);
     }
-
-    return DefWindowProc(hWnd, message, wParam, lParam);
+    
+    return 0;
 }
 
 // Exit helper

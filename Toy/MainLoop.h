@@ -12,6 +12,9 @@ public:
 	int Run();
 	
 private:
+	bool InitializeClass(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow);
+	void AddWinProcListener();
+
 	std::unique_ptr<Game> m_game;
 	std::unique_ptr<Window> m_window;
 };
