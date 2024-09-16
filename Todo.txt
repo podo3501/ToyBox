@@ -4,5 +4,8 @@
 --message에서 PostQuitMessage 메세지가 남아있어서 다음 테스트에 영향을 미치는듯 하다.
 --wndProcListener 만들기
 --mouse 클래스 연결
+--WndProc정리
+--마우스가 이미지에 올라갔을때 이미지를 바꾼다.
+간단한 버튼 클래스 만들기
 game에서 model과 view를 분리시킨다.
-WndProc정리
+

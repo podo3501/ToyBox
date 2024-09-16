@@ -44,9 +44,6 @@ public:
     void OnDisplayChange();
     void OnWindowSizeChanged(int width, int height);
 
-    // Properties
-    void GetDefaultSize( int& width, int& height ) const noexcept;
-
 private:
 
     void Update(DX::StepTimer const& timer);
@@ -69,15 +66,24 @@ private:
     std::unique_ptr<DirectX::Mouse> m_mouse;
 
     std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
-    Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
-
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_texture1;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_texture2;
+    
     enum Descriptors
     {
-        Cat,
+        img_1,
+        img_2,
         Count
     };
 
     std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
     DirectX::SimpleMath::Vector2 m_screenPos;
     DirectX::SimpleMath::Vector2 m_origin;
+
+    bool m_on{ false };
+    
+    bool m_sizemove{ false };
+    bool m_suspend{ false };
+    bool m_minimized{ false };
+    bool m_fullscreen{ false };
 };

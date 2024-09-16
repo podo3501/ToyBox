@@ -51,7 +51,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
 
     HWND hwnd{ 0 };
     RECT rc{};
-    ReturnIfFalse(m_window->Create(hInstance, nCmdShow, m_game.get(), rc, hwnd));
+    ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
     ReturnIfFalse(m_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top));
 
     return true;
