@@ -7,6 +7,8 @@
 #include "DeviceResources.h"
 #include "StepTimer.h"
 
+class Texture;
+class Button;
 
 // A basic game implementation that creates a D3D12 device and
 // provides a game loop.
@@ -66,6 +68,8 @@ private:
     std::unique_ptr<DirectX::Mouse> m_mouse;
 
     std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
+    std::unique_ptr<Texture> m_texture;
+    std::unique_ptr<Button> m_button;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_texture1;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_texture2;
     
