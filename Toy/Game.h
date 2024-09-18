@@ -77,6 +77,7 @@ private:
     {
         img_1,
         img_2,
+        img_3,
         Count
     };
 

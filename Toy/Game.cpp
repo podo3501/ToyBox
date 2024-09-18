@@ -35,9 +35,10 @@ public:
     void Draw(DirectX::SpriteBatch* spriteBatch, DirectX::SimpleMath::Vector2 screenPos)
     {
         auto size = GetTextureSize(m_texture.Get());
-        spriteBatch->Draw(m_descHeap->GetGpuHandle(m_descHeapIdx),
-            GetTextureSize(m_texture.Get()),
-            screenPos, nullptr, Colors::White, 0.f, { float(size.x / 2), float(size.y / 2) });
+        //RECT rect = { 0, 0, static_cast<LONG>(size.x / 2), static_cast<LONG>(size.y / 2) };
+        RECT rect = { 0, 0, static_cast<LONG>(size.x), static_cast<LONG>(size.y) };
+        spriteBatch->Draw(m_descHeap->GetGpuHandle(m_descHeapIdx), size,
+            screenPos, &rect, Colors::White, 0.f, { float(size.x / 2), float(size.y / 2) });
     }
 
 private:
@@ -51,6 +52,7 @@ enum class ButtonState
 {
     BT_Normal,
     BT_Over,
+    BT_Click,
 };
 
 class Button
@@ -59,7 +61,7 @@ public:
     Button(ID3D12Device* device, DirectX::DescriptorHeap* descHeap) :
         m_device{ device }, m_descHeap{ descHeap } {}
 
-    void SetTexture(std::unique_ptr<Texture> normal, std::unique_ptr<Texture> over)
+    void SetTexture(std::unique_ptr<Texture> normal, std::unique_ptr<Texture> over, std::unique_ptr<Texture> click)
     {
         XMUINT2 size = normal->GetSize();
 
@@ -68,6 +70,7 @@ public:
 
         m_textures.insert(std::make_pair(ButtonState::BT_Normal, std::move(normal)));
         m_textures.insert(std::make_pair(ButtonState::BT_Over, std::move(over)));
+        m_textures.insert(std::make_pair(ButtonState::BT_Click, std::move(click)));
     }
 
     void Reset()
@@ -77,30 +80,30 @@ public:
             });
     }
 
-    void Update(int x, int y)
+    void Update(const Mouse::State& state, const DirectX::SimpleMath::Vector2& pos)
     {
+        int x = state.x - static_cast<int>(pos.x);
+        int y = state.y - static_cast<int>(pos.y);
+
+        m_state = ButtonState::BT_Normal;
+        
         if ((-m_origin.x < x && x < m_origin.x) && (-m_origin.y < y && y < m_origin.y))
-            m_over = true;
-        else
-            m_over = false;
+            m_state = ButtonState::BT_Over;
+        
+        if (m_state == ButtonState::BT_Over && state.leftButton)
+            m_state = ButtonState::BT_Click;
     }
 
     void Render(DirectX::SpriteBatch* spriteBatch, const DirectX::SimpleMath::Vector2& screenPos)
     {
-        Texture* curTex{ nullptr };
-        if (!m_over)
-            curTex = m_textures[ButtonState::BT_Normal].get();
-        else
-            curTex = m_textures[ButtonState::BT_Over].get();
-
-        curTex->Draw(spriteBatch, screenPos);
+        m_textures[m_state]->Draw(spriteBatch, screenPos);
     }
 
 private:
     ID3D12Device* m_device;
     DirectX::DescriptorHeap* m_descHeap;
     DirectX::SimpleMath::Vector2 m_origin{ 0, 0 };
-    bool m_over{ false };
+    ButtonState m_state{ ButtonState::BT_Normal };
 
     std::map<ButtonState, std::unique_ptr<Texture>> m_textures;
 };
@@ -319,15 +322,7 @@ void Game::Update(DX::StepTimer const& timer)
     elapsedTime;
 
     Mouse::State state = m_mouse->GetState();
-    /*if ((m_screenPos.x - m_origin.x < state.x && state.x < m_screenPos.x + m_origin.x) &&
-        (m_screenPos.y - m_origin.y < state.y && state.y < m_screenPos.y + m_origin.y))
-    {
-        m_on = true;
-    }
-    else
-        m_on = false;*/
-
-    m_button->Update(state.x - static_cast<int>(m_screenPos.x), state.y - static_cast<int>(m_screenPos.y));
+    m_button->Update(state, m_screenPos);
 
     PIXEndEvent();
 }
@@ -467,6 +462,7 @@ void Game::CreateDeviceDependentResources()
 
     std::unique_ptr<Texture> m_tex1 = std::make_unique<Texture>(device, m_resourceDescriptors.get());
     std::unique_ptr<Texture> m_tex2 = std::make_unique<Texture>(device, m_resourceDescriptors.get());
+    std::unique_ptr<Texture> m_tex3 = std::make_unique<Texture>(device, m_resourceDescriptors.get());
     m_button = std::make_unique<Button>(device, m_resourceDescriptors.get());
 
     ResourceUploadBatch resourceUpload(device);
@@ -475,10 +471,12 @@ void Game::CreateDeviceDependentResources()
 
     std::wstring filename1 = m_resPath + std::wstring(L"1.png");
     std::wstring filename2 = m_resPath + std::wstring(L"2.png");
+    std::wstring filename3 = m_resPath + std::wstring(L"3.png");
     m_tex1->Upload(resourceUpload, 0, filename1);
     m_tex2->Upload(resourceUpload, 1, filename2);
+    m_tex3->Upload(resourceUpload, 2, filename3);
 
-    m_button->SetTexture(std::move(m_tex1), std::move(m_tex2));
+    m_button->SetTexture(std::move(m_tex1), std::move(m_tex2), std::move(m_tex3));
 
     RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
 
