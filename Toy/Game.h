@@ -5,10 +5,14 @@
 #pragma once
 
 #include "DeviceResources.h"
-#include "StepTimer.h"
 
 class Texture;
 class Button;
+
+namespace DX
+{
+    class StepTimer;
+}
 
 // A basic game implementation that creates a D3D12 device and
 // provides a game loop.
@@ -48,7 +52,7 @@ public:
 
 private:
 
-    void Update(DX::StepTimer const& timer);
+    void Update(DX::StepTimer* timer);
     void Render();
 
     void Clear();
@@ -58,10 +62,10 @@ private:
 
     std::wstring m_resPath{};
     // Device resources.
-    std::unique_ptr<DX::DeviceResources>        m_deviceResources;
+    std::unique_ptr<DX::DeviceResources> m_deviceResources;
 
     // Rendering loop timer.
-    DX::StepTimer                               m_timer;
+    std::unique_ptr<DX::StepTimer> m_timer;
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
     std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;

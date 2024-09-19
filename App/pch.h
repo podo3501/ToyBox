@@ -57,7 +57,7 @@
 
 #define D3DX12_NO_STATE_OBJECT_HELPERS
 #define D3DX12_NO_CHECK_FEATURE_SUPPORT_CLASS
-#include "../Toy/d3dx12.h"
+#include "../Include/d3dx12.h"
 
 #include <algorithm>
 #include <array>

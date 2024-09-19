@@ -24,6 +24,8 @@
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -34,6 +36,8 @@
     </ClCompile>
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

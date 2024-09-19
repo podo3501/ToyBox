@@ -1,112 +1,12 @@
 #include "pch.h"
 #include "Game.h"
 #include "Utility.h"
+#include "StepTimer.h"
 #include "Window.h"
-
-extern void ExitGame() noexcept;
+#include "Button.h"
+#include "Texture.h"
 
 using namespace DirectX;
-
-using Microsoft::WRL::ComPtr;
-
-class Texture
-{
-public:
-    Texture(ID3D12Device* device, DirectX::DescriptorHeap* descHeap) :
-        m_device{ device }, m_descHeap{ descHeap } {}
-    void Upload(ResourceUploadBatch& resUpload, std::uint32_t descHeapIdx, const std::wstring& filename)
-    {
-        DX::ThrowIfFailed(
-            CreateWICTextureFromFile(m_device, resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
-        CreateShaderResourceView(m_device, m_texture.Get(), m_descHeap->GetCpuHandle(descHeapIdx));
-        m_descHeapIdx = descHeapIdx;
-    }
-
-    XMUINT2 GetSize()
-    {
-        return GetTextureSize(m_texture.Get());
-    }
-
-    void Reset()
-    {
-        m_texture.Reset();
-    }
-
-    void Draw(DirectX::SpriteBatch* spriteBatch, DirectX::SimpleMath::Vector2 screenPos)
-    {
-        auto size = GetTextureSize(m_texture.Get());
-        //RECT rect = { 0, 0, static_cast<LONG>(size.x / 2), static_cast<LONG>(size.y / 2) };
-        RECT rect = { 0, 0, static_cast<LONG>(size.x), static_cast<LONG>(size.y) };
-        spriteBatch->Draw(m_descHeap->GetGpuHandle(m_descHeapIdx), size,
-            screenPos, &rect, Colors::White, 0.f, { float(size.x / 2), float(size.y / 2) });
-    }
-
-private:
-    ID3D12Device* m_device;
-    DirectX::DescriptorHeap* m_descHeap;
-    Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
-    std::uint32_t m_descHeapIdx{ 0 };
-};
-
-enum class ButtonState
-{
-    BT_Normal,
-    BT_Over,
-    BT_Click,
-};
-
-class Button
-{
-public:
-    Button(ID3D12Device* device, DirectX::DescriptorHeap* descHeap) :
-        m_device{ device }, m_descHeap{ descHeap } {}
-
-    void SetTexture(std::unique_ptr<Texture> normal, std::unique_ptr<Texture> over, std::unique_ptr<Texture> click)
-    {
-        XMUINT2 size = normal->GetSize();
-
-        m_origin.x = float(size.x / 2);
-        m_origin.y = float(size.y / 2);
-
-        m_textures.insert(std::make_pair(ButtonState::BT_Normal, std::move(normal)));
-        m_textures.insert(std::make_pair(ButtonState::BT_Over, std::move(over)));
-        m_textures.insert(std::make_pair(ButtonState::BT_Click, std::move(click)));
-    }
-
-    void Reset()
-    {
-        std::ranges::for_each(m_textures | std::views::values, [](auto& tex) {
-            tex->Reset();
-            });
-    }
-
-    void Update(const Mouse::State& state, const DirectX::SimpleMath::Vector2& pos)
-    {
-        int x = state.x - static_cast<int>(pos.x);
-        int y = state.y - static_cast<int>(pos.y);
-
-        m_state = ButtonState::BT_Normal;
-        
-        if ((-m_origin.x < x && x < m_origin.x) && (-m_origin.y < y && y < m_origin.y))
-            m_state = ButtonState::BT_Over;
-        
-        if (m_state == ButtonState::BT_Over && state.leftButton)
-            m_state = ButtonState::BT_Click;
-    }
-
-    void Render(DirectX::SpriteBatch* spriteBatch, const DirectX::SimpleMath::Vector2& screenPos)
-    {
-        m_textures[m_state]->Draw(spriteBatch, screenPos);
-    }
-
-private:
-    ID3D12Device* m_device;
-    DirectX::DescriptorHeap* m_descHeap;
-    DirectX::SimpleMath::Vector2 m_origin{ 0, 0 };
-    ButtonState m_state{ ButtonState::BT_Normal };
-
-    std::map<ButtonState, std::unique_ptr<Texture>> m_textures;
-};
 
 LRESULT Game::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -252,6 +152,7 @@ Game::Game(const std::wstring& resPath) noexcept(false) :
     WICOnceInitialize();
 
     m_deviceResources = std::make_unique<DX::DeviceResources>();
+    m_timer = std::make_unique<DX::StepTimer>();
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
     //   Add DX::DeviceResources::c_AllowTearing to opt-in to variable rate displays.
     //   Add DX::DeviceResources::c_EnableHDR for HDR10 display.
@@ -303,20 +204,20 @@ bool Game::Initialize(HWND window, int width, int height)
 // Executes the basic game loop.
 void Game::Tick()
 {
-    m_timer.Tick([&]()
+    m_timer->Tick([&]()
     {
-        Update(m_timer);
+        Update(m_timer.get());
     });
 
     Render();
 }
 
 // Updates the world.
-void Game::Update(DX::StepTimer const& timer)
+void Game::Update(DX::StepTimer* timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
-    float elapsedTime = float(timer.GetElapsedSeconds());
+    float elapsedTime = float(timer->GetElapsedSeconds());
 
     // TODO: Add your game logic here.
     elapsedTime;
@@ -333,7 +234,7 @@ void Game::Update(DX::StepTimer const& timer)
 void Game::Render()
 {
     // Don't try to render anything before the first Update.
-    if (m_timer.GetFrameCount() == 0)
+    if (m_timer->GetFrameCount() == 0)
     {
         return;
     }
@@ -410,7 +311,7 @@ void Game::OnSuspending()
 
 void Game::OnResuming()
 {
-    m_timer.ResetElapsedTime();
+    m_timer->ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
 }
@@ -460,23 +361,17 @@ void Game::CreateDeviceDependentResources()
     // TODO: Initialize device dependent objects here (independent of window size).
     m_resourceDescriptors = std::make_unique<DescriptorHeap>(device, Descriptors::Count);
 
-    std::unique_ptr<Texture> m_tex1 = std::make_unique<Texture>(device, m_resourceDescriptors.get());
-    std::unique_ptr<Texture> m_tex2 = std::make_unique<Texture>(device, m_resourceDescriptors.get());
-    std::unique_ptr<Texture> m_tex3 = std::make_unique<Texture>(device, m_resourceDescriptors.get());
     m_button = std::make_unique<Button>(device, m_resourceDescriptors.get());
 
     ResourceUploadBatch resourceUpload(device);
 
     resourceUpload.Begin();
 
-    std::wstring filename1 = m_resPath + std::wstring(L"1.png");
-    std::wstring filename2 = m_resPath + std::wstring(L"2.png");
-    std::wstring filename3 = m_resPath + std::wstring(L"3.png");
-    m_tex1->Upload(resourceUpload, 0, filename1);
-    m_tex2->Upload(resourceUpload, 1, filename2);
-    m_tex3->Upload(resourceUpload, 2, filename3);
-
-    m_button->SetTexture(std::move(m_tex1), std::move(m_tex2), std::move(m_tex3));
+    std::vector<std::tuple<int, std::wstring>> filenames{
+        {0, m_resPath + std::wstring(L"1.png")},
+        {1, m_resPath + std::wstring(L"2.png")},
+        {2, m_resPath + std::wstring(L"3.png")} };
+    SetButtonTexture(device, m_resourceDescriptors.get(), resourceUpload, filenames, m_button.get());
 
     RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
 
