@@ -6,6 +6,7 @@
 
 #include "DeviceResources.h"
 
+struct RenderItem;
 class Texture;
 class Button;
 
@@ -18,9 +19,11 @@ namespace DX
 // provides a game loop.
 class Game final : public DX::IDeviceNotify
 {
+    using DeviceLostListener = std::function<void()>;
+
 public:
 
-    Game(const std::wstring& resPath) noexcept(false);
+    Game() noexcept(false);
     ~Game();
 
     Game(Game&&) = default;
@@ -50,8 +53,9 @@ public:
     void OnDisplayChange();
     void OnWindowSizeChanged(int width, int height);
 
-private:
+    void SetRenderItem(RenderItem* item);
 
+private:
     void Update(DX::StepTimer* timer);
     void Render();
 
@@ -60,7 +64,6 @@ private:
     void CreateDeviceDependentResources();
     void CreateWindowSizeDependentResources();
 
-    std::wstring m_resPath{};
     // Device resources.
     std::unique_ptr<DX::DeviceResources> m_deviceResources;
 
@@ -69,25 +72,12 @@ private:
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
     std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
-    std::unique_ptr<DirectX::Mouse> m_mouse;
+
+    std::vector<RenderItem*> m_renderItems;
 
     std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
-    std::unique_ptr<Texture> m_texture;
-    std::unique_ptr<Button> m_button;
-    Microsoft::WRL::ComPtr<ID3D12Resource> m_texture1;
-    Microsoft::WRL::ComPtr<ID3D12Resource> m_texture2;
-    
-    enum Descriptors
-    {
-        img_1,
-        img_2,
-        img_3,
-        Count
-    };
 
     std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
-    DirectX::SimpleMath::Vector2 m_screenPos;
-    DirectX::SimpleMath::Vector2 m_origin;
 
     bool m_on{ false };
     

@@ -4,8 +4,9 @@
 
 using namespace DirectX;
 
-Button::Button(ID3D12Device* device, DirectX::DescriptorHeap* descHeap) :
-    m_device{ device }, m_descHeap{ descHeap } {}
+Button::Button(const std::wstring& resPath, int width, int height) :
+    m_resPath{ resPath }, m_screenPos{ float(width), float(height) }
+{}
 
 void Button::SetTexture(std::unique_ptr<Texture> normal, std::unique_ptr<Texture> over, std::unique_ptr<Texture> click)
 {
@@ -39,10 +40,10 @@ void Button::Reset()
         });
 }
 
-void Button::Update(const Mouse::State& state, const DirectX::SimpleMath::Vector2& pos)
+void Button::Update(const Mouse::State& state)
 {
-    int x = state.x - static_cast<int>(pos.x);
-    int y = state.y - static_cast<int>(pos.y);
+    int x = state.x - static_cast<int>(m_screenPos.x);
+    int y = state.y - static_cast<int>(m_screenPos.y);
 
     m_state = ButtonState::BT_Normal;
 
@@ -53,9 +54,24 @@ void Button::Update(const Mouse::State& state, const DirectX::SimpleMath::Vector
         m_state = ButtonState::BT_Click;
 }
 
-void Button::Render(DirectX::SpriteBatch* spriteBatch, const DirectX::SimpleMath::Vector2& screenPos)
+void Button::OnDeviceLost()
 {
-    m_textures[m_state]->Draw(spriteBatch, screenPos);
+    Reset();
+}
+
+void Button::LoadResources(ID3D12Device* device,
+    DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload)
+{
+    std::vector<std::tuple<int, std::wstring>> filenames{
+        {0, m_resPath + std::wstring(L"1.png")},
+        {1, m_resPath + std::wstring(L"2.png")},
+        {2, m_resPath + std::wstring(L"3.png")} };
+    SetButtonTexture(device, descHeap, resUpload, filenames, this);
+}
+
+void Button::Render(DirectX::DX12::SpriteBatch* sprite)
+{
+    m_textures[m_state]->Draw(sprite, m_screenPos);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

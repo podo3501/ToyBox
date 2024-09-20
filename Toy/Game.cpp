@@ -17,7 +17,7 @@ LRESULT Game::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             OnActivated();
         else
             OnDeactivated();
-        Mouse::ProcessMessage(message, wParam, lParam);
+        //Mouse::ProcessMessage(message, wParam, lParam);
         break;
 
     case WM_DISPLAYCHANGE:
@@ -125,29 +125,12 @@ LRESULT Game::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             m_fullscreen = !m_fullscreen;
         }
         break;
-
-    case WM_ACTIVATE:
-    case WM_INPUT:
-    case WM_MOUSEMOVE:
-    case WM_LBUTTONDOWN:
-    case WM_LBUTTONUP:
-    case WM_RBUTTONDOWN:
-    case WM_RBUTTONUP:
-    case WM_MBUTTONDOWN:
-    case WM_MBUTTONUP:
-    case WM_MOUSEWHEEL:
-    case WM_XBUTTONDOWN:
-    case WM_XBUTTONUP:
-    case WM_MOUSEHOVER:
-        Mouse::ProcessMessage(message, wParam, lParam);
-        break;
     }
 
     return 0;
 }
 
-Game::Game(const std::wstring& resPath) noexcept(false) : 
-    m_resPath{ resPath }
+Game::Game() noexcept(false)
 {
     WICOnceInitialize();
 
@@ -180,9 +163,6 @@ bool Game::Initialize(HWND window, int width, int height)
 
         m_deviceResources->CreateWindowSizeDependentResources();
         CreateWindowSizeDependentResources();
-
-        m_mouse = std::make_unique<Mouse>();
-        m_mouse->SetWindow(window);
 
         // TODO: Change the timer settings if you want something other than the default variable timestep mode.
         // e.g. for 60 FPS fixed timestep update logic, call:
@@ -222,9 +202,6 @@ void Game::Update(DX::StepTimer* timer)
     // TODO: Add your game logic here.
     elapsedTime;
 
-    Mouse::State state = m_mouse->GetState();
-    m_button->Update(state, m_screenPos);
-
     PIXEndEvent();
 }
 #pragma endregion
@@ -252,7 +229,9 @@ void Game::Render()
 
     m_spriteBatch->Begin(commandList);
 
-    m_button->Render(m_spriteBatch.get(), m_screenPos);
+    std::ranges::for_each(m_renderItems, [&sprite = m_spriteBatch](auto& item) {
+        item->Render(sprite.get());
+        });
 
     m_spriteBatch->End();
 
@@ -359,19 +338,14 @@ void Game::CreateDeviceDependentResources()
     m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_resourceDescriptors = std::make_unique<DescriptorHeap>(device, Descriptors::Count);
-
-    m_button = std::make_unique<Button>(device, m_resourceDescriptors.get());
+    m_resourceDescriptors = std::make_unique<DescriptorHeap>(device, 3);
 
     ResourceUploadBatch resourceUpload(device);
 
     resourceUpload.Begin();
 
-    std::vector<std::tuple<int, std::wstring>> filenames{
-        {0, m_resPath + std::wstring(L"1.png")},
-        {1, m_resPath + std::wstring(L"2.png")},
-        {2, m_resPath + std::wstring(L"3.png")} };
-    SetButtonTexture(device, m_resourceDescriptors.get(), resourceUpload, filenames, m_button.get());
+    std::ranges::for_each(m_renderItems, [&](auto& item) {
+        item->LoadResources(device, m_resourceDescriptors.get(), resourceUpload); });
 
     RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
 
@@ -389,16 +363,13 @@ void Game::CreateWindowSizeDependentResources()
     // TODO: Initialize windows-size dependent objects here.
     auto viewport = m_deviceResources->GetScreenViewport();
     m_spriteBatch->SetViewport(viewport);
-
-    auto size = m_deviceResources->GetOutputSize();
-    m_screenPos.x = float(size.right) / 2.f;
-    m_screenPos.y = float(size.bottom) / 2.f;
 }
 
 void Game::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
-    m_button->Reset();
+    std::ranges::for_each(m_renderItems, [](auto& item) {
+        item->OnDeviceLost(); });
 
     m_resourceDescriptors.reset();
     m_spriteBatch.reset();
@@ -414,3 +385,8 @@ void Game::OnDeviceRestored()
     CreateWindowSizeDependentResources();
 }
 #pragma endregion
+
+void Game::SetRenderItem(RenderItem* item)
+{
+    m_renderItems.emplace_back(item);
+}

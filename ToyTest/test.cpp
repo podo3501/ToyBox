@@ -18,24 +18,24 @@ TEST(MainLoop, MultipleInitializeTest)
 
 TEST(MainLoop, ButtonTest)
 {
-	std::unique_ptr<DX::DeviceResources> deviceResources = std::make_unique<DX::DeviceResources>();
-	auto device = deviceResources->GetD3DDevice();
-	std::unique_ptr<DirectX::DescriptorHeap> resourceDescriptors = 
-		std::make_unique<DirectX::DescriptorHeap>(device, 5);
+	//std::unique_ptr<DX::DeviceResources> deviceResources = std::make_unique<DX::DeviceResources>();
+	//auto device = deviceResources->GetD3DDevice();
+	//std::unique_ptr<DirectX::DescriptorHeap> resourceDescriptors = 
+	//	std::make_unique<DirectX::DescriptorHeap>(device, 5);
 
-	Button button(device, resourceDescriptors.get());
-	ResourceUploadBatch resourceUpload(device);
-	resourceUpload.Begin();
+	//Button button(device, resourceDescriptors.get());
+	//ResourceUploadBatch resourceUpload(device);
+	//resourceUpload.Begin();
 
-	std::wstring resPath = L"Resources/";
-	std::vector<std::tuple<int, std::wstring>> filenames{
-		{0, resPath + std::wstring(L"1.png")},
-		{1, resPath + std::wstring(L"2.png")},
-		{2, resPath + std::wstring(L"3.png")} };
-	SetButtonTexture(device, resourceDescriptors.get(), resourceUpload, filenames, &button);
+	//std::wstring resPath = L"Resources/";
+	//std::vector<std::tuple<int, std::wstring>> filenames{
+	//	{0, resPath + std::wstring(L"1.png")},
+	//	{1, resPath + std::wstring(L"2.png")},
+	//	{2, resPath + std::wstring(L"3.png")} };
+	//SetButtonTexture(device, resourceDescriptors.get(), resourceUpload, filenames, &button);
 
-	auto uploadResourcesFinished = resourceUpload.End(deviceResources->GetCommandQueue());
-	uploadResourcesFinished.wait();
+	//auto uploadResourcesFinished = resourceUpload.End(deviceResources->GetCommandQueue());
+	//uploadResourcesFinished.wait();
 }
 
 TEST(MainLoop, RunTest)

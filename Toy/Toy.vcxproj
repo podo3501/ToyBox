@@ -208,6 +208,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RenderItem.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="Texture.h" />

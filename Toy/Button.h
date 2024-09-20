@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RenderItem.h"
+
 enum class ButtonState
 {
     BT_Normal,
@@ -9,25 +11,28 @@ enum class ButtonState
 
 class Texture;
 
-class Button
+class Button : public RenderItem
 {
 public:
-    Button(ID3D12Device* device, DirectX::DescriptorHeap* descHeap);
+    Button(const std::wstring& resPath, int width, int height);
 
-    void Reset();
+    virtual void OnDeviceLost() override;
+    virtual void LoadResources(ID3D12Device* device,
+        DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload) override;
+    virtual void Render(DirectX::DX12::SpriteBatch* sprite) override;
+
     void SetTexture(std::unique_ptr<Texture> normal, std::unique_ptr<Texture> over, std::unique_ptr<Texture> click);
     void SetTexture(ButtonState btnState, std::unique_ptr<Texture> tex);
-    void Update(const DirectX::Mouse::State& state, const DirectX::SimpleMath::Vector2& pos);
-    void Render(DirectX::SpriteBatch* spriteBatch, const DirectX::SimpleMath::Vector2& screenPos);
+    void Update(const DirectX::Mouse::State& state);
 
 private:
+    void Reset();
     void SetSize(Texture* tex);
 
-    ID3D12Device* m_device;
-    DirectX::DescriptorHeap* m_descHeap;
+    std::wstring m_resPath{};
+    DirectX::SimpleMath::Vector2 m_screenPos{ 0, 0 };
     DirectX::SimpleMath::Vector2 m_origin{ 0, 0 };
     ButtonState m_state{ ButtonState::BT_Normal };
-
     std::map<ButtonState, std::unique_ptr<Texture>> m_textures;
 };
 

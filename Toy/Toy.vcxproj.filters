@@ -26,6 +26,7 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="RenderItem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

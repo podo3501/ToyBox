@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Window.h"
 #include "Utility.h"
+#include "Button.h"
 
 using namespace DirectX;
 
@@ -21,6 +22,33 @@ extern "C"
     __declspec(dllexport) extern const char* D3D12SDKPath = u8".\\D3D12\\";
 }
 #endif
+
+LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(hWnd);
+
+    switch (message)
+    {
+    case WM_ACTIVATEAPP:
+    case WM_ACTIVATE:
+    case WM_INPUT:
+    case WM_MOUSEMOVE:
+    case WM_LBUTTONDOWN:
+    case WM_LBUTTONUP:
+    case WM_RBUTTONDOWN:
+    case WM_RBUTTONUP:
+    case WM_MBUTTONDOWN:
+    case WM_MBUTTONUP:
+    case WM_MOUSEWHEEL:
+    case WM_XBUTTONDOWN:
+    case WM_XBUTTONUP:
+    case WM_MOUSEHOVER:
+        Mouse::ProcessMessage(message, wParam, lParam);
+        break;
+    }
+
+    return 0;
+}
 
 MainLoop::MainLoop() :
     m_game{ nullptr } {}
@@ -46,13 +74,21 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     ReturnIfFailed(initialize);
 #endif
 
-    m_game = std::make_unique<Game>(resPath);
     m_window = std::make_unique<Window>();
+    m_game = std::make_unique<Game>();
+    m_mouse = std::make_unique<Mouse>();
 
     HWND hwnd{ 0 };
     RECT rc{};
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
-    ReturnIfFalse(m_game->Initialize(hwnd, rc.right - rc.left, rc.bottom - rc.top));
+    int width = static_cast<int>(rc.right - rc.left);
+    int height = static_cast<int>(rc.bottom - rc.top);
+    m_button = std::make_unique<Button>(resPath, width / 2, height / 2);
+    m_game->SetRenderItem(m_button.get());
+    m_mouse->SetWindow(hwnd);
+
+    //RenderItem을 다 등록시킨후 initialize 한다.
+    ReturnIfFalse(m_game->Initialize(hwnd, width, height));
 
     return true;
 }
@@ -61,6 +97,14 @@ void MainLoop::AddWinProcListener()
 {
     m_window->AddWndProcListener([&g = m_game](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
         return g->WndProc(wnd, msg, wp, lp); });
+    m_window->AddWndProcListener([mainLoop = this](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
+        return mainLoop->WndProc(wnd, msg, wp, lp); });
+}
+
+void MainLoop::Update()
+{
+    Mouse::State state = m_mouse->GetState();
+    m_button->Update(state);
 }
 
 int MainLoop::Run()
@@ -76,6 +120,8 @@ int MainLoop::Run()
         }
         else
         {
+            Update();
+
             m_game->Tick();
         }
     }
