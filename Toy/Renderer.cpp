@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Game.h"
+#include "Renderer.h"
 #include "Utility.h"
 #include "StepTimer.h"
 #include "Window.h"
@@ -8,134 +8,11 @@
 
 using namespace DirectX;
 
-LRESULT Game::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch (message)
-    {
-    case WM_ACTIVATEAPP:
-        if (wParam)
-            OnActivated();
-        else
-            OnDeactivated();
-        //Mouse::ProcessMessage(message, wParam, lParam);
-        break;
-
-    case WM_DISPLAYCHANGE:
-        OnDisplayChange();
-        break;
-
-    case WM_MOVE:
-        OnWindowMoved();
-        break;
-
-    case WM_PAINT:
-        if (m_sizemove)
-            Tick();
-        else
-        {
-            PAINTSTRUCT ps;
-            std::ignore = BeginPaint(hWnd, &ps);
-            EndPaint(hWnd, &ps);
-        }
-        break;
-
-    case WM_SIZE:
-        if (wParam == SIZE_MINIMIZED)
-        {
-            if (!m_minimized)
-            {
-                m_minimized = true;
-                if (!m_suspend)
-                    OnSuspending();
-                m_suspend = true;
-            }
-        }
-        else if (m_minimized)
-        {
-            m_minimized = false;
-            if (m_suspend)
-                OnResuming();
-            m_suspend = false;
-        }
-        else if (!m_sizemove)
-        {
-            OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
-        }
-        break;
-
-    case WM_ENTERSIZEMOVE:
-        m_sizemove = true;
-        break;
-
-    case WM_EXITSIZEMOVE:
-        m_sizemove = false;
-        {
-            RECT rc;
-            GetClientRect(hWnd, &rc);
-
-            OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
-        }
-        break;
-
-    case WM_POWERBROADCAST:
-        switch (wParam)
-        {
-        case PBT_APMQUERYSUSPEND:
-            if (!m_suspend)
-                OnSuspending();
-            m_suspend = true;
-            return TRUE;
-        case PBT_APMRESUMESUSPEND:
-            if (!m_minimized)
-            {
-                if (m_suspend)
-                    OnResuming();
-                m_suspend = false;
-            }
-            return TRUE;
-        }
-        break;
-
-    case WM_SYSKEYDOWN:
-        if (wParam == VK_RETURN && (lParam & 0x60000000) == 0x20000000)
-        {
-            // Implements the classic ALT+ENTER fullscreen toggle
-            if (m_fullscreen)
-            {
-                SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
-                SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
-
-                auto window = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-                int width{ 0 };
-                int height{ 0 };
-                window->GetWindowSize(width, height);
-
-                ShowWindow(hWnd, SW_SHOWNORMAL);
-                SetWindowPos(hWnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
-            }
-            else
-            {
-                SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP);
-                SetWindowLongPtr(hWnd, GWL_EXSTYLE, WS_EX_TOPMOST);
-
-                SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
-                ShowWindow(hWnd, SW_SHOWMAXIMIZED);
-            }
-
-            m_fullscreen = !m_fullscreen;
-        }
-        break;
-    }
-
-    return 0;
-}
-
-Game::Game() noexcept(false)
+Renderer::Renderer() noexcept(false)
 {
     WICOnceInitialize();
 
     m_deviceResources = std::make_unique<DX::DeviceResources>();
-    m_timer = std::make_unique<DX::StepTimer>();
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
     //   Add DX::DeviceResources::c_AllowTearing to opt-in to variable rate displays.
     //   Add DX::DeviceResources::c_EnableHDR for HDR10 display.
@@ -143,7 +20,7 @@ Game::Game() noexcept(false)
     m_deviceResources->RegisterDeviceNotify(this);
 }
 
-Game::~Game()
+Renderer::~Renderer()
 {
     if (m_deviceResources)
     {
@@ -152,7 +29,7 @@ Game::~Game()
 }
 
 // Initialize the Direct3D resources required to run.
-bool Game::Initialize(HWND window, int width, int height)
+bool Renderer::Initialize(HWND window, int width, int height)
 {
     try
     {
@@ -163,13 +40,6 @@ bool Game::Initialize(HWND window, int width, int height)
 
         m_deviceResources->CreateWindowSizeDependentResources();
         CreateWindowSizeDependentResources();
-
-        // TODO: Change the timer settings if you want something other than the default variable timestep mode.
-        // e.g. for 60 FPS fixed timestep update logic, call:
-        /*
-        m_timer.SetFixedTimeStep(true);
-        m_timer.SetTargetElapsedSeconds(1.0 / 60);
-        */
     }
     catch(CException e)
     {
@@ -180,38 +50,13 @@ bool Game::Initialize(HWND window, int width, int height)
     return true;
 }
 
-#pragma region Frame Update
-// Executes the basic game loop.
-void Game::Tick()
-{
-    m_timer->Tick([&]()
-    {
-        Update(m_timer.get());
-    });
-
-    Render();
-}
-
-// Updates the world.
-void Game::Update(DX::StepTimer* timer)
-{
-    PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
-
-    float elapsedTime = float(timer->GetElapsedSeconds());
-
-    // TODO: Add your game logic here.
-    elapsedTime;
-
-    PIXEndEvent();
-}
-#pragma endregion
-
-#pragma region Frame Render
+#pragma region Frame Draw
 // Draws the scene.
-void Game::Render()
+//void Renderer::Render()
+void Renderer::Draw(DX::StepTimer* timer)
 {
     // Don't try to render anything before the first Update.
-    if (m_timer->GetFrameCount() == 0)
+    if (timer->GetFrameCount() == 0)
     {
         return;
     }
@@ -248,7 +93,7 @@ void Game::Render()
 }
 
 // Helper method to clear the back buffers.
-void Game::Clear()
+void Renderer::Clear()
 {
     auto commandList = m_deviceResources->GetCommandList();
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Clear");
@@ -273,53 +118,51 @@ void Game::Clear()
 
 #pragma region Message Handlers
 // Message handlers
-void Game::OnActivated()
+void Renderer::OnActivated()
 {
-    // TODO: Game is becoming active window.
+    // TODO: Renderer is becoming active window.
 }
 
-void Game::OnDeactivated()
+void Renderer::OnDeactivated()
 {
-    // TODO: Game is becoming background window.
+    // TODO: Renderer is becoming background window.
 }
 
-void Game::OnSuspending()
+void Renderer::OnSuspending()
 {
-    // TODO: Game is being power-suspended (or minimized).
+    // TODO: Renderer is being power-suspended (or minimized).
 }
 
-void Game::OnResuming()
+void Renderer::OnResuming()
 {
-    m_timer->ResetElapsedTime();
-
-    // TODO: Game is being power-resumed (or returning from minimize).
+    // TODO: Renderer is being power-resumed (or returning from minimize).
 }
 
-void Game::OnWindowMoved()
+void Renderer::OnWindowMoved()
 {
     auto const r = m_deviceResources->GetOutputSize();
     m_deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 
-void Game::OnDisplayChange()
+void Renderer::OnDisplayChange()
 {
     m_deviceResources->UpdateColorSpace();
 }
 
-void Game::OnWindowSizeChanged(int width, int height)
+void Renderer::OnWindowSizeChanged(int width, int height)
 {
     if (!m_deviceResources->WindowSizeChanged(width, height))
         return;
 
     CreateWindowSizeDependentResources();
 
-    // TODO: Game window is being resized.
+    // TODO: Renderer window is being resized.
 }
 #pragma endregion
 
 #pragma region Direct3D Resources
 // These are the resources that depend on the device.
-void Game::CreateDeviceDependentResources()
+void Renderer::CreateDeviceDependentResources()
 {
     auto device = m_deviceResources->GetD3DDevice();
 
@@ -358,14 +201,14 @@ void Game::CreateDeviceDependentResources()
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
-void Game::CreateWindowSizeDependentResources()
+void Renderer::CreateWindowSizeDependentResources()
 {
     // TODO: Initialize windows-size dependent objects here.
     auto viewport = m_deviceResources->GetScreenViewport();
     m_spriteBatch->SetViewport(viewport);
 }
 
-void Game::OnDeviceLost()
+void Renderer::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
     std::ranges::for_each(m_renderItems, [](auto& item) {
@@ -378,7 +221,7 @@ void Game::OnDeviceLost()
     m_graphicsMemory.reset();
 }
 
-void Game::OnDeviceRestored()
+void Renderer::OnDeviceRestored()
 {
     CreateDeviceDependentResources();
 
@@ -386,7 +229,7 @@ void Game::OnDeviceRestored()
 }
 #pragma endregion
 
-void Game::SetRenderItem(RenderItem* item)
+void Renderer::SetRenderItem(RenderItem* item)
 {
     m_renderItems.emplace_back(item);
 }

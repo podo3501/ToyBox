@@ -75,3 +75,7 @@
 #include "../DirectXTK12/Inc/SpriteFont.h" 
 #include "../DirectXTK12/Inc/VertexTypes.h"
 #include "../DirectXTK12/Inc/WICTextureLoader.h"
+
+#ifdef _DEBUG
+#include <dxgidebug.h>
+#endif

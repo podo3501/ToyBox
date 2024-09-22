@@ -11,9 +11,11 @@
 --button, texture 클래스 리팩토링 
 --button을 랜더링 개체로 해서 처리
 --button, mouse를 mainloop로 올린다.
+--stepTimer를 mainloop로 올린다.
+--button 유닛 테스트 할 수 있게 수정
+유닛 테스트에 D3D12 메모리 체크 달기
+D3D12 Warning 제거하기
 OnDeviceLost, OnDeviceRestored 잘 되는지 확인
 game을 render 클래스로 변경
-stepTimer를 mainloop로 올린다.
-button 유닛 테스트 할 수 있게 수정
 game에서 model과 view를 분리시킨다.
 

@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "../Toy/MainLoop.h"
 #include "../Toy/Button.h"
-#include "../Toy/Texture.h"
-#include "../Toy/DeviceResources.h"
+#include "../Toy/Renderer.h"
+#include "../Toy/Window.h"
 
 using namespace DirectX;
 
@@ -18,24 +18,20 @@ TEST(MainLoop, MultipleInitializeTest)
 
 TEST(MainLoop, ButtonTest)
 {
-	//std::unique_ptr<DX::DeviceResources> deviceResources = std::make_unique<DX::DeviceResources>();
-	//auto device = deviceResources->GetD3DDevice();
-	//std::unique_ptr<DirectX::DescriptorHeap> resourceDescriptors = 
-	//	std::make_unique<DirectX::DescriptorHeap>(device, 5);
+	std::unique_ptr<Window> window = std::make_unique<Window>();
+	std::unique_ptr<Renderer> renderer = std::make_unique<Renderer>();
 
-	//Button button(device, resourceDescriptors.get());
-	//ResourceUploadBatch resourceUpload(device);
-	//resourceUpload.Begin();
+	HWND hwnd{ 0 };
+	RECT rc{};
+	//hide·Î °íÃÆÀ»¶§ false°¡ ³µ´Ù.
+	EXPECT_TRUE(window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
 
-	//std::wstring resPath = L"Resources/";
-	//std::vector<std::tuple<int, std::wstring>> filenames{
-	//	{0, resPath + std::wstring(L"1.png")},
-	//	{1, resPath + std::wstring(L"2.png")},
-	//	{2, resPath + std::wstring(L"3.png")} };
-	//SetButtonTexture(device, resourceDescriptors.get(), resourceUpload, filenames, &button);
+	int width = static_cast<int>(rc.right - rc.left);
+	int height = static_cast<int>(rc.bottom - rc.top);
+	std::unique_ptr<Button> button = std::make_unique<Button>(L"Resources/", width / 2, height / 2);
+	renderer->SetRenderItem(button.get());
 
-	//auto uploadResourcesFinished = resourceUpload.End(deviceResources->GetCommandQueue());
-	//uploadResourcesFinished.wait();
+	EXPECT_TRUE(renderer->Initialize(hwnd, width, height));
 }
 
 TEST(MainLoop, RunTest)

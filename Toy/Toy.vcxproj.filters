@@ -11,7 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="StepTimer.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -27,10 +27,11 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="RenderItem.h" />
+    <ClInclude Include="MouseProcedure.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Common</Filter>
@@ -39,6 +40,7 @@
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="MouseProcedure.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

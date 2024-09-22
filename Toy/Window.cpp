@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Window.h"
-#include "Game.h"
 #include "Utility.h"
 
 LPCWSTR g_szAppName = L"Toy";
@@ -83,7 +82,7 @@ bool Window::CreateGameWindow(HINSTANCE hInstance, RECT& rc, HWND& hwnd)
 
     hwnd = CreateWindowExW(0, L"ToyWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
-        nullptr, nullptr, hInstance, this);
+        nullptr, nullptr, hInstance, nullptr);
     // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"ToyWindowClass", g_szAppName, WS_POPUP,
     // to default to fullscreen.
     if (!hwnd) return false;

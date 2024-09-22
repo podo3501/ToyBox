@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "MainLoop.h"
-#include "Game.h"
+#include "Renderer.h"
 #include "Window.h"
 #include "Utility.h"
 #include "Button.h"
+#include "MouseProcedure.h"
+#include "StepTimer.h"
 
 using namespace DirectX;
 
@@ -25,25 +27,118 @@ extern "C"
 
 LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    UNREFERENCED_PARAMETER(hWnd);
-
     switch (message)
     {
     case WM_ACTIVATEAPP:
-    case WM_ACTIVATE:
-    case WM_INPUT:
-    case WM_MOUSEMOVE:
-    case WM_LBUTTONDOWN:
-    case WM_LBUTTONUP:
-    case WM_RBUTTONDOWN:
-    case WM_RBUTTONUP:
-    case WM_MBUTTONDOWN:
-    case WM_MBUTTONUP:
-    case WM_MOUSEWHEEL:
-    case WM_XBUTTONDOWN:
-    case WM_XBUTTONUP:
-    case WM_MOUSEHOVER:
-        Mouse::ProcessMessage(message, wParam, lParam);
+        if (wParam)
+            m_renderer->OnActivated();
+        else
+            m_renderer->OnDeactivated();
+        break;
+
+    case WM_DISPLAYCHANGE:
+        m_renderer->OnDisplayChange();
+        break;
+
+    case WM_MOVE:
+        m_renderer->OnWindowMoved();
+        break;
+
+    case WM_PAINT:
+        if (m_sizemove)
+            Tick();
+        else
+        {
+            PAINTSTRUCT ps;
+            std::ignore = BeginPaint(hWnd, &ps);
+            EndPaint(hWnd, &ps);
+        }
+        break;
+
+    case WM_SIZE:
+        if (wParam == SIZE_MINIMIZED)
+        {
+            if (!m_minimized)
+            {
+                m_minimized = true;
+                if (!m_suspend)
+                    m_renderer->OnSuspending();
+                m_suspend = true;
+            }
+        }
+        else if (m_minimized)
+        {
+            m_minimized = false;
+            if (m_suspend)
+                OnResuming();
+            m_suspend = false;
+        }
+        else if (!m_sizemove)
+        {
+            m_renderer->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
+        }
+        break;
+
+    case WM_ENTERSIZEMOVE:
+        m_sizemove = true;
+        break;
+
+    case WM_EXITSIZEMOVE:
+        m_sizemove = false;
+        {
+            RECT rc;
+            GetClientRect(hWnd, &rc);
+
+            m_renderer->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
+        }
+        break;
+
+    case WM_POWERBROADCAST:
+        switch (wParam)
+        {
+        case PBT_APMQUERYSUSPEND:
+            if (!m_suspend)
+                m_renderer->OnSuspending();
+            m_suspend = true;
+            return TRUE;
+        case PBT_APMRESUMESUSPEND:
+            if (!m_minimized)
+            {
+                if (m_suspend)
+                    OnResuming();
+                m_suspend = false;
+            }
+            return TRUE;
+        }
+        break;
+
+    case WM_SYSKEYDOWN:
+        if (wParam == VK_RETURN && (lParam & 0x60000000) == 0x20000000)
+        {
+            // Implements the classic ALT+ENTER fullscreen toggle
+            if (m_fullscreen)
+            {
+                SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+                SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
+
+                int width{ 0 };
+                int height{ 0 };
+                m_window->GetWindowSize(width, height);
+
+                ShowWindow(hWnd, SW_SHOWNORMAL);
+                SetWindowPos(hWnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
+            }
+            else
+            {
+                SetWindowLongPtr(hWnd, GWL_STYLE, WS_POPUP);
+                SetWindowLongPtr(hWnd, GWL_EXSTYLE, WS_EX_TOPMOST);
+
+                SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+                ShowWindow(hWnd, SW_SHOWMAXIMIZED);
+            }
+
+            m_fullscreen = !m_fullscreen;
+        }
         break;
     }
 
@@ -51,7 +146,7 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 MainLoop::MainLoop() :
-    m_game{ nullptr } {}
+    m_renderer{ nullptr } {}
 MainLoop::~MainLoop() = default;
 
 bool MainLoop::Initialize(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
@@ -75,8 +170,9 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
 #endif
 
     m_window = std::make_unique<Window>();
-    m_game = std::make_unique<Game>();
+    m_renderer = std::make_unique<Renderer>();
     m_mouse = std::make_unique<Mouse>();
+    m_timer = std::make_unique<DX::StepTimer>();
 
     HWND hwnd{ 0 };
     RECT rc{};
@@ -84,27 +180,41 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     int width = static_cast<int>(rc.right - rc.left);
     int height = static_cast<int>(rc.bottom - rc.top);
     m_button = std::make_unique<Button>(resPath, width / 2, height / 2);
-    m_game->SetRenderItem(m_button.get());
+    m_renderer->SetRenderItem(m_button.get());
     m_mouse->SetWindow(hwnd);
 
-    //RenderItem을 다 등록시킨후 initialize 한다.
-    ReturnIfFalse(m_game->Initialize(hwnd, width, height));
+    //RenderItem을 다 등록시킨후 initialize 한다. initialize와 load를 분리해서 처리하는것도 좋을것 같다.
+    ReturnIfFalse(m_renderer->Initialize(hwnd, width, height));
+
+    // TODO: Change the timer settings if you want something other than the default variable timestep mode.
+    // e.g. for 60 FPS fixed timestep update logic, call:
+    /*
+    m_timer.SetFixedTimeStep(true);
+    m_timer.SetTargetElapsedSeconds(1.0 / 60);
+    */
 
     return true;
 }
 
 void MainLoop::AddWinProcListener()
 {
-    m_window->AddWndProcListener([&g = m_game](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
-        return g->WndProc(wnd, msg, wp, lp); });
     m_window->AddWndProcListener([mainLoop = this](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
         return mainLoop->WndProc(wnd, msg, wp, lp); });
+    m_window->AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
+        return MouseProc(wnd, msg, wp, lp); });
 }
 
-void MainLoop::Update()
+void MainLoop::Update(DX::StepTimer* timer)
 {
+    PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
+
+    UNREFERENCED_PARAMETER(timer);
+    //float elapsedTime = float(timer->GetElapsedSeconds());
+
     Mouse::State state = m_mouse->GetState();
     m_button->Update(state);
+
+    PIXEndEvent();
 }
 
 int MainLoop::Run()
@@ -119,14 +229,29 @@ int MainLoop::Run()
             DispatchMessage(&msg);
         }
         else
-        {
-            Update();
-
-            m_game->Tick();
-        }
+            Tick();
     }
 
-    m_game.reset();
+    m_renderer.reset();
 
     return static_cast<int>(msg.wParam);
+}
+
+void MainLoop::Tick()
+{
+    auto timer = m_timer.get();
+
+    m_timer->Tick([&]()
+        {
+            Update(timer);
+        });
+
+    m_renderer->Draw(timer);
+}
+
+void MainLoop::OnResuming()
+{
+    m_timer->ResetElapsedTime();
+
+    m_renderer->OnResuming();
 }
