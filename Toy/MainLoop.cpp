@@ -232,8 +232,6 @@ int MainLoop::Run()
             Tick();
     }
 
-    m_renderer.reset();
-
     return static_cast<int>(msg.wParam);
 }
 

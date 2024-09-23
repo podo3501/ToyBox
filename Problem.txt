@@ -30,3 +30,5 @@ Destroy함수가 불리면 WM_DESTROY를 부르고 거기서 WM_QUIT메세지가
 Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
 이 함수를 리팩토링으로 다른 함수로 옮겼더니 멀티쓰레드 적용이 되지 않았다.  RAII를 사용하기 때문에
 함수가 끝나면 사라진다. 사라지기 전에 com을 생성해야 하기 때문이다.
+
+한 클래스에 unique_ptr 변수가 2개 있으면 선언 순서의 역순으로 소멸자가 호출된다.
