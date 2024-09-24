@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Testsuite.h"
+#include "TestMain.h"
 
 GlobalEnv::GlobalEnv() = default;
 GlobalEnv::~GlobalEnv() = default;

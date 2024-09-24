@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "MainLoop.h"
-#include "Renderer.h"
+#include "../Include/IRenderer.h"
 #include "Window.h"
 #include "Utility.h"
 #include "Button.h"
@@ -162,7 +162,7 @@ bool MainLoop::Initialize(HINSTANCE hInstance, const std::wstring& resPath, int 
 bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
 {
     m_window = std::make_unique<Window>();
-    m_renderer = std::make_unique<Renderer>();
+    m_renderer = CreateRenderer();
     m_mouse = std::make_unique<Mouse>();
     m_timer = std::make_unique<DX::StepTimer>();
 
@@ -236,7 +236,9 @@ void MainLoop::Tick()
             Update(timer);
         });
 
-    m_renderer->Draw(timer);
+    // Don't try to render anything before the first Update.
+    if(m_timer->GetFrameCount() != 0)
+        m_renderer->Draw();
 }
 
 void MainLoop::OnResuming()

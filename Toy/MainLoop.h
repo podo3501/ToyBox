@@ -8,6 +8,8 @@ namespace DX
 	class StepTimer;
 }
 
+struct IRenderer;
+
 class MainLoop
 {
 public:
@@ -25,7 +27,7 @@ private:
 	void OnResuming();
 	void Update(DX::StepTimer* timer);
 
-	std::unique_ptr<Renderer> m_renderer;
+	std::unique_ptr<IRenderer> m_renderer;
 	std::unique_ptr<Window> m_window;
 	std::unique_ptr<DirectX::Mouse> m_mouse;
 	std::unique_ptr<Button> m_button;

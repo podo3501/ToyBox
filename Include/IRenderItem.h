@@ -11,10 +11,10 @@ namespace DirectX
 	}
 }
 
-struct RenderItem
+struct IRenderItem
 {
 public:
-	virtual ~RenderItem() {};
+	virtual ~IRenderItem() {};
 	virtual void OnDeviceLost() = 0;
 	virtual void LoadResources(ID3D12Device* device, 
 		DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload) = 0;

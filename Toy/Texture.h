@@ -6,7 +6,7 @@ public:
     Texture(ID3D12Device* device, DirectX::DescriptorHeap* descHeap);
     void Upload(DirectX::ResourceUploadBatch& resUpload, std::uint32_t descHeapIdx, const std::wstring& filename);
 
-    DirectX::XMUINT2 GetSize();
+    DirectX::XMUINT2 GetSize() const noexcept;
     void Reset();
     void Draw(DirectX::SpriteBatch* spriteBatch, DirectX::SimpleMath::Vector2 screenPos);
     

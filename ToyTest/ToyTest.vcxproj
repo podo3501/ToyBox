@@ -113,8 +113,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Testsuite.h" />
-    <ClInclude Include="ToyTest.h" />
+    <ClInclude Include="TestMain.h" />
+    <ClInclude Include="ToyTestFixture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ToyTest.cpp" />
@@ -124,7 +124,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Testsuite.cpp" />
+    <ClCompile Include="TestMain.cpp" />
+    <ClCompile Include="ToyTestFixture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GoogleTestLib\GoogleTestLib.vcxproj">

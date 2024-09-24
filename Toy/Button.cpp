@@ -7,6 +7,7 @@ using namespace DirectX;
 Button::Button(const std::wstring& resPath, int width, int height) :
     m_resPath{ resPath }, m_screenPos{ float(width), float(height) }
 {}
+Button::~Button() = default;
 
 void Button::SetTexture(std::unique_ptr<Texture> normal, std::unique_ptr<Texture> over, std::unique_ptr<Texture> click)
 {

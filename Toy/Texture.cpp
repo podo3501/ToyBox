@@ -14,7 +14,7 @@ void Texture::Upload(DirectX::ResourceUploadBatch& resUpload, std::uint32_t desc
     m_descHeapIdx = descHeapIdx;
 }
 
-XMUINT2 Texture::GetSize()
+XMUINT2 Texture::GetSize() const noexcept
 {
     return GetTextureSize(m_texture.Get());
 }

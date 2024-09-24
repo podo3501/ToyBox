@@ -1,6 +1,5 @@
 #pragma once
-
-#include "RenderItem.h"
+#include "../Include/IRenderItem.h"
 
 enum class ButtonState
 {
@@ -11,10 +10,11 @@ enum class ButtonState
 
 class Texture;
 
-class Button : public RenderItem
+class Button : public IRenderItem
 {
 public:
     Button(const std::wstring& resPath, int width, int height);
+    virtual ~Button();
 
     virtual void OnDeviceLost() override;
     virtual void LoadResources(ID3D12Device* device,
@@ -30,10 +30,11 @@ private:
     void SetSize(Texture* tex);
 
     std::wstring m_resPath{};
+    std::map<ButtonState, std::unique_ptr<Texture>> m_textures;
+
     DirectX::SimpleMath::Vector2 m_screenPos{ 0, 0 };
     DirectX::SimpleMath::Vector2 m_origin{ 0, 0 };
     ButtonState m_state{ ButtonState::BT_Normal };
-    std::map<ButtonState, std::unique_ptr<Texture>> m_textures;
 };
 
 void SetButtonTexture(ID3D12Device* device, DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload,

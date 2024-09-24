@@ -1,12 +1,17 @@
 #include "pch.h"
 #include "Renderer.h"
+#include "DeviceResources.h"
 #include "Utility.h"
-#include "StepTimer.h"
-#include "Window.h"
-#include "Button.h"
-#include "Texture.h"
+//#include "Window.h"
+//#include "Button.h"
+//#include "Texture.h"
 
 using namespace DirectX;
+
+std::unique_ptr<IRenderer> CreateRenderer()
+{
+    return std::move(std::make_unique<Renderer>());
+}
 
 Renderer::Renderer() noexcept(false)
 {
@@ -36,7 +41,7 @@ bool Renderer::Initialize(HWND window, int width, int height)
     ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
 #else
     Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
-    ReturnIfFailed(initialize);
+    if (FAILED(initialize)) return false;
 #endif
 
     try
@@ -60,15 +65,8 @@ bool Renderer::Initialize(HWND window, int width, int height)
 
 #pragma region Frame Draw
 // Draws the scene.
-//void Renderer::Render()
-void Renderer::Draw(DX::StepTimer* timer)
+void Renderer::Draw()
 {
-    // Don't try to render anything before the first Update.
-    if (timer->GetFrameCount() == 0)
-    {
-        return;
-    }
-
     // Prepare the command list to render a new frame.
     m_deviceResources->Prepare();
     Clear();
@@ -237,7 +235,7 @@ void Renderer::OnDeviceRestored()
 }
 #pragma endregion
 
-void Renderer::SetRenderItem(RenderItem* item)
+void Renderer::SetRenderItem(IRenderItem* item)
 {
     m_renderItems.emplace_back(item);
 }

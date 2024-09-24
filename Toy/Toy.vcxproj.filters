@@ -11,11 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="StepTimer.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceResources.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="d3dx12.h">
@@ -26,16 +22,11 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="RenderItem.h" />
     <ClInclude Include="MouseProcedure.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="MainLoop.cpp" />
-    <ClCompile Include="DeviceResources.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Button.cpp" />

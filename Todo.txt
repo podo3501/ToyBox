@@ -17,7 +17,8 @@
 --Button테스트에서 SW_HIDE 했을때 initialize에서 오류
 --D3D12 Warning 제거하기
 --game을 render 클래스로 변경
+--Core 프로젝트와 Renderer인터페이스를 만들어 코어 부분을 분리시킴
+--OnDeviceLost, OnDeviceRestored 잘 되는지 확인(재현을 어떻게 시켜야 하는지 모르겠음)
 
-OnDeviceLost, OnDeviceRestored 잘 되는지 확인
 game에서 model과 view를 분리시킨다.
 
