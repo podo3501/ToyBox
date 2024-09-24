@@ -31,6 +31,14 @@ Renderer::~Renderer()
 // Initialize the Direct3D resources required to run.
 bool Renderer::Initialize(HWND window, int width, int height)
 {
+    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
+#ifdef __MINGW32__
+    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
+#else
+    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
+    ReturnIfFailed(initialize);
+#endif
+
     try
     {
         m_deviceResources->SetWindow(window, width, height);

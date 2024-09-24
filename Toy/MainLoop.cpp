@@ -161,14 +161,6 @@ bool MainLoop::Initialize(HINSTANCE hInstance, const std::wstring& resPath, int 
 
 bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
 {
-    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
-#ifdef __MINGW32__
-    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
-#else
-    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
-    ReturnIfFailed(initialize);
-#endif
-
     m_window = std::make_unique<Window>();
     m_renderer = std::make_unique<Renderer>();
     m_mouse = std::make_unique<Mouse>();

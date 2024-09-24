@@ -14,9 +14,10 @@
 --stepTimer를 mainloop로 올린다.
 --button 유닛 테스트 할 수 있게 수정
 --DirectX 메모리 새는거 수정 및 유닛 테스트에 D3D12 메모리 체크 달기
-Button테스트에서 SW_HIDE 했을때 initialize에서 오류
-D3D12 Warning 제거하기
+--Button테스트에서 SW_HIDE 했을때 initialize에서 오류
+--D3D12 Warning 제거하기
+--game을 render 클래스로 변경
+
 OnDeviceLost, OnDeviceRestored 잘 되는지 확인
-game을 render 클래스로 변경
 game에서 model과 view를 분리시킨다.
 
