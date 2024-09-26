@@ -7,7 +7,7 @@ struct IRenderer
 public:
     virtual ~IRenderer() {};
 
-    virtual bool Initialize(HWND window, int width, int height) = 0;
+    virtual bool LoadResources() = 0;
 
     virtual void OnActivated() = 0;
     virtual void OnDeactivated() = 0;
@@ -21,4 +21,4 @@ public:
     virtual void Draw() = 0;
 };
 
-std::unique_ptr<IRenderer> CreateRenderer();
+std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height);

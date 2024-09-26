@@ -10,15 +10,17 @@ NuGet에서 gmock 패키지를 받아서 설치 했을때 .cc파일이 프로젝
 용시킬수는 없기 때문이다. cmake를 사용하면 gmock과 gtest프로젝트등 여러개가 만들어지는데 이렇게
 하면 아마 pch를 사용할 수 있을 것이다. 내가 한 방법은 깃허브에서 코드를 다운 받은후 빈 프로젝트를 
 만들어서 .cc 파일 (gmock-all, gtest-all 두개만 컴파일 하면 된다. 왜냐면 다른 .cc파일을 all 파일이 다 인
-클루드 하기 때문이다)을 추가한후, 그 프로젝트를 Test프로젝트에서 참조했다. Test 프로젝트는 만들때 
-google test 프로젝트로 만든후 NuGet에서 설치돼 있는 gtest(이건 mock이 없다)를 삭제하고 main을 작
-성해 준다.
+클루드 하기 때문이다)을 추가한후, 빌드한다. 이 프로젝트는 GoogleTestLib로 만들었으며, 컴파일 하고
+나면 lib가 만들어진다. 그리고 만들어진 프로젝트(lib)를 Test 프로젝트(ToyTest)에서 참조했다. Test 프로
+젝트는 만들때 google test 프로젝트로 만든후 NuGet에서 설치돼 있는 gtest를 삭제한다. 왜냐면 google 
+mock이 포함되어 있지 않아서이다. 그리고 main을 작성해 준다.
 --------------요약--------------
 1. 빈 프로젝트 GoogletTestLib 만들기
-2. google test 다운받아서 cc파일 추가하기
+2. google test GitHub에서 다운받아서 cc파일 두개 추가
 3. include 폴더 디렉토리 설정하기
 4. 컴파일 되는지 확인
-5. google test 프로젝트로 프로젝트 만들기
+5. 새프로젝트 만들기 해서 google test 프로젝트로 프로젝트 만들기
+6. NuGet에서 설치되어 있는 기본 gtest를 삭제
 6. GoogletTestLib을 참조로 연결
 7. main함수 작성
 

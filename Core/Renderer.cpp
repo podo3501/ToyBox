@@ -2,18 +2,15 @@
 #include "Renderer.h"
 #include "DeviceResources.h"
 #include "Utility.h"
-//#include "Window.h"
-//#include "Button.h"
-//#include "Texture.h"
 
 using namespace DirectX;
 
-std::unique_ptr<IRenderer> CreateRenderer()
+std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
 {
-    return std::move(std::make_unique<Renderer>());
+    return std::move(std::make_unique<Renderer>(hwnd, width, height));
 }
 
-Renderer::Renderer() noexcept(false)
+Renderer::Renderer(HWND hwnd, int width, int height) noexcept(false)
 {
     WICOnceInitialize();
 
@@ -23,6 +20,8 @@ Renderer::Renderer() noexcept(false)
     //   Add DX::DeviceResources::c_EnableHDR for HDR10 display.
     //   Add DX::DeviceResources::c_ReverseDepth to optimize depth buffer clears for 0 instead of 1.
     m_deviceResources->RegisterDeviceNotify(this);
+
+    m_deviceResources->SetWindow(hwnd, width, height);
 }
 
 Renderer::~Renderer()
@@ -34,7 +33,7 @@ Renderer::~Renderer()
 }
 
 // Initialize the Direct3D resources required to run.
-bool Renderer::Initialize(HWND window, int width, int height)
+bool Renderer::LoadResources()
 {
     //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
 #ifdef __MINGW32__
@@ -46,8 +45,6 @@ bool Renderer::Initialize(HWND window, int width, int height)
 
     try
     {
-        m_deviceResources->SetWindow(window, width, height);
-
         m_deviceResources->CreateDeviceResources();
         CreateDeviceDependentResources();
 

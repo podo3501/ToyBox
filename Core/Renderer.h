@@ -24,7 +24,7 @@ class Renderer final : public DX::IDeviceNotify, public IRenderer
 
 public:
 
-    Renderer() noexcept(false);
+    Renderer(HWND hwnd, int width, int height) noexcept(false);
     ~Renderer();
 
     Renderer(Renderer&&) = default;
@@ -38,7 +38,7 @@ public:
     void OnDeviceRestored() override;
 
     // Initialization and management
-    bool Initialize(HWND window, int width, int height);
+    bool LoadResources();
 
     // Messages
     virtual void OnActivated() override;

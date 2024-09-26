@@ -162,7 +162,6 @@ bool MainLoop::Initialize(HINSTANCE hInstance, const std::wstring& resPath, int 
 bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
 {
     m_window = std::make_unique<Window>();
-    m_renderer = CreateRenderer();
     m_mouse = std::make_unique<Mouse>();
     m_timer = std::make_unique<DX::StepTimer>();
 
@@ -171,12 +170,14 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
     int width = static_cast<int>(rc.right - rc.left);
     int height = static_cast<int>(rc.bottom - rc.top);
+    m_renderer = CreateRenderer(hwnd, width, height);
+
     m_button = std::make_unique<Button>(resPath, width / 2, height / 2);
     m_renderer->SetRenderItem(m_button.get());
     m_mouse->SetWindow(hwnd);
 
     //RenderItem을 다 등록시킨후 initialize 한다. initialize와 load를 분리해서 처리하는것도 좋을것 같다.
-    ReturnIfFalse(m_renderer->Initialize(hwnd, width, height));
+    ReturnIfFalse(m_renderer->LoadResources());
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:

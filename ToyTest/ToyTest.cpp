@@ -19,20 +19,63 @@ TEST_F(ToyTest, MultipleAppExcute)
 
 TEST_F(ToyTest, ButtonTest)
 {
-	std::unique_ptr<Window> window = std::make_unique<Window>();
-	std::unique_ptr<IRenderer> renderer = CreateRenderer();
-
-	HWND hwnd{ 0 };
-	RECT rc{};
-	
-	EXPECT_TRUE(window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
-
-	int width = static_cast<int>(rc.right - rc.left);
-	int height = static_cast<int>(rc.bottom - rc.top);
+	int width = { 0 };
+	int height = { 0 };
+	m_window->GetWindowSize(width, height);
 	std::unique_ptr<Button> button = std::make_unique<Button>(L"Resources/", width / 2, height / 2);
-	renderer->SetRenderItem(button.get());
+	m_renderer->SetRenderItem(button.get());
 
-	EXPECT_TRUE(renderer->Initialize(hwnd, width, height));
+	EXPECT_TRUE(m_renderer->LoadResources());
+}
+
+struct ButtonImage
+{
+public:
+	std::wstring left{};
+	std::wstring middle{};
+	std::wstring right{};
+	XMUINT2 pos;
+};
+
+class Button3 : public IRenderItem
+{
+public:
+	Button3(const std::wstring& resPath)
+	{}
+	virtual ~Button3() {};
+
+	virtual void OnDeviceLost() override {}
+	virtual void LoadResources(ID3D12Device* device,
+		DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload) override 
+	{
+		int a = 1;
+	}
+	virtual void Render(DirectX::DX12::SpriteBatch* sprite) override {}
+	
+	void SetImage(const ButtonImage& btnImage)
+	{
+
+	}
+
+private:
+};
+
+TEST_F(ToyTest, Button3Test)
+{
+	int width = { 0 };
+	int height = { 0 };
+	m_window->GetWindowSize(width, height);
+	std::unique_ptr<Button3> button3 = std::make_unique<Button3>(L"Resources/");
+	ButtonImage btnImage{
+		L"bar_square_large_l.png",
+		L"bar_square_large_m.png",
+		L"bar_square_large_r",
+		XMUINT2(width / 2, height / 2) };
+
+	button3->SetImage(btnImage);
+	m_renderer->SetRenderItem(button3.get());
+
+	EXPECT_TRUE(m_renderer->LoadResources());
 }
 
 TEST_F(ToyTest, RunTest)

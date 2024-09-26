@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "ToyTestFixture.h"
+#include "../Include/IRenderer.h"
+#include "../Toy/Window.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()
@@ -26,6 +28,13 @@ void ToyTest::SetUp()
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
+
+	m_window = std::make_unique<Window>();
+
+	HWND hwnd{ 0 };
+	RECT rc{};
+	EXPECT_TRUE(m_window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
+	m_renderer = CreateRenderer(hwnd, static_cast<int>(rc.right - rc.left), static_cast<int>(rc.bottom - rc.top));
 }
 
 void ToyTest::TearDown()
