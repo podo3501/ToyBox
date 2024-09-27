@@ -5,8 +5,8 @@
 #pragma once
 
 #include "../Include/IRenderer.h"
-#include "../Include/IDeviceNotify.h"
 #include "../Include/IRenderItem.h"
+#include "IDeviceNotify.h"
 
 class Texture;
 class Button;

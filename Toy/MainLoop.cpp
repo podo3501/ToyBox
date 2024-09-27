@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Utility.h"
 #include "Button.h"
+#include "Button3.h"
 #include "MouseProcedure.h"
 #include "StepTimer.h"
 
@@ -173,7 +174,15 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     m_renderer = CreateRenderer(hwnd, width, height);
 
     m_button = std::make_unique<Button>(resPath, width / 2, height / 2);
+    m_button3 = std::make_unique<Button3>(resPath);
+    ButtonImage btnImage{ 3, {
+            L"bar_square_large_l.png",
+            L"bar_square_large_m.png",
+            L"bar_square_large_r.png"
+    } };
+    m_button3->SetImage(btnImage, XMUINT2(width / 2, height / 2));
     m_renderer->SetRenderItem(m_button.get());
+    m_renderer->SetRenderItem(m_button3.get());
     m_mouse->SetWindow(hwnd);
 
     //RenderItem을 다 등록시킨후 initialize 한다. initialize와 load를 분리해서 처리하는것도 좋을것 같다.

@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "../Include/IDeviceNotify.h"
+#include "IDeviceNotify.h"
 
 namespace DX
 {

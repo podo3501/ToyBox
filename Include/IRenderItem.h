@@ -1,16 +1,5 @@
 #pragma once
 
-struct ID3D12Device;
-namespace DirectX
-{
-	class DescriptorHeap;
-	class ResourceUploadBatch;
-	namespace DX12
-	{
-		class SpriteBatch;
-	}
-}
-
 struct IRenderItem
 {
 public:

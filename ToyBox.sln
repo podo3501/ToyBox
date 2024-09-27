@@ -25,7 +25,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{69C6CF77-41C4-4FCE-AC9B-6B5223B97BE3}"
 	ProjectSection(SolutionItems) = preProject
 		Include\d3dx12.h = Include\d3dx12.h
-		Include\IDeviceNotify.h = Include\IDeviceNotify.h
 		Include\IRenderer.h = Include\IRenderer.h
 		Include\IRenderItem.h = Include\IRenderItem.h
 	EndProjectSection

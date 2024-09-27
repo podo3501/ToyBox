@@ -1,6 +1,6 @@
 #pragma once
-#include <windows.h>
-#include "IRenderItem.h"
+
+struct IRenderItem;
 
 struct IRenderer
 {
