@@ -446,13 +446,10 @@ void DeviceResources::CreateWindowSizeDependentResources()
 }
 
 // This method is called when the Win32 window is created (or re-created).
-void DeviceResources::SetWindow(HWND window, int width, int height) noexcept
+void DeviceResources::SetWindow(HWND window, const RECT& resolution) noexcept
 {
     m_window = window;
-
-    m_outputSize.left = m_outputSize.top = 0;
-    m_outputSize.right = static_cast<long>(width);
-    m_outputSize.bottom = static_cast<long>(height);
+    m_outputSize = resolution;
 }
 
 // This method is called when the Win32 window changes size.

@@ -21,4 +21,4 @@ public:
     virtual void Draw() = 0;
 };
 
-std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height);
+std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, const RECT& resolution);

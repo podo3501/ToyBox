@@ -27,13 +27,7 @@ Window::~Window()
     ClearWindowMessageQueue();
 }
 
-void Window::GetWindowSize(int& width, int& height) const noexcept
-{
-    width = m_width;
-    height = m_height;
-}
-
-bool Window::Create(HINSTANCE hInstance, int nCmdShow, RECT& rc, HWND& hwnd)
+bool Window::Create(HINSTANCE hInstance, int nCmdShow, const RECT& rc, HWND& hwnd)
 {
     ReturnIfFalse(WindowRegisterClass(hInstance, m_className));
     ReturnIfFalse(CreateGameWindow(hInstance, rc, hwnd));
@@ -44,7 +38,7 @@ bool Window::Create(HINSTANCE hInstance, int nCmdShow, RECT& rc, HWND& hwnd)
     ShowWindow(hwnd, nCmdShow);
     // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
 
-    GetClientRect(hwnd, &rc);
+    //GetClientRect(hwnd, &rc);
 
     return true;
 }
@@ -74,11 +68,12 @@ bool Window::WindowRegisterClass(HINSTANCE hInstance, const std::wstring& classN
     return true;
 }
 
-bool Window::CreateGameWindow(HINSTANCE hInstance, RECT& rc, HWND& hwnd)
+bool Window::CreateGameWindow(HINSTANCE hInstance, const RECT& rc, HWND& hwnd)
 {
-    rc = { 0, 0, static_cast<LONG>(m_width), static_cast<LONG>(m_height) };
+    //rc = { 0, 0, static_cast<LONG>(m_width), static_cast<LONG>(m_height) };
+    m_outputSize = rc;
 
-    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
+    AdjustWindowRect(&m_outputSize, WS_OVERLAPPEDWINDOW, FALSE);
 
     hwnd = CreateWindowExW(0, L"ToyWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,

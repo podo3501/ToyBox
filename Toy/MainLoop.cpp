@@ -122,9 +122,9 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
                 SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
 
-                int width{ 0 };
-                int height{ 0 };
-                m_window->GetWindowSize(width, height);
+                RECT rc = m_window->GetOutputSize();
+                int width(rc.right - rc.left);
+                int height(rc.bottom - rc.top);
 
                 ShowWindow(hWnd, SW_SHOWNORMAL);
                 SetWindowPos(hWnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
@@ -167,20 +167,18 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     m_timer = std::make_unique<DX::StepTimer>();
 
     HWND hwnd{ 0 };
-    RECT rc{};
+    RECT rc{0, 0, 800, 600};
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
-    int width = static_cast<int>(rc.right - rc.left);
-    int height = static_cast<int>(rc.bottom - rc.top);
-    m_renderer = CreateRenderer(hwnd, width, height);
+    m_renderer = CreateRenderer(hwnd, m_window->GetOutputSize());
 
-    m_button = std::make_unique<Button>(resPath, width / 2, height / 2);
+    m_button = std::make_unique<Button>(resPath, SimpleMath::Vector2{ 0.5f, 0.5f });
     m_button3 = std::make_unique<Button3>(resPath);
     ButtonImage btnImage{ 3, {
-            L"bar_square_large_l.png",
-            L"bar_square_large_m.png",
-            L"bar_square_large_r.png"
+            L"UI/Blue/bar_square_large_l.png",
+            L"UI/Blue/bar_square_large_m.png",
+            L"UI/Blue/bar_square_large_r.png"
     } };
-    m_button3->SetImage(btnImage, XMUINT2(width / 2, height / 2));
+    m_button3->SetImage(btnImage, SimpleMath::Vector2{ 0.5f, 0.5f });
     m_renderer->SetRenderItem(m_button.get());
     m_renderer->SetRenderItem(m_button3.get());
     m_mouse->SetWindow(hwnd);
@@ -214,7 +212,7 @@ void MainLoop::Update(DX::StepTimer* timer)
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
     Mouse::State state = m_mouse->GetState();
-    m_button->Update(state);
+    m_button->Update(m_window->GetResolution(), state);
 
     PIXEndEvent();
 }

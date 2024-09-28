@@ -20,14 +20,14 @@ public:
 	virtual void OnDeviceLost() override;
 	virtual void LoadResources(ID3D12Device* device,
 		DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload) override;
-	virtual void Render(DirectX::DX12::SpriteBatch* sprite) override;
+	virtual void Render(DirectX::DX12::SpriteBatch* sprite, const DirectX::SimpleMath::Vector2& outputSize) override;
 
 	void SetTexture(int index, std::unique_ptr<Texture> tex);
-	void SetImage(const ButtonImage& btnImage, const DirectX::XMUINT2& pos);
+	void SetImage(const ButtonImage& btnImage, const DirectX::SimpleMath::Vector2& pos);
 
 private:
 	ButtonImage m_image{};
 	std::wstring m_resPath{};
 	std::map<int, std::unique_ptr<Texture>> m_textures;
-	DirectX::XMUINT2 m_position{};
+	DirectX::SimpleMath::Vector2 m_position{};
 };

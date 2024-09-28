@@ -32,9 +32,9 @@ void ToyTest::SetUp()
 	m_window = std::make_unique<Window>();
 
 	HWND hwnd{ 0 };
-	RECT rc{};
+	RECT rc{0, 0, 800, 600};
 	EXPECT_TRUE(m_window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
-	m_renderer = CreateRenderer(hwnd, static_cast<int>(rc.right - rc.left), static_cast<int>(rc.bottom - rc.top));
+	m_renderer = CreateRenderer(hwnd, m_window->GetOutputSize());
 }
 
 void ToyTest::TearDown()

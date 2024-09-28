@@ -4,8 +4,8 @@
 
 using namespace DirectX;
 
-Button::Button(const std::wstring& resPath, int width, int height) :
-    m_resPath{ resPath }, m_screenPos{ float(width), float(height) }
+Button::Button(const std::wstring& resPath, const SimpleMath::Vector2& pos) :
+    m_resPath{ resPath }, m_screenPos{ pos }
 {}
 Button::~Button() = default;
 
@@ -13,14 +13,14 @@ void Button::SetTexture(std::unique_ptr<Texture> normal, std::unique_ptr<Texture
 {
     SetSize(normal.get());
 
-    m_textures.insert(std::make_pair(ButtonState::BT_Normal, std::move(normal)));
-    m_textures.insert(std::make_pair(ButtonState::BT_Over, std::move(over)));
-    m_textures.insert(std::make_pair(ButtonState::BT_Click, std::move(click)));
+    m_textures.insert(std::make_pair(ButtonStateOld::BT_Normal, std::move(normal)));
+    m_textures.insert(std::make_pair(ButtonStateOld::BT_Over, std::move(over)));
+    m_textures.insert(std::make_pair(ButtonStateOld::BT_Click, std::move(click)));
 }
 
-void Button::SetTexture(ButtonState btnState, std::unique_ptr<Texture> tex)
+void Button::SetTexture(ButtonStateOld btnState, std::unique_ptr<Texture> tex)
 {
-    if (btnState == ButtonState::BT_Normal)
+    if (btnState == ButtonStateOld::BT_Normal)
         SetSize(tex.get());
 
     m_textures.insert(std::make_pair(btnState, std::move(tex)));
@@ -41,18 +41,20 @@ void Button::Reset()
         });
 }
 
-void Button::Update(const Mouse::State& state)
+void Button::Update(const SimpleMath::Vector2& resolution, const Mouse::State& state)
 {
-    int x = state.x - static_cast<int>(m_screenPos.x);
-    int y = state.y - static_cast<int>(m_screenPos.y);
+    SimpleMath::Vector2 pos{ resolution * m_screenPos };
 
-    m_state = ButtonState::BT_Normal;
+    int x = state.x - static_cast<int>(pos.x);
+    int y = state.y - static_cast<int>(pos.y);
+
+    m_state = ButtonStateOld::BT_Normal;
 
     if ((-m_origin.x < x && x < m_origin.x) && (-m_origin.y < y && y < m_origin.y))
-        m_state = ButtonState::BT_Over;
+        m_state = ButtonStateOld::BT_Over;
 
-    if (m_state == ButtonState::BT_Over && state.leftButton)
-        m_state = ButtonState::BT_Click;
+    if (m_state == ButtonStateOld::BT_Over && state.leftButton)
+        m_state = ButtonStateOld::BT_Click;
 }
 
 void Button::OnDeviceLost()
@@ -70,20 +72,20 @@ void Button::LoadResources(ID3D12Device* device,
     SetButtonTexture(device, descHeap, resUpload, filenames, this);
 }
 
-void Button::Render(DirectX::DX12::SpriteBatch* sprite)
+void Button::Render(DX12::SpriteBatch* sprite, const SimpleMath::Vector2& outputSize)
 {
-    m_textures[m_state]->Draw(sprite, m_screenPos);
+    m_textures[m_state]->Draw(sprite, outputSize * m_screenPos);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
 void SetButtonTexture(ID3D12Device* device, DirectX::DescriptorHeap* descHeap, ResourceUploadBatch& resUpload,
     std::vector<std::tuple<int, std::wstring>>& filenames, Button* button)
 {
-    std::ranges::for_each(filenames, [device, descHeap, &resUpload, bs{ ButtonState::BT_Normal }, button](auto& file) mutable {
+    std::ranges::for_each(filenames, [device, descHeap, &resUpload, bs{ ButtonStateOld::BT_Normal }, button](auto& file) mutable {
         std::unique_ptr<Texture> tex = std::make_unique<Texture>(device, descHeap);
         tex->Upload(resUpload, std::get<0>(file), std::get<1>(file));
 
         button->SetTexture(bs, std::move(tex));
-        bs = static_cast<ButtonState>(static_cast<int>(bs) + 1);
+        bs = static_cast<ButtonStateOld>(static_cast<int>(bs) + 1);
         });
 }

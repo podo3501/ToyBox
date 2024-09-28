@@ -11,10 +11,7 @@ using namespace DirectX;
 
 TEST_F(ToyTest, ButtonTest)
 {
-	int width = { 0 };
-	int height = { 0 };
-	m_window->GetWindowSize(width, height);
-	std::unique_ptr<Button> button = std::make_unique<Button>(L"Resources/", width / 2, height / 2);
+	std::unique_ptr<Button> button = std::make_unique<Button>(L"Resources/", SimpleMath::Vector2{ 0.5f, 0.5f });
 	m_renderer->SetRenderItem(button.get());
 
 	EXPECT_TRUE(m_renderer->LoadResources());
@@ -22,17 +19,15 @@ TEST_F(ToyTest, ButtonTest)
 
 TEST_F(ToyTest, Button3Test)
 {
-	int width = { 0 };
-	int height = { 0 };
-	m_window->GetWindowSize(width, height);
 	std::unique_ptr<Button3> button3 = std::make_unique<Button3>(L"Resources/");
 	ButtonImage btnImage{ 3, { 
-			L"bar_square_large_l.png", 
-			L"bar_square_large_m.png", 
-			L"bar_square_large_r.png" 
+			L"UI/Blue/bar_square_large_l.png", 
+			L"UI/Blue/bar_square_large_m.png", 
+			L"UI/Blue/bar_square_large_r.png" 
 	} };
 
-	button3->SetImage(btnImage, XMUINT2(width / 2, height / 2));
+	SimpleMath::Vector2 pos{ 0.5f, 0.5f };
+	button3->SetImage(btnImage, pos);
 	m_renderer->SetRenderItem(button3.get());
 
 	EXPECT_TRUE(m_renderer->LoadResources());

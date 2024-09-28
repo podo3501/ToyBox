@@ -5,12 +5,12 @@
 
 using namespace DirectX;
 
-std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
+std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, const RECT& resolution)
 {
-    return std::move(std::make_unique<Renderer>(hwnd, width, height));
+    return std::move(std::make_unique<Renderer>(hwnd, resolution));
 }
 
-Renderer::Renderer(HWND hwnd, int width, int height) noexcept(false)
+Renderer::Renderer(HWND hwnd, const RECT& resolution) noexcept(false)
 {
     WICOnceInitialize();
 
@@ -21,7 +21,7 @@ Renderer::Renderer(HWND hwnd, int width, int height) noexcept(false)
     //   Add DX::DeviceResources::c_ReverseDepth to optimize depth buffer clears for 0 instead of 1.
     m_deviceResources->RegisterDeviceNotify(this);
 
-    m_deviceResources->SetWindow(hwnd, width, height);
+    m_deviceResources->SetWindow(hwnd, resolution);
 }
 
 Renderer::~Renderer()
@@ -77,8 +77,10 @@ void Renderer::Draw()
 
     m_spriteBatch->Begin(commandList);
 
-    std::ranges::for_each(m_renderItems, [&sprite = m_spriteBatch](auto& item) {
-        item->Render(sprite.get());
+    const auto& rect = m_deviceResources->GetOutputSize();
+    SimpleMath::Vector2 resolution{ static_cast<float>(rect.right + rect.left), static_cast<float>(rect.bottom + rect.top) };
+    std::ranges::for_each(m_renderItems, [&sprite = m_spriteBatch, &resolution](auto& item) {
+        item->Render(sprite.get(), resolution);
         });
 
     m_spriteBatch->End();

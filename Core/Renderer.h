@@ -24,7 +24,7 @@ class Renderer final : public DX::IDeviceNotify, public IRenderer
 
 public:
 
-    Renderer(HWND hwnd, int width, int height) noexcept(false);
+    Renderer(HWND hwnd, const RECT& resolution) noexcept(false);
     ~Renderer();
 
     Renderer(Renderer&&) = default;

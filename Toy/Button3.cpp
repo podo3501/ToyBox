@@ -15,6 +15,7 @@ void Button3::OnDeviceLost()
 		tex->Reset();
 		});
 }
+
 void Button3::LoadResources(ID3D12Device* device,
 	DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload)
 {
@@ -25,11 +26,14 @@ void Button3::LoadResources(ID3D12Device* device,
 			btn->SetTexture(texIdx++, std::move(tex));
 		});
 }
-void Button3::Render(DirectX::DX12::SpriteBatch* sprite)
+
+void Button3::Render(DX12::SpriteBatch* sprite, const SimpleMath::Vector2& outputSize)
 {
-	m_textures[0]->Draw(sprite, DirectX::SimpleMath::Vector2{ (float)m_position.x, (float)m_position.y });
-	m_textures[1]->Draw(sprite, DirectX::SimpleMath::Vector2{ (float)m_position.x, (float)m_position.y });
-	m_textures[2]->Draw(sprite, DirectX::SimpleMath::Vector2{ (float)m_position.x, (float)m_position.y });
+	const SimpleMath::Vector2& pos{ outputSize * m_position };
+
+	m_textures[0]->Draw(sprite, pos);
+	m_textures[1]->Draw(sprite, pos);
+	m_textures[2]->Draw(sprite, pos);
 }
 
 void Button3::SetTexture(int index, std::unique_ptr<Texture> tex)
@@ -37,7 +41,7 @@ void Button3::SetTexture(int index, std::unique_ptr<Texture> tex)
 	m_textures.insert(std::make_pair(index, std::move(tex)));
 }
 
-void Button3::SetImage(const ButtonImage& btnImage, const DirectX::XMUINT2& pos)
+void Button3::SetImage(const ButtonImage& btnImage, const SimpleMath::Vector2& pos)
 {
 	m_image = btnImage;
 	m_position = pos;
