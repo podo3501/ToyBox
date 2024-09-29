@@ -5,12 +5,12 @@
 
 using namespace DirectX;
 
-std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, const RECT& resolution)
+std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
 {
-    return std::move(std::make_unique<Renderer>(hwnd, resolution));
+    return std::move(std::make_unique<Renderer>(hwnd, width, height));
 }
 
-Renderer::Renderer(HWND hwnd, const RECT& resolution) noexcept(false)
+Renderer::Renderer(HWND hwnd, int width, int height) noexcept(false)
 {
     WICOnceInitialize();
 
@@ -21,7 +21,7 @@ Renderer::Renderer(HWND hwnd, const RECT& resolution) noexcept(false)
     //   Add DX::DeviceResources::c_ReverseDepth to optimize depth buffer clears for 0 instead of 1.
     m_deviceResources->RegisterDeviceNotify(this);
 
-    m_deviceResources->SetWindow(hwnd, resolution);
+    m_deviceResources->SetWindow(hwnd, width, height);
 }
 
 Renderer::~Renderer()

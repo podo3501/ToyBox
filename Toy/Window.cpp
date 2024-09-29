@@ -71,16 +71,17 @@ bool Window::WindowRegisterClass(HINSTANCE hInstance, const std::wstring& classN
 bool Window::CreateGameWindow(HINSTANCE hInstance, const RECT& rc, HWND& hwnd)
 {
     //rc = { 0, 0, static_cast<LONG>(m_width), static_cast<LONG>(m_height) };
-    m_outputSize = rc;
 
-    AdjustWindowRect(&m_outputSize, WS_OVERLAPPEDWINDOW, FALSE);
-
+    RECT rect{ rc };
+    AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
     hwnd = CreateWindowExW(0, L"ToyWindowClass", g_szAppName, WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
+        CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top,
         nullptr, nullptr, hInstance, nullptr);
     // TODO: Change to CreateWindowExW(WS_EX_TOPMOST, L"ToyWindowClass", g_szAppName, WS_POPUP,
     // to default to fullscreen.
     if (!hwnd) return false;
+
+    m_outputSize = rc;
 
     return true;
 }

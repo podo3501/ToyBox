@@ -11,8 +11,8 @@ public:
     ~Window();
     bool Create(HINSTANCE hInstance, int nCmdShow, const RECT& rc, HWND& hwnd);
     inline void AddWndProcListener(WndProcListener listener);
-    inline RECT GetOutputSize() const noexcept;
     inline DirectX::SimpleMath::Vector2 GetResolution() const noexcept;
+    inline void OnWindowSizeChanged(const RECT& size) noexcept;
     
 private:
     bool WindowRegisterClass(HINSTANCE hInstance, const std::wstring& className);
@@ -24,11 +24,12 @@ private:
     RECT m_outputSize{};
     HINSTANCE m_hInstance{};
     std::wstring m_className{ L"ToyWindowClass" };
+    LONG m_titleBarSize{ 0 };
     std::vector<WndProcListener> m_wndProcListeners{};
 };
 
 inline void Window::AddWndProcListener(WndProcListener listener) { m_wndProcListeners.emplace_back(std::move(listener)); }
-inline RECT Window::GetOutputSize() const noexcept { return m_outputSize; }
 inline DirectX::SimpleMath::Vector2 Window::GetResolution() const noexcept{
     return { static_cast<float>(m_outputSize.right + m_outputSize.left), 
         static_cast<float>(m_outputSize.bottom + m_outputSize.top) }; }
+inline void Window::OnWindowSizeChanged(const RECT& size) noexcept { m_outputSize = size; }

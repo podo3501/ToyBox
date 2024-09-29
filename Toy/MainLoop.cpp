@@ -76,6 +76,14 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         else if (!m_sizemove)
         {
+            int width = LOWORD(lParam);
+            int height = HIWORD(lParam);
+
+            RECT rc;
+            rc.left = rc.top = 0;
+            rc.right = static_cast<LONG>(width);
+            rc.bottom = static_cast<LONG>(height);
+            m_window->OnWindowSizeChanged(rc);
             m_renderer->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
         }
         break;
@@ -90,6 +98,7 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             RECT rc;
             GetClientRect(hWnd, &rc);
 
+            m_window->OnWindowSizeChanged(rc);
             m_renderer->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
         }
         break;
@@ -122,9 +131,9 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
                 SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
 
-                RECT rc = m_window->GetOutputSize();
-                int width(rc.right - rc.left);
-                int height(rc.bottom - rc.top);
+                const auto& resolution = m_window->GetResolution();
+                int width = static_cast<int>(resolution.x);
+                int height = static_cast<int>(resolution.y);
 
                 ShowWindow(hWnd, SW_SHOWNORMAL);
                 SetWindowPos(hWnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
@@ -169,7 +178,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     HWND hwnd{ 0 };
     RECT rc{0, 0, 800, 600};
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
-    m_renderer = CreateRenderer(hwnd, m_window->GetOutputSize());
+    const auto& resolution = m_window->GetResolution();
+    m_renderer = CreateRenderer(hwnd, static_cast<int>(resolution.x), static_cast<int>(resolution.y));
 
     m_button = std::make_unique<Button>(resPath, SimpleMath::Vector2{ 0.5f, 0.5f });
     m_button3 = std::make_unique<Button3>(resPath);

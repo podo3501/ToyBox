@@ -30,7 +30,7 @@ namespace DX
 
         void CreateDeviceResources();
         void CreateWindowSizeDependentResources();
-        void SetWindow(HWND window, const RECT& resolution) noexcept;
+        void SetWindow(HWND window, int width, int height) noexcept;
         bool WindowSizeChanged(int width, int height);
         void HandleDeviceLost();
         void RegisterDeviceNotify(IDeviceNotify* deviceNotify) noexcept { m_deviceNotify = deviceNotify; }
