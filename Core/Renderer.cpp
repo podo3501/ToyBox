@@ -7,7 +7,12 @@ using namespace DirectX;
 
 std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
 {
-    return std::move(std::make_unique<Renderer>(hwnd, width, height));
+    std::unique_ptr<Renderer> renderer = std::make_unique<Renderer>(hwnd, width, height);
+    auto result = renderer->Initialize();
+    if (!result)
+        return nullptr;
+
+    return std::move(renderer);
 }
 
 Renderer::Renderer(HWND hwnd, int width, int height) noexcept(false)
@@ -33,7 +38,7 @@ Renderer::~Renderer()
 }
 
 // Initialize the Direct3D resources required to run.
-bool Renderer::LoadResources()
+bool Renderer::Initialize()
 {
     //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
 #ifdef __MINGW32__
@@ -60,9 +65,35 @@ bool Renderer::LoadResources()
     return true;
 }
 
+bool Renderer::LoadResources(IRenderItem* item)
+{
+    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
+#ifdef __MINGW32__
+    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
+#else
+    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
+    if (FAILED(initialize)) return false;
+#endif
+
+    auto device = m_deviceResources->GetD3DDevice();
+    ResourceUploadBatch resourceUpload(device);
+
+    resourceUpload.Begin();
+
+    item->LoadResources(device, m_resourceDescriptors.get(), resourceUpload);
+
+    auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
+
+    uploadResourcesFinished.wait();
+
+    m_renderItems.emplace_back(item);
+
+    return true;
+}
+
 #pragma region Frame Draw
 // Draws the scene.
-void Renderer::Draw()
+void Renderer::Draw(IRenderItem* item)
 {
     // Prepare the command list to render a new frame.
     m_deviceResources->Prepare();
@@ -79,9 +110,7 @@ void Renderer::Draw()
 
     const auto& rect = m_deviceResources->GetOutputSize();
     SimpleMath::Vector2 resolution{ static_cast<float>(rect.right + rect.left), static_cast<float>(rect.bottom + rect.top) };
-    std::ranges::for_each(m_renderItems, [&sprite = m_spriteBatch, &resolution](auto& item) {
-        item->Render(sprite.get(), resolution);
-        });
+    item->Render(m_spriteBatch.get(), resolution);
 
     m_spriteBatch->End();
 
@@ -192,9 +221,6 @@ void Renderer::CreateDeviceDependentResources()
 
     resourceUpload.Begin();
 
-    std::ranges::for_each(m_renderItems, [&](auto& item) {
-        item->LoadResources(device, m_resourceDescriptors.get(), resourceUpload); });
-
     RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
 
     SpriteBatchPipelineStateDescription pd(rtState);
@@ -233,8 +259,3 @@ void Renderer::OnDeviceRestored()
     CreateWindowSizeDependentResources();
 }
 #pragma endregion
-
-void Renderer::SetRenderItem(IRenderItem* item)
-{
-    m_renderItems.emplace_back(item);
-}

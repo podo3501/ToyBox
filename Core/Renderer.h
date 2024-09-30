@@ -38,7 +38,8 @@ public:
     void OnDeviceRestored() override;
 
     // Initialization and management
-    bool LoadResources();
+    virtual bool Initialize() override;
+    virtual bool LoadResources(IRenderItem* item) override;
 
     // Messages
     virtual void OnActivated() override;
@@ -49,8 +50,7 @@ public:
     virtual void OnDisplayChange() override;
     virtual void OnWindowSizeChanged(int width, int height) override;
 
-    virtual void SetRenderItem(IRenderItem* item) override;
-    virtual void Draw() override;
+    virtual void Draw(IRenderItem* item) override;
 
 private:
     void Clear();

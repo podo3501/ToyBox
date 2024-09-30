@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Button3.h"
+#include "../Include/IRenderer.h"
 #include "Texture.h"
 
 using namespace DirectX;
@@ -16,6 +17,13 @@ void Button3::OnDeviceLost()
 			tex->Reset();
 			});
 		});
+}
+
+void Button3::LoadResources(IRenderer* renderer)
+{
+	renderer->LoadResources(this);
+	//SimpleMath::Vector2 size{};
+	//renderer->LoadTexture(a, &size);
 }
 
 void Button3::LoadResources(ID3D12Device* device,
@@ -57,6 +65,11 @@ void Button3::Update(const SimpleMath::Vector2& resolution, const Mouse::State& 
 
 	if (m_state == ButtonState::Over && state.leftButton)
 		m_state = ButtonState::Clicked;
+}
+
+void Button3::Draw(IRenderer* renderer)
+{
+	renderer->Draw(this);
 }
 
 void Button3::Render(DX12::SpriteBatch* sprite, const SimpleMath::Vector2& outputSize)

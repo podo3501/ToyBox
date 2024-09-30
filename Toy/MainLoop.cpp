@@ -180,6 +180,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
     const auto& outputSize = m_window->GetOutputSize();
     m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y));
+    if (m_renderer == nullptr)
+        return false;
 
     //m_button = std::make_unique<Button>(resPath, SimpleMath::Vector2{ 0.5f, 0.5f });
     m_button3 = std::make_unique<Button3>(resPath);
@@ -199,12 +201,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
             L"UI/Gray/bar_square_large_r.png"
     } };
     m_button3->SetImage(normalImage, overImage, clickedImage, SimpleMath::Vector2{ 0.5f, 0.5f });
-    //m_renderer->SetRenderItem(m_button.get());
-    m_renderer->SetRenderItem(m_button3.get());
     m_mouse->SetWindow(hwnd);
-
-    //RenderItem을 다 등록시킨후 initialize 한다. initialize와 load를 분리해서 처리하는것도 좋을것 같다.
-    ReturnIfFalse(m_renderer->LoadResources());
+    m_button3->LoadResources(m_renderer.get());
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
@@ -266,8 +264,11 @@ void MainLoop::Tick()
         });
 
     // Don't try to render anything before the first Update.
-    if(m_timer->GetFrameCount() != 0)
-        m_renderer->Draw();
+    if (m_timer->GetFrameCount() != 0)
+    {
+        m_button3->Draw(m_renderer.get());
+        //m_renderer->Draw();
+    }
 }
 
 void MainLoop::OnResuming()

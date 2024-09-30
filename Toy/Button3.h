@@ -3,6 +3,7 @@
 #include "../Include/IRenderItem.h"
 
 class Texture;
+struct IRenderer;
 
 struct ButtonImage
 {
@@ -18,6 +19,7 @@ class Button3 : public IRenderItem
 		Normal,
 		Over,
 		Clicked,
+		Count,
 	};
 
 public:
@@ -27,11 +29,13 @@ public:
 	virtual void OnDeviceLost() override;
 	virtual void LoadResources(ID3D12Device* device,
 		DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload) override;
-	void Update(const DirectX::SimpleMath::Vector2& resolution, const DirectX::Mouse::State& state);
 	virtual void Render(DirectX::DX12::SpriteBatch* sprite, const DirectX::SimpleMath::Vector2& outputSize) override;
 
+	void LoadResources(IRenderer* renderer);
+	void Update(const DirectX::SimpleMath::Vector2& resolution, const DirectX::Mouse::State& state);
 	void SetImage(const ButtonImage& normal, const ButtonImage& over, const ButtonImage& clicked,
 		const DirectX::SimpleMath::Vector2& pos);
+	void Draw(IRenderer* renderer);
 
 private:
 	void LoadImage(ID3D12Device* device, DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload,
