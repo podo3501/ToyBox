@@ -20,14 +20,23 @@ TEST_F(ToyTest, ButtonTest)
 TEST_F(ToyTest, Button3Test)
 {
 	std::unique_ptr<Button3> button3 = std::make_unique<Button3>(L"Resources/");
-	ButtonImage btnImage{ 3, { 
+	ButtonImage normal{ 3, { 
 			L"UI/Blue/bar_square_large_l.png", 
 			L"UI/Blue/bar_square_large_m.png", 
 			L"UI/Blue/bar_square_large_r.png" 
 	} };
-
+	ButtonImage over{ 6, {
+			L"UI/Red/bar_square_large_l.png",
+			L"UI/Red/bar_square_large_m.png",
+			L"UI/Red/bar_square_large_r.png"
+	} };
+	ButtonImage clicked{ 9, {
+			L"UI/Gray/bar_square_large_l.png",
+			L"UI/Gray/bar_square_large_m.png",
+			L"UI/Gray/bar_square_large_r.png"
+	} };
 	SimpleMath::Vector2 pos{ 0.5f, 0.5f };
-	button3->SetImage(btnImage, pos);
+	button3->SetImage(normal, over, clicked, pos);
 	m_renderer->SetRenderItem(button3.get());
 
 	EXPECT_TRUE(m_renderer->LoadResources());

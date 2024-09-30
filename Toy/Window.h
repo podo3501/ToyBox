@@ -11,7 +11,7 @@ public:
     ~Window();
     bool Create(HINSTANCE hInstance, int nCmdShow, const RECT& rc, HWND& hwnd);
     inline void AddWndProcListener(WndProcListener listener);
-    inline DirectX::SimpleMath::Vector2 GetResolution() const noexcept;
+    inline DirectX::SimpleMath::Vector2 GetOutputSize() const noexcept;
     inline void OnWindowSizeChanged(const RECT& size) noexcept;
     
 private:
@@ -29,7 +29,7 @@ private:
 };
 
 inline void Window::AddWndProcListener(WndProcListener listener) { m_wndProcListeners.emplace_back(std::move(listener)); }
-inline DirectX::SimpleMath::Vector2 Window::GetResolution() const noexcept{
+inline DirectX::SimpleMath::Vector2 Window::GetOutputSize() const noexcept{
     return { static_cast<float>(m_outputSize.right + m_outputSize.left), 
         static_cast<float>(m_outputSize.bottom + m_outputSize.top) }; }
 inline void Window::OnWindowSizeChanged(const RECT& size) noexcept { m_outputSize = size; }

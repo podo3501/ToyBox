@@ -186,7 +186,7 @@ void Renderer::CreateDeviceDependentResources()
     m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_resourceDescriptors = std::make_unique<DescriptorHeap>(device, 6);
+    m_resourceDescriptors = std::make_unique<DescriptorHeap>(device, 100);
 
     ResourceUploadBatch resourceUpload(device);
 

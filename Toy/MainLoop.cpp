@@ -131,7 +131,7 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
                 SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
 
-                const auto& resolution = m_window->GetResolution();
+                const auto& resolution = m_window->GetOutputSize();
                 int width = static_cast<int>(resolution.x);
                 int height = static_cast<int>(resolution.y);
 
@@ -178,18 +178,28 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     HWND hwnd{ 0 };
     RECT rc{0, 0, 800, 600};
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
-    const auto& resolution = m_window->GetResolution();
-    m_renderer = CreateRenderer(hwnd, static_cast<int>(resolution.x), static_cast<int>(resolution.y));
+    const auto& outputSize = m_window->GetOutputSize();
+    m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y));
 
-    m_button = std::make_unique<Button>(resPath, SimpleMath::Vector2{ 0.5f, 0.5f });
+    //m_button = std::make_unique<Button>(resPath, SimpleMath::Vector2{ 0.5f, 0.5f });
     m_button3 = std::make_unique<Button3>(resPath);
-    ButtonImage btnImage{ 3, {
+    ButtonImage normalImage{ 3, {
             L"UI/Blue/bar_square_large_l.png",
             L"UI/Blue/bar_square_large_m.png",
             L"UI/Blue/bar_square_large_r.png"
     } };
-    m_button3->SetImage(btnImage, SimpleMath::Vector2{ 0.5f, 0.5f });
-    m_renderer->SetRenderItem(m_button.get());
+    ButtonImage overImage{ 6, {
+            L"UI/Red/bar_square_large_l.png",
+            L"UI/Red/bar_square_large_m.png",
+            L"UI/Red/bar_square_large_r.png"
+    } };
+    ButtonImage clickedImage{ 9, {
+            L"UI/Gray/bar_square_large_l.png",
+            L"UI/Gray/bar_square_large_m.png",
+            L"UI/Gray/bar_square_large_r.png"
+    } };
+    m_button3->SetImage(normalImage, overImage, clickedImage, SimpleMath::Vector2{ 0.5f, 0.5f });
+    //m_renderer->SetRenderItem(m_button.get());
     m_renderer->SetRenderItem(m_button3.get());
     m_mouse->SetWindow(hwnd);
 
@@ -222,7 +232,8 @@ void MainLoop::Update(DX::StepTimer* timer)
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
     Mouse::State state = m_mouse->GetState();
-    m_button->Update(m_window->GetResolution(), state);
+    //m_button->Update(m_window->GetOutputSize(), state);
+    m_button3->Update(m_window->GetOutputSize(), state);
 
     PIXEndEvent();
 }
