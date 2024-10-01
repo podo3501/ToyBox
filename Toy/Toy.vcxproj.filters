@@ -20,8 +20,6 @@
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="MouseProcedure.h" />
     <ClInclude Include="Button3.h" />
   </ItemGroup>
@@ -30,8 +28,6 @@
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
     <ClCompile Include="Button3.cpp" />
   </ItemGroup>

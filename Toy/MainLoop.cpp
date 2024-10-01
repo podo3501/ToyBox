@@ -3,7 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "Window.h"
 #include "Utility.h"
-#include "Button.h"
+//#include "Button.h"
 #include "Button3.h"
 #include "MouseProcedure.h"
 #include "StepTimer.h"
@@ -184,7 +184,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
         return false;
 
     //m_button = std::make_unique<Button>(resPath, SimpleMath::Vector2{ 0.5f, 0.5f });
-    m_button3 = std::make_unique<Button3>(resPath);
+    m_button3 = std::make_unique<Button3>(resPath, m_window->GetOutputSize());
     ButtonImage normalImage{ 3, {
             L"UI/Blue/bar_square_large_l.png",
             L"UI/Blue/bar_square_large_m.png",
@@ -202,7 +202,13 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     } };
     m_button3->SetImage(normalImage, overImage, clickedImage, SimpleMath::Vector2{ 0.5f, 0.5f });
     m_mouse->SetWindow(hwnd);
-    m_button3->LoadResources(m_renderer.get());
+    //이렇게 등록시키는 이유는 로드할때 전처리 후처리가 있기 때문이다.
+    //문제는 등록하면 랜더러는 바꿀수 없지 않느냐 라는 것인데
+    //랜더러를 바꾸지 않더라도 테스트 렌더러를 만들어서 랜더러를 2개를 연결하면 된다.
+    //load 부분과 render부분을 나눌까도 생각했는데 그건 복잡성만 증가시킬것 같다.
+    //지금은 상속받아 처리하고 있지만, 함수포인터로 처리할 생각이다. 
+    m_renderer->AddRenderItem(m_button3.get());
+    m_renderer->LoadResources();
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
@@ -231,7 +237,7 @@ void MainLoop::Update(DX::StepTimer* timer)
 
     Mouse::State state = m_mouse->GetState();
     //m_button->Update(m_window->GetOutputSize(), state);
-    m_button3->Update(m_window->GetOutputSize(), state);
+    m_button3->Update(state);
 
     PIXEndEvent();
 }
@@ -266,8 +272,7 @@ void MainLoop::Tick()
     // Don't try to render anything before the first Update.
     if (m_timer->GetFrameCount() != 0)
     {
-        m_button3->Draw(m_renderer.get());
-        //m_renderer->Draw();
+        m_renderer->Draw();
     }
 }
 

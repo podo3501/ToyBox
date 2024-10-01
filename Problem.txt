@@ -34,3 +34,26 @@ Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
 함수가 끝나면 사라진다. 사라지기 전에 com을 생성해야 하기 때문이다.
 
 한 클래스에 unique_ptr 변수가 2개 있으면 선언 순서의 역순으로 소멸자가 호출된다.
+
+1>D:\ProgrammingStudy\ToyBox\Toy\Button3.cpp(36,43): warning C4100: 'iter': 참조되지 않은 정식 매개 변수입니다.
+1>(소스 파일 '/Button3.cpp'을(를) 컴파일하는 중)
+1>    D:\ProgrammingStudy\ToyBox\Toy\Button3.cpp(36,43):
+1>    템플릿 인스턴스화 컨텍스트(가장 오래된 인스턴스화 컨텍스트)가
+1>        D:\ProgrammingStudy\ToyBox\Toy\Button3.cpp(36,15):
+1>        클래스 템플릿 멤버 함수 'std::ranges::in_fun_result<conditional<std::ranges::borrowed_range<_Rng>,unknown-type,std::ranges::dangling>::type,_Fn> std::ranges::_For_each_fn::operator ()(_Rng &&,_Fn,_Pj) const'을(를) 컴파일하는 중입니다.
+1>        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\algorithm(488,13):
+1>        'indirectly_unary_invocable<`Button3::LoadResources'::`2'::<lambda_1>,std::_Projected_impl<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<enum Button3::ButtonState const ,ButtonImage> > > >,std::identity>::_Type>' 개념을 평가하는 동안
+1>        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xutility(964,60):
+1>        'invocable<`Button3::LoadResources'::`2'::<lambda_1> &,std::pair<enum Button3::ButtonState const ,ButtonImage> &>' 개념을 평가하는 동안
+1>        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\concepts(262,10):
+1>        컴파일되는 함수 템플릿 인스턴스화 'unknown-type std::invoke(_Callable &&,_Ty1 &&,_Types2 ...) noexcept(<expr>)'에 대한 참조를 확인하세요.
+1>        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\type_traits(1711,45):
+1>        클래스 템플릿 멤버 함수 'unknown-type std::_Invoker_functor::_Call(_Callable &&,_Types ...) noexcept(<expr>)'을(를) 컴파일하는 중입니다.
+1>        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\type_traits(1610,46):
+1>        컴파일되는 함수 템플릿 인스턴스화 'void Button3::LoadResources::<lambda_1>::operator ()<std::pair<const Button3::ButtonState,ButtonImage>>(_T2 &) const'에 대한 참조를 확인하세요.
+1>        with
+1>        [
+1>            _T2=std::pair<const Button3::ButtonState,ButtonImage>
+1>        ]
+빌드창에 이렇게 떳길래 보니까 '오류'가 아니라 '경고'였다. w4에서 w3로 경고 수준을 낮추면 사라진다.
+iter라는 변수를 사용하지 않아서 나오는 경고치고는 너무 살벌하다.

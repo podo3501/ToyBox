@@ -16,9 +16,14 @@ namespace DX
     class DeviceResources;
 }
 
+namespace DirectX
+{
+    class ResourceUploadBatch;
+}
+
 // A basic game implementation that creates a D3D12 device and
 // provides a game loop.
-class Renderer final : public DX::IDeviceNotify, public IRenderer
+class Renderer final : public DX::IDeviceNotify, public IRenderer, public ILoadData
 {
     using DeviceLostListener = std::function<void()>;
 
@@ -39,7 +44,11 @@ public:
 
     // Initialization and management
     virtual bool Initialize() override;
-    virtual bool LoadResources(IRenderItem* item) override;
+    virtual void AddRenderItem(IRenderItem* item) override;
+    virtual bool LoadResources() override;
+
+    //ILoadData
+    virtual bool LoadTexture(int index, const std::wstring& filename, DirectX::XMUINT2* outSize) override;
 
     // Messages
     virtual void OnActivated() override;
@@ -50,7 +59,8 @@ public:
     virtual void OnDisplayChange() override;
     virtual void OnWindowSizeChanged(int width, int height) override;
 
-    virtual void Draw(IRenderItem* item) override;
+    virtual void Draw() override;
+    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position) override;
 
 private:
     void Clear();
@@ -65,4 +75,7 @@ private:
     std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
 
     std::vector<IRenderItem*> m_renderItems;
+    std::map<int, std::unique_ptr<Texture>> m_textures;
+
+    std::unique_ptr<DirectX::ResourceUploadBatch> m_batch;
 };

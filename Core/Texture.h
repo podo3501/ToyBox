@@ -4,7 +4,7 @@ class Texture
 {
 public:
     Texture(ID3D12Device* device, DirectX::DescriptorHeap* descHeap);
-    void Upload(DirectX::ResourceUploadBatch& resUpload, std::uint32_t descHeapIdx, const std::wstring& filename);
+    void Upload(DirectX::ResourceUploadBatch* resUpload, std::uint32_t descHeapIdx, const std::wstring& filename);
 
     DirectX::XMUINT2 GetSize() const noexcept;
     void Reset();

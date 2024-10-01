@@ -4,12 +4,15 @@
 
 class Texture;
 struct IRenderer;
+struct ILoadData;
 
 struct ButtonImage
 {
 public:
 	int heapIndex;
 	std::vector<std::wstring> filenames;
+	DirectX::XMINT2 size{};
+	std::vector<DirectX::SimpleMath::Vector2> position;
 };
 
 class Button3 : public IRenderItem
@@ -23,29 +26,22 @@ class Button3 : public IRenderItem
 	};
 
 public:
-	Button3(const std::wstring& resPath);
+	Button3(const std::wstring& resPath, const DirectX::SimpleMath::Vector2& resolution);
 	virtual ~Button3();
 
-	virtual void OnDeviceLost() override;
-	virtual void LoadResources(ID3D12Device* device,
-		DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload) override;
-	virtual void Render(DirectX::DX12::SpriteBatch* sprite, const DirectX::SimpleMath::Vector2& outputSize) override;
-
-	void LoadResources(IRenderer* renderer);
-	void Update(const DirectX::SimpleMath::Vector2& resolution, const DirectX::Mouse::State& state);
+	virtual void LoadResources(ILoadData* load) override;
+	virtual void Render(IRenderer* renderer) override;
+	
+	void Update(const DirectX::Mouse::State& state);
 	void SetImage(const ButtonImage& normal, const ButtonImage& over, const ButtonImage& clicked,
 		const DirectX::SimpleMath::Vector2& pos);
-	void Draw(IRenderer* renderer);
 
 private:
-	void LoadImage(ID3D12Device* device, DirectX::DescriptorHeap* descHeap, DirectX::ResourceUploadBatch& resUpload,
-		ButtonState state);
-	void RenderButton(DirectX::DX12::SpriteBatch* sprite, const DirectX::SimpleMath::Vector2& outputSize, 
-		const std::vector<std::unique_ptr<Texture>>& textures);
+	void LoadTextures(ILoadData* load, ButtonImage& images);
 
 	std::wstring m_resPath{};
+	DirectX::SimpleMath::Vector2 m_resolution{};
 	std::map<ButtonState, ButtonImage> m_images;
-	std::map<ButtonState, std::vector<std::unique_ptr<Texture>>> m_textures;
 	DirectX::SimpleMath::Vector2 m_position{};
 	ButtonState m_state{ ButtonState::Normal };
 	DirectX::SimpleMath::Vector2 m_origin{};

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Renderer.h"
 #include "DeviceResources.h"
+#include "Texture.h"
 #include "Utility.h"
 
 using namespace DirectX;
@@ -65,7 +66,12 @@ bool Renderer::Initialize()
     return true;
 }
 
-bool Renderer::LoadResources(IRenderItem* item)
+void Renderer::AddRenderItem(IRenderItem* item)
+{
+    m_renderItems.emplace_back(item);
+}
+
+bool Renderer::LoadResources()
 {
     //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
 #ifdef __MINGW32__
@@ -76,24 +82,38 @@ bool Renderer::LoadResources(IRenderItem* item)
 #endif
 
     auto device = m_deviceResources->GetD3DDevice();
-    ResourceUploadBatch resourceUpload(device);
+    //ResourceUploadBatch resourceUpload(device);
+    m_batch = std::make_unique<ResourceUploadBatch>(device);
 
-    resourceUpload.Begin();
+    m_batch->Begin();
+    //resourceUpload.Begin();
 
-    item->LoadResources(device, m_resourceDescriptors.get(), resourceUpload);
+    std::ranges::for_each(m_renderItems, [load = this](const auto item) {
+        item->LoadResources(load);
+        });
 
-    auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
-
+    auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
     uploadResourcesFinished.wait();
 
-    m_renderItems.emplace_back(item);
+    return true;
+}
+
+bool Renderer::LoadTexture(int index, const std::wstring& filename, XMUINT2* outSize)
+{
+    auto device = m_deviceResources->GetD3DDevice();
+    //item->LoadResources(device, m_resourceDescriptors.get(), resourceUpload);
+    std::unique_ptr<Texture> tex = std::make_unique<Texture>(device, m_resourceDescriptors.get());
+    tex->Upload(m_batch.get(), index, filename);
+    if (outSize)
+        (*outSize) = tex->GetSize();
+    m_textures.insert(std::make_pair(index, std::move(tex)));
 
     return true;
 }
 
 #pragma region Frame Draw
 // Draws the scene.
-void Renderer::Draw(IRenderItem* item)
+void Renderer::Draw()
 {
     // Prepare the command list to render a new frame.
     m_deviceResources->Prepare();
@@ -108,9 +128,9 @@ void Renderer::Draw(IRenderItem* item)
 
     m_spriteBatch->Begin(commandList);
 
-    const auto& rect = m_deviceResources->GetOutputSize();
-    SimpleMath::Vector2 resolution{ static_cast<float>(rect.right + rect.left), static_cast<float>(rect.bottom + rect.top) };
-    item->Render(m_spriteBatch.get(), resolution);
+    std::ranges::for_each(m_renderItems, [renderer = this](const auto item) {
+        item->Render(renderer);
+        });
 
     m_spriteBatch->End();
 
@@ -124,6 +144,11 @@ void Renderer::Draw(IRenderItem* item)
     m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
 
     PIXEndEvent();
+}
+
+void Renderer::Render(int index, const DirectX::SimpleMath::Vector2& position)
+{
+    m_textures[index]->Draw(m_spriteBatch.get(), position);
 }
 
 // Helper method to clear the back buffers.
@@ -242,8 +267,9 @@ void Renderer::CreateWindowSizeDependentResources()
 void Renderer::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
-    std::ranges::for_each(m_renderItems, [](auto& item) {
-        item->OnDeviceLost(); });
+    std::ranges::for_each(m_textures | std::views::values, [](auto& tex) {
+        tex->Reset();
+        });
 
     m_resourceDescriptors.reset();
     m_spriteBatch.reset();

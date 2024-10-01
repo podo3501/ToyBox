@@ -203,22 +203,18 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Button.h" />
     <ClInclude Include="Button3.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MouseProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Button3.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="pch.cpp">

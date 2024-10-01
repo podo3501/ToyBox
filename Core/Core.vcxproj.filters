@@ -11,6 +11,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h" />
@@ -18,5 +19,6 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="IDeviceNotify.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
 </Project>
