@@ -4,7 +4,18 @@ struct IRenderItem;
 
 struct ILoadData
 {
+public:
+    virtual ~ILoadData() {};
+
     virtual bool LoadTexture(int index, const std::wstring& filename, DirectX::XMUINT2* outSize) = 0;
+};
+
+struct IRender
+{
+public:
+    virtual ~IRender() {};
+
+    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position) = 0;
 };
 
 struct IRenderer
@@ -25,7 +36,6 @@ public:
     virtual void OnWindowSizeChanged(int width, int height) = 0;
 
     virtual void Draw() = 0;
-    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position) = 0;
 };
 
 std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height);

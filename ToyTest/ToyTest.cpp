@@ -7,9 +7,29 @@
 
 using namespace DirectX;
 
+class MockRender : public IRender
+{
+public:
+	virtual ~MockRender() = default;
+
+	MOCK_METHOD(void, Render, (int index, const DirectX::SimpleMath::Vector2& position), (override));
+};
+
+void TestRender(int index, const DirectX::SimpleMath::Vector2& position)
+{
+	if (index == 3) EXPECT_EQ(position.x, 364.0f);
+	if (index == 4) EXPECT_EQ(position.x, 400.0f);
+	if (index == 5) EXPECT_EQ(position.x, 436.0f);
+
+	EXPECT_EQ(position.y, 300.0f);
+}
+
+using ::testing::_;
+using ::testing::Invoke;
+
 TEST_F(ToyTest, Button3Test)
 {
-	std::unique_ptr<Button3> button3 = std::make_unique<Button3>(L"Resources/", m_window->GetOutputSize());
+	std::unique_ptr<Button3> button3 = std::make_unique<Button3>(L"Resources/");
 	ButtonImage normal{ 3, { 
 			L"UI/Blue/bar_square_large_l.png", 
 			L"UI/Blue/bar_square_large_m.png", 
@@ -27,17 +47,19 @@ TEST_F(ToyTest, Button3Test)
 	} };
 	SimpleMath::Vector2 pos{ 0.5f, 0.5f };
 	button3->SetImage(normal, over, clicked, pos);
-	//button3->LoadResources(m_renderer.get());
+	m_renderer->AddRenderItem(button3.get());
+	EXPECT_TRUE(m_renderer->LoadResources());
 
 	Mouse::State mouseState;
 	mouseState.x = 100;
 	mouseState.y = 100;
-	button3->Update(mouseState);
+	button3->Update(m_window->GetOutputSize(), mouseState);
+
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, Render(_, _)).WillRepeatedly(Invoke(TestRender));
 	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
-	//testRenderer에서 받는 값은 위치값 같은 것을 받고 directx에 관한 것들은 renderer로 넣는다.
-	//텍스쳐를 로드 해서 받은 값을 가공해서 그 값들을 테스트 하고 싶다면 testRenderer를 만들어서
-	//넘어오는 값들에 대해서 분석한다.
-	//button3->Draw(testRenderer);	
+	//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
+	button3->Render(&mockRender);
 }
 
 //여러번 실행해서 오동작이 나는지 확인한다.

@@ -26,23 +26,22 @@ class Button3 : public IRenderItem
 	};
 
 public:
-	Button3(const std::wstring& resPath, const DirectX::SimpleMath::Vector2& resolution);
+	Button3(const std::wstring& resPath);
 	virtual ~Button3();
 
 	virtual void LoadResources(ILoadData* load) override;
-	virtual void Render(IRenderer* renderer) override;
+	virtual void Render(IRender* renderer) override;
 	
-	void Update(const DirectX::Mouse::State& state);
+	void Update(const DirectX::SimpleMath::Vector2& resolution, const DirectX::Mouse::State& state);
 	void SetImage(const ButtonImage& normal, const ButtonImage& over, const ButtonImage& clicked,
-		const DirectX::SimpleMath::Vector2& pos);
+		const DirectX::XMFLOAT2& pos);
 
 private:
 	void LoadTextures(ILoadData* load, ButtonImage& images);
 
 	std::wstring m_resPath{};
-	DirectX::SimpleMath::Vector2 m_resolution{};
 	std::map<ButtonState, ButtonImage> m_images;
-	DirectX::SimpleMath::Vector2 m_position{};
+	DirectX::XMFLOAT2 m_position{};
+	DirectX::XMFLOAT2 m_sidePosition{};
 	ButtonState m_state{ ButtonState::Normal };
-	DirectX::SimpleMath::Vector2 m_origin{};
 };

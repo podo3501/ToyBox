@@ -23,7 +23,7 @@ namespace DirectX
 
 // A basic game implementation that creates a D3D12 device and
 // provides a game loop.
-class Renderer final : public DX::IDeviceNotify, public IRenderer, public ILoadData
+class Renderer final : public DX::IDeviceNotify, public IRenderer, public ILoadData, public IRender
 {
     using DeviceLostListener = std::function<void()>;
 
@@ -49,6 +49,9 @@ public:
 
     //ILoadData
     virtual bool LoadTexture(int index, const std::wstring& filename, DirectX::XMUINT2* outSize) override;
+    
+    //IRender
+    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position) override;
 
     // Messages
     virtual void OnActivated() override;
@@ -60,7 +63,6 @@ public:
     virtual void OnWindowSizeChanged(int width, int height) override;
 
     virtual void Draw() override;
-    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position) override;
 
 private:
     void Clear();

@@ -183,8 +183,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     if (m_renderer == nullptr)
         return false;
 
-    //m_button = std::make_unique<Button>(resPath, SimpleMath::Vector2{ 0.5f, 0.5f });
-    m_button3 = std::make_unique<Button3>(resPath, m_window->GetOutputSize());
+    m_button3 = std::make_unique<Button3>(resPath);
     ButtonImage normalImage{ 3, {
             L"UI/Blue/bar_square_large_l.png",
             L"UI/Blue/bar_square_large_m.png",
@@ -202,11 +201,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     } };
     m_button3->SetImage(normalImage, overImage, clickedImage, SimpleMath::Vector2{ 0.5f, 0.5f });
     m_mouse->SetWindow(hwnd);
-    //이렇게 등록시키는 이유는 로드할때 전처리 후처리가 있기 때문이다.
-    //문제는 등록하면 랜더러는 바꿀수 없지 않느냐 라는 것인데
-    //랜더러를 바꾸지 않더라도 테스트 렌더러를 만들어서 랜더러를 2개를 연결하면 된다.
-    //load 부분과 render부분을 나눌까도 생각했는데 그건 복잡성만 증가시킬것 같다.
-    //지금은 상속받아 처리하고 있지만, 함수포인터로 처리할 생각이다. 
+
     m_renderer->AddRenderItem(m_button3.get());
     m_renderer->LoadResources();
 
@@ -236,8 +231,7 @@ void MainLoop::Update(DX::StepTimer* timer)
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
     Mouse::State state = m_mouse->GetState();
-    //m_button->Update(m_window->GetOutputSize(), state);
-    m_button3->Update(state);
+    m_button3->Update(m_window->GetOutputSize(), state);
 
     PIXEndEvent();
 }

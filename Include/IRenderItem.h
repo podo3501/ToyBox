@@ -1,12 +1,12 @@
 #pragma once
 
 struct ILoadData;
-struct IRenderer;
+struct IRender;
 
 struct IRenderItem
 {
 public:
 	virtual ~IRenderItem() {};
 	virtual void LoadResources(ILoadData* load) = 0;
-	virtual void Render(IRenderer* renderer) = 0;
+	virtual void Render(IRender* render) = 0;
 };
