@@ -203,7 +203,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Button3.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MouseProcedure.h" />
@@ -213,7 +213,7 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Button3.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="MainLoop.cpp" />

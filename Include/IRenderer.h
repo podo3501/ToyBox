@@ -15,7 +15,7 @@ struct IRender
 public:
     virtual ~IRender() {};
 
-    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position) = 0;
+    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin) = 0;
 };
 
 struct IRenderer

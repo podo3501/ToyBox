@@ -3,8 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "Window.h"
 #include "Utility.h"
-//#include "Button.h"
-#include "Button3.h"
+#include "Button.h"
 #include "MouseProcedure.h"
 #include "StepTimer.h"
 
@@ -183,7 +182,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     if (m_renderer == nullptr)
         return false;
 
-    m_button3 = std::make_unique<Button3>(resPath);
+    m_button = std::make_unique<Button>(resPath);
     ButtonImage normalImage{ 3, {
             L"UI/Blue/bar_square_large_l.png",
             L"UI/Blue/bar_square_large_m.png",
@@ -199,10 +198,11 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
             L"UI/Gray/bar_square_large_m.png",
             L"UI/Gray/bar_square_large_r.png"
     } };
-    m_button3->SetImage(normalImage, overImage, clickedImage, SimpleMath::Vector2{ 0.5f, 0.5f });
+    XMUINT2 size{ 48, 48 };
+    m_button->SetImage(normalImage, overImage, clickedImage, size, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
     m_mouse->SetWindow(hwnd);
 
-    m_renderer->AddRenderItem(m_button3.get());
+    m_renderer->AddRenderItem(m_button.get());
     m_renderer->LoadResources();
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
@@ -231,7 +231,7 @@ void MainLoop::Update(DX::StepTimer* timer)
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
     Mouse::State state = m_mouse->GetState();
-    m_button3->Update(m_window->GetOutputSize(), state);
+    m_button->Update(m_window->GetOutputSize(), state);
 
     PIXEndEvent();
 }

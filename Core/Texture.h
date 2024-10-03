@@ -8,7 +8,7 @@ public:
 
     DirectX::XMUINT2 GetSize() const noexcept;
     void Reset();
-    void Draw(DirectX::SpriteBatch* spriteBatch, DirectX::SimpleMath::Vector2 screenPos);
+    void Draw(DirectX::SpriteBatch* spriteBatch, DirectX::SimpleMath::Vector2 screenPos, const DirectX::XMFLOAT2& origin);
     
 private:
     ID3D12Device* m_device;

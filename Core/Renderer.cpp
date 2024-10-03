@@ -146,9 +146,9 @@ void Renderer::Draw()
     PIXEndEvent();
 }
 
-void Renderer::Render(int index, const DirectX::SimpleMath::Vector2& position)
+void Renderer::Render(int index, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin)
 {
-    m_textures[index]->Draw(m_spriteBatch.get(), position);
+    m_textures[index]->Draw(m_spriteBatch.get(), position, origin);
 }
 
 // Helper method to clear the back buffers.

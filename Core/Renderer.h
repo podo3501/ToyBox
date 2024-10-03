@@ -51,7 +51,7 @@ public:
     virtual bool LoadTexture(int index, const std::wstring& filename, DirectX::XMUINT2* outSize) override;
     
     //IRender
-    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position) override;
+    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin) override;
 
     // Messages
     virtual void OnActivated() override;

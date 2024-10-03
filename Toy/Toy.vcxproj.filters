@@ -21,7 +21,7 @@
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="MouseProcedure.h" />
-    <ClInclude Include="Button3.h" />
+    <ClInclude Include="Button.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -29,7 +29,7 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
-    <ClCompile Include="Button3.cpp" />
+    <ClCompile Include="Button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
