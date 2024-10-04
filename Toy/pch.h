@@ -112,74 +112,6 @@
 #include <dxgidebug.h>
 #endif
 
-// If using the DirectX Tool Kit for DX12, uncomment this line:
-//#include "GraphicsMemory.h"
-
-namespace DX
-{
-    // Helper class for COM exceptions
-    class com_exception : public std::exception
-    {
-    public:
-        com_exception(HRESULT hr) noexcept : result(hr) {}
-
-        const char* what() const noexcept override
-        {
-            static char s_str[64] = {};
-            sprintf_s(s_str, "Failure with HRESULT of %08X", static_cast<unsigned int>(result));
-            return s_str;
-        }
-
-    private:
-        HRESULT result;
-    };
-
-    // Helper utility converts D3D API failures into exceptions.
-    inline void ThrowIfFailed(HRESULT hr)
-    {
-        if (FAILED(hr))
-        {
-            throw com_exception(hr);
-        }
-    }
-}
-
-#ifdef __MINGW32__
-namespace Microsoft
-{
-    namespace WRL
-    {
-        namespace Wrappers
-        {
-            class Event
-            {
-            public:
-                Event() noexcept : m_handle{} {}
-                explicit Event(HANDLE h) noexcept : m_handle{ h } {}
-                ~Event() { if (m_handle) { ::CloseHandle(m_handle); m_handle = nullptr; } }
-
-                void Attach(HANDLE h) noexcept
-                {
-                    if (h != m_handle)
-                    {
-                        if (m_handle) ::CloseHandle(m_handle);
-                        m_handle = h;
-                    }
-                }
-
-                bool IsValid() const { return m_handle != nullptr; }
-                HANDLE Get() const { return m_handle; }
-
-            private:
-                HANDLE m_handle;
-            };
-        }
-    }
-}
-#else
-#include <wrl/event.h>
-#endif
-
 #ifdef __MINGW32__
 constexpr UINT PIX_COLOR_DEFAULT = 0;
 
@@ -197,4 +129,9 @@ inline void PIXEndEvent(T*) {}
 // then add the NuGet package WinPixEventRuntime to the project.
 #include <pix.h>
 #endif
+
+using namespace std;
+using namespace DirectX;
+using namespace DirectX::SimpleMath;
+
 

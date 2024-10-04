@@ -198,3 +198,7 @@ inline void PIXEndEvent(T*) {}
 #include <pix.h>
 #endif
 
+using namespace std;
+using namespace DirectX;
+using namespace DirectX::SimpleMath;
+

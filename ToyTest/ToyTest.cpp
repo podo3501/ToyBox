@@ -5,18 +5,19 @@
 #include "../Toy/Button.h"
 #include "../Toy/Window.h"
 
-using namespace DirectX;
-
 class MockRender : public IRender
 {
 public:
 	virtual ~MockRender() = default;
 
-	MOCK_METHOD(void, Render, (int index, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin), (override));
+	MOCK_METHOD(void, Render, (int index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin), (override));
 };
 
-void TestCenterRender(int index, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin)
+void TestCenterRender(int index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin)
 {
+	EXPECT_TRUE(size.x == 58 && size.y == 48);
+	EXPECT_TRUE(origin.x == 29.0f && origin.y == 24.0f );
+
 	if (index == 3) EXPECT_EQ(position.x, 364.0f);
 	if (index == 4) EXPECT_EQ(position.x, 400.0f);
 	if (index == 5) EXPECT_EQ(position.x, 436.0f);
@@ -24,7 +25,7 @@ void TestCenterRender(int index, const DirectX::SimpleMath::Vector2& position, c
 	EXPECT_EQ(position.y, 300.0f);
 }
 
-void TestLeftTopRender(int index, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin)
+void TestLeftTopRender(int index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin)
 {
 	if (index == 3) EXPECT_EQ(position.x, 364.0f);
 	if (index == 4) EXPECT_EQ(position.x, 400.0f);
@@ -54,9 +55,9 @@ TEST_F(ToyTest, ButtonTest)
 			L"UI/Gray/bar_square_large_m.png",
 			L"UI/Gray/bar_square_large_r.png"
 	} };
-	XMUINT2 size{ 48, 48 };
+	Rectangle area{ 0, 0, 58, 48 };
 	XMFLOAT2 pos{ 0.5f, 0.5f };
-	button->SetImage(normal, over, clicked, size, pos, Origin::Center);
+	button->SetImage(normal, over, clicked, area, pos, Origin::Center);
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -68,7 +69,7 @@ TEST_F(ToyTest, ButtonTest)
 	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 	//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
 	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestCenterRender));
+	EXPECT_CALL(mockRender, Render(_, _, _, _)).WillRepeatedly(Invoke(TestCenterRender));
 	button->Render(&mockRender);
 
 	//button->SetPosition{ 0.5f, 0.5f };

@@ -73,7 +73,7 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 OnResuming();
             m_suspend = false;
         }
-        else if (!m_sizemove)
+        else //if (!m_sizemove) //창을 변경할때 업데이트 하도록 수정
         {
             int width = LOWORD(lParam);
             int height = HIWORD(lParam);
@@ -198,8 +198,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
             L"UI/Gray/bar_square_large_m.png",
             L"UI/Gray/bar_square_large_r.png"
     } };
-    XMUINT2 size{ 48, 48 };
-    m_button->SetImage(normalImage, overImage, clickedImage, size, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
+    Rectangle area{ 0, 0, 58, 48 };
+    m_button->SetImage(normalImage, overImage, clickedImage, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
     m_mouse->SetWindow(hwnd);
 
     m_renderer->AddRenderItem(m_button.get());

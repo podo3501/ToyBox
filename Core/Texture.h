@@ -3,17 +3,17 @@
 class Texture
 {
 public:
-    Texture(ID3D12Device* device, DirectX::DescriptorHeap* descHeap);
-    void Upload(DirectX::ResourceUploadBatch* resUpload, std::uint32_t descHeapIdx, const std::wstring& filename);
+    Texture(ID3D12Device* device, DescriptorHeap* descHeap);
+    void Upload(ResourceUploadBatch* resUpload, uint32_t descHeapIdx, const wstring& filename);
 
-    DirectX::XMUINT2 GetSize() const noexcept;
+    XMUINT2 GetSize() const noexcept;
     void Reset();
-    void Draw(DirectX::SpriteBatch* spriteBatch, DirectX::SimpleMath::Vector2 screenPos, const DirectX::XMFLOAT2& origin);
+    void Draw(SpriteBatch* spriteBatch, const XMUINT2& size, Vector2 screenPos, const XMFLOAT2& origin);
     
 private:
     ID3D12Device* m_device;
-    DirectX::DescriptorHeap* m_descHeap;
+    DescriptorHeap* m_descHeap;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
-    std::uint32_t m_descHeapIdx{ 0 };
+    uint32_t m_descHeapIdx{ 0 };
 };
 

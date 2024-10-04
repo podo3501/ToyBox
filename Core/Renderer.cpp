@@ -6,21 +6,21 @@
 
 using namespace DirectX;
 
-std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
+unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
 {
-    std::unique_ptr<Renderer> renderer = std::make_unique<Renderer>(hwnd, width, height);
+    unique_ptr<Renderer> renderer = make_unique<Renderer>(hwnd, width, height);
     auto result = renderer->Initialize();
     if (!result)
         return nullptr;
 
-    return std::move(renderer);
+    return move(renderer);
 }
 
 Renderer::Renderer(HWND hwnd, int width, int height) noexcept(false)
 {
     WICOnceInitialize();
 
-    m_deviceResources = std::make_unique<DX::DeviceResources>();
+    m_deviceResources = make_unique<DX::DeviceResources>();
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
     //   Add DX::DeviceResources::c_AllowTearing to opt-in to variable rate displays.
     //   Add DX::DeviceResources::c_EnableHDR for HDR10 display.
@@ -83,12 +83,12 @@ bool Renderer::LoadResources()
 
     auto device = m_deviceResources->GetD3DDevice();
     //ResourceUploadBatch resourceUpload(device);
-    m_batch = std::make_unique<ResourceUploadBatch>(device);
+    m_batch = make_unique<ResourceUploadBatch>(device);
 
     m_batch->Begin();
     //resourceUpload.Begin();
 
-    std::ranges::for_each(m_renderItems, [load = this](const auto item) {
+    ranges::for_each(m_renderItems, [load = this](const auto item) {
         item->LoadResources(load);
         });
 
@@ -98,15 +98,15 @@ bool Renderer::LoadResources()
     return true;
 }
 
-bool Renderer::LoadTexture(int index, const std::wstring& filename, XMUINT2* outSize)
+bool Renderer::LoadTexture(int index, const wstring& filename, XMUINT2* outSize)
 {
     auto device = m_deviceResources->GetD3DDevice();
     //item->LoadResources(device, m_resourceDescriptors.get(), resourceUpload);
-    std::unique_ptr<Texture> tex = std::make_unique<Texture>(device, m_resourceDescriptors.get());
+    unique_ptr<Texture> tex = make_unique<Texture>(device, m_resourceDescriptors.get());
     tex->Upload(m_batch.get(), index, filename);
     if (outSize)
         (*outSize) = tex->GetSize();
-    m_textures.insert(std::make_pair(index, std::move(tex)));
+    m_textures.insert(make_pair(index, move(tex)));
 
     return true;
 }
@@ -124,11 +124,11 @@ void Renderer::Draw()
 
     // TODO: Add your rendering code here.
     ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap() };
-    commandList->SetDescriptorHeaps(static_cast<UINT>(std::size(heaps)), heaps);
+    commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
 
     m_spriteBatch->Begin(commandList);
 
-    std::ranges::for_each(m_renderItems, [renderer = this](const auto item) {
+    ranges::for_each(m_renderItems, [renderer = this](const auto item) {
         item->Render(renderer);
         });
 
@@ -146,9 +146,9 @@ void Renderer::Draw()
     PIXEndEvent();
 }
 
-void Renderer::Render(int index, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin)
+void Renderer::Render(int index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin)
 {
-    m_textures[index]->Draw(m_spriteBatch.get(), position, origin);
+    m_textures[index]->Draw(m_spriteBatch.get(), size, position, origin);
 }
 
 // Helper method to clear the back buffers.
@@ -233,14 +233,14 @@ void Renderer::CreateDeviceDependentResources()
 #ifdef _DEBUG
         OutputDebugStringA("ERROR: Shader Model 6.0 is not supported!\n");
 #endif
-        throw std::runtime_error("Shader Model 6.0 is not supported!");
+        throw runtime_error("Shader Model 6.0 is not supported!");
     }
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+    m_graphicsMemory = make_unique<GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_resourceDescriptors = std::make_unique<DescriptorHeap>(device, 100);
+    m_resourceDescriptors = make_unique<DescriptorHeap>(device, 100);
 
     ResourceUploadBatch resourceUpload(device);
 
@@ -249,7 +249,7 @@ void Renderer::CreateDeviceDependentResources()
     RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
 
     SpriteBatchPipelineStateDescription pd(rtState);
-    m_spriteBatch = std::make_unique<SpriteBatch>(device, resourceUpload, pd);
+    m_spriteBatch = make_unique<SpriteBatch>(device, resourceUpload, pd);
 
     auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
 
@@ -267,7 +267,7 @@ void Renderer::CreateWindowSizeDependentResources()
 void Renderer::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
-    std::ranges::for_each(m_textures | std::views::values, [](auto& tex) {
+    ranges::for_each(m_textures | views::values, [](auto& tex) {
         tex->Reset();
         });
 

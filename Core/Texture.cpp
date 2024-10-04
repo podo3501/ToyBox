@@ -3,10 +3,10 @@
 
 using namespace DirectX;
 
-Texture::Texture(ID3D12Device* device, DirectX::DescriptorHeap* descHeap) :
+Texture::Texture(ID3D12Device* device, DescriptorHeap* descHeap) :
     m_device{ device }, m_descHeap{ descHeap } {}
 
-void Texture::Upload(DirectX::ResourceUploadBatch* resUpload, std::uint32_t descHeapIdx, const std::wstring& filename)
+void Texture::Upload(ResourceUploadBatch* resUpload, std::uint32_t descHeapIdx, const std::wstring& filename)
 {
     DX::ThrowIfFailed(
         CreateWICTextureFromFile(m_device, *resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
@@ -24,7 +24,7 @@ void Texture::Reset()
     m_texture.Reset();
 }
 
-void Texture::Draw(DirectX::SpriteBatch* spriteBatch, DirectX::SimpleMath::Vector2 screenPos, const DirectX::XMFLOAT2& origin)
+void Texture::Draw(SpriteBatch* spriteBatch, const XMUINT2& size, Vector2 screenPos, const XMFLOAT2& origin)
 {
     //auto size = GetSize();
     //RECT rect = { 0, 0, static_cast<LONG>(size.x / 2), static_cast<LONG>(size.y / 2) };
@@ -34,7 +34,8 @@ void Texture::Draw(DirectX::SpriteBatch* spriteBatch, DirectX::SimpleMath::Vecto
     /*auto size = GetSize();
     spriteBatch->Draw(m_descHeap->GetGpuHandle(m_descHeapIdx), size,
         screenPos, nullptr, Colors::White, 0.f, { float(size.x / 2), float(size.y / 2) });*/
-    auto size = GetSize();
+    //auto size = GetSize();
+    //size += 30;
     spriteBatch->Draw(m_descHeap->GetGpuHandle(m_descHeapIdx), size,
         screenPos, nullptr, Colors::White, 0.f, origin);
 }

@@ -25,7 +25,7 @@ namespace DirectX
 // provides a game loop.
 class Renderer final : public DX::IDeviceNotify, public IRenderer, public ILoadData, public IRender
 {
-    using DeviceLostListener = std::function<void()>;
+    using DeviceLostListener = function<void()>;
 
 public:
 
@@ -48,10 +48,10 @@ public:
     virtual bool LoadResources() override;
 
     //ILoadData
-    virtual bool LoadTexture(int index, const std::wstring& filename, DirectX::XMUINT2* outSize) override;
+    virtual bool LoadTexture(int index, const wstring& filename, XMUINT2* outSize) override;
     
     //IRender
-    virtual void Render(int index, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin) override;
+    virtual void Render(int index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin) override;
 
     // Messages
     virtual void OnActivated() override;
@@ -72,12 +72,12 @@ private:
 
     // Device resources.
     std::unique_ptr<DX::DeviceResources> m_deviceResources;
-    std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
-    std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
-    std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
+    std::unique_ptr<GraphicsMemory> m_graphicsMemory;
+    std::unique_ptr<DescriptorHeap> m_resourceDescriptors;
+    std::unique_ptr<SpriteBatch> m_spriteBatch;
 
     std::vector<IRenderItem*> m_renderItems;
-    std::map<int, std::unique_ptr<Texture>> m_textures;
+    std::map<int, unique_ptr<Texture>> m_textures;
 
-    std::unique_ptr<DirectX::ResourceUploadBatch> m_batch;
+    std::unique_ptr<ResourceUploadBatch> m_batch;
 };
