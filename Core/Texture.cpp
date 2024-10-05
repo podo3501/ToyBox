@@ -6,7 +6,7 @@ using namespace DirectX;
 Texture::Texture(ID3D12Device* device, DescriptorHeap* descHeap) :
     m_device{ device }, m_descHeap{ descHeap } {}
 
-void Texture::Upload(ResourceUploadBatch* resUpload, std::uint32_t descHeapIdx, const std::wstring& filename)
+void Texture::Upload(ResourceUploadBatch* resUpload, std::size_t descHeapIdx, const std::wstring& filename)
 {
     DX::ThrowIfFailed(
         CreateWICTextureFromFile(m_device, *resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));

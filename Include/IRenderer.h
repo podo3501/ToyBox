@@ -7,7 +7,7 @@ struct ILoadData
 public:
     virtual ~ILoadData() {};
 
-    virtual bool LoadTexture(int index, const std::wstring& filename, DirectX::XMUINT2* outSize) = 0;
+    virtual bool LoadTexture(size_t index, const std::wstring& filename, DirectX::XMUINT2* outSize) = 0;
 };
 
 struct IRender
@@ -15,7 +15,7 @@ struct IRender
 public:
     virtual ~IRender() {};
 
-    virtual void Render(int index, const DirectX::XMUINT2& size, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin) = 0;
+    virtual void Render(size_t index, const DirectX::XMUINT2& size, const DirectX::SimpleMath::Vector2& position, const DirectX::XMFLOAT2& origin) = 0;
 };
 
 struct IRenderer

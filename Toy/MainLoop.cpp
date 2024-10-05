@@ -198,7 +198,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
             L"UI/Gray/bar_square_large_m.png",
             L"UI/Gray/bar_square_large_r.png"
     } };
-    Rectangle area{ 0, 0, 58, 48 };
+    Rectangle area{ 0, 0, 130, 48 };
     m_button->SetImage(normalImage, overImage, clickedImage, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
     m_mouse->SetWindow(hwnd);
 

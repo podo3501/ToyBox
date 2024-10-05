@@ -88,9 +88,9 @@ bool Renderer::LoadResources()
     m_batch->Begin();
     //resourceUpload.Begin();
 
-    ranges::for_each(m_renderItems, [load = this](const auto item) {
-        item->LoadResources(load);
-        });
+    ReturnIfFalse(ranges::all_of(m_renderItems, [load = this](const auto item) {
+        return item->LoadResources(load);
+        }));
 
     auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
     uploadResourcesFinished.wait();
@@ -98,7 +98,7 @@ bool Renderer::LoadResources()
     return true;
 }
 
-bool Renderer::LoadTexture(int index, const wstring& filename, XMUINT2* outSize)
+bool Renderer::LoadTexture(size_t index, const wstring& filename, XMUINT2* outSize)
 {
     auto device = m_deviceResources->GetD3DDevice();
     //item->LoadResources(device, m_resourceDescriptors.get(), resourceUpload);
@@ -146,7 +146,7 @@ void Renderer::Draw()
     PIXEndEvent();
 }
 
-void Renderer::Render(int index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin)
+void Renderer::Render(size_t index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin)
 {
     m_textures[index]->Draw(m_spriteBatch.get(), size, position, origin);
 }

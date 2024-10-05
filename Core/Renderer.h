@@ -48,10 +48,10 @@ public:
     virtual bool LoadResources() override;
 
     //ILoadData
-    virtual bool LoadTexture(int index, const wstring& filename, XMUINT2* outSize) override;
+    virtual bool LoadTexture(size_t index, const wstring& filename, XMUINT2* outSize) override;
     
     //IRender
-    virtual void Render(int index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin) override;
+    virtual void Render(size_t index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin) override;
 
     // Messages
     virtual void OnActivated() override;
@@ -77,7 +77,7 @@ private:
     std::unique_ptr<SpriteBatch> m_spriteBatch;
 
     std::vector<IRenderItem*> m_renderItems;
-    std::map<int, unique_ptr<Texture>> m_textures;
+    std::map<size_t, unique_ptr<Texture>> m_textures;
 
     std::unique_ptr<ResourceUploadBatch> m_batch;
 };

@@ -205,6 +205,7 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="ImagePart.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MouseProcedure.h" />
     <ClInclude Include="pch.h" />
@@ -214,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ImagePart.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="MainLoop.cpp" />

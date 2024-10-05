@@ -1,30 +1,39 @@
 #include "pch.h"
 #include "Button.h"
 #include "../Include/IRenderer.h"
+#include "ImagePart.h"
+#include "Utility.h"
 
 Button::Button(const wstring& resPath) :
 	m_resPath{ resPath }
 {}
 Button::~Button() = default;
 
-void Button::LoadResources(ILoadData* load)
+bool Button::LoadResources(ILoadData* load)
 {
-	ranges::for_each(m_images, [this, load](auto& iter) {
-		LoadTextures(load, iter.second);
+	return ranges::all_of(m_buttonParts, [this, load](auto& iter) {
+		return LoadTextures(load, iter.second);
 		});
 }
 
-void Button::LoadTextures(ILoadData* load, ButtonImage& images)
+bool Button::LoadTextures(ILoadData* load, const vector<unique_ptr<ImagePart>>& imageParts)
 {
-	int idx = images.heapIndex;
-	vector<int> xSize;
-	ranges::for_each(images.filenames, [this, load, idx, &xSize](const auto& filename) mutable {
-		XMUINT2 size{};
-		load->LoadTexture(idx++, m_resPath + filename, &size);
-		xSize.emplace_back(size.x);
-		});
+	for (const auto& part : imageParts)
+		ReturnIfFalse(part->Load(load));
 
-	m_sidePosition = XMFLOAT2{ xSize[0] / 2.0f + xSize[1] / 2.0f, 0.0f };
+	const auto& leftSize = imageParts[Part::Left]->GetSize();
+	const auto& rightSize = imageParts[Part::Right]->GetSize();
+	
+	XMUINT2 middleSize{};
+	middleSize.x = max(0u, static_cast<uint32_t>(m_area.width) - leftSize.x - rightSize.x);
+	middleSize.y = imageParts[Part::Middle]->GetSize().y;
+	imageParts[Part::Middle]->SetSize(middleSize);
+	
+	imageParts[Part::Left]->SetLocalPosition({ 0.f, 0.f });
+	imageParts[Part::Middle]->SetLocalPosition({ static_cast<float>(leftSize.x), 0.f });
+	imageParts[Part::Right]->SetLocalPosition({ static_cast<float>(leftSize.x + middleSize.x), 0.f });
+
+	return true;
 }
 
 void Button::Update(const Vector2& resolution, const Mouse::State& state)
@@ -47,43 +56,49 @@ void Button::Update(const Vector2& resolution, const Mouse::State& state)
 	if (m_state == ButtonState::Over && state.leftButton)
 		m_state = ButtonState::Clicked;
 
-	m_images[m_state].position.clear();
-	m_images[m_state].position.emplace_back(pos - m_sidePosition);
-	m_images[m_state].position.emplace_back(pos);
-	m_images[m_state].position.emplace_back(pos + m_sidePosition);
+	for (const auto& part : m_buttonParts[m_state])
+		part->SetPosition(pos);
 }
 
 void Button::Render(IRender* render)
 {
-	int idx = m_images[m_state].heapIndex;
-	//render->Render(idx+0, m_images[m_state].position[0]);
-	render->Render(idx+1, XMUINT2(m_area.width, m_area.height), m_images[m_state].position[1], m_origin);
-	//render->Render(idx+2, m_images[m_state].position[2]);
+	for (const auto& part : m_buttonParts[m_state])
+		part->Render(render, m_origin);
 }
 
 void Button::SetImage(const ButtonImage& normal, const ButtonImage& over, const ButtonImage& clicked,
 	const Rectangle& area, const Vector2& pos, Origin origin)
 {
-	m_images.insert(make_pair(ButtonState::Normal, normal));
-	m_images.insert(make_pair(ButtonState::Over, over));
-	m_images.insert(make_pair(ButtonState::Clicked, clicked));
-
 	SetArea(area);
 	SetPosition(pos);
 	SetOrigin(origin);
+
+	//잘라진 이미지들
+	SetFilenames(ButtonState::Normal, normal);
+	SetFilenames(ButtonState::Over, over);
+	SetFilenames(ButtonState::Clicked, clicked);
+}
+
+void Button::SetFilenames(ButtonState state, const ButtonImage& images)
+{
+	size_t index = images.heapIndex;
+	ranges::transform(images.filenames, back_inserter(m_buttonParts[state]), [this, index](const auto& filename) mutable {
+		unique_ptr<ImagePart> imagePart = make_unique<ImagePart>(index++, m_resPath + filename);
+		return move(imagePart);
+		});
+}
+
+Vector2 Button::GetOrigin(Origin origin) const noexcept
+{
+	switch (origin)
+	{
+	case Origin::Center: return Vector2(static_cast<float>(m_area.width), static_cast<float>(m_area.height)) / 2.0f;
+	case Origin::LeftTop: return  Vector2(0.f, 0.f);
+	}
+	return Vector2(0.f, 0.f);
 }
 
 void Button::SetOrigin(Origin origin)
 { 
-	switch (origin)
-	{
-	case Origin::Center:
-		m_origin.x = static_cast<float>(m_area.width) / 2.0f;
-		m_origin.y = static_cast<float>(m_area.height) / 2.0f;
-		break;
-	case Origin::LeftTop:
-		m_origin.x = static_cast<float>(m_area.x);
-		m_origin.y = static_cast<float>(m_area.y);
-		break;
-	}
+	m_origin = GetOrigin(origin);
 }

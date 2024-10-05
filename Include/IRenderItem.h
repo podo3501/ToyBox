@@ -7,6 +7,6 @@ struct IRenderItem
 {
 public:
 	virtual ~IRenderItem() {};
-	virtual void LoadResources(ILoadData* load) = 0;
+	virtual bool LoadResources(ILoadData* load) = 0;
 	virtual void Render(IRender* render) = 0;
 };
