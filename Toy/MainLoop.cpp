@@ -183,17 +183,17 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
         return false;
 
     m_button = std::make_unique<Button>(resPath);
-    ButtonImage normalImage{ 3, {
+    ButtonImage normalImage{ {
             L"UI/Blue/bar_square_large_l.png",
             L"UI/Blue/bar_square_large_m.png",
             L"UI/Blue/bar_square_large_r.png"
     } };
-    ButtonImage overImage{ 6, {
+    ButtonImage overImage{ {
             L"UI/Red/bar_square_large_l.png",
             L"UI/Red/bar_square_large_m.png",
             L"UI/Red/bar_square_large_r.png"
     } };
-    ButtonImage clickedImage{ 9, {
+    ButtonImage clickedImage{ {
             L"UI/Gray/bar_square_large_l.png",
             L"UI/Gray/bar_square_large_m.png",
             L"UI/Gray/bar_square_large_r.png"

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Renderer.h"
 #include "DeviceResources.h"
-#include "Texture.h"
+#include "TextureIndexing.h"
 #include "Utility.h"
 
 using namespace DirectX;
@@ -63,6 +63,11 @@ bool Renderer::Initialize()
         return false;
     }
 
+    auto device = m_deviceResources->GetD3DDevice();
+    m_batch = make_unique<ResourceUploadBatch>(device);
+    m_texIndexing = make_unique<TextureIndexing>(
+        device, m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
+
     return true;
 }
 
@@ -80,33 +85,17 @@ bool Renderer::LoadResources()
     Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
     if (FAILED(initialize)) return false;
 #endif
-
-    auto device = m_deviceResources->GetD3DDevice();
     //ResourceUploadBatch resourceUpload(device);
-    m_batch = make_unique<ResourceUploadBatch>(device);
 
     m_batch->Begin();
     //resourceUpload.Begin();
 
-    ReturnIfFalse(ranges::all_of(m_renderItems, [load = this](const auto item) {
+    ReturnIfFalse(ranges::all_of(m_renderItems, [load = m_texIndexing.get()](const auto item) {
         return item->LoadResources(load);
         }));
 
     auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
     uploadResourcesFinished.wait();
-
-    return true;
-}
-
-bool Renderer::LoadTexture(size_t index, const wstring& filename, XMUINT2* outSize)
-{
-    auto device = m_deviceResources->GetD3DDevice();
-    //item->LoadResources(device, m_resourceDescriptors.get(), resourceUpload);
-    unique_ptr<Texture> tex = make_unique<Texture>(device, m_resourceDescriptors.get());
-    tex->Upload(m_batch.get(), index, filename);
-    if (outSize)
-        (*outSize) = tex->GetSize();
-    m_textures.insert(make_pair(index, move(tex)));
 
     return true;
 }
@@ -128,7 +117,7 @@ void Renderer::Draw()
 
     m_spriteBatch->Begin(commandList);
 
-    ranges::for_each(m_renderItems, [renderer = this](const auto item) {
+    ranges::for_each(m_renderItems, [renderer = m_texIndexing.get()](const auto item) {
         item->Render(renderer);
         });
 
@@ -144,11 +133,6 @@ void Renderer::Draw()
     m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
 
     PIXEndEvent();
-}
-
-void Renderer::Render(size_t index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin)
-{
-    m_textures[index]->Draw(m_spriteBatch.get(), size, position, origin);
 }
 
 // Helper method to clear the back buffers.
@@ -267,9 +251,7 @@ void Renderer::CreateWindowSizeDependentResources()
 void Renderer::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
-    ranges::for_each(m_textures | views::values, [](auto& tex) {
-        tex->Reset();
-        });
+    m_texIndexing->Reset();
 
     m_resourceDescriptors.reset();
     m_spriteBatch.reset();

@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "../Toy/Utility.h"
 
 namespace Practice
 {
@@ -21,28 +22,22 @@ namespace Practice
 		}
 	};
 
-	template<typename T>
-	class TLocator
-	{
-	public:
-		static T* GetService() { return m_service; }
-		static void Provide(T* service) { m_service = service; }
-
-	private:
-		static T* m_service;
-	};
-
-	template<typename T>
-	T* TLocator<T>::m_service{ nullptr };
-
 	TEST(Locator, Test)
 	{
-		auto audio = make_unique<Audio>();
-		TLocator<Audio>::Provide(audio.get());
-		Audio* curAudio = TLocator<Audio>::GetService();
+		//싱글톤을 대신할 클래스
+		//Audio 클래스는 메인에서 생성하고 Locator에 넣으면 다른 곳에서 접근해서 사용할 수 있다.
+		//즉, Audio 클래스는 메인에서 한번만 생성하고 Locator 클래스가 다른 cpp에서 사용 할 수 있도록
+		//static으로 구성되어 있다. 다른 클래스도 사용하기 위해서 template로 만들었다.
+		{
+			auto audio = make_unique<Audio>();
+			Locator<Audio>::Provide(audio.get());
+			Audio* curAudio = Locator<Audio>::GetService();
+		}
 
-		auto budio = make_unique<Budio>();
-		TLocator<Budio>::Provide(budio.get());
-		Budio* curBudio = TLocator<Budio>::GetService();
+		{
+			auto budio = make_unique<Budio>();
+			Locator<Budio>::Provide(budio.get());
+			Budio* curBudio = Locator<Budio>::GetService();
+		}
 	}
 }

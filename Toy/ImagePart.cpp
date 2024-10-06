@@ -2,14 +2,13 @@
 #include "ImagePart.h"
 #include "../Include/IRenderer.h"
 
-ImagePart::ImagePart(size_t index, const std::wstring& filename) :
-	m_index{ index },
+ImagePart::ImagePart(const std::wstring& filename) :
 	m_filename{ filename }
 {}
 
 bool ImagePart::Load(ILoadData* load)
 {
-	return load->LoadTexture(m_index, m_filename, &m_size);
+	return load->LoadTexture(m_filename, nullptr, m_index, &m_size);
 }
 
 void ImagePart::Render(IRender* render, const Vector2& origin)

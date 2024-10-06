@@ -81,9 +81,8 @@ void Button::SetImage(const ButtonImage& normal, const ButtonImage& over, const 
 
 void Button::SetFilenames(ButtonState state, const ButtonImage& images)
 {
-	size_t index = images.heapIndex;
-	ranges::transform(images.filenames, back_inserter(m_buttonParts[state]), [this, index](const auto& filename) mutable {
-		unique_ptr<ImagePart> imagePart = make_unique<ImagePart>(index++, m_resPath + filename);
+	ranges::transform(images.filenames, back_inserter(m_buttonParts[state]), [this](const auto& filename) {
+		unique_ptr<ImagePart> imagePart = make_unique<ImagePart>(m_resPath + filename);
 		return move(imagePart);
 		});
 }

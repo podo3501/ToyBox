@@ -17,7 +17,6 @@ enum class Origin
 struct ButtonImage
 {
 public:
-	int heapIndex;
 	std::vector<std::wstring> filenames;
 };
 

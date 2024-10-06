@@ -112,11 +112,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CoreTestFixture.h" />
+    <ClInclude Include="IMockRenderer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestMain.h" />
     <ClInclude Include="ToyTestFixture.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CoreTest.cpp" />
+    <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="PracticeTest.cpp" />
     <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -127,8 +132,12 @@
     </ClCompile>
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="ToyTestFixture.cpp" />
+    <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{60e13bba-4299-40f7-8fc1-c9e1928486f4}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\GoogleTestLib\GoogleTestLib.vcxproj">
       <Project>{d35acb5a-c588-45c9-ae36-d6802a812a75}</Project>
     </ProjectReference>

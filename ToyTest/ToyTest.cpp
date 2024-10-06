@@ -1,20 +1,13 @@
 #include "pch.h"
 #include "ToyTestFixture.h"
-#include "../Include/IRenderer.h"
+#include "IMockRenderer.h"
 #include "../Toy/MainLoop.h"
 #include "../Toy/Button.h"
 #include "../Toy/Window.h"
+#include "../Toy/Utility.h"
 
 using ::testing::_;
 using ::testing::Invoke;
-
-class MockRender : public IRender
-{
-public:
-	virtual ~MockRender() = default;
-
-	MOCK_METHOD(void, Render, (size_t index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin), (override));
-};
 
 void TestCenterRender(size_t index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin)
 {
@@ -39,17 +32,17 @@ void TestLeftTopRender(size_t index, const XMUINT2& size, const Vector2& positio
 TEST_F(ToyTest, ButtonTest)
 {
 	std::unique_ptr<Button> button = std::make_unique<Button>(L"Resources/");
-	ButtonImage normal{ 3, { 
+	ButtonImage normal{ {
 			L"UI/Blue/bar_square_large_l.png", 
 			L"UI/Blue/bar_square_large_m.png", 
 			L"UI/Blue/bar_square_large_r.png" 
 	} };
-	ButtonImage over{ 6, {
+	ButtonImage over{ {
 			L"UI/Red/bar_square_large_l.png",
 			L"UI/Red/bar_square_large_m.png",
 			L"UI/Red/bar_square_large_r.png"
 	} };
-	ButtonImage clicked{ 9, {
+	ButtonImage clicked{ {
 			L"UI/Gray/bar_square_large_l.png",
 			L"UI/Gray/bar_square_large_m.png",
 			L"UI/Gray/bar_square_large_r.png"

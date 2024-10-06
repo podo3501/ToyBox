@@ -6,14 +6,17 @@ struct IRender;
 class ImagePart
 {
 public:
-	ImagePart(size_t index, const std::wstring& filename);
+	ImagePart(const std::wstring& filename);
 
 	bool Load(ILoadData* load);
 	void Render(IRender* render, const Vector2& origin);
 
 	inline void SetLocalPosition(const Vector2& localPos) { m_localPosition = localPos; }
 	inline void SetPosition(const Vector2& position) { m_position = position; }
-	inline void SetSize(const XMUINT2& size) { m_size = size; }
+	inline void SetSize(const XMUINT2& size) 
+	{ 
+		m_size = size; 
+	}
 	inline XMUINT2 GetSize() const noexcept { return m_size; }
 
 private:
