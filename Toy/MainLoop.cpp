@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "MainLoop.h"
 #include "../Include/IRenderer.h"
+#include "UserInterfaceType.h"
 #include "Window.h"
 #include "Utility.h"
 #include "Button.h"
@@ -198,8 +199,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
             L"UI/Gray/bar_square_large_m.png",
             L"UI/Gray/bar_square_large_r.png"
     } };
-    Rectangle area{ 0, 0, 130, 48 };
-    m_button->SetImage(normalImage, overImage, clickedImage, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
+    Rectangle area{ 0, 0, 180, 48 };
+    m_button->SetImage(normalImage, overImage, clickedImage, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::LeftTop);
     m_mouse->SetWindow(hwnd);
 
     m_renderer->AddRenderItem(m_button.get());

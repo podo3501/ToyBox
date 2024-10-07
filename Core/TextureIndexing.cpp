@@ -67,9 +67,9 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     return true;
 }
 
-void TextureIndexing::Render(size_t index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin)
+void TextureIndexing::Render(size_t index, const RECT& dest, const RECT* source)
 {
-    m_textures[index]->Draw(m_sprite, size, position, origin);
+    m_textures[index]->Draw(m_sprite, dest, source);
 }
 
 void TextureIndexing::Reset()

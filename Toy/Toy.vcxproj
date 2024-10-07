@@ -205,16 +205,19 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="Dialog.h" />
     <ClInclude Include="ImagePart.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MouseProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
+    <ClInclude Include="UserInterfaceType.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="ImagePart.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
     <ClCompile Include="Window.cpp" />

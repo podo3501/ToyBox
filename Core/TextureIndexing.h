@@ -13,7 +13,7 @@ public:
     virtual bool LoadTexture(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize) override;
 
     //IRender
-    virtual void Render(size_t index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin) override;
+    virtual void Render(size_t index, const RECT& dest, const RECT* source) override;
 
     void Reset();
 

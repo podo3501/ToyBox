@@ -6,7 +6,7 @@ public:
     Texture(ID3D12Device* device, DescriptorHeap* descHeap);
     void Upload(ResourceUploadBatch* resUpload, const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx);
     void Set(const Microsoft::WRL::ComPtr<ID3D12Resource>& texture, const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx);
-    void Draw(SpriteBatch* spriteBatch, const XMUINT2& size, Vector2 screenPos, const XMFLOAT2& origin);
+    void Draw(SpriteBatch* spriteBatch, const RECT& dest, const RECT* source);
     void Reset();
 
     inline XMUINT2 GetSize() const noexcept;
@@ -23,6 +23,7 @@ private:
     ID3D12Device* m_device;
     DescriptorHeap* m_descHeap;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
+    XMUINT2 m_size{};
     size_t m_descHeapIdx{ 0 };
     std::wstring m_filename{};
     Rectangle m_rect{};

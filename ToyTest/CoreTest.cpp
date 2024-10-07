@@ -37,9 +37,6 @@ TEST_F(CoreTest, TextureLoading)
 		m_deviceResources->GetD3DDevice(), m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
 	EXPECT_TRUE(LoadResources(MockLoadResources, texIndexing.get()));	
-	EXPECT_TRUE(false);
-	//그려주는 부분에서 부분을 크게 그리는 식으로 호출 하게끔 변경
-	//UI Dialog를 만든다
 }
 
 TEST_F(CoreTest, TextureIndexing)

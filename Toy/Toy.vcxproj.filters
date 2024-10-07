@@ -23,6 +23,8 @@
     <ClInclude Include="MouseProcedure.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ImagePart.h" />
+    <ClInclude Include="Dialog.h" />
+    <ClInclude Include="UserInterfaceType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -32,6 +34,7 @@
     <ClCompile Include="MouseProcedure.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ImagePart.cpp" />
+    <ClCompile Include="Dialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

@@ -1,12 +1,48 @@
 #include "pch.h"
 #include "Button.h"
 #include "../Include/IRenderer.h"
+#include "UserInterfaceType.h"
 #include "ImagePart.h"
 #include "Utility.h"
 
+class UILayout
+{
+public:
+	UILayout() {}
+	~UILayout() = default;
+
+	void Set(const Rectangle& area, const Vector2& pos, Origin origin)
+	{
+		m_area = area;
+		m_position = pos;
+		m_origin = GetOrigin(origin);
+	}
+
+	const Rectangle& GetArea() const noexcept { return m_area; }
+	const Vector2 GetOrigin() const noexcept { return m_origin; }
+
+private:
+	Vector2 GetOrigin(Origin origin) const noexcept
+	{
+		switch (origin)
+		{
+		case Origin::Center: return Vector2(static_cast<float>(m_area.width), static_cast<float>(m_area.height)) / 2.0f;
+		case Origin::LeftTop: return  Vector2(0.f, 0.f);
+		}
+		return Vector2(0.f, 0.f);
+	}
+
+	Rectangle m_area{};
+	Vector2 m_position{};
+	Vector2 m_origin{};
+};
+
 Button::Button(const wstring& resPath) :
 	m_resPath{ resPath }
-{}
+{
+	m_layout = make_unique<UILayout>();
+}
+
 Button::~Button() = default;
 
 bool Button::LoadResources(ILoadData* load)
@@ -32,6 +68,9 @@ bool Button::LoadTextures(ILoadData* load, const vector<unique_ptr<ImagePart>>& 
 	imageParts[Part::Left]->SetLocalPosition({ 0.f, 0.f });
 	imageParts[Part::Middle]->SetLocalPosition({ static_cast<float>(leftSize.x), 0.f });
 	imageParts[Part::Right]->SetLocalPosition({ static_cast<float>(leftSize.x + middleSize.x), 0.f });
+
+	for (const auto& part : imageParts)
+		part->MakeLocalDestination(m_origin);
 
 	return true;
 }
@@ -63,12 +102,14 @@ void Button::Update(const Vector2& resolution, const Mouse::State& state)
 void Button::Render(IRender* render)
 {
 	for (const auto& part : m_buttonParts[m_state])
-		part->Render(render, m_origin);
+		part->Render(render);
 }
 
 void Button::SetImage(const ButtonImage& normal, const ButtonImage& over, const ButtonImage& clicked,
 	const Rectangle& area, const Vector2& pos, Origin origin)
 {
+	m_layout->Set(area, pos, origin);
+
 	SetArea(area);
 	SetPosition(pos);
 	SetOrigin(origin);
@@ -77,6 +118,16 @@ void Button::SetImage(const ButtonImage& normal, const ButtonImage& over, const 
 	SetFilenames(ButtonState::Normal, normal);
 	SetFilenames(ButtonState::Over, over);
 	SetFilenames(ButtonState::Clicked, clicked);
+}
+
+void Button::ChangeOrigin(Origin origin)
+{
+	m_origin = GetOrigin(origin);
+
+	ranges::for_each(m_buttonParts | views::values, [&origin = m_origin](const auto& images) {
+		for (const auto& part : images)
+			part->MakeLocalDestination(origin);
+		});
 }
 
 void Button::SetFilenames(ButtonState state, const ButtonImage& images)

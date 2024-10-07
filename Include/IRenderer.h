@@ -15,7 +15,7 @@ struct IRender
 public:
     virtual ~IRender() {};
 
-    virtual void Render(size_t index, const XMUINT2& size, const Vector2& position, const XMFLOAT2& origin) = 0;
+    virtual void Render(size_t index, const RECT& dest, const RECT* source) = 0;
 };
 
 struct IRenderer
