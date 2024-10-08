@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ImagePart.h"
-#include "../Include/IRenderer.h"
-#include "Utility.h"
+#include "../../Include/IRenderer.h"
+#include "../Utility.h"
 
 ImagePart::ImagePart(const std::wstring& filename) :
 	m_filename{ filename }
@@ -20,7 +20,13 @@ void ImagePart::MakeLocalDestination(const Vector2& origin)
 	m_localDestination.height = m_size.y;
 }
 
-void ImagePart::Render(IRender* render)
+bool ImagePart::IsOver(int mouseX, int mouseY) const noexcept
+{
+	Vector2 mouseLocalPos(static_cast<float>(mouseX) - m_position.x, static_cast<float>(mouseY) - m_position.y);
+	return m_localDestination.Contains(mouseLocalPos);
+}
+
+void ImagePart::Render(IRender* render) const
 {
 	Rectangle destination(m_localDestination);
 	destination.Offset(static_cast<long>(m_position.x), static_cast<long>(m_position.y));

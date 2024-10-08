@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "MainLoop.h"
 #include "../Include/IRenderer.h"
-#include "UserInterfaceType.h"
+#include "UserInterface/UIType.h"
 #include "Window.h"
 #include "Utility.h"
-#include "Button.h"
+#include "UserInterface/Button.h"
 #include "MouseProcedure.h"
 #include "StepTimer.h"
 
@@ -184,23 +184,20 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
         return false;
 
     m_button = std::make_unique<Button>(resPath);
-    ButtonImage normalImage{ {
-            L"UI/Blue/bar_square_large_l.png",
-            L"UI/Blue/bar_square_large_m.png",
-            L"UI/Blue/bar_square_large_r.png"
-    } };
-    ButtonImage overImage{ {
-            L"UI/Red/bar_square_large_l.png",
-            L"UI/Red/bar_square_large_m.png",
-            L"UI/Red/bar_square_large_r.png"
-    } };
-    ButtonImage clickedImage{ {
-            L"UI/Gray/bar_square_large_l.png",
-            L"UI/Gray/bar_square_large_m.png",
-            L"UI/Gray/bar_square_large_r.png"
-    } };
+    vector<wstring> left{
+        L"UI/Blue/bar_square_large_l.png",
+        L"UI/Red/bar_square_large_l.png",
+        L"UI/Gray/bar_square_large_l.png" };
+    vector<wstring> middle{
+        L"UI/Blue/bar_square_large_m.png",
+        L"UI/Red/bar_square_large_m.png",
+        L"UI/Gray/bar_square_large_m.png" };
+    vector<wstring> right{
+        L"UI/Blue/bar_square_large_r.png",
+        L"UI/Red/bar_square_large_r.png",
+        L"UI/Gray/bar_square_large_r.png" };
     Rectangle area{ 0, 0, 180, 48 };
-    m_button->SetImage(normalImage, overImage, clickedImage, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::LeftTop);
+    m_button->SetImage(left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
     m_mouse->SetWindow(hwnd);
 
     m_renderer->AddRenderItem(m_button.get());

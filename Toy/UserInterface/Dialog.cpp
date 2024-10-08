@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Dialog.h"
-#include "../Include/IRenderer.h"
-#include "UserInterfaceType.h"
+#include "../../Include/IRenderer.h"
+#include "UIType.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4100)	//쓰지않는 인수에 대한 경고 잠시 중지

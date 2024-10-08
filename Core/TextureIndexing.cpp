@@ -42,14 +42,13 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     auto findFilename = ranges::find(m_texFilenames, filename);
     unique_ptr<Texture> tex = make_unique<Texture>(m_device, m_descHeap);
 
-    //텍스춰는 로딩한 적이 있다면
     size_t descHeapIndex{ 0 };
     if (findFilename == m_texFilenames.end())
     {
         descHeapIndex = m_texFilenames.size();
         tex->Upload(m_upload, filename, rect, descHeapIndex);
     }
-    else
+    else //같은 텍스춰를 로딩하려 한다면
     {
         auto findSameTex = ranges::find_if(m_textures, [&filename](const auto& tex) {
             return (tex.second->GetFilename() == filename);

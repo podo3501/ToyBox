@@ -203,23 +203,25 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Button.h" />
     <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="Dialog.h" />
-    <ClInclude Include="ImagePart.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MouseProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
-    <ClInclude Include="UserInterfaceType.h" />
+    <ClInclude Include="UserInterface\Button.h" />
+    <ClInclude Include="UserInterface\Dialog.h" />
+    <ClInclude Include="UserInterface\ImagePart.h" />
+    <ClInclude Include="UserInterface\UILayout.h" />
+    <ClInclude Include="UserInterface\UIType.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Dialog.cpp" />
-    <ClCompile Include="ImagePart.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
+    <ClCompile Include="UserInterface\Button.cpp" />
+    <ClCompile Include="UserInterface\Dialog.cpp" />
+    <ClCompile Include="UserInterface\ImagePart.cpp" />
+    <ClCompile Include="UserInterface\UILayout.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="pch.cpp">

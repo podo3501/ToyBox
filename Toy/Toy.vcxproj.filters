@@ -8,6 +8,9 @@
       <UniqueIdentifier>e24bdbef-5475-490b-b1c4-3eb2816f5db3</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="UserInterface">
+      <UniqueIdentifier>{7d2930d3-03cc-4bfc-956f-bf8ef99a4472}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -21,10 +24,21 @@
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="MouseProcedure.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="ImagePart.h" />
-    <ClInclude Include="Dialog.h" />
-    <ClInclude Include="UserInterfaceType.h" />
+    <ClInclude Include="UserInterface\Button.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Dialog.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\ImagePart.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIType.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UILayout.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -32,9 +46,18 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="ImagePart.cpp" />
-    <ClCompile Include="Dialog.cpp" />
+    <ClCompile Include="UserInterface\Button.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Dialog.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\ImagePart.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UILayout.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
