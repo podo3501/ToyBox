@@ -117,3 +117,7 @@
 #ifdef _DEBUG
 #include <dxgidebug.h>
 #endif
+
+using namespace std;
+using namespace DirectX;
+using namespace DirectX::SimpleMath;

@@ -39,6 +39,7 @@
     <ClInclude Include="UserInterface\UILayout.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="Locator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

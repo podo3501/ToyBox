@@ -6,7 +6,8 @@ struct IRenderer;
 class ToyTest : public ::testing::Test
 {
 public:
-	ToyTest() {};
+	ToyTest();
+	~ToyTest();
 
 protected:
 	void SetUp() override;

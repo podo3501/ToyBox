@@ -1,6 +1,5 @@
 #pragma once
 
-class Renderer;
 class Window;
 class Button;
 
@@ -16,24 +15,25 @@ class MainLoop
 public:
 	MainLoop();
 	~MainLoop();
-	bool Initialize(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow);
+	bool Initialize(HINSTANCE hInstance, const wstring& resPath, int nCmdShow);
 	int Run();
 	
 private:
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	bool InitializeClass(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow);
+	bool InitializeClass(HINSTANCE hInstance, int nCmdShow);
 	void AddWinProcListener();
 	void Tick();
 	void OnResuming();
 	void Update(DX::StepTimer* timer);
 
-	std::unique_ptr<IRenderer> m_renderer;
-	std::unique_ptr<Window> m_window;
-	std::unique_ptr<DirectX::Mouse> m_mouse;
-	std::unique_ptr<Button>m_button;
-	std::unique_ptr<Button>m_button2;
-	std::unique_ptr<DX::StepTimer> m_timer;
+	wstring m_resourcePath;
+	unique_ptr<IRenderer> m_renderer;
+	unique_ptr<Window> m_window;
+	unique_ptr<DirectX::Mouse> m_mouse;
+	unique_ptr<Button>m_button;
+	unique_ptr<Button>m_button2;
+	unique_ptr<DX::StepTimer> m_timer;
 
 	bool m_sizemove{ false };
 	bool m_suspend{ false };

@@ -6,8 +6,7 @@
 #include "UILayout.h"
 #include "ImagePart.h"
 
-Button::Button(const wstring& resPath) :
-	m_resPath{ resPath },
+Button::Button() :
 	m_layout{ make_unique<UILayout>() }
 {}
 
@@ -56,19 +55,19 @@ bool Button::LoadResources(ILoadData* load)
 void Button::SetLocalPosition()
 {
 	const auto& leftSize = m_buttonParts[Part::Left][ButtonState::Normal]->GetSize();
-	const auto& middleSize = m_buttonParts[Part::Middle][ButtonState::Normal]->GetSize();
+	const auto& centerSize = m_buttonParts[Part::Center][ButtonState::Normal]->GetSize();
 	const auto& rightSize = m_buttonParts[Part::Right][ButtonState::Normal]->GetSize();
 
-	XMUINT2 curMiddleSize{ middleSize };
-	curMiddleSize.x = max(0u, static_cast<uint32_t>(m_layout->GetArea().width) - leftSize.x - rightSize.x);
-	EachImageParts(Part::Middle, [curMiddleSize](ImagePart* part) { part->SetSize(curMiddleSize); });
+	XMUINT2 curCenterSize{ centerSize };
+	curCenterSize.x = max(0u, static_cast<uint32_t>(m_layout->GetArea().width) - leftSize.x - rightSize.x);
+	EachImageParts(Part::Center, [&curCenterSize](ImagePart* part) { part->SetSize(curCenterSize); });
 
 	const Vector2& leftLocalPosition{ 0.f, 0.f };
 	const Vector2& middleLocalPosition{ static_cast<float>(leftSize.x), 0.f};
-	const Vector2& rightLocalPosition{ static_cast<float>(leftSize.x + curMiddleSize.x), 0.f};
+	const Vector2& rightLocalPosition{ static_cast<float>(leftSize.x + curCenterSize.x), 0.f};
 
 	EachImageParts(Part::Left, [&leftLocalPosition](ImagePart* part) { part->SetLocalPosition(leftLocalPosition); });
-	EachImageParts(Part::Middle, [&middleLocalPosition](ImagePart* part) { part->SetLocalPosition(middleLocalPosition); });
+	EachImageParts(Part::Center, [&middleLocalPosition](ImagePart* part) { part->SetLocalPosition(middleLocalPosition); });
 	EachImageParts(Part::Right, [&rightLocalPosition](ImagePart* part) { part->SetLocalPosition(rightLocalPosition); });
 	
 	EachImageParts([&origin = m_layout->GetOrigin()](ImagePart* part) { part->MakeLocalDestination(origin); });
@@ -80,10 +79,10 @@ void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& 
 	Vector2 pos{ resolution * m_layout->GetPosition() };
 	EachImageParts([&pos](ImagePart* part) { part->SetPosition(pos); });
 
-	bool bOver = false;
-	bOver = ranges::any_of(m_buttonParts | views::values, [btnState = m_state, mouseState = tracker.GetLastState()](const auto& images) {
+	bool bOver = ranges::any_of(m_buttonParts | views::values, [btnState = m_state, mouseState = tracker.GetLastState()](const auto& images) {
 		return images[btnState]->IsOver(mouseState.x, mouseState.y);
 		});
+
 	if (!bOver)
 	{
 		m_state = ButtonState::Normal;
@@ -91,10 +90,10 @@ void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& 
 	}
 
 	if (tracker.leftButton == Mouse::ButtonStateTracker::PRESSED ||
-		m_state == ButtonState::Clicked && tracker.leftButton == Mouse::ButtonStateTracker::HELD)
-		m_state = ButtonState::Clicked;
+		m_state == ButtonState::Pressed && tracker.leftButton == Mouse::ButtonStateTracker::HELD)
+		m_state = ButtonState::Pressed;
 	else
-		m_state = ButtonState::Over;
+		m_state = ButtonState::Hover;
 }
 
 void Button::Render(IRender* render)
@@ -103,20 +102,34 @@ void Button::Render(IRender* render)
 }
 
 void Button::SetImage(
+	const wstring& resPath,
 	const vector<ImageSource>& left,
-	const vector<ImageSource>& middle,
+	const vector<ImageSource>& center,
 	const vector<ImageSource>& right,
+
+	//const vector<ImageSource>& normal,
+	//const vector<ImageSource>& hover,
+	//const vector<ImageSource>& pressed,
 	const Rectangle& area, const Vector2& pos, Origin origin)
 {
 	m_layout->Set(area, pos, origin);
+	
+	//SetImageParts(ButtonState::Normal, normal); 
 
-	ranges::for_each(left, [this](const auto& source) {
-		SetImagePart(Part::Left, source); });
-	ranges::for_each(middle, [this](const auto& source) {
-		SetImagePart(Part::Middle, source); });
-	ranges::for_each(right, [this](const auto& source) {
-		SetImagePart(Part::Right, source); });
+	ranges::for_each(left, [this, &resPath](const auto& source) {
+		SetImagePart(resPath, Part::Left, source); });
+	ranges::for_each(center, [this, &resPath](const auto& source) {
+		SetImagePart(resPath, Part::Center, source); });
+	ranges::for_each(right, [this, &resPath](const auto& source) {
+		SetImagePart(resPath, Part::Right, source); });
 }
+
+//void Button::SetImageParts(ButtonState btnState, const vector<ImageSource>& sources)
+//{
+//	ranges::for_each(sources, [](const auto& source) {
+//		unique_ptr<ImagePartList> imagePartList = make_unique<ImagePartList>(source);
+//		})
+//}
 
 void Button::ChangeOrigin(Origin origin)
 {
@@ -124,10 +137,14 @@ void Button::ChangeOrigin(Origin origin)
 	EachImageParts([&curOrigin](ImagePart* part) { part->MakeLocalDestination(curOrigin); });
 }
 
-void Button::SetImagePart(Part part, const ImageSource& source)
+void Button::SetImagePart(const wstring& resPath, Part part, const ImageSource& source)
 {
-	ranges::transform(source.list, back_inserter(m_buttonParts[part]), [this, &filename = source.filename](const auto& pos) {
-		unique_ptr<ImagePart> imagePart = make_unique<ImagePart>(m_resPath + filename, pos);
+	wstring filename = resPath + source.filename;
+	ranges::transform(source.list, back_inserter(m_buttonParts[part]), [&filename](const auto& rect) {
+		unique_ptr<ImagePart> imagePart = make_unique<ImagePart>(filename, rect);
 		return move(imagePart);
 		});
 }
+
+//enum 정리
+//함수 처리 가능한지 확인

@@ -3,6 +3,7 @@
 #include "../../Include/IRenderer.h"
 #include "UIType.h"
 #include "UILayout.h"
+#include "UIType.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4100)	//쓰지않는 인수에 대한 경고 잠시 중지
@@ -23,9 +24,11 @@ void Dialog::Render(IRender* renderer)
 {
 }
 
-void Dialog::SetImage(const wstring& filename, const Rectangle& area, const XMFLOAT2& pos, Origin origin)
+void Dialog::SetImage(const ImageSource& sources, const Rectangle& area, const XMFLOAT2& pos, Origin origin)
 {
 	m_layout->Set(area, pos, origin);
+
+	//m_parts->Set(sources);
 }
 
 void Dialog::Update(const Vector2& resolution)

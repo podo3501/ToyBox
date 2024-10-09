@@ -4,6 +4,9 @@
 #include "../Toy/Window.h"
 #include "Utility.h"
 
+ToyTest::ToyTest() = default;
+ToyTest::~ToyTest() = default;
+
 void ToyTest::SetUp()
 {
 #if defined(DEBUG) | defined(_DEBUG)

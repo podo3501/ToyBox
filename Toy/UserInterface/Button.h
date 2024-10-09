@@ -16,29 +16,29 @@ class Button : public IRenderItem
 	enum ButtonState
 	{
 		Normal = 0,
-		Over = 1,
-		Clicked = 2,
-		Count,
+		Hover = 1,
+		Pressed = 2,
 	};
 
 	//버튼은 3개로 나누어져 있다. 버튼 사이즈를 늘리면 중간만 늘어난다.
-	enum class Part
+	enum Part
 	{
 		Left = 0,
-		Middle = 1,
+		Center = 1,
 		Right = 2,
 	};
 
 public:
-	Button(const std::wstring& resPath);
+	Button();
 	virtual ~Button();
 
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual void Render(IRender* renderer) override;
 	
 	void SetImage(
+		const wstring& resPath,
 		const vector<ImageSource>& left,
-		const vector<ImageSource>& middle,
+		const vector<ImageSource>& center,
 		const vector<ImageSource>& right,
 		const Rectangle& area, const Vector2& pos, Origin origin);
 	void Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker);
@@ -54,8 +54,12 @@ private:
 	void EachImageParts(Part part, function<void(ImagePart*)> action);
 	void EachImageParts(ButtonState btnState, function<void(ImagePart*)> action);
 
-	wstring m_resPath{};
+	void SetImagePart(const wstring& resPath, Part part, const ImageSource& source);
+
 	unique_ptr<UILayout> m_layout;
 	ButtonState m_state{ ButtonState::Normal };
 	map<Part, vector<unique_ptr<ImagePart>>> m_buttonParts;
+	//map<ButtonState, vector<unique_ptr<ImagePart>>> m_buttonParts;
+
+	//vector<ImageParts> m_buttonParts;
 };

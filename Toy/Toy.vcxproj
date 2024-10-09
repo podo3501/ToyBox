@@ -204,6 +204,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="Locator.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MouseProcedure.h" />
     <ClInclude Include="pch.h" />

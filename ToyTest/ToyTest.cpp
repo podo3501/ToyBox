@@ -37,7 +37,7 @@ void TestLeftTopRender(size_t index, const RECT& dest, const RECT* source)
 
 TEST_F(ToyTest, ButtonTest)
 {
-	std::unique_ptr<Button> button = std::make_unique<Button>(L"Resources/");
+	std::unique_ptr<Button> button = std::make_unique<Button>();
 
 	vector<ImageSource> left
 	{
@@ -60,7 +60,7 @@ TEST_F(ToyTest, ButtonTest)
 
 	Rectangle area{ 0, 0, 126, 48 };
 	XMFLOAT2 pos{ 0.5f, 0.5f };
-	button->SetImage(left, middle, right, area, pos, Origin::Center);
+	button->SetImage(L"Resources/", left, middle, right, area, pos, Origin::Center);
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -91,6 +91,9 @@ TEST_F(ToyTest, ButtonTest)
 	button->Render(&mockRender);
 	
 	Bookmark;
+	//이미지를 1, 3, 9로 한 세트를 만든다.
+	//버튼 같은 경우는 normal, hover, pressed가 한 셋이다. 지금은 part로 돼 있다.
+	//다이얼로그에 이 한 셋트를 붙인다.
 	//UI 다이얼로그를 만든다.
 }
 
@@ -99,7 +102,14 @@ TEST_F(ToyTest, DialogTest)
 	unique_ptr<Dialog> dialog = make_unique<Dialog>(L"Resources/");
 	Rectangle area{ 0, 0, 200, 150 };
 	XMFLOAT2 pos{ 0.5f, 0.5f };
-	dialog->SetImage(L"button_square_header_large_square_screws.png", area, pos, Origin::Center);
+	ImageSource dialogSource{
+		L"UI/Blue/button_square_header_large_square_screws.png", {
+			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+		}
+	};
+	dialog->SetImage(dialogSource, area, pos, Origin::Center);
 	m_renderer->AddRenderItem(dialog.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -127,8 +137,3 @@ TEST(MainLoop, MultipleAppExcute)
 //	EXPECT_TRUE(mainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_SHOWDEFAULT));
 //	EXPECT_EQ(mainLoop.Run(), 0);
 //}
-
-TEST_F(ToyTest, MemoryTest)
-{
-
-}

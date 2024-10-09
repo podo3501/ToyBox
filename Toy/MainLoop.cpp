@@ -8,8 +8,6 @@
 #include "MouseProcedure.h"
 #include "StepTimer.h"
 
-using namespace DirectX;
-
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
 #pragma clang diagnostic ignored "-Wswitch-enum"
@@ -51,7 +49,7 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         else
         {
             PAINTSTRUCT ps;
-            std::ignore = BeginPaint(hWnd, &ps);
+            ignore = BeginPaint(hWnd, &ps);
             EndPaint(hWnd, &ps);
         }
         break;
@@ -159,21 +157,23 @@ MainLoop::MainLoop() :
     m_renderer{ nullptr } {}
 MainLoop::~MainLoop() = default;
 
-bool MainLoop::Initialize(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
+bool MainLoop::Initialize(HINSTANCE hInstance, const wstring& resPath, int nCmdShow)
 {
+    m_resourcePath = resPath;
+
     ReturnIfFalse(XMVerifyCPUSupport());
-    ReturnIfFalse(InitializeClass(hInstance, resPath, nCmdShow));
+    ReturnIfFalse(InitializeClass(hInstance, nCmdShow));
 
     AddWinProcListener();
 
     return true;
 }
 
-bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath, int nCmdShow)
+bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
 {
-    m_window = std::make_unique<Window>();
-    m_mouse = std::make_unique<Mouse>();
-    m_timer = std::make_unique<DX::StepTimer>();
+    m_window = make_unique<Window>();
+    m_mouse = make_unique<Mouse>();
+    m_timer = make_unique<DX::StepTimer>();
 
     HWND hwnd{ 0 };
     RECT rc{0, 0, 800, 600};
@@ -183,8 +183,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
     if (m_renderer == nullptr)
         return false;
 
-    m_button = std::make_unique<Button>(resPath);
-    m_button2 = std::make_unique<Button>(resPath);
+    m_button = make_unique<Button>();
+    m_button2 = make_unique<Button>();
     vector<ImageSource> left
     {
         { L"UI/Blue/bar_square_large_l.png", { { 0, 0, 24, 48 } } },
@@ -204,8 +204,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
         { L"UI/Gray/bar_square_large_r.png", { { 0, 0, 24, 48 } } }
     };
     Rectangle area{ 0, 0, 180, 48 };
-    m_button->SetImage(left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
-    m_button2->SetImage(left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.4f }, Origin::Center);
+    m_button->SetImage(m_resourcePath, left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
+    m_button2->SetImage(m_resourcePath, left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.4f }, Origin::Center);
 
     m_mouse->SetWindow(hwnd);
 

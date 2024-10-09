@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Locator.h"
 
 namespace Practice
 {
@@ -31,13 +31,13 @@ namespace Practice
 		{
 			auto audio = make_unique<Audio>();
 			Locator<Audio>::Provide(audio.get());
-			Audio* curAudio = Locator<Audio>::GetService();
+			const Audio* curAudio = Locator<Audio>::GetService();
 		}
 
 		{
 			auto budio = make_unique<Budio>();
 			Locator<Budio>::Provide(budio.get());
-			Budio* curBudio = Locator<Budio>::GetService();
+			const Budio* curBudio = Locator<Budio>::GetService();
 		}
 	}
 }
