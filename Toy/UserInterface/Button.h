@@ -37,9 +37,9 @@ public:
 	
 	void SetImage(
 		const wstring& resPath,
-		const vector<ImageSource>& left,
-		const vector<ImageSource>& center,
-		const vector<ImageSource>& right,
+		const vector<ImageSource>& normal,
+		const vector<ImageSource>& hover,
+		const vector<ImageSource>& pressed,
 		const Rectangle& area, const Vector2& pos, Origin origin);
 	void Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker);
 	void ChangeOrigin(Origin origin);
@@ -47,19 +47,15 @@ public:
 private:
 	void SetLocalPosition();
 
-	void SetImagePart(Part part, const ImageSource& patch);
+	void SetImage(const wstring& resPath, ButtonState btnState, const vector<ImageSource>& sources);
+	bool LoadResources(ILoadData* load, const vector<unique_ptr<ImagePart>>& imageParts);
 
-	void EachImageParts(function<void(ImagePart*)> action) const;
-	bool EachImageParts(function<bool(ImagePart*)> action);
-	void EachImageParts(Part part, function<void(ImagePart*)> action);
 	void EachImageParts(ButtonState btnState, function<void(ImagePart*)> action);
-
-	void SetImagePart(const wstring& resPath, Part part, const ImageSource& source);
+	void EachImageParts(Part part, function<void(ImagePart*)> action);
+	void EachImageParts(function<void(ImagePart*)> action) const;
+	
 
 	unique_ptr<UILayout> m_layout;
 	ButtonState m_state{ ButtonState::Normal };
-	map<Part, vector<unique_ptr<ImagePart>>> m_buttonParts;
-	//map<ButtonState, vector<unique_ptr<ImagePart>>> m_buttonParts;
-
-	//vector<ImageParts> m_buttonParts;
+	map<ButtonState, vector<unique_ptr<ImagePart>>> m_NbuttonParts;
 };

@@ -185,27 +185,27 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
 
     m_button = make_unique<Button>();
     m_button2 = make_unique<Button>();
-    vector<ImageSource> left
+    vector<ImageSource> normal
     {
         { L"UI/Blue/bar_square_large_l.png", { { 0, 0, 24, 48 } } },
-        { L"UI/Red/bar_square_large_l.png", { {} } },
-        { L"UI/Gray/bar_square_large_l.png", { {} } }
-    };
-    vector<ImageSource> middle
-    {
-        { L"UI/Blue/bar_square_large_m.png", { { 0, 0, 48, 48 } } },
-        { L"UI/Red/bar_square_large_m.png", { { 0, 0, 2, 48 } } },
-        { L"UI/Gray/bar_square_large_m.png", { { 0, 0, 0, 48 } } }
-    };
-    vector<ImageSource> right
-    {
+        { L"UI/Blue/bar_square_large_m.png", { {} } },
         { L"UI/Blue/bar_square_large_r.png", { {} } },
+    };
+    vector<ImageSource> hover
+    {
+        { L"UI/Red/bar_square_large_l.png", { {} } },
+        { L"UI/Red/bar_square_large_m.png", { { 0, 0, 48, 48 } } },
         { L"UI/Red/bar_square_large_r.png", { {} } },
-        { L"UI/Gray/bar_square_large_r.png", { { 0, 0, 24, 48 } } }
+    };
+    vector<ImageSource> pressed
+    {
+        { L"UI/Gray/bar_square_large_l.png", { {} } },
+        { L"UI/Gray/bar_square_large_m.png", { {} } },
+        { L"UI/Gray/bar_square_large_r.png", { { 0, 0, 24, 48 } } },
     };
     Rectangle area{ 0, 0, 180, 48 };
-    m_button->SetImage(m_resourcePath, left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
-    m_button2->SetImage(m_resourcePath, left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.4f }, Origin::Center);
+    m_button->SetImage(m_resourcePath, normal, hover, pressed, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
+    m_button2->SetImage(m_resourcePath, normal, hover, pressed, area, SimpleMath::Vector2{ 0.5f, 0.4f }, Origin::Center);
 
     m_mouse->SetWindow(hwnd);
 
