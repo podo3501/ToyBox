@@ -110,3 +110,5 @@
 using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
+
+#define Bookmark EXPECT_FALSE("BOOKMARK")

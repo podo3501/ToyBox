@@ -1,6 +1,7 @@
 #pragma once
 #include "../Include/IRenderItem.h"
 
+class UILayout;
 enum class Origin;
 
 class Dialog : public IRenderItem
@@ -17,4 +18,5 @@ public:
 
 private:
 	wstring m_resPath{};
+	unique_ptr<UILayout> m_layout;
 };

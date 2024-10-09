@@ -32,6 +32,7 @@ private:
 	std::unique_ptr<Window> m_window;
 	std::unique_ptr<DirectX::Mouse> m_mouse;
 	std::unique_ptr<Button>m_button;
+	std::unique_ptr<Button>m_button2;
 	std::unique_ptr<DX::StepTimer> m_timer;
 
 	bool m_sizemove{ false };

@@ -3,8 +3,9 @@
 #include "../../Include/IRenderer.h"
 #include "../Utility.h"
 
-ImagePart::ImagePart(const std::wstring& filename) :
-	m_filename{ filename }
+ImagePart::ImagePart(const std::wstring& filename, const Rectangle& source) :
+	m_filename{ filename },
+	m_source{ source }
 {}
 
 bool ImagePart::Load(ILoadData* load)
@@ -18,6 +19,14 @@ void ImagePart::MakeLocalDestination(const Vector2& origin)
 	m_localDestination.y = static_cast<long>(m_localPosition.y - origin.y);
 	m_localDestination.width = m_size.x;
 	m_localDestination.height = m_size.y;
+
+	if (m_source.IsEmpty())
+	{
+		m_source.x = 0;
+		m_source.y = 0;
+		m_source.width = m_size.x;
+		m_source.height = m_size.y;
+	}
 }
 
 bool ImagePart::IsOver(int mouseX, int mouseY) const noexcept
@@ -26,11 +35,13 @@ bool ImagePart::IsOver(int mouseX, int mouseY) const noexcept
 	return m_localDestination.Contains(mouseLocalPos);
 }
 
-void ImagePart::Render(IRender* render) const
+void ImagePart::Render(IRender* render) 
 {
 	Rectangle destination(m_localDestination);
 	destination.Offset(static_cast<long>(m_position.x), static_cast<long>(m_position.y));
-	render->Render(m_index, destination, nullptr);
+
+	RECT source(m_source);
+	render->Render(m_index, destination, &source);
 }
 
 

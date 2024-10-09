@@ -5,6 +5,7 @@
 struct IRenderer;
 struct ILoadData;
 
+struct ImageSource;
 class ImagePart;
 class UILayout;
 
@@ -35,14 +36,18 @@ public:
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual void Render(IRender* renderer) override;
 	
-	void SetImage(const vector<wstring>& left, const vector<wstring>& middle, const vector<wstring>& right,
+	void SetImage(
+		const vector<ImageSource>& left,
+		const vector<ImageSource>& middle,
+		const vector<ImageSource>& right,
 		const Rectangle& area, const Vector2& pos, Origin origin);
-	void Update(const Vector2& resolution, const Mouse::State& mouseState);
+	void Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker);
 	void ChangeOrigin(Origin origin);
 
 private:
-	void SetFilenames(Part part, const vector<wstring>& filenames);
 	void SetLocalPosition();
+
+	void SetImagePart(Part part, const ImageSource& patch);
 
 	void EachImageParts(function<void(ImagePart*)> action) const;
 	bool EachImageParts(function<bool(ImagePart*)> action);

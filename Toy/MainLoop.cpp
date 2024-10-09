@@ -184,23 +184,34 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, const std::wstring& resPath,
         return false;
 
     m_button = std::make_unique<Button>(resPath);
-    vector<wstring> left{
-        L"UI/Blue/bar_square_large_l.png",
-        L"UI/Red/bar_square_large_l.png",
-        L"UI/Gray/bar_square_large_l.png" };
-    vector<wstring> middle{
-        L"UI/Blue/bar_square_large_m.png",
-        L"UI/Red/bar_square_large_m.png",
-        L"UI/Gray/bar_square_large_m.png" };
-    vector<wstring> right{
-        L"UI/Blue/bar_square_large_r.png",
-        L"UI/Red/bar_square_large_r.png",
-        L"UI/Gray/bar_square_large_r.png" };
+    m_button2 = std::make_unique<Button>(resPath);
+    vector<ImageSource> left
+    {
+        { L"UI/Blue/bar_square_large_l.png", { { 0, 0, 24, 48 } } },
+        { L"UI/Red/bar_square_large_l.png", { {} } },
+        { L"UI/Gray/bar_square_large_l.png", { {} } }
+    };
+    vector<ImageSource> middle
+    {
+        { L"UI/Blue/bar_square_large_m.png", { { 0, 0, 48, 48 } } },
+        { L"UI/Red/bar_square_large_m.png", { { 0, 0, 2, 48 } } },
+        { L"UI/Gray/bar_square_large_m.png", { { 0, 0, 0, 48 } } }
+    };
+    vector<ImageSource> right
+    {
+        { L"UI/Blue/bar_square_large_r.png", { {} } },
+        { L"UI/Red/bar_square_large_r.png", { {} } },
+        { L"UI/Gray/bar_square_large_r.png", { { 0, 0, 24, 48 } } }
+    };
     Rectangle area{ 0, 0, 180, 48 };
     m_button->SetImage(left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
+    m_button2->SetImage(left, middle, right, area, SimpleMath::Vector2{ 0.5f, 0.4f }, Origin::Center);
+
     m_mouse->SetWindow(hwnd);
 
     m_renderer->AddRenderItem(m_button.get());
+    m_renderer->AddRenderItem(m_button2.get());
+    
     m_renderer->LoadResources();
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
@@ -221,6 +232,7 @@ void MainLoop::AddWinProcListener()
         return MouseProc(wnd, msg, wp, lp); });
 }
 
+Mouse::ButtonStateTracker mouseTracker;
 void MainLoop::Update(DX::StepTimer* timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
@@ -228,8 +240,9 @@ void MainLoop::Update(DX::StepTimer* timer)
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    Mouse::State state = m_mouse->GetState();
-    m_button->Update(m_window->GetOutputSize(), state);
+    mouseTracker.Update(m_mouse->GetState());
+    m_button->Update(m_window->GetOutputSize(), mouseTracker);
+    m_button2->Update(m_window->GetOutputSize(), mouseTracker);
 
     PIXEndEvent();
 }

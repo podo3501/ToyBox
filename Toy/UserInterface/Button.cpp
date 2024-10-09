@@ -7,10 +7,9 @@
 #include "ImagePart.h"
 
 Button::Button(const wstring& resPath) :
-	m_resPath{ resPath }
-{
-	m_layout = make_unique<UILayout>();
-}
+	m_resPath{ resPath },
+	m_layout{ make_unique<UILayout>() }
+{}
 
 Button::~Button() = default;
 
@@ -75,21 +74,24 @@ void Button::SetLocalPosition()
 	EachImageParts([&origin = m_layout->GetOrigin()](ImagePart* part) { part->MakeLocalDestination(origin); });
 }
 
-void Button::Update(const Vector2& resolution, const Mouse::State& mouseState)
+void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker)
 {
 	//클릭하는 좌표를 LeftTop에서 계산하도록 위치조정한다.
 	Vector2 pos{ resolution * m_layout->GetPosition() };
 	EachImageParts([&pos](ImagePart* part) { part->SetPosition(pos); });
 
 	bool bOver = false;
-	m_state = ButtonState::Normal;
-	bOver = ranges::any_of(m_buttonParts | views::values, [btnState = m_state, &mouseState](const auto& images) {
+	bOver = ranges::any_of(m_buttonParts | views::values, [btnState = m_state, mouseState = tracker.GetLastState()](const auto& images) {
 		return images[btnState]->IsOver(mouseState.x, mouseState.y);
 		});
+	if (!bOver)
+	{
+		m_state = ButtonState::Normal;
+		return;
+	}
 
-	if (!bOver) return;
-
-	if (mouseState.leftButton)
+	if (tracker.leftButton == Mouse::ButtonStateTracker::PRESSED ||
+		m_state == ButtonState::Clicked && tracker.leftButton == Mouse::ButtonStateTracker::HELD)
 		m_state = ButtonState::Clicked;
 	else
 		m_state = ButtonState::Over;
@@ -100,14 +102,20 @@ void Button::Render(IRender* render)
 	EachImageParts(m_state, [render](ImagePart* part) { part->Render(render); });
 }
 
-void Button::SetImage(const vector<wstring>& left, const vector<wstring>& middle, const vector<wstring>& right,
+void Button::SetImage(
+	const vector<ImageSource>& left,
+	const vector<ImageSource>& middle,
+	const vector<ImageSource>& right,
 	const Rectangle& area, const Vector2& pos, Origin origin)
 {
 	m_layout->Set(area, pos, origin);
 
-	SetFilenames(Part::Left, left);
-	SetFilenames(Part::Middle, middle);
-	SetFilenames(Part::Right, right);
+	ranges::for_each(left, [this](const auto& source) {
+		SetImagePart(Part::Left, source); });
+	ranges::for_each(middle, [this](const auto& source) {
+		SetImagePart(Part::Middle, source); });
+	ranges::for_each(right, [this](const auto& source) {
+		SetImagePart(Part::Right, source); });
 }
 
 void Button::ChangeOrigin(Origin origin)
@@ -116,10 +124,10 @@ void Button::ChangeOrigin(Origin origin)
 	EachImageParts([&curOrigin](ImagePart* part) { part->MakeLocalDestination(curOrigin); });
 }
 
-void Button::SetFilenames(Part part, const vector<wstring>& filenames)
+void Button::SetImagePart(Part part, const ImageSource& source)
 {
-	ranges::transform(filenames, back_inserter(m_buttonParts[part]), [this](const auto& filename) {
-		unique_ptr<ImagePart> imagePart = make_unique<ImagePart>(m_resPath + filename);
+	ranges::transform(source.list, back_inserter(m_buttonParts[part]), [this, &filename = source.filename](const auto& pos) {
+		unique_ptr<ImagePart> imagePart = make_unique<ImagePart>(m_resPath + filename, pos);
 		return move(imagePart);
 		});
 }

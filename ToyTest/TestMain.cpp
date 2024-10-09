@@ -28,6 +28,8 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
+	::testing::GTEST_FLAG(color) = "yes"; //yes : 컬러 사용, no : 컬러 사용 x, auto : 자동
+	
 	::testing::InitGoogleTest(&argc, argv);
 	::testing::AddGlobalTestEnvironment(new GlobalEnv);
 
