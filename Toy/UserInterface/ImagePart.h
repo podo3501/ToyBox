@@ -10,12 +10,11 @@ public:
 	ImagePart(const std::wstring& filename, const Rectangle& source);
 
 	bool Load(ILoadData* load);
-	void MakeLocalDestination(const Vector2& origin);
-	bool IsOver(int mouseX, int mouseY) const noexcept;
+	bool IsHover(int mouseX, int mouseY) const noexcept;
 	void Render(IRender* render);
 	
-	inline void SetPosition(const Vector2& position) { m_position = position; }
-	inline void SetLocalPosition(const Vector2& localPos) { m_localPosition = localPos; }
+	inline void SetPosition(const XMUINT2& position) { m_position = position; }
+	inline void SetDestination(const Rectangle& destination) { m_destination = destination; }
 	inline void SetSize(const XMUINT2& size) { m_size = size; }
 
 	inline XMUINT2 GetSize() const noexcept { return m_size; }
@@ -24,8 +23,7 @@ private:
 	size_t m_index{ 0 };
 	std::wstring m_filename{};
 	XMUINT2 m_size{};
-	Vector2 m_localPosition{};
-	Vector2 m_position{};
-	Rectangle m_localDestination{};
+	XMUINT2 m_position{};
+	Rectangle m_destination{};
 	Rectangle m_source{};
 };

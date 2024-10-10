@@ -81,16 +81,16 @@ TEST_F(ToyTest, ButtonTest)
 	//clicked 버튼일 경우
 	mouseState.x = 420;
 	mouseState.y = 320;
+
+	button->ChangeOrigin(Origin::LeftTop);	//정렬을 왼쪽위로 옮긴다.
 	mouseTracker.Update(mouseState);
 	mouseTracker.leftButton = Mouse::ButtonStateTracker::PRESSED;
 	button->Update(m_window->GetOutputSize(), mouseTracker);
 
-	//정렬을 왼쪽위로 옮긴다.
-	button->ChangeOrigin(Origin::LeftTop);
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestLeftTopRender));
 	button->Render(&mockRender);
 	
-	Bookmark;
+	//Bookmark;
 	//이미지를 1, 3, 9로 한 세트를 만든다.
 	//버튼 같은 경우는 normal, hover, pressed가 한 셋이다. 지금은 part로 돼 있다.
 	//다이얼로그에 이 한 셋트를 붙인다.

@@ -40,6 +40,9 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="Locator.h" />
+    <ClInclude Include="UserInterface\ImagePartSet.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -57,6 +60,9 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UILayout.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\ImagePartSet.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
