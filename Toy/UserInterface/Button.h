@@ -1,12 +1,10 @@
 #pragma once
-
 #include "../Include/IRenderItem.h"
 
 struct IRenderer;
 struct ILoadData;
 
 struct ImageSource;
-class ImagePart;
 class ImagePartSet;
 class UILayout;
 

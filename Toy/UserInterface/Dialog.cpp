@@ -1,37 +1,40 @@
 #include "pch.h"
 #include "Dialog.h"
 #include "../../Include/IRenderer.h"
+#include "../Utility.h"
 #include "UIType.h"
 #include "UILayout.h"
-#include "UIType.h"
-
-#pragma warning(push)
-#pragma warning(disable : 4100)	//쓰지않는 인수에 대한 경고 잠시 중지
+#include "ImagePartSet.h"
 
 Dialog::~Dialog() = default;
-Dialog::Dialog(const wstring& resPath) : 
-	m_resPath{ resPath },
+Dialog::Dialog() : 
 	m_layout{ make_unique<UILayout>() }
 {}
 
 bool Dialog::LoadResources(ILoadData* load)
 { 
-	//load->LoadTexture(m_filename, )
-	return true; 
+	ReturnIfFalse(m_imagePartSet->LoadResources(load));
+	ReturnIfFalse(m_imagePartSet->SetDestination(m_layout->GetArea()));
+
+	return true;
 }
 
 void Dialog::Render(IRender* renderer)
 {
+	renderer;
 }
 
-void Dialog::SetImage(const ImageSource& sources, const Rectangle& area, const XMFLOAT2& pos, Origin origin)
+void Dialog::SetImage(
+	const wstring& resPath,
+	const ImageSource& sources,
+	const Rectangle& area, const XMFLOAT2& pos, Origin origin)
 {
 	m_layout->Set(area, pos, origin);
 
-	//m_parts->Set(sources);
+	m_imagePartSet = make_unique<ImagePartSet>(resPath, sources);
 }
 
 void Dialog::Update(const Vector2& resolution)
-{}
-
-#pragma warning(pop)
+{
+	resolution;
+}

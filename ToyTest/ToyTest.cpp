@@ -89,17 +89,11 @@ TEST_F(ToyTest, ButtonTest)
 
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestLeftTopRender));
 	button->Render(&mockRender);
-	
-	//Bookmark;
-	//이미지를 1, 3, 9로 한 세트를 만든다.
-	//버튼 같은 경우는 normal, hover, pressed가 한 셋이다. 지금은 part로 돼 있다.
-	//다이얼로그에 이 한 셋트를 붙인다.
-	//UI 다이얼로그를 만든다.
 }
 
 TEST_F(ToyTest, DialogTest)
 {
-	unique_ptr<Dialog> dialog = make_unique<Dialog>(L"Resources/");
+	unique_ptr<Dialog> dialog = make_unique<Dialog>();
 	Rectangle area{ 0, 0, 200, 150 };
 	XMFLOAT2 pos{ 0.5f, 0.5f };
 	ImageSource dialogSource{
@@ -109,11 +103,17 @@ TEST_F(ToyTest, DialogTest)
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
-	dialog->SetImage(dialogSource, area, pos, Origin::Center);
+	dialog->SetImage(L"Resources/", dialogSource, area, pos, Origin::Center);
 	m_renderer->AddRenderItem(dialog.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
 	dialog->Update(m_window->GetOutputSize());
+
+	Bookmark;
+	//9세트 이미지 만들 차례
+	//이미지를 1, 3, 9로 한 세트를 만든다.
+	//다이얼로그에 이 한 셋트를 붙인다.
+	//UI 다이얼로그를 만든다.
 }
 
 //여러번 실행해서 오동작이 나는지 확인한다.

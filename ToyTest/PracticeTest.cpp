@@ -40,4 +40,48 @@ namespace Practice
 			const Budio* curBudio = Locator<Budio>::GetService();
 		}
 	}
+
+	struct Data
+	{
+		int i{ 1 };
+	};
+
+	class NestedForLoops
+	{
+	public:
+		NestedForLoops()
+		{
+			Datas datas(5);
+			m_typeDatas.emplace_back(datas);
+			m_typeDatas.emplace_back(datas);
+		}
+
+		int Excute()
+		{
+			int sum{ 0 };
+			Each([&sum](const Data& data) { sum += data.i; });
+			return sum;
+		}
+
+	private:
+		void Each(std::function<void(const Data&)> action)
+		{
+			for (const auto& curDatas : m_typeDatas)
+				for (const auto& curData : curDatas)
+					action(curData);
+		}
+
+		using Datas = vector<Data>;
+		vector<Datas> m_typeDatas;
+	};
+	
+
+	TEST(NestedForLoops, Test)
+	{
+		//2중반복문을 사용할때에는 2중반복문을 일반화 해서 사용하면 편하게 사용할 수 있다.
+		//리팩토링을 해야 할 경우가 생기면 조금 번거롭겠지만, 되도록이면 리팩토링이 잘 안될
+		//2중반복문에 한해서 사용하는게 좋을 듯 싶다.
+		NestedForLoops loops;
+		EXPECT_EQ(loops.Excute(), 10);
+	}
 }

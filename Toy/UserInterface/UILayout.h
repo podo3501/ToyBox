@@ -12,13 +12,12 @@ public:
 	void SetOrigin(Origin origin);
 
 	const Rectangle& GetArea() const noexcept { return m_area; }
-	const XMUINT2& GetOrigin() const noexcept { return m_originPosition; }
-	const Vector2& GetPosition() const noexcept { return m_position; }
+	XMUINT2 GetPosition(const Vector2& resolution) const noexcept;
 
 private:
-	XMUINT2 GetOriginPosition(Origin origin) noexcept;
+	XMUINT2 GetOriginPoint(Origin origin) noexcept;
 
 	Rectangle m_area{};
-	Vector2 m_position{};
-	XMUINT2 m_originPosition{};
+	Vector2 m_normalizedPosition{};
+	XMUINT2 m_originPoint{};
 };

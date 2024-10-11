@@ -8,8 +8,15 @@ struct IRender;
 
 class ImagePartSet
 {
-	//버튼은 3개로 나누어져 있다. 버튼 사이즈를 늘리면 중간만 늘어난다.
-	enum Part
+	enum ImageCount
+	{
+		Zero = 0,
+		One = 1,
+		Three = 3,
+		Nine = 9
+	};
+
+	enum Part	//버튼은 3개로 나누어져 있다. 버튼 사이즈를 늘리면 중간만 늘어난다.
 	{
 		Left = 0,
 		Center = 1,
@@ -19,15 +26,18 @@ class ImagePartSet
 
 public:
 	ImagePartSet() = delete;
-	ImagePartSet(const wstring& resPath, const vector<ImageSource>& imgSources);
 	~ImagePartSet();
+	ImagePartSet(const wstring& resPath, const vector<ImageSource>& imgSources);
+	ImagePartSet(const wstring& resPath, const ImageSource& source);
 
 	bool LoadResources(ILoadData* load);
-	void SetDestination(const UILayout* layout);
+	bool SetDestination(const Rectangle& area);
 	void SetPosition(const XMUINT2& position);
 	bool IsHover(int mouseX, int mouseY);
 	void Render(IRender* render);
 
 private:
+	void CreateImagePart(const wstring& resPath, const ImageSource& imgSource);
+
 	vector<unique_ptr<ImagePart>> m_images;
 };

@@ -6,7 +6,7 @@ UILayout::~UILayout() = default;
 UILayout::UILayout()
 {}
 
-XMUINT2 UILayout::GetOriginPosition(Origin origin) noexcept
+XMUINT2 UILayout::GetOriginPoint(Origin origin) noexcept
 {
 	switch (origin)
 	{
@@ -18,12 +18,18 @@ XMUINT2 UILayout::GetOriginPosition(Origin origin) noexcept
 
 void UILayout::SetOrigin(Origin origin)
 {
-	m_originPosition = GetOriginPosition(origin);
+	m_originPoint = GetOriginPoint(origin);
 }
 
-void UILayout::Set(const Rectangle& area, const Vector2& pos, Origin origin)
+void UILayout::Set(const Rectangle& area, const Vector2& normalizedPos, Origin origin)
 {
 	m_area = area;
 	SetOrigin(origin);
-	m_position = pos;
+	m_normalizedPosition = normalizedPos;
+}
+
+XMUINT2 UILayout::GetPosition(const Vector2& resolution) const noexcept
+{
+	Vector2 pos{ resolution * m_normalizedPosition };
+	return XMUINT2{ static_cast<long>(pos.x) - m_originPoint.x, static_cast<long>(pos.y) - m_originPoint.y };
 }

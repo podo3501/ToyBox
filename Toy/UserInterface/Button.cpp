@@ -16,19 +16,16 @@ bool Button::LoadResources(ILoadData* load)
 	ReturnIfFalse(ranges::all_of(m_image | views::values, [this, load](const auto& imgPartSet) {
 		return imgPartSet->LoadResources(load);
 		}));
-
+	//로딩을 다 하고 값을 넣는 이유는 뒤에 로딩하는 것들이 값에 영향을 주기 때문이다.
 	for (const auto& partSet : m_image | views::values)
-		partSet->SetDestination(m_layout.get());
+		ReturnIfFalse(partSet->SetDestination(m_layout->GetArea()));
 
 	return true;
 }
 
 void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker)
 {
-	//클릭하는 좌표를 LeftTop에서 계산하도록 위치조정한다.
-	const XMUINT2& origin = m_layout->GetOrigin();
-	const Vector2& pos{ resolution * m_layout->GetPosition() };
-	XMUINT2 originPos{ static_cast<long>(pos.x) - origin.x, static_cast<long>(pos.y) - origin.y };
+	XMUINT2 originPos = m_layout->GetPosition(resolution);
 
 	for (const auto& partSet : m_image | views::values)
 		partSet->SetPosition(originPos);
