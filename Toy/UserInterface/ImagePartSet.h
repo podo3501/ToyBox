@@ -15,9 +15,9 @@ public:
 	ImagePartSet(const wstring& resPath, const ImageSource& source);
 
 	bool LoadResources(ILoadData* load);
-	bool SetDestination(const Rectangle& area);
-	void SetPosition(const XMUINT2& position);
-	bool IsHover(int mouseX, int mouseY);
+	bool SetDestination(const Rectangle& area) noexcept;
+	void SetPosition(const XMUINT2& position) noexcept;
+	bool IsHover(int mouseX, int mouseY) noexcept;
 	void Render(IRender* render);
 
 private:

@@ -49,24 +49,24 @@ TEST_F(ToyTest, ButtonTest)
 
 	vector<ImageSource> normal
 	{
-		{ L"UI/Blue/bar_square_large_l.png", { { 0, 0, 24, 48 } } },
-		{ L"UI/Blue/bar_square_large_m.png", { {} } },
-		{ L"UI/Blue/bar_square_large_r.png", { {} } },
+		{ L"UI/Blue/bar_square_large_l.png" },
+		{ L"UI/Blue/bar_square_large_m.png" },
+		{ L"UI/Blue/bar_square_large_r.png" },
 	};
 	vector<ImageSource> hover
 	{
-		{ L"UI/Red/bar_square_large_l.png", { {} } },
-		{ L"UI/Red/bar_square_large_m.png", { { 0, 0, 48, 48 } } },
-		{ L"UI/Red/bar_square_large_r.png", { {} } },
+		{ L"UI/Red/bar_square_large_l.png" },
+		{ L"UI/Red/bar_square_large_m.png" },
+		{ L"UI/Red/bar_square_large_r.png" },
 	};
 	vector<ImageSource> pressed
 	{
-		{ L"UI/Gray/bar_square_large_l.png", { {} } },
-		{ L"UI/Gray/bar_square_large_m.png", { {} } },
-		{ L"UI/Gray/bar_square_large_r.png", { { 0, 0, 24, 48 } } },
+		{ L"UI/Gray/bar_square_large_l.png" },
+		{ L"UI/Gray/bar_square_large_m.png" },
+		{ L"UI/Gray/bar_square_large_r.png" },
 	};
 
-	Rectangle area{ 0, 0, 126, 48 };
+	Rectangle area{ 0, 0, 116, 48 };
 	XMFLOAT2 pos{ 0.5f, 0.5f };
 	button->SetImage(L"Resources/", normal, hover, pressed, area, pos, Origin::Center);
 	m_renderer->AddRenderItem(button.get());
@@ -75,6 +75,7 @@ TEST_F(ToyTest, ButtonTest)
 	//normal 버튼일 경우
 	Mouse::ButtonStateTracker mouseTracker;
 	SetMouse(100, 100, mouseTracker);
+	button->ChangeArea({ 0, 0, 126,48 });
 	button->Update(m_window->GetOutputSize(), mouseTracker);
 
 	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
@@ -105,7 +106,7 @@ void TestDialogRender(size_t index, const RECT& dest, const RECT* source)
 TEST_F(ToyTest, DialogTest)
 {
 	unique_ptr<Dialog> dialog = make_unique<Dialog>();
-	Rectangle area{ 0, 0, 200, 150 };
+	Rectangle area{ 0, 0, 170, 120 };
 	XMFLOAT2 pos{ 0.5f, 0.5f };
 	ImageSource dialogSource{
 		L"UI/Blue/button_square_header_large_square_screws.png", {
@@ -115,6 +116,7 @@ TEST_F(ToyTest, DialogTest)
 		}
 	};
 	dialog->SetImage(L"Resources/", dialogSource, area, pos, Origin::Center);
+	dialog->ChangeArea({ 0, 0, 200, 150 });
 	m_renderer->AddRenderItem(dialog.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -136,18 +138,9 @@ TEST_F(ToyTest, CloseButton)
 {
 	std::unique_ptr<Button> button = std::make_unique<Button>();
 
-	vector<ImageSource> normal
-	{
-		{ L"UI/Blue/check_square_color_cross.png", { {} } },
-	};
-	vector<ImageSource> hover
-	{
-		{ L"UI/Blue/check_square_grey_cross.png", { {} } },
-	};
-	vector<ImageSource> pressed
-	{
-		{ L"UI/Gray/check_square_grey_cross.png", { {} } },
-	};
+	vector<ImageSource> normal { { L"UI/Blue/check_square_color_cross.png" } };
+	vector<ImageSource> hover{ { L"UI/Blue/check_square_grey_cross.png" } };
+	vector<ImageSource> pressed { { L"UI/Gray/check_square_grey_cross.png" } };
 
 	Rectangle area{ 0, 0, 32, 32 };
 	XMFLOAT2 pos{ 0.2f, 0.2f };
@@ -167,7 +160,6 @@ TEST_F(ToyTest, CloseButton)
 	button->Render(&mockRender);
 
 	Bookmark;
-	//실시간으로 늘리게 되는거
 	//다이얼로그에 버튼 붙이기
 	//패널 개념 넣기
 	//글자 찍기

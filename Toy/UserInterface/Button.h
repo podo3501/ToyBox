@@ -32,10 +32,13 @@ public:
 		const vector<ImageSource>& hover,
 		const vector<ImageSource>& pressed,
 		const Rectangle& area, const Vector2& pos, Origin origin);
-	void Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker);
-	void ChangeOrigin(Origin origin);
+	bool ChangeArea(const Rectangle& area) noexcept;
+	void Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker) noexcept;
+	void ChangeOrigin(Origin origin) noexcept;
 
 private:
+	bool SetDestination(const Rectangle& area) noexcept;
+
 	unique_ptr<UILayout> m_layout;
 	ButtonState m_state{ ButtonState::Normal };
 	map<ButtonState, unique_ptr<ImagePartSet>> m_image;

@@ -13,8 +13,8 @@ public:
 	bool IsHover(int mouseX, int mouseY) const noexcept;
 	void Render(IRender* render);
 	
-	inline void SetPosition(const XMUINT2& position) { m_position = position; }
-	inline void SetDestination(const Rectangle& destination) { m_destination = destination; }
+	inline void SetPosition(const XMUINT2& position) noexcept { m_position = position; }
+	inline void SetDestination(const Rectangle& destination) noexcept { m_destination = destination; }
 
 	inline const Rectangle& GetSource() const noexcept { return m_source; }
 	inline XMUINT2 GetSize() const noexcept { return XMUINT2(m_source.width, m_source.height); }

@@ -188,21 +188,21 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
     m_button2 = make_unique<Button>();
     vector<ImageSource> normal
     {
-        { L"UI/Blue/bar_square_large_l.png", { { 0, 0, 24, 48 } } },
-        { L"UI/Blue/bar_square_large_m.png", { {} } },
-        { L"UI/Blue/bar_square_large_r.png", { {} } },
+        { L"UI/Blue/bar_square_large_l.png" },
+        { L"UI/Blue/bar_square_large_m.png" },
+        { L"UI/Blue/bar_square_large_r.png" },
     };
     vector<ImageSource> hover
     {
-        { L"UI/Red/bar_square_large_l.png", { {} } },
-        { L"UI/Red/bar_square_large_m.png", { { 0, 0, 48, 48 } } },
-        { L"UI/Red/bar_square_large_r.png", { {} } },
+        { L"UI/Red/bar_square_large_l.png" },
+        { L"UI/Red/bar_square_large_m.png" },
+        { L"UI/Red/bar_square_large_r.png" },
     };
     vector<ImageSource> pressed
     {
-        { L"UI/Gray/bar_square_large_l.png", { {} } },
-        { L"UI/Gray/bar_square_large_m.png", { {} } },
-        { L"UI/Gray/bar_square_large_r.png", { { 0, 0, 24, 48 } } },
+        { L"UI/Gray/bar_square_large_l.png" },
+        { L"UI/Gray/bar_square_large_m.png" },
+        { L"UI/Gray/bar_square_large_r.png" },
     };
     Rectangle area{ 0, 0, 180, 48 };
     m_button->SetImage(m_resourcePath, normal, hover, pressed, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
@@ -229,18 +229,9 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
 
     m_closeButton = std::make_unique<Button>();
 
-    vector<ImageSource> normal2
-    {
-        { L"UI/Blue/check_square_color_cross.png", { {} } },
-    };
-    vector<ImageSource> hover2
-    {
-        { L"UI/Blue/check_square_grey_cross.png", { {} } },
-    };
-    vector<ImageSource> pressed2
-    {
-        { L"UI/Gray/check_square_grey_cross.png", { {} } },
-    };
+    vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
+    vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
+    vector<ImageSource> pressed2{ { L"UI/Gray/check_square_grey_cross.png" } };
 
     Rectangle area2{ 0, 0, 32, 32 };
     XMFLOAT2 pos2{ 0.2f, 0.2f };

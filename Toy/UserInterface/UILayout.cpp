@@ -3,10 +3,11 @@
 #include "UIType.h"
 
 UILayout::~UILayout() = default;
-UILayout::UILayout()
+UILayout::UILayout() :
+	m_origin{ Origin::Init }
 {}
 
-XMUINT2 UILayout::GetOriginPoint(Origin origin) noexcept
+XMUINT2 UILayout::GetOriginPoint(Origin origin) const noexcept
 {
 	switch (origin)
 	{
@@ -16,12 +17,19 @@ XMUINT2 UILayout::GetOriginPoint(Origin origin) noexcept
 	return { 0, 0 };
 }
 
-void UILayout::SetOrigin(Origin origin)
+void UILayout::SetOrigin(Origin origin) noexcept
 {
 	m_originPoint = GetOriginPoint(origin);
+	m_origin = origin;
 }
 
-void UILayout::Set(const Rectangle& area, const Vector2& normalizedPos, Origin origin)
+void UILayout::ChangeArea(const Rectangle& area) noexcept
+{ 
+	m_area = area;
+	SetOrigin(m_origin);	//area가 변경되어서 새로 계산해 준다.
+}
+
+void UILayout::Set(const Rectangle& area, const Vector2& normalizedPos, Origin origin) noexcept
 {
 	m_area = area;
 	SetOrigin(origin);

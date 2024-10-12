@@ -23,7 +23,8 @@ public:
 		const wstring& resPath, 
 		const ImageSource& sources, 
 		const Rectangle& area, const XMFLOAT2& pos, Origin origin);
-	void Update(const Vector2& resolution);
+	bool ChangeArea(const Rectangle& area) noexcept;
+	void Update(const Vector2& resolution) noexcept;
 
 private:
 	unique_ptr<UILayout> m_layout;

@@ -19,11 +19,6 @@ bool Dialog::LoadResources(ILoadData* load)
 	return true;
 }
 
-void Dialog::Render(IRender* renderer)
-{
-	m_imagePartSet->Render(renderer);
-}
-
 void Dialog::SetImage(
 	const wstring& resPath,
 	const ImageSource& sources,
@@ -34,7 +29,21 @@ void Dialog::SetImage(
 	m_imagePartSet = make_unique<ImagePartSet>(resPath, sources);
 }
 
-void Dialog::Update(const Vector2& resolution)
+bool Dialog::ChangeArea(const Rectangle& area) noexcept
+{
+	ReturnIfFalse(m_imagePartSet->SetDestination(area));
+
+	m_layout->ChangeArea(area);
+
+	return true;
+}
+
+void Dialog::Update(const Vector2& resolution) noexcept
 {
 	m_imagePartSet->SetPosition(m_layout->GetPosition(resolution));
+}
+
+void Dialog::Render(IRender* renderer)
+{
+	m_imagePartSet->Render(renderer);
 }

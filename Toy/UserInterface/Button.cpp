@@ -16,14 +16,31 @@ bool Button::LoadResources(ILoadData* load)
 	ReturnIfFalse(ranges::all_of(m_image | views::values, [this, load](const auto& imgPartSet) {
 		return imgPartSet->LoadResources(load);
 		}));
+
 	//로딩을 다 하고 값을 넣는 이유는 뒤에 로딩하는 것들이 값에 영향을 주기 때문이다.
-	for (const auto& partSet : m_image | views::values)
-		ReturnIfFalse(partSet->SetDestination(m_layout->GetArea()));
+	SetDestination(m_layout->GetArea());
 
 	return true;
 }
 
-void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker)
+bool Button::SetDestination(const Rectangle& area) noexcept
+{
+	for (const auto& partSet : m_image | views::values)
+		ReturnIfFalse(partSet->SetDestination(area));
+
+	return true;
+}
+
+bool Button::ChangeArea(const Rectangle& area) noexcept
+{
+	ReturnIfFalse(SetDestination(area));
+
+	m_layout->ChangeArea(area);
+
+	return true;
+}
+
+void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker) noexcept
 {
 	XMUINT2 originPos = m_layout->GetPosition(resolution);
 
@@ -70,7 +87,7 @@ void Button::SetImage(
 	}
 }
 
-void Button::ChangeOrigin(Origin origin)
+void Button::ChangeOrigin(Origin origin) noexcept
 {
 	m_layout->SetOrigin(origin);
 }

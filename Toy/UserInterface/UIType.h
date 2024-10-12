@@ -2,6 +2,7 @@
 
 enum class Origin
 {
+	Init,
 	Center,
 	LeftTop,
 };
