@@ -15,14 +15,14 @@ public:
 	
 	inline void SetPosition(const XMUINT2& position) { m_position = position; }
 	inline void SetDestination(const Rectangle& destination) { m_destination = destination; }
-	inline void SetSize(const XMUINT2& size) { m_size = size; }
 
-	inline XMUINT2 GetSize() const noexcept { return m_size; }
+	inline const Rectangle& GetSource() const noexcept { return m_source; }
+	inline XMUINT2 GetSize() const noexcept { return XMUINT2(m_source.width, m_source.height); }
 
 private:
 	size_t m_index{ 0 };
 	std::wstring m_filename{};
-	XMUINT2 m_size{};
+	
 	XMUINT2 m_position{};
 	Rectangle m_destination{};
 	Rectangle m_source{};

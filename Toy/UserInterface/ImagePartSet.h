@@ -8,22 +8,6 @@ struct IRender;
 
 class ImagePartSet
 {
-	enum ImageCount
-	{
-		Zero = 0,
-		One = 1,
-		Three = 3,
-		Nine = 9
-	};
-
-	enum Part	//버튼은 3개로 나누어져 있다. 버튼 사이즈를 늘리면 중간만 늘어난다.
-	{
-		Left = 0,
-		Center = 1,
-		Right = 2,
-		Count = 3,
-	};
-
 public:
 	ImagePartSet() = delete;
 	~ImagePartSet();
@@ -38,6 +22,8 @@ public:
 
 private:
 	void CreateImagePart(const wstring& resPath, const ImageSource& imgSource);
+	vector<Rectangle> StretchSize(const Rectangle& area) noexcept;
+	inline XMUINT2 GetSize(int vecIdx) const noexcept;
 
 	vector<unique_ptr<ImagePart>> m_images;
 };

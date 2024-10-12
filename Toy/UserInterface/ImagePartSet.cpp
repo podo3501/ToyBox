@@ -41,24 +41,32 @@ vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) noexcep
 	if (length > thisEdge + thatEdge)
 		middle = length - (thisEdge + thatEdge);
 
-	return vector<long>{ 0, thisEdge, thisEdge + middle, length };
+	return { 0, thisEdge, thisEdge + middle, length };
 }
 
-vector<Rectangle> StretchSize(const Rectangle& area, const vector<XMUINT2>& sizes) noexcept
+inline XMUINT2 ImagePartSet::GetSize(int vecIdx) const noexcept
 {
-	vector<long> xPoints = GetStretchedSize(area.width, sizes[0].x, sizes[2].x);
+	return m_images[vecIdx]->GetSize();
+}
 
-	vector<long> yPoints;
-	if (sizes.size() == 3)
-		yPoints = { 0, static_cast<long>(sizes[0].y) };
-	else if (sizes.size() == 9)
-		yPoints = GetStretchedSize(area.height, sizes[0].y, sizes[6].y);
-	else return {};
+vector<Rectangle> ImagePartSet::StretchSize(const Rectangle& area) noexcept
+{
+	vector<Rectangle> destinations{};
+	if (m_images.size() == 1)	//이미지가 하나만 있다면 늘리지 않는다.
+	{
+		destinations.emplace_back(m_images[0]->GetSource());
+		return destinations;
+	}
+
+	//필요한 데이터는 0, 2, 6 번째 데이터 뿐이다.
+	vector<long> xPoints = GetStretchedSize(area.width, GetSize(0).x, GetSize(2).x);
+	vector<long> yPoints{};
+	if (m_images.size() == 3) yPoints = { 0, static_cast<long>(GetSize(0).y) };
+	if (m_images.size() == 9) yPoints = GetStretchedSize(area.height, GetSize(0).y, GetSize(6).y);
 
 	//4, 2나 4, 4점을 이용해서 Rectangle을 만드는 코드
-	vector<Rectangle> destinations;
-	for (auto ix = xPoints.begin(); ix != std::prev(xPoints.end()); ++ix)
-		for (auto iy = yPoints.begin(); iy != std::prev(yPoints.end()); ++iy)
+	for (auto iy = yPoints.begin(); iy != std::prev(yPoints.end()); ++iy)
+		for (auto ix = xPoints.begin(); ix != std::prev(xPoints.end()); ++ix)
 			destinations.emplace_back(Rectangle(*ix, *iy, *(ix + 1) - *(ix), *(iy + 1) - *(iy)));
 
 	return destinations;
@@ -66,15 +74,11 @@ vector<Rectangle> StretchSize(const Rectangle& area, const vector<XMUINT2>& size
 
 bool ImagePartSet::SetDestination(const Rectangle& area)
 {
-	vector<XMUINT2> sizes;
-	ranges::transform(m_images, back_inserter(sizes), [](const auto& part) { return part->GetSize(); });
-	vector<Rectangle> destinations = StretchSize(area, sizes);
-	if (destinations.empty()) return false;
+	vector<Rectangle> dest = StretchSize(area);
+	if (dest.empty()) return false;
 
-	int idx = 0;
-	for (auto& image : m_images)
-		image->SetDestination(destinations[idx++]);
-
+	ranges::for_each(m_images, [i{ 0 }, &dest](auto& image) mutable { image->SetDestination(dest[i++]); });
+	
 	return true;
 }
 

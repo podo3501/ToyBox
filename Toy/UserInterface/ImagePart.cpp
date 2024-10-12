@@ -10,11 +10,11 @@ ImagePart::ImagePart(const std::wstring& filename, const Rectangle& source) :
 
 bool ImagePart::Load(ILoadData* load)
 {
-	auto result = load->LoadTexture(m_filename, nullptr, m_index, &m_size);
-	
+	XMUINT2 size{};
+	auto result = load->LoadTexture(m_filename, nullptr, m_index, &size);
 	if (!m_source.IsEmpty()) return result;
 
-	m_source = { 0, 0, static_cast<long>(m_size.x), static_cast<long>(m_size.y) };
+	m_source = { 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };
 
 	return result;
 }

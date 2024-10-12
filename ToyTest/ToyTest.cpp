@@ -35,6 +35,14 @@ void TestLeftTopRender(size_t index, const RECT& dest, const RECT* source)
 		EXPECT_TRUE(source->right == 24 && source->bottom == 48);
 }
 
+void SetMouse(int x, int y, Mouse::ButtonStateTracker& mouseTracker)
+{
+	Mouse::State mouseState;
+	mouseState.x = x;
+	mouseState.y = y;
+	mouseTracker.Update(mouseState);
+}
+
 TEST_F(ToyTest, ButtonTest)
 {
 	std::unique_ptr<Button> button = std::make_unique<Button>();
@@ -65,11 +73,8 @@ TEST_F(ToyTest, ButtonTest)
 	EXPECT_TRUE(m_renderer->LoadResources());
 
 	//normal 버튼일 경우
-	Mouse::State mouseState;
 	Mouse::ButtonStateTracker mouseTracker;
-	mouseState.x = 100;
-	mouseState.y = 100;
-	mouseTracker.Update(mouseState);
+	SetMouse(100, 100, mouseTracker);
 	button->Update(m_window->GetOutputSize(), mouseTracker);
 
 	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
@@ -78,17 +83,23 @@ TEST_F(ToyTest, ButtonTest)
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestCenterRender));
 	button->Render(&mockRender);
 
-	//clicked 버튼일 경우
-	mouseState.x = 420;
-	mouseState.y = 320;
-
 	button->ChangeOrigin(Origin::LeftTop);	//정렬을 왼쪽위로 옮긴다.
-	mouseTracker.Update(mouseState);
+	//clicked 버튼일 경우
+	SetMouse(420, 320, mouseTracker);
 	mouseTracker.leftButton = Mouse::ButtonStateTracker::PRESSED;
 	button->Update(m_window->GetOutputSize(), mouseTracker);
 
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestLeftTopRender));
 	button->Render(&mockRender);
+}
+
+void TestDialogRender(size_t index, const RECT& dest, const RECT* source)
+{
+	if (dest.left == 300 && dest.top == 225) EXPECT_TRUE(dest.right == 330 && dest.bottom == 261);
+	if (dest.left == 330 && dest.top == 225) EXPECT_TRUE(dest.right == 470 && dest.bottom == 261);
+	if (dest.left == 300 && dest.top == 261) EXPECT_TRUE(dest.right == 330 && dest.bottom == 349);
+	if (dest.left == 330 && dest.top == 261) EXPECT_TRUE(dest.right == 470 && dest.bottom == 349);
+	if (dest.left == 470 && dest.top == 349) EXPECT_TRUE(dest.right == 500 && dest.bottom == 375);
 }
 
 TEST_F(ToyTest, DialogTest)
@@ -109,11 +120,58 @@ TEST_F(ToyTest, DialogTest)
 
 	dialog->Update(m_window->GetOutputSize());
 
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestDialogRender));
+	dialog->Render(&mockRender);
+}
+
+void TestCloseButtonRender(size_t index, const RECT& dest, const RECT* source)
+{
+	if (dest.left == 144 && dest.top == 104) EXPECT_TRUE(dest.right == 176 && dest.bottom == 136);
+
+	EXPECT_EQ(index, 2);
+}
+
+TEST_F(ToyTest, CloseButton)
+{
+	std::unique_ptr<Button> button = std::make_unique<Button>();
+
+	vector<ImageSource> normal
+	{
+		{ L"UI/Blue/check_square_color_cross.png", { {} } },
+	};
+	vector<ImageSource> hover
+	{
+		{ L"UI/Blue/check_square_grey_cross.png", { {} } },
+	};
+	vector<ImageSource> pressed
+	{
+		{ L"UI/Gray/check_square_grey_cross.png", { {} } },
+	};
+
+	Rectangle area{ 0, 0, 32, 32 };
+	XMFLOAT2 pos{ 0.2f, 0.2f };
+	button->SetImage(L"Resources/", normal, hover, pressed, area, pos, Origin::Center);
+	m_renderer->AddRenderItem(button.get());
+	EXPECT_TRUE(m_renderer->LoadResources());
+
+	//normal 버튼일 경우
+	Mouse::ButtonStateTracker mouseTracker;
+	SetMouse(150, 110, mouseTracker);
+	button->Update(m_window->GetOutputSize(), mouseTracker);
+
+	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
+	//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestCloseButtonRender));
+	button->Render(&mockRender);
+
 	Bookmark;
-	//9세트 이미지 만들 차례
-	//이미지를 1, 3, 9로 한 세트를 만든다.
-	//다이얼로그에 이 한 셋트를 붙인다.
-	//UI 다이얼로그를 만든다.
+	//실시간으로 늘리게 되는거
+	//다이얼로그에 버튼 붙이기
+	//패널 개념 넣기
+	//글자 찍기
+	//UI 데이터를 저장할 JSON 붙이기
 }
 
 //여러번 실행해서 오동작이 나는지 확인한다.

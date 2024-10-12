@@ -11,9 +11,9 @@ XMUINT2 UILayout::GetOriginPoint(Origin origin) noexcept
 	switch (origin)
 	{
 	case Origin::Center: return XMUINT2(m_area.width / 2, m_area.height / 2);
-	case Origin::LeftTop: return XMUINT2(0, 0);
+	case Origin::LeftTop: return { 0, 0 };
 	}
-	return XMUINT2(0, 0);
+	return { 0, 0 };
 }
 
 void UILayout::SetOrigin(Origin origin)
@@ -31,5 +31,5 @@ void UILayout::Set(const Rectangle& area, const Vector2& normalizedPos, Origin o
 XMUINT2 UILayout::GetPosition(const Vector2& resolution) const noexcept
 {
 	Vector2 pos{ resolution * m_normalizedPosition };
-	return XMUINT2{ static_cast<long>(pos.x) - m_originPoint.x, static_cast<long>(pos.y) - m_originPoint.y };
+	return { static_cast<long>(pos.x) - m_originPoint.x, static_cast<long>(pos.y) - m_originPoint.y };
 }

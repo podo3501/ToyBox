@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Utility.h"
 #include "UserInterface/Button.h"
+#include "UserInterface/Dialog.h"
 #include "MouseProcedure.h"
 #include "StepTimer.h"
 
@@ -211,6 +212,40 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
 
     m_renderer->AddRenderItem(m_button.get());
     m_renderer->AddRenderItem(m_button2.get());
+
+    m_dialog = make_unique<Dialog>();
+    Rectangle dialongArea{ 0, 0, 220, 190 };
+    XMFLOAT2 pos{ 0.65f, 0.45f };
+    ImageSource dialogSource{
+        L"UI/Blue/button_square_header_large_square_screws.png", {
+            { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+            { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+            { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+        }
+    };
+
+    m_dialog->SetImage(m_resourcePath, dialogSource, dialongArea, pos, Origin::Center);
+    m_renderer->AddRenderItem(m_dialog.get());
+
+    m_closeButton = std::make_unique<Button>();
+
+    vector<ImageSource> normal2
+    {
+        { L"UI/Blue/check_square_color_cross.png", { {} } },
+    };
+    vector<ImageSource> hover2
+    {
+        { L"UI/Blue/check_square_grey_cross.png", { {} } },
+    };
+    vector<ImageSource> pressed2
+    {
+        { L"UI/Gray/check_square_grey_cross.png", { {} } },
+    };
+
+    Rectangle area2{ 0, 0, 32, 32 };
+    XMFLOAT2 pos2{ 0.2f, 0.2f };
+    m_closeButton->SetImage(m_resourcePath, normal2, hover2, pressed2, area2, pos2, Origin::Center);
+    m_renderer->AddRenderItem(m_closeButton.get());
     
     m_renderer->LoadResources();
 
@@ -243,6 +278,8 @@ void MainLoop::Update(DX::StepTimer* timer)
     mouseTracker.Update(m_mouse->GetState());
     m_button->Update(m_window->GetOutputSize(), mouseTracker);
     m_button2->Update(m_window->GetOutputSize(), mouseTracker);
+    m_closeButton->Update(m_window->GetOutputSize(), mouseTracker);
+    m_dialog->Update(m_window->GetOutputSize());
 
     PIXEndEvent();
 }

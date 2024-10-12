@@ -21,7 +21,7 @@ bool Dialog::LoadResources(ILoadData* load)
 
 void Dialog::Render(IRender* renderer)
 {
-	renderer;
+	m_imagePartSet->Render(renderer);
 }
 
 void Dialog::SetImage(
@@ -36,5 +36,5 @@ void Dialog::SetImage(
 
 void Dialog::Update(const Vector2& resolution)
 {
-	resolution;
+	m_imagePartSet->SetPosition(m_layout->GetPosition(resolution));
 }

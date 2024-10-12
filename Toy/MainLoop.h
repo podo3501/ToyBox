@@ -2,6 +2,7 @@
 
 class Window;
 class Button;
+class Dialog;
 
 namespace DX
 {
@@ -33,6 +34,8 @@ private:
 	unique_ptr<DirectX::Mouse> m_mouse;
 	unique_ptr<Button>m_button;
 	unique_ptr<Button>m_button2;
+	unique_ptr<Button>m_closeButton;
+	unique_ptr<Dialog> m_dialog;
 	unique_ptr<DX::StepTimer> m_timer;
 
 	bool m_sizemove{ false };
