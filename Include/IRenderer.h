@@ -8,6 +8,7 @@ public:
     virtual ~ILoadData() {};
 
     virtual bool LoadTexture(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize) = 0;
+    virtual bool LoadFont(const wstring& filename, size_t& outIndex) = 0;
 };
 
 struct IRender

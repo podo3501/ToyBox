@@ -159,7 +159,7 @@ TEST_F(ToyTest, CloseButton)
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestCloseButtonRender));
 	button->Render(&mockRender);
 
-	Bookmark;
+	//Bookmark;
 	//다이얼로그에 버튼 붙이기
 	//패널 개념 넣기
 	//글자 찍기

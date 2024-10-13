@@ -3,7 +3,7 @@
 #include "../Core/TextureIndexing.h"
 #include "../Core/DeviceResources.h"
 
-bool MockLoadResources(ILoadData* load)
+bool LoadTexture(ILoadData* load)
 {
 	wstring m_filename{ L"Resources/UI/Blue/button_square_header_large_square_screws.png" };
 	size_t m_index{ 0 };
@@ -36,10 +36,25 @@ TEST_F(CoreTest, TextureLoading)
 	auto texIndexing = make_unique<TextureIndexing>(
 		m_deviceResources->GetD3DDevice(), m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
-	EXPECT_TRUE(LoadResources(MockLoadResources, texIndexing.get()));	
+	EXPECT_TRUE(LoadResources(LoadTexture, texIndexing.get()));
 }
 
-TEST_F(CoreTest, TextureIndexing)
+bool LoadFont(ILoadData* load)
 {
+	wstring m_filename{ L"Resources/UI/Font/HangleS16.spritefont" };
+	size_t m_index{ 0 };
 
+	EXPECT_TRUE(load->LoadFont(m_filename, m_index));
+
+	return true;
+}
+
+TEST_F(CoreTest, FontLoading)
+{
+	auto texIndexing = make_unique<TextureIndexing>(
+		m_deviceResources->GetD3DDevice(), m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
+
+	//EXPECT_TRUE(LoadResources(LoadFont, texIndexing.get()));
+
+	Bookmark;	//자꾸 죽는다 이유를 찾아보자
 }

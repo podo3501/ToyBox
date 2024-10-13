@@ -3,8 +3,20 @@
 
 using namespace DirectX;
 
-Texture::Texture(ID3D12Device* device, DescriptorHeap* descHeap) :
+Texture::~Texture() = default;
+Texture::Texture(ID3D12Device* device, DescriptorHeap* descHeap) noexcept :
     m_device{ device }, m_descHeap{ descHeap } {}
+Texture::Texture(const Texture* tex, const Rectangle* rect) noexcept
+{
+    m_device = tex->m_device;
+    m_descHeap = tex->m_descHeap;
+    m_texture = tex->m_texture;
+    m_size = tex->m_size;
+    m_descHeapIdx = tex->m_descHeapIdx;
+    m_filename = tex->m_filename;
+
+    SetRectangle(rect);
+}
 
 void Texture::Upload(ResourceUploadBatch* resUpload, const std::wstring& filename, 
     const Rectangle* rect, std::size_t descHeapIdx)
@@ -19,18 +31,7 @@ void Texture::Upload(ResourceUploadBatch* resUpload, const std::wstring& filenam
     SetRectangle(rect);
 }
 
-void Texture::Set(const Microsoft::WRL::ComPtr<ID3D12Resource>& texture, const std::wstring& filename, 
-    const Rectangle* rect, std::size_t descHeapIdx)
-{
-    m_texture = texture;
-    m_size = GetTextureSize(m_texture.Get());
-    m_descHeapIdx = descHeapIdx;
-    m_filename = filename;
-
-    SetRectangle(rect);
-}
-
-void Texture::SetRectangle(const Rectangle* rect)
+void Texture::SetRectangle(const Rectangle* rect) noexcept
 {
     Rectangle curRect = { 0, 0, static_cast<long>(m_size.x), static_cast<long>(m_size.y) };
 

@@ -114,6 +114,4 @@ bool CoreTest::LoadResources(function<bool(ILoadData*)> funcLoad, ILoadData* loa
 	uploadResourcesFinished.wait();
 
 	return true;
-
-	
 }

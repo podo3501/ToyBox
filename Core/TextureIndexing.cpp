@@ -34,27 +34,35 @@ bool TextureIndexing::IsExist(const wstring& filename, const Rectangle* rect, si
     return false;
 }
 
+bool TextureIndexing::LoadFont(const wstring& filename, size_t& outIndex)
+{
+    std::size_t descHeapIdx{ 0 };
+    std::unique_ptr<SpriteFont> font = make_unique<SpriteFont>(m_device, *m_upload, filename.c_str(),
+        m_descHeap->GetCpuHandle(descHeapIdx),
+        m_descHeap->GetGpuHandle(descHeapIdx));
+
+    return true;
+}
+
 bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize)
 {
     if (IsExist(filename, rect, outIndex, outSize))
         return true;
 
     auto findFilename = ranges::find(m_texFilenames, filename);
-    unique_ptr<Texture> tex = make_unique<Texture>(m_device, m_descHeap);
 
-    size_t descHeapIndex{ 0 };
+    unique_ptr<Texture> tex = nullptr;
     if (findFilename == m_texFilenames.end())
     {
-        descHeapIndex = m_texFilenames.size();
-        tex->Upload(m_upload, filename, rect, descHeapIndex);
+        tex = make_unique<Texture>(m_device, m_descHeap);
+        tex->Upload(m_upload, filename, rect, m_texFilenames.size());
     }
     else //같은 텍스춰를 로딩하려 한다면
     {
         auto findSameTex = ranges::find_if(m_textures, [&filename](const auto& tex) {
             return (tex.second->GetFilename() == filename);
             });
-        Texture* curTex = findSameTex->second.get();
-        tex->Set(curTex->GetTextureResource(), filename, rect, curTex->GetDescHeapIndex());
+        tex = make_unique<Texture>(findSameTex->second.get(), rect);
     }
 
     size_t newIndex = m_textures.size();    //인덱스를 증가시켜서 texture를 만든다.

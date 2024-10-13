@@ -4,6 +4,8 @@
 #include "TextureIndexing.h"
 #include "Utility.h"
 
+constexpr size_t DescriptorHeapSize = 100;
+
 using namespace DirectX;
 
 unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
@@ -224,7 +226,7 @@ void Renderer::CreateDeviceDependentResources()
     m_graphicsMemory = make_unique<GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_resourceDescriptors = make_unique<DescriptorHeap>(device, 100);
+    m_resourceDescriptors = make_unique<DescriptorHeap>(device, DescriptorHeapSize);
 
     ResourceUploadBatch resourceUpload(device);
 
