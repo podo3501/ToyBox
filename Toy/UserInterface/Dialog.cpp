@@ -7,8 +7,7 @@
 #include "ImagePartSet.h"
 
 Dialog::~Dialog() = default;
-Dialog::Dialog() : 
-	m_layout{ make_unique<UILayout>() }
+Dialog::Dialog()
 {}
 
 bool Dialog::LoadResources(ILoadData* load)
@@ -22,18 +21,18 @@ bool Dialog::LoadResources(ILoadData* load)
 void Dialog::SetImage(
 	const wstring& resPath,
 	const ImageSource& sources,
-	const Rectangle& area, const XMFLOAT2& pos, Origin origin)
+	const UILayout& layout)
 {
-	m_layout->Set(area, pos, origin);
+	m_layout = make_unique<UILayout>(layout);
 
 	m_imagePartSet = make_unique<ImagePartSet>(resPath, sources);
 }
 
-bool Dialog::ChangeArea(const Rectangle& area) noexcept
+bool Dialog::ChangeArea(Rectangle&& area) noexcept
 {
 	ReturnIfFalse(m_imagePartSet->SetDestination(area));
 
-	m_layout->ChangeArea(area);
+	m_layout->Set(move(area));
 
 	return true;
 }

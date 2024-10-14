@@ -8,7 +8,7 @@
 
 Button::~Button() = default;
 Button::Button() :
-	m_layout{ make_unique<UILayout>() }
+	m_layout{ nullptr }
 {}
 
 bool Button::LoadResources(ILoadData* load)
@@ -31,11 +31,11 @@ bool Button::SetDestination(const Rectangle& area) noexcept
 	return true;
 }
 
-bool Button::ChangeArea(const Rectangle& area) noexcept
+bool Button::ChangeArea(Rectangle&& area) noexcept
 {
 	ReturnIfFalse(SetDestination(area));
 
-	m_layout->ChangeArea(area);
+	m_layout->Set(move(area));
 
 	return true;
 }
@@ -74,9 +74,9 @@ void Button::SetImage(
 	const vector<ImageSource>& normal,
 	const vector<ImageSource>& hover,
 	const vector<ImageSource>& pressed,
-	const Rectangle& area, const Vector2& pos, Origin origin)
+	const UILayout& layout)
 {
-	m_layout->Set(area, pos, origin);
+	m_layout = make_unique<UILayout>(layout);
 
 	ButtonState btnState = ButtonState::Normal;
 	for (const auto& sources : { normal, hover, pressed })
@@ -87,7 +87,7 @@ void Button::SetImage(
 	}
 }
 
-void Button::ChangeOrigin(Origin origin) noexcept
+void Button::ChangeOrigin(Origin&& origin) noexcept
 {
-	m_layout->SetOrigin(origin);
+	m_layout->Set(move(origin));
 }

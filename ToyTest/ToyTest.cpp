@@ -4,9 +4,11 @@
 #include "../Toy/MainLoop.h"
 #include "../Toy/Window.h"
 #include "../Toy/Utility.h"
+#include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/Button.h"
 #include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/UserInterface/TextArea.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -66,9 +68,8 @@ TEST_F(ToyTest, ButtonTest)
 		{ L"UI/Gray/bar_square_large_r.png" },
 	};
 
-	Rectangle area{ 0, 0, 116, 48 };
-	XMFLOAT2 pos{ 0.5f, 0.5f };
-	button->SetImage(L"Resources/", normal, hover, pressed, area, pos, Origin::Center);
+	UILayout layout({ 0, 0, 116, 48 }, { 0.5f, 0.5f }, Origin::Center);
+	button->SetImage(L"Resources/", normal, hover, pressed, layout);
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -106,8 +107,6 @@ void TestDialogRender(size_t index, const RECT& dest, const RECT* source)
 TEST_F(ToyTest, DialogTest)
 {
 	unique_ptr<Dialog> dialog = make_unique<Dialog>();
-	Rectangle area{ 0, 0, 170, 120 };
-	XMFLOAT2 pos{ 0.5f, 0.5f };
 	ImageSource dialogSource{
 		L"UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
@@ -115,7 +114,8 @@ TEST_F(ToyTest, DialogTest)
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
-	dialog->SetImage(L"Resources/", dialogSource, area, pos, Origin::Center);
+	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
+	dialog->SetImage(L"Resources/", dialogSource, layout);
 	dialog->ChangeArea({ 0, 0, 200, 150 });
 	m_renderer->AddRenderItem(dialog.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
@@ -142,9 +142,8 @@ TEST_F(ToyTest, CloseButton)
 	vector<ImageSource> hover{ { L"UI/Blue/check_square_grey_cross.png" } };
 	vector<ImageSource> pressed { { L"UI/Gray/check_square_grey_cross.png" } };
 
-	Rectangle area{ 0, 0, 32, 32 };
-	XMFLOAT2 pos{ 0.2f, 0.2f };
-	button->SetImage(L"Resources/", normal, hover, pressed, area, pos, Origin::Center);
+	UILayout layout({ 0, 0, 32, 32 }, { 0.2f, 0.2f }, Origin::Center);
+	button->SetImage(L"Resources/", normal, hover, pressed, move(layout));
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -158,12 +157,20 @@ TEST_F(ToyTest, CloseButton)
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestCloseButtonRender));
 	button->Render(&mockRender);
+}
 
+TEST_F(ToyTest, TextArea)
+{
+	std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
+	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
+	textArea->SetFont(L"Resources/", 
+		{ L"UI/Font/HangleS16.spritefont", L"UI/Font/CourierNewBoldS18.spritefont" },
+		layout);
+	m_renderer->AddRenderItem(textArea.get());
+	m_renderer->LoadResources();
+	
 	//Bookmark;
-	//다이얼로그에 버튼 붙이기
-	//패널 개념 넣기
-	//글자 찍기
-	//UI 데이터를 저장할 JSON 붙이기
+	//인덱스를 관리해줄 클래스를 만들어야 한다.
 }
 
 //여러번 실행해서 오동작이 나는지 확인한다.

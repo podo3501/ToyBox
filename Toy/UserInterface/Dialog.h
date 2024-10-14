@@ -20,10 +20,10 @@ public:
 	virtual void Render(IRender* renderer) override;
 
 	void SetImage(
-		const wstring& resPath, 
-		const ImageSource& sources, 
-		const Rectangle& area, const XMFLOAT2& pos, Origin origin);
-	bool ChangeArea(const Rectangle& area) noexcept;
+		const wstring& resPath,
+		const ImageSource& sources,
+		const UILayout& layout);
+	bool ChangeArea(Rectangle&& area) noexcept;
 	void Update(const Vector2& resolution) noexcept;
 
 private:

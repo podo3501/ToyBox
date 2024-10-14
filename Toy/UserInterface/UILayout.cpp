@@ -3,9 +3,14 @@
 #include "UIType.h"
 
 UILayout::~UILayout() = default;
-UILayout::UILayout() :
-	m_origin{ Origin::Init }
-{}
+UILayout::UILayout(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) :
+	m_area{ area },
+	m_originPoint{},
+	m_origin{ Origin::Init },
+	m_normalizedPosition{ normalizedPos }
+{
+	Set(move(origin));
+}
 
 XMUINT2 UILayout::GetOriginPoint(Origin origin) const noexcept
 {
@@ -17,23 +22,34 @@ XMUINT2 UILayout::GetOriginPoint(Origin origin) const noexcept
 	return { 0, 0 };
 }
 
-void UILayout::SetOrigin(Origin origin) noexcept
+void UILayout::Set(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) noexcept
+{
+	m_area = area;
+	Set(move(origin));
+	Set(move(normalizedPos));
+}
+
+void UILayout::Set(Rectangle&& area) noexcept
+{
+	m_area = area;
+	Set(move(m_origin));
+}
+
+void UILayout::Set(Vector2&& normalPos) noexcept
+{
+	m_normalizedPosition = normalPos;
+}
+
+void UILayout::Set(Origin&& origin) noexcept
 {
 	m_originPoint = GetOriginPoint(origin);
 	m_origin = origin;
 }
 
-void UILayout::ChangeArea(const Rectangle& area) noexcept
-{ 
-	m_area = area;
-	SetOrigin(m_origin);	//area가 변경되어서 새로 계산해 준다.
-}
-
-void UILayout::Set(const Rectangle& area, const Vector2& normalizedPos, Origin origin) noexcept
+void UILayout::Set(Rectangle&& area, Vector2&& normalPos) noexcept
 {
-	m_area = area;
-	SetOrigin(origin);
-	m_normalizedPosition = normalizedPos;
+	Set(move(area));
+	Set(move(normalPos));
 }
 
 XMUINT2 UILayout::GetPosition(const Vector2& resolution) const noexcept

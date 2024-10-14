@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TextureIndexing.h"
 #include "Texture.h"
+#include "Font.h"
 
 TextureIndexing::~TextureIndexing() = default;
 TextureIndexing::TextureIndexing(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite) :
@@ -36,10 +37,23 @@ bool TextureIndexing::IsExist(const wstring& filename, const Rectangle* rect, si
 
 bool TextureIndexing::LoadFont(const wstring& filename, size_t& outIndex)
 {
-    std::size_t descHeapIdx{ 0 };
-    std::unique_ptr<SpriteFont> font = make_unique<SpriteFont>(m_device, *m_upload, filename.c_str(),
-        m_descHeap->GetCpuHandle(descHeapIdx),
-        m_descHeap->GetGpuHandle(descHeapIdx));
+    auto find = ranges::find(m_resourceFilenames, filename);
+
+    if (find != m_resourceFilenames.end())
+    {
+        auto findFont = ranges::find_if(m_fonts, [&filename](const auto& font) {
+            return (font.second->GetFilename() == filename);
+            });
+        outIndex = findFont->first;
+        return true;
+    }
+
+    unique_ptr<CFont> font = make_unique<CFont>();
+    if (!font->Load(m_device, m_upload, m_descHeap, filename, m_resourceFilenames.size())) return false;
+    size_t newIndex = m_fonts.size();
+    outIndex = newIndex;
+    m_fonts.insert(make_pair(newIndex, move(font)));
+    m_resourceFilenames.emplace_back(filename);
 
     return true;
 }
@@ -49,13 +63,13 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     if (IsExist(filename, rect, outIndex, outSize))
         return true;
 
-    auto findFilename = ranges::find(m_texFilenames, filename);
+    auto findFilename = ranges::find(m_resourceFilenames, filename);
 
     unique_ptr<Texture> tex = nullptr;
-    if (findFilename == m_texFilenames.end())
+    if (findFilename == m_resourceFilenames.end())
     {
         tex = make_unique<Texture>(m_device, m_descHeap);
-        tex->Upload(m_upload, filename, rect, m_texFilenames.size());
+        tex->Upload(m_upload, filename, rect, m_resourceFilenames.size());
     }
     else //같은 텍스춰를 로딩하려 한다면
     {
@@ -69,7 +83,7 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     outIndex = newIndex;
     if (outSize) (*outSize) = tex->GetSize();
     m_textures.insert(make_pair(newIndex, move(tex)));
-    m_texFilenames.emplace_back(filename);
+    m_resourceFilenames.emplace_back(filename);
 
     return true;
 }

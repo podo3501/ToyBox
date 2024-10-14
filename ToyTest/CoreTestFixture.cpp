@@ -76,7 +76,6 @@ void CoreTest::CreateDeviceDependentResources()
 	m_resourceDescriptors = make_unique<DescriptorHeap>(device, 100);
 
 	ResourceUploadBatch resourceUpload(device);
-
 	resourceUpload.Begin();
 
 	RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());

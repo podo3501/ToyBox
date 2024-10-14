@@ -4,6 +4,7 @@
 #include "UserInterface/UIType.h"
 #include "Window.h"
 #include "Utility.h"
+#include "UserInterface/UILayout.h"
 #include "UserInterface/Button.h"
 #include "UserInterface/Dialog.h"
 #include "MouseProcedure.h"
@@ -177,7 +178,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
     m_timer = make_unique<DX::StepTimer>();
 
     HWND hwnd{ 0 };
-    RECT rc{0, 0, 800, 600};
+    RECT rc{ 0, 0, 800, 600 };
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
     const auto& outputSize = m_window->GetOutputSize();
     m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y));
@@ -204,9 +205,11 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
         { L"UI/Gray/bar_square_large_m.png" },
         { L"UI/Gray/bar_square_large_r.png" },
     };
-    Rectangle area{ 0, 0, 180, 48 };
-    m_button->SetImage(m_resourcePath, normal, hover, pressed, area, SimpleMath::Vector2{ 0.5f, 0.5f }, Origin::Center);
-    m_button2->SetImage(m_resourcePath, normal, hover, pressed, area, SimpleMath::Vector2{ 0.5f, 0.4f }, Origin::Center);
+
+    UILayout layout( { 0, 0, 180, 48 }, { 0.5f, 0.5f }, Origin::Center );
+    m_button->SetImage(m_resourcePath, normal, hover, pressed, layout);
+    layout.Set({ 0.5f, 0.4f });
+    m_button2->SetImage(m_resourcePath, normal, hover, pressed, layout);
 
     m_mouse->SetWindow(hwnd);
 
@@ -214,8 +217,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
     m_renderer->AddRenderItem(m_button2.get());
 
     m_dialog = make_unique<Dialog>();
-    Rectangle dialongArea{ 0, 0, 220, 190 };
-    XMFLOAT2 pos{ 0.65f, 0.45f };
+    layout.Set({ 0, 0, 220, 190 }, { 0.65f, 0.45f }, Origin::Center);
     ImageSource dialogSource{
         L"UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
@@ -224,7 +226,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
         }
     };
 
-    m_dialog->SetImage(m_resourcePath, dialogSource, dialongArea, pos, Origin::Center);
+    m_dialog->SetImage(m_resourcePath, dialogSource, layout);
     m_renderer->AddRenderItem(m_dialog.get());
 
     m_closeButton = std::make_unique<Button>();
@@ -233,9 +235,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
     vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
     vector<ImageSource> pressed2{ { L"UI/Gray/check_square_grey_cross.png" } };
 
-    Rectangle area2{ 0, 0, 32, 32 };
-    XMFLOAT2 pos2{ 0.2f, 0.2f };
-    m_closeButton->SetImage(m_resourcePath, normal2, hover2, pressed2, area2, pos2, Origin::Center);
+    layout.Set({ 0, 0, 32, 32 }, { 0.2f, 0.2f }, Origin::Center);
+    m_closeButton->SetImage(m_resourcePath, normal2, hover2, pressed2, move(layout));
     m_renderer->AddRenderItem(m_closeButton.get());
     
     m_renderer->LoadResources();

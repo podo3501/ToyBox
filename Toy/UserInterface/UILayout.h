@@ -5,15 +5,21 @@ enum class Origin;
 class UILayout
 {
 public:
-	UILayout();
+	UILayout() = delete;
 	~UILayout();
 
-	void Set(const Rectangle& area, const Vector2& pos, Origin origin) noexcept;
-	void SetOrigin(Origin origin) noexcept;
+	UILayout(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin);
+	UILayout(const UILayout& layout) noexcept = default;
+	UILayout(UILayout&& layout) noexcept = default;
+
+	void Set(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) noexcept;
+	void Set(Rectangle&& area) noexcept;
+	void Set(Vector2&& normalPos) noexcept;
+	void Set(Origin&& origin) noexcept;
+	void Set(Rectangle&& area, Vector2&& normalPos) noexcept;
 
 	const Rectangle& GetArea() const noexcept { return m_area; }
 	XMUINT2 GetPosition(const Vector2& resolution) const noexcept;
-	void ChangeArea(const Rectangle& area) noexcept;
 
 private:
 	XMUINT2 GetOriginPoint(Origin origin) const noexcept;

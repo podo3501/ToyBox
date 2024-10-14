@@ -2,11 +2,12 @@
 #include "../Include/IRenderer.h"
 
 class Texture;
+class CFont;
 
 class TextureIndexing : public ILoadData, public IRender
 {
 public:
-    TextureIndexing(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite);
+    TextureIndexing(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite); //SpriteBatch는 여기서 만들어 줄 수 있다.
     ~TextureIndexing();
 
     //ILoadData
@@ -25,6 +26,8 @@ private:
     DescriptorHeap* m_descHeap{ nullptr };
     ResourceUploadBatch* m_upload{ nullptr };
     SpriteBatch* m_sprite{ nullptr };
-	vector<wstring> m_texFilenames;
+	vector<wstring> m_resourceFilenames;
+
 	map<size_t, unique_ptr<Texture>> m_textures;
+    map<size_t, unique_ptr<CFont>> m_fonts;
 };

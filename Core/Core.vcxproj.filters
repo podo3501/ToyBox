@@ -13,6 +13,7 @@
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureIndexing.cpp" />
+    <ClCompile Include="Font.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h" />
@@ -22,5 +23,6 @@
     <ClInclude Include="IDeviceNotify.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureIndexing.h" />
+    <ClInclude Include="Font.h" />
   </ItemGroup>
 </Project>

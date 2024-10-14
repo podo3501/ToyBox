@@ -213,6 +213,7 @@
     <ClInclude Include="UserInterface\Dialog.h" />
     <ClInclude Include="UserInterface\ImagePart.h" />
     <ClInclude Include="UserInterface\ImagePartSet.h" />
+    <ClInclude Include="UserInterface\TextArea.h" />
     <ClInclude Include="UserInterface\UILayout.h" />
     <ClInclude Include="UserInterface\UIType.h" />
     <ClInclude Include="Utility.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="UserInterface\Dialog.cpp" />
     <ClCompile Include="UserInterface\ImagePart.cpp" />
     <ClCompile Include="UserInterface\ImagePartSet.cpp" />
+    <ClCompile Include="UserInterface\TextArea.cpp" />
     <ClCompile Include="UserInterface\UILayout.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="MainLoop.cpp" />

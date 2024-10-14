@@ -31,10 +31,10 @@ public:
 		const vector<ImageSource>& normal,
 		const vector<ImageSource>& hover,
 		const vector<ImageSource>& pressed,
-		const Rectangle& area, const Vector2& pos, Origin origin);
-	bool ChangeArea(const Rectangle& area) noexcept;
+		const UILayout& layout);
+	bool ChangeArea(Rectangle&& area) noexcept;
 	void Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker) noexcept;
-	void ChangeOrigin(Origin origin) noexcept;
+	void ChangeOrigin(Origin&& origin) noexcept;
 
 private:
 	bool SetDestination(const Rectangle& area) noexcept;

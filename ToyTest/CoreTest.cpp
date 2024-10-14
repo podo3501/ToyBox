@@ -41,10 +41,18 @@ TEST_F(CoreTest, TextureLoading)
 
 bool LoadFont(ILoadData* load)
 {
-	wstring m_filename{ L"Resources/UI/Font/HangleS16.spritefont" };
+	wstring m_hangleFilename{ L"Resources/UI/Font/HangleS16.spritefont" };
+	wstring m_englishFilename{ L"Resources/UI/Font/CourierNewBoldS18.spritefont" };
+	
 	size_t m_index{ 0 };
+	EXPECT_TRUE(load->LoadFont(m_hangleFilename, m_index));
+	EXPECT_EQ(m_index, 0);
 
-	EXPECT_TRUE(load->LoadFont(m_filename, m_index));
+	EXPECT_TRUE(load->LoadFont(m_hangleFilename, m_index));
+	EXPECT_EQ(m_index, 0);
+
+	EXPECT_TRUE(load->LoadFont(m_englishFilename, m_index));
+	EXPECT_EQ(m_index, 1);
 
 	return true;
 }
@@ -54,7 +62,5 @@ TEST_F(CoreTest, FontLoading)
 	auto texIndexing = make_unique<TextureIndexing>(
 		m_deviceResources->GetD3DDevice(), m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
-	//EXPECT_TRUE(LoadResources(LoadFont, texIndexing.get()));
-
-	Bookmark;	//자꾸 죽는다 이유를 찾아보자
+	EXPECT_TRUE(LoadResources(LoadFont, texIndexing.get()));
 }
