@@ -163,11 +163,16 @@ TEST_F(ToyTest, TextArea)
 {
 	std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
 	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
-	textArea->SetFont(L"Resources/", 
-		{ L"UI/Font/HangleS16.spritefont", L"UI/Font/CourierNewBoldS18.spritefont" },
-		layout);
+	map<wstring, wstring> fontFileList;
+	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/HangleS16.spritefont"));
+	fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
+	textArea->SetFont(L"Resources/", fontFileList, layout);
 	m_renderer->AddRenderItem(textArea.get());
 	m_renderer->LoadResources();
+
+	//textArea->SetText(m_renderer->GetUpdate(), L"Hangle", L"테스트");
+
+	textArea->Update(m_window->GetOutputSize());
 	
 	//Bookmark;
 	//인덱스를 관리해줄 클래스를 만들어야 한다.

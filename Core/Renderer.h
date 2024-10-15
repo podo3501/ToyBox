@@ -43,8 +43,11 @@ public:
 
     // Initialization and management
     virtual bool Initialize() override;
+
     virtual void AddRenderItem(IRenderItem* item) override;
     virtual bool LoadResources() override;
+    virtual IUpdate* GetUpdate() const noexcept override;
+    virtual void Draw() override;
 
     // Messages
     virtual void OnActivated() override;
@@ -54,8 +57,6 @@ public:
     virtual void OnWindowMoved() override;
     virtual void OnDisplayChange() override;
     virtual void OnWindowSizeChanged(int width, int height) override;
-
-    virtual void Draw() override;
 
 private:
     void Clear();

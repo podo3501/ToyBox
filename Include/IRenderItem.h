@@ -1,6 +1,7 @@
 #pragma once
 
 struct ILoadData;
+struct IUpdate;
 struct IRender;
 
 struct IRenderItem

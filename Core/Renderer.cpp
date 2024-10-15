@@ -269,3 +269,8 @@ void Renderer::OnDeviceRestored()
     CreateWindowSizeDependentResources();
 }
 #pragma endregion
+
+IUpdate* Renderer::GetUpdate() const noexcept 
+{ 
+    return m_texIndexing.get(); 
+}

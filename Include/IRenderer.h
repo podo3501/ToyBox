@@ -2,6 +2,13 @@
 
 struct IRenderItem;
 
+struct ISpriteFont
+{
+public:
+    virtual ~ISpriteFont() {};
+};
+
+//로딩할때 사용하는 인터페이스
 struct ILoadData
 {
 public:
@@ -11,6 +18,14 @@ public:
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) = 0;
 };
 
+//데이터를 얻어올때 사용하는 인터페이스
+struct IUpdate
+{
+public:
+    virtual ~IUpdate() {};
+};
+
+//렌더링 할때 사용하는 인터페이스
 struct IRender
 {
 public:
@@ -27,6 +42,8 @@ public:
     virtual bool Initialize() = 0;
     virtual void AddRenderItem(IRenderItem* item) = 0;
     virtual bool LoadResources() = 0;
+    virtual IUpdate* GetUpdate() const noexcept = 0;
+    virtual void Draw() = 0;
 
     virtual void OnActivated() = 0;
     virtual void OnDeactivated() = 0;
@@ -35,8 +52,6 @@ public:
     virtual void OnWindowMoved() = 0;
     virtual void OnDisplayChange() = 0;
     virtual void OnWindowSizeChanged(int width, int height) = 0;
-
-    virtual void Draw() = 0;
 };
 
 std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height);

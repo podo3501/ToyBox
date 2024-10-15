@@ -3,12 +3,12 @@
 class Texture
 {
 public:
-    Texture(ID3D12Device* device, DescriptorHeap* descHeap) noexcept;
+    Texture() noexcept;
     Texture(const Texture* tex, const Rectangle* rect) noexcept;
     ~Texture();
 
-    void Upload(ResourceUploadBatch* resUpload, const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx);
-    void Draw(SpriteBatch* spriteBatch, const RECT& dest, const RECT* source);
+    void Upload(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* resUpload, const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx);
+    void Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source);
     void Reset();
 
     inline XMUINT2 GetSize() const noexcept;
@@ -19,8 +19,6 @@ public:
 private:
     void SetRectangle(const Rectangle* rect) noexcept;
 
-    ID3D12Device* m_device;
-    DescriptorHeap* m_descHeap;
     Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
     XMUINT2 m_size{};
     size_t m_descHeapIdx{ 0 };

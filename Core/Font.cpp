@@ -14,3 +14,7 @@ bool CFont::Load(ID3D12Device* device, ResourceUploadBatch* upload, const Descri
 
     return true;
 }
+
+void CFont::GetSize()
+{
+}

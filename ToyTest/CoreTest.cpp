@@ -43,16 +43,19 @@ bool LoadFont(ILoadData* load)
 {
 	wstring m_hangleFilename{ L"Resources/UI/Font/HangleS16.spritefont" };
 	wstring m_englishFilename{ L"Resources/UI/Font/CourierNewBoldS18.spritefont" };
-	
-	size_t m_index{ 0 };
-	EXPECT_TRUE(load->LoadFont(m_hangleFilename, m_index));
-	EXPECT_EQ(m_index, 0);
 
-	EXPECT_TRUE(load->LoadFont(m_hangleFilename, m_index));
-	EXPECT_EQ(m_index, 0);
+	size_t fontIndex1{ 0 };
+	load->LoadFont(m_hangleFilename, fontIndex1);
+	EXPECT_EQ(fontIndex1, 0);
 
-	EXPECT_TRUE(load->LoadFont(m_englishFilename, m_index));
-	EXPECT_EQ(m_index, 1);
+	size_t fontIndex2{ 0 };
+	load->LoadFont(m_hangleFilename, fontIndex2);
+	EXPECT_EQ(fontIndex1, fontIndex2);
+
+	size_t fontIndex3{ 0 };
+	load->LoadFont(m_englishFilename, fontIndex3);
+	EXPECT_NE(fontIndex3, 0);
+	EXPECT_NE(fontIndex3, fontIndex2);
 
 	return true;
 }

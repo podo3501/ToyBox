@@ -11,24 +11,24 @@ TextureIndexing::TextureIndexing(ID3D12Device* device, DescriptorHeap* descHeap,
 bool TextureIndexing::IsExist(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize)
 {
     //같은 파일이 있는지 확인한다.
-    map<size_t, unique_ptr<Texture>>::iterator find = m_textures.end();
+    vector<unique_ptr<Texture>>::iterator find = m_textures.end();
     if (rect == nullptr)     //이미지 전체를 사용한다면
     {
         find = ranges::find_if(m_textures, [&filename](const auto& tex) {
-            return (tex.second->GetFilename() == filename && tex.second->IsFullSize());
+            return (tex->GetFilename() == filename && tex->IsFullSize());
             });
     }
     else
     {
         find = ranges::find_if(m_textures, [&filename, rect](const auto& tex) {
-            return (tex.second->GetFilename() == filename && tex.second->GetRect() == *rect);
+            return (tex->GetFilename() == filename && tex->GetRect() == *rect);
             });
     }
 
     if (find != m_textures.end())
     {
-        outIndex = find->first;
-        if (outSize) (*outSize) = find->second->GetSize();
+        outIndex = distance(m_textures.begin(), find);
+        if (outSize) (*outSize) = (*find)->GetSize();
         return true;
     }
 
@@ -38,23 +38,22 @@ bool TextureIndexing::IsExist(const wstring& filename, const Rectangle* rect, si
 bool TextureIndexing::LoadFont(const wstring& filename, size_t& outIndex)
 {
     auto find = ranges::find(m_resourceFilenames, filename);
-
     if (find != m_resourceFilenames.end())
     {
         auto findFont = ranges::find_if(m_fonts, [&filename](const auto& font) {
-            return (font.second->GetFilename() == filename);
+            return (font->GetFilename() == filename);
             });
-        outIndex = findFont->first;
+        outIndex = distance(m_fonts.begin(), findFont);
         return true;
     }
 
     unique_ptr<CFont> font = make_unique<CFont>();
     if (!font->Load(m_device, m_upload, m_descHeap, filename, m_resourceFilenames.size())) return false;
-    size_t newIndex = m_fonts.size();
-    outIndex = newIndex;
-    m_fonts.insert(make_pair(newIndex, move(font)));
-    m_resourceFilenames.emplace_back(filename);
 
+    outIndex = m_fonts.size();    //인덱스를 증가시킨다.
+    m_fonts.emplace_back(move(font));
+    m_resourceFilenames.emplace_back(filename); //이 변수가 heapindex를 제공한다.
+    
     return true;
 }
 
@@ -68,21 +67,20 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     unique_ptr<Texture> tex = nullptr;
     if (findFilename == m_resourceFilenames.end())
     {
-        tex = make_unique<Texture>(m_device, m_descHeap);
-        tex->Upload(m_upload, filename, rect, m_resourceFilenames.size());
+        tex = make_unique<Texture>();
+        tex->Upload(m_device, m_descHeap, m_upload, filename, rect, m_resourceFilenames.size());
     }
     else //같은 텍스춰를 로딩하려 한다면
     {
         auto findSameTex = ranges::find_if(m_textures, [&filename](const auto& tex) {
-            return (tex.second->GetFilename() == filename);
+            return (tex->GetFilename() == filename);
             });
-        tex = make_unique<Texture>(findSameTex->second.get(), rect);
+        tex = make_unique<Texture>(findSameTex->get(), rect);
     }
 
-    size_t newIndex = m_textures.size();    //인덱스를 증가시켜서 texture를 만든다.
-    outIndex = newIndex;
+    outIndex = m_textures.size();    //인덱스를 증가시킨다.
     if (outSize) (*outSize) = tex->GetSize();
-    m_textures.insert(make_pair(newIndex, move(tex)));
+    m_textures.emplace_back(move(tex));
     m_resourceFilenames.emplace_back(filename);
 
     return true;
@@ -90,12 +88,12 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
 
 void TextureIndexing::Render(size_t index, const RECT& dest, const RECT* source)
 {
-    m_textures[index]->Draw(m_sprite, dest, source);
+    m_textures[index]->Draw(m_sprite, m_descHeap, dest, source);
 }
 
 void TextureIndexing::Reset()
 {
-    ranges::for_each(m_textures | views::values, [](auto& tex) {
+    ranges::for_each(m_textures, [](auto& tex) {
         tex->Reset();
         });
 }

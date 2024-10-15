@@ -3,13 +3,10 @@
 
 using namespace DirectX;
 
+Texture::Texture() noexcept = default;
 Texture::~Texture() = default;
-Texture::Texture(ID3D12Device* device, DescriptorHeap* descHeap) noexcept :
-    m_device{ device }, m_descHeap{ descHeap } {}
 Texture::Texture(const Texture* tex, const Rectangle* rect) noexcept
 {
-    m_device = tex->m_device;
-    m_descHeap = tex->m_descHeap;
     m_texture = tex->m_texture;
     m_size = tex->m_size;
     m_descHeapIdx = tex->m_descHeapIdx;
@@ -18,12 +15,12 @@ Texture::Texture(const Texture* tex, const Rectangle* rect) noexcept
     SetRectangle(rect);
 }
 
-void Texture::Upload(ResourceUploadBatch* resUpload, const std::wstring& filename, 
-    const Rectangle* rect, std::size_t descHeapIdx)
+void Texture::Upload(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* resUpload, 
+    const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx)
 {
     DX::ThrowIfFailed(
-        CreateWICTextureFromFile(m_device, *resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
-    CreateShaderResourceView(m_device, m_texture.Get(), m_descHeap->GetCpuHandle(descHeapIdx));
+        CreateWICTextureFromFile(device, *resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
+    CreateShaderResourceView(device, m_texture.Get(), descHeap->GetCpuHandle(descHeapIdx));
     m_size = GetTextureSize(m_texture.Get());
     m_descHeapIdx = descHeapIdx;
     m_filename = filename;
@@ -48,7 +45,7 @@ void Texture::SetRectangle(const Rectangle* rect) noexcept
     }
 }
 
-void Texture::Draw(SpriteBatch* spriteBatch, const RECT& dest, const RECT* source)
+void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source)
 {
     //텍스춰 크기는 고정으로 함
     //dest는 화면에 보여주는 사각형(크기가 안 맞으면 강제로 늘림)
@@ -56,7 +53,7 @@ void Texture::Draw(SpriteBatch* spriteBatch, const RECT& dest, const RECT* sourc
     //origin은 0, 0으로 고정. 중간으로 했을 경우 늘릴때 위치가 어긋남
     //텍스춰가 늘어나면 텍스춰가 여러장일 경우 origin 값으로 설정했을때 조금씩 어긋나는 현상이 벌어진다.
     //origin을 0, 0 로 고정후 위치값을 계산해서 넘겨주는 식으로 해야겠다.
-    spriteBatch->Draw(m_descHeap->GetGpuHandle(m_descHeapIdx), m_size, dest, source, Colors::White, 0.f);
+    spriteBatch->Draw(descHeap->GetGpuHandle(m_descHeapIdx), m_size, dest, source, Colors::White, 0.f);
 }
 
 void Texture::Reset() 

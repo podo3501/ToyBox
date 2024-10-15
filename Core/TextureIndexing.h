@@ -4,7 +4,7 @@
 class Texture;
 class CFont;
 
-class TextureIndexing : public ILoadData, public IRender
+class TextureIndexing : public ILoadData, public IUpdate, public IRender
 {
 public:
     TextureIndexing(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite); //SpriteBatch는 여기서 만들어 줄 수 있다.
@@ -13,6 +13,8 @@ public:
     //ILoadData
     virtual bool LoadTexture(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize) override;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) override;
+
+    //IUpdate
 
     //IRender
     virtual void Render(size_t index, const RECT& dest, const RECT* source) override;
@@ -28,6 +30,6 @@ private:
     SpriteBatch* m_sprite{ nullptr };
 	vector<wstring> m_resourceFilenames;
 
-	map<size_t, unique_ptr<Texture>> m_textures;
-    map<size_t, unique_ptr<CFont>> m_fonts;
+	vector<unique_ptr<Texture>> m_textures;
+    vector<unique_ptr<CFont>> m_fonts;
 };
