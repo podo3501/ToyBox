@@ -46,6 +46,9 @@
     <ClInclude Include="UserInterface\TextArea.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIUtility.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -69,6 +72,9 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\TextArea.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIUtility.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

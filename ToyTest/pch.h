@@ -72,6 +72,7 @@
 #include <memory>
 #include <ranges>
 #include <sstream>
+#include <stack>
 #include <stdexcept>
 #include <string>
 #include <system_error>

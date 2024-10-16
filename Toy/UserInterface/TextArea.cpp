@@ -3,6 +3,7 @@
 #include "../../Include/IRenderer.h"
 #include "UILayout.h"
 #include "../Utility.h"
+#include "UIUtility.h"
 
 class Sentence
 {
@@ -48,10 +49,10 @@ void TextArea::SetFont(const wstring& resPath, const map<wstring, wstring>& font
 		});
 }
 
-//L"<Hangle>테스트, !@#$%</Hangle><English>Test. ^&*()</English>"
 bool TextArea::SetText(IUpdate* update, wstring&& text) noexcept
 {
-
+	TextProperty textProperty;
+	ReturnIfFalse(Parser(text, textProperty));
 	//if (m_sentences.find(fontName) == m_sentences.end()) return false;
 	//크기를 얻어와서 현재 공간에 넣을 수 있을지 비교한다.
 	//m_sentences[fontName]->GetSize(text);

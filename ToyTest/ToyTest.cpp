@@ -170,7 +170,8 @@ TEST_F(ToyTest, TextArea)
 	m_renderer->AddRenderItem(textArea.get());
 	m_renderer->LoadResources();
 
-	//textArea->SetText(m_renderer->GetUpdate(), L"Hangle", L"테스트");
+	textArea->SetText(m_renderer->GetUpdate(), 
+		L"<Hangle><Red>테스트, 테스트2</Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
 	textArea->Update(m_window->GetOutputSize());
 	

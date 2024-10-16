@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../Toy/Locator.h"
+#include "../Toy/UserInterface/UIUtility.h"
 
 namespace Practice
 {
@@ -83,5 +84,14 @@ namespace Practice
 		//2중반복문에 한해서 사용하는게 좋을 듯 싶다.
 		NestedForLoops loops;
 		EXPECT_EQ(loops.Excute(), 10);
+	}
+
+	TEST(Parser, Test)
+	{
+		TextProperty textProperty;
+		auto result = Parser(
+			L"<Hangle><Red>테스트, </Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>()</English>",
+			textProperty);
+		EXPECT_TRUE(result);
 	}
 }

@@ -216,6 +216,7 @@
     <ClInclude Include="UserInterface\TextArea.h" />
     <ClInclude Include="UserInterface\UILayout.h" />
     <ClInclude Include="UserInterface\UIType.h" />
+    <ClInclude Include="UserInterface\UIUtility.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -227,6 +228,7 @@
     <ClCompile Include="UserInterface\ImagePartSet.cpp" />
     <ClCompile Include="UserInterface\TextArea.cpp" />
     <ClCompile Include="UserInterface\UILayout.cpp" />
+    <ClCompile Include="UserInterface\UIUtility.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="pch.cpp">
