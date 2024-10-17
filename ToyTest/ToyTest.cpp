@@ -159,19 +159,29 @@ TEST_F(ToyTest, CloseButton)
 	button->Render(&mockRender);
 }
 
+Rectangle TestMeasureTextUpdate(size_t index, const wstring& text, const Vector2& position)
+{
+	return Rectangle{};
+}
+
 TEST_F(ToyTest, TextArea)
 {
 	std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
 	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
 	map<wstring, wstring> fontFileList;
-	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/HangleS16.spritefont"));
+	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
 	fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
 	textArea->SetFont(L"Resources/", fontFileList, layout);
 	m_renderer->AddRenderItem(textArea.get());
 	m_renderer->LoadResources();
 
-	textArea->SetText(m_renderer->GetUpdate(), 
-		L"<Hangle><Red>테스트, 테스트2</Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
+	/*MockUpdate mockUpdate;
+	EXPECT_CALL(mockUpdate, MeasureText(_, _, _)).WillRepeatedly(Invoke(TestMeasureTextUpdate));
+	textArea->SetText(&mockUpdate,
+		L"<Hangle><Red>테스트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");*/
+
+	textArea->SetText(m_renderer->GetUpdate(),
+		L"<Hangle><Red>테스트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
 	textArea->Update(m_window->GetOutputSize());
 	

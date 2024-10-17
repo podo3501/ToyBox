@@ -7,6 +7,7 @@
 #include "UserInterface/UILayout.h"
 #include "UserInterface/Button.h"
 #include "UserInterface/Dialog.h"
+#include "UserInterface/TextArea.h"
 #include "MouseProcedure.h"
 #include "StepTimer.h"
 
@@ -238,8 +239,19 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
     layout.Set({ 0, 0, 32, 32 }, { 0.2f, 0.2f }, Origin::Center);
     m_closeButton->SetImage(m_resourcePath, normal2, hover2, pressed2, move(layout));
     m_renderer->AddRenderItem(m_closeButton.get());
+
+    m_textArea = std::make_unique<TextArea>();
+    layout.Set({ 0, 0, 250, 120 }, { 0.2f, 0.7f }, Origin::Center);
+    map<wstring, wstring> fontFileList;
+    fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
+    fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
+    m_textArea->SetFont(m_resourcePath, fontFileList, layout);
+    m_renderer->AddRenderItem(m_textArea.get());
     
     m_renderer->LoadResources();
+
+    m_textArea->SetText(m_renderer->GetUpdate(),
+        L"<Hangle><Red>테스트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
@@ -272,6 +284,7 @@ void MainLoop::Update(DX::StepTimer* timer)
     m_button2->Update(m_window->GetOutputSize(), mouseTracker);
     m_closeButton->Update(m_window->GetOutputSize(), mouseTracker);
     m_dialog->Update(m_window->GetOutputSize());
+    m_textArea->Update(m_window->GetOutputSize());
 
     PIXEndEvent();
 }

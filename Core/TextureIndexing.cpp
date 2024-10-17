@@ -57,6 +57,21 @@ bool TextureIndexing::LoadFont(const wstring& filename, size_t& outIndex)
     return true;
 }
 
+Rectangle TextureIndexing::MeasureText(size_t index, const wstring& text, const Vector2& position)
+{
+    return m_fonts[index]->MeasureText(text, position);
+}
+
+float TextureIndexing::GetLineSpacing(size_t index) const noexcept
+{ 
+    return m_fonts[index]->GetLineSpacing();
+}
+
+void TextureIndexing::DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const
+{
+    m_fonts[index]->DrawString(m_sprite, text, pos, color);
+}
+
 bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize)
 {
     if (IsExist(filename, rect, outIndex, outSize))

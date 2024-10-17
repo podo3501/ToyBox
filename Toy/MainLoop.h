@@ -3,6 +3,7 @@
 class Window;
 class Button;
 class Dialog;
+class TextArea;
 
 namespace DX
 {
@@ -36,6 +37,7 @@ private:
 	unique_ptr<Button>m_button2;
 	unique_ptr<Button>m_closeButton;
 	unique_ptr<Dialog> m_dialog;
+	unique_ptr<TextArea> m_textArea;
 	unique_ptr<DX::StepTimer> m_timer;
 
 	bool m_sizemove{ false };

@@ -5,6 +5,22 @@
 #include "../Utility.h"
 #include "UIUtility.h"
 
+struct WordPosition
+{
+	WordPosition(const TextData& _text, const Vector2& _position)
+	{
+		fontStyle = _text.fontStyle;
+		color = _text.color;
+		text = _text.text;
+		position = _position;
+	}
+
+	wstring fontStyle{};
+	wstring color{};
+	wstring text{};
+	Vector2 position{};
+};
+
 class Sentence
 {
 public:
@@ -16,7 +32,31 @@ public:
 		return load->LoadFont(filename, m_index);
 	}
 
+	Rectangle MeasureText(IUpdate* update, const wstring& text, const Vector2& position) const
+	{
+		return update->MeasureText(m_index, text, position);
+	}
 
+	float GetLineSpacing(IUpdate* update)
+	{
+		return update->GetLineSpacing(m_index);
+	}
+
+	void DrawString(IRender* render, const XMUINT2& position, const WordPosition& word) const
+	{
+		XMVECTORF32 color = Colors::Black;
+		if (word.color == L"Red")
+			color = Colors::Red;
+		if (word.color == L"Black")
+			color = Colors::Black;
+		if (word.color == L"Blue")
+			color = Colors::Blue;
+
+		XMUINT2 curPos{
+			position.x + static_cast<uint32_t>(word.position.x),
+			position.y + static_cast<uint32_t>(word.position.y) };
+		render->DrawString(m_index, word.text, { static_cast<float>(curPos.x), static_cast<float>(curPos.y) }, color);
+	}
 
 private:
 	size_t m_index{ 0 };
@@ -49,14 +89,40 @@ void TextArea::SetFont(const wstring& resPath, const map<wstring, wstring>& font
 		});
 }
 
-bool TextArea::SetText(IUpdate* update, wstring&& text) noexcept
+bool TextArea::SetText(IUpdate* update, wstring&& text)
 {
 	TextProperty textProperty;
 	ReturnIfFalse(Parser(text, textProperty));
-	//if (m_sentences.find(fontName) == m_sentences.end()) return false;
-	//크기를 얻어와서 현재 공간에 넣을 수 있을지 비교한다.
-	//m_sentences[fontName]->GetSize(text);
-	//m_text = move(text);
+
+	Rectangle usableArea = m_layout->GetArea();
+	Vector2 startPos = { static_cast<float>(usableArea.x), static_cast<float>(usableArea.y) };
+	float lineSpacing = 0.0f;
+	long maxHeight = 0;
+	auto w = textProperty.GetTextList().begin();
+	while(w != textProperty.GetTextList().end())
+	{
+		const auto& word = *w;
+		const auto& curSentence = m_sentences[word.fontStyle];
+		const Rectangle& wordRect = curSentence->MeasureText(update, word.text, startPos);
+		lineSpacing = max(lineSpacing, curSentence->GetLineSpacing(update));
+		maxHeight = max(maxHeight, wordRect.height);
+
+		//높이에 넘어갔을때는 강제종료
+		if (!usableArea.Contains(wordRect) && usableArea.height < wordRect.y + wordRect.height)
+			break;
+
+		if (!usableArea.Contains(wordRect) && usableArea.width < wordRect.x + wordRect.width)	//넓이에 넘어갔을 경우
+		{
+			startPos.x = 0.0f;
+			startPos.y += static_cast<float>(maxHeight) + lineSpacing;
+			continue;
+		}
+
+		m_lines.emplace_back(move(WordPosition(word, startPos)));
+		startPos.x = static_cast<float>(wordRect.x + wordRect.width);
+		w++;
+	}
+	
 	return true;
 }
 
@@ -67,5 +133,9 @@ void TextArea::Update(const Vector2& resolution) noexcept
 
 void TextArea::Render(IRender* render)
 {
-	render;
+	for (const auto& word : m_lines)
+	{
+		const auto& curSentence = m_sentences[word.fontStyle];
+		curSentence->DrawString(render, m_position, word);
+	}
 }

@@ -2,12 +2,6 @@
 
 struct IRenderItem;
 
-struct ISpriteFont
-{
-public:
-    virtual ~ISpriteFont() {};
-};
-
 //로딩할때 사용하는 인터페이스
 struct ILoadData
 {
@@ -23,6 +17,9 @@ struct IUpdate
 {
 public:
     virtual ~IUpdate() {};
+
+    virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) = 0;
+    virtual float GetLineSpacing(size_t index) const noexcept = 0;
 };
 
 //렌더링 할때 사용하는 인터페이스
@@ -32,6 +29,7 @@ public:
     virtual ~IRender() {};
 
     virtual void Render(size_t index, const RECT& dest, const RECT* source) = 0;
+    virtual void DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const = 0;
 };
 
 struct IRenderer
