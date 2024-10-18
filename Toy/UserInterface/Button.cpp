@@ -40,14 +40,14 @@ bool Button::ChangeArea(Rectangle&& area) noexcept
 	return true;
 }
 
-void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker) noexcept
+void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker* tracker) noexcept
 {
 	const Vector2& originPos = m_layout->GetPosition(resolution);
 
 	for (const auto& partSet : m_image | views::values)
 		partSet->SetPosition(originPos);
 
-	bool bHover = ranges::any_of(m_image | views::values, [mouseState = tracker.GetLastState()](const auto& partSet) {
+	bool bHover = ranges::any_of(m_image | views::values, [mouseState = tracker->GetLastState()](const auto& partSet) {
 		return partSet->IsHover(mouseState.x, mouseState.y);
 		});
 
@@ -57,8 +57,8 @@ void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& 
 		return;
 	}
 
-	if (tracker.leftButton == Mouse::ButtonStateTracker::PRESSED ||
-		m_state == ButtonState::Pressed && tracker.leftButton == Mouse::ButtonStateTracker::HELD)
+	if (tracker->leftButton == Mouse::ButtonStateTracker::PRESSED ||
+		m_state == ButtonState::Pressed && tracker->leftButton == Mouse::ButtonStateTracker::HELD)
 		m_state = ButtonState::Pressed;
 	else
 		m_state = ButtonState::Hover;

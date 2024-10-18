@@ -20,7 +20,7 @@
     <ClInclude Include="d3dx12.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="MainLoop.h" />
+    <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="MouseProcedure.h" />
@@ -49,10 +49,11 @@
     <ClInclude Include="UserInterface\UIUtility.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="MainLoop.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="MainLoop.cpp" />
+    <ClCompile Include="GameMainLoop.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
@@ -77,6 +78,8 @@
     <ClCompile Include="UserInterface\UIUtility.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="MainLoopWndProc.cpp" />
+    <ClCompile Include="MainLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

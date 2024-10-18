@@ -32,7 +32,7 @@ void TextArea::SetFont(const wstring& resPath, const map<wstring, wstring>& font
 		});
 }
 
-bool TextArea::SetText(IUpdate* update, wstring&& text)
+bool TextArea::SetText(IGetValue* getValue, wstring&& text)
 {
 	TextProperty textProperty;
 	ReturnIfFalse(Parser(text, textProperty));
@@ -48,8 +48,8 @@ bool TextArea::SetText(IUpdate* update, wstring&& text)
 	{
 		auto& word = *w;
 		const auto& fontIdx = m_font[word.fontStyle];
-		const Rectangle& wordRect = update->MeasureText(fontIdx, word.text, startPos);
-		lineSpacing = max(lineSpacing, update->GetLineSpacing(fontIdx));
+		const Rectangle& wordRect = getValue->MeasureText(fontIdx, word.text, startPos);
+		lineSpacing = max(lineSpacing, getValue->GetLineSpacing(fontIdx));
 		maxHeight = max(maxHeight, wordRect.height);
 
 		if (word.text == L"br")

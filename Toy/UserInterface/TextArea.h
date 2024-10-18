@@ -15,7 +15,7 @@ public:
 
 	void Update(const Vector2& resolution) noexcept;
 	void SetFont(const wstring& resPath, const map<wstring, wstring>& fontFileList, const UILayout& layout);
-	bool SetText(IUpdate* update, wstring&& text);
+	bool SetText(IGetValue* update, wstring&& text);
 
 private:
 	unique_ptr<UILayout> m_layout;

@@ -13,10 +13,10 @@ public:
 };
 
 //데이터를 얻어올때 사용하는 인터페이스
-struct IUpdate
+struct IGetValue
 {
 public:
-    virtual ~IUpdate() {};
+    virtual ~IGetValue() {};
 
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) = 0;
     virtual float GetLineSpacing(size_t index) const noexcept = 0;
@@ -40,7 +40,7 @@ public:
     virtual bool Initialize() = 0;
     virtual void AddRenderItem(IRenderItem* item) = 0;
     virtual bool LoadResources() = 0;
-    virtual IUpdate* GetUpdate() const noexcept = 0;
+    virtual IGetValue* GetValue() const noexcept = 0;
     virtual void Draw() = 0;
 
     virtual void OnActivated() = 0;

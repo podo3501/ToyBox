@@ -46,7 +46,7 @@ public:
 
     virtual void AddRenderItem(IRenderItem* item) override;
     virtual bool LoadResources() override;
-    virtual IUpdate* GetUpdate() const noexcept override;
+    virtual IGetValue* GetValue() const noexcept override;
     virtual void Draw() override;
 
     // Messages

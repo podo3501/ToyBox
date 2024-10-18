@@ -205,6 +205,7 @@
   <ItemGroup>
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Locator.h" />
+    <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="MouseProcedure.h" />
     <ClInclude Include="pch.h" />
@@ -221,6 +222,8 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MainLoop.cpp" />
+    <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="MouseProcedure.cpp" />
     <ClCompile Include="UserInterface\Button.cpp" />
     <ClCompile Include="UserInterface\Dialog.cpp" />
@@ -230,7 +233,7 @@
     <ClCompile Include="UserInterface\UILayout.cpp" />
     <ClCompile Include="UserInterface\UIUtility.cpp" />
     <ClCompile Include="Window.cpp" />
-    <ClCompile Include="MainLoop.cpp" />
+    <ClCompile Include="GameMainLoop.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

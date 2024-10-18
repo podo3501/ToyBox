@@ -4,7 +4,7 @@
 class Texture;
 class CFont;
 
-class TextureIndexing : public ILoadData, public IUpdate, public IRender
+class TextureIndexing : public ILoadData, public IGetValue, public IRender
 {
 public:
     TextureIndexing(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite); //SpriteBatch는 여기서 만들어 줄 수 있다.
@@ -14,7 +14,7 @@ public:
     virtual bool LoadTexture(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize) override;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) override;
 
-    //IUpdate
+    //IGetValue
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
     virtual float GetLineSpacing(size_t index) const noexcept override;
 

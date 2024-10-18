@@ -33,7 +33,7 @@ public:
 		const vector<ImageSource>& pressed,
 		const UILayout& layout);
 	bool ChangeArea(Rectangle&& area) noexcept;
-	void Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker) noexcept;
+	void Update(const Vector2& resolution, const Mouse::ButtonStateTracker* tracker) noexcept;
 	void ChangeOrigin(Origin&& origin) noexcept;
 
 private:

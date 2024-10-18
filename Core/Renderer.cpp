@@ -270,7 +270,7 @@ void Renderer::OnDeviceRestored()
 }
 #pragma endregion
 
-IUpdate* Renderer::GetUpdate() const noexcept 
+IGetValue* Renderer::GetValue() const noexcept
 { 
     return m_texIndexing.get(); 
 }

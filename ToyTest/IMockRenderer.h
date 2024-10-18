@@ -11,7 +11,7 @@ public:
 		(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color), (const override));
 };
 
-class MockUpdate : public IUpdate
+class MockUpdate : public IGetValue
 {
 public:
 	virtual ~MockUpdate() = default;

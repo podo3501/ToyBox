@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
-#include "../Toy/MainLoop.h"
+#include "../Toy/GameMainLoop.h"
 #include "../Toy/Window.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UILayout.h"
@@ -77,7 +77,7 @@ TEST_F(ToyTest, ButtonTest)
 	Mouse::ButtonStateTracker mouseTracker;
 	SetMouse(100, 100, mouseTracker);
 	button->ChangeArea({ 0, 0, 126,48 });
-	button->Update(m_window->GetOutputSize(), mouseTracker);
+	button->Update(m_window->GetOutputSize(), &mouseTracker);
 
 	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 	//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
@@ -89,7 +89,7 @@ TEST_F(ToyTest, ButtonTest)
 	//clicked 버튼일 경우
 	SetMouse(420, 320, mouseTracker);
 	mouseTracker.leftButton = Mouse::ButtonStateTracker::PRESSED;
-	button->Update(m_window->GetOutputSize(), mouseTracker);
+	button->Update(m_window->GetOutputSize(), &mouseTracker);
 
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestLeftTopRender));
 	button->Render(&mockRender);
@@ -150,7 +150,7 @@ TEST_F(ToyTest, CloseButton)
 	//normal 버튼일 경우
 	Mouse::ButtonStateTracker mouseTracker;
 	SetMouse(150, 110, mouseTracker);
-	button->Update(m_window->GetOutputSize(), mouseTracker);
+	button->Update(m_window->GetOutputSize(), &mouseTracker);
 
 	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 	//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
@@ -161,10 +161,10 @@ TEST_F(ToyTest, CloseButton)
 
 void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
 {
-	if (text == L"테스트, ") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
-	if (text == L"테스트2") EXPECT_TRUE(index == 1 && pos == Vector2(324.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
-	if (text == L"^") EXPECT_TRUE(index == 0 && pos == Vector2(326.f, 296.375f) && DirectX::XMVector4Equal(color, Colors::Black));
-	if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(342.f, 296.375f) && DirectX::XMVector4Equal(color, Colors::Blue));
+	if (text == L"테스") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
+	if (text == L"테스트2") EXPECT_TRUE(index == 1 && pos == Vector2(282, 268.375f) && DirectX::XMVector4Equal(color, Colors::Red));
+	if (text == L"^") EXPECT_TRUE(index == 0 && pos == Vector2(531.f, 268.375f) && DirectX::XMVector4Equal(color, Colors::Black));
+	if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(240.f, 296.75f) && DirectX::XMVector4Equal(color, Colors::Blue));
 }
 
 TEST_F(ToyTest, TextArea)
@@ -178,7 +178,7 @@ TEST_F(ToyTest, TextArea)
 	m_renderer->AddRenderItem(textArea.get());
 	m_renderer->LoadResources();
 
-	textArea->SetText(m_renderer->GetUpdate(),
+	textArea->SetText(m_renderer->GetValue(),
 		L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
 	textArea->Update(m_window->GetOutputSize());
@@ -186,8 +186,6 @@ TEST_F(ToyTest, TextArea)
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
 	textArea->Render(&mockRender);
-
-	Bookmark;
 }
 
 //여러번 실행해서 오동작이 나는지 확인한다.
@@ -195,8 +193,8 @@ TEST(MainLoop, MultipleAppExcute)
 {
 	for (auto i : std::views::iota(0, 5))
 	{
-		MainLoop mainLoop;
-		EXPECT_TRUE(mainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE));
+		GameMainLoop gameMainLoop;
+		EXPECT_TRUE(gameMainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE));
 	}
 
 	std::map<int, int> test;
@@ -207,7 +205,7 @@ TEST(MainLoop, MultipleAppExcute)
 //테스트에서도 window창을 띄울 수 있다. 하지만 App 프로젝트에서 실행 가능하기 때문에 주석처리
 //TEST(MainLoop, RunTest)
 //{
-//	MainLoop mainLoop;
+//	GameMainLoop mainLoop;
 //	EXPECT_TRUE(mainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_SHOWDEFAULT));
 //	EXPECT_EQ(mainLoop.Run(), 0);
 //}

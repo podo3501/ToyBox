@@ -77,3 +77,11 @@ template를 안 쓰는게 좋은 것 같다.  그리고 에러 메세지가 꼭 
 Google Test에서 SEH 예외가 발생한다는 것은 테스트 실행 중에 시스템 오류(예: 잘못된 메모리 접근, NULL 포인
 터 참조 등)가 발생했음을 의미함. 코드중에 어떤 포인터가 잘못됐는지를 잘 찾아보자. 예를들면 unique_ptr로
 만들고 나서 scope가 지나서 자동으로 사라진지 모르고 거기다가 셋팅한다던지 등등.
+
+ttf폰트에서 spritefont로 바꿀때 한글 및 기호, 영어를 넣어서 뽑는 옵션
+MakeSpriteFont "맑은 고딕" MaleunGothicS16.spritefont /FontSize:16 /CharacterRegion:0xAC00-0xD7A3 /CharacterRegion:0x0020-0x007E
+ /FastPack
+ /CharacterRegion:0xAC00-0xD7A3 한글 추가 옵션
+ /CharacterRegion:0x0020-0x007E 영어 및 기호 옵션
+ 그냥 옵션 없이 실행하면 한글 폰트임에도 영어와 기호 옵션만 나온다.
+ /FastPack을 안하면 실행이 끝날때까지 4시간 정도 걸린다.

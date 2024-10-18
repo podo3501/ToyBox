@@ -1,4 +1,5 @@
 #pragma once
+#include "../Toy/MainLoop.h"
 
 class Window;
 struct IRenderer;
