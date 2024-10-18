@@ -193,13 +193,10 @@ TEST(MainLoop, MultipleAppExcute)
 {
 	for (auto i : std::views::iota(0, 5))
 	{
-		GameMainLoop gameMainLoop;
-		EXPECT_TRUE(gameMainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE));
+		unique_ptr<MainLoop> mainLoop = make_unique<GameMainLoop>();
+		EXPECT_TRUE(mainLoop->Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE));
+		mainLoop.reset();
 	}
-
-	std::map<int, int> test;
-	std::ranges::for_each(test, [](auto& iter) {
-		});
 }
 
 //테스트에서도 window창을 띄울 수 있다. 하지만 App 프로젝트에서 실행 가능하기 때문에 주석처리

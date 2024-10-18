@@ -38,12 +38,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	//괄호로 감싼 이유는 MainLoop의 스마트 포인터 소멸자를 호출해 주기 위해서이며,
 	//DirectX 관련 리소스가 잘 소멸됐는지 ReportLiveObjects함수로 확인하기 때문이다.
 	{
-		GameMainLoop gameMainLoop;
-		auto initResult = gameMainLoop.Initialize(hInstance, L"../Resources/", nShowCmd);
+		unique_ptr<MainLoop> mainLoop = make_unique<GameMainLoop>();
+		auto initResult = mainLoop->Initialize(hInstance, L"../Resources/", nShowCmd);
 		if (!initResult)
 			return 1;
 
-		result = gameMainLoop.Run();
+		result = mainLoop->Run();
+		mainLoop.reset();
 	}
 
 #if defined(DEBUG) | defined(_DEBUG)

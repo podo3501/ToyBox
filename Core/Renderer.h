@@ -58,6 +58,11 @@ public:
     virtual void OnDisplayChange() override;
     virtual void OnWindowSizeChanged(int width, int height) override;
 
+    // Other
+    ID3D12Device* GetDevice() const noexcept;
+    DescriptorHeap* GetDescriptorHeap() const noexcept;
+    ID3D12GraphicsCommandList* GetCommandList() const noexcept;
+
 private:
     void Clear();
 

@@ -80,6 +80,7 @@ int MainLoop::Run()
         else
             Tick();
     }
+    CleanUp();
 
     return static_cast<int>(msg.wParam);
 }
@@ -94,12 +95,13 @@ void MainLoop::Tick()
         {
             Update(timer, m_window->GetOutputSize(), &mouseTracker);
         });
-
+   
     // Don't try to render anything before the first Update.
-    if (m_timer->GetFrameCount() != 0)
-    {
-        m_renderer->Draw();
-    }
+    if (m_timer->GetFrameCount() == 0)
+        return;
+
+    Render();
+    m_renderer->Draw(); //item으로 등록시킨 애들을 랜더링
 }
 
 void MainLoop::OnResuming()

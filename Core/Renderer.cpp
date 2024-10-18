@@ -274,3 +274,18 @@ IGetValue* Renderer::GetValue() const noexcept
 { 
     return m_texIndexing.get(); 
 }
+
+ID3D12Device* Renderer::GetDevice() const noexcept
+{
+    return m_deviceResources->GetD3DDevice();
+}
+
+DescriptorHeap* Renderer::GetDescriptorHeap() const noexcept
+{
+    return m_resourceDescriptors.get();
+}
+
+ID3D12GraphicsCommandList* Renderer::GetCommandList() const noexcept
+{
+    return m_deviceResources->GetCommandList();
+}

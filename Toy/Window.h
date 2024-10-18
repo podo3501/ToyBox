@@ -13,6 +13,7 @@ public:
     inline void AddWndProcListener(WndProcListener listener);
     inline DirectX::SimpleMath::Vector2 GetOutputSize() const noexcept;
     inline void OnWindowSizeChanged(const RECT& size) noexcept;
+    inline HWND GetHandle() const noexcept { return m_wnd; }
     
 private:
     bool WindowRegisterClass(HINSTANCE hInstance, const std::wstring& className);

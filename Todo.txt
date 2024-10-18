@@ -45,6 +45,9 @@
 --화면 줄일때 글자 사라짐 단위의 문제 uint말고 float로 교체
 --개행 처리
 --툴 만들기 위해서 MainLoop를 GameMainLoop와 ToolMainLoop로 템플릿 메소드 패턴을 사용해서 분리
+--툴 프로젝트 만들기
+--imgui 연동
+코어테스트에서 DirectX12 리소스 누출 확인
 다이얼로그에 버튼 붙이기
 패널 개념 넣기
 UI 데이터를 저장할 JSON 붙이기

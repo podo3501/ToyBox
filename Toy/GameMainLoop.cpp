@@ -2,7 +2,6 @@
 #include "GameMainLoop.h"
 #include "../Include/IRenderer.h"
 #include "UserInterface/UIType.h"
-#include "Window.h"
 #include "Utility.h"
 #include "UserInterface/UILayout.h"
 #include "UserInterface/Button.h"
@@ -123,3 +122,9 @@ void GameMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
 
     PIXEndEvent();
 }
+
+void GameMainLoop::Render()
+{}
+
+void GameMainLoop::CleanUp()
+{}
