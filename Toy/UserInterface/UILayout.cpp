@@ -12,14 +12,14 @@ UILayout::UILayout(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) :
 	Set(move(origin));
 }
 
-XMUINT2 UILayout::GetOriginPoint(Origin origin) const noexcept
+Vector2 UILayout::GetOriginPoint(Origin origin) const noexcept
 {
 	switch (origin)
 	{
-	case Origin::Center: return XMUINT2(m_area.width / 2, m_area.height / 2);
-	case Origin::LeftTop: return { 0, 0 };
+	case Origin::Center: return Vector2(static_cast<float>(m_area.width) / 2.f, static_cast<float>(m_area.height) / 2.f);
+	case Origin::LeftTop: return { 0.f, 0.f };
 	}
-	return { 0, 0 };
+	return { 0.f, 0.f };
 }
 
 void UILayout::Set(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) noexcept
@@ -52,8 +52,7 @@ void UILayout::Set(Rectangle&& area, Vector2&& normalPos) noexcept
 	Set(move(normalPos));
 }
 
-XMUINT2 UILayout::GetPosition(const Vector2& resolution) const noexcept
+Vector2 UILayout::GetPosition(const Vector2& resolution) const noexcept
 {
-	Vector2 pos{ resolution * m_normalizedPosition };
-	return { static_cast<long>(pos.x) - m_originPoint.x, static_cast<long>(pos.y) - m_originPoint.y };
+	return ( resolution * m_normalizedPosition ) - m_originPoint;
 }

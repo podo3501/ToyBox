@@ -251,7 +251,8 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
     m_renderer->LoadResources();
 
     m_textArea->SetText(m_renderer->GetUpdate(),
-        L"<Hangle><Red>테스트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
+        L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
+        //L"<Hangle><Red>테스트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:

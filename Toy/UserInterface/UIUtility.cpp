@@ -1,23 +1,26 @@
 #include "pch.h"
 #include "UIUtility.h"
 
-TextData::TextData() noexcept :
-	fontStyle(L"English"), color(L"Black")
-{}
-TextData::TextData(const wstring& _fontStyle, const wstring& _color, const wstring& _text) noexcept :
-	fontStyle(L"English"), color(L"Black"), text{ _text }
-{
-	if (!_fontStyle.empty()) fontStyle = _fontStyle;
-	if (!_color.empty()) color = _color;
+bool operator==(const DirectX::XMFLOAT4& a, const DirectX::XMFLOAT4& b) {
+	return (a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w);
 }
 
-constexpr inline bool TextData::operator==(const TextData& rhs) const noexcept
+TextData::TextData() noexcept :
+	fontStyle(L"English"), color{}
 {
-	return (this->fontStyle == rhs.fontStyle && this->color == rhs.color);
+	XMStoreFloat4(&color, Colors::Black);
+}
+TextData::TextData(const wstring& _fontStyle, const XMFLOAT4& _color, const wstring& _text) noexcept :
+	fontStyle(L"English"), color{}, text{ _text }
+{
+	XMStoreFloat4(&color, Colors::Black);
+
+	if (!_fontStyle.empty()) fontStyle = _fontStyle;
+	if (!(_color == XMFLOAT4{})) color = _color;
 }
 
 TextProperty::TextProperty() = default;
-void TextProperty::Set(const wstring& fontStyle, const wstring& color, const wstring& text) noexcept
+void TextProperty::Set(const wstring& fontStyle, const XMFLOAT4& color, const wstring& text) noexcept
 {
 	m_data.emplace_back(move(TextData{ fontStyle, color, text }));
 }
@@ -40,11 +43,23 @@ inline constexpr bool IsColor(const wstring& color) noexcept
 	return false;
 }
 
+XMFLOAT4 GetColor(const wstring& color) noexcept
+{
+	XMVECTORF32 vColor = Colors::Black;
+	if (color == L"Red") vColor = Colors::Red;
+	if (color == L"Black") vColor = Colors::Black;
+	if (color == L"Blue") vColor = Colors::Blue;
+
+	XMFLOAT4 fColor;
+	XMStoreFloat4(&fColor, vColor);
+	return fColor;
+}
+
 bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept
 {
 	stack<wstring> tagStack;
 	wstring fontStyle{};
-	wstring color{};
+	XMFLOAT4 color{};
 
 	auto c = context.begin();
 	while (c != context.end())
@@ -60,14 +75,18 @@ bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept
 				if (tagStack.top() != tag)
 					return false;
 				if (IsFontStyle(tag)) fontStyle.clear();
-				if (IsColor(tag)) color.clear();
+				if (IsColor(tag)) color = {};
 				tagStack.pop();
+			}
+			else if (tag == L"br")	//줄바꿈. L"br"로 저장하고 나중에 줄바꿈 처리한다.
+			{
+				outTextProperty.Set(fontStyle, color, tag);
 			}
 			else
 			{
 				tagStack.push(tag);
 				if (IsFontStyle(tag)) fontStyle = tag;
-				if (IsColor(tag)) color = tag;
+				if (IsColor(tag)) color = GetColor(tag);
 			}
 			c = tagEnd + 1;
 			continue;	//tag가 연속적으로 나올 수 있기 때문에 처음으로 돌아간다.

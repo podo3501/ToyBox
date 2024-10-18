@@ -159,15 +159,18 @@ TEST_F(ToyTest, CloseButton)
 	button->Render(&mockRender);
 }
 
-Rectangle TestMeasureTextUpdate(size_t index, const wstring& text, const Vector2& position)
+void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
 {
-	return Rectangle{};
+	if (text == L"테스트, ") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
+	if (text == L"테스트2") EXPECT_TRUE(index == 1 && pos == Vector2(324.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
+	if (text == L"^") EXPECT_TRUE(index == 0 && pos == Vector2(326.f, 296.375f) && DirectX::XMVector4Equal(color, Colors::Black));
+	if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(342.f, 296.375f) && DirectX::XMVector4Equal(color, Colors::Blue));
 }
 
 TEST_F(ToyTest, TextArea)
 {
 	std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
-	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
+	UILayout layout({ 0, 0, 320, 120 }, { 0.5f, 0.5f }, Origin::Center);
 	map<wstring, wstring> fontFileList;
 	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
 	fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
@@ -175,18 +178,16 @@ TEST_F(ToyTest, TextArea)
 	m_renderer->AddRenderItem(textArea.get());
 	m_renderer->LoadResources();
 
-	/*MockUpdate mockUpdate;
-	EXPECT_CALL(mockUpdate, MeasureText(_, _, _)).WillRepeatedly(Invoke(TestMeasureTextUpdate));
-	textArea->SetText(&mockUpdate,
-		L"<Hangle><Red>테스트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");*/
-
 	textArea->SetText(m_renderer->GetUpdate(),
-		L"<Hangle><Red>테스트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
+		L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
 	textArea->Update(m_window->GetOutputSize());
-	
-	//Bookmark;
-	//인덱스를 관리해줄 클래스를 만들어야 한다.
+
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
+	textArea->Render(&mockRender);
+
+	Bookmark;
 }
 
 //여러번 실행해서 오동작이 나는지 확인한다.

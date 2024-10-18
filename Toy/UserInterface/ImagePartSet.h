@@ -16,7 +16,7 @@ public:
 
 	bool LoadResources(ILoadData* load);
 	bool SetDestination(const Rectangle& area) noexcept;
-	void SetPosition(const XMUINT2& position) noexcept;
+	void SetPosition(const Vector2& position) noexcept;
 	bool IsHover(int mouseX, int mouseY) noexcept;
 	void Render(IRender* render);
 

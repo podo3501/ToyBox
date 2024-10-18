@@ -2,13 +2,13 @@
 #include "../../Include/IRenderItem.h"
 
 class UILayout;
-class Sentence;
-struct WordPosition;
+struct TextData;
 
 class TextArea : public IRenderItem
 {
 public:
 	TextArea();
+	~TextArea();
 
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual void Render(IRender* render) override;
@@ -20,8 +20,8 @@ public:
 private:
 	unique_ptr<UILayout> m_layout;
 	map<wstring, wstring> m_fontFileList;
-	map<wstring, unique_ptr<Sentence>> m_sentences;
-	vector<WordPosition> m_lines;
+	map<wstring, size_t> m_font;
+	vector<TextData> m_lines;
 	
-	XMUINT2 m_position{};
+	Vector2 m_position{};
 };

@@ -116,7 +116,7 @@ void Renderer::Draw()
     // TODO: Add your rendering code here.
     ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap() };
     commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
-
+    
     m_spriteBatch->Begin(commandList);
 
     ranges::for_each(m_renderItems, [renderer = m_texIndexing.get()](const auto item) {

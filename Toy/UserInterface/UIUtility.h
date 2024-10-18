@@ -3,22 +3,21 @@
 struct TextData
 {
 	TextData() noexcept;
-	TextData(const wstring& _fontStyle, const wstring& _color, const wstring& text) noexcept;
-
-	constexpr inline bool operator==(const TextData& rhs) const noexcept;
+	TextData(const wstring& _fontStyle, const XMFLOAT4& _color, const wstring& _text) noexcept;
 
 	wstring fontStyle;
-	wstring color;
+	XMFLOAT4 color;
 	wstring text;
+	Vector2 position{};
 };
 
 class TextProperty
 {
 public:
 	TextProperty();
-	void Set(const wstring& fontStyle, const wstring& color, const wstring& text) noexcept;
+	void Set(const wstring& fontStyle, const XMFLOAT4& color, const wstring& text) noexcept;
 	void AddText(const wstring& text) noexcept;
-	inline const vector<TextData>& GetTextList() const noexcept { return m_data; }
+	inline vector<TextData> GetTextList() const noexcept { return m_data; }
 
 private:
 	vector<TextData> m_data;

@@ -88,7 +88,7 @@ bool ImagePartSet::SetDestination(const Rectangle& area) noexcept
 	return true;
 }
 
-void ImagePartSet::SetPosition(const XMUINT2& position) noexcept
+void ImagePartSet::SetPosition(const Vector2& position) noexcept
 {
 	for (const auto& part : m_images)
 		part->SetPosition(position);

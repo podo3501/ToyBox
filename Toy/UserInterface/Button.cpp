@@ -42,7 +42,7 @@ bool Button::ChangeArea(Rectangle&& area) noexcept
 
 void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker& tracker) noexcept
 {
-	XMUINT2 originPos = m_layout->GetPosition(resolution);
+	const Vector2& originPos = m_layout->GetPosition(resolution);
 
 	for (const auto& partSet : m_image | views::values)
 		partSet->SetPosition(originPos);

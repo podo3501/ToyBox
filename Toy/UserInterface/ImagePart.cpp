@@ -28,7 +28,7 @@ bool ImagePart::IsHover(int mouseX, int mouseY) const noexcept
 void ImagePart::Render(IRender* render) 
 {
 	Rectangle destination(m_destination);
-	destination.Offset(m_position.x, m_position.y);
+	destination.Offset(static_cast<long>(m_position.x), static_cast<long>(m_position.y));
 
 	RECT source(m_source);
 	render->Render(m_index, destination, &source);
