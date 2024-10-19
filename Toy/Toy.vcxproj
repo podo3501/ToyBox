@@ -207,7 +207,7 @@
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="MainLoop.h" />
-    <ClInclude Include="MouseProcedure.h" />
+    <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="UserInterface\Button.h" />
@@ -224,7 +224,7 @@
   <ItemGroup>
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
-    <ClCompile Include="MouseProcedure.cpp" />
+    <ClCompile Include="WindowProcedure.cpp" />
     <ClCompile Include="UserInterface\Button.cpp" />
     <ClCompile Include="UserInterface\Dialog.cpp" />
     <ClCompile Include="UserInterface\ImagePart.cpp" />

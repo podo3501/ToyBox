@@ -10,9 +10,11 @@
     <ClCompile Include="Tool.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="ToolMainLoop.cpp" />
+    <ClCompile Include="TestImgui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToolMainLoop.h" />
+    <ClInclude Include="TestImgui.h" />
   </ItemGroup>
 </Project>

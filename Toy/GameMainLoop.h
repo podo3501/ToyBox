@@ -16,8 +16,6 @@ protected:
 	virtual bool LoadResources(const wstring& resPath) override;
 	virtual bool SetDatas(IGetValue* getValue) override;
 	virtual void Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker) override;
-	virtual void Render() override;
-	virtual void CleanUp() override;
 
 private:
 	unique_ptr<Button>m_button;

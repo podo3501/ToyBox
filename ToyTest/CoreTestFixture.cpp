@@ -9,9 +9,18 @@ CoreTest::CoreTest() = default;
 CoreTest::~CoreTest()
 {
 	if (m_deviceResources)
-	{
 		m_deviceResources->WaitForGpu();
-	}
+
+	m_spriteBatch.reset();
+	m_batch.reset();
+	m_resourceDescriptors.reset();
+	m_graphicsMemory.reset();
+	m_deviceResources.reset();
+	m_window.reset();
+	
+#if defined(DEBUG) | defined(_DEBUG)
+	ReportLiveObjects();
+#endif
 }
 
 void CoreTest::SetUp()
@@ -34,11 +43,7 @@ void CoreTest::SetUp()
 }
 
 void CoreTest::TearDown()
-{
-#if defined(DEBUG) | defined(_DEBUG)
-	ReportLiveObjects();
-#endif
-}
+{}
 
 bool CoreTest::Initialize()
 {

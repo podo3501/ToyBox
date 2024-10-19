@@ -1,7 +1,5 @@
 #pragma once
 
-struct IRenderItem;
-
 //로딩할때 사용하는 인터페이스
 struct ILoadData
 {
@@ -32,6 +30,17 @@ public:
     virtual void DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const = 0;
 };
 
+//Imgui ui 만들때 사용
+struct ImGuiIO;
+struct IImguiItem
+{
+public:
+    virtual ~IImguiItem() {};
+
+    virtual void Render(ImGuiIO* io) = 0;
+};
+
+struct IRenderItem;
 struct IRenderer
 {
 public:
@@ -39,6 +48,7 @@ public:
 
     virtual bool Initialize() = 0;
     virtual void AddRenderItem(IRenderItem* item) = 0;
+    virtual void AddImguiItem(IImguiItem* item) = 0;
     virtual bool LoadResources() = 0;
     virtual IGetValue* GetValue() const noexcept = 0;
     virtual void Draw() = 0;
@@ -52,4 +62,4 @@ public:
     virtual void OnWindowSizeChanged(int width, int height) = 0;
 };
 
-std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height);
+std::unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height, bool bUseImgui);

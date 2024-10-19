@@ -23,7 +23,7 @@
     <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
-    <ClInclude Include="MouseProcedure.h" />
+    <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="UserInterface\Button.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
@@ -56,7 +56,7 @@
     <ClCompile Include="GameMainLoop.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="MouseProcedure.cpp" />
+    <ClCompile Include="WindowProcedure.cpp" />
     <ClCompile Include="UserInterface\Button.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>

@@ -39,7 +39,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	//DirectX 관련 리소스가 잘 소멸됐는지 ReportLiveObjects함수로 확인하기 때문이다.
 	{
 		unique_ptr<MainLoop> mainLoop = make_unique<ToolMainLoop>();
-		auto initResult = mainLoop->Initialize(hInstance, L"../Resources/", nShowCmd);
+		auto initResult = mainLoop->Initialize(hInstance, L"../Resources/", nShowCmd, true);
 		if (!initResult)
 			return 1;
 

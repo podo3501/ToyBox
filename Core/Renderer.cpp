@@ -2,15 +2,22 @@
 #include "Renderer.h"
 #include "DeviceResources.h"
 #include "TextureIndexing.h"
+#include "Imgui.h"
 #include "Utility.h"
 
 constexpr size_t DescriptorHeapSize = 100;
 
 using namespace DirectX;
 
-unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
+unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height, bool bUseImgui)
 {
-    unique_ptr<Renderer> renderer = make_unique<Renderer>(hwnd, width, height);
+    unique_ptr<IImgui> imgui{ nullptr };
+    if (bUseImgui)
+        imgui = make_unique<Imgui>(hwnd);
+    else
+        imgui = make_unique<NullImgui>();
+
+    unique_ptr<Renderer> renderer = make_unique<Renderer>(hwnd, width, height, move(imgui));
     auto result = renderer->Initialize();
     if (!result)
         return nullptr;
@@ -18,7 +25,8 @@ unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height)
     return move(renderer);
 }
 
-Renderer::Renderer(HWND hwnd, int width, int height) noexcept(false)
+Renderer::Renderer(HWND hwnd, int width, int height, unique_ptr<IImgui>&& imgui) noexcept(false) :
+    m_imgui{ move(imgui) }
 {
     WICOnceInitialize();
 
@@ -66,16 +74,12 @@ bool Renderer::Initialize()
     }
 
     auto device = m_deviceResources->GetD3DDevice();
+    ReturnIfFalse(m_imgui->Initialize(device, m_resourceDescriptors->Heap()));
     m_batch = make_unique<ResourceUploadBatch>(device);
     m_texIndexing = make_unique<TextureIndexing>(
         device, m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
     return true;
-}
-
-void Renderer::AddRenderItem(IRenderItem* item)
-{
-    m_renderItems.emplace_back(item);
 }
 
 bool Renderer::LoadResources()
@@ -106,6 +110,7 @@ bool Renderer::LoadResources()
 // Draws the scene.
 void Renderer::Draw()
 {
+    m_imgui->PrepareRender();
     // Prepare the command list to render a new frame.
     m_deviceResources->Prepare();
     Clear();
@@ -116,6 +121,8 @@ void Renderer::Draw()
     // TODO: Add your rendering code here.
     ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap() };
     commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
+
+    m_imgui->Render(commandList);
     
     m_spriteBatch->Begin(commandList);
 
@@ -270,22 +277,6 @@ void Renderer::OnDeviceRestored()
 }
 #pragma endregion
 
-IGetValue* Renderer::GetValue() const noexcept
-{ 
-    return m_texIndexing.get(); 
-}
-
-ID3D12Device* Renderer::GetDevice() const noexcept
-{
-    return m_deviceResources->GetD3DDevice();
-}
-
-DescriptorHeap* Renderer::GetDescriptorHeap() const noexcept
-{
-    return m_resourceDescriptors.get();
-}
-
-ID3D12GraphicsCommandList* Renderer::GetCommandList() const noexcept
-{
-    return m_deviceResources->GetCommandList();
-}
+IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
+void Renderer::AddRenderItem(IRenderItem* item) { m_renderItems.emplace_back(item); }
+void Renderer::AddImguiItem(IImguiItem* item) { m_imgui->AddItem(item); }

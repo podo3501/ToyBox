@@ -122,9 +122,3 @@ void GameMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
 
     PIXEndEvent();
 }
-
-void GameMainLoop::Render()
-{}
-
-void GameMainLoop::CleanUp()
-{}

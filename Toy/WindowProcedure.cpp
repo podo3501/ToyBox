@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "MouseProcedure.h"
+#include "WindowProcedure.h"
 
 using namespace DirectX;
 
@@ -26,6 +26,17 @@ LRESULT MouseProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         Mouse::ProcessMessage(message, wParam, lParam);
         break;
     }
+
+    return 0;
+}
+
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+LRESULT ImguiWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+        return true;
 
     return 0;
 }

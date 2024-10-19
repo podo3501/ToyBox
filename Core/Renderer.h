@@ -8,6 +8,7 @@
 #include "../Include/IRenderItem.h"
 #include "IDeviceNotify.h"
 
+struct IImgui;
 class TextureIndexing;
 
 namespace DX
@@ -28,7 +29,7 @@ class Renderer final : public DX::IDeviceNotify, public IRenderer
 
 public:
 
-    Renderer(HWND hwnd, int width, int height) noexcept(false);
+    Renderer(HWND hwnd, int width, int height, unique_ptr<IImgui>&& imgui) noexcept(false);
     ~Renderer();
 
     Renderer(Renderer&&) = default;
@@ -45,6 +46,7 @@ public:
     virtual bool Initialize() override;
 
     virtual void AddRenderItem(IRenderItem* item) override;
+    virtual void AddImguiItem(IImguiItem* item) override;
     virtual bool LoadResources() override;
     virtual IGetValue* GetValue() const noexcept override;
     virtual void Draw() override;
@@ -58,11 +60,6 @@ public:
     virtual void OnDisplayChange() override;
     virtual void OnWindowSizeChanged(int width, int height) override;
 
-    // Other
-    ID3D12Device* GetDevice() const noexcept;
-    DescriptorHeap* GetDescriptorHeap() const noexcept;
-    ID3D12GraphicsCommandList* GetCommandList() const noexcept;
-
 private:
     void Clear();
 
@@ -74,6 +71,7 @@ private:
     std::unique_ptr<GraphicsMemory> m_graphicsMemory;
     std::unique_ptr<DescriptorHeap> m_resourceDescriptors;
     std::unique_ptr<ResourceUploadBatch> m_batch;
+    std::unique_ptr<IImgui> m_imgui;
     std::unique_ptr<SpriteBatch> m_spriteBatch;
     std::unique_ptr<TextureIndexing> m_texIndexing;
 

@@ -194,7 +194,7 @@ TEST(MainLoop, MultipleAppExcute)
 	for (auto i : std::views::iota(0, 5))
 	{
 		unique_ptr<MainLoop> mainLoop = make_unique<GameMainLoop>();
-		EXPECT_TRUE(mainLoop->Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE));
+		EXPECT_TRUE(mainLoop->Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE, true));
 		mainLoop.reset();
 	}
 }

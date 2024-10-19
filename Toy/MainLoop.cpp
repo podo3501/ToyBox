@@ -4,21 +4,21 @@
 #include "Utility.h"
 #include "Window.h"
 #include "StepTimer.h"
-#include "MouseProcedure.h"
+#include "WindowProcedure.h"
 
 MainLoop::~MainLoop() = default;
 MainLoop::MainLoop()
 {}
 
-bool MainLoop::Initialize(HINSTANCE hInstance, const wstring& resPath, int nCmdShow)
+bool MainLoop::Initialize(HINSTANCE hInstance, const wstring& resPath, int nCmdShow, bool bUseImgui)
 {
     m_resourcePath = resPath;
 
     ReturnIfFalse(XMVerifyCPUSupport());
-    ReturnIfFalse(InitializeClass(hInstance, nCmdShow));
+    ReturnIfFalse(InitializeClass(hInstance, nCmdShow, bUseImgui));
     ReturnIfFalse(InitializeDerived());
 
-    AddWinProcListener();
+    AddWinProcListener(bUseImgui);
 
     ReturnIfFalse(LoadResources(m_resourcePath));
     m_renderer->LoadResources();
@@ -28,7 +28,7 @@ bool MainLoop::Initialize(HINSTANCE hInstance, const wstring& resPath, int nCmdS
     return true;
 }
 
-bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
+bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow, bool bUseImgui)
 {
     m_window = make_unique<Window>();
     m_mouse = make_unique<Mouse>();
@@ -38,7 +38,7 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
     RECT rc{ 0, 0, 800, 600 };
     ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
     const auto& outputSize = m_window->GetOutputSize();
-    m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y));
+    m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), bUseImgui);
     if (m_renderer == nullptr)
         return false;
     m_mouse->SetWindow(hwnd);
@@ -53,17 +53,18 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow)
     return true;
 }
 
-void MainLoop::AddRenderItem(IRenderItem* item) noexcept
-{
-    m_renderer->AddRenderItem(item);
-}
-
-void MainLoop::AddWinProcListener()
+void MainLoop::AddWinProcListener(bool bUseImgui) noexcept
 {
     m_window->AddWndProcListener([mainLoop = this](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
         return mainLoop->WndProc(wnd, msg, wp, lp); });
     m_window->AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
         return MouseProc(wnd, msg, wp, lp); });
+
+    if (bUseImgui)
+    {
+        m_window->AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
+            return ImguiWndProc(wnd, msg, wp, lp); });
+    }
 }
 
 int MainLoop::Run()
@@ -80,7 +81,6 @@ int MainLoop::Run()
         else
             Tick();
     }
-    CleanUp();
 
     return static_cast<int>(msg.wParam);
 }
@@ -100,13 +100,15 @@ void MainLoop::Tick()
     if (m_timer->GetFrameCount() == 0)
         return;
 
-    Render();
     m_renderer->Draw(); //item으로 등록시킨 애들을 랜더링
 }
 
-void MainLoop::OnResuming()
+void MainLoop::OnResuming() const
 {
     m_timer->ResetElapsedTime();
 
     m_renderer->OnResuming();
 }
+
+void MainLoop::AddRenderItem(IRenderItem* item) noexcept { m_renderer->AddRenderItem(item); }
+void MainLoop::AddImguiItem(IImguiItem* item) noexcept { m_renderer->AddImguiItem(item); }
