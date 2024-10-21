@@ -2,6 +2,7 @@
 #include "../Toy/MainLoop.h"
 
 class TestImgui;
+class Dialog;
 
 class ToolMainLoop final : public MainLoop
 {
@@ -17,5 +18,6 @@ protected:
 
 private:
 	unique_ptr<TestImgui> m_testImgui;
+	unique_ptr<Dialog> m_dialog;
 };
 

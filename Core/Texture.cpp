@@ -20,6 +20,7 @@ void Texture::Upload(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUpl
 {
     DX::ThrowIfFailed(
         CreateWICTextureFromFile(device, *resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
+    
     CreateShaderResourceView(device, m_texture.Get(), descHeap->GetCpuHandle(descHeapIdx));
     m_size = GetTextureSize(m_texture.Get());
     m_descHeapIdx = descHeapIdx;

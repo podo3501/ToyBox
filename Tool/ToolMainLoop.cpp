@@ -2,6 +2,9 @@
 #include "ToolMainLoop.h"
 #include "TestImgui.h"
 #include "../Toy/Utility.h"
+#include "../Toy/UserInterface/UIType.h"
+#include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/UserInterface/UILayout.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -26,12 +29,26 @@ ToolMainLoop::ToolMainLoop() :
 
 bool ToolMainLoop::InitializeDerived()
 {
+    m_dialog = make_unique<Dialog>();
+
     return true;
 }
 
 bool ToolMainLoop::LoadResources(const wstring& resPath)
 {
     AddImguiItem(m_testImgui.get());
+
+    UILayout layout({ 0, 0, 220, 190 }, { 0.65f, 0.45f }, Origin::Center);
+    ImageSource dialogSource{
+        L"UI/Blue/button_square_header_large_square_screws.png", {
+            { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+            { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+            { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+        }
+    };
+
+    m_dialog->SetImage(resPath, dialogSource, layout);
+    AddRenderItem(m_dialog.get());
 
     return true;
 }
@@ -47,6 +64,8 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
 
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
+
+    m_dialog->Update(resolution);
 
     PIXEndEvent();
 }

@@ -74,7 +74,8 @@ bool Renderer::Initialize()
     }
 
     auto device = m_deviceResources->GetD3DDevice();
-    ReturnIfFalse(m_imgui->Initialize(device, m_resourceDescriptors->Heap()));
+    ReturnIfFalse(m_imgui->Initialize(device));
+    auto count = m_resourceDescriptors->Count();
     m_batch = make_unique<ResourceUploadBatch>(device);
     m_texIndexing = make_unique<TextureIndexing>(
         device, m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
@@ -163,8 +164,6 @@ void Renderer::Draw()
     // TODO: Add your rendering code here.
     ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap() };
     commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
-
-    m_imgui->Render(commandList);
     
     m_spriteBatch->Begin(commandList);
 
@@ -173,6 +172,8 @@ void Renderer::Draw()
         });
 
     m_spriteBatch->End();
+
+    m_imgui->Render(commandList);
 
     PIXEndEvent(commandList);
 
@@ -302,6 +303,7 @@ void Renderer::CreateWindowSizeDependentResources()
 void Renderer::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
+    m_imgui->Reset();
     m_texIndexing->Reset();
 
     m_resourceDescriptors.reset();
