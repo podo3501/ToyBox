@@ -66,6 +66,8 @@ private:
     void CreateDeviceDependentResources();
     void CreateWindowSizeDependentResources();
 
+    bool CreateRenderTexture();
+
     // Device resources.
     std::unique_ptr<DX::DeviceResources> m_deviceResources;
     std::unique_ptr<GraphicsMemory> m_graphicsMemory;

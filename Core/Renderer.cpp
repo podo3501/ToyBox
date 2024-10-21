@@ -79,6 +79,48 @@ bool Renderer::Initialize()
     m_texIndexing = make_unique<TextureIndexing>(
         device, m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
+    CreateRenderTexture();
+
+    return true;
+}
+
+bool Renderer::CreateRenderTexture()
+{
+    auto device = m_deviceResources->GetD3DDevice();
+    const CD3DX12_HEAP_PROPERTIES renderTextureHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
+    D3D12_RESOURCE_DESC renderTextureDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+        DXGI_FORMAT_B8G8R8A8_UNORM,
+        400,
+        300,
+        1, // This depth stencil view has only one texture.
+        1  // Use a single mipmap level.
+    );
+    renderTextureDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> renderTargetTexture{ nullptr };
+    device->CreateCommittedResource(
+        &renderTextureHeapProperties,
+        D3D12_HEAP_FLAG_NONE,
+        &renderTextureDesc,
+        D3D12_RESOURCE_STATE_RENDER_TARGET,
+        nullptr,
+        IID_PPV_ARGS(&renderTargetTexture)
+    );
+
+    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>        renderTextureRtvHeap;
+    D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+    rtvHeapDesc.NumDescriptors = 1;
+    rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+    rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+    device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&renderTextureRtvHeap));
+
+    D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+    rtvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+    rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(renderTextureRtvHeap->GetCPUDescriptorHandleForHeapStart());
+    device->CreateRenderTargetView(renderTargetTexture.Get(), &rtvDesc, rtvHandle);
+
     return true;
 }
 
