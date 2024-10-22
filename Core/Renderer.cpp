@@ -5,7 +5,8 @@
 #include "Imgui.h"
 #include "Utility.h"
 
-constexpr size_t DescriptorHeapSize = 100;
+constexpr size_t SrvDescriptorHeapSize = 100;
+constexpr size_t DsvDescriptorHeapSize = 50;
 
 using namespace DirectX;
 
@@ -74,53 +75,120 @@ bool Renderer::Initialize()
     }
 
     auto device = m_deviceResources->GetD3DDevice();
-    ReturnIfFalse(m_imgui->Initialize(device));
-    auto count = m_resourceDescriptors->Count();
+    ReturnIfFalse(m_imgui->Initialize(device, m_srvDescriptors->Heap(), m_deviceResources->GetBackBufferFormat()));
     m_batch = make_unique<ResourceUploadBatch>(device);
     m_texIndexing = make_unique<TextureIndexing>(
-        device, m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
+        device, m_srvDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
     CreateRenderTexture();
 
     return true;
 }
 
-bool Renderer::CreateRenderTexture()
+
+#pragma region Direct3D Resources
+// These are the resources that depend on the device.
+void Renderer::CreateDeviceDependentResources()
 {
     auto device = m_deviceResources->GetD3DDevice();
+
+    // Check Shader Model 6 support
+    D3D12_FEATURE_DATA_SHADER_MODEL shaderModel = { D3D_SHADER_MODEL_6_0 };
+    if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel)))
+        || (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_0))
+    {
+#ifdef _DEBUG
+        OutputDebugStringA("ERROR: Shader Model 6.0 is not supported!\n");
+#endif
+        throw runtime_error("Shader Model 6.0 is not supported!");
+    }
+
+    // If using the DirectX Tool Kit for DX12, uncomment this line:
+    m_graphicsMemory = make_unique<GraphicsMemory>(device);
+
+    // TODO: Initialize device dependent objects here (independent of window size).
+    m_srvDescriptors = make_unique<DescriptorHeap>(device, SrvDescriptorHeapSize);
+    m_rtvDescriptors = make_unique<DescriptorHeap>(device,
+        D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+        D3D12_DESCRIPTOR_HEAP_FLAG_NONE, DsvDescriptorHeapSize);
+
+    ResourceUploadBatch resourceUpload(device);
+
+    resourceUpload.Begin();
+
+    RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
+
+    SpriteBatchPipelineStateDescription pd(rtState);
+    m_spriteBatch = make_unique<SpriteBatch>(device, resourceUpload, pd);
+
+    auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
+
+    uploadResourcesFinished.wait();
+}
+
+// Allocate all memory resources that change on a window SizeChanged event.
+void Renderer::CreateWindowSizeDependentResources()
+{
+    // TODO: Initialize windows-size dependent objects here.
+    auto viewport = m_deviceResources->GetScreenViewport();
+    m_spriteBatch->SetViewport(viewport);
+}
+
+void Renderer::OnDeviceLost()
+{
+    // TODO: Add Direct3D resource cleanup here.
+    m_imgui->Reset();
+    m_texIndexing->Reset();
+
+    m_srvDescriptors.reset();
+    m_spriteBatch.reset();
+
+    // If using the DirectX Tool Kit for DX12, uncomment this line:
+    m_graphicsMemory.reset();
+}
+
+void Renderer::OnDeviceRestored()
+{
+    CreateDeviceDependentResources();
+
+    CreateWindowSizeDependentResources();
+}
+#pragma endregion
+
+D3D12_GPU_DESCRIPTOR_HANDLE g_srvHandle;
+bool Renderer::CreateRenderTexture()
+{
+    //화면을 저장할 Texture를 만든다.
+    auto device = m_deviceResources->GetD3DDevice();
+    const DXGI_FORMAT& textureFormat = m_deviceResources->GetBackBufferFormat();
     const CD3DX12_HEAP_PROPERTIES renderTextureHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
     D3D12_RESOURCE_DESC renderTextureDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-        DXGI_FORMAT_B8G8R8A8_UNORM,
-        400,
-        300,
+        textureFormat,
+        //DXGI_FORMAT_B8G8R8A8_UNORM,
+        800,
+        600,
         1, // This depth stencil view has only one texture.
         1  // Use a single mipmap level.
     );
     renderTextureDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 
-    Microsoft::WRL::ComPtr<ID3D12Resource> renderTargetTexture{ nullptr };
+    D3D12_CLEAR_VALUE optClear{ textureFormat, { 0.f, 0.f, 0.f, 1.f } };
     device->CreateCommittedResource(
         &renderTextureHeapProperties,
         D3D12_HEAP_FLAG_NONE,
         &renderTextureDesc,
         D3D12_RESOURCE_STATE_RENDER_TARGET,
-        nullptr,
-        IID_PPV_ARGS(&renderTargetTexture)
+        &optClear,
+        IID_PPV_ARGS(&m_renderTargetTexture)
     );
+    
+    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvDescriptors->GetFirstCpuHandle());
+    CreateRenderTargetView(device, m_renderTargetTexture.Get(), rtvHandle);
 
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>        renderTextureRtvHeap;
-    D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-    rtvHeapDesc.NumDescriptors = 1;
-    rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-    rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-    device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&renderTextureRtvHeap));
+    //텍스춰를 읽기 위해서 Srv로 만든다.
+    CreateShaderResourceView(device, m_renderTargetTexture.Get(), m_srvDescriptors->GetCpuHandle(98));
 
-    D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-    rtvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-    rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-
-    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(renderTextureRtvHeap->GetCPUDescriptorHandleForHeapStart());
-    device->CreateRenderTargetView(renderTargetTexture.Get(), &rtvDesc, rtvHandle);
+    g_srvHandle = m_srvDescriptors->GetGpuHandle(98);
 
     return true;
 }
@@ -153,17 +221,29 @@ bool Renderer::LoadResources()
 // Draws the scene.
 void Renderer::Draw()
 {
-    m_imgui->PrepareRender();
+    //m_imgui->PrepareRender();
     // Prepare the command list to render a new frame.
     m_deviceResources->Prepare();
-    Clear();
+    /*Clear();*/
 
     auto commandList = m_deviceResources->GetCommandList();
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
     // TODO: Add your rendering code here.
-    ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap() };
+    ID3D12DescriptorHeap* heaps[] = { m_srvDescriptors->Heap() };
     commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
+
+    // 클라이언트 화면을 렌더링할 렌더 타겟 뷰 설정
+    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvDescriptors->GetFirstCpuHandle());
+    commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+    //// 렌더 타겟 클리어
+    const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+    // Set the viewport and scissor rect.
+    auto const viewport = m_deviceResources->GetScreenViewport();
+    auto const scissorRect = m_deviceResources->GetScissorRect();
+    commandList->RSSetViewports(1, &viewport);
+    commandList->RSSetScissorRects(1, &scissorRect);
     
     m_spriteBatch->Begin(commandList);
 
@@ -172,6 +252,30 @@ void Renderer::Draw()
         });
 
     m_spriteBatch->End();
+
+    Clear();
+    // Start the Dear ImGui frame
+    ImGui_ImplDX12_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
+    //ImGui::Begin("Client Window");
+    ImGui::Begin("Horizontal Scrolling Example", nullptr, ImGuiWindowFlags_HorizontalScrollbar);
+
+    // 클라이언트 텍스처 크기 지정
+    ImVec2 textureSize(800.f, 600.0f);
+
+    // 텍스처 핸들 가져오기 (SRV Heap에서 Gpu Handle 가져옴)
+    
+    /*D3D12_GPU_DESCRIPTOR_HANDLE srvHandle = m_srvDescriptors->GetGpuHandle(98);*/
+
+    // ImGui에 텍스춰에 찍어논 화면을 연결
+    ImGui::Image((ImTextureID)g_srvHandle.ptr, textureSize);
+
+    ImGui::End();
+
+    // Rendering
+    ImGui::Render();
 
     m_imgui->Render(commandList);
 
@@ -252,72 +356,6 @@ void Renderer::OnWindowSizeChanged(int width, int height)
     CreateWindowSizeDependentResources();
 
     // TODO: Renderer window is being resized.
-}
-#pragma endregion
-
-#pragma region Direct3D Resources
-// These are the resources that depend on the device.
-void Renderer::CreateDeviceDependentResources()
-{
-    auto device = m_deviceResources->GetD3DDevice();
-
-    // Check Shader Model 6 support
-    D3D12_FEATURE_DATA_SHADER_MODEL shaderModel = { D3D_SHADER_MODEL_6_0 };
-    if (FAILED(device->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel)))
-        || (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_0))
-    {
-#ifdef _DEBUG
-        OutputDebugStringA("ERROR: Shader Model 6.0 is not supported!\n");
-#endif
-        throw runtime_error("Shader Model 6.0 is not supported!");
-    }
-
-    // If using the DirectX Tool Kit for DX12, uncomment this line:
-    m_graphicsMemory = make_unique<GraphicsMemory>(device);
-
-    // TODO: Initialize device dependent objects here (independent of window size).
-    m_resourceDescriptors = make_unique<DescriptorHeap>(device, DescriptorHeapSize);
-
-    ResourceUploadBatch resourceUpload(device);
-
-    resourceUpload.Begin();
-
-    RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
-
-    SpriteBatchPipelineStateDescription pd(rtState);
-    m_spriteBatch = make_unique<SpriteBatch>(device, resourceUpload, pd);
-
-    auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
-
-    uploadResourcesFinished.wait();
-}
-
-// Allocate all memory resources that change on a window SizeChanged event.
-void Renderer::CreateWindowSizeDependentResources()
-{
-    // TODO: Initialize windows-size dependent objects here.
-    auto viewport = m_deviceResources->GetScreenViewport();
-    m_spriteBatch->SetViewport(viewport);
-}
-
-void Renderer::OnDeviceLost()
-{
-    // TODO: Add Direct3D resource cleanup here.
-    m_imgui->Reset();
-    m_texIndexing->Reset();
-
-    m_resourceDescriptors.reset();
-    m_spriteBatch.reset();
-
-    // If using the DirectX Tool Kit for DX12, uncomment this line:
-    m_graphicsMemory.reset();
-}
-
-void Renderer::OnDeviceRestored()
-{
-    CreateDeviceDependentResources();
-
-    CreateWindowSizeDependentResources();
 }
 #pragma endregion
 

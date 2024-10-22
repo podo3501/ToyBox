@@ -8,8 +8,8 @@ constexpr int NUM_FRAMES_IN_FLIGHT = 2;
 
 Imgui::Imgui(HWND hwnd) :
     m_hwnd{ hwnd },
-    m_io{ nullptr },
-    m_descriptorHeap{ nullptr }
+    m_io{ nullptr }
+    //m_descriptorHeap{ nullptr }
 {}
 
 Imgui::~Imgui()
@@ -20,11 +20,8 @@ Imgui::~Imgui()
     ImGui::DestroyContext();
 }
 
-bool Imgui::Initialize(ID3D12Device* device)
+bool Imgui::Initialize(ID3D12Device* device, ID3D12DescriptorHeap* descriptorHeap, DXGI_FORMAT format)
 {
-    m_descriptorHeap = make_unique<DescriptorHeap>(device, 100);
-    ID3D12DescriptorHeap* descriptorHeap = m_descriptorHeap->Heap();
-
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     m_io = &ImGui::GetIO();
@@ -37,11 +34,14 @@ bool Imgui::Initialize(ID3D12Device* device)
     // Setup Platform/Renderer backends
     ReturnIfFalse(ImGui_ImplWin32_Init(m_hwnd));
 
-    ReturnIfFalse(ImGui_ImplDX12_Init(device, NUM_FRAMES_IN_FLIGHT,
-        DXGI_FORMAT_B8G8R8A8_UNORM, descriptorHeap,
-        descriptorHeap->GetCPUDescriptorHandleForHeapStart(),
-        descriptorHeap->GetGPUDescriptorHandleForHeapStart()));
+    UINT srvDescSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDesc{ descriptorHeap->GetCPUDescriptorHandleForHeapStart() };
+    cpuDesc.Offset(50, srvDescSize);
+    CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDesc{ descriptorHeap->GetGPUDescriptorHandleForHeapStart() };
+    gpuDesc.Offset(50, srvDescSize);
 
+    ReturnIfFalse(ImGui_ImplDX12_Init(device, NUM_FRAMES_IN_FLIGHT, format, descriptorHeap, cpuDesc, gpuDesc));
+    
     return true;
 }
 
@@ -52,8 +52,8 @@ void Imgui::AddItem(IImguiItem* item)
 
 void Imgui::Render(ID3D12GraphicsCommandList* commandList)
 {
-    ID3D12DescriptorHeap* heaps[] = { m_descriptorHeap->Heap() };
-    commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
+    //ID3D12DescriptorHeap* heaps[] = { m_descriptorHeap->Heap() };
+    //commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
     ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
 }
 
@@ -73,8 +73,13 @@ void Imgui::PrepareRender()
 
 void Imgui::Reset()
 {
-    m_descriptorHeap.reset();
+    //m_descriptorHeap.reset();
     //imgui 리셋에 대해서 처리해야할 것이 있을 수 있다.
 }
+
+//ID3D12DescriptorHeap* Imgui::GetHeap()
+//{
+//    return m_descriptorHeap->Heap();
+//}
 
 

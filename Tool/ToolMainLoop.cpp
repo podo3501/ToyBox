@@ -38,7 +38,7 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
 {
     AddImguiItem(m_testImgui.get());
 
-    UILayout layout({ 0, 0, 220, 190 }, { 0.65f, 0.45f }, Origin::Center);
+    UILayout layout({ 0, 0, 220, 190 }, { 0.f, 0.f }, Origin::LeftTop);
     ImageSource dialogSource{
         L"UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
@@ -49,6 +49,10 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
 
     m_dialog->SetImage(resPath, dialogSource, layout);
     AddRenderItem(m_dialog.get());
+
+    
+    //ImTextureID texID = renderer->GetRenderTexture({ 220, 190 }, m_dialog->Render);
+    //igWidget = make_unique<IGWidget>(texID);
 
     return true;
 }

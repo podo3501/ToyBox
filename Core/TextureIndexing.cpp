@@ -112,3 +112,8 @@ void TextureIndexing::Reset()
         tex->Reset();
         });
 }
+
+D3D12_GPU_DESCRIPTOR_HANDLE TextureIndexing::GetSrvHandle()
+{
+    return m_descHeap->GetGpuHandle(0);
+}

@@ -23,6 +23,7 @@ public:
     virtual void DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const override;
 
     void Reset();
+    D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandle();
 
 private:
 	bool IsExist(const wstring& filename, const Rectangle* rect, std::size_t& outIndex, DirectX::XMUINT2* outSize);

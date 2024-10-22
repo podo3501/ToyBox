@@ -69,13 +69,15 @@ private:
     bool CreateRenderTexture();
 
     // Device resources.
-    std::unique_ptr<DX::DeviceResources> m_deviceResources;
-    std::unique_ptr<GraphicsMemory> m_graphicsMemory;
-    std::unique_ptr<DescriptorHeap> m_resourceDescriptors;
-    std::unique_ptr<ResourceUploadBatch> m_batch;
-    std::unique_ptr<IImgui> m_imgui;
-    std::unique_ptr<SpriteBatch> m_spriteBatch;
-    std::unique_ptr<TextureIndexing> m_texIndexing;
+    unique_ptr<DX::DeviceResources> m_deviceResources;
+    unique_ptr<GraphicsMemory> m_graphicsMemory;
+    unique_ptr<DescriptorHeap> m_srvDescriptors;
+    unique_ptr<DescriptorHeap> m_rtvDescriptors;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargetTexture;
+    unique_ptr<ResourceUploadBatch> m_batch;
+    unique_ptr<IImgui> m_imgui;
+    unique_ptr<SpriteBatch> m_spriteBatch;
+    unique_ptr<TextureIndexing> m_texIndexing;
 
-    std::vector<IRenderItem*> m_renderItems;
+    vector<IRenderItem*> m_renderItems;
 };
