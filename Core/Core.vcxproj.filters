@@ -15,6 +15,7 @@
     <ClCompile Include="TextureIndexing.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Imgui.cpp" />
+    <ClCompile Include="RenderTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h" />
@@ -26,5 +27,7 @@
     <ClInclude Include="TextureIndexing.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Imgui.h" />
+    <ClInclude Include="Setting.h" />
+    <ClInclude Include="RenderTexture.h" />
   </ItemGroup>
 </Project>

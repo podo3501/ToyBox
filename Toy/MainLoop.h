@@ -28,6 +28,8 @@ protected:
     void AddRenderItem(IRenderItem* item) noexcept;
     void AddImguiItem(IImguiItem* item) noexcept;
 
+    unique_ptr<IRenderer> m_renderer;
+
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool InitializeClass(HINSTANCE hInstance, int nCmdShow, bool bUseImgui);
@@ -41,7 +43,6 @@ private:
     bool m_fullscreen{ false };
 
     wstring m_resourcePath;
-    unique_ptr<IRenderer> m_renderer;
     unique_ptr<Window> m_window;
     unique_ptr<DirectX::Mouse> m_mouse;
     unique_ptr<DX::StepTimer> m_timer;

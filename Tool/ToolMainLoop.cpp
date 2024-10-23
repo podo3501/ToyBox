@@ -22,6 +22,9 @@ extern "C"
 }
 #endif
 
+class GuiWidget
+{};
+
 ToolMainLoop::~ToolMainLoop() = default;
 ToolMainLoop::ToolMainLoop() :
     m_testImgui{ make_unique<TestImgui>() }
@@ -50,10 +53,12 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
     m_dialog->SetImage(resPath, dialogSource, layout);
     AddRenderItem(m_dialog.get());
 
-    
-    //ImTextureID texID = renderer->GetRenderTexture({ 220, 190 }, m_dialog->Render);
-    //igWidget = make_unique<IGWidget>(texID);
+    m_guiWidget = make_unique<GuiWidget>();
 
+    ImTextureID textureID{ 0 };
+    ReturnIfFalse(m_renderer->CreateRenderTexture({ 800, 600 }, m_dialog.get(), textureID));
+    //코어에서 guiwindow를 띄우고 있는데 tool 쪽으로 뺀다.
+    
     return true;
 }
 

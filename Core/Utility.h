@@ -28,3 +28,10 @@ public:
         return false;                                                \
 }
 #endif
+
+template <typename E>
+constexpr auto
+Ev(E enumerator) noexcept
+{
+    return static_cast<std::underlying_type_t<E>>(enumerator);
+}

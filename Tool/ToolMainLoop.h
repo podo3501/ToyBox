@@ -4,6 +4,8 @@
 class TestImgui;
 class Dialog;
 
+class GuiWidget;
+
 class ToolMainLoop final : public MainLoop
 {
 public:
@@ -19,5 +21,7 @@ protected:
 private:
 	unique_ptr<TestImgui> m_testImgui;
 	unique_ptr<Dialog> m_dialog;
+
+	unique_ptr<GuiWidget> m_guiWidget;
 };
 

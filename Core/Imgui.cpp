@@ -9,7 +9,6 @@ constexpr int NUM_FRAMES_IN_FLIGHT = 2;
 Imgui::Imgui(HWND hwnd) :
     m_hwnd{ hwnd },
     m_io{ nullptr }
-    //m_descriptorHeap{ nullptr }
 {}
 
 Imgui::~Imgui()
@@ -20,7 +19,7 @@ Imgui::~Imgui()
     ImGui::DestroyContext();
 }
 
-bool Imgui::Initialize(ID3D12Device* device, ID3D12DescriptorHeap* descriptorHeap, DXGI_FORMAT format)
+bool Imgui::Initialize(ID3D12Device* device, DescriptorHeap* descHeap, DXGI_FORMAT format, size_t srvOffset)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -35,12 +34,10 @@ bool Imgui::Initialize(ID3D12Device* device, ID3D12DescriptorHeap* descriptorHea
     ReturnIfFalse(ImGui_ImplWin32_Init(m_hwnd));
 
     UINT srvDescSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDesc{ descriptorHeap->GetCPUDescriptorHandleForHeapStart() };
-    cpuDesc.Offset(50, srvDescSize);
-    CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDesc{ descriptorHeap->GetGPUDescriptorHandleForHeapStart() };
-    gpuDesc.Offset(50, srvDescSize);
 
-    ReturnIfFalse(ImGui_ImplDX12_Init(device, NUM_FRAMES_IN_FLIGHT, format, descriptorHeap, cpuDesc, gpuDesc));
+    ReturnIfFalse(ImGui_ImplDX12_Init(device, NUM_FRAMES_IN_FLIGHT, format, descHeap->Heap(),
+        descHeap->GetCpuHandle(srvOffset),
+        descHeap->GetGpuHandle(srvOffset)));
     
     return true;
 }
@@ -52,8 +49,6 @@ void Imgui::AddItem(IImguiItem* item)
 
 void Imgui::Render(ID3D12GraphicsCommandList* commandList)
 {
-    //ID3D12DescriptorHeap* heaps[] = { m_descriptorHeap->Heap() };
-    //commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
     ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
 }
 
@@ -73,13 +68,6 @@ void Imgui::PrepareRender()
 
 void Imgui::Reset()
 {
-    //m_descriptorHeap.reset();
     //imgui 리셋에 대해서 처리해야할 것이 있을 수 있다.
 }
-
-//ID3D12DescriptorHeap* Imgui::GetHeap()
-//{
-//    return m_descriptorHeap->Heap();
-//}
-
 

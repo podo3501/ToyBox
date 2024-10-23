@@ -10,6 +10,7 @@
 
 struct IImgui;
 class TextureIndexing;
+class RenderTexture;
 
 namespace DX
 {
@@ -49,6 +50,7 @@ public:
     virtual void AddImguiItem(IImguiItem* item) override;
     virtual bool LoadResources() override;
     virtual IGetValue* GetValue() const noexcept override;
+    virtual bool CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID) override;
     virtual void Draw() override;
 
     // Messages
@@ -66,18 +68,15 @@ private:
     void CreateDeviceDependentResources();
     void CreateWindowSizeDependentResources();
 
-    bool CreateRenderTexture();
-
     // Device resources.
     unique_ptr<DX::DeviceResources> m_deviceResources;
     unique_ptr<GraphicsMemory> m_graphicsMemory;
     unique_ptr<DescriptorHeap> m_srvDescriptors;
-    unique_ptr<DescriptorHeap> m_rtvDescriptors;
-    Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargetTexture;
     unique_ptr<ResourceUploadBatch> m_batch;
+
     unique_ptr<IImgui> m_imgui;
     unique_ptr<SpriteBatch> m_spriteBatch;
     unique_ptr<TextureIndexing> m_texIndexing;
-
+    unique_ptr<RenderTexture> m_renderTexture;
     vector<IRenderItem*> m_renderItems;
 };

@@ -104,8 +104,20 @@
 #include "../DirectXTK12/Inc/VertexTypes.h"
 #include "../DirectXTK12/Inc/WICTextureLoader.h"
 
+//Immediate Mode GUI include
+#include "../Imgui/imgui.h"
+#include "../Imgui/imgui_impl_win32.h"
+#include "../Imgui/imgui_impl_dx12.h"
+
+#include "../Imgui/imgui_internal.h"
+
 #ifdef _DEBUG
+#define DX12_ENABLE_DEBUG_LAYER
+#endif
+
+#ifdef DX12_ENABLE_DEBUG_LAYER
 #include <dxgidebug.h>
+#pragma comment(lib, "dxguid.lib")
 #endif
 
 using namespace std;

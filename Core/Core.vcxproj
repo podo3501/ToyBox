@@ -149,6 +149,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderTexture.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureIndexing.cpp" />
     <ClCompile Include="Utility.cpp" />
@@ -160,6 +161,8 @@
     <ClInclude Include="Imgui.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderTexture.h" />
+    <ClInclude Include="Setting.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureIndexing.h" />
     <ClInclude Include="Utility.h" />

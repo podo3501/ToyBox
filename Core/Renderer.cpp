@@ -2,11 +2,10 @@
 #include "Renderer.h"
 #include "DeviceResources.h"
 #include "TextureIndexing.h"
+#include "RenderTexture.h"
 #include "Imgui.h"
 #include "Utility.h"
-
-constexpr size_t SrvDescriptorHeapSize = 100;
-constexpr size_t DsvDescriptorHeapSize = 50;
+#include "Setting.h"
 
 using namespace DirectX;
 
@@ -75,16 +74,16 @@ bool Renderer::Initialize()
     }
 
     auto device = m_deviceResources->GetD3DDevice();
-    ReturnIfFalse(m_imgui->Initialize(device, m_srvDescriptors->Heap(), m_deviceResources->GetBackBufferFormat()));
+    auto format = m_deviceResources->GetBackBufferFormat();
+    ReturnIfFalse(m_imgui->Initialize(device, m_srvDescriptors.get(), format, Ev(SrvOffset::Imgui)));
     m_batch = make_unique<ResourceUploadBatch>(device);
     m_texIndexing = make_unique<TextureIndexing>(
         device, m_srvDescriptors.get(), m_batch.get(), m_spriteBatch.get());
-
-    CreateRenderTexture();
+    m_renderTexture = make_unique<RenderTexture>(device, m_srvDescriptors.get());
+    //m_renderTexture->Create(format, { 800, 600 }, Ev(SrvOffset::RenderTexture), nullptr);
 
     return true;
 }
-
 
 #pragma region Direct3D Resources
 // These are the resources that depend on the device.
@@ -107,10 +106,7 @@ void Renderer::CreateDeviceDependentResources()
     m_graphicsMemory = make_unique<GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_srvDescriptors = make_unique<DescriptorHeap>(device, SrvDescriptorHeapSize);
-    m_rtvDescriptors = make_unique<DescriptorHeap>(device,
-        D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
-        D3D12_DESCRIPTOR_HEAP_FLAG_NONE, DsvDescriptorHeapSize);
+    m_srvDescriptors = make_unique<DescriptorHeap>(device, Ev(SrvOffset::Count));
 
     ResourceUploadBatch resourceUpload(device);
 
@@ -155,44 +151,6 @@ void Renderer::OnDeviceRestored()
 }
 #pragma endregion
 
-D3D12_GPU_DESCRIPTOR_HANDLE g_srvHandle;
-bool Renderer::CreateRenderTexture()
-{
-    //화면을 저장할 Texture를 만든다.
-    auto device = m_deviceResources->GetD3DDevice();
-    const DXGI_FORMAT& textureFormat = m_deviceResources->GetBackBufferFormat();
-    const CD3DX12_HEAP_PROPERTIES renderTextureHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
-    D3D12_RESOURCE_DESC renderTextureDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-        textureFormat,
-        //DXGI_FORMAT_B8G8R8A8_UNORM,
-        800,
-        600,
-        1, // This depth stencil view has only one texture.
-        1  // Use a single mipmap level.
-    );
-    renderTextureDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-
-    D3D12_CLEAR_VALUE optClear{ textureFormat, { 0.f, 0.f, 0.f, 1.f } };
-    device->CreateCommittedResource(
-        &renderTextureHeapProperties,
-        D3D12_HEAP_FLAG_NONE,
-        &renderTextureDesc,
-        D3D12_RESOURCE_STATE_RENDER_TARGET,
-        &optClear,
-        IID_PPV_ARGS(&m_renderTargetTexture)
-    );
-    
-    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvDescriptors->GetFirstCpuHandle());
-    CreateRenderTargetView(device, m_renderTargetTexture.Get(), rtvHandle);
-
-    //텍스춰를 읽기 위해서 Srv로 만든다.
-    CreateShaderResourceView(device, m_renderTargetTexture.Get(), m_srvDescriptors->GetCpuHandle(98));
-
-    g_srvHandle = m_srvDescriptors->GetGpuHandle(98);
-
-    return true;
-}
-
 bool Renderer::LoadResources()
 {
     //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
@@ -233,25 +191,19 @@ void Renderer::Draw()
     ID3D12DescriptorHeap* heaps[] = { m_srvDescriptors->Heap() };
     commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
 
-    // 클라이언트 화면을 렌더링할 렌더 타겟 뷰 설정
-    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvDescriptors->GetFirstCpuHandle());
-    commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
-    //// 렌더 타겟 클리어
-    const float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-    commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
     // Set the viewport and scissor rect.
     auto const viewport = m_deviceResources->GetScreenViewport();
     auto const scissorRect = m_deviceResources->GetScissorRect();
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissorRect);
-    
-    m_spriteBatch->Begin(commandList);
 
-    ranges::for_each(m_renderItems, [renderer = m_texIndexing.get()](const auto item) {
-        item->Render(renderer);
-        });
+    m_renderTexture->Render(commandList, m_texIndexing.get(), m_spriteBatch.get(), *m_renderItems.begin());
 
-    m_spriteBatch->End();
+    //m_spriteBatch->Begin(commandList);
+    //ranges::for_each(m_renderItems, [renderer = m_texIndexing.get()](const auto item) {
+    //    item->Render(renderer);
+    //    });
+    //m_spriteBatch->End();
 
     Clear();
     // Start the Dear ImGui frame
@@ -265,12 +217,8 @@ void Renderer::Draw()
     // 클라이언트 텍스처 크기 지정
     ImVec2 textureSize(800.f, 600.0f);
 
-    // 텍스처 핸들 가져오기 (SRV Heap에서 Gpu Handle 가져옴)
-    
-    /*D3D12_GPU_DESCRIPTOR_HANDLE srvHandle = m_srvDescriptors->GetGpuHandle(98);*/
-
     // ImGui에 텍스춰에 찍어논 화면을 연결
-    ImGui::Image((ImTextureID)g_srvHandle.ptr, textureSize);
+    ImGui::Image(m_renderTexture->GetTextureID(), textureSize);
 
     ImGui::End();
 
@@ -362,3 +310,12 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
 void Renderer::AddRenderItem(IRenderItem* item) { m_renderItems.emplace_back(item); }
 void Renderer::AddImguiItem(IImguiItem* item) { m_imgui->AddItem(item); }
+
+bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID)
+{
+    auto format = m_deviceResources->GetBackBufferFormat();
+    ReturnIfFalse(m_renderTexture->Create(format, size, Ev(SrvOffset::RenderTexture), renderItem));
+    outTextureID = m_renderTexture->GetTextureID();
+
+    return true;
+}
