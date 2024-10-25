@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="TestImgui.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -150,6 +151,7 @@
     <ClCompile Include="ToolMainLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="TestImgui.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToolMainLoop.h" />

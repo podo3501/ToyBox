@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ToolMainLoop.h"
 #include "TestImgui.h"
+#include "GuiWidget.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/Dialog.h"
@@ -22,9 +23,6 @@ extern "C"
 }
 #endif
 
-class GuiWidget
-{};
-
 ToolMainLoop::~ToolMainLoop() = default;
 ToolMainLoop::ToolMainLoop() :
     m_testImgui{ make_unique<TestImgui>() }
@@ -41,7 +39,10 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
 {
     AddImguiItem(m_testImgui.get());
 
-    UILayout layout({ 0, 0, 220, 190 }, { 0.f, 0.f }, Origin::LeftTop);
+    Rectangle rect{ 0, 0, 220, 190 };
+    XMUINT2 size{ static_cast<uint32_t>(rect.width), static_cast<uint32_t>(rect.height) };
+    //XMUINT2 size{ 800, 600 };
+    UILayout layout(move(rect), { 0.f, 0.f }, Origin::LeftTop);
     ImageSource dialogSource{
         L"UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
@@ -54,10 +55,8 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
     AddRenderItem(m_dialog.get());
 
     m_guiWidget = make_unique<GuiWidget>();
-
-    ImTextureID textureID{ 0 };
-    ReturnIfFalse(m_renderer->CreateRenderTexture({ 800, 600 }, m_dialog.get(), textureID));
-    //코어에서 guiwindow를 띄우고 있는데 tool 쪽으로 뺀다.
+    ReturnIfFalse(m_guiWidget->Create(m_renderer.get(), size, m_dialog.get()));
+    AddImguiItem(m_guiWidget.get());
     
     return true;
 }

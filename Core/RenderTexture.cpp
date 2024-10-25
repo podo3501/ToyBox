@@ -10,7 +10,6 @@ RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor
     m_device(device),
     m_srvDescriptor{ srvDescriptor },
     m_renderTargetTexture{ nullptr },
-    m_srvHandle{},
     m_renderItem{ nullptr }
 {
     m_rtvDescriptor = make_unique<DescriptorHeap>(device,
@@ -21,6 +20,7 @@ RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor
 bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderItem* renderItem)
 {
     m_renderItem = renderItem;
+    m_size = size;
     //화면을 저장할 Texture를 만든다.
     const CD3DX12_HEAP_PROPERTIES renderTextureHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
     D3D12_RESOURCE_DESC renderTextureDesc = CD3DX12_RESOURCE_DESC::Tex2D(
@@ -51,8 +51,23 @@ bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, I
     return true;
 }
 
-void RenderTexture::Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite, IRenderItem* renderItem)
+void RenderTexture::Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite)
 {
+    if (m_renderItem == nullptr)
+        return;
+
+    //D3D12_VIEWPORT viewport{};
+    //viewport.Width = static_cast<float>(m_size.x);
+    //viewport.Height = static_cast<float>(m_size.y);
+    //viewport.MaxDepth = 1.0f;
+
+    //D3D12_RECT scissorRect{};
+    //scissorRect.right = static_cast<long>(m_size.x);
+    //scissorRect.bottom = static_cast<long>(m_size.y);
+
+    //commandList->RSSetViewports(1, &viewport);
+    //commandList->RSSetScissorRects(1, &scissorRect);
+
     // 클라이언트 화면을 렌더링할 렌더 타겟 뷰 설정
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvDescriptor->GetFirstCpuHandle());
     commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
@@ -60,10 +75,7 @@ void RenderTexture::Render(ID3D12GraphicsCommandList* commandList, IRender* rend
 
     sprite->Begin(commandList);
 
-    /*if (!m_renderItem)
-        renderItem->Render(renderer);
-    else*/
-        m_renderItem->Render(renderer);
+    m_renderItem->Render(renderer);
 
     sprite->End();
 }

@@ -9,7 +9,7 @@ public:
 	~RenderTexture();
 
 	bool Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderItem* renderItem);
-	void Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite, IRenderItem* renderItem);
+	void Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite);
 	ImTextureID GetTextureID() const noexcept { return static_cast<ImTextureID>(m_srvHandle.ptr); }
 
 private:
@@ -18,6 +18,7 @@ private:
 	unique_ptr<DescriptorHeap> m_rtvDescriptor;
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargetTexture;
 
-	D3D12_GPU_DESCRIPTOR_HANDLE m_srvHandle;
+	XMUINT2 m_size{};
+	D3D12_GPU_DESCRIPTOR_HANDLE m_srvHandle{};
 	IRenderItem* m_renderItem;
 };

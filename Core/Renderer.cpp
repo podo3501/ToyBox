@@ -80,7 +80,6 @@ bool Renderer::Initialize()
     m_texIndexing = make_unique<TextureIndexing>(
         device, m_srvDescriptors.get(), m_batch.get(), m_spriteBatch.get());
     m_renderTexture = make_unique<RenderTexture>(device, m_srvDescriptors.get());
-    //m_renderTexture->Create(format, { 800, 600 }, Ev(SrvOffset::RenderTexture), nullptr);
 
     return true;
 }
@@ -179,10 +178,8 @@ bool Renderer::LoadResources()
 // Draws the scene.
 void Renderer::Draw()
 {
-    //m_imgui->PrepareRender();
     // Prepare the command list to render a new frame.
     m_deviceResources->Prepare();
-    /*Clear();*/
 
     auto commandList = m_deviceResources->GetCommandList();
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
@@ -197,34 +194,18 @@ void Renderer::Draw()
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissorRect);
 
-    m_renderTexture->Render(commandList, m_texIndexing.get(), m_spriteBatch.get(), *m_renderItems.begin());
-
-    //m_spriteBatch->Begin(commandList);
-    //ranges::for_each(m_renderItems, [renderer = m_texIndexing.get()](const auto item) {
-    //    item->Render(renderer);
-    //    });
-    //m_spriteBatch->End();
+    m_renderTexture->Render(commandList, m_texIndexing.get(), m_spriteBatch.get());
 
     Clear();
-    // Start the Dear ImGui frame
-    ImGui_ImplDX12_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
 
-    //ImGui::Begin("Client Window");
-    ImGui::Begin("Horizontal Scrolling Example", nullptr, ImGuiWindowFlags_HorizontalScrollbar);
+    m_spriteBatch->Begin(commandList);
+    ranges::for_each(m_renderItems, [renderer = m_texIndexing.get()](const auto item) {
+        item->Render(renderer);
+        });
+    m_spriteBatch->End();
 
-    // 클라이언트 텍스처 크기 지정
-    ImVec2 textureSize(800.f, 600.0f);
-
-    // ImGui에 텍스춰에 찍어논 화면을 연결
-    ImGui::Image(m_renderTexture->GetTextureID(), textureSize);
-
-    ImGui::End();
-
-    // Rendering
-    ImGui::Render();
-
+    //imgui들을 렌더링 한다.
+    m_imgui->PrepareRender();
     m_imgui->Render(commandList);
 
     PIXEndEvent(commandList);
