@@ -17,6 +17,8 @@ RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor
         D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1);
 }
 
+int g_index{ 0 };
+Microsoft::WRL::ComPtr<ID3D12Resource> g_renderTargetTexture[10] = { nullptr, };
 bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderItem* renderItem)
 {
     m_renderItem = renderItem;
@@ -33,19 +35,35 @@ bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, I
 
     D3D12_CLEAR_VALUE optClear{ texFormat, { ClearColor[0], ClearColor[1], ClearColor[2], ClearColor[3] } };
     
+    //if (m_rtvDescriptor)
+    //{
+    //    m_rtvDescriptor.reset();
+    //    m_rtvDescriptor = nullptr;
+    //}
+
+    //m_rtvDescriptor = make_unique<DescriptorHeap>(m_device,
+    //    D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+    //    D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1);
+
+    //if (m_renderTargetTexture)
+    //{
+    //    m_renderTargetTexture->Release();
+    //}
+
+    ID3D12Resource* curResource = g_renderTargetTexture[g_index++].Get();
     ReturnIfFailed(m_device->CreateCommittedResource(
         &renderTextureHeapProperties,
         D3D12_HEAP_FLAG_NONE,
         &renderTextureDesc,
         D3D12_RESOURCE_STATE_RENDER_TARGET,
         &optClear,
-        IID_PPV_ARGS(&m_renderTargetTexture)
+        IID_PPV_ARGS(&curResource)
     ));
 
-    CreateRenderTargetView(m_device, m_renderTargetTexture.Get(), m_rtvDescriptor->GetFirstCpuHandle());
+    CreateRenderTargetView(m_device, curResource, m_rtvDescriptor->GetFirstCpuHandle());
 
     //텍스춰를 읽기 위해서 Srv로 만든다.
-    CreateShaderResourceView(m_device, m_renderTargetTexture.Get(), m_srvDescriptor->GetCpuHandle(offset));
+    CreateShaderResourceView(m_device, curResource, m_srvDescriptor->GetCpuHandle(offset));
     m_srvHandle = m_srvDescriptor->GetGpuHandle(offset);
 
     return true;

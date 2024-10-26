@@ -74,6 +74,7 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
     m_dialog->Update(resolution);
+    m_guiWidget->Update();
 
     PIXEndEvent();
 }

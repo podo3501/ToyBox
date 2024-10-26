@@ -24,6 +24,11 @@ bool TextArea::LoadResources(ILoadData* load)
 	return true;
 }
 
+const Rectangle& TextArea::GetArea() const noexcept 
+{ 
+	return m_layout->GetArea(); 
+}
+
 void TextArea::SetFont(const wstring& resPath, const map<wstring, wstring>& fontFileList, const UILayout& layout)
 {
 	m_layout = make_unique<UILayout>(layout);

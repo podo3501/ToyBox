@@ -29,7 +29,7 @@ void UILayout::Set(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) n
 	Set(move(normalizedPos));
 }
 
-void UILayout::Set(Rectangle&& area) noexcept
+void UILayout::Set(const Rectangle& area) noexcept
 {
 	m_area = area;
 	Set(move(m_origin));
@@ -55,4 +55,9 @@ void UILayout::Set(Rectangle&& area, Vector2&& normalPos) noexcept
 Vector2 UILayout::GetPosition(const Vector2& resolution) const noexcept
 {
 	return ( resolution * m_normalizedPosition ) - m_originPoint;
+}
+
+bool UILayout::IsArea(const Vector2& pos) const noexcept
+{
+	return m_area.Contains(pos);
 }

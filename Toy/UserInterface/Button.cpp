@@ -6,6 +6,8 @@
 #include "UILayout.h"
 #include "ImagePartSet.h"
 
+const Rectangle& Button::GetArea() const noexcept { return m_layout->GetArea(); }
+
 Button::~Button() = default;
 Button::Button() :
 	m_layout{ nullptr }

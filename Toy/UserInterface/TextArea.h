@@ -12,6 +12,8 @@ public:
 
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual void Render(IRender* render) override;
+	virtual bool IsPicking(const Vector2&)  const noexcept override { return false; }
+	virtual const Rectangle& GetArea() const noexcept override;
 
 	void Update(const Vector2& resolution) noexcept;
 	void SetFont(const wstring& resPath, const map<wstring, wstring>& fontFileList, const UILayout& layout);

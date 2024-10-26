@@ -25,6 +25,8 @@ public:
 
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual void Render(IRender* renderer) override;
+	virtual bool IsPicking(const Vector2&)  const noexcept override { return false; }
+	virtual const Rectangle& GetArea() const noexcept override;
 	
 	void SetImage(
 		const wstring& resPath,

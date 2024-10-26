@@ -28,7 +28,7 @@ void Dialog::SetImage(
 	m_imagePartSet = make_unique<ImagePartSet>(resPath, sources);
 }
 
-bool Dialog::ChangeArea(Rectangle&& area) noexcept
+bool Dialog::ChangeArea(const Rectangle& area) noexcept
 {
 	ReturnIfFalse(m_imagePartSet->SetDestination(area));
 
@@ -45,4 +45,14 @@ void Dialog::Update(const Vector2& resolution) noexcept
 void Dialog::Render(IRender* renderer)
 {
 	m_imagePartSet->Render(renderer);
+}
+
+bool Dialog::IsPicking(const Vector2& pos) const noexcept
+{
+	return m_layout->IsArea(pos);
+}
+
+const Rectangle& Dialog::GetArea() const noexcept
+{
+	return m_layout->GetArea();
 }

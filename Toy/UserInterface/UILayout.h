@@ -13,13 +13,15 @@ public:
 	UILayout(UILayout&& layout) noexcept = default;
 
 	void Set(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) noexcept;
-	void Set(Rectangle&& area) noexcept;
+	void Set(const Rectangle& area) noexcept;
 	void Set(Vector2&& normalPos) noexcept;
 	void Set(Origin&& origin) noexcept;
 	void Set(Rectangle&& area, Vector2&& normalPos) noexcept;
 
 	const Rectangle& GetArea() const noexcept { return m_area; }
 	Vector2 GetPosition(const Vector2& resolution) const noexcept;
+
+	bool IsArea(const Vector2& pos) const noexcept;
 
 private:
 	Vector2 GetOriginPoint(Origin origin) const noexcept;

@@ -18,12 +18,14 @@ public:
 
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual void Render(IRender* renderer) override;
+	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
+	virtual const Rectangle& GetArea() const noexcept;
 
 	void SetImage(
 		const wstring& resPath,
 		const ImageSource& sources,
 		const UILayout& layout);
-	bool ChangeArea(Rectangle&& area) noexcept;
+	bool ChangeArea(const Rectangle& area) noexcept;
 	void Update(const Vector2& resolution) noexcept;
 
 private:
