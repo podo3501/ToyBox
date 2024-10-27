@@ -47,8 +47,10 @@ public:
     virtual ~IRenderer() {};
 
     virtual bool Initialize() = 0;
+    virtual void AddLoadResource(IRenderItem* item) = 0;
     virtual void AddRenderItem(IRenderItem* item) = 0;
     virtual void AddImguiItem(IImguiItem* item) = 0;
+
     virtual bool LoadResources() = 0;
     virtual IGetValue* GetValue() const noexcept = 0;
     virtual bool CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID) = 0;

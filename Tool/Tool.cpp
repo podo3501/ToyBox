@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "ToolMainLoop.h"
+#include "../Toy/Window.h"
+#include "../Toy/WindowProcedure.h"
+#include "../Include/IRenderer.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()
@@ -33,17 +36,38 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-	int result = { 0 };
+	int nResult = { 0 };
 	//ToDo: 여기에 필요한 것을 초기화
 	//괄호로 감싼 이유는 MainLoop의 스마트 포인터 소멸자를 호출해 주기 위해서이며,
 	//DirectX 관련 리소스가 잘 소멸됐는지 ReportLiveObjects함수로 확인하기 때문이다.
 	{
-		unique_ptr<MainLoop> mainLoop = make_unique<ToolMainLoop>();
-		auto initResult = mainLoop->Initialize(hInstance, L"../Resources/", nShowCmd, true);
-		if (!initResult)
+		auto result = XMVerifyCPUSupport();
+		if (not result)
 			return 1;
 
-		result = mainLoop->Run();
+		Window window;
+		HWND hwnd{};
+		result = window.Create(hInstance, nShowCmd, { 0, 0, 800, 600 }, hwnd);
+		if (not result)
+			return 1;
+
+		bool bImgui = true;
+		if (bImgui)
+			window.AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
+				return ImguiWndProc(wnd, msg, wp, lp); });
+
+		const auto& outputSize = window.GetOutputSize();
+		unique_ptr<IRenderer> renderer = CreateRenderer(hwnd,
+			static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), bImgui);
+		if (not renderer)
+			return 1;
+
+		unique_ptr<MainLoop> mainLoop = make_unique<ToolMainLoop>(&window, renderer.get());
+		result = mainLoop->Initialize(L"../Resources/");
+		if (not result)
+			return 1;
+
+		nResult = mainLoop->Run();
 		mainLoop.reset();
 	}
 
@@ -51,5 +75,5 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 	ReportLiveObjects();
 #endif
 
-	return result;
+	return nResult;
 }

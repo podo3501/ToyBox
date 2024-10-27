@@ -8,7 +8,8 @@ class TextArea;
 class GameMainLoop final : public MainLoop
 {
 public:
-	GameMainLoop();
+	GameMainLoop() = delete;
+	GameMainLoop(Window* window, IRenderer* renderer);
 	virtual ~GameMainLoop();
 
 protected:
@@ -18,6 +19,9 @@ protected:
 	virtual void Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker) override;
 
 private:
+	Window* m_window;
+	IRenderer* m_renderer;
+
 	unique_ptr<Button>m_button;
 	unique_ptr<Button>m_button2;
 	unique_ptr<Button>m_closeButton;

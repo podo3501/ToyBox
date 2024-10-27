@@ -30,6 +30,7 @@ public:
 	
 	void SetImage(
 		const wstring& resPath,
+		IRenderer* renderer,
 		const vector<ImageSource>& normal,
 		const vector<ImageSource>& hover,
 		const vector<ImageSource>& pressed,

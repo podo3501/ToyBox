@@ -9,7 +9,6 @@ RenderTexture::~RenderTexture() = default;
 RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor) :
     m_device(device),
     m_srvDescriptor{ srvDescriptor },
-    m_renderTargetTexture{ nullptr },
     m_renderItem{ nullptr }
 {
     m_rtvDescriptor = make_unique<DescriptorHeap>(device,
@@ -17,8 +16,6 @@ RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor
         D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1);
 }
 
-int g_index{ 0 };
-Microsoft::WRL::ComPtr<ID3D12Resource> g_renderTargetTexture[10] = { nullptr, };
 bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderItem* renderItem)
 {
     m_renderItem = renderItem;
@@ -35,35 +32,25 @@ bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, I
 
     D3D12_CLEAR_VALUE optClear{ texFormat, { ClearColor[0], ClearColor[1], ClearColor[2], ClearColor[3] } };
     
-    //if (m_rtvDescriptor)
-    //{
-    //    m_rtvDescriptor.reset();
-    //    m_rtvDescriptor = nullptr;
-    //}
-
-    //m_rtvDescriptor = make_unique<DescriptorHeap>(m_device,
-    //    D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
-    //    D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1);
-
-    //if (m_renderTargetTexture)
-    //{
-    //    m_renderTargetTexture->Release();
-    //}
-
-    ID3D12Resource* curResource = g_renderTargetTexture[g_index++].Get();
+    //새로운 텍스춰를 만들어야 하는데 같은 ID3D12Resource 변수를 지정할 경우 graphic card에서는 아직
+    //사용하고 있어서 안된다. 그래서 변수를 몇개 만들어서 돌아가면서 사용함
+    if (m_renderTargetIndex >= RenderTargetCount)
+        m_renderTargetIndex = 0;
+    auto& curResource = m_renderTargetTexture[m_renderTargetIndex++] ;
+    
     ReturnIfFailed(m_device->CreateCommittedResource(
         &renderTextureHeapProperties,
         D3D12_HEAP_FLAG_NONE,
         &renderTextureDesc,
         D3D12_RESOURCE_STATE_RENDER_TARGET,
         &optClear,
-        IID_PPV_ARGS(&curResource)
+        IID_PPV_ARGS(curResource.ReleaseAndGetAddressOf())
     ));
 
-    CreateRenderTargetView(m_device, curResource, m_rtvDescriptor->GetFirstCpuHandle());
+    CreateRenderTargetView(m_device, curResource.Get(), m_rtvDescriptor->GetFirstCpuHandle());
 
     //텍스춰를 읽기 위해서 Srv로 만든다.
-    CreateShaderResourceView(m_device, curResource, m_srvDescriptor->GetCpuHandle(offset));
+    CreateShaderResourceView(m_device, curResource.Get(), m_srvDescriptor->GetCpuHandle(offset));
     m_srvHandle = m_srvDescriptor->GetGpuHandle(offset);
 
     return true;

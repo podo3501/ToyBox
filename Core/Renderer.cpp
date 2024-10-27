@@ -164,7 +164,7 @@ bool Renderer::LoadResources()
     m_batch->Begin();
     //resourceUpload.Begin();
 
-    ReturnIfFalse(ranges::all_of(m_renderItems, [load = m_texIndexing.get()](const auto item) {
+    ReturnIfFalse(ranges::all_of(m_loadItems, [load = m_texIndexing.get()](const auto item) {
         return item->LoadResources(load);
         }));
 
@@ -289,6 +289,7 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 #pragma endregion
 
 IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
+void Renderer::AddLoadResource(IRenderItem* item) { m_loadItems.emplace_back(item); }
 void Renderer::AddRenderItem(IRenderItem* item) { m_renderItems.emplace_back(item); }
 void Renderer::AddImguiItem(IImguiItem* item) { m_imgui->AddItem(item); }
 

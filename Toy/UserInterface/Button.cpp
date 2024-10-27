@@ -73,6 +73,7 @@ void Button::Render(IRender* render)
 
 void Button::SetImage(
 	const wstring& resPath,
+	IRenderer* renderer,
 	const vector<ImageSource>& normal,
 	const vector<ImageSource>& hover,
 	const vector<ImageSource>& pressed,
@@ -87,6 +88,8 @@ void Button::SetImage(
 		m_image.insert(make_pair(btnState, move(imgPartSet)));
 		btnState = static_cast<ButtonState>(static_cast<int>(btnState) + 1);
 	}
+
+	renderer->AddLoadResource(this);
 }
 
 void Button::ChangeOrigin(Origin&& origin) noexcept

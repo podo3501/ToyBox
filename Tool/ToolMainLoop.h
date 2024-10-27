@@ -1,6 +1,8 @@
 #pragma once
 #include "../Toy/MainLoop.h"
 
+struct IRenderer;
+class Window;
 class TestImgui;
 class Dialog;
 
@@ -9,7 +11,8 @@ class GuiWidget;
 class ToolMainLoop final : public MainLoop
 {
 public:
-	ToolMainLoop();
+	ToolMainLoop() = delete;
+	ToolMainLoop(Window* window, IRenderer* renderer);
 	virtual ~ToolMainLoop();
 
 protected:
@@ -19,6 +22,9 @@ protected:
 	virtual void Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker) override;
 
 private:
+	Window* m_window;
+	IRenderer* m_renderer;
+
 	unique_ptr<TestImgui> m_testImgui;
 	unique_ptr<Dialog> m_dialog;
 

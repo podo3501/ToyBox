@@ -2,6 +2,7 @@
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
 #include "../Toy/GameMainLoop.h"
+#include "../Toy/WindowProcedure.h"
 #include "../Toy/Window.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UILayout.h"
@@ -69,7 +70,7 @@ TEST_F(ToyTest, ButtonTest)
 	};
 
 	UILayout layout({ 0, 0, 116, 48 }, { 0.5f, 0.5f }, Origin::Center);
-	button->SetImage(L"Resources/", normal, hover, pressed, layout);
+	button->SetImage(L"Resources/", m_renderer.get(), normal, hover, pressed, layout);
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -115,7 +116,7 @@ TEST_F(ToyTest, DialogTest)
 		}
 	};
 	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
-	dialog->SetImage(L"Resources/", dialogSource, layout);
+	dialog->SetImage(L"Resources/", m_renderer.get(), dialogSource, layout);
 	dialog->ChangeArea({ 0, 0, 200, 150 });
 	m_renderer->AddRenderItem(dialog.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
@@ -143,7 +144,7 @@ TEST_F(ToyTest, CloseButton)
 	vector<ImageSource> pressed { { L"UI/Gray/check_square_grey_cross.png" } };
 
 	UILayout layout({ 0, 0, 32, 32 }, { 0.2f, 0.2f }, Origin::Center);
-	button->SetImage(L"Resources/", normal, hover, pressed, move(layout));
+	button->SetImage(L"Resources/", m_renderer.get(), normal, hover, pressed, move(layout));
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -174,8 +175,9 @@ TEST_F(ToyTest, TextArea)
 	map<wstring, wstring> fontFileList;
 	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
 	fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-	textArea->SetFont(L"Resources/", fontFileList, layout);
+	textArea->SetFont(L"Resources/", m_renderer.get(), fontFileList, layout);
 	m_renderer->AddRenderItem(textArea.get());
+
 	m_renderer->LoadResources();
 
 	textArea->SetText(m_renderer->GetValue(),
@@ -193,8 +195,26 @@ TEST(MainLoop, MultipleAppExcute)
 {
 	for (auto i : std::views::iota(0, 5))
 	{
-		unique_ptr<MainLoop> mainLoop = make_unique<GameMainLoop>();
-		EXPECT_TRUE(mainLoop->Initialize(GetModuleHandle(nullptr), L"Resources/", SW_HIDE, true));
+		auto result = XMVerifyCPUSupport();
+		EXPECT_TRUE(result);
+
+		Window window;
+		HWND hwnd{};
+		result = window.Create(GetModuleHandle(nullptr), SW_HIDE, { 0, 0, 800, 600 }, hwnd);
+		EXPECT_TRUE(result);
+
+		bool bImgui = true;
+		if (bImgui)
+			window.AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
+			return ImguiWndProc(wnd, msg, wp, lp); });
+
+		const auto& outputSize = window.GetOutputSize();
+		unique_ptr<IRenderer> renderer = CreateRenderer(hwnd,
+			static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), bImgui);
+		EXPECT_TRUE(renderer != nullptr);
+
+		unique_ptr<MainLoop> mainLoop = make_unique<GameMainLoop>(&window, renderer.get());
+		EXPECT_TRUE(mainLoop->Initialize(L"Resources/"));
 		mainLoop.reset();
 	}
 }

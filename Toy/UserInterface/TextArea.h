@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Include/IRenderItem.h"
 
+struct IRenderer;
 class UILayout;
 struct TextData;
 
@@ -16,7 +17,7 @@ public:
 	virtual const Rectangle& GetArea() const noexcept override;
 
 	void Update(const Vector2& resolution) noexcept;
-	void SetFont(const wstring& resPath, const map<wstring, wstring>& fontFileList, const UILayout& layout);
+	void SetFont(const wstring& resPath, IRenderer* renderer, const map<wstring, wstring>& fontFileList, const UILayout& layout);
 	bool SetText(IGetValue* update, wstring&& text);
 
 private:

@@ -23,6 +23,7 @@ public:
 
 	void SetImage(
 		const wstring& resPath,
+		IRenderer* renderer,
 		const ImageSource& sources,
 		const UILayout& layout);
 	bool ChangeArea(const Rectangle& area) noexcept;

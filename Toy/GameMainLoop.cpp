@@ -25,7 +25,10 @@ extern "C"
 #endif
 
 GameMainLoop::~GameMainLoop() = default;
-GameMainLoop::GameMainLoop()
+GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
+    ::MainLoop(window, renderer),
+    m_window{ window },
+    m_renderer{ renderer }
 {}
 
 bool GameMainLoop::InitializeDerived()
@@ -61,12 +64,12 @@ bool GameMainLoop::LoadResources(const wstring& resPath)
     };
 
     UILayout layout({ 0, 0, 180, 48 }, { 0.5f, 0.5f }, Origin::Center);
-    m_button->SetImage(resPath, normal, hover, pressed, layout);
+    m_button->SetImage(resPath, m_renderer, normal, hover, pressed, layout);
     layout.Set({ 0.5f, 0.4f });
-    m_button2->SetImage(resPath, normal, hover, pressed, layout);
+    m_button2->SetImage(resPath, m_renderer, normal, hover, pressed, layout);
 
-    AddRenderItem(m_button.get());
-    AddRenderItem(m_button2.get());
+    m_renderer->AddRenderItem(m_button.get());
+    m_renderer->AddRenderItem(m_button2.get());
 
     layout.Set({ 0, 0, 220, 190 }, { 0.65f, 0.45f }, Origin::Center);
     ImageSource dialogSource{
@@ -77,24 +80,24 @@ bool GameMainLoop::LoadResources(const wstring& resPath)
         }
     };
 
-    m_dialog->SetImage(resPath, dialogSource, layout);
-    AddRenderItem(m_dialog.get());
+    m_dialog->SetImage(resPath, m_renderer, dialogSource, layout);
+    m_renderer->AddRenderItem(m_dialog.get());
 
     vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
     vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
     vector<ImageSource> pressed2{ { L"UI/Gray/check_square_grey_cross.png" } };
 
     layout.Set({ 0, 0, 32, 32 }, { 0.2f, 0.2f }, Origin::Center);
-    m_closeButton->SetImage(resPath, normal2, hover2, pressed2, move(layout));
-    AddRenderItem(m_closeButton.get());
+    m_closeButton->SetImage(resPath, m_renderer, normal2, hover2, pressed2, move(layout));
+    m_renderer->AddRenderItem(m_closeButton.get());
 
     layout.Set({ 0, 0, 250, 120 }, { 0.2f, 0.7f }, Origin::Center);
     map<wstring, wstring> fontFileList;
     fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
     fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-    m_textArea->SetFont(resPath, fontFileList, layout);
+    m_textArea->SetFont(resPath, m_renderer, fontFileList, layout);
 
-    AddRenderItem(m_textArea.get());
+    m_renderer->AddRenderItem(m_textArea.get());
 
     return true;
 }

@@ -46,6 +46,7 @@ public:
     // Initialization and management
     virtual bool Initialize() override;
 
+    virtual void AddLoadResource(IRenderItem* item) override;
     virtual void AddRenderItem(IRenderItem* item) override;
     virtual void AddImguiItem(IImguiItem* item) override;
     virtual bool LoadResources() override;
@@ -78,5 +79,6 @@ private:
     unique_ptr<SpriteBatch> m_spriteBatch;
     unique_ptr<TextureIndexing> m_texIndexing;
     unique_ptr<RenderTexture> m_renderTexture;
+    vector<IRenderItem*> m_loadItems;
     vector<IRenderItem*> m_renderItems;
 };

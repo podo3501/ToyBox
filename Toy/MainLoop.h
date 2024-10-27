@@ -14,9 +14,11 @@ namespace DX
 class MainLoop
 {
 public:
-    MainLoop();
+    MainLoop() = delete;
+    MainLoop(Window* window, IRenderer* renderer);
     virtual ~MainLoop();
-    bool Initialize(HINSTANCE hInstance, const wstring& resPath, int nCmdShow, bool bUseImgui);
+
+    bool Initialize(const wstring& resPath);
     int Run();
 
 protected:
@@ -25,15 +27,10 @@ protected:
     virtual bool SetDatas(IGetValue* getValue) = 0;
     virtual void Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker) = 0;
 
-    void AddRenderItem(IRenderItem* item) noexcept;
-    void AddImguiItem(IImguiItem* item) noexcept;
-
-    unique_ptr<IRenderer> m_renderer;
-
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-    bool InitializeClass(HINSTANCE hInstance, int nCmdShow, bool bUseImgui);
-    void AddWinProcListener(bool bUseImgui) noexcept;
+    bool InitializeClass();
+    void AddWinProcListener() noexcept;
     void Tick();
     void OnResuming() const;
 
@@ -43,7 +40,8 @@ private:
     bool m_fullscreen{ false };
 
     wstring m_resourcePath;
-    unique_ptr<Window> m_window;
+    Window* m_window;
+    IRenderer* m_renderer;
     unique_ptr<DirectX::Mouse> m_mouse;
     unique_ptr<DX::StepTimer> m_timer;
 };

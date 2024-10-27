@@ -103,6 +103,8 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
 
 void TextureIndexing::Render(size_t index, const RECT& dest, const RECT* source)
 {
+    if (m_textures.empty() || index > m_textures.size() - 1) 
+        return;
     m_textures[index]->Draw(m_sprite, m_descHeap, dest, source);
 }
 

@@ -20,12 +20,15 @@ bool Dialog::LoadResources(ILoadData* load)
 
 void Dialog::SetImage(
 	const wstring& resPath,
+	IRenderer* renderer,
 	const ImageSource& sources,
 	const UILayout& layout)
 {
 	m_layout = make_unique<UILayout>(layout);
 
 	m_imagePartSet = make_unique<ImagePartSet>(resPath, sources);
+
+	renderer->AddLoadResource(this);
 }
 
 bool Dialog::ChangeArea(const Rectangle& area) noexcept

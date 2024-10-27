@@ -6,18 +6,18 @@ struct IRenderItem;
 class GuiWidget : public IImguiItem
 {
 public:
-    GuiWidget();
+    GuiWidget(IRenderer* renderer);
     ~GuiWidget();
 
     //IImguiItem
     virtual void Render(ImGuiIO* io);
 
     void Update();
-    bool Create(IRenderer* renderer, const XMUINT2& size, IRenderItem* renderItem);
+    bool Create(IRenderer* renderer, IRenderItem* renderItem);
 
 private:
+    IRenderer* m_renderer{ nullptr };
     ImTextureID m_textureID{ 0 };
-    ImVec2 m_size{};
 
     IRenderItem* m_renderItem;
 };

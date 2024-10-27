@@ -3,39 +3,28 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Dialog.h"
 
-GuiWidget::GuiWidget() : 
+GuiWidget::GuiWidget(IRenderer* renderer) :
+    m_renderer{ renderer },
     m_renderItem{ nullptr }
 {};
 GuiWidget::~GuiWidget() = default;
 
-XMUINT2 createSize{};
-IRenderer* g_renderer{ nullptr };
-bool GuiWidget::Create(IRenderer* renderer, const XMUINT2& size, IRenderItem* renderItem)
+bool GuiWidget::Create(IRenderer* renderer, IRenderItem* renderItem)
 {
+    Dialog* curDialog = static_cast<Dialog*>(renderItem);
+    const Rectangle& area = curDialog->GetArea();
+    XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
     ReturnIfFalse(renderer->CreateRenderTexture(size, renderItem, m_textureID));
-    ReturnIfFalse(renderer->CreateRenderTexture(size, renderItem, m_textureID));
-    m_size = { static_cast<float>(size.x), static_cast<float>(size.y) };
-    createSize.x = uint32_t(m_size.x);
-    createSize.y = uint32_t(m_size.y);
     m_renderItem = renderItem;
-    g_renderer = renderer;
 
     return true;    
 }
 
-bool g_bCreate{ false };
-
 void GuiWidget::Update()
 {
-    if(g_bCreate)
-    {
-        g_renderer->CreateRenderTexture(createSize, m_renderItem, m_textureID);
-        g_bCreate = false;
-    }
 }
 
 bool bVisible = true;
-bool bDialogVisible = true;
 void GuiWidget::Render(ImGuiIO* io)
 {
     if (not bVisible) return;
@@ -64,6 +53,12 @@ void GuiWidget::Render(ImGuiIO* io)
             bPicking = !bPicking;
     }
 
+    Dialog* curDialog = static_cast<Dialog*>(m_renderItem);
+    static Rectangle newArea = curDialog->GetArea();
+
+    // ImGui에 텍스춰에 찍어논 화면을 연결
+    ImGui::Image(m_textureID, { static_cast<float>(newArea.width), static_cast<float>(newArea.height) });
+    
     if(bPicking)
     {
         ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -71,39 +66,31 @@ void GuiWidget::Render(ImGuiIO* io)
 
         static ImVec4 colf = ImVec4(1.0f, 1.0f, 1.0f, 0.3f);
         const ImU32 col = ImColor(colf);
+        //나중에 그리는 것이 위로 올라온다.
         draw_list->AddRectFilled(
             { static_cast<float>(rect.x) + startPos.x, static_cast<float>(rect.y) + startPos.y },
             { static_cast<float>(rect.x) + static_cast<float>(rect.width) + startPos.x, 
             static_cast<float>(rect.y) + static_cast<float>(rect.height) + startPos.y }, col);
 
-        ImGui::Begin("Dialog Property", &bDialogVisible);
-        Dialog* curDialog = static_cast<Dialog*>(m_renderItem);
+        ImGui::Begin("Dialog Property", &bPicking);
         const Rectangle& dialogArea = curDialog->GetArea();
 
-        static int i0 = dialogArea.x;
-        ImGui::InputInt("x", &i0);
-        static int i1 = dialogArea.y;
-        ImGui::InputInt("y", &i1);
-        static int i2 = dialogArea.width;
-        ImGui::InputInt("width", &i2);
-        static int i3 = dialogArea.height;
-        ImGui::InputInt("height", &i3);
+        static int width = dialogArea.width;
+        ImGui::InputInt("width", &width);
+        static int height = dialogArea.height;
+        ImGui::InputInt("height", &height);
 
-        Rectangle newArea{ i0, i1, i2, i3 };
+        newArea.width = width;
+        newArea.height = height;
         if (dialogArea != newArea)
         {
             curDialog->ChangeArea(newArea);
-            createSize.x = static_cast<uint32_t>(i2 - i0);
-            createSize.y = static_cast<uint32_t>(i3 - i1);
-            g_bCreate = true;
+            m_renderer->CreateRenderTexture(
+                { static_cast<uint32_t>(width), static_cast<uint32_t>(height) },
+                m_renderItem, m_textureID);
         }
-
         ImGui::End();
     }
-
-    // ImGui에 텍스춰에 찍어논 화면을 연결
-    
-    ImGui::Image(m_textureID, { float(createSize.x), float(createSize.y) });
 
     ImGui::End();
 }

@@ -27,15 +27,15 @@ Window::~Window()
     ClearWindowMessageQueue();
 }
 
-bool Window::Create(HINSTANCE hInstance, int nCmdShow, const RECT& rc, HWND& hwnd)
+bool Window::Create(HINSTANCE hInstance, int nCmdShow, const RECT& rc, HWND& outHwnd)
 {
     ReturnIfFalse(WindowRegisterClass(hInstance, m_className));
-    ReturnIfFalse(CreateGameWindow(hInstance, rc, hwnd));
+    ReturnIfFalse(CreateGameWindow(hInstance, rc, outHwnd));
 
-    m_wnd = hwnd;
+    m_wnd = outHwnd;
     m_hInstance = hInstance;
 
-    ShowWindow(hwnd, nCmdShow);
+    ShowWindow(outHwnd, nCmdShow);
     // TODO: Change nCmdShow to SW_SHOWMAXIMIZED to default to fullscreen.
 
     //GetClientRect(hwnd, &rc);

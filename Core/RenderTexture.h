@@ -4,6 +4,8 @@ struct IRenderItem;
 
 class RenderTexture
 {
+	const static int RenderTargetCount = 3;
+
 public:
 	RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor);
 	~RenderTexture();
@@ -16,7 +18,9 @@ private:
 	ID3D12Device* m_device;
 	DescriptorHeap* m_srvDescriptor;
 	unique_ptr<DescriptorHeap> m_rtvDescriptor;
-	Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargetTexture;
+
+	int m_renderTargetIndex{ 0 };
+	Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargetTexture[RenderTargetCount];
 
 	XMUINT2 m_size{};
 	D3D12_GPU_DESCRIPTOR_HANDLE m_srvHandle{};

@@ -7,18 +7,19 @@
 #include "WindowProcedure.h"
 
 MainLoop::~MainLoop() = default;
-MainLoop::MainLoop()
+MainLoop::MainLoop(Window* window, IRenderer* renderer) :
+    m_window{ window },
+    m_renderer{ renderer }
 {}
 
-bool MainLoop::Initialize(HINSTANCE hInstance, const wstring& resPath, int nCmdShow, bool bUseImgui)
+bool MainLoop::Initialize(const wstring& resPath)
 {
     m_resourcePath = resPath;
-
-    ReturnIfFalse(XMVerifyCPUSupport());
-    ReturnIfFalse(InitializeClass(hInstance, nCmdShow, bUseImgui));
+    
+    ReturnIfFalse(InitializeClass());
     ReturnIfFalse(InitializeDerived());
 
-    AddWinProcListener(bUseImgui);
+    AddWinProcListener();
 
     ReturnIfFalse(LoadResources(m_resourcePath));
     m_renderer->LoadResources();
@@ -28,20 +29,11 @@ bool MainLoop::Initialize(HINSTANCE hInstance, const wstring& resPath, int nCmdS
     return true;
 }
 
-bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow, bool bUseImgui)
+bool MainLoop::InitializeClass()
 {
-    m_window = make_unique<Window>();
     m_mouse = make_unique<Mouse>();
     m_timer = make_unique<DX::StepTimer>();
-
-    HWND hwnd{ 0 };
-    RECT rc{ 0, 0, 800, 600 };
-    ReturnIfFalse(m_window->Create(hInstance, nCmdShow, rc, hwnd));
-    const auto& outputSize = m_window->GetOutputSize();
-    m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), bUseImgui);
-    if (m_renderer == nullptr)
-        return false;
-    m_mouse->SetWindow(hwnd);
+    m_mouse->SetWindow(m_window->GetHandle());
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
@@ -53,18 +45,12 @@ bool MainLoop::InitializeClass(HINSTANCE hInstance, int nCmdShow, bool bUseImgui
     return true;
 }
 
-void MainLoop::AddWinProcListener(bool bUseImgui) noexcept
+void MainLoop::AddWinProcListener() noexcept
 {
     m_window->AddWndProcListener([mainLoop = this](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
         return mainLoop->WndProc(wnd, msg, wp, lp); });
     m_window->AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
         return MouseProc(wnd, msg, wp, lp); });
-
-    if (bUseImgui)
-    {
-        m_window->AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
-            return ImguiWndProc(wnd, msg, wp, lp); });
-    }
 }
 
 int MainLoop::Run()
@@ -109,6 +95,3 @@ void MainLoop::OnResuming() const
 
     m_renderer->OnResuming();
 }
-
-void MainLoop::AddRenderItem(IRenderItem* item) noexcept { m_renderer->AddRenderItem(item); }
-void MainLoop::AddImguiItem(IImguiItem* item) noexcept { m_renderer->AddImguiItem(item); }

@@ -24,7 +24,10 @@ extern "C"
 #endif
 
 ToolMainLoop::~ToolMainLoop() = default;
-ToolMainLoop::ToolMainLoop() :
+ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
+    ::MainLoop(window, renderer),
+    m_window{ window },
+    m_renderer{ renderer },
     m_testImgui{ make_unique<TestImgui>() }
 {}
 
@@ -37,12 +40,10 @@ bool ToolMainLoop::InitializeDerived()
 
 bool ToolMainLoop::LoadResources(const wstring& resPath)
 {
-    AddImguiItem(m_testImgui.get());
+    m_renderer->AddImguiItem(m_testImgui.get());
 
     Rectangle rect{ 0, 0, 220, 190 };
-    XMUINT2 size{ static_cast<uint32_t>(rect.width), static_cast<uint32_t>(rect.height) };
-    //XMUINT2 size{ 800, 600 };
-    UILayout layout(move(rect), { 0.f, 0.f }, Origin::LeftTop);
+    UILayout layout(move(rect), { 0.0f, 0.0f }, Origin::LeftTop);
     ImageSource dialogSource{
         L"UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
@@ -51,12 +52,13 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
         }
     };
 
-    m_dialog->SetImage(resPath, dialogSource, layout);
-    AddRenderItem(m_dialog.get());
+    m_dialog->SetImage(resPath, m_renderer, dialogSource, layout);
+    m_renderer->AddLoadResource(m_dialog.get());
+    m_renderer->AddRenderItem(m_dialog.get());
 
-    m_guiWidget = make_unique<GuiWidget>();
-    ReturnIfFalse(m_guiWidget->Create(m_renderer.get(), size, m_dialog.get()));
-    AddImguiItem(m_guiWidget.get());
+    m_guiWidget = make_unique<GuiWidget>(m_renderer);
+    ReturnIfFalse(m_guiWidget->Create(m_renderer, m_dialog.get()));
+    m_renderer->AddImguiItem(m_guiWidget.get());
     
     return true;
 }

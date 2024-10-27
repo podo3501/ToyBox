@@ -9,7 +9,7 @@ class Window
 public:
     Window();
     ~Window();
-    bool Create(HINSTANCE hInstance, int nCmdShow, const RECT& rc, HWND& hwnd);
+    bool Create(HINSTANCE hInstance, int nCmdShow, const RECT& rc, HWND& outHwnd);
     inline void AddWndProcListener(WndProcListener listener);
     inline DirectX::SimpleMath::Vector2 GetOutputSize() const noexcept;
     inline void OnWindowSizeChanged(const RECT& size) noexcept;
