@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "TestImgui.h"
+#include "../Include/IRenderer.h"
 
-TestImgui::TestImgui()
-{}
-TestImgui::~TestImgui()
-{}
+TestImgui::~TestImgui() = default;
+TestImgui::TestImgui(IRenderer* renderer)
+{
+    renderer->AddImguiItem(this);
+}
 
 // Our state
 bool show_demo_window = true;

@@ -11,10 +11,16 @@ public:
 	~RenderTexture();
 
 	bool Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderItem* renderItem);
+	bool ModifyRenderTexture(const XMUINT2& size);
 	void Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite);
-	ImTextureID GetTextureID() const noexcept { return static_cast<ImTextureID>(m_srvHandle.ptr); }
+	ImTextureID GetTextureID() const noexcept;
 
 private:
+	inline D3D12_CLEAR_VALUE GetClearValue() const noexcept;
+	inline D3D12_RESOURCE_DESC GetResourceDesc(DXGI_FORMAT format, const XMUINT2& size) const noexcept;
+	inline Microsoft::WRL::ComPtr<ID3D12Resource>& GetTextureResource() noexcept;
+	void CreateRtvAndSrv(ID3D12Resource* resource);
+
 	ID3D12Device* m_device;
 	DescriptorHeap* m_srvDescriptor;
 	unique_ptr<DescriptorHeap> m_rtvDescriptor;
@@ -22,7 +28,7 @@ private:
 	int m_renderTargetIndex{ 0 };
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargetTexture[RenderTargetCount];
 
-	XMUINT2 m_size{};
-	D3D12_GPU_DESCRIPTOR_HANDLE m_srvHandle{};
 	IRenderItem* m_renderItem;
+	size_t m_offset{};
+	D3D12_RESOURCE_DESC m_resDesc{};
 };

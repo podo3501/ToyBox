@@ -141,6 +141,9 @@
     <ProjectReference Include="..\GoogleTestLib\GoogleTestLib.vcxproj">
       <Project>{d35acb5a-c588-45c9-ae36-d6802a812a75}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Imgui\Imgui.vcxproj">
+      <Project>{a3b677a0-27e1-4a53-9761-ab4f496dc1cf}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Toy\Toy.vcxproj">
       <Project>{ce88cfb8-f480-4ead-b13e-d54c92e8fde8}</Project>
     </ProjectReference>

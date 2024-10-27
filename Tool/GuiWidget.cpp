@@ -3,18 +3,20 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Dialog.h"
 
+GuiWidget::~GuiWidget() = default;
 GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer{ renderer },
     m_renderItem{ nullptr }
-{};
-GuiWidget::~GuiWidget() = default;
+{
+    m_renderer->AddImguiItem(this);
+};
 
-bool GuiWidget::Create(IRenderer* renderer, IRenderItem* renderItem)
+bool GuiWidget::Create(IRenderItem* renderItem)
 {
     Dialog* curDialog = static_cast<Dialog*>(renderItem);
     const Rectangle& area = curDialog->GetArea();
     XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
-    ReturnIfFalse(renderer->CreateRenderTexture(size, renderItem, m_textureID));
+    ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem, m_textureID));
     m_renderItem = renderItem;
 
     return true;    
@@ -27,7 +29,7 @@ void GuiWidget::Update()
 bool bVisible = true;
 void GuiWidget::Render(ImGuiIO* io)
 {
-    if (not bVisible) return;
+    if (!bVisible) return;
 
     //ImGui::Begin("Client Window");
     //윈도우 생성할때 빈 공간을 넣는다.
@@ -85,9 +87,7 @@ void GuiWidget::Render(ImGuiIO* io)
         if (dialogArea != newArea)
         {
             curDialog->ChangeArea(newArea);
-            m_renderer->CreateRenderTexture(
-                { static_cast<uint32_t>(width), static_cast<uint32_t>(height) },
-                m_renderItem, m_textureID);
+            m_renderer->ModifyRenderTexture(m_textureID, { static_cast<uint32_t>(width), static_cast<uint32_t>(height) });
         }
         ImGui::End();
     }

@@ -169,7 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Imgui\Imgui.vcxproj">
-      <Project>{c08c9fc9-1c6a-4579-9139-deb2fa14bc32}</Project>
+      <Project>{a3b677a0-27e1-4a53-9761-ab4f496dc1cf}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

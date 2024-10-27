@@ -79,7 +79,7 @@ bool Renderer::Initialize()
     m_batch = make_unique<ResourceUploadBatch>(device);
     m_texIndexing = make_unique<TextureIndexing>(
         device, m_srvDescriptors.get(), m_batch.get(), m_spriteBatch.get());
-    m_renderTexture = make_unique<RenderTexture>(device, m_srvDescriptors.get());
+    //m_renderTexture = make_unique<RenderTexture>(device, m_srvDescriptors.get());
 
     return true;
 }
@@ -194,7 +194,8 @@ void Renderer::Draw()
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissorRect);
 
-    m_renderTexture->Render(commandList, m_texIndexing.get(), m_spriteBatch.get());
+    for (auto& renderTexture : m_renderTextures | views::values )
+        renderTexture->Render(commandList, m_texIndexing.get(), m_spriteBatch.get());
 
     Clear();
 
@@ -295,9 +296,24 @@ void Renderer::AddImguiItem(IImguiItem* item) { m_imgui->AddItem(item); }
 
 bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID)
 {
+    auto device = m_deviceResources->GetD3DDevice();
+    unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>(device, m_srvDescriptors.get());
+
     auto format = m_deviceResources->GetBackBufferFormat();
-    ReturnIfFalse(m_renderTexture->Create(format, size, Ev(SrvOffset::RenderTexture), renderItem));
-    outTextureID = m_renderTexture->GetTextureID();
+    size_t renderTextureIdx = m_renderTextures.size();
+    ReturnIfFalse(renderTexture->Create(format, size, Ev(SrvOffset::RenderTexture) + renderTextureIdx, renderItem));
+    outTextureID = renderTexture->GetTextureID();
+
+    m_renderTextures.insert(make_pair(outTextureID, move(renderTexture)));
 
     return true;
+}
+
+bool Renderer::ModifyRenderTexture(ImTextureID id, const XMUINT2& size)
+{
+    auto find = m_renderTextures.find(id);
+    if (find == m_renderTextures.end()) return false;
+
+    auto& renderTexture = find->second;
+    return renderTexture->ModifyRenderTexture(size);
 }

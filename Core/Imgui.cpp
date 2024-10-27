@@ -25,16 +25,21 @@ bool Imgui::Initialize(ID3D12Device* device, DescriptorHeap* descHeap, DXGI_FORM
     ImGui::CreateContext();
     m_io = &ImGui::GetIO();
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+    //m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+    m_io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     ImGui::StyleColorsDark();
 
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (m_io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
+
     // Setup Platform/Renderer backends
     ReturnIfFalse(ImGui_ImplWin32_Init(m_hwnd));
-
-    UINT srvDescSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
     ReturnIfFalse(ImGui_ImplDX12_Init(device, NUM_FRAMES_IN_FLIGHT, format, descHeap->Heap(),
         descHeap->GetCpuHandle(srvOffset),
         descHeap->GetGpuHandle(srvOffset)));
@@ -64,6 +69,13 @@ void Imgui::PrepareRender()
 
     // Rendering
     ImGui::Render();
+
+    // Update and Render additional Platform Windows
+    if (m_io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+    }
 }
 
 void Imgui::Reset()

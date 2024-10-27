@@ -52,6 +52,7 @@ public:
     virtual bool LoadResources() override;
     virtual IGetValue* GetValue() const noexcept override;
     virtual bool CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID) override;
+    virtual bool ModifyRenderTexture(ImTextureID id, const XMUINT2& size) override;
     virtual void Draw() override;
 
     // Messages
@@ -79,6 +80,7 @@ private:
     unique_ptr<SpriteBatch> m_spriteBatch;
     unique_ptr<TextureIndexing> m_texIndexing;
     unique_ptr<RenderTexture> m_renderTexture;
+    map<ImTextureID, unique_ptr<RenderTexture>> m_renderTextures;
     vector<IRenderItem*> m_loadItems;
     vector<IRenderItem*> m_renderItems;
 };

@@ -10,10 +10,10 @@ public:
     ~GuiWidget();
 
     //IImguiItem
-    virtual void Render(ImGuiIO* io);
+    virtual void Render(ImGuiIO* io) override;
 
     void Update();
-    bool Create(IRenderer* renderer, IRenderItem* renderItem);
+    bool Create(IRenderItem* renderItem);
 
 private:
     IRenderer* m_renderer{ nullptr };

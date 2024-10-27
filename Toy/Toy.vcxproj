@@ -258,6 +258,9 @@
     <ProjectReference Include="..\DirectXTK12\DirectXTK_Desktop_2022_Win10.vcxproj">
       <Project>{3e0e8608-cd9b-4c76-af33-29ca38f2c9f0}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Imgui\Imgui.vcxproj">
+      <Project>{a3b677a0-27e1-4a53-9761-ab4f496dc1cf}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

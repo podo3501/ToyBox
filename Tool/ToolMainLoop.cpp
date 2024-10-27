@@ -28,7 +28,7 @@ ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
     ::MainLoop(window, renderer),
     m_window{ window },
     m_renderer{ renderer },
-    m_testImgui{ make_unique<TestImgui>() }
+    m_testImgui{ make_unique<TestImgui>(renderer) }
 {}
 
 bool ToolMainLoop::InitializeDerived()
@@ -38,10 +38,50 @@ bool ToolMainLoop::InitializeDerived()
     return true;
 }
 
+class GuiAppWindow : IImguiItem
+{
+public:
+    ~GuiAppWindow() = default;
+    GuiAppWindow(IRenderer* renderer) :
+        m_renderer{ renderer },
+        m_renderItem{ nullptr }
+    {
+        m_renderer->AddImguiItem(this);
+    }
+
+    bool Create(IRenderItem* renderItem, const XMUINT2& size)
+    {
+        Dialog* curDialog = static_cast<Dialog*>(renderItem);
+        //const Rectangle& area = curDialog->GetArea();
+        //XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
+        ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem, m_textureID));
+        m_renderItem = renderItem;
+        m_size = size;
+
+        return true;
+    }
+
+    //IImguiItem
+    virtual void Render(ImGuiIO* io) override
+    {
+        ImGui::Begin("App Window", &m_visible, ImGuiWindowFlags_AlwaysAutoResize);
+        ImGui::Image(m_textureID, { static_cast<float>(m_size.x), static_cast<float>(m_size.y) });
+        //ImGui::Image(m_textureID, { static_cast<float>(800), static_cast<float>(600) });
+        ImGui::End();
+        return;
+    }
+   
+private:
+    IRenderer* m_renderer;
+    IRenderItem* m_renderItem;
+    ImTextureID m_textureID{};
+    XMUINT2 m_size{};
+
+    bool m_visible{ true };
+};
+
 bool ToolMainLoop::LoadResources(const wstring& resPath)
 {
-    m_renderer->AddImguiItem(m_testImgui.get());
-
     Rectangle rect{ 0, 0, 220, 190 };
     UILayout layout(move(rect), { 0.0f, 0.0f }, Origin::LeftTop);
     ImageSource dialogSource{
@@ -53,12 +93,13 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
     };
 
     m_dialog->SetImage(resPath, m_renderer, dialogSource, layout);
-    m_renderer->AddLoadResource(m_dialog.get());
     m_renderer->AddRenderItem(m_dialog.get());
 
+    m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
+    ReturnIfFalse(m_guiAppWindow->Create(m_dialog.get(), { 800, 600 }));
+
     m_guiWidget = make_unique<GuiWidget>(m_renderer);
-    ReturnIfFalse(m_guiWidget->Create(m_renderer, m_dialog.get()));
-    m_renderer->AddImguiItem(m_guiWidget.get());
+    ReturnIfFalse(m_guiWidget->Create(m_dialog.get()));
     
     return true;
 }

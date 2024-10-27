@@ -4,7 +4,7 @@
 class TestImgui : public IImguiItem
 {
 public:
-    TestImgui();
+    TestImgui(IRenderer* renderer);
     ~TestImgui();
 
     virtual void Render(ImGuiIO* io) override;

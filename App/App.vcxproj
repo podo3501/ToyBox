@@ -162,7 +162,7 @@
       <Project>{3e0e8608-cd9b-4c76-af33-29ca38f2c9f0}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Imgui\Imgui.vcxproj">
-      <Project>{c08c9fc9-1c6a-4579-9139-deb2fa14bc32}</Project>
+      <Project>{a3b677a0-27e1-4a53-9761-ab4f496dc1cf}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Toy\Toy.vcxproj">
       <Project>{ce88cfb8-f480-4ead-b13e-d54c92e8fde8}</Project>

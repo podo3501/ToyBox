@@ -6,6 +6,7 @@ class Window;
 class TestImgui;
 class Dialog;
 
+class GuiAppWindow;
 class GuiWidget;
 
 class ToolMainLoop final : public MainLoop
@@ -28,6 +29,7 @@ private:
 	unique_ptr<TestImgui> m_testImgui;
 	unique_ptr<Dialog> m_dialog;
 
+	unique_ptr<GuiAppWindow> m_guiAppWindow;
 	unique_ptr<GuiWidget> m_guiWidget;
 };
 
