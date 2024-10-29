@@ -8,5 +8,6 @@ public:
     ~TestImgui();
 
     virtual void Render(ImGuiIO* io) override;
+    virtual void Update() override;
 };
 

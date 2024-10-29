@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GuiAppWindow.cpp" />
     <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="TestImgui.cpp" />
     <ClCompile Include="pch.cpp">
@@ -151,6 +152,7 @@
     <ClCompile Include="ToolMainLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GuiAppWindow.h" />
     <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="TestImgui.h" />
     <ClInclude Include="pch.h" />

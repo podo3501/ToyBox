@@ -8,6 +8,11 @@ TestImgui::TestImgui(IRenderer* renderer)
     renderer->AddImguiItem(this);
 }
 
+void TestImgui::Update()
+{
+
+}
+
 // Our state
 bool show_demo_window = true;
 bool show_another_window = false;

@@ -2,6 +2,7 @@
 #include "ToolMainLoop.h"
 #include "TestImgui.h"
 #include "GuiWidget.h"
+#include "GuiAppWindow.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/Dialog.h"
@@ -38,48 +39,6 @@ bool ToolMainLoop::InitializeDerived()
     return true;
 }
 
-class GuiAppWindow : IImguiItem
-{
-public:
-    ~GuiAppWindow() = default;
-    GuiAppWindow(IRenderer* renderer) :
-        m_renderer{ renderer },
-        m_renderItem{ nullptr }
-    {
-        m_renderer->AddImguiItem(this);
-    }
-
-    bool Create(IRenderItem* renderItem, const XMUINT2& size)
-    {
-        Dialog* curDialog = static_cast<Dialog*>(renderItem);
-        //const Rectangle& area = curDialog->GetArea();
-        //XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
-        ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem, m_textureID));
-        m_renderItem = renderItem;
-        m_size = size;
-
-        return true;
-    }
-
-    //IImguiItem
-    virtual void Render(ImGuiIO* io) override
-    {
-        ImGui::Begin("App Window", &m_visible, ImGuiWindowFlags_AlwaysAutoResize);
-        ImGui::Image(m_textureID, { static_cast<float>(m_size.x), static_cast<float>(m_size.y) });
-        //ImGui::Image(m_textureID, { static_cast<float>(800), static_cast<float>(600) });
-        ImGui::End();
-        return;
-    }
-   
-private:
-    IRenderer* m_renderer;
-    IRenderItem* m_renderItem;
-    ImTextureID m_textureID{};
-    XMUINT2 m_size{};
-
-    bool m_visible{ true };
-};
-
 bool ToolMainLoop::LoadResources(const wstring& resPath)
 {
     Rectangle rect{ 0, 0, 220, 190 };
@@ -96,10 +55,7 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
     m_renderer->AddRenderItem(m_dialog.get());
 
     m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
-    ReturnIfFalse(m_guiAppWindow->Create(m_dialog.get(), { 800, 600 }));
-
-    m_guiWidget = make_unique<GuiWidget>(m_renderer);
-    ReturnIfFalse(m_guiWidget->Create(m_dialog.get()));
+    ReturnIfFalse(m_guiAppWindow->Create(m_dialog.get(), { 400, 300 }));
     
     return true;
 }
@@ -117,7 +73,6 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
     m_dialog->Update(resolution);
-    m_guiWidget->Update();
 
     PIXEndEvent();
 }

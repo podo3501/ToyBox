@@ -38,6 +38,7 @@ public:
     virtual ~IImguiItem() {};
 
     virtual void Render(ImGuiIO* io) = 0;
+    virtual void Update() = 0;
 };
 
 struct IRenderItem;

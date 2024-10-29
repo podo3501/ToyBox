@@ -7,6 +7,7 @@
 #include "UserInterface/Button.h"
 #include "UserInterface/Dialog.h"
 #include "UserInterface/TextArea.h"
+#include "UserInterface/Panel.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -38,6 +39,7 @@ bool GameMainLoop::InitializeDerived()
     m_closeButton = make_unique<Button>();
     m_dialog = make_unique<Dialog>();
     m_textArea = make_unique<TextArea>();
+    m_panel = make_unique<Panel>();
 
     return true;
 }
@@ -71,18 +73,6 @@ bool GameMainLoop::LoadResources(const wstring& resPath)
     m_renderer->AddRenderItem(m_button.get());
     m_renderer->AddRenderItem(m_button2.get());
 
-    layout.Set({ 0, 0, 220, 190 }, { 0.65f, 0.45f }, Origin::Center);
-    ImageSource dialogSource{
-        L"UI/Blue/button_square_header_large_square_screws.png", {
-            { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-            { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-            { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
-        }
-    };
-
-    m_dialog->SetImage(resPath, m_renderer, dialogSource, layout);
-    m_renderer->AddRenderItem(m_dialog.get());
-
     vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
     vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
     vector<ImageSource> pressed2{ { L"UI/Gray/check_square_grey_cross.png" } };
@@ -98,6 +88,23 @@ bool GameMainLoop::LoadResources(const wstring& resPath)
     m_textArea->SetFont(resPath, m_renderer, fontFileList, layout);
 
     m_renderer->AddRenderItem(m_textArea.get());
+
+    layout.Set({ 0, 0, 220, 190 }, { 0.0f, 0.0f }, Origin::LeftTop);
+    ImageSource dialogSource{
+        L"UI/Blue/button_square_header_large_square_screws.png", {
+            { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+            { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+            { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+        }
+    };
+
+    m_dialog->SetImage(resPath, m_renderer, dialogSource, layout);
+    //m_renderer->AddRenderItem(m_dialog.get());
+    m_panel->AddRenderItem({ 0.0f, 0.0f }, m_dialog.get());
+    Rectangle test = m_panel->GetArea();
+
+    m_renderer->AddRenderItem(m_panel.get());
+    
 
     return true;
 }
@@ -122,6 +129,7 @@ void GameMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     m_closeButton->Update(resolution, mouseTracker);
     m_dialog->Update(resolution);
     m_textArea->Update(resolution);
+    m_panel->Update(resolution);
 
     PIXEndEvent();
 }

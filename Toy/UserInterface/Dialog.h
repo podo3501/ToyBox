@@ -28,6 +28,7 @@ public:
 		const UILayout& layout);
 	bool ChangeArea(const Rectangle& area) noexcept;
 	void Update(const Vector2& resolution) noexcept;
+	void Update(const Vector2& normalPos, const Vector2& resolution) noexcept;
 
 private:
 	unique_ptr<UILayout> m_layout;

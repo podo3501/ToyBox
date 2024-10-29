@@ -50,6 +50,7 @@
 --툴과 app에서 사용 가능하게 imgui를 core로 이동후 리팩토링
 --코어테스트에서 DirectX12 리소스 누출 확인
 --imgui용 DescriptorHeap을 생성해서 연결
+--imgui를 이용해서 툴 기반 만들기
 다이얼로그에 버튼 붙이기
 패널 개념 넣기
 UI 데이터를 저장할 JSON 붙이기

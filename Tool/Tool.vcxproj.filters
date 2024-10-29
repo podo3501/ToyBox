@@ -12,11 +12,13 @@
     <ClCompile Include="ToolMainLoop.cpp" />
     <ClCompile Include="TestImgui.cpp" />
     <ClCompile Include="GuiWidget.cpp" />
+    <ClCompile Include="GuiAppWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToolMainLoop.h" />
     <ClInclude Include="TestImgui.h" />
     <ClInclude Include="GuiWidget.h" />
+    <ClInclude Include="GuiAppWindow.h" />
   </ItemGroup>
 </Project>

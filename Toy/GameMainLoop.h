@@ -4,6 +4,7 @@
 class Button;
 class Dialog;
 class TextArea;
+class Panel;
 
 class GameMainLoop final : public MainLoop
 {
@@ -27,4 +28,5 @@ private:
 	unique_ptr<Button>m_closeButton;
 	unique_ptr<Dialog> m_dialog;
 	unique_ptr<TextArea> m_textArea;
+	unique_ptr<Panel> m_panel;
 };

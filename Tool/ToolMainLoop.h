@@ -30,6 +30,5 @@ private:
 	unique_ptr<Dialog> m_dialog;
 
 	unique_ptr<GuiAppWindow> m_guiAppWindow;
-	unique_ptr<GuiWidget> m_guiWidget;
 };
 

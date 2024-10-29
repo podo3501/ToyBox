@@ -45,6 +45,12 @@ void Dialog::Update(const Vector2& resolution) noexcept
 	m_imagePartSet->SetPosition(m_layout->GetPosition(resolution));
 }
 
+void Dialog::Update(const Vector2& normalPos, const Vector2& resolution) noexcept
+{
+	const Vector2 pos = m_layout->GetPosition(resolution) + (resolution * normalPos);
+	m_imagePartSet->SetPosition(pos);
+}
+
 void Dialog::Render(IRender* renderer)
 {
 	m_imagePartSet->Render(renderer);

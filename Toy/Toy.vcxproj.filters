@@ -50,6 +50,9 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="MainLoop.h" />
+    <ClInclude Include="UserInterface\Panel.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -80,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="MainLoop.cpp" />
+    <ClCompile Include="UserInterface\Panel.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

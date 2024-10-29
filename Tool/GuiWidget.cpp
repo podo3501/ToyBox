@@ -26,17 +26,16 @@ void GuiWidget::Update()
 {
 }
 
-bool bVisible = true;
 void GuiWidget::Render(ImGuiIO* io)
 {
-    if (!bVisible) return;
+    if (!m_visible) return;
 
     //ImGui::Begin("Client Window");
     //윈도우 생성할때 빈 공간을 넣는다.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(30.0f, 30.0f));
     //두번째 인자가 bool 값이 들어가면 닫기(x) 버튼이 생긴다.
     //ImGuiWindowFlags_AlwaysAutoResize 크기가 항상 일정하다.
-    ImGui::Begin("Horizontal Scrolling Example", &bVisible, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Horizontal Scrolling Example", &m_visible, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
     
     static bool bPicking{ false };
