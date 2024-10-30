@@ -10,6 +10,7 @@
 #include "../Toy/UserInterface/Button.h"
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/UserInterface/TextArea.h"
+#include "../Toy/UserInterface/Panel.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -188,6 +189,87 @@ TEST_F(ToyTest, TextArea)
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
 	textArea->Render(&mockRender);
+}
+
+TEST_F(ToyTest, Panel)
+{
+	unique_ptr<Panel> panel = std::make_unique<Panel>();
+	Rectangle area{ 0, 0, 220, 190 };
+	UILayout layout(area, { 0.0f, 0.0f }, Origin::LeftTop);
+	ImageSource dialogSource{
+		L"UI/Blue/button_square_header_large_square_screws.png", {
+			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+		}
+	};
+	unique_ptr<Dialog> dialog = make_unique<Dialog>();
+	dialog->SetImage(L"Resources/", m_renderer.get(), dialogSource, layout);
+	panel->AddRenderItem({ 0.1f, 0.1f }, move(dialog));
+
+	EXPECT_EQ(area, panel->GetArea());
+}
+
+class Dialog2 : public IRenderItem
+{
+public:
+	Dialog2() = delete;
+	Dialog2(IRenderer* renderer) :
+		m_renderer{ renderer },
+		m_panel{make_unique<Panel>()}
+	{};
+	~Dialog2() = default;
+
+	virtual bool LoadResources(ILoadData* load) override
+	{
+		return m_panel->LoadResources(load);
+	}
+
+	virtual void Render(IRender* render) override
+	{
+
+	}
+
+	virtual bool IsPicking(const Vector2& pos)  const noexcept override
+	{
+		return m_panel->IsPicking(pos);
+	}
+
+	virtual const Rectangle& GetArea() const noexcept override
+	{
+		return m_panel->GetArea();
+	}
+
+	void SetUIItem()
+	{
+		UILayout layout({ 0, 0, 220, 190 }, { 0.0f, 0.0f }, Origin::LeftTop);
+		ImageSource dialogSource{
+			L"UI/Blue/button_square_header_large_square_screws.png", {
+				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+				{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+				{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+			}
+		};
+		unique_ptr<Dialog> dialog = make_unique<Dialog>();
+		dialog->SetImage(L"Resources/", m_renderer, dialogSource, layout);
+		
+		m_panel->AddRenderItem({ 0.1f, 0.1f }, move(dialog));
+	}
+
+private:
+	IRenderer* m_renderer;
+	unique_ptr<Panel> m_panel;
+};
+
+TEST_F(ToyTest, Dialog2)
+{
+	unique_ptr<Dialog2> dialog = std::make_unique<Dialog2>(m_renderer.get());
+	dialog->SetUIItem();
+
+	m_renderer->AddRenderItem(dialog.get());
+	//LoadResources 자신을 등록해서 callback하는데
+	//그렇게 되면 dialog2에서 할게 없어진다. 다른 방식을 생각해 보자.
+	EXPECT_TRUE(m_renderer->LoadResources());
 }
 
 //여러번 실행해서 오동작이 나는지 확인한다.

@@ -13,9 +13,9 @@ public:
     virtual const Rectangle& GetArea() const noexcept;
 
     void Update(const Vector2& resolution);
-    void AddRenderItem(const Vector2& normalPos, IRenderItem* renderItem);
+    void AddRenderItem(const Vector2& normalPos, unique_ptr<IRenderItem>&& renderItem);
 
 private:
-    vector<pair<Vector2, IRenderItem*>> m_renderItems;
+    vector<pair<Vector2, unique_ptr<IRenderItem>>> m_renderItems;
     Rectangle m_area{};
 };

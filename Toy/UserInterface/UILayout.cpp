@@ -3,13 +3,13 @@
 #include "UIType.h"
 
 UILayout::~UILayout() = default;
-UILayout::UILayout(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) :
+UILayout::UILayout(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin) :
 	m_area{ area },
 	m_originPoint{},
 	m_origin{ Origin::Init },
 	m_normalizedPosition{ normalizedPos }
 {
-	Set(move(origin));
+	Set(origin);
 }
 
 Vector2 UILayout::GetOriginPoint(Origin origin) const noexcept
@@ -22,34 +22,34 @@ Vector2 UILayout::GetOriginPoint(Origin origin) const noexcept
 	return { 0.f, 0.f };
 }
 
-void UILayout::Set(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) noexcept
+void UILayout::Set(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin) noexcept
 {
 	m_area = area;
-	Set(move(origin));
-	Set(move(normalizedPos));
+	Set(origin);
+	Set(normalizedPos);
 }
 
 void UILayout::Set(const Rectangle& area) noexcept
 {
 	m_area = area;
-	Set(move(m_origin));
+	Set(m_origin);
 }
 
-void UILayout::Set(Vector2&& normalPos) noexcept
+void UILayout::Set(const Vector2& normalPos) noexcept
 {
 	m_normalizedPosition = normalPos;
 }
 
-void UILayout::Set(Origin&& origin) noexcept
+void UILayout::Set(const Origin& origin) noexcept
 {
 	m_originPoint = GetOriginPoint(origin);
 	m_origin = origin;
 }
 
-void UILayout::Set(Rectangle&& area, Vector2&& normalPos) noexcept
+void UILayout::Set(const Rectangle& area, const Vector2& normalPos) noexcept
 {
-	Set(move(area));
-	Set(move(normalPos));
+	Set(area);
+	Set(normalPos);
 }
 
 Vector2 UILayout::GetPosition(const Vector2& resolution) const noexcept

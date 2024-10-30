@@ -8,15 +8,15 @@ public:
 	UILayout() = delete;
 	~UILayout();
 
-	UILayout(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin);
+	UILayout(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin);
 	UILayout(const UILayout& layout) noexcept = default;
 	UILayout(UILayout&& layout) noexcept = default;
 
-	void Set(Rectangle&& area, Vector2&& normalizedPos, Origin&& origin) noexcept;
+	void Set(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin) noexcept;
 	void Set(const Rectangle& area) noexcept;
-	void Set(Vector2&& normalPos) noexcept;
-	void Set(Origin&& origin) noexcept;
-	void Set(Rectangle&& area, Vector2&& normalPos) noexcept;
+	void Set(const Vector2& normalPos) noexcept;
+	void Set(const Origin& origin) noexcept;
+	void Set(const Rectangle& area, const Vector2& normalPos) noexcept;
 
 	const Rectangle& GetArea() const noexcept { return m_area; }
 	Vector2 GetPosition(const Vector2& resolution) const noexcept;

@@ -26,7 +26,7 @@ private:
 	unique_ptr<Button>m_button;
 	unique_ptr<Button>m_button2;
 	unique_ptr<Button>m_closeButton;
-	unique_ptr<Dialog> m_dialog;
+	//unique_ptr<Dialog> m_dialog;
 	unique_ptr<TextArea> m_textArea;
 	unique_ptr<Panel> m_panel;
 };

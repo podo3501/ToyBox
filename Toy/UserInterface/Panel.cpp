@@ -33,7 +33,7 @@ void Panel::Render(IRender* render)
 bool Panel::IsPicking(const Vector2& pos)  const noexcept
 {
     return ranges::any_of(m_renderItems, [&pos](const auto& i) {
-        IRenderItem* item = i.second;
+        IRenderItem* item = i.second.get();
         return item->IsPicking(pos);
         });
 }
@@ -47,15 +47,14 @@ void Panel::Update(const Vector2& resolution)
 {
     for (const auto& i : m_renderItems)
     {
-        Dialog* dialog = static_cast<Dialog*>(i.second);
+        Dialog* dialog = static_cast<Dialog*>(i.second.get());
         dialog->Update(i.first, resolution);
     }
 }
 
-void Panel::AddRenderItem(const Vector2& normalPos, IRenderItem* renderItem)
+void Panel::AddRenderItem(const Vector2& normalPos, unique_ptr<IRenderItem>&& renderItem)
 {
-    m_renderItems.emplace_back(make_pair(normalPos, renderItem));
-
     m_area = EncompassingRectangle(m_area, renderItem->GetArea());
+    m_renderItems.emplace_back(make_pair(normalPos, move(renderItem)));
 }
 
