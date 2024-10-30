@@ -46,9 +46,13 @@ public:
     // Initialization and management
     virtual bool Initialize() override;
 
+    virtual void AddLoadScene(IRenderScene* scene) override;
+    virtual void AddRenderScene(IRenderScene* scene) override;
     virtual void AddLoadResource(IRenderItem* item) override;
     virtual void AddRenderItem(IRenderItem* item) override;
     virtual void AddImguiItem(IImguiItem* item) override;
+
+    virtual bool LoadScenes() override;
     virtual bool LoadResources() override;
     virtual IGetValue* GetValue() const noexcept override;
     virtual bool CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID) override;
@@ -81,6 +85,9 @@ private:
     unique_ptr<TextureIndexing> m_texIndexing;
     unique_ptr<RenderTexture> m_renderTexture;
     map<ImTextureID, unique_ptr<RenderTexture>> m_renderTextures;
+
+    vector<IRenderScene*> m_loadScenes;
+    vector<IRenderScene*> m_renderScenes;
     vector<IRenderItem*> m_loadItems;
     vector<IRenderItem*> m_renderItems;
 };

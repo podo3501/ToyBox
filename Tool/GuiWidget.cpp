@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GuiWidget.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/UserInterface/BGImage.h"
 
 GuiWidget::~GuiWidget() = default;
 GuiWidget::GuiWidget(IRenderer* renderer) :
@@ -13,8 +13,8 @@ GuiWidget::GuiWidget(IRenderer* renderer) :
 
 bool GuiWidget::Create(IRenderItem* renderItem)
 {
-    Dialog* curDialog = static_cast<Dialog*>(renderItem);
-    const Rectangle& area = curDialog->GetArea();
+    BGImage* bgImage = static_cast<BGImage*>(renderItem);
+    const Rectangle& area = bgImage->GetArea();
     XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
     ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem, m_textureID));
     m_renderItem = renderItem;
@@ -54,8 +54,8 @@ void GuiWidget::Render(ImGuiIO* io)
             bPicking = !bPicking;
     }
 
-    Dialog* curDialog = static_cast<Dialog*>(m_renderItem);
-    static Rectangle newArea = curDialog->GetArea();
+    BGImage* bgImage = static_cast<BGImage*>(m_renderItem);
+    static Rectangle newArea = bgImage->GetArea();
 
     // ImGui에 텍스춰에 찍어논 화면을 연결
     ImGui::Image(m_textureID, { static_cast<float>(newArea.width), static_cast<float>(newArea.height) });
@@ -74,7 +74,7 @@ void GuiWidget::Render(ImGuiIO* io)
             static_cast<float>(rect.y) + static_cast<float>(rect.height) + startPos.y }, col);
 
         ImGui::Begin("Dialog Property", &bPicking);
-        const Rectangle& dialogArea = curDialog->GetArea();
+        const Rectangle& dialogArea = bgImage->GetArea();
 
         static int width = dialogArea.width;
         ImGui::InputInt("width", &width);
@@ -85,7 +85,7 @@ void GuiWidget::Render(ImGuiIO* io)
         newArea.height = height;
         if (dialogArea != newArea)
         {
-            curDialog->ChangeArea(newArea);
+            bgImage->ChangeArea(newArea);
             m_renderer->ModifyRenderTexture(m_textureID, { static_cast<uint32_t>(width), static_cast<uint32_t>(height) });
         }
         ImGui::End();

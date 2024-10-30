@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GuiAppWindow.h"
 #include "GuiWidget.h"
-#include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/Utility.h"
 
 GuiAppWindow::~GuiAppWindow() = default;
@@ -14,8 +14,8 @@ GuiAppWindow::GuiAppWindow(IRenderer* renderer) :
 
 bool GuiAppWindow::Create(IRenderItem* renderItem, const XMUINT2& size)
 {
-    Dialog* curDialog = static_cast<Dialog*>(renderItem);
-    //const Rectangle& area = curDialog->GetArea();
+    BGImage* bgImage = static_cast<BGImage*>(renderItem);
+    //const Rectangle& area = bgImage->GetArea();
     //XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
     ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem, m_textureID));
     m_renderItem = renderItem;

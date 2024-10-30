@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Panel.h"
-#include "Dialog.h"
+#include "BGImage.h"
 #include "../Utility.h"
 
 Rectangle EncompassingRectangle(const Rectangle& rect1, const Rectangle& rect2)
@@ -47,8 +47,8 @@ void Panel::Update(const Vector2& resolution)
 {
     for (const auto& i : m_renderItems)
     {
-        Dialog* dialog = static_cast<Dialog*>(i.second.get());
-        dialog->Update(i.first, resolution);
+        BGImage* bgImg = static_cast<BGImage*>(i.second.get());
+        bgImg->Update(i.first, resolution);
     }
 }
 

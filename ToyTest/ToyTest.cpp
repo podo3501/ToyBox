@@ -8,9 +8,11 @@
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/Button.h"
-#include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/TextArea.h"
 #include "../Toy/UserInterface/Panel.h"
+#include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/UserInterface/Scene.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -97,7 +99,7 @@ TEST_F(ToyTest, ButtonTest)
 	button->Render(&mockRender);
 }
 
-void TestDialogRender(size_t index, const RECT& dest, const RECT* source)
+void TestBGImageRender(size_t index, const RECT& dest, const RECT* source)
 {
 	if (dest.left == 300 && dest.top == 225) EXPECT_TRUE(dest.right == 330 && dest.bottom == 261);
 	if (dest.left == 330 && dest.top == 225) EXPECT_TRUE(dest.right == 470 && dest.bottom == 261);
@@ -106,10 +108,10 @@ void TestDialogRender(size_t index, const RECT& dest, const RECT* source)
 	if (dest.left == 470 && dest.top == 349) EXPECT_TRUE(dest.right == 500 && dest.bottom == 375);
 }
 
-TEST_F(ToyTest, DialogTest)
+TEST_F(ToyTest, BGImageTest)
 {
-	unique_ptr<Dialog> dialog = make_unique<Dialog>();
-	ImageSource dialogSource{
+	unique_ptr<BGImage> bgImage = make_unique<BGImage>();
+	ImageSource bgImageSource{
 		L"UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
 			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
@@ -117,16 +119,16 @@ TEST_F(ToyTest, DialogTest)
 		}
 	};
 	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
-	dialog->SetImage(L"Resources/", m_renderer.get(), dialogSource, layout);
-	dialog->ChangeArea({ 0, 0, 200, 150 });
-	m_renderer->AddRenderItem(dialog.get());
+	bgImage->SetImage(L"Resources/", m_renderer.get(), bgImageSource, layout);
+	bgImage->ChangeArea({ 0, 0, 200, 150 });
+	m_renderer->AddRenderItem(bgImage.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
-	dialog->Update(m_window->GetOutputSize());
+	bgImage->Update(m_window->GetOutputSize());
 
 	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestDialogRender));
-	dialog->Render(&mockRender);
+	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestBGImageRender));
+	bgImage->Render(&mockRender);
 }
 
 void TestCloseButtonRender(size_t index, const RECT& dest, const RECT* source)
@@ -203,73 +205,33 @@ TEST_F(ToyTest, Panel)
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
-	unique_ptr<Dialog> dialog = make_unique<Dialog>();
+	unique_ptr<BGImage> dialog = make_unique<BGImage>();
 	dialog->SetImage(L"Resources/", m_renderer.get(), dialogSource, layout);
 	panel->AddRenderItem({ 0.1f, 0.1f }, move(dialog));
 
 	EXPECT_EQ(area, panel->GetArea());
 }
 
-class Dialog2 : public IRenderItem
+TEST_F(ToyTest, Dialog)
 {
-public:
-	Dialog2() = delete;
-	Dialog2(IRenderer* renderer) :
-		m_renderer{ renderer },
-		m_panel{make_unique<Panel>()}
-	{};
-	~Dialog2() = default;
-
-	virtual bool LoadResources(ILoadData* load) override
-	{
-		return m_panel->LoadResources(load);
-	}
-
-	virtual void Render(IRender* render) override
-	{
-
-	}
-
-	virtual bool IsPicking(const Vector2& pos)  const noexcept override
-	{
-		return m_panel->IsPicking(pos);
-	}
-
-	virtual const Rectangle& GetArea() const noexcept override
-	{
-		return m_panel->GetArea();
-	}
-
-	void SetUIItem()
-	{
-		UILayout layout({ 0, 0, 220, 190 }, { 0.0f, 0.0f }, Origin::LeftTop);
-		ImageSource dialogSource{
-			L"UI/Blue/button_square_header_large_square_screws.png", {
-				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-				{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-				{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
-			}
-		};
-		unique_ptr<Dialog> dialog = make_unique<Dialog>();
-		dialog->SetImage(L"Resources/", m_renderer, dialogSource, layout);
-		
-		m_panel->AddRenderItem({ 0.1f, 0.1f }, move(dialog));
-	}
-
-private:
-	IRenderer* m_renderer;
-	unique_ptr<Panel> m_panel;
-};
-
-TEST_F(ToyTest, Dialog2)
-{
-	unique_ptr<Dialog2> dialog = std::make_unique<Dialog2>(m_renderer.get());
+	unique_ptr<Dialog> dialog = std::make_unique<Dialog>(m_renderer.get());
 	dialog->SetUIItem();
 
 	m_renderer->AddRenderItem(dialog.get());
 	//LoadResources 자신을 등록해서 callback하는데
 	//그렇게 되면 dialog2에서 할게 없어진다. 다른 방식을 생각해 보자.
 	EXPECT_TRUE(m_renderer->LoadResources());
+}
+
+TEST_F(ToyTest, Scene)
+{
+	unique_ptr<Scene>testScene = std::make_unique<Scene>(m_renderer.get());
+	testScene->LoadData();	
+
+	m_renderer->AddLoadScene(testScene.get());
+	m_renderer->AddRenderScene(testScene.get());
+
+	EXPECT_TRUE(m_renderer->LoadScenes());
 }
 
 //여러번 실행해서 오동작이 나는지 확인한다.

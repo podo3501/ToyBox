@@ -27,7 +27,7 @@
     <ClInclude Include="UserInterface\Button.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\Dialog.h">
+    <ClInclude Include="UserInterface\BGImage.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\ImagePart.h">
@@ -53,6 +53,12 @@
     <ClInclude Include="UserInterface\Panel.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Dialog.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Scene.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -63,7 +69,7 @@
     <ClCompile Include="UserInterface\Button.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\Dialog.cpp">
+    <ClCompile Include="UserInterface\BGImage.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\ImagePart.cpp">
@@ -84,6 +90,12 @@
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="UserInterface\Panel.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Dialog.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Scene.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

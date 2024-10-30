@@ -174,6 +174,31 @@ bool Renderer::LoadResources()
     return true;
 }
 
+bool Renderer::LoadScenes()
+{
+    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
+#ifdef __MINGW32__
+    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
+#else
+    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
+    if (FAILED(initialize)) return false;
+#endif
+    //ResourceUploadBatch resourceUpload(device);
+
+    m_batch->Begin();
+    //resourceUpload.Begin();
+
+    ReturnIfFalse(ranges::all_of(m_loadScenes, [load = m_texIndexing.get()](const auto item) {
+        return item->LoadScene(load);
+        }));
+
+    auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
+    uploadResourcesFinished.wait();
+
+    return true;
+}
+
+
 #pragma region Frame Draw
 // Draws the scene.
 void Renderer::Draw()
@@ -290,6 +315,8 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 #pragma endregion
 
 IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
+void Renderer::AddLoadScene(IRenderScene* scene) { m_loadScenes.emplace_back(scene); }
+void Renderer::AddRenderScene(IRenderScene* scene) { m_renderScenes.emplace_back(scene); }
 void Renderer::AddLoadResource(IRenderItem* item) { m_loadItems.emplace_back(item); }
 void Renderer::AddRenderItem(IRenderItem* item) { m_renderItems.emplace_back(item); }
 void Renderer::AddImguiItem(IImguiItem* item) { m_imgui->AddItem(item); }

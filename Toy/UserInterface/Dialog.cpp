@@ -1,67 +1,52 @@
 #include "pch.h"
 #include "Dialog.h"
-#include "../../Include/IRenderer.h"
-#include "../Utility.h"
-#include "UIType.h"
+#include "../Include/IRenderer.h"
+#include "Panel.h"
 #include "UILayout.h"
-#include "ImagePartSet.h"
+#include "UIType.h"
+#include "BGImage.h"
 
+Dialog::Dialog(IRenderer* renderer) :
+	m_renderer{ renderer },
+	m_panel{ make_unique<Panel>() }
+{};
 Dialog::~Dialog() = default;
-Dialog::Dialog()
-{}
 
 bool Dialog::LoadResources(ILoadData* load)
-{ 
-	ReturnIfFalse(m_imagePartSet->LoadResources(load));
-	ReturnIfFalse(m_imagePartSet->SetDestination(m_layout->GetArea()));
-
-	return true;
+{
+	return m_panel->LoadResources(load);
 }
 
-void Dialog::SetImage(
-	const wstring& resPath,
-	IRenderer* renderer,
-	const ImageSource& sources,
-	const UILayout& layout)
+void Dialog::Render(IRender* render)
 {
-	m_layout = make_unique<UILayout>(layout);
-
-	m_imagePartSet = make_unique<ImagePartSet>(resPath, sources);
-
-	renderer->AddLoadResource(this);
+	render;
 }
 
-bool Dialog::ChangeArea(const Rectangle& area) noexcept
+bool Dialog::IsPicking(const Vector2& pos)  const noexcept
 {
-	ReturnIfFalse(m_imagePartSet->SetDestination(area));
-
-	m_layout->Set(move(area));
-
-	return true;
-}
-
-void Dialog::Update(const Vector2& resolution) noexcept
-{
-	m_imagePartSet->SetPosition(m_layout->GetPosition(resolution));
-}
-
-void Dialog::Update(const Vector2& normalPos, const Vector2& resolution) noexcept
-{
-	const Vector2 pos = m_layout->GetPosition(resolution) + (resolution * normalPos);
-	m_imagePartSet->SetPosition(pos);
-}
-
-void Dialog::Render(IRender* renderer)
-{
-	m_imagePartSet->Render(renderer);
-}
-
-bool Dialog::IsPicking(const Vector2& pos) const noexcept
-{
-	return m_layout->IsArea(pos);
+	return m_panel->IsPicking(pos);
 }
 
 const Rectangle& Dialog::GetArea() const noexcept
 {
-	return m_layout->GetArea();
+	return m_panel->GetArea();
+}
+
+bool Dialog::SetUIItem()
+{
+	UILayout layout({ 0, 0, 220, 190 }, { 0.0f, 0.0f }, Origin::LeftTop);
+	ImageSource bgImgSrc{
+		L"UI/Blue/button_square_header_large_square_screws.png", {
+			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+		}
+	};
+	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
+	bgImg->SetImage(L"Resources/", m_renderer, bgImgSrc, layout);
+
+	//unique_ptr<IRenderItem> = uiLoad->Load(abc.json);
+	m_panel->AddRenderItem({ 0.1f, 0.1f }, move(bgImg));
+
+	return true;
 }

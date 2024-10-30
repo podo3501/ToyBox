@@ -5,7 +5,7 @@
 #include "GuiAppWindow.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/UILayout.h"
 
 #ifdef __clang__
@@ -34,7 +34,7 @@ ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
 
 bool ToolMainLoop::InitializeDerived()
 {
-    m_dialog = make_unique<Dialog>();
+    m_bgImage = make_unique<BGImage>();
 
     return true;
 }
@@ -51,11 +51,11 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
         }
     };
 
-    m_dialog->SetImage(resPath, m_renderer, dialogSource, layout);
-    m_renderer->AddRenderItem(m_dialog.get());
+    m_bgImage->SetImage(resPath, m_renderer, dialogSource, layout);
+    m_renderer->AddRenderItem(m_bgImage.get());
 
     m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
-    ReturnIfFalse(m_guiAppWindow->Create(m_dialog.get(), { 400, 300 }));
+    ReturnIfFalse(m_guiAppWindow->Create(m_bgImage.get(), { 400, 300 }));
     
     return true;
 }
@@ -72,7 +72,7 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_dialog->Update(resolution);
+    m_bgImage->Update(resolution);
 
     PIXEndEvent();
 }

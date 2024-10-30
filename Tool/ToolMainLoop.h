@@ -4,7 +4,7 @@
 struct IRenderer;
 class Window;
 class TestImgui;
-class Dialog;
+class BGImage;
 
 class GuiAppWindow;
 class GuiWidget;
@@ -27,7 +27,7 @@ private:
 	IRenderer* m_renderer;
 
 	unique_ptr<TestImgui> m_testImgui;
-	unique_ptr<Dialog> m_dialog;
+	unique_ptr<BGImage> m_bgImage;
 
 	unique_ptr<GuiAppWindow> m_guiAppWindow;
 };

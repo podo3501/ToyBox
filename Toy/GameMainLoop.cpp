@@ -5,7 +5,7 @@
 #include "Utility.h"
 #include "UserInterface/UILayout.h"
 #include "UserInterface/Button.h"
-#include "UserInterface/Dialog.h"
+#include "UserInterface/BGImage.h"
 #include "UserInterface/TextArea.h"
 #include "UserInterface/Panel.h"
 
@@ -37,7 +37,6 @@ bool GameMainLoop::InitializeDerived()
     m_button = make_unique<Button>();
     m_button2 = make_unique<Button>();
     m_closeButton = make_unique<Button>();
-    //m_dialog = make_unique<Dialog>();
     m_textArea = make_unique<TextArea>();
     m_panel = make_unique<Panel>();
 
@@ -90,17 +89,17 @@ bool GameMainLoop::LoadResources(const wstring& resPath)
     m_renderer->AddRenderItem(m_textArea.get());
 
     layout.Set({ 0, 0, 220, 190 }, { 0.0f, 0.0f }, Origin::LeftTop);
-    ImageSource dialogSource{
+    ImageSource bgImageSource{
         L"UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
             { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
             { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
         }
     };
-    unique_ptr<Dialog> paneDialog = make_unique<Dialog>();
-    paneDialog->SetImage(resPath, m_renderer, dialogSource, layout);
+    unique_ptr<BGImage> bgImage = make_unique<BGImage>();
+    bgImage->SetImage(resPath, m_renderer, bgImageSource, layout);
     //m_renderer->AddRenderItem(m_dialog.get());
-    m_panel->AddRenderItem({ 0.5f, 0.5f }, move(paneDialog));
+    m_panel->AddRenderItem({ 0.5f, 0.5f }, move(bgImage));
     Rectangle test = m_panel->GetArea();
 
     m_renderer->AddRenderItem(m_panel.get());
@@ -127,7 +126,6 @@ void GameMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     m_button->Update(resolution, mouseTracker);
     m_button2->Update(resolution, mouseTracker);
     m_closeButton->Update(resolution, mouseTracker);
-    //m_dialog->Update(resolution);
     m_textArea->Update(resolution);
     m_panel->Update(resolution);
 
