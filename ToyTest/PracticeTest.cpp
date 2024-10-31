@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "../Toy/Locator.h"
 #include "../Toy/UserInterface/UIUtility.h"
+#include "../Include/nlohmann/json.hpp"
 
 namespace Practice
 {
@@ -93,5 +94,31 @@ namespace Practice
 			L"<Hangle><Red>Å×½ºÆ®, </Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>()</English>",
 			textProperty);
 		EXPECT_TRUE(result);
+	}
+
+	using json = nlohmann::json;
+	TEST(Json, Test)
+	{
+		ifstream file(L"./ToyTest/TestResources/dialog.json");
+		if (!file.is_open())
+			return;
+
+		json dataList = json::parse(file);
+		for (auto& [uiType, properties] : dataList.items())
+		{
+			for (auto& [property, data] : properties.items())
+			{
+				if (property == "Filename")
+					auto uiFilename = data;
+				if (property == "Position")
+				{
+					for (const auto& posList : data)
+					{
+						if (posList.is_array() && posList.size() == 4)
+							Rectangle test{ posList[0], posList[1], posList[2], posList[3] };
+					}
+				}
+			}
+		}
 	}
 }
