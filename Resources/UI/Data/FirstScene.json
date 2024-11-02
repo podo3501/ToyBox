@@ -1,0 +1,11 @@
+{
+	"Dialog": 
+	{
+		"Filename": "Resources/UI/Data/Dialog.json",
+		"Position": 
+		{ 
+			"x": 0.1,
+			"y": 0.1 
+		}
+	}
+}

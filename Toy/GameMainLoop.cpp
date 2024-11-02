@@ -43,61 +43,61 @@ bool GameMainLoop::InitializeDerived()
     return true;
 }
 
-bool GameMainLoop::LoadResources(const wstring& resPath)
+bool GameMainLoop::LoadResources(const wstring&)
 {
     vector<ImageSource> normal
     {
-        { L"UI/Blue/bar_square_large_l.png" },
-        { L"UI/Blue/bar_square_large_m.png" },
-        { L"UI/Blue/bar_square_large_r.png" },
+        { L"Resources/UI/Blue/bar_square_large_l.png" },
+        { L"Resources/UI/Blue/bar_square_large_m.png" },
+        { L"Resources/UI/Blue/bar_square_large_r.png" },
     };
     vector<ImageSource> hover
     {
-        { L"UI/Red/bar_square_large_l.png" },
-        { L"UI/Red/bar_square_large_m.png" },
-        { L"UI/Red/bar_square_large_r.png" },
+        { L"Resources/UI/Red/bar_square_large_l.png" },
+        { L"Resources/UI/Red/bar_square_large_m.png" },
+        { L"Resources/UI/Red/bar_square_large_r.png" },
     };
     vector<ImageSource> pressed
     {
-        { L"UI/Gray/bar_square_large_l.png" },
-        { L"UI/Gray/bar_square_large_m.png" },
-        { L"UI/Gray/bar_square_large_r.png" },
+        { L"Resources/UI/Gray/bar_square_large_l.png" },
+        { L"Resources/UI/Gray/bar_square_large_m.png" },
+        { L"Resources/UI/Gray/bar_square_large_r.png" },
     };
 
     UILayout layout({ 0, 0, 180, 48 }, { 0.5f, 0.5f }, Origin::Center);
-    m_button->SetImage(resPath, m_renderer, normal, hover, pressed, layout);
+    m_button->SetImage(m_renderer, normal, hover, pressed, layout);
     layout.Set({ 0.5f, 0.4f });
-    m_button2->SetImage(resPath, m_renderer, normal, hover, pressed, layout);
+    m_button2->SetImage(m_renderer, normal, hover, pressed, layout);
 
     m_renderer->AddRenderItem(m_button.get());
     m_renderer->AddRenderItem(m_button2.get());
 
-    vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
-    vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
-    vector<ImageSource> pressed2{ { L"UI/Gray/check_square_grey_cross.png" } };
+    vector<ImageSource> normal2{ { L"Resources/UI/Blue/check_square_color_cross.png" } };
+    vector<ImageSource> hover2{ { L"Resources/UI/Blue/check_square_grey_cross.png" } };
+    vector<ImageSource> pressed2{ { L"Resources/UI/Gray/check_square_grey_cross.png" } };
 
     layout.Set({ 0, 0, 32, 32 }, { 0.2f, 0.2f }, Origin::Center);
-    m_closeButton->SetImage(resPath, m_renderer, normal2, hover2, pressed2, move(layout));
+    m_closeButton->SetImage(m_renderer, normal2, hover2, pressed2, move(layout));
     m_renderer->AddRenderItem(m_closeButton.get());
 
     layout.Set({ 0, 0, 250, 120 }, { 0.2f, 0.7f }, Origin::Center);
     map<wstring, wstring> fontFileList;
-    fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
-    fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-    m_textArea->SetFont(resPath, m_renderer, fontFileList, layout);
+    fontFileList.insert(make_pair(L"Hangle", L"Resources/UI/Font/MaleunGothicS16.spritefont"));
+    fontFileList.insert(make_pair(L"English", L"Resources/UI/Font/CourierNewBoldS18.spritefont"));
+    m_textArea->SetFont(m_renderer, fontFileList, layout);
 
     m_renderer->AddRenderItem(m_textArea.get());
 
     layout.Set({ 0, 0, 220, 190 }, { 0.0f, 0.0f }, Origin::LeftTop);
     ImageSource bgImageSource{
-        L"UI/Blue/button_square_header_large_square_screws.png", {
+        L"Resources/UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
             { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
             { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
         }
     };
     unique_ptr<BGImage> bgImage = make_unique<BGImage>();
-    bgImage->SetImage(resPath, m_renderer, bgImageSource, layout);
+    bgImage->SetImage(m_renderer, bgImageSource, layout);
     //m_renderer->AddRenderItem(m_dialog.get());
     m_panel->AddRenderItem({ 0.5f, 0.5f }, move(bgImage));
     Rectangle test = m_panel->GetArea();

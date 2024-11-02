@@ -44,14 +44,14 @@ bool ToolMainLoop::LoadResources(const wstring& resPath)
     Rectangle rect{ 0, 0, 220, 190 };
     UILayout layout(move(rect), { 0.0f, 0.0f }, Origin::LeftTop);
     ImageSource dialogSource{
-        L"UI/Blue/button_square_header_large_square_screws.png", {
+        L"Resources/UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
             { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
             { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
         }
     };
 
-    m_bgImage->SetImage(resPath, m_renderer, dialogSource, layout);
+    m_bgImage->SetImage(m_renderer, dialogSource, layout);
     m_renderer->AddRenderItem(m_bgImage.get());
 
     m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);

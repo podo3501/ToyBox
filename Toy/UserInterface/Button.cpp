@@ -72,7 +72,6 @@ void Button::Render(IRender* render)
 }
 
 void Button::SetImage(
-	const wstring& resPath,
 	IRenderer* renderer,
 	const vector<ImageSource>& normal,
 	const vector<ImageSource>& hover,
@@ -84,7 +83,7 @@ void Button::SetImage(
 	ButtonState btnState = ButtonState::Normal;
 	for (const auto& sources : { normal, hover, pressed })
 	{
-		unique_ptr<ImagePartSet> imgPartSet = make_unique<ImagePartSet>(resPath, sources);
+		unique_ptr<ImagePartSet> imgPartSet = make_unique<ImagePartSet>(sources);
 		m_image.insert(make_pair(btnState, move(imgPartSet)));
 		btnState = static_cast<ButtonState>(static_cast<int>(btnState) + 1);
 	}

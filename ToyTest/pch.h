@@ -105,6 +105,9 @@
 #include "../DirectXTK12/Inc/VertexTypes.h"
 #include "../DirectXTK12/Inc/WICTextureLoader.h"
 
+//json
+#include "../Include/nlohmann/json.hpp"
+
 //Immediate Mode GUI include
 #include "../Imgui/imgui.h"
 #include "../Imgui/imgui_impl_win32.h"

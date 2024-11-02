@@ -59,6 +59,9 @@
     <ClInclude Include="UserInterface\Scene.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\JsonHelper.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -96,6 +99,9 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Scene.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\JsonHelper.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

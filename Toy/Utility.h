@@ -28,3 +28,13 @@
         return false;                                                \
 }
 #endif
+
+#ifndef ReturnIfNullptr
+#define ReturnIfNullptr(x)                                              \
+{                                                                     \
+    if(x == nullptr)                                            \
+        return false;                                                \
+}
+#endif
+
+std::wstring StringToWString(const std::string& str);

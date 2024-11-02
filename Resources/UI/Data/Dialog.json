@@ -1,0 +1,11 @@
+{
+	"BGImage":
+	{
+		"Filename": "Resources/UI/Data/BGImage.json",
+		"Position":
+		{		         
+			"x": 0.1,
+			"y": 0.1 
+		}
+	}
+}

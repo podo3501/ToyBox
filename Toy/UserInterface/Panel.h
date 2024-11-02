@@ -7,6 +7,7 @@ public:
     Panel();
     ~Panel();
 
+    virtual bool SetResources(const wstring& filename) override { filename; return true; }
     virtual bool LoadResources(ILoadData* load) override;
     virtual void Render(IRender* render) override;
     virtual bool IsPicking(const Vector2& pos)  const noexcept override;

@@ -7,10 +7,10 @@ class Panel;
 class Dialog : public IRenderItem
 {
 public:
-	Dialog() = delete;
-	Dialog(IRenderer* renderer);
+	Dialog();
 	~Dialog();
 
+	virtual bool SetResources(const wstring& filename) override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual void Render(IRender* render) override;
 	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
@@ -19,6 +19,6 @@ public:
 	bool SetUIItem();
 
 private:
-	IRenderer* m_renderer;
+	vector<pair<Vector2, unique_ptr<IRenderItem>>> m_renderItems;
 	unique_ptr<Panel> m_panel;
 };

@@ -55,25 +55,25 @@ TEST_F(ToyTest, ButtonTest)
 
 	vector<ImageSource> normal
 	{
-		{ L"UI/Blue/bar_square_large_l.png" },
-		{ L"UI/Blue/bar_square_large_m.png" },
-		{ L"UI/Blue/bar_square_large_r.png" },
+		{ L"Resources/UI/Blue/bar_square_large_l.png" },
+		{ L"Resources/UI/Blue/bar_square_large_m.png" },
+		{ L"Resources/UI/Blue/bar_square_large_r.png" },
 	};
 	vector<ImageSource> hover
 	{
-		{ L"UI/Red/bar_square_large_l.png" },
-		{ L"UI/Red/bar_square_large_m.png" },
-		{ L"UI/Red/bar_square_large_r.png" },
+		{ L"Resources/UI/Red/bar_square_large_l.png" },
+		{ L"Resources/UI/Red/bar_square_large_m.png" },
+		{ L"Resources/UI/Red/bar_square_large_r.png" },
 	};
 	vector<ImageSource> pressed
 	{
-		{ L"UI/Gray/bar_square_large_l.png" },
-		{ L"UI/Gray/bar_square_large_m.png" },
-		{ L"UI/Gray/bar_square_large_r.png" },
+		{ L"Resources/UI/Gray/bar_square_large_l.png" },
+		{ L"Resources/UI/Gray/bar_square_large_m.png" },
+		{ L"Resources/UI/Gray/bar_square_large_r.png" },
 	};
 
 	UILayout layout({ 0, 0, 116, 48 }, { 0.5f, 0.5f }, Origin::Center);
-	button->SetImage(L"Resources/", m_renderer.get(), normal, hover, pressed, layout);
+	button->SetImage(m_renderer.get(), normal, hover, pressed, layout);
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -112,14 +112,14 @@ TEST_F(ToyTest, BGImageTest)
 {
 	unique_ptr<BGImage> bgImage = make_unique<BGImage>();
 	ImageSource bgImageSource{
-		L"UI/Blue/button_square_header_large_square_screws.png", {
+		L"Resources/UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
 			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
 	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
-	bgImage->SetImage(L"Resources/", m_renderer.get(), bgImageSource, layout);
+	bgImage->SetImage(m_renderer.get(), bgImageSource, layout);
 	bgImage->ChangeArea({ 0, 0, 200, 150 });
 	m_renderer->AddRenderItem(bgImage.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
@@ -142,12 +142,12 @@ TEST_F(ToyTest, CloseButton)
 {
 	std::unique_ptr<Button> button = std::make_unique<Button>();
 
-	vector<ImageSource> normal { { L"UI/Blue/check_square_color_cross.png" } };
-	vector<ImageSource> hover{ { L"UI/Blue/check_square_grey_cross.png" } };
-	vector<ImageSource> pressed { { L"UI/Gray/check_square_grey_cross.png" } };
+	vector<ImageSource> normal { { L"Resources/UI/Blue/check_square_color_cross.png" } };
+	vector<ImageSource> hover{ { L"Resources/UI/Blue/check_square_grey_cross.png" } };
+	vector<ImageSource> pressed { { L"Resources/UI/Gray/check_square_grey_cross.png" } };
 
 	UILayout layout({ 0, 0, 32, 32 }, { 0.2f, 0.2f }, Origin::Center);
-	button->SetImage(L"Resources/", m_renderer.get(), normal, hover, pressed, move(layout));
+	button->SetImage(m_renderer.get(), normal, hover, pressed, move(layout));
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -176,9 +176,9 @@ TEST_F(ToyTest, TextArea)
 	std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
 	UILayout layout({ 0, 0, 320, 120 }, { 0.5f, 0.5f }, Origin::Center);
 	map<wstring, wstring> fontFileList;
-	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
-	fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-	textArea->SetFont(L"Resources/", m_renderer.get(), fontFileList, layout);
+	fontFileList.insert(make_pair(L"Hangle", L"Resources/UI/Font/MaleunGothicS16.spritefont"));
+	fontFileList.insert(make_pair(L"English", L"Resources/UI/Font/CourierNewBoldS18.spritefont"));
+	textArea->SetFont(m_renderer.get(), fontFileList, layout);
 	m_renderer->AddRenderItem(textArea.get());
 
 	m_renderer->LoadResources();
@@ -199,14 +199,14 @@ TEST_F(ToyTest, Panel)
 	Rectangle area{ 0, 0, 220, 190 };
 	UILayout layout(area, { 0.0f, 0.0f }, Origin::LeftTop);
 	ImageSource dialogSource{
-		L"UI/Blue/button_square_header_large_square_screws.png", {
+		L"Resources/UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
 			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
 	unique_ptr<BGImage> dialog = make_unique<BGImage>();
-	dialog->SetImage(L"Resources/", m_renderer.get(), dialogSource, layout);
+	dialog->SetImage(m_renderer.get(), dialogSource, layout);
 	panel->AddRenderItem({ 0.1f, 0.1f }, move(dialog));
 
 	EXPECT_EQ(area, panel->GetArea());
@@ -214,7 +214,7 @@ TEST_F(ToyTest, Panel)
 
 TEST_F(ToyTest, Dialog)
 {
-	unique_ptr<Dialog> dialog = std::make_unique<Dialog>(m_renderer.get());
+	unique_ptr<Dialog> dialog = std::make_unique<Dialog>();
 	dialog->SetUIItem();
 
 	m_renderer->AddRenderItem(dialog.get());
@@ -226,7 +226,7 @@ TEST_F(ToyTest, Dialog)
 TEST_F(ToyTest, Scene)
 {
 	unique_ptr<Scene>testScene = std::make_unique<Scene>(m_renderer.get());
-	testScene->LoadData();	
+	EXPECT_TRUE(testScene->LoadData(L"Resources/UI/Data/FirstScene.json"));
 
 	m_renderer->AddLoadScene(testScene.get());
 	m_renderer->AddRenderScene(testScene.get());

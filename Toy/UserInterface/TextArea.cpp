@@ -29,11 +29,11 @@ const Rectangle& TextArea::GetArea() const noexcept
 	return m_layout->GetArea(); 
 }
 
-void TextArea::SetFont(const wstring& resPath, IRenderer* renderer, const map<wstring, wstring>& fontFileList, const UILayout& layout)
+void TextArea::SetFont(IRenderer* renderer, const map<wstring, wstring>& fontFileList, const UILayout& layout)
 {
 	m_layout = make_unique<UILayout>(layout);
-	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [&resPath](const auto& filename) {
-		return make_pair(filename.first, resPath + filename.second);
+	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
+		return make_pair(filename.first, filename.second);
 		});
 
 	renderer->AddLoadResource(this);

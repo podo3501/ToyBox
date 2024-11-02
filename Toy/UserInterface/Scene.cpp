@@ -2,7 +2,9 @@
 #include "Scene.h"
 #include "../Utility.h"
 #include "../Include/IRenderer.h"
-#include "Dialog.h"
+#include "JsonHelper.h"
+
+using json = nlohmann::json;
 
 Scene::~Scene() = default;
 Scene::Scene(IRenderer* renderer) :
@@ -11,25 +13,31 @@ Scene::Scene(IRenderer* renderer) :
 
 bool Scene::LoadScene(ILoadData* load)
 {
-	return ranges::all_of(m_items, [load](const auto& item) {
-		return item->LoadResources(load);
+	return ranges::all_of(m_renderItems, [load](const auto& item) {
+		return item.second->LoadResources(load);
 		});
 }
 
 void Scene::RenderScene(IRender* render)
 {
-	ranges::for_each(m_items, [render](const auto& item) {
-		item->Render(render);
+	ranges::for_each(m_renderItems, [render](const auto& item) {
+		item.second->Render(render);
 		});
 }
 
-//파일을 로드하는 부분. 지금은 파일이 없이 값을 바로 넣는다.
-bool Scene::LoadData()
+bool Scene::LoadData(const wstring& filename)
 {
-	unique_ptr<Dialog> dialog = std::make_unique<Dialog>(m_renderer);
-	ReturnIfFalse(dialog->SetUIItem());
+	ifstream file(filename);
+	ReturnIfFalse(file.is_open());
+	   
+	json dataList = json::parse(file);
+	for (const auto& [component, data] : dataList.items())
+	{
+		auto [item, position] = GetComponent(component, data);
+		ReturnIfNullptr(item);
 
-	m_items.emplace_back(move(dialog));
+		m_renderItems.emplace_back(make_pair(position, move(item)));
+	}
 
 	return true;
 }

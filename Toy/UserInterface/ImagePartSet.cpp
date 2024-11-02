@@ -7,27 +7,27 @@
 #include "../Utility.h"
 
 ImagePartSet::~ImagePartSet() = default;
-ImagePartSet::ImagePartSet(const wstring& resPath, const vector<ImageSource>& imgSources)
+ImagePartSet::ImagePartSet(const vector<ImageSource>& imgSources)
 {
-	ranges::for_each(imgSources, [this, &resPath](const auto& source) { CreateImagePart(resPath, source); });
+	ranges::for_each(imgSources, [this](const auto& source) { CreateImagePart(source); });
 }
 
-ImagePartSet::ImagePartSet(const wstring& resPath, const ImageSource& source)
+ImagePartSet::ImagePartSet(const ImageSource& source)
 {
-	CreateImagePart(resPath, source);
+	CreateImagePart(source);
 }
 
-void ImagePartSet::CreateImagePart(const wstring& resPath, const ImageSource& imgSource)
+void ImagePartSet::CreateImagePart(const ImageSource& imgSource)
 {
-	const wstring& fullFilename = resPath + imgSource.filename;
+	const wstring& filename = imgSource.filename;
 	if (imgSource.list.empty())	//읽어들이는 부위가 전체 부위와 같을때는 source 정보가 없다.
 	{
-		m_images.emplace_back(make_unique<ImagePart>(fullFilename, Rectangle{}));
+		m_images.emplace_back(make_unique<ImagePart>(filename, Rectangle{}));
 		return;
 	}
 
-	ranges::transform(imgSource.list, back_inserter(m_images), [&fullFilename](const auto& source) {
-		return make_unique<ImagePart>(fullFilename, source);
+	ranges::transform(imgSource.list, back_inserter(m_images), [&filename](const auto& source) {
+		return make_unique<ImagePart>(filename, source);
 		});
 }
 
