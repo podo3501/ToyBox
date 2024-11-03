@@ -2,6 +2,22 @@
 
 struct IRenderer;
 struct IRenderItem;
+class UILayout;
 
-unique_ptr<IRenderItem> CreateComponent(const string& component, IRenderer* renderer);
-tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(const string& component, const nlohmann::json& data);
+enum class DataType
+{
+	Init = 0,
+	Layout,
+	Component
+};
+
+enum class ComponentType
+{
+	Init = 0,
+	Dialog,
+	BGImage,
+	ImagePartSet
+};
+
+tuple<DataType, ComponentType> GetType(const string& key);
+tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(ComponentType compType, const nlohmann::json& data);

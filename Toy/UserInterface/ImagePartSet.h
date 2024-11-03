@@ -1,24 +1,29 @@
 #pragma once
-
+#include "../Include/IRenderItem.h"
 class UILayout;
 class ImagePart;
 struct ImageSource;
 struct ILoadData;
 struct IRender;
 
-class ImagePartSet
+class ImagePartSet : public IRenderItem
 {
 public:
-	ImagePartSet() = delete;
+	ImagePartSet();
 	~ImagePartSet();
 	ImagePartSet(const vector<ImageSource>& imgSources);
 	ImagePartSet(const ImageSource& source);
 
-	bool LoadResources(ILoadData* load);
+	virtual bool SetResources(const wstring& filename) override;
+	virtual bool LoadResources(ILoadData* load) override;
+	virtual void Render(IRender* render) override;
+	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
+	virtual const Rectangle& GetArea() const noexcept override;
+
 	bool SetDestination(const Rectangle& area) noexcept;
 	void SetPosition(const Vector2& position) noexcept;
 	bool IsHover(int mouseX, int mouseY) noexcept;
-	void Render(IRender* render);
+	
 
 private:
 	void CreateImagePart(const ImageSource& imgSource);

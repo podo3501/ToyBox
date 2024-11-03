@@ -2,7 +2,28 @@
 #include "UILayout.h"
 #include "UIType.h"
 
+using json = nlohmann::json;
+
 UILayout::~UILayout() = default;
+Origin GetOrigin(const string& strOrigin)
+{
+	if (strOrigin == "LeftTop") return Origin::LeftTop;
+	if (strOrigin == "Center") return Origin::Center;
+
+	return Origin::Init;
+}
+
+UILayout::UILayout(const json& data)
+{
+	const auto& rect = data["Area"];
+	m_area.x = rect["x"];
+	m_area.y = rect["y"];
+	m_area.width = rect["width"];
+	m_area.height = rect["height"];
+
+	m_origin = GetOrigin(data["Origin"]);
+}
+
 UILayout::UILayout(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin) :
 	m_area{ area },
 	m_originPoint{},

@@ -43,15 +43,18 @@ bool Dialog::SetResources(const wstring& filename)
 	ReturnIfFalse(file.is_open());
 
 	json dataList = json::parse(file);
-	for (const auto& [component, data] : dataList.items())
+	for (const auto& [key, data] : dataList.items())
 	{
-		auto [item, position] = GetComponent(component, data);
+		auto [dataType, compType] = GetType(key);
+		if (dataType == DataType::Init) return false;
+
+		auto [item, position] = GetComponent(compType, data);
 		ReturnIfNullptr(item);
 
 		m_renderItems.emplace_back(make_pair(position, move(item)));
 	}
 
-	return true; 
+	return true;
 }
 
 bool Dialog::SetUIItem()

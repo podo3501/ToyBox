@@ -6,6 +6,7 @@
 #include "ImagePart.h"
 #include "../Utility.h"
 
+ImagePartSet::ImagePartSet() = default;
 ImagePartSet::~ImagePartSet() = default;
 ImagePartSet::ImagePartSet(const vector<ImageSource>& imgSources)
 {
@@ -109,4 +110,32 @@ void ImagePartSet::Render(IRender* render)
 {
 	for (const auto& part : m_images)
 		part->Render(render);
+}
+
+bool ImagePartSet::SetResources(const wstring& filename)
+{
+	filename;
+	//json data = json::parse(file);
+	//const json& imagepartSet = data["ImagePartSet"];
+
+	//ImageSource sources;
+	//sources.filename = StringToWString(imagepartSet["Filename"]);
+	//	
+	//auto& posList = imagepartSet["Position"];
+	//for (size_t i{ 0 }; posList.size() != i; i++)
+	//	sources.list.emplace_back(posList[i][0], posList[i][1], posList[i][2], posList[i][3]);
+
+	return true;
+}
+
+bool ImagePartSet::IsPicking(const Vector2& pos)  const noexcept
+{
+	pos;
+	return true;
+}
+
+const Rectangle& ImagePartSet::GetArea() const noexcept
+{
+	static Rectangle empty;
+	return empty;
 }

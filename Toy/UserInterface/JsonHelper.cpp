@@ -4,33 +4,55 @@
 #include "../Utility.h"
 #include "Dialog.h"
 #include "BGImage.h"
+#include "ImagePartSet.h"
+#include "UILayout.h"
+#include "UIType.h"
 
 using json = nlohmann::json;
 
-unique_ptr<IRenderItem> CreateComponent(const string& component)
+unique_ptr<IRenderItem> CreateComponent(ComponentType compType)
 {
-	if (component == "Dialog")
-		return move(make_unique<Dialog>());
-	if (component == "BGImage")
-		return move(make_unique<BGImage>());
+	switch (compType)
+	{
+		case ComponentType::Dialog: return make_unique<Dialog>();
+		case ComponentType::BGImage: return make_unique<BGImage>();
+		case ComponentType::ImagePartSet: return make_unique<ImagePartSet>();
+	}
 
 	return nullptr;
 }
 
-tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(const string& component, const json& data)
+ComponentType GetComponentType(const string& key)
 {
-	if (component == "Dialog" || component == "BGImage")
-	{
-		wstring compFilename{ StringToWString(data["Filename"]) };
-		const auto& pos = data["Position"];
-		Vector2 position{ pos["x"], pos["y"] };
+	if (key == "Dialog") return ComponentType::Dialog;
+	if (key == "BGImage") return ComponentType::BGImage;
+	if (key == "ImagePartSet") return ComponentType::ImagePartSet;
 
-		unique_ptr<IRenderItem> item = CreateComponent(component);
-		if (item->SetResources(compFilename) == false)
-			return make_tuple(nullptr, position);
+	return ComponentType::Init;
+}
 
-		return make_tuple(move(item), position);
-	}
+tuple<DataType, ComponentType> GetType(const string& key)
+{
+	DataType dataType{ DataType::Init };
+	ComponentType compType{ ComponentType::Init };
 
-	return make_tuple(nullptr, Vector2{});
+	if (key == "Layout") dataType = DataType::Layout;
+	compType = GetComponentType(key);
+	if (compType != ComponentType::Init)
+		dataType = DataType::Component;
+	
+	return make_tuple(dataType, compType);
+}
+
+tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(ComponentType compType, const json& data)
+{
+	wstring compFilename{ StringToWString(data["Filename"]) };
+	const auto& pos = data["Position"];
+	Vector2 position{ pos["x"], pos["y"] };
+
+	unique_ptr<IRenderItem> item = CreateComponent(compType);
+	if (item->SetResources(compFilename) == false)
+		return make_tuple(nullptr, position);
+
+	return make_tuple(move(item), position);
 }

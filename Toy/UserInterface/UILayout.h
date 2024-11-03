@@ -8,6 +8,7 @@ public:
 	UILayout() = delete;
 	~UILayout();
 
+	UILayout(const nlohmann::json& data);
 	UILayout(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin);
 	UILayout(const UILayout& layout) noexcept = default;
 	UILayout(UILayout&& layout) noexcept = default;

@@ -27,12 +27,22 @@ bool BGImage::SetResources(const wstring& filename)
 	ReturnIfFalse(file.is_open());
 
 	json dataList = json::parse(file);
-	for (const auto& [component, data] : dataList.items())
+	for (const auto& [key, data] : dataList.items())
 	{
-		auto [item, position] = GetComponent(component, data);
-		ReturnIfNullptr(item);
+		auto [dataType, compType] = GetType(key);
+		if (dataType == DataType::Init) return false;
 
-		m_renderItems.emplace_back(make_pair(position, move(item)));
+		switch (dataType)
+		{
+		case DataType::Layout:
+			m_layout = make_unique<UILayout>(data);
+			break;
+		case DataType::Component:
+			auto [item, position] = GetComponent(compType, data);
+			ReturnIfNullptr(item);
+			m_renderItems.emplace_back(make_pair(position, move(item)));
+			break;
+		}
 	}
 
 	//json data = json::parse(file);
