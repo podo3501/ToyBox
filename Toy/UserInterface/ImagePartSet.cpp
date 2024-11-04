@@ -6,6 +6,8 @@
 #include "ImagePart.h"
 #include "../Utility.h"
 
+using json = nlohmann::json;
+
 ImagePartSet::ImagePartSet() = default;
 ImagePartSet::~ImagePartSet() = default;
 ImagePartSet::ImagePartSet(const vector<ImageSource>& imgSources)
@@ -21,7 +23,7 @@ ImagePartSet::ImagePartSet(const ImageSource& source)
 void ImagePartSet::CreateImagePart(const ImageSource& imgSource)
 {
 	const wstring& filename = imgSource.filename;
-	if (imgSource.list.empty())	//읽어들이는 부위가 전체 부위와 같을때는 source 정보가 없다.
+	if (imgSource.list.empty())	//읽어들이는 부위가 전체 부위와 같을때는 source 정보(이미지의 부분정보)가 없다.
 	{
 		m_images.emplace_back(make_unique<ImagePart>(filename, Rectangle{}));
 		return;
@@ -114,16 +116,18 @@ void ImagePartSet::Render(IRender* render)
 
 bool ImagePartSet::SetResources(const wstring& filename)
 {
-	filename;
-	//json data = json::parse(file);
-	//const json& imagepartSet = data["ImagePartSet"];
+	ifstream file(filename);
+	ReturnIfFalse(file.is_open());
 
-	//ImageSource sources;
-	//sources.filename = StringToWString(imagepartSet["Filename"]);
-	//	
-	//auto& posList = imagepartSet["Position"];
-	//for (size_t i{ 0 }; posList.size() != i; i++)
-	//	sources.list.emplace_back(posList[i][0], posList[i][1], posList[i][2], posList[i][3]);
+	json data = json::parse(file);
+	ImageSource sources;
+	sources.filename = StringToWString(data["Filename"]);
+
+	auto& posList = data["Position"];
+	for (size_t i{ 0 }; posList.size() != i; i++)
+		sources.list.emplace_back(posList[i][0], posList[i][1], posList[i][2], posList[i][3]);
+
+	CreateImagePart(sources);
 
 	return true;
 }

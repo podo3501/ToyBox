@@ -33,10 +33,10 @@ bool Scene::LoadData(const wstring& filename)
 	json dataList = json::parse(file);
 	for (const auto& [key, data] : dataList.items())
 	{
-		auto [dataType, compType] = GetType(key);
+		auto dataType = GetType(key);
 		if (dataType == DataType::Init) return false;
 
-		auto [item, position] = GetComponent(compType, data);
+		auto [item, position] = GetComponent(data);
 		ReturnIfNullptr(item);
 
 		m_renderItems.emplace_back(make_pair(position, move(item)));

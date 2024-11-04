@@ -16,7 +16,6 @@ unique_ptr<IRenderItem> CreateComponent(ComponentType compType)
 	{
 		case ComponentType::Dialog: return make_unique<Dialog>();
 		case ComponentType::BGImage: return make_unique<BGImage>();
-		case ComponentType::ImagePartSet: return make_unique<ImagePartSet>();
 	}
 
 	return nullptr;
@@ -26,29 +25,34 @@ ComponentType GetComponentType(const string& key)
 {
 	if (key == "Dialog") return ComponentType::Dialog;
 	if (key == "BGImage") return ComponentType::BGImage;
-	if (key == "ImagePartSet") return ComponentType::ImagePartSet;
 
 	return ComponentType::Init;
 }
 
-tuple<DataType, ComponentType> GetType(const string& key)
+DataType GetType(const string& key)
 {
 	DataType dataType{ DataType::Init };
-	ComponentType compType{ ComponentType::Init };
 
 	if (key == "Layout") dataType = DataType::Layout;
-	compType = GetComponentType(key);
-	if (compType != ComponentType::Init)
-		dataType = DataType::Component;
+	if (key == "Property") dataType = DataType::Property;
+	if (key == "Component") dataType = DataType::Component;
 	
-	return make_tuple(dataType, compType);
+	return dataType;
 }
 
-tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(ComponentType compType, const json& data)
+tuple<wstring, Vector2> GetFilenameAndPos(const json& data)
 {
-	wstring compFilename{ StringToWString(data["Filename"]) };
+	wstring filename{ StringToWString(data["Filename"]) };
 	const auto& pos = data["Position"];
 	Vector2 position{ pos["x"], pos["y"] };
+
+	return make_tuple(filename, position);
+}
+
+tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(const json& data)
+{
+	ComponentType compType = GetComponentType(data["Type"]);
+	const auto& [compFilename, position] = GetFilenameAndPos(data);
 
 	unique_ptr<IRenderItem> item = CreateComponent(compType);
 	if (item->SetResources(compFilename) == false)

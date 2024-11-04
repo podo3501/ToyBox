@@ -1,6 +1,7 @@
 {
-	"Dialog": 
+	"Component": 
 	{
+		"Type": "Dialog",
 		"Filename": "Resources/UI/Data/Dialog.json",
 		"Position": 
 		{ 

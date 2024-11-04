@@ -15,10 +15,12 @@ BGImage::BGImage()
 
 bool BGImage::LoadResources(ILoadData* load)
 { 
-	ReturnIfFalse(m_imagePartSet->LoadResources(load));
-	ReturnIfFalse(m_imagePartSet->SetDestination(m_layout->GetArea()));
-
-	return true;
+	return ranges::all_of(m_NimagePartSet, [this, load](const auto& item) {
+		const auto& imagePartSet = item.second.get();
+		ReturnIfFalse(imagePartSet->LoadResources(load));
+		ReturnIfFalse(imagePartSet->SetDestination(m_layout->GetArea()));
+		return true;
+		});
 }
 
 bool BGImage::SetResources(const wstring& filename)
@@ -29,7 +31,7 @@ bool BGImage::SetResources(const wstring& filename)
 	json dataList = json::parse(file);
 	for (const auto& [key, data] : dataList.items())
 	{
-		auto [dataType, compType] = GetType(key);
+		auto dataType = GetType(key);
 		if (dataType == DataType::Init) return false;
 
 		switch (dataType)
@@ -37,27 +39,13 @@ bool BGImage::SetResources(const wstring& filename)
 		case DataType::Layout:
 			m_layout = make_unique<UILayout>(data);
 			break;
-		case DataType::Component:
-			auto [item, position] = GetComponent(compType, data);
-			ReturnIfNullptr(item);
-			m_renderItems.emplace_back(make_pair(position, move(item)));
+		case DataType::Property:
+			auto [imagePartSet, position] = GetProperty<ImagePartSet>(data);
+			ReturnIfNullptr(imagePartSet);
+			m_NimagePartSet.emplace_back(make_pair(position, move(imagePartSet)));
 			break;
 		}
 	}
-
-	//json data = json::parse(file);
-	//const json& imagepartSet = data["ImagePartSet"];
-
-	//ImageSource sources;
-	//sources.filename = StringToWString(imagepartSet["Filename"]);
-	//	
-	//auto& posList = imagepartSet["Position"];
-	//for (size_t i{ 0 }; posList.size() != i; i++)
-	//	sources.list.emplace_back(posList[i][0], posList[i][1], posList[i][2], posList[i][3]);
-
-	////m_layout = make_unique<UILayout>(layout);
-
-	////m_imagePartSet = make_unique<ImagePartSet>(sources);
 
 	return true; 
 }

@@ -1,6 +1,7 @@
 {
-	"BGImage":
+	"Component":
 	{
+		"Type": "BGImage",
 		"Filename": "Resources/UI/Data/BGImage.json",
 		"Position":
 		{		         
