@@ -7,6 +7,7 @@
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/UILayout.h"
+#include "../Toy/UserInterface/JsonHelper.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -39,19 +40,12 @@ bool ToolMainLoop::InitializeDerived()
     return true;
 }
 
-bool ToolMainLoop::LoadResources(const wstring& resPath)
+bool ToolMainLoop::LoadResources()
 {
-    Rectangle rect{ 0, 0, 220, 190 };
-    UILayout layout(move(rect), { 0.0f, 0.0f }, Origin::LeftTop);
-    ImageSource dialogSource{
-        L"Resources/UI/Blue/button_square_header_large_square_screws.png", {
-            { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-            { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-            { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
-        }
-    };
+    //다이얼로그를 열면 0.1씩 벗어나야 하고, 최종창에는 벗어나지 않아야 한다.
+    ReturnIfFalse(m_bgImage->SetResources(L"UI/Data/BGImage.json"));
 
-    m_bgImage->SetImage(m_renderer, dialogSource, layout);
+    m_renderer->AddLoadResource(m_bgImage.get());
     m_renderer->AddRenderItem(m_bgImage.get());
 
     m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);

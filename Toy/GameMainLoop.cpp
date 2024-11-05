@@ -43,7 +43,7 @@ bool GameMainLoop::InitializeDerived()
     return true;
 }
 
-bool GameMainLoop::LoadResources(const wstring&)
+bool GameMainLoop::LoadResources()
 {
     vector<ImageSource> normal
     {

@@ -2,6 +2,7 @@
 #include "ToyTestFixture.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Window.h"
+#include "../Toy/Config.h"
 #include "Utility.h"
 
 ToyTest::ToyTest() = default;
@@ -20,6 +21,8 @@ void ToyTest::SetUp()
 	EXPECT_TRUE(m_window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
 	const auto& outputSize = m_window->GetOutputSize();
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
+
+	SetResourcePath(L"Resources/");
 }
 
 void ToyTest::TearDown()

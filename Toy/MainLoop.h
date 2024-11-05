@@ -23,7 +23,7 @@ public:
 
 protected:
     virtual bool InitializeDerived() = 0;
-    virtual bool LoadResources(const wstring& resPath) = 0;
+    virtual bool LoadResources() = 0;
     virtual bool SetDatas(IGetValue* getValue) = 0;
     virtual void Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker) = 0;
 

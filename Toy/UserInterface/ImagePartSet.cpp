@@ -5,6 +5,7 @@
 #include "UILayout.h"
 #include "ImagePart.h"
 #include "../Utility.h"
+#include "JsonHelper.h"
 
 using json = nlohmann::json;
 
@@ -73,7 +74,11 @@ vector<Rectangle> ImagePartSet::StretchSize(const Rectangle& area) noexcept
 	if (m_images.size() == 3) yPoints = { 0, static_cast<long>(GetSize(0).y) };
 	if (m_images.size() == 9) yPoints = GetStretchedSize(area.height, GetSize(0).y, GetSize(6).y);
 
-	//4x2나 4x4점을 이용해서 Rectangle을 만드는 코드
+	//. . . .	. . . . 
+	//. . . .	. . . .
+	//. . . .
+	//. . . .
+	//4x4나 4x2점을 이용해서 Rectangle을 만드는 코드
 	for (auto iy = yPoints.begin(); iy != std::prev(yPoints.end()); ++iy)
 		for (auto ix = xPoints.begin(); ix != std::prev(xPoints.end()); ++ix)
 			destinations.emplace_back(Rectangle(*ix, *iy, *(ix + 1) - *(ix), *(iy + 1) - *(iy)));
@@ -116,10 +121,10 @@ void ImagePartSet::Render(IRender* render)
 
 bool ImagePartSet::SetResources(const wstring& filename)
 {
-	ifstream file(filename);
-	ReturnIfFalse(file.is_open());
+	const json& data = LoadUIFile(filename);
+	if (data.is_null())
+		return false;
 
-	json data = json::parse(file);
 	ImageSource sources;
 	sources.filename = StringToWString(data["Filename"]);
 

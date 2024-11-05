@@ -27,6 +27,7 @@ enum class PropertyType
 DataType GetType(const string& key);
 tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(const nlohmann::json& data);
 tuple<wstring, Vector2> GetFilenameAndPos(const nlohmann::json& data);
+nlohmann::json LoadUIFile(const wstring& filename);
 
 template<typename T>
 tuple<unique_ptr<T>, Vector2> GetProperty(const nlohmann::json& data)

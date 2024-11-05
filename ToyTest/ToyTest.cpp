@@ -226,7 +226,7 @@ TEST_F(ToyTest, Dialog)
 TEST_F(ToyTest, Scene)
 {
 	unique_ptr<Scene>testScene = std::make_unique<Scene>(m_renderer.get());
-	EXPECT_TRUE(testScene->LoadData(L"Resources/UI/Data/FirstScene.json"));
+	EXPECT_TRUE(testScene->LoadData(L"UI/Data/FirstScene.json"));
 
 	m_renderer->AddLoadScene(testScene.get());
 	m_renderer->AddRenderScene(testScene.get());

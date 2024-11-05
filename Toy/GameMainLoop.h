@@ -14,7 +14,7 @@ public:
 
 protected:
 	virtual bool InitializeDerived() override;
-	virtual bool LoadResources(const wstring& resPath) override;
+	virtual bool LoadResources() override;
 	virtual bool SetDatas(IGetValue* getValue) override;
 	virtual void Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker) override;
 

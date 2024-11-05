@@ -15,20 +15,18 @@ BGImage::BGImage()
 
 bool BGImage::LoadResources(ILoadData* load)
 { 
-	return ranges::all_of(m_NimagePartSet, [this, load](const auto& item) {
-		const auto& imagePartSet = item.second.get();
-		ReturnIfFalse(imagePartSet->LoadResources(load));
-		ReturnIfFalse(imagePartSet->SetDestination(m_layout->GetArea()));
-		return true;
-		});
+	ReturnIfFalse(m_imagePartSet->LoadResources(load));
+	ReturnIfFalse(m_imagePartSet->SetDestination(m_layout->GetArea()));
+
+	return true;
 }
 
 bool BGImage::SetResources(const wstring& filename)
 {
-	ifstream file(filename);
-	ReturnIfFalse(file.is_open());
+	const json& dataList = LoadUIFile(filename);
+	if (dataList.is_null())
+		return false;
 
-	json dataList = json::parse(file);
 	for (const auto& [key, data] : dataList.items())
 	{
 		auto dataType = GetType(key);
@@ -40,9 +38,8 @@ bool BGImage::SetResources(const wstring& filename)
 			m_layout = make_unique<UILayout>(data);
 			break;
 		case DataType::Property:
-			auto [imagePartSet, position] = GetProperty<ImagePartSet>(data);
-			ReturnIfNullptr(imagePartSet);
-			m_NimagePartSet.emplace_back(make_pair(position, move(imagePartSet)));
+			tie(m_imagePartSet, m_position) = GetProperty<ImagePartSet>(data);
+			ReturnIfNullptr(m_imagePartSet);
 			break;
 		}
 	}
@@ -66,14 +63,17 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 {
 	ReturnIfFalse(m_imagePartSet->SetDestination(area));
 
-	m_layout->Set(move(area));
+	m_layout->Set(area);
 
 	return true;
 }
 
 void BGImage::Update(const Vector2& resolution) noexcept
 {
-	m_imagePartSet->SetPosition(m_layout->GetPosition(resolution));
+	const Vector2 pos = m_layout->GetPosition(resolution) + (resolution * m_position);
+	m_imagePartSet->SetPosition(pos);
+
+	//m_imagePartSet->SetPosition(m_layout->GetPosition(resolution));
 }
 
 void BGImage::Update(const Vector2& normalPos, const Vector2& resolution) noexcept

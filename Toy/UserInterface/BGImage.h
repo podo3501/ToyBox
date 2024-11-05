@@ -33,6 +33,7 @@ public:
 private:
 	unique_ptr<UILayout> m_layout;
 	unique_ptr<ImagePartSet> m_imagePartSet;
-	vector<pair<Vector2, unique_ptr<ImagePartSet>>> m_NimagePartSet;
-	vector<pair<Vector2, unique_ptr<IRenderItem>>> m_renderItems;
+	Vector2 m_position{};
+	//vector<pair<Vector2, unique_ptr<ImagePartSet>>> m_NimagePartSet;
+	//vector<pair<Vector2, unique_ptr<IRenderItem>>> m_renderItems;
 };

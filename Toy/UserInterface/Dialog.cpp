@@ -39,10 +39,10 @@ const Rectangle& Dialog::GetArea() const noexcept
 
 bool Dialog::SetResources(const wstring& filename)
 { 
-	ifstream file(filename);
-	ReturnIfFalse(file.is_open());
+	const json& dataList = LoadUIFile(filename);
+	if (dataList.is_null())
+		return false;
 
-	json dataList = json::parse(file);
 	for (const auto& [key, data] : dataList.items())
 	{
 		auto dataType = GetType(key);

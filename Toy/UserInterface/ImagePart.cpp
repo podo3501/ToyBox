@@ -2,6 +2,7 @@
 #include "ImagePart.h"
 #include "../../Include/IRenderer.h"
 #include "../Utility.h"
+#include "Config.h"
 
 ImagePart::ImagePart(const std::wstring& filename, const Rectangle& source) :
 	m_filename{ filename },
@@ -11,7 +12,7 @@ ImagePart::ImagePart(const std::wstring& filename, const Rectangle& source) :
 bool ImagePart::Load(ILoadData* load)
 {
 	XMUINT2 size{};
-	auto result = load->LoadTexture(m_filename, nullptr, m_index, &size);
+	auto result = load->LoadTexture(GetResourcePath() + m_filename, nullptr, m_index, &size);
 	if (!m_source.IsEmpty()) return result;
 
 	m_source = { 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };

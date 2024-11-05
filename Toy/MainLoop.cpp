@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "StepTimer.h"
 #include "WindowProcedure.h"
+#include "Config.h"
 
 MainLoop::~MainLoop() = default;
 MainLoop::MainLoop(Window* window, IRenderer* renderer) :
@@ -14,14 +15,14 @@ MainLoop::MainLoop(Window* window, IRenderer* renderer) :
 
 bool MainLoop::Initialize(const wstring& resPath)
 {
-    m_resourcePath = resPath;
+    SetResourcePath(resPath);
     
     ReturnIfFalse(InitializeClass());
     ReturnIfFalse(InitializeDerived());
 
     AddWinProcListener();
 
-    ReturnIfFalse(LoadResources(m_resourcePath));
+    ReturnIfFalse(LoadResources());
     m_renderer->LoadResources();
 
     ReturnIfFalse(SetDatas(m_renderer->GetValue()));

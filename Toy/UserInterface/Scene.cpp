@@ -27,10 +27,10 @@ void Scene::RenderScene(IRender* render)
 
 bool Scene::LoadData(const wstring& filename)
 {
-	ifstream file(filename);
-	ReturnIfFalse(file.is_open());
-	   
-	json dataList = json::parse(file);
+	const json& dataList = LoadUIFile(filename);
+	if (dataList.is_null())
+		return false;
+
 	for (const auto& [key, data] : dataList.items())
 	{
 		auto dataType = GetType(key);

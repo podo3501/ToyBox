@@ -7,6 +7,7 @@
 #include "ImagePartSet.h"
 #include "UILayout.h"
 #include "UIType.h"
+#include "../Config.h"
 
 using json = nlohmann::json;
 
@@ -59,4 +60,13 @@ tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(const json& data)
 		return make_tuple(nullptr, position);
 
 	return make_tuple(move(item), position);
+}
+
+json LoadUIFile(const wstring& filename)
+{
+	ifstream file(GetResourcePath() + filename);
+	if (!file.is_open())
+		return nullptr;
+
+	return json::parse(file);
 }
