@@ -258,7 +258,7 @@ TEST(MainLoop, MultipleAppExcute)
 		EXPECT_TRUE(renderer != nullptr);
 
 		unique_ptr<MainLoop> mainLoop = make_unique<GameMainLoop>(&window, renderer.get());
-		EXPECT_TRUE(mainLoop->Initialize(L"Resources/"));
+		EXPECT_TRUE(mainLoop->Initialize(L"Resources/", outputSize));
 		mainLoop.reset();
 	}
 }

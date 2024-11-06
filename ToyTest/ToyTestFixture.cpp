@@ -22,7 +22,7 @@ void ToyTest::SetUp()
 	const auto& outputSize = m_window->GetOutputSize();
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
-	SetResourcePath(L"Resources/");
+	InitializeConfig(L"Resources/", outputSize);
 }
 
 void ToyTest::TearDown()

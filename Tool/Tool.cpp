@@ -63,7 +63,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 			return 1;
 
 		unique_ptr<MainLoop> mainLoop = make_unique<ToolMainLoop>(&window, renderer.get());
-		result = mainLoop->Initialize(L"../Resources/");
+		result = mainLoop->Initialize(L"../Resources/", outputSize);
 		if (not result)
 			return 1;
 

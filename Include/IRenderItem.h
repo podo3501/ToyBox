@@ -10,6 +10,7 @@ public:
 	virtual ~IRenderItem() {};
 	virtual bool SetResources(const wstring& filename) = 0;
 	virtual bool LoadResources(ILoadData* load) = 0;
+	virtual bool Update(const Vector2& position) noexcept = 0;
 	virtual void Render(IRender* render) = 0;
 	virtual bool IsPicking(const Vector2& pos)  const noexcept = 0;
 	virtual const Rectangle& GetArea() const noexcept = 0;

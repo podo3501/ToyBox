@@ -96,10 +96,12 @@ bool ImagePartSet::SetDestination(const Rectangle& area) noexcept
 	return true;
 }
 
-void ImagePartSet::SetPosition(const Vector2& position) noexcept
+bool ImagePartSet::Update(const Vector2& position) noexcept
 {
 	for (const auto& part : m_images)
 		part->SetPosition(position);
+
+	return true;
 }
 
 bool ImagePartSet::IsHover(int mouseX, int mouseY) noexcept

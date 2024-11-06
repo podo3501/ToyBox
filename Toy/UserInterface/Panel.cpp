@@ -43,13 +43,15 @@ const Rectangle& Panel::GetArea() const noexcept
     return m_area;
 }
 
-void Panel::Update(const Vector2& resolution)
+bool Panel::Update(const Vector2& position) noexcept
 {
     for (const auto& i : m_renderItems)
     {
         BGImage* bgImg = static_cast<BGImage*>(i.second.get());
-        bgImg->Update(i.first, resolution);
+        ReturnIfFalse(bgImg->Update(i.first + position));
     }
+
+    return true;
 }
 
 void Panel::AddRenderItem(const Vector2& normalPos, unique_ptr<IRenderItem>&& renderItem)

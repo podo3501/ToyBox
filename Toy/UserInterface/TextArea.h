@@ -13,11 +13,11 @@ public:
 
 	virtual bool SetResources(const wstring& filename) override { filename; return true; }
 	virtual bool LoadResources(ILoadData* load) override;
+	virtual bool Update(const Vector2& position) noexcept override;
 	virtual void Render(IRender* render) override;
 	virtual bool IsPicking(const Vector2&)  const noexcept override { return false; }
 	virtual const Rectangle& GetArea() const noexcept override;
 
-	void Update(const Vector2& resolution) noexcept;
 	void SetFont(IRenderer* renderer, const map<wstring, wstring>& fontFileList, const UILayout& layout);
 	bool SetText(IGetValue* update, wstring&& text);
 

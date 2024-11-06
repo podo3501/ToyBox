@@ -11,6 +11,7 @@
 using json = nlohmann::json;
 
 Dialog::Dialog() :
+	m_layout{ make_unique<UILayout>(Rectangle{}, Vector2{}, Origin::Center) },
 	m_panel{ make_unique<Panel>() }
 {};
 Dialog::~Dialog() = default;
@@ -20,6 +21,17 @@ bool Dialog::LoadResources(ILoadData* load)
 	return ranges::all_of(m_renderItems, [load](const auto& item) {
 		return item.second->LoadResources(load);
 		});
+}
+
+bool Dialog::Update(const Vector2& position) noexcept
+{
+	for (const auto& item : m_renderItems)
+	{
+		const Vector2& pos = item.first;
+		ReturnIfFalse(item.second->Update(pos));
+	}
+
+	return true;
 }
 
 void Dialog::Render(IRender* render)
@@ -34,7 +46,7 @@ bool Dialog::IsPicking(const Vector2& pos)  const noexcept
 
 const Rectangle& Dialog::GetArea() const noexcept
 {
-	return m_panel->GetArea();
+	return m_layout->GetArea();
 }
 
 bool Dialog::SetResources(const wstring& filename)
@@ -50,10 +62,11 @@ bool Dialog::SetResources(const wstring& filename)
 
 		auto [item, position] = GetComponent(data);
 		ReturnIfNullptr(item);
-
+		
+		m_layout->Union(item->GetArea());	//자식의 크기만큼 자신의 크기를 키운다.
 		m_renderItems.emplace_back(make_pair(position, move(item)));
 	}
-
+	
 	return true;
 }
 

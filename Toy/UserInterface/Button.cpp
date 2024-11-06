@@ -47,7 +47,7 @@ void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker* 
 	const Vector2& originPos = m_layout->GetPosition(resolution);
 
 	for (const auto& partSet : m_image | views::values)
-		partSet->SetPosition(originPos);
+		partSet->Update(originPos);
 
 	bool bHover = ranges::any_of(m_image | views::values, [mouseState = tracker->GetLastState()](const auto& partSet) {
 		return partSet->IsHover(mouseState.x, mouseState.y);

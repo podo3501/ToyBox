@@ -68,19 +68,21 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-void BGImage::Update(const Vector2& resolution) noexcept
+bool BGImage::Update(const Vector2& position) noexcept
 {
-	const Vector2 pos = m_layout->GetPosition(resolution) + (resolution * m_position);
-	m_imagePartSet->SetPosition(pos);
+	const Vector2 pos = m_layout->GetPosition(m_position + position);
+	ReturnIfFalse(m_imagePartSet->Update(pos));
 
 	//m_imagePartSet->SetPosition(m_layout->GetPosition(resolution));
+
+	return true;
 }
 
-void BGImage::Update(const Vector2& normalPos, const Vector2& resolution) noexcept
-{
-	const Vector2 pos = m_layout->GetPosition(resolution) + (resolution * normalPos);
-	m_imagePartSet->SetPosition(pos);
-}
+//void BGImage::Update(const Vector2& normalPos, const Vector2& resolution) noexcept
+//{
+//	const Vector2 pos = m_layout->GetPosition(resolution) + (resolution * normalPos);
+//	m_imagePartSet->SetPosition(pos);
+//}
 
 void BGImage::Render(IRender* renderer)
 {

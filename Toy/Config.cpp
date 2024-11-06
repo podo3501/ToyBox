@@ -2,12 +2,13 @@
 #include "Config.h"
 
 static wstring g_resourcePath{};
-void SetResourcePath(const wstring& resourcePath) noexcept
+static Vector2 g_resolution{};
+
+void InitializeConfig(const wstring& resourcePath, const Vector2& resolution) noexcept
 {
 	g_resourcePath = resourcePath;
+	g_resolution = resolution;
 }
 
-const wstring& GetResourcePath() noexcept
-{
-	return g_resourcePath;
-}
+const wstring& GetResourcePath() noexcept { return g_resourcePath; }
+const Vector2& GetResolution() noexcept { return g_resolution; }

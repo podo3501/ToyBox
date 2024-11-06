@@ -8,6 +8,7 @@
 #include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/UserInterface/Dialog.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -35,7 +36,7 @@ ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
 
 bool ToolMainLoop::InitializeDerived()
 {
-    m_bgImage = make_unique<BGImage>();
+    m_dialog = make_unique<Dialog>();
 
     return true;
 }
@@ -43,13 +44,13 @@ bool ToolMainLoop::InitializeDerived()
 bool ToolMainLoop::LoadResources()
 {
     //다이얼로그를 열면 0.1씩 벗어나야 하고, 최종창에는 벗어나지 않아야 한다.
-    ReturnIfFalse(m_bgImage->SetResources(L"UI/Data/BGImage.json"));
+    ReturnIfFalse(m_dialog->SetResources(L"UI/Data/Dialog.json"));
 
-    m_renderer->AddLoadResource(m_bgImage.get());
-    m_renderer->AddRenderItem(m_bgImage.get());
+    m_renderer->AddLoadResource(m_dialog.get());
+    m_renderer->AddRenderItem(m_dialog.get());
 
     m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
-    ReturnIfFalse(m_guiAppWindow->Create(m_bgImage.get(), { 400, 300 }));
+    ReturnIfFalse(m_guiAppWindow->Create(m_dialog.get(), { 400, 300 }));
     
     return true;
 }
@@ -66,7 +67,7 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_bgImage->Update(resolution);
+    m_dialog->Update(Vector2{});
 
     PIXEndEvent();
 }

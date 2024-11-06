@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UILayout.h"
 #include "UIType.h"
+#include "../Config.h"
 
 using json = nlohmann::json;
 
@@ -73,12 +74,17 @@ void UILayout::Set(const Rectangle& area, const Vector2& normalPos) noexcept
 	Set(normalPos);
 }
 
-Vector2 UILayout::GetPosition(const Vector2& resolution) const noexcept
+Vector2 UILayout::GetPosition(const Vector2& position) const noexcept
 {
-	return ( resolution * m_normalizedPosition ) - m_originPoint;
+	return (GetResolution() * (m_normalizedPosition + position)) - m_originPoint;
 }
 
 bool UILayout::IsArea(const Vector2& pos) const noexcept
 {
 	return m_area.Contains(pos);
+}
+
+void UILayout::Union(const Rectangle& area) noexcept
+{
+	m_area = Rectangle::Union(m_area, area);
 }

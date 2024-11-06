@@ -13,8 +13,8 @@ GuiWidget::GuiWidget(IRenderer* renderer) :
 
 bool GuiWidget::Create(IRenderItem* renderItem)
 {
-    BGImage* bgImage = static_cast<BGImage*>(renderItem);
-    const Rectangle& area = bgImage->GetArea();
+    //BGImage* bgImage = static_cast<BGImage*>(renderItem);
+    const Rectangle& area = renderItem->GetArea();
     XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
     ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem, m_textureID));
     m_renderItem = renderItem;
@@ -54,8 +54,8 @@ void GuiWidget::Render(ImGuiIO* io)
             bPicking = !bPicking;
     }
 
-    BGImage* bgImage = static_cast<BGImage*>(m_renderItem);
-    static Rectangle newArea = bgImage->GetArea();
+    //BGImage* bgImage = static_cast<BGImage*>(m_renderItem);
+    static Rectangle newArea = m_renderItem->GetArea();
 
     // ImGui에 텍스춰에 찍어논 화면을 연결
     ImGui::Image(m_textureID, { static_cast<float>(newArea.width), static_cast<float>(newArea.height) });
@@ -74,7 +74,7 @@ void GuiWidget::Render(ImGuiIO* io)
             static_cast<float>(rect.y) + static_cast<float>(rect.height) + startPos.y }, col);
 
         ImGui::Begin("Dialog Property", &bPicking);
-        const Rectangle& dialogArea = bgImage->GetArea();
+        const Rectangle& dialogArea = m_renderItem->GetArea();
 
         static int width = dialogArea.width;
         ImGui::InputInt("width", &width);
@@ -85,8 +85,8 @@ void GuiWidget::Render(ImGuiIO* io)
         newArea.height = height;
         if (dialogArea != newArea)
         {
-            bgImage->ChangeArea(newArea);
-            m_renderer->ModifyRenderTexture(m_textureID, { static_cast<uint32_t>(width), static_cast<uint32_t>(height) });
+            //m_renderItem->ChangeArea(newArea);
+            //m_renderer->ModifyRenderTexture(m_textureID, { static_cast<uint32_t>(width), static_cast<uint32_t>(height) });
         }
         ImGui::End();
     }

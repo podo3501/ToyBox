@@ -22,6 +22,8 @@ public:
 	const Rectangle& GetArea() const noexcept { return m_area; }
 	Vector2 GetPosition(const Vector2& resolution) const noexcept;
 
+	void Union(const Rectangle& area) noexcept;
+
 	bool IsArea(const Vector2& pos) const noexcept;
 
 private:

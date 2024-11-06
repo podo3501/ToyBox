@@ -18,7 +18,7 @@ public:
     MainLoop(Window* window, IRenderer* renderer);
     virtual ~MainLoop();
 
-    bool Initialize(const wstring& resPath);
+    bool Initialize(const wstring& resPath, const Vector2& resolution);
     int Run();
 
 protected:

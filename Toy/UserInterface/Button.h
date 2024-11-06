@@ -25,6 +25,7 @@ public:
 
 	virtual bool SetResources(const wstring& filename) override { filename; return true; }
 	virtual bool LoadResources(ILoadData* load) override;
+	virtual bool Update(const Vector2& position) noexcept override { return true; }
 	virtual void Render(IRender* renderer) override;
 	virtual bool IsPicking(const Vector2&)  const noexcept override { return false; }
 	virtual const Rectangle& GetArea() const noexcept override;

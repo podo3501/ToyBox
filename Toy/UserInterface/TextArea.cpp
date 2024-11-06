@@ -4,6 +4,7 @@
 #include "UILayout.h"
 #include "../Utility.h"
 #include "UIUtility.h"
+#include "../Config.h"
 
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
@@ -91,9 +92,11 @@ bool TextArea::SetText(IGetValue* getValue, wstring&& text)
 	return true;
 }
 
-void TextArea::Update(const Vector2& resolution) noexcept
+bool TextArea::Update(const Vector2& position) noexcept
 {
-	m_position = m_layout->GetPosition(resolution);
+	m_position = m_layout->GetPosition(position);
+
+	return true;
 }
 
 void TextArea::Render(IRender* render)

@@ -13,9 +13,9 @@ MainLoop::MainLoop(Window* window, IRenderer* renderer) :
     m_renderer{ renderer }
 {}
 
-bool MainLoop::Initialize(const wstring& resPath)
+bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
 {
-    SetResourcePath(resPath);
+    InitializeConfig(resPath, resolution);
     
     ReturnIfFalse(InitializeClass());
     ReturnIfFalse(InitializeDerived());
