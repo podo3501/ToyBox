@@ -2,6 +2,8 @@
 #include "../Include/IRenderItem.h"
 
 struct IRenderer;
+
+class RenderItemProperty;
 class UILayout;
 class Panel;
 
@@ -18,11 +20,12 @@ public:
 	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
 	virtual const Rectangle& GetArea() const noexcept override;
 
-	void Update() noexcept;
+	IRenderItem* GetSelected() const noexcept;
+	//void Update() noexcept;
 	bool SetUIItem();
 
 private:
 	unique_ptr<UILayout> m_layout;
-	vector<pair<Vector2, unique_ptr<IRenderItem>>> m_renderItems;
+	vector<unique_ptr<RenderItemProperty>> m_renderItems;
 	unique_ptr<Panel> m_panel;
 };

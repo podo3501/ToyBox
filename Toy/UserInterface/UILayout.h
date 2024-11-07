@@ -10,8 +10,8 @@ public:
 
 	UILayout(const nlohmann::json& data);
 	UILayout(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin);
-	UILayout(const UILayout& layout) noexcept = default;
-	UILayout(UILayout&& layout) noexcept = default;
+	UILayout(const UILayout& other) noexcept = default;
+	UILayout(UILayout&& other) noexcept = default;
 
 	void Set(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin) noexcept;
 	void Set(const Rectangle& area) noexcept;

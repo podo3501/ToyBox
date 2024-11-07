@@ -13,8 +13,9 @@ enum class Origin;
 class BGImage : public IRenderItem
 {
 public:
-	BGImage();
 	virtual ~BGImage();
+	BGImage();
+	BGImage(const UILayout* layout, const ImagePartSet* imagePartSet, const Vector2& position);
 
 	virtual bool SetResources(const wstring& filename) override;
 	virtual bool LoadResources(ILoadData* load) override;
@@ -28,8 +29,10 @@ public:
 		const ImageSource& sources,
 		const UILayout& layout);
 	bool ChangeArea(const Rectangle& area) noexcept;
+	unique_ptr<IRenderItem> Clone();
+	void SetPosition(const Vector2& pos) noexcept;
 	//void Update(const Vector2& normalPos, const Vector2& resolution) noexcept;
-
+	
 private:
 	unique_ptr<UILayout> m_layout;
 	unique_ptr<ImagePartSet> m_imagePartSet;

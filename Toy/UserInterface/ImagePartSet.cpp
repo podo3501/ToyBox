@@ -21,6 +21,13 @@ ImagePartSet::ImagePartSet(const ImageSource& source)
 	CreateImagePart(source);
 }
 
+ImagePartSet::ImagePartSet(const ImagePartSet& other)
+{
+	ranges::for_each(other.m_images, [this](const auto& part){
+		m_images.emplace_back(make_unique<ImagePart>(*part));
+		});
+}
+
 void ImagePartSet::CreateImagePart(const ImageSource& imgSource)
 {
 	const wstring& filename = imgSource.filename;

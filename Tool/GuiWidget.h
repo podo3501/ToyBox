@@ -13,12 +13,12 @@ public:
     virtual void Render(ImGuiIO* io) override;
     virtual void Update();
 
-    bool Create(IRenderItem* renderItem);
+    bool Create(unique_ptr<IRenderItem> renderItem);
     void SetVisible(bool visible) { m_visible = visible; }
 
 private:
     IRenderer* m_renderer{ nullptr };
-    IRenderItem* m_renderItem;
+    unique_ptr<IRenderItem> m_renderItem;
     ImTextureID m_textureID{};
     
     bool m_visible{ true };

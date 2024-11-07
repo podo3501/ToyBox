@@ -7,6 +7,8 @@ class ImagePart
 {
 public:
 	ImagePart() = delete;
+	ImagePart(const ImagePart& other) noexcept = default;
+	ImagePart(ImagePart&& other) noexcept = default;
 	ImagePart(const std::wstring& filename, const Rectangle& source);
 
 	bool Load(ILoadData* load);

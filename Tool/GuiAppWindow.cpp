@@ -2,6 +2,7 @@
 #include "GuiAppWindow.h"
 #include "GuiWidget.h"
 #include "../Toy/UserInterface/BGImage.h"
+#include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/Utility.h"
 
 GuiAppWindow::~GuiAppWindow() = default;
@@ -21,8 +22,14 @@ bool GuiAppWindow::Create(IRenderItem* renderItem, const XMUINT2& size)
     m_renderItem = renderItem;
     m_size = size;
 
+    //임시로 bgImage가 선택되었다고 가정한다.
     m_guiWidget = make_unique<GuiWidget>(m_renderer);
-    ReturnIfFalse(m_guiWidget->Create(renderItem));
+    auto dialog = static_cast<Dialog*>(renderItem);
+    auto curBGImage = static_cast<BGImage*>(dialog->GetSelected());
+    auto clone = curBGImage->Clone();
+    static_cast<BGImage*>(clone.get())->SetPosition({0.f, 0.f});
+    
+    ReturnIfFalse(m_guiWidget->Create(move(clone)));
 
     return true;
 }

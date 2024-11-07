@@ -11,6 +11,7 @@ class ImagePartSet : public IRenderItem
 public:
 	ImagePartSet();
 	~ImagePartSet();
+	ImagePartSet(const ImagePartSet& other);
 	ImagePartSet(const vector<ImageSource>& imgSources);
 	ImagePartSet(const ImageSource& source);
 

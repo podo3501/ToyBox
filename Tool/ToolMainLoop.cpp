@@ -48,15 +48,15 @@ bool ToolMainLoop::LoadResources()
 
     m_renderer->AddLoadResource(m_dialog.get());
     m_renderer->AddRenderItem(m_dialog.get());
-
-    m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
-    ReturnIfFalse(m_guiAppWindow->Create(m_dialog.get(), { 400, 300 }));
     
     return true;
 }
 
 bool ToolMainLoop::SetDatas(IGetValue* getValue)
 {
+    m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
+    ReturnIfFalse(m_guiAppWindow->Create(m_dialog.get(), { 400, 300 }));
+
     return true;
 }
 
@@ -68,6 +68,8 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
     m_dialog->Update(Vector2{});
+
+    m_guiAppWindow->Update();
 
     PIXEndEvent();
 }

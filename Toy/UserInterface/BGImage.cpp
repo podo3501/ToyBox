@@ -98,3 +98,20 @@ const Rectangle& BGImage::GetArea() const noexcept
 {
 	return m_layout->GetArea();
 }
+
+BGImage::BGImage(const UILayout* layout, const ImagePartSet* imagePartSet, const Vector2& position)
+{
+	m_layout = make_unique<UILayout>(*layout);
+	m_imagePartSet = make_unique<ImagePartSet>(*imagePartSet);
+	m_position = position;
+}
+
+unique_ptr<IRenderItem> BGImage::Clone()
+{
+	return make_unique<BGImage>(m_layout.get(), m_imagePartSet.get(), m_position); 
+}
+
+void BGImage::SetPosition(const Vector2& pos) noexcept
+{
+	m_position = pos;
+}

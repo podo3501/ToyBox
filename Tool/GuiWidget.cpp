@@ -3,7 +3,11 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/BGImage.h"
 
-GuiWidget::~GuiWidget() = default;
+GuiWidget::~GuiWidget()
+{
+    int a = 1;
+}
+
 GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer{ renderer },
     m_renderItem{ nullptr }
@@ -11,19 +15,20 @@ GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer->AddImguiItem(this);
 };
 
-bool GuiWidget::Create(IRenderItem* renderItem)
+bool GuiWidget::Create(unique_ptr<IRenderItem> renderItem)
 {
     //BGImage* bgImage = static_cast<BGImage*>(renderItem);
     const Rectangle& area = renderItem->GetArea();
     XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
-    ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem, m_textureID));
-    m_renderItem = renderItem;
+    ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem.get(), m_textureID));
+    m_renderItem = move(renderItem);
 
     return true;    
 }
 
 void GuiWidget::Update()
 {
+    m_renderItem->Update({ 0.f, 0.f });
 }
 
 void GuiWidget::Render(ImGuiIO* io)
