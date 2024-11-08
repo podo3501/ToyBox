@@ -23,7 +23,8 @@ public:
 	virtual const Rectangle& GetArea() const noexcept override;
 	virtual IRenderItem* GetSelected() const noexcept { return nullptr; }
 	virtual unique_ptr<IRenderItem> Clone();
-	virtual void SetPosition(const Vector2&) noexcept override;
+	virtual void SetPosition(const string& name, const Vector2&) noexcept override;
+	virtual bool ChangeArea(const Rectangle&) noexcept override { return true; }
 
 	void SetFont(IRenderer* renderer, 
 		const Vector2& position,

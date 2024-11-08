@@ -34,6 +34,9 @@ bool BGImage::SetResources(const wstring& filename)
 
 		switch (dataType)
 		{
+		case DataType::Name:
+			m_name = dataList["Name"];
+			break;
 		case DataType::Layout:
 			m_layout = make_unique<UILayout>(data);
 			break;
@@ -47,8 +50,9 @@ bool BGImage::SetResources(const wstring& filename)
 	return true; 
 }
 
-void BGImage::SetImage(IRenderer* renderer, const Vector2 position, const UILayout& layout, const ImageSource& sources)
+void BGImage::SetImage(IRenderer* renderer, const string& name, const Vector2 position, const UILayout& layout, const ImageSource& sources)
 {
+	m_name = name;
 	m_position = position;
 	m_layout = make_unique<UILayout>(layout);
 	m_imagePartSet = make_unique<ImagePartSet>(sources);
@@ -88,19 +92,20 @@ const Rectangle& BGImage::GetArea() const noexcept
 	return m_layout->GetArea();
 }
 
-BGImage::BGImage(const Vector2& position, const UILayout* layout, const ImagePartSet* imagePartSet)
+BGImage::BGImage(const BGImage& other)
 {
-	m_position = position;
-	m_layout = make_unique<UILayout>(*layout);
-	m_imagePartSet = make_unique<ImagePartSet>(*imagePartSet);
+	m_name = other.m_name + "_clone";
+	m_position = other.m_position;
+	m_layout = make_unique<UILayout>(*other.m_layout.get());
+	m_imagePartSet = make_unique<ImagePartSet>(*other.m_imagePartSet.get());
 }
 
 unique_ptr<IRenderItem> BGImage::Clone()
 {
-	return make_unique<BGImage>(m_position, m_layout.get(), m_imagePartSet.get());
+	return make_unique<BGImage>(*this);
 }
 
-void BGImage::SetPosition(const Vector2& pos) noexcept
+void BGImage::SetPosition(const string& name, const Vector2& pos) noexcept
 {
 	m_position = pos;
 }

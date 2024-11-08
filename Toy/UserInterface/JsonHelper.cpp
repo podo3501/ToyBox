@@ -34,6 +34,7 @@ DataType GetType(const string& key)
 {
 	DataType dataType{ DataType::Init };
 
+	if (key == "Name") dataType = DataType::Name;
 	if (key == "Layout") dataType = DataType::Layout;
 	if (key == "Property") dataType = DataType::Property;
 	if (key == "Component") dataType = DataType::Component;

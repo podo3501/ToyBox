@@ -11,6 +11,7 @@ class Dialog : public IRenderItem
 {
 public:
 	Dialog();
+	Dialog(const Dialog& other) noexcept;
 	~Dialog();
 
 	virtual bool SetResources(const wstring& filename) override;
@@ -20,14 +21,15 @@ public:
 	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
 	virtual const Rectangle& GetArea() const noexcept override;
 	virtual IRenderItem* GetSelected() const noexcept override;
-	virtual unique_ptr<IRenderItem> Clone() { return nullptr; }
-	virtual void SetPosition(const Vector2&) noexcept override {};
+	virtual unique_ptr<IRenderItem> Clone() override;
+	virtual void SetPosition(const string& name, const Vector2& position) noexcept override;
+	virtual bool ChangeArea(const Rectangle&) noexcept override { return true; }
 
-	//void Update() noexcept;
-	bool SetUIItem();
+	void SetName(const string& name);
+	void AddRenderItem(const Vector2& normalPos, unique_ptr<IRenderItem>&& renderItem);
 
 private:
+	string m_name{};
 	unique_ptr<UILayout> m_layout;
 	vector<unique_ptr<RenderItemProperty>> m_renderItems;
-	unique_ptr<Panel> m_panel;
 };

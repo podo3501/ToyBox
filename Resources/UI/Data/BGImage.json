@@ -1,17 +1,14 @@
-{	
-	"Property":
-	{
+{
+	"Name": "BGImage",
+	"Property": {
 		"Filename": "UI/Data/ImagePartSet.json",
-		"Position":
-		{		         
+		"Position": {
 			"x": 0.1,
-			"y": 0.1 
+			"y": 0.1
 		}
 	},
-	"Layout":
-	{
-		"Area":
-		{
+	"Layout": {
+		"Area": {
 			"x": 0,
 			"y": 0,
 			"width": 220,

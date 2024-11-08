@@ -1,12 +1,10 @@
 {
-	"Component": 
-	{
+	"Component": {
 		"Type": "Dialog",
 		"Filename": "UI/Data/Dialog.json",
-		"Position": 
-		{ 
+		"Position": {
 			"x": 0.1,
-			"y": 0.1 
+			"y": 0.1
 		}
 	}
 }

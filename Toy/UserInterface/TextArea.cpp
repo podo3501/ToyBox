@@ -128,7 +128,7 @@ unique_ptr<IRenderItem> TextArea::Clone()
 	return make_unique<TextArea>(m_position, m_layout.get(), m_fontFileList, m_font, m_lines);
 }
 
-void TextArea::SetPosition(const Vector2& position) noexcept 
+void TextArea::SetPosition(const string& name, const Vector2& position) noexcept 
 {
 	m_position = position;
 };

@@ -116,7 +116,7 @@ unique_ptr<IRenderItem> Button::Clone()
 	return make_unique<Button>(m_position, m_layout.get(), m_image);
 }
 
-void Button::SetPosition(const Vector2& pos) noexcept
+void Button::SetPosition(const string& name, const Vector2& pos) noexcept
 {
 	m_position = pos;
 }

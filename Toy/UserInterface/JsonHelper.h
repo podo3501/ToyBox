@@ -7,6 +7,7 @@ class UILayout;
 enum class DataType
 {
 	Init = 0,
+	Name,	//Component의 이름
 	Layout,	//위치, 정렬정보
 	Component,	//Dialog, Button 같은 붙일수 있는 것들
 	Property,	//Component안에 들어있는 속성들(ex 이미지)

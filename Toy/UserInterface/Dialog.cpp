@@ -15,6 +15,13 @@ public:
 		m_renderItem{ move(renderItem) }, m_position{ position }, m_selected{ selected }
 	{}
 
+	RenderItemProperty(const RenderItemProperty& other)
+	{
+		m_renderItem = other.m_renderItem->Clone();
+		m_position = other.m_position;
+		m_selected = false;
+	}
+
 	bool LoadResources(ILoadData* load)
 	{
 		return m_renderItem->LoadResources(load);
@@ -49,8 +56,7 @@ private:
 using json = nlohmann::json;
 
 Dialog::Dialog() :
-	m_layout{ make_unique<UILayout>(Rectangle{}, Vector2{}, Origin::Center) },
-	m_panel{ make_unique<Panel>() }
+	m_layout{ make_unique<UILayout>(Rectangle{}, Vector2{}, Origin::Center) }
 {};
 Dialog::~Dialog() = default;
 
@@ -89,7 +95,7 @@ void Dialog::Render(IRender* render)
 
 bool Dialog::IsPicking(const Vector2& pos)  const noexcept
 {
-	return m_panel->IsPicking(pos);
+	return m_layout->IsArea(pos);
 }
 
 const Rectangle& Dialog::GetArea() const noexcept
@@ -108,32 +114,51 @@ bool Dialog::SetResources(const wstring& filename)
 		auto dataType = GetType(key);
 		if (dataType == DataType::Init) return false;
 
-		auto [item, position] = GetComponent(data);
-		ReturnIfNullptr(item);
-		
-		m_layout->Union(item->GetArea());	//자식의 크기만큼 자신의 크기를 키운다.
-		auto rmProp = make_unique<RenderItemProperty>(move(item), position, true);
-		m_renderItems.emplace_back(move(rmProp));
+		switch (dataType)
+		{
+		case DataType::Name:
+			m_name = dataList["Name"];
+			break;
+		case DataType::Component:
+			auto [item, position] = GetComponent(data);
+			ReturnIfNullptr(item);
+
+			m_layout->Union(item->GetArea());	//자식의 크기만큼 자신의 크기를 키운다.
+			auto rmProp = make_unique<RenderItemProperty>(move(item), position, true);
+			m_renderItems.emplace_back(move(rmProp));
+			break;
+		}
 	}
 	
 	return true;
 }
 
-bool Dialog::SetUIItem()
+void Dialog::SetName(const string& name)
 {
-	//UILayout layout({ 0, 0, 220, 190 }, { 0.0f, 0.0f }, Origin::LeftTop);
-	//ImageSource bgImgSrc{
-	//	L"UI/Blue/button_square_header_large_square_screws.png", {
-	//		{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-	//		{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-	//		{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
-	//	}
-	//};
-	//unique_ptr<BGImage> bgImg = make_unique<BGImage>();
-	//bgImg->SetImage(L"Resources/", m_renderer, bgImgSrc, layout);
+	m_name = name;
+}
 
-	////unique_ptr<IRenderItem> = uiLoad->Load(abc.json);
-	//m_panel->AddRenderItem({ 0.1f, 0.1f }, move(bgImg));
+void Dialog::AddRenderItem(const Vector2& pos, unique_ptr<IRenderItem>&& renderItem)
+{
+	auto riProp = make_unique<RenderItemProperty>(move(renderItem), pos, false);
+	m_renderItems.emplace_back(move(riProp));
+}
 
-	return true;
+Dialog::Dialog(const Dialog& other) noexcept
+{
+	m_name = other.m_name + "_clone";
+	m_layout = make_unique<UILayout>(*other.m_layout);
+	ranges::transform(other.m_renderItems, back_inserter(m_renderItems), [](const auto& item) {
+		return make_unique<RenderItemProperty>(*item.get());
+		});
+}
+
+unique_ptr<IRenderItem> Dialog::Clone()
+{ 
+	return make_unique<Dialog>(*this);
+}
+
+void Dialog::SetPosition(const string& name, const Vector2& position) noexcept
+{
+	position;
 }

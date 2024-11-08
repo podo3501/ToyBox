@@ -97,7 +97,7 @@ bool GameMainLoop::LoadResources()
         }
     };
     unique_ptr<BGImage> bgImage = make_unique<BGImage>();
-    bgImage->SetImage(m_renderer, { 0.f, 0.f }, layout, bgImageSource);
+    bgImage->SetImage(m_renderer, "BGImage", { 0.f, 0.f }, layout, bgImageSource);
     //m_renderer->AddRenderItem(m_dialog.get());
     m_panel->AddRenderItem({ 0.5f, 0.5f }, move(bgImage));
     Rectangle test = m_panel->GetArea();

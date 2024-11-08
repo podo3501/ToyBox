@@ -16,7 +16,8 @@ public:
 	virtual const Rectangle& GetArea() const noexcept = 0;
 	virtual IRenderItem* GetSelected() const noexcept = 0;
 	virtual unique_ptr<IRenderItem> Clone() = 0;
-	virtual void SetPosition(const Vector2& pos) noexcept = 0;
+	virtual void SetPosition(const string& name, const Vector2& pos) noexcept = 0;
+	virtual bool ChangeArea(const Rectangle& area) noexcept = 0;
 };
 
 struct IRenderScene

@@ -15,7 +15,8 @@ public:
     virtual const Rectangle& GetArea() const noexcept;
     virtual IRenderItem* GetSelected() const noexcept { return nullptr; }
     virtual unique_ptr<IRenderItem> Clone() { return nullptr; }
-    virtual void SetPosition(const Vector2&) noexcept override {};
+    virtual void SetPosition(const string& name, const Vector2&) noexcept override {};
+    virtual bool ChangeArea(const Rectangle&) noexcept override { return true; }
 
     void AddRenderItem(const Vector2& normalPos, unique_ptr<IRenderItem>&& renderItem);
 

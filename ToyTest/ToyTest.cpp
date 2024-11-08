@@ -108,18 +108,25 @@ void TestBGImageRender(size_t index, const RECT& dest, const RECT* source)
 	if (dest.left == 470 && dest.top == 349) EXPECT_TRUE(dest.right == 500 && dest.bottom == 375);
 }
 
-TEST_F(ToyTest, BGImageTest)
+unique_ptr<IRenderItem> CreateTestBGImage(IRenderer* renderer, const Rectangle& area)
 {
-	unique_ptr<BGImage> bgImage = make_unique<BGImage>();
-	ImageSource bgImageSource{
+	UILayout layout(area, { 0.0f, 0.0f }, Origin::LeftTop);
+	ImageSource dialogSource{
 		L"UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
 			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
-	UILayout layout({ 0, 0, 170, 120 }, { 0.0f, 0.0f }, Origin::Center);
-	bgImage->SetImage(m_renderer.get(), { 0.f, 0.f }, layout, bgImageSource);
+	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
+	bgImg->SetImage(renderer, "TestBGImage", { 0.f, 0.f }, layout, dialogSource);
+
+	return move(bgImg);
+}
+
+TEST_F(ToyTest, BGImageTest)
+{
+	unique_ptr<IRenderItem> bgImage = CreateTestBGImage(m_renderer.get(), { 0, 0, 170, 120 });
 	bgImage->ChangeArea({ 0, 0, 200, 150 });
 	m_renderer->AddRenderItem(bgImage.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
@@ -196,29 +203,33 @@ TEST_F(ToyTest, TextArea)
 TEST_F(ToyTest, Panel)
 {
 	unique_ptr<Panel> panel = std::make_unique<Panel>();
-	Rectangle area{ 0, 0, 220, 190 };
-	UILayout layout(area, { 0.0f, 0.0f }, Origin::LeftTop);
-	ImageSource dialogSource{
-		L"Resources/UI/Blue/button_square_header_large_square_screws.png", {
-			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
-		}
-	};
-	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
-	bgImg->SetImage(m_renderer.get(), { 0.f, 0.f }, layout, dialogSource);
+	unique_ptr<IRenderItem> bgImg = CreateTestBGImage(m_renderer.get(), { 0, 0, 220, 190 });
+	
+	Rectangle bgArea = bgImg->GetArea();
 	panel->AddRenderItem({ 0.1f, 0.1f }, move(bgImg));
 
-	EXPECT_EQ(area, panel->GetArea());
+	EXPECT_EQ(bgArea, panel->GetArea());
 }
 
 TEST_F(ToyTest, Dialog)
 {
 	unique_ptr<Dialog> dialog = std::make_unique<Dialog>();
-	dialog->SetUIItem();
+	dialog->SetName("Dialog");
+	unique_ptr<IRenderItem> bgImg = CreateTestBGImage(m_renderer.get(), { 0, 0, 220, 190 });
+	dialog->AddRenderItem({ 0.1f, 0.1f }, move(bgImg));
 
 	m_renderer->AddRenderItem(dialog.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
+
+	//클론을 만들어서 둘이 같지 않음을 확인한다.
+	unique_ptr<IRenderItem> cloneDialog = dialog->Clone();
+
+	//여기 할 차례
+	cloneDialog->SetPosition("TestBGImage_clone", { 0.2f, 0.2f });
+	//auto cloneDialogBgImg = cloneDialog->GetRenderItem("BackGroundImage_2");
+	
+	//auto dialogBgImg = dialog->GetRenderItem("BackGroundImage");
+	//EXPECT_NE(cloneDialogBgImg, dialogBgImg);
 }
 
 TEST_F(ToyTest, Scene)

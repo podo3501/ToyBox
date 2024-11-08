@@ -26,7 +26,7 @@ bool GuiAppWindow::Create(IRenderItem* renderItem, const XMUINT2& size)
     m_guiWidget = make_unique<GuiWidget>(m_renderer);
     IRenderItem* selectedItem = renderItem->GetSelected();
     unique_ptr<IRenderItem> clone = selectedItem->Clone();
-    clone->SetPosition({ 0.f, 0.f });
+    clone->SetPosition("", { 0.f, 0.f });
     
     ReturnIfFalse(m_guiWidget->Create(move(clone)));
 

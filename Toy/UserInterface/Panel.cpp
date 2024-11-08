@@ -3,16 +3,6 @@
 #include "BGImage.h"
 #include "../Utility.h"
 
-Rectangle EncompassingRectangle(const Rectangle& rect1, const Rectangle& rect2)
-{
-    int left = std::min(rect1.x, rect2.x);
-    int top = std::min(rect1.y, rect2.y);
-    int right = std::max(rect1.x + rect1.width, rect2.x + rect2.width);
-    int bottom = std::max(rect1.y + rect1.height, rect2.y + rect2.height);
-
-    return Rectangle(left, top, right - left, bottom - top);
-}
-
 Panel::Panel() {};
 Panel::~Panel() = default;
 
@@ -56,7 +46,7 @@ bool Panel::Update(const Vector2& position) noexcept
 
 void Panel::AddRenderItem(const Vector2& normalPos, unique_ptr<IRenderItem>&& renderItem)
 {
-    m_area = EncompassingRectangle(m_area, renderItem->GetArea());
+    m_area = Rectangle::Union(m_area, renderItem->GetArea());
     m_renderItems.emplace_back(make_pair(normalPos, move(renderItem)));
 }
 
