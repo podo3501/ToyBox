@@ -47,13 +47,10 @@ bool BGImage::SetResources(const wstring& filename)
 	return true; 
 }
 
-void BGImage::SetImage(
-	IRenderer* renderer,
-	const ImageSource& sources,
-	const UILayout& layout)
+void BGImage::SetImage(IRenderer* renderer, const Vector2 position, const UILayout& layout, const ImageSource& sources)
 {
+	m_position = position;
 	m_layout = make_unique<UILayout>(layout);
-
 	m_imagePartSet = make_unique<ImagePartSet>(sources);
 
 	renderer->AddLoadResource(this);
@@ -71,18 +68,10 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 bool BGImage::Update(const Vector2& position) noexcept
 {
 	const Vector2 pos = m_layout->GetPosition(m_position + position);
-	ReturnIfFalse(m_imagePartSet->Update(pos));
-
-	//m_imagePartSet->SetPosition(m_layout->GetPosition(resolution));
+	ReturnIfFalse(m_imagePartSet->Update(pos));	//Update보다 SetPosition으로 바꾸는게 더 직관적일듯
 
 	return true;
 }
-
-//void BGImage::Update(const Vector2& normalPos, const Vector2& resolution) noexcept
-//{
-//	const Vector2 pos = m_layout->GetPosition(resolution) + (resolution * normalPos);
-//	m_imagePartSet->SetPosition(pos);
-//}
 
 void BGImage::Render(IRender* renderer)
 {
@@ -99,16 +88,16 @@ const Rectangle& BGImage::GetArea() const noexcept
 	return m_layout->GetArea();
 }
 
-BGImage::BGImage(const UILayout* layout, const ImagePartSet* imagePartSet, const Vector2& position)
+BGImage::BGImage(const Vector2& position, const UILayout* layout, const ImagePartSet* imagePartSet)
 {
+	m_position = position;
 	m_layout = make_unique<UILayout>(*layout);
 	m_imagePartSet = make_unique<ImagePartSet>(*imagePartSet);
-	m_position = position;
 }
 
 unique_ptr<IRenderItem> BGImage::Clone()
 {
-	return make_unique<BGImage>(m_layout.get(), m_imagePartSet.get(), m_position); 
+	return make_unique<BGImage>(m_position, m_layout.get(), m_imagePartSet.get());
 }
 
 void BGImage::SetPosition(const Vector2& pos) noexcept

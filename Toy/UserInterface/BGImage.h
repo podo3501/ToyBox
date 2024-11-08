@@ -15,7 +15,7 @@ class BGImage : public IRenderItem
 public:
 	virtual ~BGImage();
 	BGImage();
-	BGImage(const UILayout* layout, const ImagePartSet* imagePartSet, const Vector2& position);
+	BGImage(const Vector2& position, const UILayout* layout, const ImagePartSet* imagePartSet);
 
 	virtual bool SetResources(const wstring& filename) override;
 	virtual bool LoadResources(ILoadData* load) override;
@@ -23,20 +23,15 @@ public:
 	virtual void Render(IRender* renderer) override;
 	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
 	virtual const Rectangle& GetArea() const noexcept;
+	virtual IRenderItem* GetSelected() const noexcept { return nullptr; }
+	virtual unique_ptr<IRenderItem> Clone() override;
+	virtual void SetPosition(const Vector2& pos) noexcept override;
 
-	void SetImage(
-		IRenderer* renderer,
-		const ImageSource& sources,
-		const UILayout& layout);
-	bool ChangeArea(const Rectangle& area) noexcept;
-	unique_ptr<IRenderItem> Clone();
-	void SetPosition(const Vector2& pos) noexcept;
-	//void Update(const Vector2& normalPos, const Vector2& resolution) noexcept;
+	void SetImage(IRenderer* renderer, const Vector2 position, const UILayout& layout, const ImageSource& sources);
+	bool ChangeArea(const Rectangle& area) noexcept;	
 	
 private:
+	Vector2 m_position{};
 	unique_ptr<UILayout> m_layout;
 	unique_ptr<ImagePartSet> m_imagePartSet;
-	Vector2 m_position{};
-	//vector<pair<Vector2, unique_ptr<ImagePartSet>>> m_NimagePartSet;
-	//vector<pair<Vector2, unique_ptr<IRenderItem>>> m_renderItems;
 };

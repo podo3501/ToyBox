@@ -6,7 +6,7 @@ struct ImageSource;
 struct ILoadData;
 struct IRender;
 
-class ImagePartSet : public IRenderItem
+class ImagePartSet// : public IRenderItem
 {
 public:
 	ImagePartSet();
@@ -15,15 +15,14 @@ public:
 	ImagePartSet(const vector<ImageSource>& imgSources);
 	ImagePartSet(const ImageSource& source);
 
-	virtual bool SetResources(const wstring& filename) override;
-	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool Update(const Vector2& position) noexcept override;
-	virtual void Render(IRender* render) override;
-	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
-	virtual const Rectangle& GetArea() const noexcept override;
+	bool SetResources(const wstring& filename);
+	bool LoadResources(ILoadData* load);
+	bool Update(const Vector2& position) noexcept;
+	void Render(IRender* render);
+	bool IsPicking(const Vector2& pos)  const noexcept;
+	const Rectangle& GetArea() const noexcept;
 
 	bool SetDestination(const Rectangle& area) noexcept;
-	//void SetPosition(const Vector2& position) noexcept;
 	bool IsHover(int mouseX, int mouseY) noexcept;
 	
 

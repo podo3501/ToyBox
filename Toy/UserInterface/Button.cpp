@@ -42,12 +42,12 @@ bool Button::ChangeArea(Rectangle&& area) noexcept
 	return true;
 }
 
-void Button::Update(const Vector2& resolution, const Mouse::ButtonStateTracker* tracker) noexcept
+void Button::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept
 {
-	const Vector2& originPos = m_layout->GetPosition(resolution);
+	const Vector2& pos = m_layout->GetPosition(m_position + position);
 
 	for (const auto& partSet : m_image | views::values)
-		partSet->Update(originPos);
+		partSet->Update(pos);
 
 	bool bHover = ranges::any_of(m_image | views::values, [mouseState = tracker->GetLastState()](const auto& partSet) {
 		return partSet->IsHover(mouseState.x, mouseState.y);
@@ -73,11 +73,13 @@ void Button::Render(IRender* render)
 
 void Button::SetImage(
 	IRenderer* renderer,
+	const Vector2& position,
+	const UILayout& layout,
 	const vector<ImageSource>& normal,
 	const vector<ImageSource>& hover,
-	const vector<ImageSource>& pressed,
-	const UILayout& layout)
+	const vector<ImageSource>& pressed)
 {
+	m_position = position;
 	m_layout = make_unique<UILayout>(layout);
 
 	ButtonState btnState = ButtonState::Normal;
@@ -94,4 +96,27 @@ void Button::SetImage(
 void Button::ChangeOrigin(Origin&& origin) noexcept
 {
 	m_layout->Set(move(origin));
+}
+
+Button::Button(const Vector2& position, const UILayout* layout,
+	const map<ButtonState, unique_ptr<ImagePartSet>>& image)
+{
+	m_position = position;
+	m_layout = make_unique<UILayout>(*layout);
+
+	ranges::for_each(image, [this](const auto& pair) {
+		ButtonState state = pair.first;
+		const auto& imgPartSet = pair.second;
+		m_image.insert(make_pair(state, make_unique<ImagePartSet>(*imgPartSet.get())));
+		});
+}
+
+unique_ptr<IRenderItem> Button::Clone()
+{ 
+	return make_unique<Button>(m_position, m_layout.get(), m_image);
+}
+
+void Button::SetPosition(const Vector2& pos) noexcept
+{
+	m_position = pos;
 }

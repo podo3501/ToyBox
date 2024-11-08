@@ -18,7 +18,7 @@ bool TextArea::LoadResources(ILoadData* load)
 	for (const auto& file : m_fontFileList)
 	{
 		size_t index{ 0 };
-		ReturnIfFalse(load->LoadFont(file.second, index));
+		ReturnIfFalse(load->LoadFont(GetResourcePath() + file.second, index));
 		m_font.insert(make_pair(file.first, index));
 	}
 
@@ -30,8 +30,12 @@ const Rectangle& TextArea::GetArea() const noexcept
 	return m_layout->GetArea(); 
 }
 
-void TextArea::SetFont(IRenderer* renderer, const map<wstring, wstring>& fontFileList, const UILayout& layout)
+void TextArea::SetFont(IRenderer* renderer, 
+	const Vector2& position,
+	const UILayout& layout, 
+	const map<wstring, wstring>& fontFileList)
 {
+	m_position = position;
 	m_layout = make_unique<UILayout>(layout);
 	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
 		return make_pair(filename.first, filename.second);
@@ -94,7 +98,7 @@ bool TextArea::SetText(IGetValue* getValue, wstring&& text)
 
 bool TextArea::Update(const Vector2& position) noexcept
 {
-	m_position = m_layout->GetPosition(position);
+	m_position = m_layout->GetPosition(m_position + position);
 
 	return true;
 }
@@ -106,3 +110,25 @@ void TextArea::Render(IRender* render)
 			word.text, m_position + word.position, 
 			XMLoadFloat4(&word.color));
 }
+
+TextArea::TextArea(const Vector2& position, const UILayout* layout,
+	const map<wstring, wstring>& fontFileList, 
+	const map<wstring, size_t>& font, 
+	const vector<TextData>& lines)
+{
+	m_position = position;
+	m_layout = make_unique<UILayout>(*layout);
+	m_fontFileList = fontFileList;
+	m_font = font;
+	m_lines = lines;
+}
+
+unique_ptr<IRenderItem> TextArea::Clone() 
+{
+	return make_unique<TextArea>(m_position, m_layout.get(), m_fontFileList, m_font, m_lines);
+}
+
+void TextArea::SetPosition(const Vector2& position) noexcept 
+{
+	m_position = position;
+};

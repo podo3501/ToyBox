@@ -19,8 +19,10 @@ public:
 	virtual void Render(IRender* render) override;
 	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
 	virtual const Rectangle& GetArea() const noexcept override;
+	virtual IRenderItem* GetSelected() const noexcept override;
+	virtual unique_ptr<IRenderItem> Clone() { return nullptr; }
+	virtual void SetPosition(const Vector2&) noexcept override {};
 
-	IRenderItem* GetSelected() const noexcept;
 	//void Update() noexcept;
 	bool SetUIItem();
 

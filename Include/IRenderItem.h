@@ -14,6 +14,9 @@ public:
 	virtual void Render(IRender* render) = 0;
 	virtual bool IsPicking(const Vector2& pos)  const noexcept = 0;
 	virtual const Rectangle& GetArea() const noexcept = 0;
+	virtual IRenderItem* GetSelected() const noexcept = 0;
+	virtual unique_ptr<IRenderItem> Clone() = 0;
+	virtual void SetPosition(const Vector2& pos) noexcept = 0;
 };
 
 struct IRenderScene

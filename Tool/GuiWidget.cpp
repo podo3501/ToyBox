@@ -4,9 +4,7 @@
 #include "../Toy/UserInterface/BGImage.h"
 
 GuiWidget::~GuiWidget()
-{
-    int a = 1;
-}
+{}
 
 GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer{ renderer },

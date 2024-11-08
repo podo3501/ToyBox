@@ -24,10 +24,9 @@ bool GuiAppWindow::Create(IRenderItem* renderItem, const XMUINT2& size)
 
     //임시로 bgImage가 선택되었다고 가정한다.
     m_guiWidget = make_unique<GuiWidget>(m_renderer);
-    auto dialog = static_cast<Dialog*>(renderItem);
-    auto curBGImage = static_cast<BGImage*>(dialog->GetSelected());
-    auto clone = curBGImage->Clone();
-    static_cast<BGImage*>(clone.get())->SetPosition({0.f, 0.f});
+    IRenderItem* selectedItem = renderItem->GetSelected();
+    unique_ptr<IRenderItem> clone = selectedItem->Clone();
+    clone->SetPosition({ 0.f, 0.f });
     
     ReturnIfFalse(m_guiWidget->Create(move(clone)));
 

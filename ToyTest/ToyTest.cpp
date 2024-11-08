@@ -55,25 +55,25 @@ TEST_F(ToyTest, ButtonTest)
 
 	vector<ImageSource> normal
 	{
-		{ L"Resources/UI/Blue/bar_square_large_l.png" },
-		{ L"Resources/UI/Blue/bar_square_large_m.png" },
-		{ L"Resources/UI/Blue/bar_square_large_r.png" },
+		{ L"UI/Blue/bar_square_large_l.png" },
+		{ L"UI/Blue/bar_square_large_m.png" },
+		{ L"UI/Blue/bar_square_large_r.png" },
 	};
 	vector<ImageSource> hover
 	{
-		{ L"Resources/UI/Red/bar_square_large_l.png" },
-		{ L"Resources/UI/Red/bar_square_large_m.png" },
-		{ L"Resources/UI/Red/bar_square_large_r.png" },
+		{ L"UI/Red/bar_square_large_l.png" },
+		{ L"UI/Red/bar_square_large_m.png" },
+		{ L"UI/Red/bar_square_large_r.png" },
 	};
 	vector<ImageSource> pressed
 	{
-		{ L"Resources/UI/Gray/bar_square_large_l.png" },
-		{ L"Resources/UI/Gray/bar_square_large_m.png" },
-		{ L"Resources/UI/Gray/bar_square_large_r.png" },
+		{ L"UI/Gray/bar_square_large_l.png" },
+		{ L"UI/Gray/bar_square_large_m.png" },
+		{ L"UI/Gray/bar_square_large_r.png" },
 	};
 
-	UILayout layout({ 0, 0, 116, 48 }, { 0.5f, 0.5f }, Origin::Center);
-	button->SetImage(m_renderer.get(), normal, hover, pressed, layout);
+	UILayout layout({ 0, 0, 116, 48 }, { 0.0f, 0.0f }, Origin::Center);
+	button->SetImage(m_renderer.get(), { 0.5f, 0.5f }, layout, normal, hover, pressed);
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
@@ -81,7 +81,7 @@ TEST_F(ToyTest, ButtonTest)
 	Mouse::ButtonStateTracker mouseTracker;
 	SetMouse(100, 100, mouseTracker);
 	button->ChangeArea({ 0, 0, 126,48 });
-	button->Update(m_window->GetOutputSize(), &mouseTracker);
+	button->Update({ 0.f, 0.f }, &mouseTracker);
 
 	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 	//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
@@ -93,7 +93,7 @@ TEST_F(ToyTest, ButtonTest)
 	//clicked 버튼일 경우
 	SetMouse(420, 320, mouseTracker);
 	mouseTracker.leftButton = Mouse::ButtonStateTracker::PRESSED;
-	button->Update(m_window->GetOutputSize(), &mouseTracker);
+	button->Update({ 0.f, 0.f }, &mouseTracker);
 
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestLeftTopRender));
 	button->Render(&mockRender);
@@ -112,19 +112,19 @@ TEST_F(ToyTest, BGImageTest)
 {
 	unique_ptr<BGImage> bgImage = make_unique<BGImage>();
 	ImageSource bgImageSource{
-		L"Resources/UI/Blue/button_square_header_large_square_screws.png", {
+		L"UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
 			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
-	UILayout layout({ 0, 0, 170, 120 }, { 0.5f, 0.5f }, Origin::Center);
-	bgImage->SetImage(m_renderer.get(), bgImageSource, layout);
+	UILayout layout({ 0, 0, 170, 120 }, { 0.0f, 0.0f }, Origin::Center);
+	bgImage->SetImage(m_renderer.get(), { 0.f, 0.f }, layout, bgImageSource);
 	bgImage->ChangeArea({ 0, 0, 200, 150 });
 	m_renderer->AddRenderItem(bgImage.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
-	bgImage->Update(m_window->GetOutputSize());
+	bgImage->Update({0.f, 0.f});
 
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestBGImageRender));
@@ -142,19 +142,19 @@ TEST_F(ToyTest, CloseButton)
 {
 	std::unique_ptr<Button> button = std::make_unique<Button>();
 
-	vector<ImageSource> normal { { L"Resources/UI/Blue/check_square_color_cross.png" } };
-	vector<ImageSource> hover{ { L"Resources/UI/Blue/check_square_grey_cross.png" } };
-	vector<ImageSource> pressed { { L"Resources/UI/Gray/check_square_grey_cross.png" } };
+	vector<ImageSource> normal { { L"UI/Blue/check_square_color_cross.png" } };
+	vector<ImageSource> hover{ { L"UI/Blue/check_square_grey_cross.png" } };
+	vector<ImageSource> pressed { { L"UI/Gray/check_square_grey_cross.png" } };
 
-	UILayout layout({ 0, 0, 32, 32 }, { 0.2f, 0.2f }, Origin::Center);
-	button->SetImage(m_renderer.get(), normal, hover, pressed, move(layout));
+	UILayout layout({ 0, 0, 32, 32 }, { 0.0f, 0.0f }, Origin::Center);
+	button->SetImage(m_renderer.get(), { 0.2f, 0.2f }, layout, normal, hover, pressed);
 	m_renderer->AddRenderItem(button.get());
 	EXPECT_TRUE(m_renderer->LoadResources());
 
 	//normal 버튼일 경우
 	Mouse::ButtonStateTracker mouseTracker;
 	SetMouse(150, 110, mouseTracker);
-	button->Update(m_window->GetOutputSize(), &mouseTracker);
+	button->Update({0.f, 0.f}, &mouseTracker);
 
 	//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 	//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
@@ -174,11 +174,11 @@ void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, c
 TEST_F(ToyTest, TextArea)
 {
 	std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
-	UILayout layout({ 0, 0, 320, 120 }, { 0.5f, 0.5f }, Origin::Center);
+	UILayout layout({ 0, 0, 320, 120 }, { 0.0f, 0.0f }, Origin::Center);
 	map<wstring, wstring> fontFileList;
-	fontFileList.insert(make_pair(L"Hangle", L"Resources/UI/Font/MaleunGothicS16.spritefont"));
-	fontFileList.insert(make_pair(L"English", L"Resources/UI/Font/CourierNewBoldS18.spritefont"));
-	textArea->SetFont(m_renderer.get(), fontFileList, layout);
+	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
+	fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
+	textArea->SetFont(m_renderer.get(), { 0.5f, 0.5f }, layout, fontFileList);
 	m_renderer->AddRenderItem(textArea.get());
 
 	m_renderer->LoadResources();
@@ -186,7 +186,7 @@ TEST_F(ToyTest, TextArea)
 	textArea->SetText(m_renderer->GetValue(),
 		L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
-	textArea->Update(m_window->GetOutputSize());
+	textArea->Update({ 0.f, 0.f });
 
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
@@ -205,9 +205,9 @@ TEST_F(ToyTest, Panel)
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
-	unique_ptr<BGImage> dialog = make_unique<BGImage>();
-	dialog->SetImage(m_renderer.get(), dialogSource, layout);
-	panel->AddRenderItem({ 0.1f, 0.1f }, move(dialog));
+	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
+	bgImg->SetImage(m_renderer.get(), { 0.f, 0.f }, layout, dialogSource);
+	panel->AddRenderItem({ 0.1f, 0.1f }, move(bgImg));
 
 	EXPECT_EQ(area, panel->GetArea());
 }
@@ -218,8 +218,6 @@ TEST_F(ToyTest, Dialog)
 	dialog->SetUIItem();
 
 	m_renderer->AddRenderItem(dialog.get());
-	//LoadResources 자신을 등록해서 callback하는데
-	//그렇게 되면 dialog2에서 할게 없어진다. 다른 방식을 생각해 보자.
 	EXPECT_TRUE(m_renderer->LoadResources());
 }
 
