@@ -2,6 +2,7 @@
 #include "../Include/IRenderer.h"
 
 struct IRenderItem;
+struct IRenderScene;
 
 class GuiWidget : public IImguiItem
 {
@@ -18,7 +19,8 @@ public:
 
 private:
     IRenderer* m_renderer{ nullptr };
-    unique_ptr<IRenderItem> m_renderItem;
+    unique_ptr<IRenderScene> m_widgetScene;
+    IRenderItem* m_renderItem;
     ImTextureID m_textureID{};
     
     bool m_visible{ true };

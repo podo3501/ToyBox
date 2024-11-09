@@ -2,6 +2,7 @@
 #include "../Toy/MainLoop.h"
 
 class Window;
+class Scene;
 struct IRenderer;
 
 class ToyTest : public ::testing::Test
@@ -14,6 +15,7 @@ protected:
 	void SetUp() override;
 	void TearDown() override;
 
-	std::unique_ptr<Window> m_window;
-	std::unique_ptr<IRenderer> m_renderer;
+	unique_ptr<Window> m_window;
+	unique_ptr<IRenderer> m_renderer;
+	unique_ptr<Scene> m_testScene;
 };

@@ -209,6 +209,7 @@
     <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="UserInterface\Dialog.h" />
+    <ClInclude Include="UserInterface\IRenderItem.h" />
     <ClInclude Include="UserInterface\JsonHelper.h" />
     <ClInclude Include="UserInterface\Panel.h" />
     <ClInclude Include="UserInterface\Scene.h" />

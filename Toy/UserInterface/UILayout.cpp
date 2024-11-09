@@ -25,11 +25,10 @@ UILayout::UILayout(const json& data)
 	m_origin = GetOrigin(data["Origin"]);
 }
 
-UILayout::UILayout(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin) :
+UILayout::UILayout(const Rectangle& area, const Origin& origin) :
 	m_area{ area },
 	m_originPoint{},
-	m_origin{ Origin::Init },
-	m_normalizedPosition{ normalizedPos }
+	m_origin{ Origin::Init }
 {
 	Set(origin);
 }
@@ -44,11 +43,10 @@ Vector2 UILayout::GetOriginPoint(Origin origin) const noexcept
 	return { 0.f, 0.f };
 }
 
-void UILayout::Set(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin) noexcept
+void UILayout::Set(const Rectangle& area, const Origin& origin) noexcept
 {
 	m_area = area;
 	Set(origin);
-	Set(normalizedPos);
 }
 
 void UILayout::Set(const Rectangle& area) noexcept
@@ -57,26 +55,15 @@ void UILayout::Set(const Rectangle& area) noexcept
 	Set(m_origin);
 }
 
-void UILayout::Set(const Vector2& normalPos) noexcept
-{
-	m_normalizedPosition = normalPos;
-}
-
 void UILayout::Set(const Origin& origin) noexcept
 {
 	m_originPoint = GetOriginPoint(origin);
 	m_origin = origin;
 }
 
-void UILayout::Set(const Rectangle& area, const Vector2& normalPos) noexcept
-{
-	Set(area);
-	Set(normalPos);
-}
-
 Vector2 UILayout::GetPosition(const Vector2& position) const noexcept
 {
-	return (GetResolution() * (m_normalizedPosition + position)) - m_originPoint;
+	return GetResolution() * position - m_originPoint;
 }
 
 bool UILayout::IsArea(const Vector2& pos) const noexcept

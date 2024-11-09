@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GuiAppWindow.h"
 #include "GuiWidget.h"
+#include "../Include/IRenderScene.h"
 #include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/Utility.h"
@@ -13,29 +14,28 @@ GuiAppWindow::GuiAppWindow(IRenderer* renderer) :
     m_renderer->AddImguiItem(this);
 }
 
-bool GuiAppWindow::Create(IRenderItem* renderItem, const XMUINT2& size)
+bool GuiAppWindow::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
 {
-    BGImage* bgImage = static_cast<BGImage*>(renderItem);
-    //const Rectangle& area = bgImage->GetArea();
-    //XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
-    ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem, m_textureID));
-    m_renderItem = renderItem;
+    ReturnIfFalse(m_renderer->CreateRenderTexture(size, scene.get(), m_textureID));
+    auto dialog = scene->GetRenderItem("Dialog_clone");
+    m_renderItem = dialog->GetRenderItem("BGImage_clone");
     m_size = size;
 
     //임시로 bgImage가 선택되었다고 가정한다.
     m_guiWidget = make_unique<GuiWidget>(m_renderer);
-    IRenderItem* selectedItem = renderItem->GetSelected();
-    unique_ptr<IRenderItem> clone = selectedItem->Clone();
+    unique_ptr<IRenderItem> clone = m_renderItem->Clone();
     clone->SetPosition("", { 0.f, 0.f });
     
     ReturnIfFalse(m_guiWidget->Create(move(clone)));
-
+    
+    m_scene = move(scene);
     return true;
 }
 
 void GuiAppWindow::Update()
 {
     m_guiWidget->Update();
+    m_scene->Update(nullptr);
 }
 
 void GuiAppWindow::Render(ImGuiIO* io)

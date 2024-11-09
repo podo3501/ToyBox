@@ -9,16 +9,14 @@ public:
 	~UILayout();
 
 	UILayout(const nlohmann::json& data);
-	UILayout(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin);
+	UILayout(const Rectangle& area, const Origin& origin);
 	UILayout(const UILayout& other) noexcept = default;
 	UILayout(UILayout&& other) noexcept = default;
 	UILayout& operator=(const UILayout& other) noexcept = default;
 
-	void Set(const Rectangle& area, const Vector2& normalizedPos, const Origin& origin) noexcept;
+	void Set(const Rectangle& area, const Origin& origin) noexcept;
 	void Set(const Rectangle& area) noexcept;
-	void Set(const Vector2& normalPos) noexcept;
 	void Set(const Origin& origin) noexcept;
-	void Set(const Rectangle& area, const Vector2& normalPos) noexcept;
 
 	const Rectangle& GetArea() const noexcept { return m_area; }
 	Vector2 GetPosition(const Vector2& resolution) const noexcept;
@@ -31,7 +29,6 @@ private:
 	Vector2 GetOriginPoint(Origin origin) const noexcept;
 
 	Rectangle m_area{};
-	Vector2 m_normalizedPosition{};
 	Vector2 m_originPoint{};
 	Origin m_origin;
 };

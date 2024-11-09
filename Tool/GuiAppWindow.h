@@ -1,6 +1,8 @@
 #pragma once
 #include "../Include/IRenderer.h"
 
+struct IRenderScene;
+struct IRenderItem;
 class GuiWidget;
 
 class GuiAppWindow : public IImguiItem
@@ -9,7 +11,7 @@ public:
     ~GuiAppWindow();
     GuiAppWindow(IRenderer* renderer);
 
-    bool Create(IRenderItem* renderItem, const XMUINT2& size);
+    bool Create(unique_ptr<IRenderScene> scene, const XMUINT2& size);
 
     //IImguiItem
     virtual void Update() override;
@@ -17,6 +19,7 @@ public:
 
 private:
     IRenderer* m_renderer;
+    unique_ptr<IRenderScene> m_scene;
     IRenderItem* m_renderItem;
     ImTextureID m_textureID{};
     bool m_visible{ true };

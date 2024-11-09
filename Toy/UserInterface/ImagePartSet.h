@@ -1,12 +1,12 @@
 #pragma once
-#include "../Include/IRenderItem.h"
+
 class UILayout;
 class ImagePart;
 struct ImageSource;
 struct ILoadData;
 struct IRender;
 
-class ImagePartSet// : public IRenderItem
+class ImagePartSet
 {
 public:
 	ImagePartSet();

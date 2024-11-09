@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GuiWidget.h"
 #include "../Toy/Utility.h"
+#include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/BGImage.h"
 
 GuiWidget::~GuiWidget()
@@ -8,25 +9,30 @@ GuiWidget::~GuiWidget()
 
 GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer{ renderer },
+    m_widgetScene{ make_unique<Scene>(renderer) },
     m_renderItem{ nullptr }
 {
     m_renderer->AddImguiItem(this);
-};
+}
 
 bool GuiWidget::Create(unique_ptr<IRenderItem> renderItem)
 {
-    //BGImage* bgImage = static_cast<BGImage*>(renderItem);
+    const string& name = renderItem->GetName();
     const Rectangle& area = renderItem->GetArea();
+
+    m_widgetScene->AddRenderItem({ 0.f, 0.f }, move(renderItem));
+    m_renderItem = m_widgetScene->GetRenderItem(name);
+    
     XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
-    ReturnIfFalse(m_renderer->CreateRenderTexture(size, renderItem.get(), m_textureID));
-    m_renderItem = move(renderItem);
+    ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_widgetScene.get(), m_textureID));
 
     return true;    
 }
 
 void GuiWidget::Update()
 {
-    m_renderItem->Update({ 0.f, 0.f });
+    m_widgetScene->Update(nullptr);
+    //m_renderItem->Update({ 0.f, 0.f }, nullptr);
 }
 
 void GuiWidget::Render(ImGuiIO* io)

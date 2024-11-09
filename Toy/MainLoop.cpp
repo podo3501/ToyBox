@@ -23,7 +23,7 @@ bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
     AddWinProcListener();
 
     ReturnIfFalse(LoadResources());
-    m_renderer->LoadResources();
+    m_renderer->LoadScenes();
 
     ReturnIfFalse(SetDatas(m_renderer->GetValue()));
 

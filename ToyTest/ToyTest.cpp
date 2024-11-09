@@ -51,8 +51,6 @@ void SetMouse(int x, int y, Mouse::ButtonStateTracker& mouseTracker)
 
 TEST_F(ToyTest, ButtonTest)
 {
-	std::unique_ptr<Button> button = std::make_unique<Button>();
-
 	vector<ImageSource> normal
 	{
 		{ L"UI/Blue/bar_square_large_l.png" },
@@ -72,11 +70,13 @@ TEST_F(ToyTest, ButtonTest)
 		{ L"UI/Gray/bar_square_large_r.png" },
 	};
 
-	UILayout layout({ 0, 0, 116, 48 }, { 0.0f, 0.0f }, Origin::Center);
-	button->SetImage(m_renderer.get(), { 0.5f, 0.5f }, layout, normal, hover, pressed);
-	m_renderer->AddRenderItem(button.get());
-	EXPECT_TRUE(m_renderer->LoadResources());
-
+	UILayout layout({ 0, 0, 116, 48 }, Origin::Center);
+	std::unique_ptr<Button> cButton = std::make_unique<Button>();
+	cButton->SetImage("Button", { 0.5f, 0.5f }, layout, normal, hover, pressed);
+	m_testScene->AddRenderItem({ 0.f, 0.f }, move(cButton));
+	EXPECT_TRUE(m_renderer->LoadScenes());
+	
+	Button* button = static_cast<Button*>(m_testScene->GetRenderItem("Button"));
 	//normal 버튼일 경우
 	Mouse::ButtonStateTracker mouseTracker;
 	SetMouse(100, 100, mouseTracker);
@@ -108,9 +108,9 @@ void TestBGImageRender(size_t index, const RECT& dest, const RECT* source)
 	if (dest.left == 470 && dest.top == 349) EXPECT_TRUE(dest.right == 500 && dest.bottom == 375);
 }
 
-unique_ptr<IRenderItem> CreateTestBGImage(IRenderer* renderer, const Rectangle& area)
+unique_ptr<IRenderItem> CreateTestBGImage(IRenderer* renderer, const string& name, const Rectangle& area)
 {
-	UILayout layout(area, { 0.0f, 0.0f }, Origin::LeftTop);
+	UILayout layout(area, Origin::LeftTop);
 	ImageSource dialogSource{
 		L"UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
@@ -119,19 +119,20 @@ unique_ptr<IRenderItem> CreateTestBGImage(IRenderer* renderer, const Rectangle& 
 		}
 	};
 	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
-	bgImg->SetImage(renderer, "TestBGImage", { 0.f, 0.f }, layout, dialogSource);
+	bgImg->SetImage(name, { 0.f, 0.f }, layout, dialogSource);
 
 	return move(bgImg);
 }
 
 TEST_F(ToyTest, BGImageTest)
 {
-	unique_ptr<IRenderItem> bgImage = CreateTestBGImage(m_renderer.get(), { 0, 0, 170, 120 });
+	unique_ptr<IRenderItem> cBgImage = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 170, 120 });
+	m_testScene->AddRenderItem({ 0.f, 0.f }, move(cBgImage));
+	auto bgImage = m_testScene->GetRenderItem("BGImage");
 	bgImage->ChangeArea({ 0, 0, 200, 150 });
-	m_renderer->AddRenderItem(bgImage.get());
-	EXPECT_TRUE(m_renderer->LoadResources());
+	EXPECT_TRUE(m_renderer->LoadScenes());
 
-	bgImage->Update({0.f, 0.f});
+	bgImage->Update({0.f, 0.f}, nullptr);
 
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestBGImageRender));
@@ -147,17 +148,18 @@ void TestCloseButtonRender(size_t index, const RECT& dest, const RECT* source)
 
 TEST_F(ToyTest, CloseButton)
 {
-	std::unique_ptr<Button> button = std::make_unique<Button>();
+	std::unique_ptr<Button> cButton = std::make_unique<Button>();
 
 	vector<ImageSource> normal { { L"UI/Blue/check_square_color_cross.png" } };
 	vector<ImageSource> hover{ { L"UI/Blue/check_square_grey_cross.png" } };
 	vector<ImageSource> pressed { { L"UI/Gray/check_square_grey_cross.png" } };
 
-	UILayout layout({ 0, 0, 32, 32 }, { 0.0f, 0.0f }, Origin::Center);
-	button->SetImage(m_renderer.get(), { 0.2f, 0.2f }, layout, normal, hover, pressed);
-	m_renderer->AddRenderItem(button.get());
-	EXPECT_TRUE(m_renderer->LoadResources());
+	UILayout layout({ 0, 0, 32, 32 }, Origin::Center);
+	cButton->SetImage("Button", { 0.2f, 0.2f }, layout, normal, hover, pressed);
+	m_testScene->AddRenderItem({ 0.f, 0.f }, move(cButton));
+	EXPECT_TRUE(m_renderer->LoadScenes());
 
+	auto button = m_testScene->GetRenderItem("Button");
 	//normal 버튼일 경우
 	Mouse::ButtonStateTracker mouseTracker;
 	SetMouse(150, 110, mouseTracker);
@@ -180,20 +182,20 @@ void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, c
 
 TEST_F(ToyTest, TextArea)
 {
-	std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
-	UILayout layout({ 0, 0, 320, 120 }, { 0.0f, 0.0f }, Origin::Center);
+	std::unique_ptr<TextArea> cTextArea = std::make_unique<TextArea>();
+	UILayout layout({ 0, 0, 320, 120 }, Origin::Center);
 	map<wstring, wstring> fontFileList;
 	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
 	fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-	textArea->SetFont(m_renderer.get(), { 0.5f, 0.5f }, layout, fontFileList);
-	m_renderer->AddRenderItem(textArea.get());
+	cTextArea->SetFont("TextArea", { 0.5f, 0.5f }, layout, fontFileList);
+	m_testScene->AddRenderItem({ 0.f, 0.f }, move(cTextArea));
+	m_renderer->LoadScenes();
 
-	m_renderer->LoadResources();
-
+	TextArea* textArea = static_cast<TextArea*>(m_testScene->GetRenderItem("TextArea"));
 	textArea->SetText(m_renderer->GetValue(),
 		L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
-	textArea->Update({ 0.f, 0.f });
+	textArea->Update({ 0.f, 0.f }, nullptr);
 
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
@@ -203,8 +205,7 @@ TEST_F(ToyTest, TextArea)
 TEST_F(ToyTest, Panel)
 {
 	unique_ptr<Panel> panel = std::make_unique<Panel>();
-	unique_ptr<IRenderItem> bgImg = CreateTestBGImage(m_renderer.get(), { 0, 0, 220, 190 });
-	
+	unique_ptr<IRenderItem> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
 	Rectangle bgArea = bgImg->GetArea();
 	panel->AddRenderItem({ 0.1f, 0.1f }, move(bgImg));
 
@@ -213,23 +214,23 @@ TEST_F(ToyTest, Panel)
 
 TEST_F(ToyTest, Dialog)
 {
-	unique_ptr<Dialog> dialog = std::make_unique<Dialog>();
-	dialog->SetName("Dialog");
-	unique_ptr<IRenderItem> bgImg = CreateTestBGImage(m_renderer.get(), { 0, 0, 220, 190 });
-	dialog->AddRenderItem({ 0.1f, 0.1f }, move(bgImg));
+	unique_ptr<Dialog> cDialog = std::make_unique<Dialog>();
+	cDialog->SetName("Dialog");
+	unique_ptr<IRenderItem> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
+	cDialog->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
-	m_renderer->AddRenderItem(dialog.get());
-	EXPECT_TRUE(m_renderer->LoadResources());
+	m_testScene->AddRenderItem({ 0.f, 0.f }, move(cDialog));
+	EXPECT_TRUE(m_renderer->LoadScenes());
 
+	auto dialog = m_testScene->GetRenderItem("Dialog");
 	//클론을 만들어서 둘이 같지 않음을 확인한다.
 	unique_ptr<IRenderItem> cloneDialog = dialog->Clone();
 
-	//여기 할 차례
-	cloneDialog->SetPosition("TestBGImage_clone", { 0.2f, 0.2f });
-	//auto cloneDialogBgImg = cloneDialog->GetRenderItem("BackGroundImage_2");
+	cloneDialog->SetPosition("BGImage_clone", { 0.2f, 0.2f });
+	auto cloneDialogBgImg = cloneDialog->GetRenderItem("BGImage_clone");
 	
-	//auto dialogBgImg = dialog->GetRenderItem("BackGroundImage");
-	//EXPECT_NE(cloneDialogBgImg, dialogBgImg);
+	auto dialogBgImg = dialog->GetRenderItem("BGImage");
+	EXPECT_NE(cloneDialogBgImg, dialogBgImg);
 }
 
 TEST_F(ToyTest, Scene)

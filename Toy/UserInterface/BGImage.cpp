@@ -50,14 +50,12 @@ bool BGImage::SetResources(const wstring& filename)
 	return true; 
 }
 
-void BGImage::SetImage(IRenderer* renderer, const string& name, const Vector2 position, const UILayout& layout, const ImageSource& sources)
+void BGImage::SetImage(const string& name, const Vector2 position, const UILayout& layout, const ImageSource& sources)
 {
 	m_name = name;
 	m_position = position;
 	m_layout = make_unique<UILayout>(layout);
 	m_imagePartSet = make_unique<ImagePartSet>(sources);
-
-	renderer->AddLoadResource(this);
 }
 
 bool BGImage::ChangeArea(const Rectangle& area) noexcept
@@ -69,7 +67,7 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool BGImage::Update(const Vector2& position) noexcept
+bool BGImage::Update(const Vector2& position, const Mouse::ButtonStateTracker*) noexcept
 {
 	const Vector2 pos = m_layout->GetPosition(m_position + position);
 	ReturnIfFalse(m_imagePartSet->Update(pos));	//Update보다 SetPosition으로 바꾸는게 더 직관적일듯

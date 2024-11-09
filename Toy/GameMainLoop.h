@@ -1,6 +1,7 @@
 #pragma once
 #include "MainLoop.h"
 
+struct IRenderScene;
 class Button;
 class TextArea;
 class Panel;
@@ -22,9 +23,5 @@ private:
 	Window* m_window;
 	IRenderer* m_renderer;
 
-	unique_ptr<Button>m_button;
-	unique_ptr<Button>m_button2;
-	unique_ptr<Button>m_closeButton;
-	unique_ptr<TextArea> m_textArea;
-	unique_ptr<Panel> m_panel;
+	unique_ptr<IRenderScene> m_gameScene;
 };

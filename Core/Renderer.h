@@ -5,7 +5,6 @@
 #pragma once
 
 #include "../Include/IRenderer.h"
-#include "../Include/IRenderItem.h"
 #include "IDeviceNotify.h"
 
 struct IImgui;
@@ -48,14 +47,11 @@ public:
 
     virtual void AddLoadScene(IRenderScene* scene) override;
     virtual void AddRenderScene(IRenderScene* scene) override;
-    virtual void AddLoadResource(IRenderItem* item) override;
-    virtual void AddRenderItem(IRenderItem* item) override;
     virtual void AddImguiItem(IImguiItem* item) override;
 
     virtual bool LoadScenes() override;
-    virtual bool LoadResources() override;
     virtual IGetValue* GetValue() const noexcept override;
-    virtual bool CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID) override;
+    virtual bool CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID) override;
     virtual bool ModifyRenderTexture(ImTextureID id, const XMUINT2& size) override;
     virtual void Draw() override;
 
@@ -88,6 +84,4 @@ private:
 
     vector<IRenderScene*> m_loadScenes;
     vector<IRenderScene*> m_renderScenes;
-    vector<IRenderItem*> m_loadItems;
-    vector<IRenderItem*> m_renderItems;
 };

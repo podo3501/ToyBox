@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Renderer.h"
+#include "../Include/IRenderScene.h"
 #include "DeviceResources.h"
 #include "TextureIndexing.h"
 #include "RenderTexture.h"
@@ -150,30 +151,6 @@ void Renderer::OnDeviceRestored()
 }
 #pragma endregion
 
-bool Renderer::LoadResources()
-{
-    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
-#ifdef __MINGW32__
-    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
-#else
-    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
-    if (FAILED(initialize)) return false;
-#endif
-    //ResourceUploadBatch resourceUpload(device);
-
-    m_batch->Begin();
-    //resourceUpload.Begin();
-
-    ReturnIfFalse(ranges::all_of(m_loadItems, [load = m_texIndexing.get()](const auto item) {
-        return item->LoadResources(load);
-        }));
-
-    auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
-    uploadResourcesFinished.wait();
-
-    return true;
-}
-
 bool Renderer::LoadScenes()
 {
     //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
@@ -225,8 +202,8 @@ void Renderer::Draw()
     Clear();
 
     m_spriteBatch->Begin(commandList);
-    ranges::for_each(m_renderItems, [renderer = m_texIndexing.get()](const auto item) {
-        item->Render(renderer);
+    ranges::for_each(m_renderScenes, [renderer = m_texIndexing.get()](const auto& scene) {
+        scene->RenderScene(renderer);
         });
     m_spriteBatch->End();
 
@@ -317,18 +294,16 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
 void Renderer::AddLoadScene(IRenderScene* scene) { m_loadScenes.emplace_back(scene); }
 void Renderer::AddRenderScene(IRenderScene* scene) { m_renderScenes.emplace_back(scene); }
-void Renderer::AddLoadResource(IRenderItem* item) { m_loadItems.emplace_back(item); }
-void Renderer::AddRenderItem(IRenderItem* item) { m_renderItems.emplace_back(item); }
 void Renderer::AddImguiItem(IImguiItem* item) { m_imgui->AddItem(item); }
 
-bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID)
+bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID)
 {
     auto device = m_deviceResources->GetD3DDevice();
     unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>(device, m_srvDescriptors.get());
 
     auto format = m_deviceResources->GetBackBufferFormat();
     size_t renderTextureIdx = m_renderTextures.size();
-    ReturnIfFalse(renderTexture->Create(format, size, Ev(SrvOffset::RenderTexture) + renderTextureIdx, renderItem));
+    ReturnIfFalse(renderTexture->Create(format, size, Ev(SrvOffset::RenderTexture) + renderTextureIdx, scene));
     outTextureID = renderTexture->GetTextureID();
 
     m_renderTextures.insert(make_pair(outTextureID, move(renderTexture)));

@@ -4,8 +4,8 @@
 #include "GuiWidget.h"
 #include "GuiAppWindow.h"
 #include "../Toy/Utility.h"
+#include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/Dialog.h"
@@ -31,31 +31,35 @@ ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
     ::MainLoop(window, renderer),
     m_window{ window },
     m_renderer{ renderer },
-    m_testImgui{ make_unique<TestImgui>(renderer) }
-{}
+    m_testImgui{ make_unique<TestImgui>(renderer) },
+    m_toolScene{ make_unique<Scene>(renderer) }
+{
+    m_renderer->AddLoadScene(m_toolScene.get());
+    m_renderer->AddRenderScene(m_toolScene.get());
+}
 
 bool ToolMainLoop::InitializeDerived()
 {
-    m_dialog = make_unique<Dialog>();
-
     return true;
 }
 
 bool ToolMainLoop::LoadResources()
 {
     //다이얼로그를 열면 0.1씩 벗어나야 하고, 최종창에는 벗어나지 않아야 한다.
-    ReturnIfFalse(m_dialog->SetResources(L"UI/Data/Dialog.json"));
+    unique_ptr<Dialog> dialog = make_unique<Dialog>();
+    ReturnIfFalse(dialog->SetResources(L"UI/Data/Dialog.json"));
 
-    m_renderer->AddLoadResource(m_dialog.get());
-    m_renderer->AddRenderItem(m_dialog.get());
-    
+    m_toolScene->AddRenderItem({ 0.f, 0.f }, move(dialog));
+
     return true;
 }
 
 bool ToolMainLoop::SetDatas(IGetValue* getValue)
 {
     m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
-    ReturnIfFalse(m_guiAppWindow->Create(m_dialog.get(), { 400, 300 }));
+
+    auto cloneScene = m_toolScene->Clone();
+    ReturnIfFalse(m_guiAppWindow->Create(move(cloneScene), { 400, 300 }));
 
     return true;
 }
@@ -67,7 +71,7 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_dialog->Update(Vector2{});
+    m_toolScene->Update(mouseTracker);
 
     m_guiAppWindow->Update();
 

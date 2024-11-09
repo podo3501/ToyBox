@@ -1,5 +1,4 @@
 #pragma once
-#include "../Include/IRenderItem.h"
 
 struct IImguiItem;
 class Renderer;

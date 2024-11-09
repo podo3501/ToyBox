@@ -1,6 +1,6 @@
 #pragma once
 
-struct IRenderItem;
+struct IRenderScene;
 
 class RenderTexture
 {
@@ -10,7 +10,7 @@ public:
 	RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor);
 	~RenderTexture();
 
-	bool Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderItem* renderItem);
+	bool Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderScene* scene);
 	bool ModifyRenderTexture(const XMUINT2& size);
 	void Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite);
 	ImTextureID GetTextureID() const noexcept;
@@ -28,7 +28,7 @@ private:
 	int m_renderTargetIndex{ 0 };
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargetTexture[RenderTargetCount];
 
-	IRenderItem* m_renderItem;
+	IRenderScene* m_scene;
 	size_t m_offset{};
 	D3D12_RESOURCE_DESC m_resDesc{};
 };

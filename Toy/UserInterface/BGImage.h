@@ -1,5 +1,5 @@
 #pragma once
-#include "../Include/IRenderItem.h"
+#include "IRenderItem.h"
 
 struct IRenderer;
 struct ILoadData;
@@ -19,16 +19,19 @@ public:
 
 	virtual bool SetResources(const wstring& filename) override;
 	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool Update(const Vector2& position) noexcept;
+	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* mouseTracker) noexcept;
 	virtual void Render(IRender* renderer) override;
 	virtual bool IsPicking(const Vector2& pos)  const noexcept override;
 	virtual const Rectangle& GetArea() const noexcept;
+	virtual void SetSelected(const string& name, bool selected) noexcept {};
 	virtual IRenderItem* GetSelected() const noexcept { return nullptr; }
 	virtual unique_ptr<IRenderItem> Clone() override;
 	virtual void SetPosition(const string& name, const Vector2& pos) noexcept override;
 	virtual bool ChangeArea(const Rectangle& area) noexcept override;
+	virtual const string& GetName() const noexcept { return m_name; }
+	virtual IRenderItem* GetRenderItem(const string& name) const noexcept override { return nullptr;	}
 
-	void SetImage(IRenderer* renderer, const string& name, const Vector2 position, const UILayout& layout, const ImageSource& sources);
+	void SetImage(const string& name, const Vector2 position, const UILayout& layout, const ImageSource& sources);
 	
 	
 private:

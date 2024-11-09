@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../Include/IRenderItem.h"
+#include "../Include/IRenderScene.h"
 #include "RenderTexture.h"
 #include "Utility.h"
 
@@ -9,7 +9,7 @@ RenderTexture::~RenderTexture() = default;
 RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor) :
     m_device(device),
     m_srvDescriptor{ srvDescriptor },
-    m_renderItem{ nullptr }
+    m_scene{ nullptr }
 {
     m_rtvDescriptor = make_unique<DescriptorHeap>(device,
         D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
@@ -49,9 +49,9 @@ void RenderTexture::CreateRtvAndSrv(ID3D12Resource* resource)
     CreateShaderResourceView(m_device, resource, m_srvDescriptor->GetCpuHandle(m_offset));
 }
 
-bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderItem* renderItem)
+bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderScene* scene)
 {
-    m_renderItem = renderItem;
+    m_scene = scene;
     m_offset = offset;
     //화면을 저장할 Texture를 만든다.
     m_resDesc = GetResourceDesc(texFormat, size);
@@ -96,7 +96,7 @@ bool RenderTexture::ModifyRenderTexture(const XMUINT2& size)
 
 void RenderTexture::Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite)
 {
-    if (m_renderItem == nullptr)
+    if (m_scene == nullptr)
         return;
 
     //D3D12_VIEWPORT viewport{};
@@ -118,7 +118,7 @@ void RenderTexture::Render(ID3D12GraphicsCommandList* commandList, IRender* rend
 
     sprite->Begin(commandList);
 
-    m_renderItem->Render(renderer);
+    m_scene->RenderScene(renderer);
 
     sprite->End();
 }

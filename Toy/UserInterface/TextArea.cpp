@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TextArea.h"
-#include "../../Include/IRenderer.h"
+#include "../Include/IRenderer.h"
 #include "UILayout.h"
 #include "../Utility.h"
 #include "UIUtility.h"
@@ -30,18 +30,17 @@ const Rectangle& TextArea::GetArea() const noexcept
 	return m_layout->GetArea(); 
 }
 
-void TextArea::SetFont(IRenderer* renderer, 
+void TextArea::SetFont(const string& name,
 	const Vector2& position,
 	const UILayout& layout, 
 	const map<wstring, wstring>& fontFileList)
 {
+	m_name = name;
 	m_position = position;
 	m_layout = make_unique<UILayout>(layout);
 	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
 		return make_pair(filename.first, filename.second);
 		});
-
-	renderer->AddLoadResource(this);
 }
 
 bool TextArea::SetText(IGetValue* getValue, wstring&& text)
@@ -96,9 +95,9 @@ bool TextArea::SetText(IGetValue* getValue, wstring&& text)
 	return true;
 }
 
-bool TextArea::Update(const Vector2& position) noexcept
+bool TextArea::Update(const Vector2& position, const Mouse::ButtonStateTracker*) noexcept
 {
-	m_position = m_layout->GetPosition(m_position + position);
+	m_posByResolution = m_layout->GetPosition(m_position + position);
 
 	return true;
 }
@@ -107,28 +106,27 @@ void TextArea::Render(IRender* render)
 {
 	for (const auto& word : m_lines)
 		render->DrawString(m_font[word.fontStyle], 
-			word.text, m_position + word.position, 
+			word.text, m_posByResolution + word.position,
 			XMLoadFloat4(&word.color));
 }
 
-TextArea::TextArea(const Vector2& position, const UILayout* layout,
-	const map<wstring, wstring>& fontFileList, 
-	const map<wstring, size_t>& font, 
-	const vector<TextData>& lines)
+TextArea::TextArea(const TextArea& other)
 {
-	m_position = position;
-	m_layout = make_unique<UILayout>(*layout);
-	m_fontFileList = fontFileList;
-	m_font = font;
-	m_lines = lines;
+	m_name = other.m_name + "_clone";
+	m_position = other.m_position;
+	m_posByResolution = other.m_posByResolution;
+	m_layout = make_unique<UILayout>(*other.m_layout);
+	m_fontFileList = other.m_fontFileList;
+	m_font = other.m_font;
+	m_lines = other.m_lines;
 }
 
 unique_ptr<IRenderItem> TextArea::Clone() 
 {
-	return make_unique<TextArea>(m_position, m_layout.get(), m_fontFileList, m_font, m_lines);
+	return make_unique<TextArea>(*this);
 }
 
 void TextArea::SetPosition(const string& name, const Vector2& position) noexcept 
 {
-	m_position = position;
+	//m_position = position;
 };

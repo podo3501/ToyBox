@@ -33,12 +33,12 @@ const Rectangle& Panel::GetArea() const noexcept
     return m_area;
 }
 
-bool Panel::Update(const Vector2& position) noexcept
+bool Panel::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept
 {
     for (const auto& i : m_renderItems)
     {
         BGImage* bgImg = static_cast<BGImage*>(i.second.get());
-        ReturnIfFalse(bgImg->Update(i.first + position));
+        ReturnIfFalse(bgImg->Update(i.first + position, tracker));
     }
 
     return true;

@@ -42,7 +42,6 @@ public:
 };
 
 struct IRenderScene;
-struct IRenderItem;
 struct IRenderer
 {
 public:
@@ -51,14 +50,11 @@ public:
     virtual bool Initialize() = 0;
     virtual void AddLoadScene(IRenderScene* scene) = 0;
     virtual void AddRenderScene(IRenderScene* scene) = 0;
-    virtual void AddLoadResource(IRenderItem* item) = 0;
-    virtual void AddRenderItem(IRenderItem* item) = 0;
     virtual void AddImguiItem(IImguiItem* item) = 0;
 
     virtual bool LoadScenes() = 0;
-    virtual bool LoadResources() = 0;
     virtual IGetValue* GetValue() const noexcept = 0;
-    virtual bool CreateRenderTexture(const XMUINT2& size, IRenderItem* renderItem, ImTextureID& outTextureID) = 0;
+    virtual bool CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID) = 0;
     virtual bool ModifyRenderTexture(ImTextureID id, const XMUINT2& size) = 0;
     virtual void Draw() = 0;
 

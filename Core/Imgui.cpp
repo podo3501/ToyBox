@@ -26,8 +26,8 @@ bool Imgui::Initialize(ID3D12Device* device, DescriptorHeap* descHeap, DXGI_FORM
     m_io = &ImGui::GetIO();
     m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     //m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
-    m_io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    //m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+    //m_io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     ImGui::StyleColorsDark();
 

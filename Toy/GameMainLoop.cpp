@@ -3,6 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "UserInterface/UIType.h"
 #include "Utility.h"
+#include "UserInterface/Scene.h"
 #include "UserInterface/UILayout.h"
 #include "UserInterface/Button.h"
 #include "UserInterface/BGImage.h"
@@ -34,11 +35,9 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 
 bool GameMainLoop::InitializeDerived()
 {
-    m_button = make_unique<Button>();
-    m_button2 = make_unique<Button>();
-    m_closeButton = make_unique<Button>();
-    m_textArea = make_unique<TextArea>();
-    m_panel = make_unique<Panel>();
+    m_gameScene = make_unique<Scene>(m_renderer);
+    m_renderer->AddLoadScene(m_gameScene.get());
+    m_renderer->AddRenderScene(m_gameScene.get());
 
     return true;
 }
@@ -64,31 +63,34 @@ bool GameMainLoop::LoadResources()
         { L"UI/Gray/bar_square_large_r.png" },
     };
 
-    UILayout layout({ 0, 0, 180, 48 }, { 0.5f, 0.5f }, Origin::Center);
-    m_button->SetImage(m_renderer, { 0.5f, 0.5f }, layout, normal, hover, pressed);
-    layout.Set({ 0.0f, 0.0f });
-    m_button2->SetImage(m_renderer, { 0.5f, 0.4f }, layout, normal, hover, pressed);
+    UILayout layout({ 0, 0, 180, 48 }, Origin::Center);
+    unique_ptr<Button> button = make_unique<Button>();
+    button->SetImage("Button", { 0.5f, 0.5f }, layout, normal, hover, pressed);
+    unique_ptr<Button> button_2 = make_unique<Button>();
+    button_2->SetImage("Button2", { 0.5f, 0.4f }, layout, normal, hover, pressed);
 
-    m_renderer->AddRenderItem(m_button.get());
-    m_renderer->AddRenderItem(m_button2.get());
+    m_gameScene->AddRenderItem({0.f, 0.f}, move(button));
+    m_gameScene->AddRenderItem({ 0.f, 0.f }, move(button_2));
 
     vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
     vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
     vector<ImageSource> pressed2{ { L"UI/Gray/check_square_grey_cross.png" } };
 
-    layout.Set({ 0, 0, 32, 32 }, { 0.0f, 0.0f }, Origin::Center);
-    m_closeButton->SetImage(m_renderer, { 0.2f, 0.2f }, layout, normal2, hover2, pressed2);
-    m_renderer->AddRenderItem(m_closeButton.get());
+    layout.Set({ 0, 0, 32, 32 }, Origin::Center);
+    unique_ptr<Button> closeButton = make_unique<Button>();
+    closeButton->SetImage("CloseButton", { 0.2f, 0.2f }, layout, normal2, hover2, pressed2);
+    m_gameScene->AddRenderItem({ 0.f, 0.f }, move(closeButton));
 
-    layout.Set({ 0, 0, 250, 120 }, { 0.f, 0.f }, Origin::Center);
+    layout.Set({ 0, 0, 250, 120 }, Origin::Center);
     map<wstring, wstring> fontFileList;
     fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
     fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-    m_textArea->SetFont(m_renderer, { 0.2f, 0.7f }, layout, fontFileList);
+    unique_ptr<TextArea> textArea = make_unique<TextArea>();
+    textArea->SetFont("TextArea", { 0.2f, 0.7f }, layout, fontFileList);
 
-    m_renderer->AddRenderItem(m_textArea.get());
+    m_gameScene->AddRenderItem({ 0.f, 0.f }, move(textArea));
 
-    layout.Set({ 0, 0, 220, 190 }, { 0.0f, 0.0f }, Origin::LeftTop);
+    layout.Set({ 0, 0, 220, 190 }, Origin::LeftTop);
     ImageSource bgImageSource{
         L"UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
@@ -97,20 +99,22 @@ bool GameMainLoop::LoadResources()
         }
     };
     unique_ptr<BGImage> bgImage = make_unique<BGImage>();
-    bgImage->SetImage(m_renderer, "BGImage", { 0.f, 0.f }, layout, bgImageSource);
-    //m_renderer->AddRenderItem(m_dialog.get());
-    m_panel->AddRenderItem({ 0.5f, 0.5f }, move(bgImage));
-    Rectangle test = m_panel->GetArea();
+    bgImage->SetImage("BGImage", { 0.f, 0.f }, layout, bgImageSource);
 
-    m_renderer->AddRenderItem(m_panel.get());
-    
+    unique_ptr<Panel> panel = make_unique<Panel>();
+    panel->AddRenderItem({ 0.5f, 0.5f }, move(bgImage));
+    Rectangle test = panel->GetArea();
+
+    m_gameScene->AddRenderItem({ 0.f, 0.f }, move(panel));
 
     return true;
 }
 
 bool GameMainLoop::SetDatas(IGetValue* getValue)
 {
-    auto result = m_textArea->SetText(getValue,
+    auto renderItem = m_gameScene->GetRenderItem("TextArea");
+    TextArea* textArea = static_cast<TextArea*>(renderItem);
+    auto result = textArea->SetText(getValue,
         L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 
     return result;
@@ -123,11 +127,7 @@ void GameMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution,
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_button->Update(resolution, mouseTracker);
-    m_button2->Update(resolution, mouseTracker);
-    m_closeButton->Update(resolution, mouseTracker);
-    m_textArea->Update(resolution);
-    m_panel->Update(resolution);
+    m_gameScene->Update(mouseTracker);
 
     PIXEndEvent();
 }
