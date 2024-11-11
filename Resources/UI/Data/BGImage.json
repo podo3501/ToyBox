@@ -3,8 +3,8 @@
 	"Property": {
 		"Filename": "UI/Data/ImagePartSet.json",
 		"Position": {
-			"x": 0.1,
-			"y": 0.1
+			"x": 0,
+			"y": 0
 		}
 	},
 	"Layout": {

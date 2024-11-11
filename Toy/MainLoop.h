@@ -1,8 +1,8 @@
 #pragma once
 
 class Window;
+class IRenderItem;
 struct IRenderer;
-struct IRenderItem;
 struct IImguiItem;
 struct IGetValue;
 
@@ -25,7 +25,7 @@ protected:
     virtual bool InitializeDerived() = 0;
     virtual bool LoadResources() = 0;
     virtual bool SetDatas(IGetValue* getValue) = 0;
-    virtual void Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker) = 0;
+    virtual void Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker) = 0;
 
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

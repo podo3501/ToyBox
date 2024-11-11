@@ -1,8 +1,8 @@
 #pragma once
 #include "../Include/IRenderer.h"
 
-struct IRenderItem;
 struct IRenderScene;
+class IRenderItem;
 
 class GuiWidget : public IImguiItem
 {

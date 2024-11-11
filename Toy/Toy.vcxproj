@@ -232,6 +232,7 @@
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="UserInterface\Dialog.cpp" />
+    <ClCompile Include="UserInterface\IRenderItem.cpp" />
     <ClCompile Include="UserInterface\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\Panel.cpp" />
     <ClCompile Include="UserInterface\Scene.cpp" />

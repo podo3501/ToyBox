@@ -9,9 +9,17 @@
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
 TextArea::~TextArea() = default;
-TextArea::TextArea() :
-	m_layout{ nullptr }
+TextArea::TextArea()
 {}
+TextArea::TextArea(const TextArea& other)
+	: IRenderItem{ other }
+{
+	m_position = other.m_position;
+	m_posByResolution = other.m_posByResolution;
+	m_fontFileList = other.m_fontFileList;
+	m_font = other.m_font;
+	m_lines = other.m_lines;
+}
 
 bool TextArea::LoadResources(ILoadData* load)
 {
@@ -25,19 +33,14 @@ bool TextArea::LoadResources(ILoadData* load)
 	return true;
 }
 
-const Rectangle& TextArea::GetArea() const noexcept 
-{ 
-	return m_layout->GetArea(); 
-}
-
 void TextArea::SetFont(const string& name,
 	const Vector2& position,
 	const UILayout& layout, 
 	const map<wstring, wstring>& fontFileList)
 {
-	m_name = name;
+	SetName(name);
+	SetLayout(layout);
 	m_position = position;
-	m_layout = make_unique<UILayout>(layout);
 	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
 		return make_pair(filename.first, filename.second);
 		});
@@ -48,7 +51,8 @@ bool TextArea::SetText(IGetValue* getValue, wstring&& text)
 	TextProperty textProperty;
 	ReturnIfFalse(Parser(text, textProperty));
 
-	Rectangle usableArea = m_layout->GetArea();
+	auto layout = GetLayout();
+	Rectangle usableArea = layout->GetArea();
 	Vector2 startPos = usableArea.Location();
 	float lineSpacing = 0.0f;
 	long maxHeight = 0;
@@ -97,7 +101,8 @@ bool TextArea::SetText(IGetValue* getValue, wstring&& text)
 
 bool TextArea::Update(const Vector2& position, const Mouse::ButtonStateTracker*) noexcept
 {
-	m_posByResolution = m_layout->GetPosition(m_position + position);
+	auto layout = GetLayout();
+	m_posByResolution = layout->GetPosition(m_position + position);
 
 	return true;
 }
@@ -110,23 +115,12 @@ void TextArea::Render(IRender* render)
 			XMLoadFloat4(&word.color));
 }
 
-TextArea::TextArea(const TextArea& other)
-{
-	m_name = other.m_name + "_clone";
-	m_position = other.m_position;
-	m_posByResolution = other.m_posByResolution;
-	m_layout = make_unique<UILayout>(*other.m_layout);
-	m_fontFileList = other.m_fontFileList;
-	m_font = other.m_font;
-	m_lines = other.m_lines;
-}
-
 unique_ptr<IRenderItem> TextArea::Clone() 
 {
 	return make_unique<TextArea>(*this);
 }
 
-void TextArea::SetPosition(const string& name, const Vector2& position) noexcept 
+void TextArea::SetPosition(const Vector2& position) noexcept 
 {
-	//m_position = position;
+	m_position = position;
 };

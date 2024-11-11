@@ -24,7 +24,6 @@ bool GuiAppWindow::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
     //임시로 bgImage가 선택되었다고 가정한다.
     m_guiWidget = make_unique<GuiWidget>(m_renderer);
     unique_ptr<IRenderItem> clone = m_renderItem->Clone();
-    clone->SetPosition("", { 0.f, 0.f });
     
     ReturnIfFalse(m_guiWidget->Create(move(clone)));
     

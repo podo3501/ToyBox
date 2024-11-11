@@ -2,7 +2,7 @@
 
 struct ILoadData;
 struct IRender;
-struct IRenderItem;
+class IRenderItem;
 class Mouse::ButtonStateTracker;
 
 struct IRenderScene

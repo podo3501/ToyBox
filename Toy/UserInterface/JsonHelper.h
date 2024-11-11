@@ -1,7 +1,7 @@
 #pragma once
 
 struct IRenderer;
-struct IRenderItem;
+class IRenderItem;
 class UILayout;
 
 enum class DataType

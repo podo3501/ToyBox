@@ -6,12 +6,24 @@
 #include "UILayout.h"
 #include "ImagePartSet.h"
 
-const Rectangle& Button::GetArea() const noexcept { return m_layout->GetArea(); }
-
 Button::~Button() = default;
-Button::Button() :
-	m_layout{ nullptr }
-{}
+Button::Button() {}
+Button::Button(const Button& other)
+	: IRenderItem{ other }
+{
+	m_position = other.m_position;
+
+	ranges::for_each(other.m_image, [this](const auto& pair) {
+		ButtonState state = pair.first;
+		const auto& imgPartSet = pair.second;
+		m_image.insert(make_pair(state, make_unique<ImagePartSet>(*imgPartSet.get())));
+		});
+}
+
+unique_ptr<IRenderItem> Button::Clone()
+{
+	return make_unique<Button>(*this);
+}
 
 bool Button::LoadResources(ILoadData* load)
 {
@@ -20,7 +32,8 @@ bool Button::LoadResources(ILoadData* load)
 		}));
 
 	//로딩을 다 하고 값을 넣는 이유는 뒤에 로딩하는 것들이 값에 영향을 주기 때문이다.
-	SetDestination(m_layout->GetArea());
+	auto layout = GetLayout();
+	SetDestination(layout->GetArea());
 
 	return true;
 }
@@ -33,18 +46,19 @@ bool Button::SetDestination(const Rectangle& area) noexcept
 	return true;
 }
 
-bool Button::ChangeArea(Rectangle&& area) noexcept
+bool Button::ChangeArea(const Rectangle& area) noexcept
 {
 	ReturnIfFalse(SetDestination(area));
 
-	m_layout->Set(move(area));
+	IRenderItem::ChangeArea(area);
 
 	return true;
 }
 
 bool Button::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept
 {
-	const Vector2& pos = m_layout->GetPosition(m_position + position);
+	auto layout = GetLayout();
+	const Vector2& pos = layout->GetPosition(m_position + position);
 
 	for (const auto& partSet : m_image | views::values)
 		ReturnIfFalse(partSet->Update(pos));
@@ -80,9 +94,9 @@ void Button::SetImage(const string& name,
 	const vector<ImageSource>& hover,
 	const vector<ImageSource>& pressed)
 {
-	m_name = name;
+	SetName(name);
+	SetLayout(layout);
 	m_position = position;
-	m_layout = make_unique<UILayout>(layout);
 
 	ButtonState btnState = ButtonState::Normal;
 	for (const auto& sources : { normal, hover, pressed })
@@ -91,34 +105,15 @@ void Button::SetImage(const string& name,
 		m_image.insert(make_pair(btnState, move(imgPartSet)));
 		btnState = static_cast<ButtonState>(static_cast<int>(btnState) + 1);
 	}
-
-	//renderer->AddLoadResource(this);
 }
 
 void Button::ChangeOrigin(Origin&& origin) noexcept
 {
-	m_layout->Set(move(origin));
+	auto layout = GetLayout();
+	layout->Set(move(origin));
 }
 
-Button::Button(const Vector2& position, const UILayout* layout,
-	const map<ButtonState, unique_ptr<ImagePartSet>>& image)
-{
-	m_position = position;
-	m_layout = make_unique<UILayout>(*layout);
-
-	ranges::for_each(image, [this](const auto& pair) {
-		ButtonState state = pair.first;
-		const auto& imgPartSet = pair.second;
-		m_image.insert(make_pair(state, make_unique<ImagePartSet>(*imgPartSet.get())));
-		});
-}
-
-unique_ptr<IRenderItem> Button::Clone()
-{ 
-	return make_unique<Button>(m_position, m_layout.get(), m_image);
-}
-
-void Button::SetPosition(const string& name, const Vector2& pos) noexcept
+void Button::SetPosition(const Vector2& pos) noexcept
 {
 	m_position = pos;
 }

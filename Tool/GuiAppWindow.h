@@ -2,7 +2,7 @@
 #include "../Include/IRenderer.h"
 
 struct IRenderScene;
-struct IRenderItem;
+class IRenderItem;
 class GuiWidget;
 
 class GuiAppWindow : public IImguiItem

@@ -80,7 +80,7 @@ void MainLoop::Tick()
 
     m_timer->Tick([&]()
         {
-            Update(timer, m_window->GetOutputSize(), &mouseTracker);
+            Update(timer, &mouseTracker);
         });
    
     // Don't try to render anything before the first Update.

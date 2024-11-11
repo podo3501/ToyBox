@@ -207,14 +207,14 @@ TEST_F(ToyTest, Panel)
 	unique_ptr<Panel> panel = std::make_unique<Panel>();
 	unique_ptr<IRenderItem> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
 	Rectangle bgArea = bgImg->GetArea();
-	panel->AddRenderItem({ 0.1f, 0.1f }, move(bgImg));
+	panel->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
 	EXPECT_EQ(bgArea, panel->GetArea());
 }
 
 TEST_F(ToyTest, Dialog)
 {
-	unique_ptr<Dialog> cDialog = std::make_unique<Dialog>();
+	unique_ptr<IRenderItem> cDialog = std::make_unique<Dialog>();
 	cDialog->SetName("Dialog");
 	unique_ptr<IRenderItem> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
 	cDialog->AddComponent(move(bgImg), { 0.1f, 0.1f });
@@ -226,7 +226,7 @@ TEST_F(ToyTest, Dialog)
 	//클론을 만들어서 둘이 같지 않음을 확인한다.
 	unique_ptr<IRenderItem> cloneDialog = dialog->Clone();
 
-	cloneDialog->SetPosition("BGImage_clone", { 0.2f, 0.2f });
+	cloneDialog->SetChildPosition("BGImage_clone", { 0.2f, 0.2f });
 	auto cloneDialogBgImg = cloneDialog->GetRenderItem("BGImage_clone");
 	
 	auto dialogBgImg = dialog->GetRenderItem("BGImage");

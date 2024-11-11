@@ -102,7 +102,7 @@ bool GameMainLoop::LoadResources()
     bgImage->SetImage("BGImage", { 0.f, 0.f }, layout, bgImageSource);
 
     unique_ptr<Panel> panel = make_unique<Panel>();
-    panel->AddRenderItem({ 0.5f, 0.5f }, move(bgImage));
+    panel->AddComponent(move(bgImage), { 0.5f, 0.5f });
     Rectangle test = panel->GetArea();
 
     m_gameScene->AddRenderItem({ 0.f, 0.f }, move(panel));
@@ -120,7 +120,7 @@ bool GameMainLoop::SetDatas(IGetValue* getValue)
     return result;
 }
 
-void GameMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker)
+void GameMainLoop::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 

@@ -64,7 +64,7 @@ bool ToolMainLoop::SetDatas(IGetValue* getValue)
     return true;
 }
 
-void ToolMainLoop::Update(const DX::StepTimer* timer, const Vector2& resolution, const Mouse::ButtonStateTracker* mouseTracker)
+void ToolMainLoop::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
