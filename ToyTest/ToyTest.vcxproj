@@ -127,6 +127,7 @@
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="PracticeTest.cpp" />
+    <ClCompile Include="ReadJsonTest.cpp" />
     <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -151,6 +152,16 @@
     <ProjectReference Include="..\Toy\Toy.vcxproj">
       <Project>{ce88cfb8-f480-4ead-b13e-d54c92e8fde8}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestResources\UI\Data\BGImage.json" />
+    <None Include="TestResources\UI\Data\Button.json" />
+    <None Include="TestResources\UI\Data\Dialog.json" />
+    <None Include="TestResources\UI\Data\FirstScene.json" />
+    <None Include="TestResources\UI\Data\HoverImage.json" />
+    <None Include="TestResources\UI\Data\ImagePartSet.json" />
+    <None Include="TestResources\UI\Data\NormalImage.json" />
+    <None Include="TestResources\UI\Data\PressedImage.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

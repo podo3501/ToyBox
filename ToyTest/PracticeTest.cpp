@@ -98,7 +98,7 @@ namespace Practice
 	using json = nlohmann::json;
 	TEST(Json, Test)
 	{
-		ifstream file(L"./ToyTest/TestResources/dialog.json");
+		ifstream file(L"./ToyTest/TestResources/JsonTest.json");
 		if (!file.is_open())
 			return;
 

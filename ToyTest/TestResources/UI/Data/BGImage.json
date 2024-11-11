@@ -1,0 +1,19 @@
+{
+	"Name": "BGImage",
+	"Property": {
+		"Filename": "UI/Data/ImagePartSet.json",
+		"Position": {
+			"x": 0,
+			"y": 0
+		}
+	},
+	"Layout": {
+		"Area": {
+			"x": 0,
+			"y": 0,
+			"width": 220,
+			"height": 190
+		},
+		"Origin": "LeftTop"
+	}
+}

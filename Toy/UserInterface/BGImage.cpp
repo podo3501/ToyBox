@@ -15,8 +15,20 @@ BGImage::BGImage()
 BGImage::BGImage(const BGImage& other)
 	: UIComponent{ other }
 {
-	m_position = other.m_position;
 	m_imagePartSet = make_unique<ImagePartSet>(*other.m_imagePartSet.get());
+}
+
+unique_ptr<UIComponent> BGImage::Clone()
+{
+	return make_unique<BGImage>(*this);
+}
+
+bool BGImage::ReadProperty(const nlohmann::json& data)
+{
+	m_imagePartSet = CreateProperty<ImagePartSet>(data);
+	ReturnIfNullptr(m_imagePartSet);
+
+	return true;
 }
 
 bool BGImage::LoadResources(ILoadData* load)
@@ -27,20 +39,11 @@ bool BGImage::LoadResources(ILoadData* load)
 	return true;
 }
 
-bool BGImage::ReadProperty(const nlohmann::json& data)
-{
-	tie(m_imagePartSet, m_position) = CreateProperty<ImagePartSet>(data);
-	ReturnIfNullptr(m_imagePartSet);
-
-	return true;
-}
-
-void BGImage::SetImage(const string& name, const Vector2 position, const UILayout& layout, const ImageSource& sources)
+void BGImage::SetImage(const string& name, const UILayout& layout, const ImageSource& sources)
 {
 	SetName(name);
 	SetLayout(layout);
 
-	m_position = position;
 	m_imagePartSet = make_unique<ImagePartSet>(sources);
 }
 
@@ -55,7 +58,7 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 bool BGImage::Update(const Vector2& position, const Mouse::ButtonStateTracker*) noexcept
 {
 	auto layout = GetLayout();
-	const Vector2 pos = layout->GetPosition(m_position + position);
+	const Vector2 pos = layout->GetPosition(position);
 
 	ReturnIfFalse(m_imagePartSet->Update(pos));	//Update보다 SetPosition으로 바꾸는게 더 직관적일듯
 
@@ -65,14 +68,4 @@ bool BGImage::Update(const Vector2& position, const Mouse::ButtonStateTracker*) 
 void BGImage::Render(IRender* renderer)
 {
 	m_imagePartSet->Render(renderer);
-}
-
-unique_ptr<UIComponent> BGImage::Clone()
-{
-	return make_unique<BGImage>(*this);
-}
-
-void BGImage::SetPosition(const Vector2& pos) noexcept
-{
-	m_position = pos;
 }

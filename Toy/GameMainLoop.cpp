@@ -65,12 +65,12 @@ bool GameMainLoop::LoadResources()
 
     UILayout layout({ 0, 0, 180, 48 }, Origin::Center);
     unique_ptr<Button> button = make_unique<Button>();
-    button->SetImage("Button", { 0.5f, 0.5f }, layout, normal, hover, pressed);
+    button->SetImage("Button", layout, normal, hover, pressed);
     unique_ptr<Button> button_2 = make_unique<Button>();
-    button_2->SetImage("Button2", { 0.5f, 0.4f }, layout, normal, hover, pressed);
+    button_2->SetImage("Button2", layout, normal, hover, pressed);
 
-    m_gameScene->AddComponent({0.f, 0.f}, move(button));
-    m_gameScene->AddComponent({ 0.f, 0.f }, move(button_2));
+    m_gameScene->AddComponent({0.5f, 0.5f}, move(button));
+    m_gameScene->AddComponent({ 0.5f, 0.4f }, move(button_2));
 
     vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
     vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
@@ -78,8 +78,8 @@ bool GameMainLoop::LoadResources()
 
     layout.Set({ 0, 0, 32, 32 }, Origin::Center);
     unique_ptr<Button> closeButton = make_unique<Button>();
-    closeButton->SetImage("CloseButton", { 0.2f, 0.2f }, layout, normal2, hover2, pressed2);
-    m_gameScene->AddComponent({ 0.f, 0.f }, move(closeButton));
+    closeButton->SetImage("CloseButton", layout, normal2, hover2, pressed2);
+    m_gameScene->AddComponent({ 0.2f, 0.2f }, move(closeButton));
 
     layout.Set({ 0, 0, 250, 120 }, Origin::Center);
     map<wstring, wstring> fontFileList;
@@ -99,7 +99,7 @@ bool GameMainLoop::LoadResources()
         }
     };
     unique_ptr<BGImage> bgImage = make_unique<BGImage>();
-    bgImage->SetImage("BGImage", { 0.f, 0.f }, layout, bgImageSource);
+    bgImage->SetImage("BGImage", layout, bgImageSource);
 
     unique_ptr<Panel> panel = make_unique<Panel>();
     panel->AddComponent(move(bgImage), { 0.5f, 0.5f });

@@ -52,6 +52,7 @@ public:
     virtual void AddRenderScene(IRenderScene* scene) = 0;
     virtual void AddImguiComponent(IImguiComponent* item) = 0;
 
+    //Scene에 Component를 넣고 읽어들일 데이터를 셋팅후 LoadScene을 호출한다. 
     virtual bool LoadScenes() = 0;
     virtual IGetValue* GetValue() const noexcept = 0;
     virtual bool CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID) = 0;

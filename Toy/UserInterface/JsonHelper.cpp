@@ -42,13 +42,20 @@ DataType GetType(const string& key)
 	return dataType;
 }
 
+wstring GetFilename(const nlohmann::json& data)
+{
+	return { StringToWString(data["Filename"]) };
+}
+
+Vector2 GetPosition(const nlohmann::json& data)
+{
+	const auto& pos = data["Position"];
+	return { pos["x"], pos["y"] };
+}
+
 tuple<wstring, Vector2> GetFilenameAndPos(const json& data)
 {
-	wstring filename{ StringToWString(data["Filename"]) };
-	const auto& pos = data["Position"];
-	Vector2 position{ pos["x"], pos["y"] };
-
-	return make_tuple(filename, position);
+	return make_tuple(GetFilename(data), GetPosition(data));
 }
 
 tuple<unique_ptr<UIComponent>, Vector2> CreateComponent(const json& data)

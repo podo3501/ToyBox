@@ -5,11 +5,11 @@ class Window;
 class Scene;
 struct IRenderer;
 
-class ToyTest : public ::testing::Test
+class ToyTestFixture : public ::testing::Test
 {
 public:
-	ToyTest();
-	~ToyTest();
+	ToyTestFixture();
+	~ToyTestFixture();
 
 protected:
 	void SetUp() override;

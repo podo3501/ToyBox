@@ -1,0 +1,23 @@
+{
+    "Name": "Button",
+    "Property": {
+        "Normal": {
+            "Filename": "UI/Data/NormalImage.json"
+        },
+        "Hover": {
+            "Filename": "UI/Data/HoverImage.json"
+        },
+        "Pressed": {
+            "Filename": "UI/Data/PressedImage.json"
+        }
+    },
+    "Layout": {
+        "Area": {
+            "x": 0,
+            "y": 0,
+            "width": 116,
+            "height": 48
+        },
+        "Origin": "Center"
+    }
+}

@@ -24,10 +24,9 @@ public:
 	virtual void Render(IRender* renderer) override;
 
 	bool ChangeArea(const Rectangle& area) noexcept;
-	void SetPosition(const Vector2& pos) noexcept;
-	void SetImage(const string& name, const Vector2 position, const UILayout& layout, const ImageSource& sources);
+	void SetImage(const string& name, const UILayout& layout, const ImageSource& sources);
 	
 private:
-	Vector2 m_position{};
+	//Vector2 m_position{};
 	unique_ptr<ImagePartSet> m_imagePartSet;
 };

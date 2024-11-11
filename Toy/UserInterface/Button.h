@@ -12,12 +12,15 @@ enum class Origin;
 
 class Button : public UIComponent
 {
-	enum ButtonState
+	enum class State
 	{
-		Normal = 0,
-		Hover = 1,
-		Pressed = 2,
+		Init = 0,
+		Normal = 1,
+		Hover = 2,
+		Pressed = 3,
 	};
+	string GetStringState(State state);
+	State GetStateString(const string& str);
 
 public:
 	virtual ~Button();
@@ -25,26 +28,25 @@ public:
 	Button(const Button& other);
 
 	virtual unique_ptr<UIComponent> Clone() override;
+	virtual bool ReadProperty(const nlohmann::json& data) override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept override;
 	virtual void Render(IRender* renderer) override;
 	
 	void SetImage(const string& name,
-		const Vector2& position,
 		const UILayout& layout,
 		const vector<ImageSource>& normal,
 		const vector<ImageSource>& hover,
 		const vector<ImageSource>& pressed);
 	void ChangeOrigin(Origin&& origin) noexcept;
 	bool ChangeArea(const Rectangle& area) noexcept;
-	void SetPosition(const Vector2&) noexcept;
 
 private:
 	bool SetDestination(const Rectangle& area) noexcept;
+	void InsertImage(State btnState, unique_ptr<ImagePartSet>&& imgPartSet);
 
 	string m_name;
 	unique_ptr<UILayout> m_layout;
-	ButtonState m_state{ ButtonState::Normal };
-	map<ButtonState, unique_ptr<ImagePartSet>> m_image;
-	Vector2 m_position{};
+	State m_state{ State::Normal };
+	map<State, unique_ptr<ImagePartSet>> m_image;
 };

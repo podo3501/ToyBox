@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="CoreTest.cpp" />
+    <ClCompile Include="CoreTestFixture.cpp" />
+    <ClCompile Include="PracticeTest.cpp" />
+    <ClCompile Include="ReadJsonTest.cpp" />
+    <ClCompile Include="ToyTest.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="TestMain.cpp" />
+    <ClCompile Include="ToyTestFixture.cpp" />
+    <ClCompile Include="Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CoreTestFixture.h" />
+    <ClInclude Include="IMockRenderer.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="TestMain.h" />
+    <ClInclude Include="ToyTestFixture.h" />
+    <ClInclude Include="Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="TestResources">
+      <UniqueIdentifier>{d64897cb-d02e-49e1-b496-104f65474e45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestResources\UI">
+      <UniqueIdentifier>{2e12f1c1-31e1-414a-b230-b9b47221f62a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestResources\UI\Data">
+      <UniqueIdentifier>{29b2907e-e49d-4d53-92bd-639879902646}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestResources\UI\Data\BGImage.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\Dialog.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\FirstScene.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\ImagePartSet.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\Button.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\NormalImage.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\HoverImage.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\PressedImage.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+  </ItemGroup>
+</Project>

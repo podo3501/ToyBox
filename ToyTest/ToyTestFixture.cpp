@@ -6,10 +6,10 @@
 #include "../Toy/UserInterface/Scene.h"
 #include "Utility.h"
 
-ToyTest::ToyTest() = default;
-ToyTest::~ToyTest() = default;
+ToyTestFixture::ToyTestFixture() = default;
+ToyTestFixture::~ToyTestFixture() = default;
 
-void ToyTest::SetUp()
+void ToyTestFixture::SetUp()
 {
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -28,10 +28,11 @@ void ToyTest::SetUp()
 	m_renderer->AddLoadScene(m_testScene.get());
 	m_renderer->AddRenderScene(m_testScene.get());
 
-	InitializeConfig(L"Resources/", outputSize);
+	InitializeConfig(L"ToyTest/TestResources/", outputSize);
+	//InitializeConfig(L"Resources/", outputSize);
 }
 
-void ToyTest::TearDown()
+void ToyTestFixture::TearDown()
 {
 	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
 	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.
