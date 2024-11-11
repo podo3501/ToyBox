@@ -1,18 +1,18 @@
 #pragma once
-#include "IRenderItem.h"
+#include "UIComponent.h"
 
 struct IRenderer;
 class UILayout;
 struct TextData;
 
-class TextArea : public IRenderItem
+class TextArea : public UIComponent
 {
 public:
 	~TextArea();
 	TextArea();
 	TextArea(const TextArea& other);
 
-	virtual unique_ptr<IRenderItem> Clone();
+	virtual unique_ptr<UIComponent> Clone();
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept override;
 	virtual void Render(IRender* render) override;

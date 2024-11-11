@@ -6,10 +6,10 @@ Dialog::Dialog()
 Dialog::~Dialog() = default;
 
 Dialog::Dialog(const Dialog& other)
-	: IRenderItem{ other }
+	: UIComponent{ other }
 {}
 
-unique_ptr<IRenderItem> Dialog::Clone()
+unique_ptr<UIComponent> Dialog::Clone()
 { 
 	return make_unique<Dialog>(*this);
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "IRenderItem.h"
+#include "UIComponent.h"
 
 struct IRenderer;
 struct ILoadData;
@@ -10,7 +10,7 @@ class UILayout;
 
 enum class Origin;
 
-class Button : public IRenderItem
+class Button : public UIComponent
 {
 	enum ButtonState
 	{
@@ -24,7 +24,7 @@ public:
 	Button();
 	Button(const Button& other);
 
-	virtual unique_ptr<IRenderItem> Clone() override;
+	virtual unique_ptr<UIComponent> Clone() override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept override;
 	virtual void Render(IRender* renderer) override;

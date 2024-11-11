@@ -5,7 +5,7 @@
 TestImgui::~TestImgui() = default;
 TestImgui::TestImgui(IRenderer* renderer)
 {
-    renderer->AddImguiItem(this);
+    renderer->AddImguiComponent(this);
 }
 
 void TestImgui::Update()

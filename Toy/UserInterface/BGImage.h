@@ -1,5 +1,5 @@
 #pragma once
-#include "IRenderItem.h"
+#include "UIComponent.h"
 
 struct IRenderer;
 struct ILoadData;
@@ -10,14 +10,14 @@ class UILayout;
 
 enum class Origin;
 
-class BGImage : public IRenderItem
+class BGImage : public UIComponent
 {
 public:
 	virtual ~BGImage();
 	BGImage();
 	BGImage(const BGImage& other);
 
-	virtual unique_ptr<IRenderItem> Clone() override;
+	virtual unique_ptr<UIComponent> Clone() override;
 	virtual bool ReadProperty(const nlohmann::json& data) override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* mouseTracker) noexcept;

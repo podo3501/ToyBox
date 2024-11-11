@@ -9,7 +9,7 @@
 Button::~Button() = default;
 Button::Button() {}
 Button::Button(const Button& other)
-	: IRenderItem{ other }
+	: UIComponent{ other }
 {
 	m_position = other.m_position;
 
@@ -20,7 +20,7 @@ Button::Button(const Button& other)
 		});
 }
 
-unique_ptr<IRenderItem> Button::Clone()
+unique_ptr<UIComponent> Button::Clone()
 {
 	return make_unique<Button>(*this);
 }
@@ -50,7 +50,7 @@ bool Button::ChangeArea(const Rectangle& area) noexcept
 {
 	ReturnIfFalse(SetDestination(area));
 
-	IRenderItem::ChangeArea(area);
+	UIComponent::ChangeArea(area);
 
 	return true;
 }

@@ -69,8 +69,8 @@ bool GameMainLoop::LoadResources()
     unique_ptr<Button> button_2 = make_unique<Button>();
     button_2->SetImage("Button2", { 0.5f, 0.4f }, layout, normal, hover, pressed);
 
-    m_gameScene->AddRenderItem({0.f, 0.f}, move(button));
-    m_gameScene->AddRenderItem({ 0.f, 0.f }, move(button_2));
+    m_gameScene->AddComponent({0.f, 0.f}, move(button));
+    m_gameScene->AddComponent({ 0.f, 0.f }, move(button_2));
 
     vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
     vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
@@ -79,7 +79,7 @@ bool GameMainLoop::LoadResources()
     layout.Set({ 0, 0, 32, 32 }, Origin::Center);
     unique_ptr<Button> closeButton = make_unique<Button>();
     closeButton->SetImage("CloseButton", { 0.2f, 0.2f }, layout, normal2, hover2, pressed2);
-    m_gameScene->AddRenderItem({ 0.f, 0.f }, move(closeButton));
+    m_gameScene->AddComponent({ 0.f, 0.f }, move(closeButton));
 
     layout.Set({ 0, 0, 250, 120 }, Origin::Center);
     map<wstring, wstring> fontFileList;
@@ -88,7 +88,7 @@ bool GameMainLoop::LoadResources()
     unique_ptr<TextArea> textArea = make_unique<TextArea>();
     textArea->SetFont("TextArea", { 0.2f, 0.7f }, layout, fontFileList);
 
-    m_gameScene->AddRenderItem({ 0.f, 0.f }, move(textArea));
+    m_gameScene->AddComponent({ 0.f, 0.f }, move(textArea));
 
     layout.Set({ 0, 0, 220, 190 }, Origin::LeftTop);
     ImageSource bgImageSource{
@@ -105,15 +105,15 @@ bool GameMainLoop::LoadResources()
     panel->AddComponent(move(bgImage), { 0.5f, 0.5f });
     Rectangle test = panel->GetArea();
 
-    m_gameScene->AddRenderItem({ 0.f, 0.f }, move(panel));
+    m_gameScene->AddComponent({ 0.f, 0.f }, move(panel));
 
     return true;
 }
 
 bool GameMainLoop::SetDatas(IGetValue* getValue)
 {
-    auto renderItem = m_gameScene->GetRenderItem("TextArea");
-    TextArea* textArea = static_cast<TextArea*>(renderItem);
+    auto comp = m_gameScene->GetComponent("TextArea");
+    TextArea* textArea = static_cast<TextArea*>(comp);
     auto result = textArea->SetText(getValue,
         L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
 

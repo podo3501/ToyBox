@@ -10,18 +10,18 @@ GuiWidget::~GuiWidget()
 GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer{ renderer },
     m_widgetScene{ make_unique<Scene>(renderer) },
-    m_renderItem{ nullptr }
+    m_component{ nullptr }
 {
-    m_renderer->AddImguiItem(this);
+    m_renderer->AddImguiComponent(this);
 }
 
-bool GuiWidget::Create(unique_ptr<IRenderItem> renderItem)
+bool GuiWidget::Create(unique_ptr<UIComponent> comp)
 {
-    const string& name = renderItem->GetName();
-    const Rectangle& area = renderItem->GetArea();
+    const string& name = comp->GetName();
+    const Rectangle& area = comp->GetArea();
 
-    m_widgetScene->AddRenderItem({ 0.f, 0.f }, move(renderItem));
-    m_renderItem = m_widgetScene->GetRenderItem(name);
+    m_widgetScene->AddComponent({ 0.f, 0.f }, move(comp));
+    m_component = m_widgetScene->GetComponent(name);
     
     XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
     ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_widgetScene.get(), m_textureID));
@@ -32,7 +32,7 @@ bool GuiWidget::Create(unique_ptr<IRenderItem> renderItem)
 void GuiWidget::Update()
 {
     m_widgetScene->Update(nullptr);
-    //m_renderItem->Update({ 0.f, 0.f }, nullptr);
+    //m_component->Update({ 0.f, 0.f }, nullptr);
 }
 
 void GuiWidget::Render(ImGuiIO* io)
@@ -59,12 +59,12 @@ void GuiWidget::Render(ImGuiIO* io)
         realMousePos.y = mousePos.y - startPos.y;
 
         //클릭했을때 픽킹이 되었는지 확인
-        if (m_renderItem->IsPicking(realMousePos))
+        if (m_component->IsPicking(realMousePos))
             bPicking = !bPicking;
     }
 
-    //BGImage* bgImage = static_cast<BGImage*>(m_renderItem);
-    static Rectangle newArea = m_renderItem->GetArea();
+    //BGImage* bgImage = static_cast<BGImage*>(m_component);
+    static Rectangle newArea = m_component->GetArea();
 
     // ImGui에 텍스춰에 찍어논 화면을 연결
     ImGui::Image(m_textureID, { static_cast<float>(newArea.width), static_cast<float>(newArea.height) });
@@ -72,7 +72,7 @@ void GuiWidget::Render(ImGuiIO* io)
     if(bPicking)
     {
         ImDrawList* draw_list = ImGui::GetWindowDrawList();
-        const Rectangle& rect = m_renderItem->GetArea();
+        const Rectangle& rect = m_component->GetArea();
 
         static ImVec4 colf = ImVec4(1.0f, 1.0f, 1.0f, 0.3f);
         const ImU32 col = ImColor(colf);
@@ -83,7 +83,7 @@ void GuiWidget::Render(ImGuiIO* io)
             static_cast<float>(rect.y) + static_cast<float>(rect.height) + startPos.y }, col);
 
         ImGui::Begin("Dialog Property", &bPicking);
-        const Rectangle& dialogArea = m_renderItem->GetArea();
+        const Rectangle& dialogArea = m_component->GetArea();
 
         static int width = dialogArea.width;
         ImGui::InputInt("width", &width);
@@ -94,7 +94,7 @@ void GuiWidget::Render(ImGuiIO* io)
         newArea.height = height;
         if (dialogArea != newArea)
         {
-            //m_renderItem->ChangeArea(newArea);
+            //m_component->ChangeArea(newArea);
             //m_renderer->ModifyRenderTexture(m_textureID, { static_cast<uint32_t>(width), static_cast<uint32_t>(height) });
         }
         ImGui::End();

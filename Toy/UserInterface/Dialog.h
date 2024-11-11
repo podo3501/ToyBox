@@ -1,14 +1,14 @@
 #pragma once
-#include "IRenderItem.h"
+#include "UIComponent.h"
 
-class Dialog : public IRenderItem
+class Dialog : public UIComponent
 {
 public:
 	Dialog();
 	Dialog(const Dialog& other);
 	~Dialog();
 
-	virtual unique_ptr<IRenderItem> Clone() override;
+	virtual unique_ptr<UIComponent> Clone() override;
 	
 private:
 };

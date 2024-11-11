@@ -294,7 +294,7 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
 void Renderer::AddLoadScene(IRenderScene* scene) { m_loadScenes.emplace_back(scene); }
 void Renderer::AddRenderScene(IRenderScene* scene) { m_renderScenes.emplace_back(scene); }
-void Renderer::AddImguiItem(IImguiItem* item) { m_imgui->AddItem(item); }
+void Renderer::AddImguiComponent(IImguiComponent* comp) { m_imgui->AddComponent(comp); }
 
 bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID)
 {

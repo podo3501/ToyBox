@@ -11,9 +11,9 @@ const Rectangle& Panel::GetArea() const noexcept
     return m_area;
 }
 
-void Panel::AddComponent(unique_ptr<IRenderItem>&& item, const Vector2& pos)
+void Panel::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos)
 {
-    m_area = Rectangle::Union(m_area, item->GetArea());
-    IRenderItem::AddComponent(move(item), pos);
+    m_area = Rectangle::Union(m_area, comp->GetArea());
+    UIComponent::AddComponent(move(comp), pos);
 }
 

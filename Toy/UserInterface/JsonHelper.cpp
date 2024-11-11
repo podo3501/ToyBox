@@ -11,7 +11,7 @@
 
 using json = nlohmann::json;
 
-unique_ptr<IRenderItem> CreateComponent(ComponentType compType)
+unique_ptr<UIComponent> CreateComponent(ComponentType compType)
 {
 	switch (compType)
 	{
@@ -51,16 +51,16 @@ tuple<wstring, Vector2> GetFilenameAndPos(const json& data)
 	return make_tuple(filename, position);
 }
 
-tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(const json& data)
+tuple<unique_ptr<UIComponent>, Vector2> CreateComponent(const json& data)
 {
 	ComponentType compType = GetComponentType(data["Type"]);
 	const auto& [compFilename, position] = GetFilenameAndPos(data);
 
-	unique_ptr<IRenderItem> item = CreateComponent(compType);
-	if (item->SetResources(compFilename) == false)
+	unique_ptr<UIComponent> comp = CreateComponent(compType);
+	if (comp->SetResources(compFilename) == false)
 		return make_tuple(nullptr, position);
 
-	return make_tuple(move(item), position);
+	return make_tuple(move(comp), position);
 }
 
 json LoadUIFile(const wstring& filename)

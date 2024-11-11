@@ -49,7 +49,7 @@ bool ToolMainLoop::LoadResources()
     unique_ptr<Dialog> dialog = make_unique<Dialog>();
     ReturnIfFalse(dialog->SetResources(L"UI/Data/Dialog.json"));
 
-    m_toolScene->AddRenderItem({ 0.f, 0.f }, move(dialog));
+    m_toolScene->AddComponent({ 0.f, 0.f }, move(dialog));
 
     return true;
 }

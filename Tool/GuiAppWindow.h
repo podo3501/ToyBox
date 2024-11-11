@@ -2,10 +2,10 @@
 #include "../Include/IRenderer.h"
 
 struct IRenderScene;
-class IRenderItem;
+class UIComponent;
 class GuiWidget;
 
-class GuiAppWindow : public IImguiItem
+class GuiAppWindow : public IImguiComponent
 {
 public:
     ~GuiAppWindow();
@@ -13,14 +13,14 @@ public:
 
     bool Create(unique_ptr<IRenderScene> scene, const XMUINT2& size);
 
-    //IImguiItem
+    //IImguiComponent
     virtual void Update() override;
     virtual void Render(ImGuiIO* io) override;
 
 private:
     IRenderer* m_renderer;
     unique_ptr<IRenderScene> m_scene;
-    IRenderItem* m_renderItem;
+    UIComponent* m_component;
     ImTextureID m_textureID{};
     bool m_visible{ true };
 

@@ -1,7 +1,7 @@
 #pragma once
 
 struct IRenderer;
-class IRenderItem;
+class UIComponent;
 class UILayout;
 
 enum class DataType
@@ -26,12 +26,12 @@ enum class PropertyType
 };
 
 DataType GetType(const string& key);
-tuple<unique_ptr<IRenderItem>, Vector2> GetComponent(const nlohmann::json& data);
+tuple<unique_ptr<UIComponent>, Vector2> CreateComponent(const nlohmann::json& data);
 tuple<wstring, Vector2> GetFilenameAndPos(const nlohmann::json& data);
 nlohmann::json LoadUIFile(const wstring& filename);
 
 template<typename T>
-tuple<unique_ptr<T>, Vector2> GetProperty(const nlohmann::json& data)
+tuple<unique_ptr<T>, Vector2> CreateProperty(const nlohmann::json& data)
 {
 	auto [filename, position] = GetFilenameAndPos(data);
 	auto property = make_unique<T>();

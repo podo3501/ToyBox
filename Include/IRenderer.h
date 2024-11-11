@@ -32,10 +32,10 @@ public:
 
 //Imgui ui 만들때 사용
 struct ImGuiIO;
-struct IImguiItem
+struct IImguiComponent
 {
 public:
-    virtual ~IImguiItem() {};
+    virtual ~IImguiComponent() {};
 
     virtual void Render(ImGuiIO* io) = 0;
     virtual void Update() = 0;
@@ -50,7 +50,7 @@ public:
     virtual bool Initialize() = 0;
     virtual void AddLoadScene(IRenderScene* scene) = 0;
     virtual void AddRenderScene(IRenderScene* scene) = 0;
-    virtual void AddImguiItem(IImguiItem* item) = 0;
+    virtual void AddImguiComponent(IImguiComponent* item) = 0;
 
     virtual bool LoadScenes() = 0;
     virtual IGetValue* GetValue() const noexcept = 0;

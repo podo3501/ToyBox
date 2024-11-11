@@ -63,7 +63,7 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="Config.h" />
-    <ClInclude Include="UserInterface\IRenderItem.h">
+    <ClInclude Include="UserInterface\UIComponent.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
   </ItemGroup>
@@ -109,7 +109,7 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp" />
-    <ClCompile Include="UserInterface\IRenderItem.cpp">
+    <ClCompile Include="UserInterface\UIComponent.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

@@ -47,7 +47,7 @@ public:
 
     virtual void AddLoadScene(IRenderScene* scene) override;
     virtual void AddRenderScene(IRenderScene* scene) override;
-    virtual void AddImguiItem(IImguiItem* item) override;
+    virtual void AddImguiComponent(IImguiComponent* item) override;
 
     virtual bool LoadScenes() override;
     virtual IGetValue* GetValue() const noexcept override;

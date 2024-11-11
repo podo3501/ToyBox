@@ -9,21 +9,21 @@
 GuiAppWindow::~GuiAppWindow() = default;
 GuiAppWindow::GuiAppWindow(IRenderer* renderer) :
     m_renderer{ renderer },
-    m_renderItem{ nullptr }
+    m_component{ nullptr }
 {
-    m_renderer->AddImguiItem(this);
+    m_renderer->AddImguiComponent(this);
 }
 
 bool GuiAppWindow::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
 {
     ReturnIfFalse(m_renderer->CreateRenderTexture(size, scene.get(), m_textureID));
-    auto dialog = scene->GetRenderItem("Dialog_clone");
-    m_renderItem = dialog->GetRenderItem("BGImage_clone");
+    auto dialog = scene->GetComponent("Dialog_clone");
+    m_component = dialog->GetComponent("BGImage_clone");
     m_size = size;
 
     //임시로 bgImage가 선택되었다고 가정한다.
     m_guiWidget = make_unique<GuiWidget>(m_renderer);
-    unique_ptr<IRenderItem> clone = m_renderItem->Clone();
+    unique_ptr<UIComponent> clone = m_component->Clone();
     
     ReturnIfFalse(m_guiWidget->Create(move(clone)));
     
@@ -55,7 +55,7 @@ void GuiAppWindow::Render(ImGuiIO* io)
         realMousePos.y = mousePos.y - startPos.y;
 
         //클릭했을때 픽킹이 되었는지 확인
-        if (m_renderItem->IsPicking(realMousePos))
+        if (m_component->IsPicking(realMousePos))
             m_guiWidget->SetVisible(true);
     }
 

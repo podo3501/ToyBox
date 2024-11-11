@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "../Utility.h"
 #include "../Include/IRenderer.h"
-#include "IRenderItem.h"
+#include "UIComponent.h"
 #include "JsonHelper.h"
 
 using json = nlohmann::json;
@@ -14,15 +14,15 @@ Scene::Scene(IRenderer* renderer) :
 
 bool Scene::LoadScene(ILoadData* load)
 {
-	return ranges::all_of(m_renderItems, [load](const auto& item) {
-		return item.second->LoadResources(load);
+	return ranges::all_of(m_components, [load](const auto& comp) {
+		return comp.second->LoadResources(load);
 		});
 }
 
 void Scene::RenderScene(IRender* render)
 {
-	ranges::for_each(m_renderItems, [render](const auto& item) {
-		item.second->Render(render);
+	ranges::for_each(m_components, [render](const auto& comp) {
+		comp.second->Render(render);
 		});
 }
 
@@ -37,33 +37,33 @@ bool Scene::LoadData(const wstring& filename)
 		auto dataType = GetType(key);
 		if (dataType == DataType::Init) return false;
 
-		auto [item, position] = GetComponent(data);
-		ReturnIfNullptr(item);
+		auto [comp, position] = CreateComponent(data);
+		ReturnIfNullptr(comp);
 
-		AddRenderItem(position, move(item));
+		AddComponent(position, move(comp));
 	}
 
 	return true;
 }
 
-void Scene::AddRenderItem(const Vector2& position, unique_ptr<IRenderItem> item)
+void Scene::AddComponent(const Vector2& position, unique_ptr<UIComponent> comp)
 {
-	m_renderItems.emplace_back(make_pair(position, move(item)));
+	m_components.emplace_back(make_pair(position, move(comp)));
 }
 
 bool Scene::Update(const Mouse::ButtonStateTracker* mouseTracker)
 {
-	return ranges::all_of(m_renderItems, [mouseTracker](const auto& item) {
-		return item.second->Update(item.first, mouseTracker);
+	return ranges::all_of(m_components, [mouseTracker](const auto& comp) {
+		return comp.second->Update(comp.first, mouseTracker);
 		});
 }
 
-IRenderItem* Scene::GetRenderItem(const string& name)
+UIComponent* Scene::GetComponent(const string& name)
 {
-	auto find = ranges::find_if(m_renderItems, [&name](const auto& item) {
-		return item.second->GetName() == name;
+	auto find = ranges::find_if(m_components, [&name](const auto& comp) {
+		return comp.second->GetName() == name;
 		});
-	if (find == m_renderItems.end()) return nullptr;
+	if (find == m_components.end()) return nullptr;
 
 	return find->second.get();
 }
@@ -71,9 +71,9 @@ IRenderItem* Scene::GetRenderItem(const string& name)
 Scene::Scene(const Scene& other)
 {
 	m_renderer = other.m_renderer;
-	ranges::transform(other.m_renderItems, back_inserter(m_renderItems), [](const auto& item) {
-		auto clone = item.second->Clone();
-		return make_pair(item.first, move(clone));
+	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& comp) {
+		auto clone = comp.second->Clone();
+		return make_pair(comp.first, move(clone));
 		});
 }
 

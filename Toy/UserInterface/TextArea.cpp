@@ -12,7 +12,7 @@ TextArea::~TextArea() = default;
 TextArea::TextArea()
 {}
 TextArea::TextArea(const TextArea& other)
-	: IRenderItem{ other }
+	: UIComponent{ other }
 {
 	m_position = other.m_position;
 	m_posByResolution = other.m_posByResolution;
@@ -115,7 +115,7 @@ void TextArea::Render(IRender* render)
 			XMLoadFloat4(&word.color));
 }
 
-unique_ptr<IRenderItem> TextArea::Clone() 
+unique_ptr<UIComponent> TextArea::Clone() 
 {
 	return make_unique<TextArea>(*this);
 }

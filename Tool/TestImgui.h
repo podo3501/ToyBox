@@ -1,7 +1,7 @@
 #pragma once
 #include "../Include/IRenderer.h"
 
-class TestImgui : public IImguiItem
+class TestImgui : public IImguiComponent
 {
 public:
     TestImgui(IRenderer* renderer);

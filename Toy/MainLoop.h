@@ -1,7 +1,6 @@
 #pragma once
 
 class Window;
-class IRenderItem;
 struct IRenderer;
 struct IImguiItem;
 struct IGetValue;

@@ -2,25 +2,25 @@
 #include "../Include/IRenderer.h"
 
 struct IRenderScene;
-class IRenderItem;
+class UIComponent;
 
-class GuiWidget : public IImguiItem
+class GuiWidget : public IImguiComponent
 {
 public:
     GuiWidget(IRenderer* renderer);
     ~GuiWidget();
 
-    //IImguiItem
+    //IImguiComponent
     virtual void Render(ImGuiIO* io) override;
     virtual void Update();
 
-    bool Create(unique_ptr<IRenderItem> renderItem);
+    bool Create(unique_ptr<UIComponent> comp);
     void SetVisible(bool visible) { m_visible = visible; }
 
 private:
     IRenderer* m_renderer{ nullptr };
     unique_ptr<IRenderScene> m_widgetScene;
-    IRenderItem* m_renderItem;
+    UIComponent* m_component;
     ImTextureID m_textureID{};
     
     bool m_visible{ true };

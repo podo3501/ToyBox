@@ -13,7 +13,7 @@ BGImage::~BGImage() = default;
 BGImage::BGImage()
 {}
 BGImage::BGImage(const BGImage& other)
-	: IRenderItem{ other }
+	: UIComponent{ other }
 {
 	m_position = other.m_position;
 	m_imagePartSet = make_unique<ImagePartSet>(*other.m_imagePartSet.get());
@@ -29,7 +29,7 @@ bool BGImage::LoadResources(ILoadData* load)
 
 bool BGImage::ReadProperty(const nlohmann::json& data)
 {
-	tie(m_imagePartSet, m_position) = GetProperty<ImagePartSet>(data);
+	tie(m_imagePartSet, m_position) = CreateProperty<ImagePartSet>(data);
 	ReturnIfNullptr(m_imagePartSet);
 
 	return true;
@@ -47,7 +47,7 @@ void BGImage::SetImage(const string& name, const Vector2 position, const UILayou
 bool BGImage::ChangeArea(const Rectangle& area) noexcept
 {
 	ReturnIfFalse(m_imagePartSet->SetDestination(area));
-	IRenderItem::ChangeArea(area);
+	UIComponent::ChangeArea(area);
 
 	return true;
 }
@@ -67,7 +67,7 @@ void BGImage::Render(IRender* renderer)
 	m_imagePartSet->Render(renderer);
 }
 
-unique_ptr<IRenderItem> BGImage::Clone()
+unique_ptr<UIComponent> BGImage::Clone()
 {
 	return make_unique<BGImage>(*this);
 }

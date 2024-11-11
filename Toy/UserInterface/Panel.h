@@ -1,7 +1,7 @@
 #pragma once
-#include "IRenderItem.h"
+#include "UIComponent.h"
 
-class Panel : public IRenderItem
+class Panel : public UIComponent
 {
 public:
     Panel();
@@ -9,9 +9,9 @@ public:
 
     virtual bool SetResources(const wstring& filename) override { filename; return true; }
     virtual const Rectangle& GetArea() const noexcept;
-    virtual unique_ptr<IRenderItem> Clone() { return nullptr; }
+    virtual unique_ptr<UIComponent> Clone() { return nullptr; }
 
-    void AddComponent(unique_ptr<IRenderItem>&& item, const Vector2& pos);
+    void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 
 private:
     Rectangle m_area{};
