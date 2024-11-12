@@ -78,3 +78,15 @@ json LoadUIFile(const wstring& filename)
 
 	return json::parse(file);
 }
+
+bool WriteJson(const json& data, const wstring& filename)
+{
+	ofstream file(GetResourcePath() + filename);
+	if (!file.is_open())
+		return false;
+
+	file << data.dump(4);
+	file.close();
+
+	return true;
+}

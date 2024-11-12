@@ -44,10 +44,17 @@ unique_ptr<UIComponent> Button::Clone()
 
 bool Button::ReadProperty(const nlohmann::json& data)
 {
-	for (const auto& strType : { "Normal", "Hover", "Pressed" })
+	for (const auto& strState : { "Normal", "Hover", "Pressed" })
 	{
-		const auto& normal = data[strType];
-		InsertImage(GetStateString(strType), CreateProperty<ImagePartSet>(normal));
+		const auto& stateData = data[strState];
+		vector<ImageSource> imgSrcList;
+		for (size_t i{ 0 }; stateData.size() != i; i++)
+		{
+			ImageSource imgSrc;
+			imgSrc.Read(stateData[i]);
+			imgSrcList.emplace_back(imgSrc);
+		}
+		InsertImage(GetStateString(strState), make_unique<ImagePartSet>(imgSrcList));
 	}
 
 	return true;

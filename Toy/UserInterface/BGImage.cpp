@@ -25,8 +25,13 @@ unique_ptr<UIComponent> BGImage::Clone()
 
 bool BGImage::ReadProperty(const nlohmann::json& data)
 {
-	m_imagePartSet = CreateProperty<ImagePartSet>(data);
-	ReturnIfNullptr(m_imagePartSet);
+	ImageSource imgSource;
+	ReturnIfFalse(imgSource.Read(data));
+	m_imagePartSet = make_unique<ImagePartSet>(imgSource);
+	
+	//auto imagePartSet = make_unique<ImagePartSet>();
+	//m_imagePartSet = CreateProperty<ImagePartSet>(data);
+	//ReturnIfNullptr(m_imagePartSet);
 
 	return true;
 }

@@ -158,10 +158,6 @@
     <None Include="TestResources\UI\Data\Button.json" />
     <None Include="TestResources\UI\Data\Dialog.json" />
     <None Include="TestResources\UI\Data\FirstScene.json" />
-    <None Include="TestResources\UI\Data\HoverImage.json" />
-    <None Include="TestResources\UI\Data\ImagePartSet.json" />
-    <None Include="TestResources\UI\Data\NormalImage.json" />
-    <None Include="TestResources\UI\Data\PressedImage.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -112,6 +112,9 @@
     <ClCompile Include="UserInterface\UIComponent.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\UIType.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

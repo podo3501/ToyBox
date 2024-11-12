@@ -1,15 +1,39 @@
 {
     "Name": "Button",
     "Property": {
-        "Normal": {
-            "Filename": "UI/Data/NormalImage.json"
-        },
-        "Hover": {
-            "Filename": "UI/Data/HoverImage.json"
-        },
-        "Pressed": {
-            "Filename": "UI/Data/PressedImage.json"
-        }
+        "Normal": [
+            {
+                "Filename": "UI/Blue/bar_square_large_l.png"
+            },
+            {
+                "Filename": "UI/Blue/bar_square_large_m.png"
+            },
+            {
+                "Filename": "UI/Blue/bar_square_large_r.png"
+            }
+        ],
+        "Hover": [
+            {
+                "Filename": "UI/Red/bar_square_large_l.png"
+            },
+            {
+                "Filename": "UI/Red/bar_square_large_m.png"
+            },
+            {
+                "Filename": "UI/Red/bar_square_large_r.png"
+            }
+        ],
+        "Pressed": [
+            {
+                "Filename": "UI/Gray/bar_square_large_l.png"
+            },
+            {
+                "Filename": "UI/Gray/bar_square_large_m.png"
+            },
+            {
+                "Filename": "UI/Gray/bar_square_large_r.png"
+            }
+        ]
     },
     "Layout": {
         "Area": {

@@ -6,6 +6,8 @@
 #include "UIUtility.h"
 #include "../Config.h"
 
+using json = nlohmann::json;
+
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
 TextArea::~TextArea() = default;
@@ -124,3 +126,16 @@ void TextArea::SetPosition(const Vector2& position) noexcept
 {
 	m_position = position;
 };
+
+json TextArea::ToJson() const noexcept
+{
+	json j;
+	//j["Name"] = "TextArea";
+	for (const auto& font : m_font)
+	{
+		string fontName = RemoveNullTerminator(WStringToString(font.first));
+		j[fontName] = font.second;
+	}
+	//j = m_font;
+	return j;
+}

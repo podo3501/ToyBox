@@ -23,6 +23,7 @@ public:
 		const map<wstring, wstring>& fontFileList);
 	bool SetText(IGetValue* update, wstring&& text);
 	void SetPosition(const Vector2&) noexcept;
+	nlohmann::json ToJson() const noexcept;
 
 private:
 	Vector2 m_position{};

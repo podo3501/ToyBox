@@ -37,4 +37,6 @@
 }
 #endif
 
-std::wstring StringToWString(const std::string& str);
+wstring StringToWString(const string& str);
+string RemoveNullTerminator(const string& str);
+string WStringToString(const wstring& wstr);

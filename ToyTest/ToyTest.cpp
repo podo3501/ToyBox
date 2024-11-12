@@ -13,6 +13,7 @@
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/UserInterface/Scene.h"
+#include "../Toy/UserInterface/JsonHelper.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -202,6 +203,8 @@ namespace BasicClient
 		MockRender mockRender;
 		EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
 		textArea->Render(&mockRender);
+
+		EXPECT_TRUE(WriteJson(textArea->ToJson(), L"UI/Data/WriteTextArea.json"));
 	}
 
 	TEST_F(ToyTestFixture, Panel)

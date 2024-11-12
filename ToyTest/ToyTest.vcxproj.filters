@@ -40,19 +40,7 @@
     <None Include="TestResources\UI\Data\FirstScene.json">
       <Filter>TestResources\UI\Data</Filter>
     </None>
-    <None Include="TestResources\UI\Data\ImagePartSet.json">
-      <Filter>TestResources\UI\Data</Filter>
-    </None>
     <None Include="TestResources\UI\Data\Button.json">
-      <Filter>TestResources\UI\Data</Filter>
-    </None>
-    <None Include="TestResources\UI\Data\NormalImage.json">
-      <Filter>TestResources\UI\Data</Filter>
-    </None>
-    <None Include="TestResources\UI\Data\HoverImage.json">
-      <Filter>TestResources\UI\Data</Filter>
-    </None>
-    <None Include="TestResources\UI\Data\PressedImage.json">
       <Filter>TestResources\UI\Data</Filter>
     </None>
   </ItemGroup>
