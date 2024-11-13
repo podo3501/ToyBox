@@ -86,9 +86,10 @@ bool GameMainLoop::LoadResources()
     fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
     fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
     unique_ptr<TextArea> textArea = make_unique<TextArea>();
-    textArea->SetFont("TextArea", { 0.2f, 0.7f }, layout, fontFileList);
+    wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
+    textArea->SetFont("TextArea", text, layout, fontFileList);
 
-    m_gameScene->AddComponent({ 0.f, 0.f }, move(textArea));
+    m_gameScene->AddComponent({ 0.2f, 0.7f }, move(textArea));
 
     layout.Set({ 0, 0, 220, 190 }, Origin::LeftTop);
     ImageSource bgImageSource{
@@ -112,12 +113,12 @@ bool GameMainLoop::LoadResources()
 
 bool GameMainLoop::SetDatas(IGetValue* getValue)
 {
-    auto comp = m_gameScene->GetComponent("TextArea");
-    TextArea* textArea = static_cast<TextArea*>(comp);
-    auto result = textArea->SetText(getValue,
-        L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
+    return m_gameScene->SetDatas(getValue);
+    //auto comp = m_gameScene->GetComponent("TextArea");
+    //TextArea* textArea = static_cast<TextArea*>(comp);
+    //auto result = textArea->ParseText(getValue);
 
-    return result;
+    //return result;
 }
 
 void GameMainLoop::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker)

@@ -43,5 +43,11 @@
     <None Include="TestResources\UI\Data\Button.json">
       <Filter>TestResources\UI\Data</Filter>
     </None>
+    <None Include="TestResources\UI\Data\WriteTextArea.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\JsonOperation.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
   </ItemGroup>
 </Project>

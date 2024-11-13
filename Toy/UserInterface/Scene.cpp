@@ -19,6 +19,13 @@ bool Scene::LoadScene(ILoadData* load)
 		});
 }
 
+bool Scene::SetDatas(IGetValue* value)
+{
+	return ranges::all_of(m_components, [value](const auto& comp) {
+		return comp.second->SetDatas(value);
+		});
+}
+
 void Scene::RenderScene(IRender* render)
 {
 	ranges::for_each(m_components, [render](const auto& comp) {

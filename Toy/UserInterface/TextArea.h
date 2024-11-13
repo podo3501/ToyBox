@@ -1,9 +1,11 @@
 #pragma once
 #include "UIComponent.h"
 
+struct IGetValue;
 struct IRenderer;
 class UILayout;
 struct TextData;
+class JsonOperation;
 
 class TextArea : public UIComponent
 {
@@ -14,20 +16,25 @@ public:
 
 	virtual unique_ptr<UIComponent> Clone();
 	virtual bool LoadResources(ILoadData* load) override;
+	virtual bool SetDatas(IGetValue* getValue) override;
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept override;
 	virtual void Render(IRender* render) override;
 
+	bool IsEqual(const TextArea* other) const noexcept;
 	void SetFont(const string& name,
-		const Vector2& position,
+		const wstring& text,
 		const UILayout& layout,
 		const map<wstring, wstring>& fontFileList);
-	bool SetText(IGetValue* update, wstring&& text);
-	void SetPosition(const Vector2&) noexcept;
-	nlohmann::json ToJson() const noexcept;
+	bool Write(const wstring& filename) const noexcept;
+	bool Read(const wstring& filename) noexcept;
+	void FileIO(JsonOperation* operation);
 
 private:
-	Vector2 m_position{};
+	void ToJson(nlohmann::ordered_json& outJson) const noexcept;
+	bool FromJson(const nlohmann::json& j) noexcept;
+
 	Vector2 m_posByResolution{};
+	wstring m_text{};
 	map<wstring, wstring> m_fontFileList;
 	map<wstring, size_t> m_font;
 	vector<TextData> m_lines;

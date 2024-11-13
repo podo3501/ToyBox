@@ -36,6 +36,7 @@ private:
 };
 
 using json = nlohmann::json;
+using ordered_json = nlohmann::ordered_json;
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -49,6 +50,15 @@ UIComponent::UIComponent(const UIComponent& other)
 	ranges::transform(other.m_properties, back_inserter(m_properties), [](const auto& prop) {
 		return make_unique<Property>(*prop.get());
 		});
+}
+
+bool UIComponent::IsEqual(const UIComponent* other) const noexcept
+{
+	//_clone 같은게 있을 수도 있고, 다른 이름이지만 값은 같을 수도 있기 때문에 m_name은 비교하지 않는다.
+	if (!m_layout->IsEqual(other->m_layout.get())) return false;
+	//Property 비교
+
+	return true;
 }
 
 bool UIComponent::LoadResources(ILoadData* load)
@@ -200,4 +210,18 @@ void UIComponent::SetLayout(const UILayout& layout) noexcept
 UILayout* UIComponent::GetLayout() const noexcept
 {
 	return m_layout.get();
+}
+
+void UIComponent::ToJson(ordered_json& outJson) const noexcept
+{
+	DataToJson("Name", m_name, outJson);
+	ordered_json j;
+	m_layout->ToJson(j);
+	outJson["Layout"] = j;
+}
+
+void UIComponent::FromJson(const json& j) noexcept
+{
+	DataFromJson("Name", m_name, j);
+	m_layout->FromJson(j["Layout"]);
 }

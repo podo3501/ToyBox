@@ -10,6 +10,7 @@
 #include "../Config.h"
 
 using json = nlohmann::json;
+using ordered_json = nlohmann::ordered_json;
 
 unique_ptr<UIComponent> CreateComponent(ComponentType compType)
 {
@@ -79,7 +80,7 @@ json LoadUIFile(const wstring& filename)
 	return json::parse(file);
 }
 
-bool WriteJson(const json& data, const wstring& filename)
+bool WriteJsonAA(const ordered_json& data, const wstring& filename) noexcept
 {
 	ofstream file(GetResourcePath() + filename);
 	if (!file.is_open())
@@ -89,4 +90,94 @@ bool WriteJson(const json& data, const wstring& filename)
 	file.close();
 
 	return true;
+}
+
+json DataToJson(const wstring& data) noexcept
+{
+	return RemoveNullTerminator(WStringToString(data));
+}
+
+void DataToJson(const string& key, const string& data, ordered_json& outJson) noexcept
+{
+	outJson[key] = data;
+}
+
+void DataToJson(const string& key, const wstring& data, ordered_json& outJson) noexcept
+{
+	outJson[key] = DataToJson(data);
+}
+
+void DataToJson(const string& key, const map<wstring, size_t>& data, ordered_json& outJson) noexcept
+{
+	json j{};
+	for (const auto& font : data)
+		j[DataToJson(font.first)] = font.second;
+
+	outJson[key] = j;
+}
+
+void DataToJson(const string& key, const map<wstring, wstring>& data, ordered_json& outJson) noexcept
+{
+	json j{};
+	for (const auto& font : data)
+		j[DataToJson(font.first)] = DataToJson(font.second);
+
+	outJson[key] = j;
+}
+
+void DataToJson(const string& key, const Rectangle& rect, ordered_json& outJson) noexcept
+{
+	ordered_json j{};
+
+	j["x"] = rect.x;
+	j["y"] = rect.y;
+	j["width"] = rect.width;
+	j["height"] = rect.height;
+
+	outJson[key] = j;
+}
+
+void DataToJson(const string& key, Origin origin, ordered_json& outJson) noexcept
+{
+	outJson[key] = EnumToString(origin);
+}
+
+void DataFromJson(const string& key, string& outStr, const json& j) noexcept
+{
+	outStr = j[key];
+}
+
+void DataFromJson(const string& key, Rectangle& outRect, const json& j) noexcept
+{
+	const auto& keyJ = j[key];
+	outRect.x = keyJ["x"];
+	outRect.y = keyJ["y"];
+	outRect.width = keyJ["width"];
+	outRect.height = keyJ["height"];
+}
+
+void DataFromJson(const string& key, Origin& outOrigin, const json& j) noexcept
+{
+	outOrigin = StringToEnum<Origin>(j[key]);
+}
+
+void DataFromJson(const string& key, map<wstring, wstring>& outData, const json& j) noexcept
+{
+	const auto& keyJ = j[key];
+	for(const auto& [k, v] : keyJ.items())
+		outData.insert(make_pair(StringToWString(k), StringToWString(v)));
+}
+
+void DataFromJson(const string& key, wstring& outData, const json& j) noexcept
+{
+	outData = StringToWString(j[key]);
+}
+
+json ReadJsonAA(const wstring& filename) noexcept
+{
+	ifstream file(GetResourcePath() + filename);
+	if (!file.is_open())
+		return nullptr;
+
+	return json::parse(file);
 }

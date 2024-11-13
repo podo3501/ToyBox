@@ -14,6 +14,7 @@
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/UserInterface/JsonOperation.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -190,21 +191,33 @@ namespace BasicClient
 		map<wstring, wstring> fontFileList;
 		fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
 		fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-		cTextArea->SetFont("TextArea", { 0.5f, 0.5f }, layout, fontFileList);
-		m_testScene->AddComponent({ 0.f, 0.f }, move(cTextArea));
+		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
+		cTextArea->SetFont("TextArea", text, layout, fontFileList);
+		m_testScene->AddComponent({ 0.5f, 0.5f }, move(cTextArea));
 		m_renderer->LoadScenes();
+		EXPECT_TRUE(m_testScene->SetDatas(m_renderer->GetValue()));
 
 		TextArea* textArea = static_cast<TextArea*>(m_testScene->GetComponent("TextArea"));
-		textArea->SetText(m_renderer->GetValue(),
-			L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>");
-
-		textArea->Update({ 0.f, 0.f }, nullptr);
+		m_testScene->Update(nullptr);
 
 		MockRender mockRender;
 		EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
 		textArea->Render(&mockRender);
 
-		EXPECT_TRUE(WriteJson(textArea->ToJson(), L"UI/Data/WriteTextArea.json"));
+		EXPECT_TRUE(textArea->Write(L"UI/Data/WriteTextArea.json"));
+		std::unique_ptr<TextArea> rTextArea = make_unique<TextArea>();
+		TextArea* readTextArea = rTextArea.get();
+		EXPECT_TRUE(rTextArea->Read(L"UI/Data/WriteTextArea.json"));	
+
+		EXPECT_TRUE(textArea->IsEqual(readTextArea));
+
+		auto jsonIO = make_unique<JsonOperation>();
+		textArea->FileIO(jsonIO.get());
+		jsonIO->WriteFile(L"UI/Data/JsonOperation.json");
+
+		jsonIO->ReadFile(L"UI/Data/JsonOperation.json");
+		std::unique_ptr<TextArea> readOperation = make_unique<TextArea>();
+		readOperation->FileIO(jsonIO.get());
 	}
 
 	TEST_F(ToyTestFixture, Panel)

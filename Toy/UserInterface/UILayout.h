@@ -13,6 +13,10 @@ public:
 	UILayout(const UILayout& other) noexcept = default;
 	UILayout(UILayout&& other) noexcept = default;
 	UILayout& operator=(const UILayout& other) noexcept = default;
+	bool IsEqual(const UILayout* other) const noexcept;
+
+	void ToJson(nlohmann::ordered_json& outJson) const noexcept;
+	void FromJson(const nlohmann::json& j) noexcept;
 
 	void Set(const Rectangle& area, const Origin& origin) noexcept;
 	void Set(const Rectangle& area) noexcept;

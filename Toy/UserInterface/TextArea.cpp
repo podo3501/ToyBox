@@ -5,8 +5,11 @@
 #include "../Utility.h"
 #include "UIUtility.h"
 #include "../Config.h"
+#include "JsonHelper.h"
+#include "JsonOperation.h"
 
 using json = nlohmann::json;
+using ordered_json = nlohmann::ordered_json;
 
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
@@ -16,11 +19,21 @@ TextArea::TextArea()
 TextArea::TextArea(const TextArea& other)
 	: UIComponent{ other }
 {
-	m_position = other.m_position;
 	m_posByResolution = other.m_posByResolution;
+	m_text = other.m_text;
 	m_fontFileList = other.m_fontFileList;
 	m_font = other.m_font;
 	m_lines = other.m_lines;
+}
+
+bool TextArea::IsEqual(const TextArea* other) const noexcept
+{
+	if (!UIComponent::IsEqual(this)) return false;
+	if (m_text != other->m_text) return false;
+	if (m_fontFileList != other->m_fontFileList) return false;
+	//나머지 멤버변수들은 이 멤버변수들을 기초로 값이 만들어진다.
+	
+	return true;
 }
 
 bool TextArea::LoadResources(ILoadData* load)
@@ -35,23 +48,10 @@ bool TextArea::LoadResources(ILoadData* load)
 	return true;
 }
 
-void TextArea::SetFont(const string& name,
-	const Vector2& position,
-	const UILayout& layout, 
-	const map<wstring, wstring>& fontFileList)
-{
-	SetName(name);
-	SetLayout(layout);
-	m_position = position;
-	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
-		return make_pair(filename.first, filename.second);
-		});
-}
-
-bool TextArea::SetText(IGetValue* getValue, wstring&& text)
+bool TextArea::SetDatas(IGetValue* getValue)
 {
 	TextProperty textProperty;
-	ReturnIfFalse(Parser(text, textProperty));
+	ReturnIfFalse(Parser(m_text, textProperty));
 
 	auto layout = GetLayout();
 	Rectangle usableArea = layout->GetArea();
@@ -61,7 +61,7 @@ bool TextArea::SetText(IGetValue* getValue, wstring&& text)
 
 	vector<TextData> textList = textProperty.GetTextList();
 	auto w = textList.begin();
-	while(w != textList.end())
+	while (w != textList.end())
 	{
 		auto& word = *w;
 		const auto& fontIdx = m_font[word.fontStyle];
@@ -88,23 +88,36 @@ bool TextArea::SetText(IGetValue* getValue, wstring&& text)
 
 		//글자 쓰는 영역을 벗어나서 더 밑으로 글자가 찍혀야 하는 경우는 글자가 있어도 강제 종료
 		if (usableArea.height < wordRect.y + wordRect.height)
-			break;	
+			break;
 
 		//글자 쓰는 영역을 벗어나서 더 오른쪽으로 글자가 찍혀야 하는 경우 다음 줄로 개행	
 		if (usableArea.width < wordRect.x + wordRect.width)
-		{ 
+		{
 			startPos.x = 0.0f;
 			startPos.y += lineSpacing;
 		}
 	}
-	
+
 	return true;
+}
+
+void TextArea::SetFont(const string& name,
+	const wstring& text,
+	const UILayout& layout, 
+	const map<wstring, wstring>& fontFileList)
+{
+	SetName(name);
+	m_text = text;
+	SetLayout(layout);
+	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
+		return make_pair(filename.first, filename.second);
+		});
 }
 
 bool TextArea::Update(const Vector2& position, const Mouse::ButtonStateTracker*) noexcept
 {
 	auto layout = GetLayout();
-	m_posByResolution = layout->GetPosition(m_position + position);
+	m_posByResolution = layout->GetPosition(position);
 
 	return true;
 }
@@ -122,20 +135,38 @@ unique_ptr<UIComponent> TextArea::Clone()
 	return make_unique<TextArea>(*this);
 }
 
-void TextArea::SetPosition(const Vector2& position) noexcept 
+void TextArea::ToJson(ordered_json& outJson) const noexcept
 {
-	m_position = position;
-};
+	UIComponent::ToJson(outJson);
+	DataToJson("FontFileList", m_fontFileList, outJson);
+	DataToJson("Text", m_text, outJson);
+}
 
-json TextArea::ToJson() const noexcept
+bool TextArea::Write(const wstring& filename) const noexcept
 {
-	json j;
-	//j["Name"] = "TextArea";
-	for (const auto& font : m_font)
-	{
-		string fontName = RemoveNullTerminator(WStringToString(font.first));
-		j[fontName] = font.second;
-	}
-	//j = m_font;
-	return j;
+	ordered_json j;
+	ToJson(j);
+	return WriteJsonAA(j, filename);
+}
+
+bool TextArea::FromJson(const json& j) noexcept
+{
+	UIComponent::FromJson(j); 
+	DataFromJson("FontFileList", m_fontFileList, j);
+	DataFromJson("Text", m_text, j);
+
+	return true;
+}
+
+bool TextArea::Read(const wstring& filename) noexcept
+{
+	const json& j = ReadJsonAA(filename);
+	if (j.is_null()) return false;
+
+	return FromJson(j);
+}
+
+void TextArea::FileIO(JsonOperation* operation)
+{
+	operation->Process("Text", m_text);
 }

@@ -2,8 +2,10 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "../Config.h"
+#include "JsonHelper.h"
 
 using json = nlohmann::json;
+using ordered_json = nlohmann::ordered_json;
 
 UILayout::~UILayout() = default;
 Origin GetOrigin(const string& strOrigin)
@@ -31,6 +33,26 @@ UILayout::UILayout(const Rectangle& area, const Origin& origin) :
 	m_origin{ Origin::Init }
 {
 	Set(origin);
+}
+
+bool UILayout::IsEqual(const UILayout* other) const noexcept
+{
+	if (m_area != other->m_area) return false;
+	if (m_origin != other->m_origin) return false;
+
+	return true;
+}
+
+void UILayout::ToJson(ordered_json& outJson) const noexcept
+{
+	DataToJson("Area", m_area, outJson);
+	DataToJson("Origin", m_origin, outJson);
+}
+
+void UILayout::FromJson(const json& j) noexcept
+{
+	DataFromJson("Area", m_area, j);
+	DataFromJson("Origin", m_origin, j);
 }
 
 Vector2 UILayout::GetOriginPoint(Origin origin) const noexcept
