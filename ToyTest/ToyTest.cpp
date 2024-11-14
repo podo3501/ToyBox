@@ -211,13 +211,22 @@ namespace BasicClient
 
 		EXPECT_TRUE(textArea->IsEqual(readTextArea));
 
-		auto jsonIO = make_unique<JsonOperation>();
-		textArea->FileIO(jsonIO.get());
-		jsonIO->WriteFile(L"UI/Data/JsonOperation.json");
+		UIComponent* writeComp = textArea;
 
-		jsonIO->ReadFile(L"UI/Data/JsonOperation.json");
-		std::unique_ptr<TextArea> readOperation = make_unique<TextArea>();
-		readOperation->FileIO(jsonIO.get());
+		nlohmann::json j = *writeComp;
+		WriteJsonAA(j, L"UI/Data/JsonOperation.json");
+
+		//UIComponent* writeComp = textArea;
+		//auto jsonIO = make_unique<JsonOperation>();
+		//writeComp->FileIO(jsonIO.get());
+		//writeComp->FileIO(jsonIO.get());
+		//jsonIO->WriteFile(L"UI/Data/JsonOperation.json");
+
+		//jsonIO->ReadFile(L"UI/Data/JsonOperation.json");
+		//auto readComp = UIComponent::CreateComponent(jsonIO.get()); 
+		//readComp->FileIO(jsonIO.get());
+
+		//EXPECT_TRUE(writeComp->IsEqual(readComp.get()));
 	}
 
 	TEST_F(ToyTestFixture, Panel)

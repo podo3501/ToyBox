@@ -4,6 +4,8 @@ struct ILoadData;
 struct IGetValue;
 struct IRender;
 class UILayout;
+class JsonOperation;
+class TestClass;
 
 class UIComponent
 {
@@ -36,9 +38,16 @@ public:
 	void SetName(const string& name) noexcept;
 	void SetLayout(const UILayout& layout) noexcept;
 
+	void FileIO(JsonOperation* operation) noexcept;
+	//static unique_ptr<UIComponent> CreateComponent(JsonOperation* operation);
+
+	friend void to_json(nlohmann::json& j, const UIComponent& comp);
+	friend void from_json(const nlohmann::json& j, UIComponent& comp);
+
 protected:
 	void ToJson(nlohmann::ordered_json& outJson) const noexcept;
 	void FromJson(const nlohmann::json& j) noexcept;
+	virtual void Process(JsonOperation*) noexcept {};
 	
 private:
 	class Property;
@@ -47,4 +56,5 @@ private:
 	string m_name{};
 	unique_ptr<UILayout> m_layout;
 	vector<unique_ptr<Property>> m_properties;
+	vector<unique_ptr<TestClass>> m_testClass;
 };

@@ -3,7 +3,21 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "JsonHelper.h"
+#include "JsonOperation.h"
 #include "../Utility.h"
+
+class TestClass
+{
+public:
+	TestClass() = default;
+
+	friend void to_json(nlohmann::json& j, const TestClass& tc);
+	friend void from_json(const nlohmann::json& j, TestClass& tc);
+
+private:
+	int a{ 5 };
+	int b{ 6 };
+};
 
 class UIComponent::Property
 {
@@ -41,7 +55,10 @@ using ordered_json = nlohmann::ordered_json;
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
 	m_layout{ make_unique<UILayout>(Rectangle{}, Origin::Center) }
-{}
+{
+	m_testClass.emplace_back(make_unique<TestClass>());
+	m_testClass.emplace_back(make_unique<TestClass>());
+}
 
 UIComponent::UIComponent(const UIComponent& other)
 {
@@ -224,4 +241,53 @@ void UIComponent::FromJson(const json& j) noexcept
 {
 	DataFromJson("Name", m_name, j);
 	m_layout->FromJson(j["Layout"]);
+}
+
+void UIComponent::FileIO(JsonOperation* operation) noexcept
+{
+	operation->Push(m_name);
+	m_layout->FileIO(operation);	
+	//Process(operation);
+	operation->Pop();
+}
+
+//unique_ptr<UIComponent> UIComponent::CreateComponent(JsonOperation* operation)
+//{
+//	operation->FindComponent();
+//}
+
+void to_json(nlohmann::json& j, const UIComponent& comp)
+{
+	j = nlohmann::json{ {"Name", comp.m_name} };
+	j["TestClass"] = json::array();
+	for (const auto& testClassPtr : comp.m_testClass) {
+		// 포인터가 유효한 경우에만 JSON으로 변환
+		if (testClassPtr) {
+			j["TestClass"].push_back(*testClassPtr);
+		}
+	}
+}
+
+void from_json(const nlohmann::json& j, UIComponent& comp)
+{
+	j.at("Name").get_to(comp.m_name);
+	comp.m_testClass.clear();
+
+	// JSON 배열을 순회하면서 unique_ptr<Property>로 변환
+	for (const auto& item : j.at("TestClass")) 
+	{
+		auto testClass = std::make_unique<TestClass>(item.get<TestClass>());
+		comp.m_testClass.push_back(std::move(testClass));
+	}
+}
+
+void to_json(nlohmann::json& j, const TestClass& tc)
+{
+	j = nlohmann::json{ {"a", tc.a}, {"b", tc.b} };
+}
+
+void from_json(const nlohmann::json& j, TestClass& tc)
+{
+	j.at("a").get_to(tc.a);
+	j.at("b").get_to(tc.b);
 }

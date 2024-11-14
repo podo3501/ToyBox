@@ -166,7 +166,8 @@ bool TextArea::Read(const wstring& filename) noexcept
 	return FromJson(j);
 }
 
-void TextArea::FileIO(JsonOperation* operation)
+void TextArea::Process(JsonOperation* operation) noexcept
 {
+	operation->Process("FontFileList", m_fontFileList);
 	operation->Process("Text", m_text);
 }

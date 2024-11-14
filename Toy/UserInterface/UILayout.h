@@ -1,5 +1,6 @@
 #pragma once
 
+class JsonOperation;
 enum class Origin;
 
 class UILayout
@@ -17,6 +18,7 @@ public:
 
 	void ToJson(nlohmann::ordered_json& outJson) const noexcept;
 	void FromJson(const nlohmann::json& j) noexcept;
+	void FileIO(JsonOperation* operation) noexcept;
 
 	void Set(const Rectangle& area, const Origin& origin) noexcept;
 	void Set(const Rectangle& area) noexcept;

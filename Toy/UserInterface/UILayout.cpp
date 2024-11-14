@@ -3,6 +3,7 @@
 #include "UIType.h"
 #include "../Config.h"
 #include "JsonHelper.h"
+#include "JsonOperation.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -53,6 +54,12 @@ void UILayout::FromJson(const json& j) noexcept
 {
 	DataFromJson("Area", m_area, j);
 	DataFromJson("Origin", m_origin, j);
+}
+
+void UILayout::FileIO(JsonOperation* operation) noexcept
+{
+	operation->Process("Area", m_area);
+	//operation->Process("Origin", m_origin);
 }
 
 Vector2 UILayout::GetOriginPoint(Origin origin) const noexcept

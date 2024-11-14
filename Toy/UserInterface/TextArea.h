@@ -27,7 +27,9 @@ public:
 		const map<wstring, wstring>& fontFileList);
 	bool Write(const wstring& filename) const noexcept;
 	bool Read(const wstring& filename) noexcept;
-	void FileIO(JsonOperation* operation);
+
+protected:
+	virtual void Process(JsonOperation* operation) noexcept override;
 
 private:
 	void ToJson(nlohmann::ordered_json& outJson) const noexcept;
