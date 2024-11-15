@@ -17,6 +17,8 @@ Origin GetOrigin(const string& strOrigin)
 	return Origin::Init;
 }
 
+UILayout& UILayout::operator=(const UILayout& other) = default;
+
 UILayout::UILayout(const json& data)
 {
 	const auto& rect = data["Area"];
@@ -103,4 +105,16 @@ bool UILayout::IsArea(const Vector2& pos) const noexcept
 void UILayout::Union(const Rectangle& area) noexcept
 {
 	m_area = Rectangle::Union(m_area, area);
+}
+
+void to_json(nlohmann::ordered_json& j, const UILayout& data)
+{
+	DataToJson("Area", data.m_area, j);
+	DataToJson("Origin", data.m_origin, j);
+}
+
+void from_json(const nlohmann::json& j, UILayout& data)
+{
+	DataFromJson("Area", data.m_area, j);
+	DataFromJson("Origin", data.m_origin, j);
 }

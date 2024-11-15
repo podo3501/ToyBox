@@ -212,9 +212,16 @@ namespace BasicClient
 		EXPECT_TRUE(textArea->IsEqual(readTextArea));
 
 		UIComponent* writeComp = textArea;
+		writeComp->AddComponent(move(rTextArea), { 1.f, 2.f });
+		std::unique_ptr<UIComponent> emptyTextArea = make_unique<TextArea>();
+		writeComp->AddComponent(move(emptyTextArea), { 3.f, 4.f });
 
-		nlohmann::json j = *writeComp;
+		nlohmann::ordered_json j = *writeComp;
 		WriteJsonAA(j, L"UI/Data/JsonOperation.json");
+
+		nlohmann::json rj = ReadJsonAA(L"UI/Data/JsonOperation.json");
+		std::unique_ptr<UIComponent> readComp = make_unique<TextArea>();
+		*readComp = rj.get<UIComponent>();
 
 		//UIComponent* writeComp = textArea;
 		//auto jsonIO = make_unique<JsonOperation>();

@@ -5,13 +5,25 @@
 #include "JsonHelper.h"
 #include "JsonOperation.h"
 #include "../Utility.h"
+#include "Property.h"
+
+using json = nlohmann::json;
+using ordered_json = nlohmann::ordered_json;
 
 class TestClass
 {
 public:
-	TestClass() = default;
+	TestClass()
+	{
+		//int a = 1;
+	}
 
-	friend void to_json(nlohmann::json& j, const TestClass& tc);
+	TestClass(const TestClass& /*other*/)
+	{
+		//int a = 1;
+	}
+
+	friend void to_json(nlohmann::ordered_json& j, const TestClass& tc);
 	friend void from_json(const nlohmann::json& j, TestClass& tc);
 
 private:
@@ -19,45 +31,26 @@ private:
 	int b{ 6 };
 };
 
-class UIComponent::Property
-{
-public:
-	Property(unique_ptr<UIComponent> comp, const Vector2& position) :
-		m_component{ move(comp) }, m_position{ position }, m_selected{ false }
-	{}
-
-	Property(const Property& other)
-	{
-		m_component = other.m_component->Clone();
-		m_position = other.m_position;
-		m_selected = false;
-	}
-
-	inline bool LoadResources(ILoadData* load) { return m_component->LoadResources(load); }
-	inline bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept { return m_component->Update(m_position + position, tracker); }
-	inline void SetSelected(bool selected) noexcept { m_selected = selected; }
-	inline bool IsSelected() const noexcept { return m_selected; }
-	inline bool IsPicking(const Vector2& pos) const noexcept { return m_component->IsPicking(pos); }
-	inline void Render(IRender* render) { m_component->Render(render); }
-	inline void SetPosition(const Vector2& position) noexcept { m_position = position; }
-	inline UIComponent* GetComponent() const noexcept { return m_component.get(); }
-	inline const string& GetName() const { return m_component->GetName(); }
-
-private:
-	unique_ptr<UIComponent> m_component;
-	Vector2 m_position;
-	bool m_selected;
-};
-
-using json = nlohmann::json;
-using ordered_json = nlohmann::ordered_json;
-
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
+	m_name{},
 	m_layout{ make_unique<UILayout>(Rectangle{}, Origin::Center) }
 {
 	m_testClass.emplace_back(make_unique<TestClass>());
 	m_testClass.emplace_back(make_unique<TestClass>());
+}
+
+UIComponent& UIComponent::operator=(const UIComponent& other)
+{
+	if (this == &other) return *this;
+
+	m_name = other.m_name;
+	m_layout = std::make_unique<UILayout>(*other.m_layout);
+	ranges::transform(other.m_properties, back_inserter(m_properties), [](const auto& prop) {
+		return make_unique<Property>(*prop.get());
+		});
+
+	return *this;
 }
 
 UIComponent::UIComponent(const UIComponent& other)
@@ -85,7 +78,7 @@ bool UIComponent::LoadResources(ILoadData* load)
 		});
 }
 
-UIComponent::Property* UIComponent::FindProperty(const string& name) const noexcept
+Property* UIComponent::FindProperty(const string& name) const noexcept
 {
 	auto find = ranges::find_if(m_properties, [&name](const auto& prop) {
 		return prop->GetName() == name;
@@ -248,6 +241,7 @@ void UIComponent::FileIO(JsonOperation* operation) noexcept
 	operation->Push(m_name);
 	m_layout->FileIO(operation);	
 	//Process(operation);
+	//m_testClass
 	operation->Pop();
 }
 
@@ -256,32 +250,36 @@ void UIComponent::FileIO(JsonOperation* operation) noexcept
 //	operation->FindComponent();
 //}
 
-void to_json(nlohmann::json& j, const UIComponent& comp)
+void to_json(nlohmann::ordered_json& j, const UIComponent& data)
 {
-	j = nlohmann::json{ {"Name", comp.m_name} };
+	DataToJson("Name", data.m_name, j);
+	DataToJson("Layout", data.m_layout, j);
+	DataToJson("Properties", data.m_properties, j);
+
 	j["TestClass"] = json::array();
-	for (const auto& testClassPtr : comp.m_testClass) {
-		// 포인터가 유효한 경우에만 JSON으로 변환
-		if (testClassPtr) {
-			j["TestClass"].push_back(*testClassPtr);
-		}
-	}
-}
-
-void from_json(const nlohmann::json& j, UIComponent& comp)
-{
-	j.at("Name").get_to(comp.m_name);
-	comp.m_testClass.clear();
-
-	// JSON 배열을 순회하면서 unique_ptr<Property>로 변환
-	for (const auto& item : j.at("TestClass")) 
+	for (const auto& testClassPtr : data.m_testClass)
 	{
-		auto testClass = std::make_unique<TestClass>(item.get<TestClass>());
-		comp.m_testClass.push_back(std::move(testClass));
+		if (!testClassPtr) continue;
+		j["TestClass"].push_back(*testClassPtr);
 	}
 }
 
-void to_json(nlohmann::json& j, const TestClass& tc)
+void from_json(const nlohmann::json& j, UIComponent& data)
+{
+	DataFromJson("Name", data.m_name, j);
+	DataFromJson("Layout", data.m_layout, j);
+	DataFromJson("Properties", data.m_properties, j);
+
+	//data.m_testClass.clear();
+	//// JSON 배열을 순회하면서 unique_ptr<Property>로 변환
+	//for (const auto& item : j.at("TestClass")) 
+	//{
+	//	auto testClass = std::make_unique<TestClass>(item.get<TestClass>());
+	//	data.m_testClass.push_back(std::move(testClass));
+	//}
+}
+
+void to_json(nlohmann::ordered_json& j, const TestClass& tc)
 {
 	j = nlohmann::json{ {"a", tc.a}, {"b", tc.b} };
 }

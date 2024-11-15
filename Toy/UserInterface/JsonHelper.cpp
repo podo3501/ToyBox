@@ -8,6 +8,7 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "../Config.h"
+#include "Property.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -97,11 +98,6 @@ json DataToJson(const wstring& data) noexcept
 	return RemoveNullTerminator(WStringToString(data));
 }
 
-void DataToJson(const string& key, const string& data, ordered_json& outJson) noexcept
-{
-	outJson[key] = data;
-}
-
 void DataToJson(const string& key, const wstring& data, ordered_json& outJson) noexcept
 {
 	outJson[key] = DataToJson(data);
@@ -142,10 +138,31 @@ void DataToJson(const string& key, Origin origin, ordered_json& outJson) noexcep
 	outJson[key] = EnumToString(origin);
 }
 
-void DataFromJson(const string& key, string& outStr, const json& j) noexcept
+void DataToJson(const string& key, const Vector2& vec, ordered_json& outJson) noexcept
 {
-	outStr = j[key];
+	ordered_json j{};
+
+	j["x"] = vec.x;
+	j["y"] = vec.y;
+
+	outJson[key] = j;
 }
+
+void DataToJson(const string& key, const vector<unique_ptr<Property>>& data, nlohmann::ordered_json& outJson) noexcept
+{
+	if (data.empty())
+		return;
+	
+	outJson[key] = json::array();
+	for (const auto& prop : data)
+	{
+		//nlohmann::ordered_json pj{};
+		//DataToJson("Property", prop, pj);
+		outJson[key].push_back(*prop);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
 
 void DataFromJson(const string& key, Rectangle& outRect, const json& j) noexcept
 {
@@ -171,6 +188,26 @@ void DataFromJson(const string& key, map<wstring, wstring>& outData, const json&
 void DataFromJson(const string& key, wstring& outData, const json& j) noexcept
 {
 	outData = StringToWString(j[key]);
+}
+
+void DataFromJson(const string& key, Vector2& outData, const json& j) noexcept
+{
+	const auto& keyJ = j[key];
+	outData.x = keyJ["x"];
+	outData.y = keyJ["y"];
+}
+
+void DataFromJson(const string& key, vector<unique_ptr<Property>>& outData, const json& j) noexcept
+{
+	if (j.contains(key) == false)
+		return;
+
+	outData.clear();
+	for (const auto& propJson : j[key])
+	{
+		auto prop = std::make_unique<Property>(propJson.get<Property>());
+		outData.emplace_back(move(prop));
+	}
 }
 
 json ReadJsonAA(const wstring& filename) noexcept

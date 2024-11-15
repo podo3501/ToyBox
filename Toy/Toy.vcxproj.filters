@@ -69,6 +69,9 @@
     <ClInclude Include="UserInterface\JsonOperation.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Property.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -119,6 +122,9 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\JsonOperation.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Property.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

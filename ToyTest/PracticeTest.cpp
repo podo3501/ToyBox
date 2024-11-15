@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "../Toy/Locator.h"
 #include "../Toy/UserInterface/UIUtility.h"
+#include "../Toy/UserInterface/UILayout.h"
 
 namespace Practice
 {
@@ -119,5 +120,37 @@ namespace Practice
 				}
 			}
 		}
+	}
+
+	TEST(CPP, Move)
+	{
+		class MoveTest
+		{
+		public:
+			virtual ~MoveTest() {};
+			//복사 생성자에서는 move 구문이 먹히지 않는다
+			MoveTest& operator=(const MoveTest& other)
+			{
+				if (this == &other)
+					return *this;
+
+				m_data = std::make_unique<UILayout>(*other.m_data);
+				//m_data = move(other.m_data); 
+				//이렇게 될것 같지만 이 함수가 복사 생성자이기 때문에 move가 안된다.
+				//만약 가능하다면 other에 값이 사라지기 때문에(값이 변하기 때문에) other가 'const' 변수라서 여기에 막혀 에러를 뱉어내게 된다.
+
+				return *this;
+			}
+			
+			virtual void Test() {}
+
+		private:
+			unique_ptr<UILayout> m_data;
+		};
+
+		unique_ptr<MoveTest> test1 = make_unique<MoveTest>();
+		unique_ptr<MoveTest> test2 = make_unique<MoveTest>();
+
+		test1 = move(test2); 
 	}
 }

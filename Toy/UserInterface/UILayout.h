@@ -11,9 +11,10 @@ public:
 
 	UILayout(const nlohmann::json& data);
 	UILayout(const Rectangle& area, const Origin& origin);
-	UILayout(const UILayout& other) noexcept = default;
+	UILayout(const UILayout& other) = default;
+	UILayout& operator=(const UILayout& other);
 	UILayout(UILayout&& other) noexcept = default;
-	UILayout& operator=(const UILayout& other) noexcept = default;
+
 	bool IsEqual(const UILayout* other) const noexcept;
 
 	void ToJson(nlohmann::ordered_json& outJson) const noexcept;
@@ -30,6 +31,9 @@ public:
 	void Union(const Rectangle& area) noexcept;
 
 	bool IsArea(const Vector2& pos) const noexcept;
+
+	friend void to_json(nlohmann::ordered_json& j, const UILayout& data);
+	friend void from_json(const nlohmann::json& j, UILayout& data);
 
 private:
 	Vector2 GetOriginPoint(Origin origin) const noexcept;
