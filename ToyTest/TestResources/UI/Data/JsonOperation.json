@@ -1,4 +1,9 @@
 {
+    "FontFileList": {
+        "English": "UI/Font/CourierNewBoldS18.spritefont",
+        "Hangle": "UI/Font/MaleunGothicS16.spritefont"
+    },
+    "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
     "Name": "TextArea",
     "Layout": {
         "Area": {
@@ -9,14 +14,14 @@
         },
         "Origin": "Center"
     },
-    "Properties": [
+    "Components": [
         {
             "Position": {
                 "x": 1.0,
                 "y": 2.0
             },
             "Component": {
-                "Name": "TextArea",
+                "Name": "rTextArea",
                 "Layout": {
                     "Area": {
                         "x": 0,
@@ -25,17 +30,7 @@
                         "height": 120
                     },
                     "Origin": "Center"
-                },
-                "TestClass": [
-                    {
-                        "a": 5,
-                        "b": 6
-                    },
-                    {
-                        "a": 5,
-                        "b": 6
-                    }
-                ]
+                }
             }
         },
         {
@@ -44,7 +39,7 @@
                 "y": 4.0
             },
             "Component": {
-                "Name": "",
+                "Name": "emptyTextArea",
                 "Layout": {
                     "Area": {
                         "x": 0,
@@ -53,28 +48,8 @@
                         "height": 0
                     },
                     "Origin": "Center"
-                },
-                "TestClass": [
-                    {
-                        "a": 5,
-                        "b": 6
-                    },
-                    {
-                        "a": 5,
-                        "b": 6
-                    }
-                ]
+                }
             }
-        }
-    ],
-    "TestClass": [
-        {
-            "a": 5,
-            "b": 6
-        },
-        {
-            "a": 5,
-            "b": 6
         }
     ]
 }

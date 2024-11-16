@@ -20,21 +20,23 @@ BGImage::BGImage(const BGImage& other)
 
 unique_ptr<UIComponent> BGImage::Clone()
 {
-	return make_unique<BGImage>(*this);
+	auto clone = make_unique<BGImage>(*this);
+	clone->SetName(clone->GetName() + "_clone");
+	return clone;
 }
 
-bool BGImage::ReadProperty(const nlohmann::json& data)
-{
-	ImageSource imgSource;
-	ReturnIfFalse(imgSource.Read(data));
-	m_imagePartSet = make_unique<ImagePartSet>(imgSource);
-	
-	//auto imagePartSet = make_unique<ImagePartSet>();
-	//m_imagePartSet = CreateProperty<ImagePartSet>(data);
-	//ReturnIfNullptr(m_imagePartSet);
-
-	return true;
-}
+//bool BGImage::ReadProperty(const nlohmann::json& data)
+//{
+//	ImageSource imgSource;
+//	ReturnIfFalse(imgSource.Read(data));
+//	m_imagePartSet = make_unique<ImagePartSet>(imgSource);
+//	
+//	//auto imagePartSet = make_unique<ImagePartSet>();
+//	//m_imagePartSet = CreateProperty<ImagePartSet>(data);
+//	//ReturnIfNullptr(m_imagePartSet);
+//
+//	return true;
+//}
 
 bool BGImage::LoadResources(ILoadData* load)
 { 

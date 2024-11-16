@@ -15,7 +15,7 @@ public:
 	ImagePartSet(const vector<ImageSource>& imgSources);
 	ImagePartSet(const ImageSource& source);
 
-	bool SetResources(const wstring& filename);
+	//bool SetResources(const wstring& filename);
 	bool LoadResources(ILoadData* load);
 	bool Update(const Vector2& position) noexcept;
 	void Render(IRender* render);

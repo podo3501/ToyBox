@@ -35,7 +35,7 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 
 bool GameMainLoop::InitializeDerived()
 {
-    m_gameScene = make_unique<Scene>(m_renderer);
+    m_gameScene = make_unique<Scene>();
     m_renderer->AddLoadScene(m_gameScene.get());
     m_renderer->AddRenderScene(m_gameScene.get());
 

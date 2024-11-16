@@ -5,7 +5,6 @@ struct IGetValue;
 struct IRenderer;
 class UILayout;
 struct TextData;
-class JsonOperation;
 
 class TextArea : public UIComponent
 {
@@ -13,6 +12,8 @@ public:
 	~TextArea();
 	TextArea();
 	TextArea(const TextArea& other);
+	TextArea& operator=(const TextArea& o);
+	bool operator==(const TextArea& o) const noexcept;
 
 	virtual unique_ptr<UIComponent> Clone();
 	virtual bool LoadResources(ILoadData* load) override;
@@ -20,21 +21,15 @@ public:
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept override;
 	virtual void Render(IRender* render) override;
 
-	bool IsEqual(const TextArea* other) const noexcept;
 	void SetFont(const string& name,
 		const wstring& text,
 		const UILayout& layout,
 		const map<wstring, wstring>& fontFileList);
-	bool Write(const wstring& filename) const noexcept;
-	bool Read(const wstring& filename) noexcept;
 
-protected:
-	virtual void Process(JsonOperation* operation) noexcept override;
+	friend void to_json(nlohmann::ordered_json& j, const TextArea& data);
+	friend void from_json(const nlohmann::json& j, TextArea& data);
 
 private:
-	void ToJson(nlohmann::ordered_json& outJson) const noexcept;
-	bool FromJson(const nlohmann::json& j) noexcept;
-
 	Vector2 m_posByResolution{};
 	wstring m_text{};
 	map<wstring, wstring> m_fontFileList;

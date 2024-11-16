@@ -9,7 +9,7 @@ GuiWidget::~GuiWidget()
 
 GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer{ renderer },
-    m_widgetScene{ make_unique<Scene>(renderer) },
+    m_widgetScene{ make_unique<Scene>() },
     m_component{ nullptr }
 {
     m_renderer->AddImguiComponent(this);

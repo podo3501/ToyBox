@@ -8,80 +8,17 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "../Config.h"
-#include "Property.h"
+#include "TransformComponent.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
 
-unique_ptr<UIComponent> CreateComponent(ComponentType compType)
+double RoundToSix(double value) 
 {
-	switch (compType)
-	{
-		case ComponentType::Dialog: return make_unique<Dialog>();
-		case ComponentType::BGImage: return make_unique<BGImage>();
-	}
-
-	return nullptr;
+	return std::round(value * 1e6) / 1e6;
 }
 
-ComponentType GetComponentType(const string& key)
-{
-	if (key == "Dialog") return ComponentType::Dialog;
-	if (key == "BGImage") return ComponentType::BGImage;
-
-	return ComponentType::Init;
-}
-
-DataType GetType(const string& key)
-{
-	DataType dataType{ DataType::Init };
-
-	if (key == "Name") dataType = DataType::Name;
-	if (key == "Layout") dataType = DataType::Layout;
-	if (key == "Property") dataType = DataType::Property;
-	if (key == "Component") dataType = DataType::Component;
-	
-	return dataType;
-}
-
-wstring GetFilename(const nlohmann::json& data)
-{
-	return { StringToWString(data["Filename"]) };
-}
-
-Vector2 GetPosition(const nlohmann::json& data)
-{
-	const auto& pos = data["Position"];
-	return { pos["x"], pos["y"] };
-}
-
-tuple<wstring, Vector2> GetFilenameAndPos(const json& data)
-{
-	return make_tuple(GetFilename(data), GetPosition(data));
-}
-
-tuple<unique_ptr<UIComponent>, Vector2> CreateComponent(const json& data)
-{
-	ComponentType compType = GetComponentType(data["Type"]);
-	const auto& [compFilename, position] = GetFilenameAndPos(data);
-
-	unique_ptr<UIComponent> comp = CreateComponent(compType);
-	if (comp->SetResources(compFilename) == false)
-		return make_tuple(nullptr, position);
-
-	return make_tuple(move(comp), position);
-}
-
-json LoadUIFile(const wstring& filename)
-{
-	ifstream file(GetResourcePath() + filename);
-	if (!file.is_open())
-		return nullptr;
-
-	return json::parse(file);
-}
-
-bool WriteJsonAA(const ordered_json& data, const wstring& filename) noexcept
+bool WriteJson(ordered_json& data, const wstring& filename) noexcept
 {
 	ofstream file(GetResourcePath() + filename);
 	if (!file.is_open())
@@ -91,6 +28,15 @@ bool WriteJsonAA(const ordered_json& data, const wstring& filename) noexcept
 	file.close();
 
 	return true;
+}
+
+json ReadJson(const wstring& filename) noexcept
+{
+	ifstream file(GetResourcePath() + filename);
+	if (!file.is_open())
+		return nullptr;
+
+	return json::parse(file);
 }
 
 json DataToJson(const wstring& data) noexcept
@@ -142,24 +88,20 @@ void DataToJson(const string& key, const Vector2& vec, ordered_json& outJson) no
 {
 	ordered_json j{};
 
-	j["x"] = vec.x;
-	j["y"] = vec.y;
+	j["x"] = RoundToSix(vec.x);
+	j["y"] = RoundToSix(vec.y);
 
 	outJson[key] = j;
 }
 
-void DataToJson(const string& key, const vector<unique_ptr<Property>>& data, nlohmann::ordered_json& outJson) noexcept
+void DataToJson(const string& key, const vector<unique_ptr<TransformComponent>>& data, ordered_json& outJson) noexcept
 {
 	if (data.empty())
 		return;
 	
 	outJson[key] = json::array();
 	for (const auto& prop : data)
-	{
-		//nlohmann::ordered_json pj{};
-		//DataToJson("Property", prop, pj);
 		outJson[key].push_back(*prop);
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +139,7 @@ void DataFromJson(const string& key, Vector2& outData, const json& j) noexcept
 	outData.y = keyJ["y"];
 }
 
-void DataFromJson(const string& key, vector<unique_ptr<Property>>& outData, const json& j) noexcept
+void DataFromJson(const string& key, vector<unique_ptr<TransformComponent>>& outData, const json& j) noexcept
 {
 	if (j.contains(key) == false)
 		return;
@@ -205,16 +147,7 @@ void DataFromJson(const string& key, vector<unique_ptr<Property>>& outData, cons
 	outData.clear();
 	for (const auto& propJson : j[key])
 	{
-		auto prop = std::make_unique<Property>(propJson.get<Property>());
+		auto prop = std::make_unique<TransformComponent>(propJson.get<TransformComponent>());
 		outData.emplace_back(move(prop));
 	}
-}
-
-json ReadJsonAA(const wstring& filename) noexcept
-{
-	ifstream file(GetResourcePath() + filename);
-	if (!file.is_open())
-		return nullptr;
-
-	return json::parse(file);
 }

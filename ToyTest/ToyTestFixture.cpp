@@ -23,7 +23,7 @@ void ToyTestFixture::SetUp()
 	const auto& outputSize = m_window->GetOutputSize();
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
-	m_testScene = make_unique<Scene>(m_renderer.get());
+	m_testScene = make_unique<Scene>();
 
 	m_renderer->AddLoadScene(m_testScene.get());
 	m_renderer->AddRenderScene(m_testScene.get());

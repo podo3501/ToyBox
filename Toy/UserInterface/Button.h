@@ -28,7 +28,7 @@ public:
 	Button(const Button& other);
 
 	virtual unique_ptr<UIComponent> Clone() override;
-	virtual bool ReadProperty(const nlohmann::json& data) override;
+	//virtual bool ReadProperty(const nlohmann::json& data) override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept override;
 	virtual void Render(IRender* renderer) override;

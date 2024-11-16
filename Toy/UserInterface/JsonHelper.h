@@ -3,29 +3,11 @@
 struct IRenderer;
 class UIComponent;
 class UILayout;
-class Property;
+class TransformComponent;
 enum class Origin;
 
-enum class DataType
-{
-	Init = 0,
-	Name,	//Component의 이름
-	Layout,	//위치, 정렬정보
-	Component,	//Dialog, Button 같은 붙일수 있는 것들
-	Property,	//Component안에 들어있는 속성들(ex 이미지)
-};
-
-enum class ComponentType
-{
-	Init = 0,
-	Dialog,
-	BGImage,
-};
-
-DataType GetType(const string& key);
-tuple<unique_ptr<UIComponent>, Vector2> CreateComponent(const nlohmann::json& data);
-nlohmann::json LoadUIFile(const wstring& filename);
-bool WriteJsonAA(const nlohmann::ordered_json& data, const wstring& filename) noexcept;
+bool WriteJson(nlohmann::ordered_json& data, const wstring& filename) noexcept;
+nlohmann::json ReadJson(const wstring& filename) noexcept;
 
 template<typename T>
 concept Primitive = is_arithmetic<T>::value || is_same_v<T, string>;
@@ -48,7 +30,7 @@ void DataToJson(const string& key, const map<wstring, wstring>& data, nlohmann::
 void DataToJson(const string& key, const Rectangle& rect, nlohmann::ordered_json& outJson) noexcept;
 void DataToJson(const string& key, Origin origin, nlohmann::ordered_json& outJson) noexcept;
 void DataToJson(const string& key, const Vector2& vec, nlohmann::ordered_json& outJson) noexcept;
-void DataToJson(const string& key, const vector<unique_ptr<Property>>& data, nlohmann::ordered_json& outJson) noexcept;
+void DataToJson(const string& key, const vector<unique_ptr<TransformComponent>>& data, nlohmann::ordered_json& outJson) noexcept;
 
 template<typename T>
 void DataToJson(const vector<T>& data, nlohmann::ordered_json& outJson) noexcept
@@ -57,8 +39,6 @@ void DataToJson(const vector<T>& data, nlohmann::ordered_json& outJson) noexcept
 		iter.ToJson(outJson);
 		});
 }
-
-nlohmann::json ReadJsonAA(const wstring& filename) noexcept;
 
 template<Primitive T>
 void DataFromJson(const string& key, T& outData, const nlohmann::json& j) noexcept
@@ -77,4 +57,4 @@ void DataFromJson(const string& key, Origin& outOrigin, const nlohmann::json& j)
 void DataFromJson(const string& key, map<wstring, wstring>& outData, const nlohmann::json& j) noexcept;
 void DataFromJson(const string& key, wstring& outData, const nlohmann::json& j) noexcept;
 void DataFromJson(const string& key, Vector2& outData, const nlohmann::json& j) noexcept;
-void DataFromJson(const string& key, vector<unique_ptr<Property>>& outData, const nlohmann::json& j) noexcept;
+void DataFromJson(const string& key, vector<unique_ptr<TransformComponent>>& outData, const nlohmann::json& j) noexcept;

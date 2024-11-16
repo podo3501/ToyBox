@@ -1,0 +1,54 @@
+{
+    "Main": {
+        "Name": "Main",
+        "Layout": {
+            "Area": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+            },
+            "Origin": "Center"
+        },
+        "Components": [
+            {
+                "Position": {
+                    "x": 1.0,
+                    "y": 2.0
+                },
+                "Component": {
+                    "Name": "Dialog",
+                    "Layout": {
+                        "Area": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 0,
+                            "height": 0
+                        },
+                        "Origin": "Center"
+                    },
+                    "Components": [
+                        {
+                            "Position": {
+                                "x": 0.1,
+                                "y": 0.1
+                            },
+                            "Component": {
+                                "Name": "BGImage",
+                                "Layout": {
+                                    "Area": {
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 220,
+                                        "height": 190
+                                    },
+                                    "Origin": "LeftTop"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

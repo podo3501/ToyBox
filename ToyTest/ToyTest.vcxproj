@@ -127,7 +127,7 @@
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="PracticeTest.cpp" />
-    <ClCompile Include="ReadJsonTest.cpp" />
+    <ClCompile Include="WriteReadTest.cpp" />
     <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -159,6 +159,7 @@
     <None Include="TestResources\UI\Data\Dialog.json" />
     <None Include="TestResources\UI\Data\FirstScene.json" />
     <None Include="TestResources\UI\Data\JsonOperation.json" />
+    <None Include="TestResources\UI\Data\Main.json" />
     <None Include="TestResources\UI\Data\WriteTextArea.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -6,7 +6,6 @@
 #include "UIUtility.h"
 #include "../Config.h"
 #include "JsonHelper.h"
-#include "JsonOperation.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -26,14 +25,29 @@ TextArea::TextArea(const TextArea& other)
 	m_lines = other.m_lines;
 }
 
-bool TextArea::IsEqual(const TextArea* other) const noexcept
+unique_ptr<UIComponent> TextArea::Clone()
 {
-	if (!UIComponent::IsEqual(this)) return false;
-	if (m_text != other->m_text) return false;
-	if (m_fontFileList != other->m_fontFileList) return false;
-	//나머지 멤버변수들은 이 멤버변수들을 기초로 값이 만들어진다.
+	auto clone = make_unique<TextArea>(*this);
+	clone->SetName(clone->GetName() + "_clone");
+	return clone;
+}
+
+TextArea& TextArea::operator=(const TextArea& o)
+{
+	if (this == &o)
+		return *this;
+
+	UIComponent::operator=(o);
+	tie(m_fontFileList, m_text) = tie(o.m_fontFileList, o.m_text);
+
+	return *this;
+}
+
+bool TextArea::operator==(const TextArea& o) const noexcept
+{
+	ReturnIfFalse(UIComponent::operator==(o));
 	
-	return true;
+	return tie(m_fontFileList, m_text) == tie(o.m_fontFileList, o.m_text);
 }
 
 bool TextArea::LoadResources(ILoadData* load)
@@ -130,44 +144,16 @@ void TextArea::Render(IRender* render)
 			XMLoadFloat4(&word.color));
 }
 
-unique_ptr<UIComponent> TextArea::Clone() 
+void to_json(nlohmann::ordered_json& j, const TextArea& data)
 {
-	return make_unique<TextArea>(*this);
+	DataToJson("FontFileList", data.m_fontFileList, j);
+	DataToJson("Text", data.m_text, j);
+	to_json(j, static_cast<const UIComponent&>(data));
 }
 
-void TextArea::ToJson(ordered_json& outJson) const noexcept
+void from_json(const nlohmann::json& j, TextArea& data)
 {
-	UIComponent::ToJson(outJson);
-	DataToJson("FontFileList", m_fontFileList, outJson);
-	DataToJson("Text", m_text, outJson);
-}
-
-bool TextArea::Write(const wstring& filename) const noexcept
-{
-	ordered_json j;
-	ToJson(j);
-	return WriteJsonAA(j, filename);
-}
-
-bool TextArea::FromJson(const json& j) noexcept
-{
-	UIComponent::FromJson(j); 
-	DataFromJson("FontFileList", m_fontFileList, j);
-	DataFromJson("Text", m_text, j);
-
-	return true;
-}
-
-bool TextArea::Read(const wstring& filename) noexcept
-{
-	const json& j = ReadJsonAA(filename);
-	if (j.is_null()) return false;
-
-	return FromJson(j);
-}
-
-void TextArea::Process(JsonOperation* operation) noexcept
-{
-	operation->Process("FontFileList", m_fontFileList);
-	operation->Process("Text", m_text);
+	DataFromJson("FontFileList", data.m_fontFileList, j);
+	DataFromJson("Text", data.m_text, j);
+	from_json(j, static_cast<UIComponent&>(data));
 }

@@ -14,7 +14,6 @@
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/JsonHelper.h"
-#include "../Toy/UserInterface/JsonOperation.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -204,36 +203,23 @@ namespace BasicClient
 		EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
 		textArea->Render(&mockRender);
 
-		EXPECT_TRUE(textArea->Write(L"UI/Data/WriteTextArea.json"));
-		std::unique_ptr<TextArea> rTextArea = make_unique<TextArea>();
-		TextArea* readTextArea = rTextArea.get();
-		EXPECT_TRUE(rTextArea->Read(L"UI/Data/WriteTextArea.json"));	
-
-		EXPECT_TRUE(textArea->IsEqual(readTextArea));
-
-		UIComponent* writeComp = textArea;
-		writeComp->AddComponent(move(rTextArea), { 1.f, 2.f });
+		std::unique_ptr<UIComponent> rTextArea = textArea->Clone();
+		rTextArea->SetName("rTextArea");
+		TextArea& writeComp = *textArea;
+		writeComp.AddComponent(move(rTextArea), { 1.f, 2.f });
 		std::unique_ptr<UIComponent> emptyTextArea = make_unique<TextArea>();
-		writeComp->AddComponent(move(emptyTextArea), { 3.f, 4.f });
+		emptyTextArea->SetName("emptyTextArea");
+		writeComp.AddComponent(move(emptyTextArea), { 3.f, 4.f });
 
-		nlohmann::ordered_json j = *writeComp;
-		WriteJsonAA(j, L"UI/Data/JsonOperation.json");
+		nlohmann::ordered_json j = writeComp;
+		WriteJson(j, L"UI/Data/JsonOperation.json");
 
-		nlohmann::json rj = ReadJsonAA(L"UI/Data/JsonOperation.json");
-		std::unique_ptr<UIComponent> readComp = make_unique<TextArea>();
-		*readComp = rj.get<UIComponent>();
+		nlohmann::json rj = ReadJson(L"UI/Data/JsonOperation.json");
+		TextArea readComp{};
+		readComp = rj.get<TextArea>();
 
-		//UIComponent* writeComp = textArea;
-		//auto jsonIO = make_unique<JsonOperation>();
-		//writeComp->FileIO(jsonIO.get());
-		//writeComp->FileIO(jsonIO.get());
-		//jsonIO->WriteFile(L"UI/Data/JsonOperation.json");
-
-		//jsonIO->ReadFile(L"UI/Data/JsonOperation.json");
-		//auto readComp = UIComponent::CreateComponent(jsonIO.get()); 
-		//readComp->FileIO(jsonIO.get());
-
-		//EXPECT_TRUE(writeComp->IsEqual(readComp.get()));
+		EXPECT_TRUE(writeComp == readComp);
+		//클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
 	}
 
 	TEST_F(ToyTestFixture, Panel)
@@ -269,7 +255,7 @@ namespace BasicClient
 
 	TEST_F(ToyTestFixture, Scene)
 	{
-		unique_ptr<Scene>testScene = std::make_unique<Scene>(m_renderer.get());
+		unique_ptr<Scene>testScene = std::make_unique<Scene>();
 		EXPECT_TRUE(testScene->LoadData(L"UI/Data/FirstScene.json"));
 
 		m_renderer->AddLoadScene(testScene.get());

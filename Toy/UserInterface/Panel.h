@@ -7,7 +7,7 @@ public:
     Panel();
     ~Panel();
 
-    virtual bool SetResources(const wstring& filename) override { filename; return true; }
+    //virtual bool SetResources(const wstring& filename) override { filename; return true; }
     virtual const Rectangle& GetArea() const noexcept;
     virtual unique_ptr<UIComponent> Clone() { return nullptr; }
 

@@ -7,9 +7,10 @@ class Scene : public IRenderScene
 {
 public:
 	~Scene();
-	Scene() = delete;
-	Scene(IRenderer* renderer);
+	Scene();
 	Scene(const Scene& other);
+	Scene& operator=(const Scene& other);
+	bool operator==(const Scene& o) const noexcept;
 
 	virtual unique_ptr<IRenderScene> Clone() override;
 	virtual bool LoadScene(ILoadData* load) override;
@@ -21,8 +22,10 @@ public:
 
 	//파일을 로드하는 부분. 지금은 파일이 없이 값을 바로 넣는다.
 	bool LoadData(const wstring& filename);
+	
+	friend void to_json(nlohmann::ordered_json& j, const Scene& data);
+	friend void from_json(const nlohmann::json& j, Scene& data);
 
 private:
-	IRenderer* m_renderer;
-	vector<pair<Vector2, unique_ptr<UIComponent>>> m_components;
+	unique_ptr<UIComponent> m_mainComponent;
 };

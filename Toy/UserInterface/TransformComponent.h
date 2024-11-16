@@ -4,12 +4,14 @@ struct ILoadData;
 struct IRender;
 class UIComponent;
 
-class Property
+class TransformComponent
 {
 public:
-	Property();
-	Property(unique_ptr<UIComponent> comp, const Vector2& position);
-	Property(const Property& other);
+	TransformComponent();
+	TransformComponent(unique_ptr<UIComponent> comp, const Vector2& position);
+	TransformComponent& operator=(const TransformComponent& other);
+	TransformComponent(const TransformComponent& other);
+	bool operator==(const TransformComponent& o) const noexcept;
 
 	bool LoadResources(ILoadData* load);
 	bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept;
@@ -21,8 +23,8 @@ public:
 	UIComponent* GetComponent() const noexcept;
 	const string& GetName() const;
 
-	friend void to_json(nlohmann::ordered_json& j, const Property& data);
-	friend void from_json(const nlohmann::json& j, Property& data);
+	friend void to_json(nlohmann::ordered_json& j, const TransformComponent& data);
+	friend void from_json(const nlohmann::json& j, TransformComponent& data);
 
 private:
 	unique_ptr<UIComponent> m_component;

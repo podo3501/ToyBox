@@ -3,42 +3,17 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "JsonHelper.h"
-#include "JsonOperation.h"
 #include "../Utility.h"
-#include "Property.h"
+#include "TransformComponent.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
-
-class TestClass
-{
-public:
-	TestClass()
-	{
-		//int a = 1;
-	}
-
-	TestClass(const TestClass& /*other*/)
-	{
-		//int a = 1;
-	}
-
-	friend void to_json(nlohmann::ordered_json& j, const TestClass& tc);
-	friend void from_json(const nlohmann::json& j, TestClass& tc);
-
-private:
-	int a{ 5 };
-	int b{ 6 };
-};
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
 	m_name{},
 	m_layout{ make_unique<UILayout>(Rectangle{}, Origin::Center) }
-{
-	m_testClass.emplace_back(make_unique<TestClass>());
-	m_testClass.emplace_back(make_unique<TestClass>());
-}
+{}
 
 UIComponent& UIComponent::operator=(const UIComponent& other)
 {
@@ -46,63 +21,76 @@ UIComponent& UIComponent::operator=(const UIComponent& other)
 
 	m_name = other.m_name;
 	m_layout = std::make_unique<UILayout>(*other.m_layout);
-	ranges::transform(other.m_properties, back_inserter(m_properties), [](const auto& prop) {
-		return make_unique<Property>(*prop.get());
+	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& prop) {
+		return make_unique<TransformComponent>(*prop.get());
 		});
 
 	return *this;
 }
 
-UIComponent::UIComponent(const UIComponent& other)
+unique_ptr<UIComponent> UIComponent::Clone() 
 {
-	m_name = other.m_name + "_clone";
-	m_layout = make_unique<UILayout>(*other.m_layout);
-	ranges::transform(other.m_properties, back_inserter(m_properties), [](const auto& prop) {
-		return make_unique<Property>(*prop.get());
-		});
+	return make_unique<UIComponent>(*this);
 }
 
-bool UIComponent::IsEqual(const UIComponent* other) const noexcept
-{
-	//_clone 같은게 있을 수도 있고, 다른 이름이지만 값은 같을 수도 있기 때문에 m_name은 비교하지 않는다.
-	if (!m_layout->IsEqual(other->m_layout.get())) return false;
-	//Property 비교
+//template 함수로 만들지 않는 이유는 == 비교가 사방에서 쓰기 때문에 이 함수와 다른 함수가 충돌될지 모른다.
+//namespace로 만들어주던지 아니면 cpp에 정의 해서 여기만 쓰도록 강제해야 한다.
+bool operator==(const unique_ptr<TransformComponent>& lhs, const unique_ptr<TransformComponent>& rhs) {
+	if (lhs == nullptr && rhs == nullptr) {
+		return true;
+	}
+	if (lhs == nullptr || rhs == nullptr) {
+		return false;
+	}
+	return *lhs == *rhs;
+}
 
-	return true;
+bool UIComponent::operator==(const UIComponent& o) const noexcept
+{
+	return tie(m_name, *m_layout, m_components) == tie(o.m_name, *o.m_layout, o.m_components);
+}
+
+UIComponent::UIComponent(const UIComponent& other)
+{
+	m_name = other.m_name;
+	m_layout = make_unique<UILayout>(*other.m_layout);
+	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& prop) {
+		return make_unique<TransformComponent>(*prop.get());
+		});
 }
 
 bool UIComponent::LoadResources(ILoadData* load)
 {
-	return ranges::all_of(m_properties, [load](const auto& prop) {
+	return ranges::all_of(m_components, [load](const auto& prop) {
 		return prop->LoadResources(load);
 		});
 }
 
-Property* UIComponent::FindProperty(const string& name) const noexcept
+TransformComponent* UIComponent::FindTransformComponent(const string& name) const noexcept
 {
-	auto find = ranges::find_if(m_properties, [&name](const auto& prop) {
+	auto find = ranges::find_if(m_components, [&name](const auto& prop) {
 		return prop->GetName() == name;
 		});
 
-	if (find == m_properties.end()) return nullptr;
+	if (find == m_components.end()) return nullptr;
 	return find->get();
 }
 
 void UIComponent::SetSelected(const string& name, bool selected) noexcept
 {
-	auto property = FindProperty(name);
-	if (property == nullptr) return;
+	auto TransformComponent = FindTransformComponent(name);
+	if (TransformComponent == nullptr) return;
 
-	property->SetSelected(selected);
+	TransformComponent->SetSelected(selected);
 }
 
 UIComponent* UIComponent::GetSelected() const noexcept
 {
-	auto find = ranges::find_if(m_properties, [](const auto& prop) {
+	auto find = ranges::find_if(m_components, [](const auto& prop) {
 		return prop->IsSelected();
 		});
 
-	if (find == m_properties.end())
+	if (find == m_components.end())
 		return nullptr;
 
 	return (*find)->GetComponent();
@@ -110,14 +98,14 @@ UIComponent* UIComponent::GetSelected() const noexcept
 
 bool UIComponent::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept
 {
-	return ranges::all_of(m_properties, [&position, tracker](const auto& prop) {
+	return ranges::all_of(m_components, [&position, tracker](const auto& prop) {
 		return prop->Update(position, tracker);
 		});
 }
 
 void UIComponent::Render(IRender* render)
 {
-	ranges::for_each(m_properties, [render](const auto& prop) {
+	ranges::for_each(m_components, [render](const auto& prop) {
 		prop->Render(render);
 		});
 }
@@ -126,7 +114,7 @@ bool UIComponent::IsPicking(const Vector2& pos)  const noexcept
 {
 	if (m_layout->IsArea(pos)) return true;
 
-	return ranges::any_of(m_properties, [&pos](const auto& prop) {
+	return ranges::any_of(m_components, [&pos](const auto& prop) {
 		return prop->IsPicking(pos);
 		});
 }
@@ -136,57 +124,20 @@ const Rectangle& UIComponent::GetArea() const noexcept
 	return m_layout->GetArea();
 }
 
-bool UIComponent::SetResources(const wstring& filename)
-{
-	const json& dataList = LoadUIFile(filename);
-	if (dataList.is_null())
-		return false;
-
-	for (const auto& [key, data] : dataList.items())
-	{
-		auto dataType = GetType(key);
-		if (dataType == DataType::Init) return false;
-
-		switch (dataType)
-		{
-		case DataType::Name:
-			m_name = dataList["Name"];
-			break;
-		case DataType::Layout:
-			m_layout = move(make_unique<UILayout>(data));
-			break;
-		case DataType::Component:
-		{
-			auto [comp, position] = CreateComponent(data);
-			ReturnIfNullptr(comp);
-
-			m_layout->Union(comp->GetArea());	//자식의 크기만큼 자신의 크기를 키운다.
-			AddComponent(move(comp), position);
-			break;
-		}
-		case DataType::Property:
-			ReturnIfFalse(ReadProperty(data));
-			break;
-		}
-	}
-
-	return true;
-}
-
 void UIComponent::SetChildPosition(const string& name, const Vector2& position) noexcept
 {
-	auto property = FindProperty(name);
-	if (property == nullptr) return;
+	auto TransformComponent = FindTransformComponent(name);
+	if (TransformComponent == nullptr) return;
 
-	property->SetPosition(position);
+	TransformComponent->SetPosition(position);
 }
 
 UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 {
-	auto property = FindProperty(name);
-	if (property == nullptr) return nullptr;
+	auto TransformComponent = FindTransformComponent(name);
+	if (TransformComponent == nullptr) return nullptr;
 
-	return property->GetComponent();
+	return TransformComponent->GetComponent();
 }
 
 bool UIComponent::ChangeArea(const Rectangle& area) noexcept
@@ -208,8 +159,8 @@ const string& UIComponent::GetName() const noexcept
 
 void UIComponent::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos)
 {
-	auto prop = make_unique<Property>(move(comp), pos);
-	m_properties.emplace_back(move(prop));
+	auto prop = make_unique<TransformComponent>(move(comp), pos);
+	m_components.emplace_back(move(prop));
 }
 
 void UIComponent::SetLayout(const UILayout& layout) noexcept
@@ -222,70 +173,16 @@ UILayout* UIComponent::GetLayout() const noexcept
 	return m_layout.get();
 }
 
-void UIComponent::ToJson(ordered_json& outJson) const noexcept
-{
-	DataToJson("Name", m_name, outJson);
-	ordered_json j;
-	m_layout->ToJson(j);
-	outJson["Layout"] = j;
-}
-
-void UIComponent::FromJson(const json& j) noexcept
-{
-	DataFromJson("Name", m_name, j);
-	m_layout->FromJson(j["Layout"]);
-}
-
-void UIComponent::FileIO(JsonOperation* operation) noexcept
-{
-	operation->Push(m_name);
-	m_layout->FileIO(operation);	
-	//Process(operation);
-	//m_testClass
-	operation->Pop();
-}
-
-//unique_ptr<UIComponent> UIComponent::CreateComponent(JsonOperation* operation)
-//{
-//	operation->FindComponent();
-//}
-
 void to_json(nlohmann::ordered_json& j, const UIComponent& data)
 {
 	DataToJson("Name", data.m_name, j);
 	DataToJson("Layout", data.m_layout, j);
-	DataToJson("Properties", data.m_properties, j);
-
-	j["TestClass"] = json::array();
-	for (const auto& testClassPtr : data.m_testClass)
-	{
-		if (!testClassPtr) continue;
-		j["TestClass"].push_back(*testClassPtr);
-	}
+	DataToJson("Components", data.m_components, j);
 }
 
 void from_json(const nlohmann::json& j, UIComponent& data)
 {
 	DataFromJson("Name", data.m_name, j);
 	DataFromJson("Layout", data.m_layout, j);
-	DataFromJson("Properties", data.m_properties, j);
-
-	//data.m_testClass.clear();
-	//// JSON 배열을 순회하면서 unique_ptr<Property>로 변환
-	//for (const auto& item : j.at("TestClass")) 
-	//{
-	//	auto testClass = std::make_unique<TestClass>(item.get<TestClass>());
-	//	data.m_testClass.push_back(std::move(testClass));
-	//}
-}
-
-void to_json(nlohmann::ordered_json& j, const TestClass& tc)
-{
-	j = nlohmann::json{ {"a", tc.a}, {"b", tc.b} };
-}
-
-void from_json(const nlohmann::json& j, TestClass& tc)
-{
-	j.at("a").get_to(tc.a);
-	j.at("b").get_to(tc.b);
+	DataFromJson("Components", data.m_components, j);
 }

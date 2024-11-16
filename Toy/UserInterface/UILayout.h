@@ -1,6 +1,5 @@
 #pragma once
 
-class JsonOperation;
 enum class Origin;
 
 class UILayout
@@ -14,12 +13,7 @@ public:
 	UILayout(const UILayout& other) = default;
 	UILayout& operator=(const UILayout& other);
 	UILayout(UILayout&& other) noexcept = default;
-
-	bool IsEqual(const UILayout* other) const noexcept;
-
-	void ToJson(nlohmann::ordered_json& outJson) const noexcept;
-	void FromJson(const nlohmann::json& j) noexcept;
-	void FileIO(JsonOperation* operation) noexcept;
+	bool operator==(const UILayout& o) const noexcept;
 
 	void Set(const Rectangle& area, const Origin& origin) noexcept;
 	void Set(const Rectangle& area) noexcept;
