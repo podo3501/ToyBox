@@ -82,6 +82,7 @@
 #include <string>
 #include <system_error>
 #include <tuple>
+#include <typeindex>
 #include <unordered_map>
 #include <vector>
 #include <windowsx.h>

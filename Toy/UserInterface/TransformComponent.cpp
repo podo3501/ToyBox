@@ -2,24 +2,28 @@
 #include "TransformComponent.h"
 #include "JsonHelper.h"
 #include "UIComponent.h"
+#include "Dialog.h"
 
-TransformComponent::TransformComponent() :
-	m_component{ make_unique<UIComponent>() }
+TransformComponent::TransformComponent() 
 {}
 
 TransformComponent::TransformComponent(unique_ptr<UIComponent> comp, const Vector2& position) :
 	m_component{ move(comp) }, m_position{ position }
 {}
 
-TransformComponent::TransformComponent(const TransformComponent& other)
-{
-	m_component = std::make_unique<UIComponent>(*other.m_component);
-	m_position = other.m_position;
-}
+TransformComponent::TransformComponent(const TransformComponent& o) :
+	m_component{ o.m_component->Clone() },
+	m_position{ o.m_position }
+{}
+
+TransformComponent::TransformComponent(TransformComponent&& o) noexcept :
+	m_component{ move(o.m_component) },
+	m_position{ move(o.m_position) }
+{}
 
 TransformComponent& TransformComponent::operator=(const TransformComponent& other)
 {
-	m_component = std::make_unique<UIComponent>(*other.m_component);
+	m_component = other.m_component->Clone();
 	m_position = other.m_position;
 
 	return *this;
@@ -78,11 +82,11 @@ const string& TransformComponent::GetName() const
 void to_json(nlohmann::ordered_json& j, const TransformComponent& data)
 {
 	DataToJson("Position", data.m_position, j);
-	DataToJson("Component", data.m_component, j);
+	ComponentToJson("Type", data.m_component, j);
 }
 
 void from_json(const nlohmann::json& j, TransformComponent& data)
 {
 	DataFromJson("Position", data.m_position, j);
-	DataFromJson("Component", data.m_component, j);
+	ComponentFromJson("Type", data.m_component, j);
 }

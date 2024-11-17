@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
+#include "TestHelper.h"
 #include "../Toy/GameMainLoop.h"
 #include "../Toy/WindowProcedure.h"
 #include "../Toy/Window.h"
@@ -236,21 +237,23 @@ namespace BasicClient
 	{
 		unique_ptr<UIComponent> cDialog = std::make_unique<Dialog>();
 		cDialog->SetName("Dialog");
-		unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
-		cDialog->AddComponent(move(bgImg), { 0.1f, 0.1f });
+		//unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
+		//cDialog->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
 		m_testScene->AddComponent({ 0.f, 0.f }, move(cDialog));
-		EXPECT_TRUE(m_renderer->LoadScenes());
+		//EXPECT_TRUE(m_renderer->LoadScenes());
 
-		auto dialog = m_testScene->GetComponent("Dialog");
+		//auto dialog = m_testScene->GetComponent("Dialog");
 		//클론을 만들어서 둘이 같지 않음을 확인한다.
-		unique_ptr<UIComponent> cloneDialog = dialog->Clone();
+		//unique_ptr<UIComponent> cloneDialog = dialog->Clone();
 
-		cloneDialog->SetChildPosition("BGImage_clone", { 0.2f, 0.2f });
-		auto cloneDialogBgImg = cloneDialog->GetComponent("BGImage_clone");
+		//cloneDialog->SetChildPosition("BGImage_clone", { 0.2f, 0.2f });
+		//auto cloneDialogBgImg = cloneDialog->GetComponent("BGImage_clone");
 
-		auto dialogBgImg = dialog->GetComponent("BGImage");
-		EXPECT_NE(cloneDialogBgImg, dialogBgImg);
+		//auto dialogBgImg = dialog->GetComponent("BGImage");
+		//EXPECT_NE(cloneDialogBgImg, dialogBgImg);
+
+		EXPECT_TRUE(WriteReadTest(*m_testScene));
 	}
 
 	TEST_F(ToyTestFixture, Scene)

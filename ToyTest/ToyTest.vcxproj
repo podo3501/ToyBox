@@ -119,6 +119,7 @@
     <ClInclude Include="CoreTestFixture.h" />
     <ClInclude Include="IMockRenderer.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="TestHelper.h" />
     <ClInclude Include="TestMain.h" />
     <ClInclude Include="ToyTestFixture.h" />
     <ClInclude Include="Utility.h" />
@@ -127,6 +128,7 @@
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="PracticeTest.cpp" />
+    <ClCompile Include="TestHelper.cpp" />
     <ClCompile Include="WriteReadTest.cpp" />
     <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -160,6 +162,7 @@
     <None Include="TestResources\UI\Data\FirstScene.json" />
     <None Include="TestResources\UI\Data\JsonOperation.json" />
     <None Include="TestResources\UI\Data\Main.json" />
+    <None Include="TestResources\UI\Data\WriteReadTest.json" />
     <None Include="TestResources\UI\Data\WriteTextArea.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

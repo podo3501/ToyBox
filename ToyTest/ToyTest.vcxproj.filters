@@ -10,6 +10,7 @@
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="ToyTestFixture.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="TestHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />
@@ -18,6 +19,7 @@
     <ClInclude Include="TestMain.h" />
     <ClInclude Include="ToyTestFixture.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="TestHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestResources">
@@ -50,6 +52,9 @@
       <Filter>TestResources\UI\Data</Filter>
     </None>
     <None Include="TestResources\UI\Data\Main.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\WriteReadTest.json">
       <Filter>TestResources\UI\Data</Filter>
     </None>
   </ItemGroup>

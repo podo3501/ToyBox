@@ -40,6 +40,10 @@ void DataToJson(const vector<T>& data, nlohmann::ordered_json& outJson) noexcept
 		});
 }
 
+void ComponentToJson(const string& key, const unique_ptr<UIComponent>& component, nlohmann::ordered_json& outJson) noexcept;
+
+/////////////////////////////////////////////////////////////////////////////
+
 template<Primitive T>
 void DataFromJson(const string& key, T& outData, const nlohmann::json& j) noexcept
 {
@@ -57,4 +61,6 @@ void DataFromJson(const string& key, Origin& outOrigin, const nlohmann::json& j)
 void DataFromJson(const string& key, map<wstring, wstring>& outData, const nlohmann::json& j) noexcept;
 void DataFromJson(const string& key, wstring& outData, const nlohmann::json& j) noexcept;
 void DataFromJson(const string& key, Vector2& outData, const nlohmann::json& j) noexcept;
-void DataFromJson(const string& key, vector<unique_ptr<TransformComponent>>& outData, const nlohmann::json& j) noexcept;
+void DataFromJson(const string& key, vector<unique_ptr<TransformComponent>>& outData, const nlohmann::json& j);
+
+void ComponentFromJson(const string& key, unique_ptr<UIComponent>& component, const nlohmann::json& j);

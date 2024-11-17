@@ -9,8 +9,9 @@ class TransformComponent
 public:
 	TransformComponent();
 	TransformComponent(unique_ptr<UIComponent> comp, const Vector2& position);
+	TransformComponent(const TransformComponent& o);
+	TransformComponent(TransformComponent&& o) noexcept;
 	TransformComponent& operator=(const TransformComponent& other);
-	TransformComponent(const TransformComponent& other);
 	bool operator==(const TransformComponent& o) const noexcept;
 
 	bool LoadResources(ILoadData* load);

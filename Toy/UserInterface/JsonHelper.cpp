@@ -39,21 +39,23 @@ json ReadJson(const wstring& filename) noexcept
 	return json::parse(file);
 }
 
-json DataToJson(const wstring& data) noexcept
+/////////////////////////////////////////////////////////////////////////////////
+
+string RemoveNullWToS(const wstring& data) noexcept
 {
 	return RemoveNullTerminator(WStringToString(data));
 }
 
 void DataToJson(const string& key, const wstring& data, ordered_json& outJson) noexcept
 {
-	outJson[key] = DataToJson(data);
+	outJson[key] = RemoveNullWToS(data);
 }
 
 void DataToJson(const string& key, const map<wstring, size_t>& data, ordered_json& outJson) noexcept
 {
 	json j{};
 	for (const auto& font : data)
-		j[DataToJson(font.first)] = font.second;
+		j[RemoveNullWToS(font.first)] = font.second;
 
 	outJson[key] = j;
 }
@@ -62,7 +64,7 @@ void DataToJson(const string& key, const map<wstring, wstring>& data, ordered_js
 {
 	json j{};
 	for (const auto& font : data)
-		j[DataToJson(font.first)] = DataToJson(font.second);
+		j[RemoveNullWToS(font.first)] = RemoveNullWToS(font.second);
 
 	outJson[key] = j;
 }
@@ -104,6 +106,23 @@ void DataToJson(const string& key, const vector<unique_ptr<TransformComponent>>&
 		outJson[key].push_back(*prop);
 }
 
+void UpdateJson(const unique_ptr<UIComponent>& component, const string& type, ordered_json& outJson) noexcept
+{
+	nlohmann::ordered_json json{};
+	if (type == "class UIComponent") json = *component;
+	if (type == "class Dialog") json = static_cast<Dialog&>(*component);
+
+	//static_cast를 해서 json으로 할당하면 json내의 타입값이 바뀌면서 새로운 타입이 되어 이전 정보 (여기서는 position)값이 사라진다. 그래서 update를 해서 병합하는 것.
+	outJson.update(json);
+}
+
+void ComponentToJson(const string& key, const unique_ptr<UIComponent>& component, ordered_json& outJson) noexcept
+{
+	const string& type = component->GetType();
+	DataToJson(key, type, outJson);
+	UpdateJson(component, type, outJson);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 
 void DataFromJson(const string& key, Rectangle& outRect, const json& j) noexcept
@@ -139,7 +158,7 @@ void DataFromJson(const string& key, Vector2& outData, const json& j) noexcept
 	outData.y = keyJ["y"];
 }
 
-void DataFromJson(const string& key, vector<unique_ptr<TransformComponent>>& outData, const json& j) noexcept
+void DataFromJson(const string& key, vector<unique_ptr<TransformComponent>>& outData, const json& j)
 {
 	if (j.contains(key) == false)
 		return;
@@ -147,7 +166,32 @@ void DataFromJson(const string& key, vector<unique_ptr<TransformComponent>>& out
 	outData.clear();
 	for (const auto& propJson : j[key])
 	{
+		//이동생성자 호출(이동생성자가 없을경우 복사생성자 호출). get<T>() 사용으로 from_json 호출
 		auto prop = std::make_unique<TransformComponent>(propJson.get<TransformComponent>());
+		//이동연산자 호출(이동생성자 호출하지 않음)
 		outData.emplace_back(move(prop));
 	}
+}
+
+template <typename T>
+unique_ptr<T> CreateComponent(const json& j) 
+{
+	auto comp = std::make_unique<T>();
+	*comp = j.get<T>();  // JSON을 T 타입으로 변환하여 *comp에 할당
+	return comp;
+}
+
+unique_ptr<UIComponent> CreateComponentFromType(const string& typeName, const json& j) 
+{
+	if (typeName == "class UIComponent") return CreateComponent<UIComponent>(j);
+	if (typeName == "class Dialog") return CreateComponent<Dialog>(j);
+
+	return nullptr;
+}
+
+void ComponentFromJson(const string& key, unique_ptr<UIComponent>& component, const json& j)
+{
+	string curType{};
+	DataFromJson(key, curType, j);
+	component = move(CreateComponentFromType(curType, j));
 }

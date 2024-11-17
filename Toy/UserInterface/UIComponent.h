@@ -13,8 +13,10 @@ public:
 	UIComponent();
 	virtual ~UIComponent();
 	UIComponent(const UIComponent& other);
+	UIComponent(UIComponent&& o) noexcept;
 	UIComponent& operator=(const UIComponent& other);
-	bool operator==(const UIComponent& other) const noexcept;
+	virtual bool operator==(const UIComponent& other) const noexcept;
+	virtual string GetType() const;
 
 	virtual unique_ptr<UIComponent> Clone();
 	virtual void Render(IRender* render);

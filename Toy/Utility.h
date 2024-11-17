@@ -17,7 +17,7 @@
 #ifndef ReturnIfFalse
 #define ReturnIfFalse(x)                       \
 {                                                             \
-    if(!x) return false;                          \
+    if(!(x)) return false;                          \
 }
 #endif
 

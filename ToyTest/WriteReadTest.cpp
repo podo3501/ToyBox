@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ToyTestFixture.h"
+#include "TestHelper.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/UILayout.h"
@@ -39,13 +40,6 @@ namespace WriteReadJson
 		dialog->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
 		m_testScene->AddComponent({ 1.f, 2.f }, move(dialog));
-		nlohmann::ordered_json j = *m_testScene;
-		WriteJson(j, L"UI/Data/Main.json");
-
-		json readJson = ReadJson(L"UI/Data/Main.json");
-		Scene readScene;
-		readScene = readJson.get<Scene>();
-
-		EXPECT_TRUE(*m_testScene == readScene);
+		EXPECT_TRUE(WriteReadTest(*m_testScene));
 	}
 }

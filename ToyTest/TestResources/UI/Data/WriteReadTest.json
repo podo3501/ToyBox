@@ -1,0 +1,34 @@
+{
+    "Main": {
+        "Name": "Main",
+        "Layout": {
+            "Area": {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+            },
+            "Origin": "Center"
+        },
+        "Components": [
+            {
+                "Position": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "Type": "class Dialog",
+                "Name": "Dialog",
+                "Layout": {
+                    "Area": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 0,
+                        "height": 0
+                    },
+                    "Origin": "Center"
+                },
+                "Test": 3
+            }
+        ]
+    }
+}

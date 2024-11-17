@@ -28,6 +28,8 @@ UIComponent& UIComponent::operator=(const UIComponent& other)
 	return *this;
 }
 
+string UIComponent::GetType() const { return string(typeid(UIComponent).name()); }
+
 unique_ptr<UIComponent> UIComponent::Clone() 
 {
 	return make_unique<UIComponent>(*this);
@@ -47,6 +49,7 @@ bool operator==(const unique_ptr<TransformComponent>& lhs, const unique_ptr<Tran
 
 bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
+	if (GetType() != o.GetType()) return false;
 	return tie(m_name, *m_layout, m_components) == tie(o.m_name, *o.m_layout, o.m_components);
 }
 
@@ -58,6 +61,12 @@ UIComponent::UIComponent(const UIComponent& other)
 		return make_unique<TransformComponent>(*prop.get());
 		});
 }
+
+UIComponent::UIComponent(UIComponent&& o) noexcept :
+	m_name{ move(o.m_name) },
+	m_layout{ move(o.m_layout) },
+	m_components{ move(o.m_components) }
+{}
 
 bool UIComponent::LoadResources(ILoadData* load)
 {
