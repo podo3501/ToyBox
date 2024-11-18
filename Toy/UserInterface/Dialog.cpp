@@ -2,6 +2,7 @@
 #include "Dialog.h"
 #include "../Utility.h"
 #include "JsonHelper.h"
+#include "JsonOperation.h"
 
 Dialog::Dialog()
 {};
@@ -35,4 +36,10 @@ void from_json(const nlohmann::json& j, Dialog& data)
 {
 	from_json(j, static_cast<UIComponent&>(data));
 	DataFromJson("Test", data.m_test, j);
+}
+
+void Dialog::SerializeIO(JsonOperation* operation)
+{
+	UIComponent::SerializeIO(operation);
+	operation->Process("Test", m_test);
 }

@@ -5,6 +5,7 @@ struct IGetValue;
 struct IRender;
 class UILayout;
 class TestClass;
+class JsonOperation;
 class TransformComponent;
 
 class UIComponent
@@ -41,6 +42,8 @@ public:
 
 	friend void to_json(nlohmann::ordered_json& j, const UIComponent& data);
 	friend void from_json(const nlohmann::json& j, UIComponent& data);
+
+	virtual void SerializeIO(JsonOperation* operation);
 	
 private:
 	TransformComponent* FindTransformComponent(const string& name) const noexcept;

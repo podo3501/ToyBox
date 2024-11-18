@@ -5,6 +5,7 @@
 #include "JsonHelper.h"
 #include "../Utility.h"
 #include "TransformComponent.h"
+#include "JsonOperation.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -194,4 +195,11 @@ void from_json(const nlohmann::json& j, UIComponent& data)
 	DataFromJson("Name", data.m_name, j);
 	DataFromJson("Layout", data.m_layout, j);
 	DataFromJson("Components", data.m_components, j);
+}
+
+void UIComponent::SerializeIO(JsonOperation* operation)
+{
+	operation->Process("Name", m_name);
+	operation->Process("Layout", m_layout);
+	operation->Process("Components", m_components);
 }

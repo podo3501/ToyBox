@@ -13,8 +13,8 @@
         "Components": [
             {
                 "Position": {
-                    "x": 0.0,
-                    "y": 0.0
+                    "x": 1.0,
+                    "y": 2.0
                 },
                 "Type": "class Dialog",
                 "Name": "Dialog",
@@ -27,6 +27,25 @@
                     },
                     "Origin": "Center"
                 },
+                "Components": [
+                    {
+                        "Position": {
+                            "x": 0.1,
+                            "y": 0.1
+                        },
+                        "Type": "class UIComponent",
+                        "Name": "BGImage",
+                        "Layout": {
+                            "Area": {
+                                "x": 0,
+                                "y": 0,
+                                "width": 220,
+                                "height": 190
+                            },
+                            "Origin": "LeftTop"
+                        }
+                    }
+                ],
                 "Test": 3
             }
         ]

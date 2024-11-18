@@ -2,6 +2,7 @@
 #include "../Include/IRenderScene.h"
 
 struct IRenderer;
+class JsonOperation;
 
 class Scene : public IRenderScene
 {
@@ -25,6 +26,8 @@ public:
 	
 	friend void to_json(nlohmann::ordered_json& j, const Scene& data);
 	friend void from_json(const nlohmann::json& j, Scene& data);
+
+	void SerializeIO(JsonOperation* operation);
 
 private:
 	unique_ptr<UIComponent> m_mainComponent;

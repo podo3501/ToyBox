@@ -3,6 +3,7 @@
 struct ILoadData;
 struct IRender;
 class UIComponent;
+class JsonOperation;
 
 class TransformComponent
 {
@@ -26,6 +27,8 @@ public:
 
 	friend void to_json(nlohmann::ordered_json& j, const TransformComponent& data);
 	friend void from_json(const nlohmann::json& j, TransformComponent& data);
+
+	void SerializeIO(JsonOperation* operation);
 
 private:
 	unique_ptr<UIComponent> m_component;

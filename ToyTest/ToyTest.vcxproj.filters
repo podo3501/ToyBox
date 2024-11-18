@@ -57,5 +57,11 @@
     <None Include="TestResources\UI\Data\WriteReadTest.json">
       <Filter>TestResources\UI\Data</Filter>
     </None>
+    <None Include="TestResources\UI\Data\JOPTest.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\JOPTest2.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
   </ItemGroup>
 </Project>

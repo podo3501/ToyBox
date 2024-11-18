@@ -1,6 +1,7 @@
 #pragma once
 
 enum class Origin;
+class JsonOperation;
 
 class UILayout
 {
@@ -28,6 +29,8 @@ public:
 
 	friend void to_json(nlohmann::ordered_json& j, const UILayout& data);
 	friend void from_json(const nlohmann::json& j, UILayout& data);
+
+	void SerializeIO(JsonOperation* operation);
 
 private:
 	Vector2 GetOriginPoint(Origin origin) const noexcept;

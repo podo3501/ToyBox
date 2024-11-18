@@ -1,6 +1,8 @@
 #pragma once
 #include "UIComponent.h"
 
+class JsonOperation;
+
 class Dialog : public UIComponent
 {
 public:
@@ -14,6 +16,8 @@ public:
 
 	friend void to_json(nlohmann::ordered_json& j, const Dialog& data);
 	friend void from_json(const nlohmann::json& j, Dialog& data);
+	
+	virtual void SerializeIO(JsonOperation* operation) override;
 	
 private:
 	int m_test{ 3 };

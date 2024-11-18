@@ -4,6 +4,7 @@
 #include "../Include/IRenderer.h"
 #include "UIComponent.h"
 #include "JsonHelper.h"
+#include "JsonOperation.h"
 
 using json = nlohmann::json;
 
@@ -82,4 +83,9 @@ void to_json(nlohmann::ordered_json& j, const Scene& data)
 void from_json(const nlohmann::json& j, Scene& data)
 {
 	DataFromJson("Main", data.m_mainComponent, j);
+}
+
+void Scene::SerializeIO(JsonOperation* operation)
+{
+	operation->Process("Main", m_mainComponent);
 }

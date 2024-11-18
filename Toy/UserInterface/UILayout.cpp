@@ -3,6 +3,7 @@
 #include "UIType.h"
 #include "../Config.h"
 #include "JsonHelper.h"
+#include "JsonOperation.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -95,4 +96,10 @@ void from_json(const nlohmann::json& j, UILayout& data)
 {
 	DataFromJson("Area", data.m_area, j);
 	DataFromJson("Origin", data.m_origin, j);
+}
+
+void UILayout::SerializeIO(JsonOperation* operation)
+{
+	operation->Process("Area", m_area);
+	operation->Process("Origin", m_origin);
 }
