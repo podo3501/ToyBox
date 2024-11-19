@@ -6,6 +6,7 @@
 #include "UILayout.h"
 #include "ImagePartSet.h"
 #include "JsonHelper.h"
+#include "JsonOperation.h"
 
 using json = nlohmann::json;
 
@@ -23,6 +24,14 @@ unique_ptr<UIComponent> BGImage::Clone()
 	auto clone = make_unique<BGImage>(*this);
 	clone->SetName(clone->GetName() + "_clone");
 	return clone;
+}
+
+bool BGImage::operator==(const UIComponent& o) const noexcept
+{
+	ReturnIfFalse(UIComponent::operator==(o));
+	const BGImage* bgImage = static_cast<const BGImage*>(&o);
+
+	return tie(*m_imagePartSet) == tie(*bgImage->m_imagePartSet);
 }
 
 //bool BGImage::ReadProperty(const nlohmann::json& data)
@@ -75,4 +84,20 @@ bool BGImage::Update(const Vector2& position, const Mouse::ButtonStateTracker*) 
 void BGImage::Render(IRender* renderer)
 {
 	m_imagePartSet->Render(renderer);
+}
+
+void to_json(nlohmann::ordered_json& j, const BGImage& data)
+{
+	to_json(j, static_cast<const UIComponent&>(data));
+}
+
+void from_json(const nlohmann::json& j, BGImage& data)
+{
+	from_json(j, static_cast<UIComponent&>(data));
+}
+
+void BGImage::SerializeIO(JsonOperation* operation)
+{
+	operation->Process("ImagePartSet", m_imagePartSet);
+	UIComponent::SerializeIO(operation);
 }

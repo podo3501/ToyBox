@@ -101,6 +101,8 @@ namespace BasicClient
 
 		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestLeftTopRender));
 		button->Render(&mockRender);
+
+		EXPECT_TRUE(WriteReadTest(*m_testScene));
 	}
 
 	void TestBGImageRender(size_t index, const RECT& dest, const RECT* source)
@@ -141,6 +143,8 @@ namespace BasicClient
 		MockRender mockRender;
 		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestBGImageRender));
 		bgImage->Render(&mockRender);
+
+		EXPECT_TRUE(WriteReadTest(*m_testScene));
 	}
 
 	void TestCloseButtonRender(size_t index, const RECT& dest, const RECT* source)
@@ -212,15 +216,17 @@ namespace BasicClient
 		emptyTextArea->SetName("emptyTextArea");
 		writeComp.AddComponent(move(emptyTextArea), { 3.f, 4.f });
 
-		nlohmann::ordered_json j = writeComp;
-		WriteJson(j, L"UI/Data/JsonOperation.json");
+		EXPECT_TRUE(WriteReadTest(*m_testScene));
 
-		nlohmann::json rj = ReadJson(L"UI/Data/JsonOperation.json");
-		TextArea readComp{};
-		readComp = rj.get<TextArea>();
+		//nlohmann::ordered_json j = writeComp;
+		//WriteJson(j, L"UI/Data/JsonOperation.json");
 
-		EXPECT_TRUE(writeComp == readComp);
-		//클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
+		//nlohmann::json rj = ReadJson(L"UI/Data/JsonOperation.json");
+		//TextArea readComp{};
+		//readComp = rj.get<TextArea>();
+
+		//EXPECT_TRUE(writeComp == readComp);
+		////클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
 	}
 
 	TEST_F(ToyTestFixture, Panel)

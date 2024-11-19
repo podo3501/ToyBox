@@ -1,11 +1,8 @@
 #include "pch.h"
 #include "JsonOperation.h"
-#include "UIComponent.h"
 #include "../Config.h"
+#include "../Utility.h"
 #include "UIType.h"
-#include "TransformComponent.h"
-#include "UIComponent.h"
-#include "Dialog.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -28,12 +25,12 @@ bool JsonOperation::IsWrite()
 
 ordered_json& JsonOperation::GetWrite()
 {
-    return m_write->getCurrent();
+    return m_write->GetCurrent();
 }
 
 json& JsonOperation::GetRead()
 {
-    return m_read->getCurrent();
+    return m_read->GetCurrent();
 }
 
 bool JsonOperation::Write(const wstring& filename)
@@ -42,7 +39,7 @@ bool JsonOperation::Write(const wstring& filename)
     if (!file.is_open())
         return false;
 
-    auto& json = m_write->getRoot();
+    auto& json = m_write->GetRoot();
     file << json.dump(4);
     file.close();
 
@@ -61,42 +58,46 @@ bool JsonOperation::Read(const wstring& filename)
     return true;
 }
 
+void JsonOperation::ProcessImpl(const string& key, auto writeFunc, auto readFunc)
+{
+    if (IsWrite())
+    {
+        m_write->GotoKey(key);
+        writeFunc(m_write->GetCurrent());
+        m_write->GoBack();
+    }
+    else
+    {
+        m_read->GotoKey(key);
+        readFunc(m_read->GetCurrent());
+        m_read->GoBack();
+    }
+}
+
 void JsonOperation::Process(const string& key, Rectangle& data) noexcept
 {
-	if (IsWrite())
-	{
-        m_write->goToKey(key);
-        auto& j = m_write->getCurrent();
-		j["x"] = data.x;
-		j["y"] = data.y;
-		j["width"] = data.width;
-		j["height"] = data.height;
-        m_write->goBack();
-	}
-	else
-	{
-        m_read->goToKey(key);
-        const auto& j = m_read->getCurrent();
-		data.x = j["x"];
-		data.y = j["y"];
-		data.width = j["width"];
-		data.height = j["height"];
-        m_read->goBack();
-	}
+    auto writeFunc = [&data](auto& j) {
+        j["x"] = data.x;
+        j["y"] = data.y;
+        j["width"] = data.width;
+        j["height"] = data.height;
+        };
+
+    auto readFunc = [&data](const auto& j) {
+        data.x = j["x"];
+        data.y = j["y"];
+        data.width = j["width"];
+        data.height = j["height"];
+        };
+
+    ProcessImpl(key, writeFunc, readFunc);
 }
 
 void JsonOperation::Process(const string& key, Origin& data) noexcept
 {
-    if (IsWrite())
-    {
-        auto& j = m_write->getCurrent();
-        j[key] = EnumToString(data);
-    }
-    else
-    {
-        const auto& j = m_read->getCurrent();
-        data = StringToEnum<Origin>(j[key]);
-    }
+    auto writeFunc = [&data](auto& j) { j = EnumToString(data); };
+    auto readFunc = [&data](const auto& j) { data = StringToEnum<Origin>(j); };
+    ProcessImpl(key, writeFunc, readFunc);
 }
 
 double RoundToSixA(double value)
@@ -106,103 +107,42 @@ double RoundToSixA(double value)
 
 void JsonOperation::Process(const string & key, Vector2& data) noexcept
 {
-    if (IsWrite())
-    {
-        ordered_json json{};
+    auto writeFunc = [&data](auto& j) {
+        j["x"] = RoundToSixA(data.x);
+        j["y"] = RoundToSixA(data.y);
+        };
 
-        json["x"] = RoundToSixA(data.x);
-        json["y"] = RoundToSixA(data.y);
+    auto readFunc = [&data](const auto& j) {
+        data.x = j["x"];
+        data.y = j["y"];
+        };
 
-        auto& j = m_write->getCurrent();
-        j[key] = json;
-    }
-    else
-    {
-        const auto& j = m_read->getCurrent();
-        const auto& keyJ = j[key];
-        data.x = keyJ["x"];
-        data.y = keyJ["y"];
-    }
+    ProcessImpl(key, writeFunc, readFunc);
 }
 
-void JsonOperation::Process(const string& key, vector<unique_ptr<TransformComponent>>& data)
+string RemoveNullWToSA(const wstring& data) noexcept
 {
-    if (IsWrite())
-    {
-        if (data.empty())
-            return;
-
-        m_write->goToKey(key, true);
-        for (auto& comp : data)
-        {
-            JsonOperation jsOp{};
-            comp->SerializeIO(&jsOp);
-            m_write->getCurrent().push_back(jsOp.GetWrite());
-        }
-        m_write->goBack();
-    }
-    else
-    {
-        const auto& j = m_read->getCurrent();
-        if (j.contains(key) == false)
-            return;
-
-        data.clear();
-        m_read->goToKey(key);
-        for (auto& compJson : m_read->getCurrent())
-        {
-            m_read->setCurrent(&compJson);
-            auto comp = std::make_unique<TransformComponent>();
-            comp->SerializeIO(this);
-            data.emplace_back(move(comp));
-        }
-        m_read->goBack();
-    }
+    return RemoveNullTerminator(WStringToString(data));
 }
 
-void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& component, const string& type) noexcept
+void JsonOperation::Process(const string& key, wstring& data) noexcept
 {
-    //nlohmann::ordered_json json{};
-    JsonOperation jsOp{};
-    if (type == "class UIComponent") component->SerializeIO(&jsOp);
-    if (type == "class Dialog") static_cast<Dialog*>(component.get())->SerializeIO(&jsOp);
-
-    //static_cast를 해서 json으로 할당하면 json내의 타입값이 바뀌면서 새로운 타입이 되어 이전 정보 (여기서는 position)값이 사라진다. 그래서 update를 해서 병합하는 것.
-    m_write->getCurrent().update(jsOp.GetWrite());
+    auto writeFunc = [&data](auto& j) { j = RemoveNullWToSA(data); };
+    auto readFunc = [&data](const auto& j) { data = StringToWString(j); };
+    ProcessImpl(key, writeFunc, readFunc);
 }
 
-
-template <typename T>
-unique_ptr<T> CreateComponent(const json& j)
+void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noexcept
 {
-    auto comp = std::make_unique<T>();
-    *comp = j.get<T>();  // JSON을 T 타입으로 변환하여 *comp에 할당
-    return comp;
-}
+    auto writeFunc = [&data](auto& j) {
+        for (const auto& font : data)
+            j[RemoveNullWToSA(font.first)] = RemoveNullWToSA(font.second);
+        };
 
-unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string & typeName)
-{
-    unique_ptr<UIComponent> comp{ nullptr };
-    if (typeName == "class UIComponent") comp = std::make_unique<UIComponent>();
-    if (typeName == "class Dialog") comp = make_unique<Dialog>();
-    if (comp == nullptr) return nullptr;
+    auto readFunc = [&data](const auto& j) {
+        for (const auto& [k, v] : j.items())
+            data.insert(make_pair(StringToWString(k), StringToWString(v)));
+        };
 
-    comp->SerializeIO(this);
-    return move(comp);
-}
-
-void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& component)
-{
-    if (IsWrite())
-    {
-        const string& type = component->GetType();
-        Process(key, const_cast<string&>(type));
-        UpdateJson(component, type);
-    }
-    else
-    {
-        string curType{};
-        Process(key, curType);
-        component = move(CreateComponentFromType(curType));
-    }
+    ProcessImpl(key, writeFunc, readFunc);
 }

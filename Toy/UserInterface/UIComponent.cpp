@@ -29,7 +29,7 @@ UIComponent& UIComponent::operator=(const UIComponent& other)
 	return *this;
 }
 
-string UIComponent::GetType() const { return string(typeid(UIComponent).name()); }
+string UIComponent::GetType() const { return string(typeid(*this).name()); }
 
 unique_ptr<UIComponent> UIComponent::Clone() 
 {

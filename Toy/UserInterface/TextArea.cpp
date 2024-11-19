@@ -6,6 +6,7 @@
 #include "UIUtility.h"
 #include "../Config.h"
 #include "JsonHelper.h"
+#include "JsonOperation.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -156,4 +157,11 @@ void from_json(const nlohmann::json& j, TextArea& data)
 	DataFromJson("FontFileList", data.m_fontFileList, j);
 	DataFromJson("Text", data.m_text, j);
 	from_json(j, static_cast<UIComponent&>(data));
+}
+
+void TextArea::SerializeIO(JsonOperation* operation)
+{
+	operation->Process("FontFileList", m_fontFileList);
+	operation->Process("Text", m_text);
+	UIComponent::SerializeIO(operation);
 }

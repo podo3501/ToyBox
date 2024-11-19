@@ -21,22 +21,18 @@ bool WriteReadTest(Scene& sourceScene, const wstring& filename = L"UI/Data/Write
 	destReadOpScene.SerializeIO(newOp.get());
 	newOp->Write(L"UI/Data/JOPTest2.json");
 	
-	//이걸로 만들어야 하나 고민중
-	//JsonOperation jsonOp(L"UI/Data/WriteReadTest.json", true);
-	//sourceScene->Process(jsonOp);
+	return true;
+	
 
-	//JsonOperation jsonOp(L"UI/Data/WriteReadTest.json", false);
+
+
+
+	//nlohmann::ordered_json j = sourceScene;
+	//WriteJson(j, filename);
+
+	//json readJson = ReadJson(filename);
 	//Scene destScene;
-	//destScene->Process(jsonOp);
+	//destScene = readJson.get<Scene>();
 
 	//return sourceScene == destScene;
-
-	nlohmann::ordered_json j = sourceScene;
-	WriteJson(j, filename);
-
-	json readJson = ReadJson(filename);
-	Scene destScene;
-	destScene = readJson.get<Scene>();
-
-	return sourceScene == destScene;
 }

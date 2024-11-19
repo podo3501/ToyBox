@@ -6,7 +6,7 @@ class JsonOperation;
 class UILayout
 {
 public:
-	UILayout() = delete;
+	UILayout();
 	~UILayout();
 
 	UILayout(const nlohmann::json& data);
@@ -15,6 +15,8 @@ public:
 	UILayout& operator=(const UILayout& other);
 	UILayout(UILayout&& other) noexcept = default;
 	bool operator==(const UILayout& o) const noexcept;
+
+	string GetType() const;
 
 	void Set(const Rectangle& area, const Origin& origin) noexcept;
 	void Set(const Rectangle& area) noexcept;

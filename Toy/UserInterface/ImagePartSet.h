@@ -2,6 +2,7 @@
 
 class UILayout;
 class ImagePart;
+class JsonOperation;
 struct ImageSource;
 struct ILoadData;
 struct IRender;
@@ -14,6 +15,8 @@ public:
 	ImagePartSet(const ImagePartSet& other);
 	ImagePartSet(const vector<ImageSource>& imgSources);
 	ImagePartSet(const ImageSource& source);
+	bool operator==(const ImagePartSet& o) const noexcept;
+	string GetType() const;
 
 	//bool SetResources(const wstring& filename);
 	bool LoadResources(ILoadData* load);
@@ -25,6 +28,7 @@ public:
 	bool SetDestination(const Rectangle& area) noexcept;
 	bool IsHover(int mouseX, int mouseY) noexcept;
 	
+	void SerializeIO(JsonOperation* operation);
 
 private:
 	void CreateImagePart(const ImageSource& imgSource);

@@ -41,12 +41,12 @@ public:
 	void ChangeOrigin(Origin&& origin) noexcept;
 	bool ChangeArea(const Rectangle& area) noexcept;
 
+	void SerializeIO(JsonOperation* operation);
+
 private:
 	bool SetDestination(const Rectangle& area) noexcept;
 	void InsertImage(State btnState, unique_ptr<ImagePartSet>&& imgPartSet);
 
-	string m_name;
-	unique_ptr<UILayout> m_layout;
 	State m_state{ State::Normal };
 	map<State, unique_ptr<ImagePartSet>> m_image;
 };

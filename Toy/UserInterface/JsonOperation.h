@@ -12,23 +12,21 @@ public:
 		: root(std::move(root)), current(this->root.get()) {}
 
 	// 특정 키로 내려가기 (키가 없으면 생성)
-	bool goToKey(const std::string& key, bool array = false) 
+	bool GotoKey(const std::string& key, bool createArray = false)
 	{
-		if (!current->contains(key)) 
-		{
-			if (array)
-				(*current)[key] = T::array();
-			else
-				(*current)[key] = T();  // 키가 없으면 빈 객체로 초기화
+		if (!current || key.empty()) return false;
+
+		if (!current->contains(key)) {
+			(*current)[key] = createArray ? T::array() : T();
 		}
 
-		parentStack.push(current);           // 부모 객체를 스택에 저장
-		current = &(*current)[key];          // 현재 객체를 하위 객체로 변경
+		parentStack.push(current);
+		current = &(*current)[key];
 		return true;
 	}
 
 	// 부모 객체로 올라가기
-	bool goBack() {
+	bool GoBack() {
 		if (!parentStack.empty()) {
 			current = parentStack.top();     // 부모 객체로 돌아가기
 			parentStack.pop();               // 스택에서 부모 객체 제거
@@ -38,20 +36,15 @@ public:
 	}
 
 	// 현재 객체 값 가져오기
-	T& getCurrent() {
+	T& GetCurrent() {
 		return *current;
 	}
 
 	//json을 읽을때 특정 json으로 읽어야 할 때가 있다. 그때 살짝 자리바꿈 한 다음에 goBack으로 돌려놓는다.
-	void setCurrent(T* _current)
+	void SetCurrent(T* _current)
 	{
 		current = _current;
 	}
-
-	//T& GetKeyJson(const std::string& key)
-	//{
-	//	return (*current)[key];
-	//}
 
 	bool IsEmpty()
 	{
@@ -71,7 +64,7 @@ public:
 	//}
 
 	// 루트 JSON 반환 (상태 확인용)
-	const T& getRoot() const {
+	const T& GetRoot() const {
 		return *root;
 	}
 
@@ -83,7 +76,10 @@ private:
 
 
 template<typename T>
-concept JsonPrimitive = is_arithmetic<T>::value || is_same_v<T, string>;
+concept JsonPrimitive = is_arithmetic<T>::value || is_same_v<T, string> || is_same_v<T, size_t>;
+
+template<typename T>
+concept IsNotUIComponent = !std::is_same_v<T, UIComponent>;
 
 class JsonOperation
 {
@@ -97,50 +93,100 @@ public:
 	bool Read(const wstring& filename);
 
 	template<JsonPrimitive T>
-	void Process(const string& key, T& data) noexcept
-	{
-		if (IsWrite())
-		{
-			auto& j = GetWrite();
-			j[key] = data;
-		}
-		else
-		{
-			auto& j = GetRead();
-			data = j[key];
-		}
-	}
-
+	void Process(const string& key, T& data) noexcept;
+	template<IsNotUIComponent T>
+	void Process(const string& key, unique_ptr<T>& data);
 	template<typename T>
-	void Process(const string& key, unique_ptr<T>& data) noexcept
-	{
-		if (IsWrite())
-		{
-			m_write->goToKey(key);
-			data->SerializeIO(this);
-			m_write->goBack();
-		}
-		else
-		{
-			m_read->goToKey(key);
-			data->SerializeIO(this);
-			m_read->goBack();
-		}
-	}
+	void Process(const string& key, vector<unique_ptr<T>>& data);
 
 	void Process(const string& key, Rectangle& data) noexcept;
 	void Process(const string& key, Origin& data) noexcept;
-	void Process(const string& key, Vector2& outData) noexcept;
-	void Process(const string& key, vector<unique_ptr<TransformComponent>>& data);
+	void Process(const string& key, Vector2& data) noexcept;
 	void Process(const string& key, unique_ptr<UIComponent>& data);
+	void Process(const string& key, wstring& data) noexcept;
+	void Process(const string& key, map<wstring, wstring>& data) noexcept;
 
 private:
 	nlohmann::ordered_json& GetWrite();
 	nlohmann::json& GetRead();
-	void UpdateJson(const unique_ptr<UIComponent>& component, const string& type) noexcept;
+
+	void UpdateJson(const unique_ptr<UIComponent>& data) noexcept;
 	unique_ptr<UIComponent> CreateComponentFromType(const string& typeName);
+	void ProcessImpl(const string& key, auto readFunc, auto writeFunc);
 
 	unique_ptr<JsonNavigator<nlohmann::ordered_json>> m_write;
 	unique_ptr<JsonNavigator<nlohmann::json>> m_read;
 };
+
+//////////////////////////////////////////////////////////////////////////
+
+template<JsonPrimitive T>
+void JsonOperation::Process(const string& key, T& data) noexcept
+{
+	if (IsWrite())
+	{
+		auto& j = GetWrite();
+		j[key] = data;
+	}
+	else
+	{
+		auto& j = GetRead();
+		data = j[key];
+	}
+}
+
+template<IsNotUIComponent T>
+void JsonOperation::Process(const string& key, unique_ptr<T>& data)
+{
+	if (IsWrite())
+	{
+		m_write->GotoKey(key);
+		data->SerializeIO(this);
+		m_write->GoBack();
+	}
+	else
+	{
+		m_read->GotoKey(key);
+		auto newClass = std::make_unique<T>();
+		newClass->SerializeIO(this);
+		data = move(newClass);
+		m_read->GoBack();
+	}
+}
+
+template<typename T>
+void JsonOperation::Process(const string& key, vector<unique_ptr<T>>& data)
+{
+	if (IsWrite())
+	{
+		if (data.empty())
+			return;
+
+		m_write->GotoKey(key, true);
+		for (auto& comp : data)
+		{
+			JsonOperation jsOp{};
+			comp->SerializeIO(&jsOp);
+			m_write->GetCurrent().push_back(jsOp.GetWrite());
+		}
+		m_write->GoBack();
+	}
+	else
+	{
+		const auto& j = m_read->GetCurrent();
+		if (j.contains(key) == false)
+			return;
+
+		data.clear();
+		m_read->GotoKey(key);
+		for (auto& compJson : m_read->GetCurrent())
+		{
+			m_read->SetCurrent(&compJson);
+			auto comp = std::make_unique<T>();
+			comp->SerializeIO(this);
+			data.emplace_back(move(comp));
+		}
+		m_read->GoBack();
+	}
+}
 

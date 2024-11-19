@@ -87,5 +87,5 @@ void from_json(const nlohmann::json& j, Scene& data)
 
 void Scene::SerializeIO(JsonOperation* operation)
 {
-	operation->Process("Main", m_mainComponent);
+	operation->Process("Component", m_mainComponent);
 }

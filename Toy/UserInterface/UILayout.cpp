@@ -8,6 +8,7 @@
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
 
+UILayout::UILayout() = default;
 UILayout::~UILayout() = default;
 Origin GetOrigin(const string& strOrigin)
 {
@@ -18,6 +19,8 @@ Origin GetOrigin(const string& strOrigin)
 }
 
 UILayout& UILayout::operator=(const UILayout& other) = default;
+
+string UILayout::GetType() const { return string(typeid(UILayout).name()); }
 
 UILayout::UILayout(const json& data)
 {

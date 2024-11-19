@@ -19,8 +19,6 @@ bool Dialog::operator==(const UIComponent& other) const noexcept
 	return true;
 }
 
-string Dialog::GetType() const { return string(typeid(Dialog).name()); }
-
 unique_ptr<UIComponent> Dialog::Clone()
 { 
 	return make_unique<Dialog>(*this);
@@ -29,17 +27,14 @@ unique_ptr<UIComponent> Dialog::Clone()
 void to_json(nlohmann::ordered_json& j, const Dialog& data)
 {
 	to_json(j, static_cast<const UIComponent&>(data));
-	DataToJson("Test", data.m_test, j);
 }
 
 void from_json(const nlohmann::json& j, Dialog& data)
 {
 	from_json(j, static_cast<UIComponent&>(data));
-	DataFromJson("Test", data.m_test, j);
 }
 
 void Dialog::SerializeIO(JsonOperation* operation)
 {
 	UIComponent::SerializeIO(operation);
-	operation->Process("Test", m_test);
 }

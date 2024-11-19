@@ -149,3 +149,8 @@ void Button::InsertImage(State btnState, unique_ptr<ImagePartSet>&& imgPartSet)
 {
 	m_image.insert(make_pair(btnState, move(imgPartSet)));
 }
+
+void Button::SerializeIO(JsonOperation* operation)
+{
+	UIComponent::SerializeIO(operation);
+}

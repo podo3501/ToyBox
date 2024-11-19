@@ -127,6 +127,9 @@
     <ClCompile Include="UserInterface\JsonOperation.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\JsonOperation_impl.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

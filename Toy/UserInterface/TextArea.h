@@ -29,6 +29,8 @@ public:
 	friend void to_json(nlohmann::ordered_json& j, const TextArea& data);
 	friend void from_json(const nlohmann::json& j, TextArea& data);
 
+	virtual void SerializeIO(JsonOperation* operation) override;
+
 private:
 	Vector2 m_posByResolution{};
 	wstring m_text{};

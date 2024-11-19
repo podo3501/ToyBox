@@ -95,5 +95,5 @@ void from_json(const nlohmann::json& j, TransformComponent& data)
 void TransformComponent::SerializeIO(JsonOperation* operation)
 {
 	operation->Process("Position", m_position);
-	operation->Process("Type", m_component);
+	operation->Process("Component", m_component);
 }
