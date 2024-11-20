@@ -5,7 +5,6 @@
 #include "UIType.h"
 #include "UILayout.h"
 #include "ImagePartSet.h"
-#include "JsonHelper.h"
 #include "JsonOperation.h"
 
 using json = nlohmann::json;
@@ -84,16 +83,6 @@ bool BGImage::Update(const Vector2& position, const Mouse::ButtonStateTracker*) 
 void BGImage::Render(IRender* renderer)
 {
 	m_imagePartSet->Render(renderer);
-}
-
-void to_json(nlohmann::ordered_json& j, const BGImage& data)
-{
-	to_json(j, static_cast<const UIComponent&>(data));
-}
-
-void from_json(const nlohmann::json& j, BGImage& data)
-{
-	from_json(j, static_cast<UIComponent&>(data));
 }
 
 void BGImage::SerializeIO(JsonOperation* operation)

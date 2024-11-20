@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "TransformComponent.h"
-#include "JsonHelper.h"
 #include "UIComponent.h"
 #include "Dialog.h"
 #include "JsonOperation.h"
@@ -82,18 +81,6 @@ UIComponent* TransformComponent::GetComponent() const noexcept
 const string& TransformComponent::GetName() const 
 { 
 	return m_component->GetName(); 
-}
-
-void to_json(nlohmann::ordered_json& j, const TransformComponent& data)
-{
-	DataToJson("Position", data.m_position, j);
-	ComponentToJson("Type", data.m_component, j);
-}
-
-void from_json(const nlohmann::json& j, TransformComponent& data)
-{
-	DataFromJson("Position", data.m_position, j);
-	ComponentFromJson("Type", data.m_component, j);
 }
 
 void TransformComponent::SerializeIO(JsonOperation* operation)

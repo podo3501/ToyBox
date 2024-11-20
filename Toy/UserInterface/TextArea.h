@@ -26,9 +26,6 @@ public:
 		const UILayout& layout,
 		const map<wstring, wstring>& fontFileList);
 
-	friend void to_json(nlohmann::ordered_json& j, const TextArea& data);
-	friend void from_json(const nlohmann::json& j, TextArea& data);
-
 	virtual void SerializeIO(JsonOperation* operation) override;
 
 private:

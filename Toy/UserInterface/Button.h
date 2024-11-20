@@ -20,7 +20,6 @@ public:
 	bool operator==(const UIComponent& o) const noexcept;
 
 	virtual unique_ptr<UIComponent> Clone() override;
-	//virtual bool ReadProperty(const nlohmann::json& data) override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept override;
 	virtual void Render(IRender* renderer) override;

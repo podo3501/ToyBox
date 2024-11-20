@@ -29,9 +29,6 @@ public:
 
 	bool IsArea(const Vector2& pos) const noexcept;
 
-	friend void to_json(nlohmann::ordered_json& j, const UILayout& data);
-	friend void from_json(const nlohmann::json& j, UILayout& data);
-
 	void SerializeIO(JsonOperation* operation);
 
 private:

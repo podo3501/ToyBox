@@ -5,7 +5,6 @@
 #include "../Utility.h"
 #include "UIUtility.h"
 #include "../Config.h"
-#include "JsonHelper.h"
 #include "JsonOperation.h"
 
 using json = nlohmann::json;
@@ -144,20 +143,6 @@ void TextArea::Render(IRender* render)
 		render->DrawString(m_font[word.fontStyle], 
 			word.text, m_posByResolution + word.position,
 			XMLoadFloat4(&word.color));
-}
-
-void to_json(nlohmann::ordered_json& j, const TextArea& data)
-{
-	DataToJson("FontFileList", data.m_fontFileList, j);
-	DataToJson("Text", data.m_text, j);
-	to_json(j, static_cast<const UIComponent&>(data));
-}
-
-void from_json(const nlohmann::json& j, TextArea& data)
-{
-	DataFromJson("FontFileList", data.m_fontFileList, j);
-	DataFromJson("Text", data.m_text, j);
-	from_json(j, static_cast<UIComponent&>(data));
 }
 
 void TextArea::SerializeIO(JsonOperation* operation)

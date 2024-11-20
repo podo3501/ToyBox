@@ -3,7 +3,6 @@
 #include "../Utility.h"
 #include "../Include/IRenderer.h"
 #include "UIComponent.h"
-#include "JsonHelper.h"
 #include "JsonOperation.h"
 
 using json = nlohmann::json;
@@ -73,16 +72,6 @@ bool Scene::Update(const Mouse::ButtonStateTracker* mouseTracker)
 UIComponent* Scene::GetComponent(const string& name)
 {
 	return m_mainComponent->GetComponent(name);
-}
-
-void to_json(nlohmann::ordered_json& j, const Scene& data)
-{
-	DataToJson("Main", data.m_mainComponent, j);
-}
-
-void from_json(const nlohmann::json& j, Scene& data)
-{
-	DataFromJson("Main", data.m_mainComponent, j);
 }
 
 void Scene::SerializeIO(JsonOperation* operation)

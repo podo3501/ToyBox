@@ -40,9 +40,6 @@ public:
 	void SetName(const string& name) noexcept;
 	void SetLayout(const UILayout& layout) noexcept;
 
-	friend void to_json(nlohmann::ordered_json& j, const UIComponent& data);
-	friend void from_json(const nlohmann::json& j, UIComponent& data);
-
 	virtual void SerializeIO(JsonOperation* operation);
 	
 private:

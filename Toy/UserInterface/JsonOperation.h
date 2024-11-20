@@ -4,7 +4,6 @@ class UIComponent;
 class ImagePartSet;
 enum class Origin;
 enum class ButtonState;
-class TransformComponent;
 
 template <typename T>
 class JsonNavigator {
@@ -158,7 +157,8 @@ unique_ptr<T> JsonOperation::CreateData(const nlohmann::json& readJ)
 	return comp;
 }
 
-template<IsNotUIComponent T>
+//UIComponent overload 된 함수가 존재한다. 그래서 이건 Component가 아닌 unique_ptr에 관한 함수
+template<IsNotUIComponent T>	
 void JsonOperation::Process(const string& key, unique_ptr<T>& data)
 {
 	if (IsWrite())

@@ -14,7 +14,6 @@
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/UserInterface/Scene.h"
-#include "../Toy/UserInterface/JsonHelper.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -217,15 +216,6 @@ namespace BasicClient
 		writeComp.AddComponent(move(emptyTextArea), { 3.f, 4.f });
 
 		EXPECT_TRUE(WriteReadTest(*m_testScene));
-
-		//nlohmann::ordered_json j = writeComp;
-		//WriteJson(j, L"UI/Data/JsonOperation.json");
-
-		//nlohmann::json rj = ReadJson(L"UI/Data/JsonOperation.json");
-		//TextArea readComp{};
-		//readComp = rj.get<TextArea>();
-
-		//EXPECT_TRUE(writeComp == readComp);
 		////클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
 	}
 

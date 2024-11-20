@@ -13,9 +13,6 @@ public:
 	virtual bool operator==(const UIComponent& other) const noexcept override;
 	virtual unique_ptr<UIComponent> Clone() override;
 
-	friend void to_json(nlohmann::ordered_json& j, const Dialog& data);
-	friend void from_json(const nlohmann::json& j, Dialog& data);
-	
 	virtual void SerializeIO(JsonOperation* operation) override;
 	
 private:

@@ -24,9 +24,6 @@ public:
 	//파일을 로드하는 부분. 지금은 파일이 없이 값을 바로 넣는다.
 	bool LoadData(const wstring& filename);
 	
-	friend void to_json(nlohmann::ordered_json& j, const Scene& data);
-	friend void from_json(const nlohmann::json& j, Scene& data);
-
 	void SerializeIO(JsonOperation* operation);
 
 private:

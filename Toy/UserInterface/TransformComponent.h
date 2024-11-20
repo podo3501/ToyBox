@@ -25,9 +25,6 @@ public:
 	UIComponent* GetComponent() const noexcept;
 	const string& GetName() const;
 
-	friend void to_json(nlohmann::ordered_json& j, const TransformComponent& data);
-	friend void from_json(const nlohmann::json& j, TransformComponent& data);
-
 	void SerializeIO(JsonOperation* operation);
 
 private:

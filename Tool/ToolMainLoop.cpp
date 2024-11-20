@@ -7,7 +7,6 @@
 #include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/UILayout.h"
-#include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/Dialog.h"
 
 #ifdef __clang__

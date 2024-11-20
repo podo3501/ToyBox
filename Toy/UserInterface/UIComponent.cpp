@@ -2,7 +2,6 @@
 #include "UIComponent.h"
 #include "UILayout.h"
 #include "UIType.h"
-#include "JsonHelper.h"
 #include "../Utility.h"
 #include "TransformComponent.h"
 #include "JsonOperation.h"
@@ -174,20 +173,6 @@ void UIComponent::SetLayout(const UILayout& layout) noexcept
 UILayout* UIComponent::GetLayout() const noexcept
 {
 	return m_layout.get();
-}
-
-void to_json(nlohmann::ordered_json& j, const UIComponent& data)
-{
-	DataToJson("Name", data.m_name, j);
-	DataToJson("Layout", data.m_layout, j);
-	DataToJson("Components", data.m_components, j);
-}
-
-void from_json(const nlohmann::json& j, UIComponent& data)
-{
-	DataFromJson("Name", data.m_name, j);
-	DataFromJson("Layout", data.m_layout, j);
-	DataFromJson("Components", data.m_components, j);
 }
 
 void UIComponent::SerializeIO(JsonOperation* operation)

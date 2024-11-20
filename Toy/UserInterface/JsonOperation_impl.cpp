@@ -48,11 +48,10 @@ void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data)
     }
     else
     {
-        m_read->GotoKey(key);
-        string curType{};
-        Process("Type", curType);
-        data = move(CreateComponentFromType(curType));
-        m_read->GoBack();
+        ProcessReadKey(key, [&data, this](auto& currentJson) {
+            string curType{ currentJson["Type"] };
+            data = move(CreateComponentFromType(curType));
+            });
     }
 }
 

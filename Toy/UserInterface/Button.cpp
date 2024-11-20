@@ -5,7 +5,6 @@
 #include "UIType.h"
 #include "UILayout.h"
 #include "ImagePartSet.h"
-#include "JsonHelper.h"
 #include "JsonOperation.h"
 
 Button::~Button() = default;
@@ -35,24 +34,6 @@ unique_ptr<UIComponent> Button::Clone()
 {
 	return make_unique<Button>(*this);
 }
-
-//bool Button::ReadProperty(const nlohmann::json& data)
-//{
-//	for (const auto& strState : { "Normal", "Hover", "Pressed" })
-//	{
-//		const auto& stateData = data[strState];
-//		vector<ImageSource> imgSrcList;
-//		for (size_t i{ 0 }; stateData.size() != i; i++)
-//		{
-//			ImageSource imgSrc;
-//			imgSrc.Read(stateData[i]);
-//			imgSrcList.emplace_back(imgSrc);
-//		}
-//		InsertImage(GetStateString(strState), make_unique<ImagePartSet>(imgSrcList));
-//	}
-//
-//	return true;
-//}
 
 bool Button::LoadResources(ILoadData* load)
 {

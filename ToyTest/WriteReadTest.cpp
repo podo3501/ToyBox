@@ -9,7 +9,6 @@
 #include "../Toy/UserInterface/Button.h"
 #include "../Toy/UserInterface/TextArea.h"
 #include "../Toy/UserInterface/BGImage.h"
-#include "../Toy/UserInterface/JsonHelper.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;

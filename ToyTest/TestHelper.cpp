@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "../Toy/UserInterface/Scene.h"
-#include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/JsonOperation.h"
 
 using json = nlohmann::json;
@@ -22,17 +21,4 @@ bool WriteReadTest(Scene& sourceScene, const wstring& filename = L"UI/Data/Write
 	newOp->Write(L"UI/Data/JOPTest2.json");
 	
 	return true;
-	
-
-
-
-
-	//nlohmann::ordered_json j = sourceScene;
-	//WriteJson(j, filename);
-
-	//json readJson = ReadJson(filename);
-	//Scene destScene;
-	//destScene = readJson.get<Scene>();
-
-	//return sourceScene == destScene;
 }

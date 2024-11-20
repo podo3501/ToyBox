@@ -2,7 +2,6 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "../Config.h"
-#include "JsonHelper.h"
 #include "JsonOperation.h"
 
 using json = nlohmann::json;
@@ -87,18 +86,6 @@ bool UILayout::IsArea(const Vector2& pos) const noexcept
 void UILayout::Union(const Rectangle& area) noexcept
 {
 	m_area = Rectangle::Union(m_area, area);
-}
-
-void to_json(nlohmann::ordered_json& j, const UILayout& data)
-{
-	DataToJson("Area", data.m_area, j);
-	DataToJson("Origin", data.m_origin, j);
-}
-
-void from_json(const nlohmann::json& j, UILayout& data)
-{
-	DataFromJson("Area", data.m_area, j);
-	DataFromJson("Origin", data.m_origin, j);
 }
 
 void UILayout::SerializeIO(JsonOperation* operation)

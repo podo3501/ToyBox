@@ -5,7 +5,6 @@
 #include "UILayout.h"
 #include "ImagePart.h"
 #include "../Utility.h"
-#include "JsonHelper.h"
 #include "JsonOperation.h"
 
 using json = nlohmann::json;
@@ -135,24 +134,6 @@ void ImagePartSet::Render(IRender* render)
 	for (const auto& part : m_images)
 		part->Render(render);
 }
-
-//bool ImagePartSet::SetResources(const wstring& filename)
-//{
-//	const json& data = LoadUIFile(filename);
-//	if (data.is_null())
-//		return false;
-//
-//	ImageSource sources;
-//	sources.filename = StringToWString(data["Filename"]);
-//
-//	auto& posList = data["Position"];
-//	for (size_t i{ 0 }; posList.size() != i; i++)
-//		sources.list.emplace_back(posList[i][0], posList[i][1], posList[i][2], posList[i][3]);
-//
-//	CreateImagePart(sources);
-//
-//	return true;
-//}
 
 bool ImagePartSet::IsPicking(const Vector2& pos)  const noexcept
 {
