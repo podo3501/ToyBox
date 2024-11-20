@@ -17,19 +17,9 @@ ImagePartSet::ImagePartSet(const vector<ImageSource>& imgSources)
 	ranges::for_each(imgSources, [this](const auto& source) { CreateImagePart(source); });
 }
 
-bool operator==(const unique_ptr<ImagePart>& lhs, const unique_ptr<ImagePart>& rhs) {
-	if (lhs == nullptr && rhs == nullptr) {
-		return true;
-	}
-	if (lhs == nullptr || rhs == nullptr) {
-		return false;
-	}
-	return *lhs == *rhs;
-}
-
 bool ImagePartSet::operator==(const ImagePartSet& o) const noexcept
 {
-	return tie(m_images) == tie(o.m_images);
+	return CompareSeq(m_images, o.m_images);
 }
 
 string ImagePartSet::GetType() const { return string(typeid(ImagePartSet).name()); }

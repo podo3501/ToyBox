@@ -36,22 +36,15 @@ unique_ptr<UIComponent> UIComponent::Clone()
 	return make_unique<UIComponent>(*this);
 }
 
-//template 함수로 만들지 않는 이유는 == 비교가 사방에서 쓰기 때문에 이 함수와 다른 함수가 충돌될지 모른다.
-//namespace로 만들어주던지 아니면 cpp에 정의 해서 여기만 쓰도록 강제해야 한다.
-bool operator==(const unique_ptr<TransformComponent>& lhs, const unique_ptr<TransformComponent>& rhs) {
-	if (lhs == nullptr && rhs == nullptr) {
-		return true;
-	}
-	if (lhs == nullptr || rhs == nullptr) {
-		return false;
-	}
-	return *lhs == *rhs;
-}
-
 bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetType() != o.GetType()) return false;
-	return tie(m_name, *m_layout, m_components) == tie(o.m_name, *o.m_layout, o.m_components);
+
+	ReturnIfFalse(tie(m_name) == tie(o.m_name));
+	ReturnIfFalse(CompareUniquePtr(m_layout, o.m_layout));
+	ReturnIfFalse(CompareSeq(m_components, o.m_components));
+
+	return true;
 }
 
 UIComponent::UIComponent(const UIComponent& other)

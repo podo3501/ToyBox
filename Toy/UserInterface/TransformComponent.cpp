@@ -4,6 +4,7 @@
 #include "UIComponent.h"
 #include "Dialog.h"
 #include "JsonOperation.h"
+#include "../Utility.h"
 
 TransformComponent::TransformComponent() 
 {}
@@ -32,7 +33,10 @@ TransformComponent& TransformComponent::operator=(const TransformComponent& othe
 
 bool TransformComponent::operator==(const TransformComponent& o) const noexcept
 {
-	return tie(*m_component, m_position) == tie(*o.m_component, o.m_position);
+	ReturnIfFalse(CompareUniquePtr(m_component, o.m_component));
+	ReturnIfFalse(tie(m_position) == tie(o.m_position));
+
+	return true;
 }
 
 bool TransformComponent::LoadResources(ILoadData* load) 

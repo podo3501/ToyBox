@@ -44,11 +44,12 @@ TextArea& TextArea::operator=(const TextArea& o)
 	return *this;
 }
 
-bool TextArea::operator==(const TextArea& o) const noexcept
+bool TextArea::operator==(const UIComponent& o) const noexcept
 {
 	ReturnIfFalse(UIComponent::operator==(o));
+	const TextArea* rhs = static_cast<const TextArea*>(&o);
 	
-	return tie(m_fontFileList, m_text) == tie(o.m_fontFileList, o.m_text);
+	return tie(m_fontFileList, m_text) == tie(rhs->m_fontFileList, rhs->m_text);
 }
 
 bool TextArea::LoadResources(ILoadData* load)

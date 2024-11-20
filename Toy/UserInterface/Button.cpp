@@ -6,35 +6,29 @@
 #include "UILayout.h"
 #include "ImagePartSet.h"
 #include "JsonHelper.h"
-
-string Button::GetStringState(State state)
-{
-	if (state == State::Normal) return "Normal";
-	if (state == State::Hover) return "Hover";
-	if (state == State::Pressed) return "Presssed";
-
-	return "";
-}
-
-Button::State Button::GetStateString(const string& str)
-{
-	if (str == "Normal") return State::Normal;
-	if (str == "Hover") return State::Hover;
-	if (str == "Presssed") return State::Pressed;
-
-	return State::Init;
-}
+#include "JsonOperation.h"
 
 Button::~Button() = default;
-Button::Button() {}
+Button::Button() :
+	m_state{ ButtonState::Normal }
+{}
+
 Button::Button(const Button& other)
 	: UIComponent{ other }
 {
 	ranges::for_each(other.m_image, [this](const auto& pair) {
-		State state = pair.first;
+		ButtonState state = pair.first;
 		const auto& imgPartSet = pair.second;
 		m_image.insert(make_pair(state, make_unique<ImagePartSet>(*imgPartSet.get())));
 		});
+}
+
+bool Button::operator==(const UIComponent& o) const noexcept
+{
+	ReturnIfFalse(UIComponent::operator==(o));
+	const Button* rhs = static_cast<const Button*>(&o);
+
+	return CompareAssoc(m_image, rhs->m_image);
 }
 
 unique_ptr<UIComponent> Button::Clone()
@@ -104,15 +98,15 @@ bool Button::Update(const Vector2& position, const Mouse::ButtonStateTracker* tr
 
 	if (!bHover)
 	{
-		m_state = State::Normal;
+		m_state = ButtonState::Normal;
 		return true;
 	}
 
 	if (tracker->leftButton == Mouse::ButtonStateTracker::PRESSED ||
-		m_state == State::Pressed && tracker->leftButton == Mouse::ButtonStateTracker::HELD)
-		m_state = State::Pressed;
+		m_state == ButtonState::Pressed && tracker->leftButton == Mouse::ButtonStateTracker::HELD)
+		m_state = ButtonState::Pressed;
 	else
-		m_state = State::Hover;
+		m_state = ButtonState::Hover;
 
 	return true;
 }
@@ -131,11 +125,11 @@ void Button::SetImage(const string& name,
 	SetName(name);
 	SetLayout(layout);
 
-	State btnState = State::Normal;
+	ButtonState btnState = ButtonState::Normal;
 	for (const auto& sources : { normal, hover, pressed })
 	{
 		InsertImage(btnState, make_unique<ImagePartSet>(sources));
-		btnState = static_cast<State>(static_cast<int>(btnState) + 1);
+		btnState = static_cast<ButtonState>(static_cast<int>(btnState) + 1);
 	}
 }
 
@@ -145,12 +139,13 @@ void Button::ChangeOrigin(Origin&& origin) noexcept
 	layout->Set(move(origin));
 }
 
-void Button::InsertImage(State btnState, unique_ptr<ImagePartSet>&& imgPartSet)
+void Button::InsertImage(ButtonState btnState, unique_ptr<ImagePartSet>&& imgPartSet)
 {
 	m_image.insert(make_pair(btnState, move(imgPartSet)));
 }
 
 void Button::SerializeIO(JsonOperation* operation)
 {
+	operation->Process("StateImage", m_image);
 	UIComponent::SerializeIO(operation);
 }

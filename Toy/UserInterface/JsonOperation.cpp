@@ -14,6 +14,12 @@ JsonOperation::JsonOperation()
     m_write = make_unique<JsonNavigator<ordered_json>>(move(write));
 }
 
+JsonOperation::JsonOperation(const nlohmann::json& read)
+{
+    auto readJson = make_unique<json>(read);
+    m_read = make_unique<JsonNavigator<json>>(move(readJson));
+}
+
 bool JsonOperation::IsWrite()
 {
     //읽는게 아니면 쓰는 것이다.

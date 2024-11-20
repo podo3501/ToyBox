@@ -9,23 +9,15 @@ class ImagePartSet;
 class UILayout;
 
 enum class Origin;
+enum class ButtonState;
 
 class Button : public UIComponent
 {
-	enum class State
-	{
-		Init = 0,
-		Normal = 1,
-		Hover = 2,
-		Pressed = 3,
-	};
-	string GetStringState(State state);
-	State GetStateString(const string& str);
-
 public:
 	virtual ~Button();
 	Button();
 	Button(const Button& other);
+	bool operator==(const UIComponent& o) const noexcept;
 
 	virtual unique_ptr<UIComponent> Clone() override;
 	//virtual bool ReadProperty(const nlohmann::json& data) override;
@@ -45,8 +37,8 @@ public:
 
 private:
 	bool SetDestination(const Rectangle& area) noexcept;
-	void InsertImage(State btnState, unique_ptr<ImagePartSet>&& imgPartSet);
+	void InsertImage(ButtonState btnButtonState, unique_ptr<ImagePartSet>&& imgPartSet);
 
-	State m_state{ State::Normal };
-	map<State, unique_ptr<ImagePartSet>> m_image;
+	ButtonState m_state;
+	map<ButtonState, unique_ptr<ImagePartSet>> m_image;
 };

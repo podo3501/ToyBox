@@ -13,7 +13,7 @@ public:
 	TextArea();
 	TextArea(const TextArea& other);
 	TextArea& operator=(const TextArea& o);
-	bool operator==(const TextArea& o) const noexcept;
+	virtual bool operator==(const UIComponent& o) const noexcept override;
 
 	virtual unique_ptr<UIComponent> Clone();
 	virtual bool LoadResources(ILoadData* load) override;

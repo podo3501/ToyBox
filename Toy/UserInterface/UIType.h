@@ -1,5 +1,11 @@
 #pragma once
 
+template<typename EnumType>
+constexpr std::size_t EnumSize();
+
+template<typename EnumType>
+constexpr auto EnumToStringMap() -> std::array<const char*, EnumSize<EnumType>()>;
+
 enum class Origin : int
 {
 	Init = 0,
@@ -8,14 +14,8 @@ enum class Origin : int
 	Count,
 };
 
-template<typename EnumType>
-constexpr std::size_t EnumSize();
-
 template<>
 constexpr std::size_t EnumSize<Origin>() { return 4; }
-
-template<typename EnumType>
-constexpr auto EnumToStringMap() -> std::array<const char*, EnumSize<EnumType>()>;
 
 template<>
 constexpr auto EnumToStringMap<Origin>() -> std::array<const char*, EnumSize<Origin>()> {
@@ -23,6 +23,29 @@ constexpr auto EnumToStringMap<Origin>() -> std::array<const char*, EnumSize<Ori
 		{ "Init" },
 		{ "Center" },
 		{ "LeftTop" },
+		{ "Count" }
+	} };
+}
+
+enum class ButtonState : int
+{
+	Init = 0,
+	Normal = 1,
+	Hover = 2,
+	Pressed = 3,
+	Count,
+};
+
+template<>
+constexpr std::size_t EnumSize<ButtonState>() { return 5; }
+
+template<>
+constexpr auto EnumToStringMap<ButtonState>()->std::array<const char*, EnumSize<ButtonState>()> {
+	return { {
+		{ "Init" },
+		{ "Normal" },
+		{ "Hover" },
+		{ "Pressed" },
 		{ "Count" }
 	} };
 }

@@ -1,7 +1,9 @@
 #pragma once
 
 class UIComponent;
+class ImagePartSet;
 enum class Origin;
+enum class ButtonState;
 class TransformComponent;
 
 template <typename T>
@@ -85,6 +87,7 @@ class JsonOperation
 {
 public:
 	JsonOperation();
+	JsonOperation(const nlohmann::json& read);
 	virtual ~JsonOperation();
 
 	bool IsWrite();
@@ -105,8 +108,16 @@ public:
 	void Process(const string& key, unique_ptr<UIComponent>& data);
 	void Process(const string& key, wstring& data) noexcept;
 	void Process(const string& key, map<wstring, wstring>& data) noexcept;
+	void Process(const string& key, map<ButtonState, unique_ptr<ImagePartSet>>& data);
 
 private:
+	template<typename T>
+	unique_ptr<T> CreateData(const nlohmann::json& readJ = nullptr);
+	template <typename ProcessFunc>
+	void ProcessWriteKey(const string& key, ProcessFunc processFunc);
+	template <typename ProcessFunc>
+	void ProcessReadKey(const string& key, ProcessFunc processFunc);
+
 	nlohmann::ordered_json& GetWrite();
 	nlohmann::json& GetRead();
 
@@ -135,6 +146,18 @@ void JsonOperation::Process(const string& key, T& data) noexcept
 	}
 }
 
+template<typename T>
+unique_ptr<T> JsonOperation::CreateData(const nlohmann::json& readJ)
+{
+	JsonOperation js(readJ);
+	auto comp = std::make_unique<T>();
+	if (readJ == nullptr)
+		comp->SerializeIO(this);
+	else
+		comp->SerializeIO(&js);
+	return comp;
+}
+
 template<IsNotUIComponent T>
 void JsonOperation::Process(const string& key, unique_ptr<T>& data)
 {
@@ -147,11 +170,29 @@ void JsonOperation::Process(const string& key, unique_ptr<T>& data)
 	else
 	{
 		m_read->GotoKey(key);
-		auto newClass = std::make_unique<T>();
-		newClass->SerializeIO(this);
-		data = move(newClass);
+		data = CreateData<T>();
 		m_read->GoBack();
 	}
+}
+
+template <typename ProcessFunc>
+void JsonOperation::ProcessWriteKey(const string& key, ProcessFunc processFunc)
+{
+	m_write->GotoKey(key, true);
+	processFunc(m_write->GetCurrent());
+	m_write->GoBack();
+}
+
+template <typename ProcessFunc>
+void JsonOperation::ProcessReadKey( const string& key, ProcessFunc processFunc)
+{
+	const auto& j = m_read->GetCurrent();
+	if (!j.contains(key))
+		return;
+
+	m_read->GotoKey(key);
+	processFunc(m_read->GetCurrent());
+	m_read->GoBack();
 }
 
 template<typename T>
@@ -162,31 +203,21 @@ void JsonOperation::Process(const string& key, vector<unique_ptr<T>>& data)
 		if (data.empty())
 			return;
 
-		m_write->GotoKey(key, true);
-		for (auto& comp : data)
-		{
-			JsonOperation jsOp{};
-			comp->SerializeIO(&jsOp);
-			m_write->GetCurrent().push_back(jsOp.GetWrite());
-		}
-		m_write->GoBack();
+		ProcessWriteKey(key, [&data](auto& currentJson) {
+			for (auto& comp : data) 
+			{
+				JsonOperation jsOp{};
+				comp->SerializeIO(&jsOp);
+				currentJson.push_back(jsOp.GetWrite());
+			}
+			});
 	}
 	else
 	{
-		const auto& j = m_read->GetCurrent();
-		if (j.contains(key) == false)
-			return;
-
 		data.clear();
-		m_read->GotoKey(key);
-		for (auto& compJson : m_read->GetCurrent())
-		{
-			m_read->SetCurrent(&compJson);
-			auto comp = std::make_unique<T>();
-			comp->SerializeIO(this);
-			data.emplace_back(move(comp));
-		}
-		m_read->GoBack();
+		ProcessReadKey(key, [&data, this](const auto& currentJson) {
+			for (const auto& compJson : currentJson) 
+				data.emplace_back(CreateData<T>(compJson));
+			});
 	}
 }
-

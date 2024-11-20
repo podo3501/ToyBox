@@ -29,9 +29,9 @@ unique_ptr<UIComponent> BGImage::Clone()
 bool BGImage::operator==(const UIComponent& o) const noexcept
 {
 	ReturnIfFalse(UIComponent::operator==(o));
-	const BGImage* bgImage = static_cast<const BGImage*>(&o);
-
-	return tie(*m_imagePartSet) == tie(*bgImage->m_imagePartSet);
+	const BGImage* rhs = static_cast<const BGImage*>(&o);
+	
+	return CompareUniquePtr(m_imagePartSet, rhs->m_imagePartSet);
 }
 
 //bool BGImage::ReadProperty(const nlohmann::json& data)
