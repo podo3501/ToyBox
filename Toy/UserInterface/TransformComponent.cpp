@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "TransformComponent.h"
 #include "UIComponent.h"
-#include "Dialog.h"
 #include "JsonOperation.h"
 #include "../Utility.h"
 
@@ -41,6 +40,11 @@ bool TransformComponent::operator==(const TransformComponent& o) const noexcept
 bool TransformComponent::LoadResources(ILoadData* load) 
 { 
 	return m_component->LoadResources(load); 
+}
+
+bool TransformComponent::SetDatas(IGetValue* value)
+{
+	return m_component->SetDatas(value);
 }
 
 bool TransformComponent::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept 

@@ -41,6 +41,7 @@ wstring StringToWString(const string& str);
 string RemoveNullTerminator(const string& str);
 string WStringToString(const wstring& wstr);
 
+//스마트 포인터 비교
 template <typename T>
 bool CompareUniquePtr(const unique_ptr<T>& lhs, const unique_ptr<T>& rhs)
 {
@@ -53,6 +54,7 @@ bool CompareUniquePtr(const unique_ptr<T>& lhs, const unique_ptr<T>& rhs)
 	return *lhs == *rhs; // 가리키는 값 비교
 }
 
+//시퀀스 컨테이너 비교
 template <typename T>
 bool CompareSeq(const vector<unique_ptr<T>>& lhs, const vector<unique_ptr<T>>& rhs)
 {
@@ -62,6 +64,7 @@ bool CompareSeq(const vector<unique_ptr<T>>& lhs, const vector<unique_ptr<T>>& r
 	return equal(lhs.begin(), lhs.end(), rhs.begin(), CompareUniquePtr<T>);
 }
 
+//연관 컨테이너 비교
 template <typename Key, typename Value>
 bool CompareAssoc(const map<Key, unique_ptr<Value>>& lhs, const map<Key, unique_ptr<Value>>& rhs)
 {

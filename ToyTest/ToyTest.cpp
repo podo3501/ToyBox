@@ -6,6 +6,7 @@
 #include "../Toy/WindowProcedure.h"
 #include "../Toy/Window.h"
 #include "../Toy/Utility.h"
+#include "../Toy/Config.h"
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/Button.h"
@@ -177,6 +178,8 @@ namespace BasicClient
 		MockRender mockRender;
 		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestCloseButtonRender));
 		button->Render(&mockRender);
+
+		EXPECT_TRUE(WriteReadTest(*m_testScene));
 	}
 
 	void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
@@ -227,17 +230,19 @@ namespace BasicClient
 		panel->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
 		EXPECT_EQ(bgArea, panel->GetArea());
+
+		EXPECT_TRUE(WriteReadTest(*m_testScene));
 	}
 
 	TEST_F(ToyTestFixture, Dialog)
 	{
 		unique_ptr<UIComponent> cDialog = std::make_unique<Dialog>();
 		cDialog->SetName("Dialog");
-		//unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
-		//cDialog->AddComponent(move(bgImg), { 0.1f, 0.1f });
+		unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
+		cDialog->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
 		m_testScene->AddComponent({ 0.f, 0.f }, move(cDialog));
-		//EXPECT_TRUE(m_renderer->LoadScenes());
+		EXPECT_TRUE(m_renderer->LoadScenes());
 
 		//auto dialog = m_testScene->GetComponent("Dialog");
 		//클론을 만들어서 둘이 같지 않음을 확인한다.
@@ -254,7 +259,7 @@ namespace BasicClient
 
 	TEST_F(ToyTestFixture, Scene)
 	{
-		unique_ptr<Scene>testScene = std::make_unique<Scene>();
+		unique_ptr<Scene>testScene = std::make_unique<Scene>(GetRectResolution());
 		EXPECT_TRUE(testScene->LoadData(L"UI/Data/FirstScene.json"));
 
 		m_renderer->AddLoadScene(testScene.get());

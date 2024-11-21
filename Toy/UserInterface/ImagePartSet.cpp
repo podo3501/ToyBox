@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "ImagePartSet.h"
-#include "../../Include/IRenderer.h"
 #include "UIType.h"
-#include "UILayout.h"
 #include "ImagePart.h"
 #include "../Utility.h"
 #include "JsonOperation.h"

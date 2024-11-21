@@ -8,7 +8,7 @@ class Scene : public IRenderScene
 {
 public:
 	~Scene();
-	Scene();
+	Scene(const Rectangle& rect);
 	Scene(const Scene& other);
 	Scene& operator=(const Scene& other);
 	bool operator==(const Scene& o) const noexcept;
@@ -27,5 +27,5 @@ public:
 	void SerializeIO(JsonOperation* operation);
 
 private:
-	unique_ptr<UIComponent> m_mainComponent;
+	unique_ptr<UIComponent> m_mainPanel;
 };

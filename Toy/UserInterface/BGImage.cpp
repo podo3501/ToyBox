@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "BGImage.h"
-#include "../../Include/IRenderer.h"
 #include "../Utility.h"
-#include "UIType.h"
 #include "UILayout.h"
 #include "ImagePartSet.h"
 #include "JsonOperation.h"
@@ -12,8 +10,8 @@ using json = nlohmann::json;
 BGImage::~BGImage() = default;
 BGImage::BGImage()
 {}
-BGImage::BGImage(const BGImage& other)
-	: UIComponent{ other }
+BGImage::BGImage(const BGImage& other) :
+	UIComponent{ other }
 {
 	m_imagePartSet = make_unique<ImagePartSet>(*other.m_imagePartSet.get());
 }
@@ -32,19 +30,6 @@ bool BGImage::operator==(const UIComponent& o) const noexcept
 	
 	return CompareUniquePtr(m_imagePartSet, rhs->m_imagePartSet);
 }
-
-//bool BGImage::ReadProperty(const nlohmann::json& data)
-//{
-//	ImageSource imgSource;
-//	ReturnIfFalse(imgSource.Read(data));
-//	m_imagePartSet = make_unique<ImagePartSet>(imgSource);
-//	
-//	//auto imagePartSet = make_unique<ImagePartSet>();
-//	//m_imagePartSet = CreateProperty<ImagePartSet>(data);
-//	//ReturnIfNullptr(m_imagePartSet);
-//
-//	return true;
-//}
 
 bool BGImage::LoadResources(ILoadData* load)
 { 

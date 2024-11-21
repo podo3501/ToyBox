@@ -2,35 +2,33 @@
 #include "Scene.h"
 #include "../Utility.h"
 #include "../Include/IRenderer.h"
-#include "UIComponent.h"
+#include "Panel.h"
 #include "JsonOperation.h"
 
 using json = nlohmann::json;
 
 Scene::~Scene() = default;
-Scene::Scene() :
-	m_mainComponent{ make_unique<UIComponent>() }
-{
-	m_mainComponent->SetName("Main");
-}
+Scene::Scene(const Rectangle& rect) :
+	m_mainPanel{ make_unique<Panel>("Main", rect) }
+{}
 
 Scene::Scene(const Scene& other)
 {
-	m_mainComponent = make_unique<UIComponent>(*other.m_mainComponent);
+	m_mainPanel = other.m_mainPanel->Clone();
 }
 
 Scene& Scene::operator=(const Scene& other)
 {
 	if (this == &other) return *this;
 
-	m_mainComponent = make_unique<UIComponent>(*other.m_mainComponent);
+	m_mainPanel = other.m_mainPanel->Clone();
 
 	return *this;
 }
 
 bool Scene::operator==(const Scene& o) const noexcept
 {
-	return tie(*m_mainComponent) == tie(*o.m_mainComponent);
+	return tie(*m_mainPanel) == tie(*o.m_mainPanel);
 }
 
 unique_ptr<IRenderScene> Scene::Clone()
@@ -40,17 +38,17 @@ unique_ptr<IRenderScene> Scene::Clone()
 
 bool Scene::LoadScene(ILoadData* load)
 {
-	return m_mainComponent->LoadResources(load);
+	return m_mainPanel->LoadResources(load);
 }
 
 bool Scene::SetDatas(IGetValue* value)
 {
-	return m_mainComponent->SetDatas(value);
+	return m_mainPanel->SetDatas(value);
 }
 
 void Scene::RenderScene(IRender* render)
 {
-	m_mainComponent->Render(render);
+	m_mainPanel->Render(render);
 }
 
 bool Scene::LoadData(const wstring& filename)
@@ -61,20 +59,20 @@ bool Scene::LoadData(const wstring& filename)
 
 void Scene::AddComponent(const Vector2& position, unique_ptr<UIComponent> comp)
 {
-	m_mainComponent->AddComponent(move(comp), position);
+	m_mainPanel->AddComponent(move(comp), position);
 }
 
 bool Scene::Update(const Mouse::ButtonStateTracker* mouseTracker)
 {
-	return m_mainComponent->Update({}, mouseTracker);
+	return m_mainPanel->Update({}, mouseTracker);
 }
 
 UIComponent* Scene::GetComponent(const string& name)
 {
-	return m_mainComponent->GetComponent(name);
+	return m_mainPanel->GetComponent(name);
 }
 
 void Scene::SerializeIO(JsonOperation* operation)
 {
-	operation->Process("Component", m_mainComponent);
+	operation->Process("Component", m_mainPanel);
 }

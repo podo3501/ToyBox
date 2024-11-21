@@ -3,6 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "UserInterface/UIType.h"
 #include "Utility.h"
+#include "Config.h"
 #include "UserInterface/Scene.h"
 #include "UserInterface/UILayout.h"
 #include "UserInterface/Button.h"
@@ -35,7 +36,7 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 
 bool GameMainLoop::InitializeDerived()
 {
-    m_gameScene = make_unique<Scene>();
+    m_gameScene = make_unique<Scene>(GetRectResolution());
     m_renderer->AddLoadScene(m_gameScene.get());
     m_renderer->AddRenderScene(m_gameScene.get());
 

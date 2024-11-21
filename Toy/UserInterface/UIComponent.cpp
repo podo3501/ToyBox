@@ -12,7 +12,12 @@ using ordered_json = nlohmann::ordered_json;
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
 	m_name{},
-	m_layout{ make_unique<UILayout>(Rectangle{}, Origin::Center) }
+	m_layout{ make_unique<UILayout>(Rectangle{}, Origin::LeftTop) }
+{}
+
+UIComponent::UIComponent(const string& name, const Rectangle& rect) :
+	m_name{ name },
+	m_layout{ make_unique<UILayout>(rect, Origin::LeftTop) }
 {}
 
 UIComponent& UIComponent::operator=(const UIComponent& other)
@@ -98,6 +103,13 @@ UIComponent* UIComponent::GetSelected() const noexcept
 	return (*find)->GetComponent();
 }
 
+bool UIComponent::SetDatas(IGetValue* value)
+{
+	return ranges::all_of(m_components, [value](const auto& prop) {
+		return prop->SetDatas(value);
+		});
+}
+
 bool UIComponent::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept
 {
 	return ranges::all_of(m_components, [&position, tracker](const auto& prop) {
@@ -167,7 +179,11 @@ void UIComponent::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& po
 
 void UIComponent::SetLayout(const UILayout& layout) noexcept
 {
-	(*m_layout.get()) = layout;
+	if (m_layout == nullptr)
+		m_layout = make_unique<UILayout>(layout);
+	else
+		*m_layout = layout;
+	//(*m_layout.get()) = layout;
 }
 
 UILayout* UIComponent::GetLayout() const noexcept

@@ -2,9 +2,27 @@
 #include "Panel.h"
 #include "BGImage.h"
 #include "../Utility.h"
+#include "JsonOperation.h"
 
 Panel::Panel() {};
 Panel::~Panel() = default;
+
+Panel::Panel(const Panel& other) :
+    UIComponent{ other }
+{
+    m_area = other.m_area;
+}
+
+Panel::Panel(const string& name, const Rectangle& rect) :
+    UIComponent(name, rect)
+{}
+
+unique_ptr<UIComponent> Panel::Clone()
+{
+    auto clone = make_unique<Panel>(*this);
+    clone->SetName(clone->GetName() + "_clone");
+    return clone;
+}
 
 const Rectangle& Panel::GetArea() const noexcept
 {
@@ -17,3 +35,8 @@ void Panel::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos)
     UIComponent::AddComponent(move(comp), pos);
 }
 
+void Panel::SerializeIO(JsonOperation* operation)
+{
+    operation->Process("Area", m_area);
+    UIComponent::SerializeIO(operation);
+}

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "JsonOperation.h"
 #include "UIType.h"
-#include "UIComponent.h"
+#include "Panel.h"
 #include "Dialog.h"
 #include "BGImage.h"
 #include "TextArea.h"
@@ -21,7 +21,7 @@ void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typeName)
 {
     unique_ptr<UIComponent> comp{ nullptr };
-    if (typeName == "class UIComponent") comp = std::make_unique<UIComponent>();
+    if (typeName == "class Panel") comp = std::make_unique<Panel>();
     if (typeName == "class Dialog") comp = make_unique<Dialog>();
     if (typeName == "class BGImage") comp = make_unique<BGImage>();
     if (typeName == "class TextArea") comp = make_unique<TextArea>();

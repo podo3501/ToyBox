@@ -1,6 +1,7 @@
 #pragma once
 
 struct ILoadData;
+struct IGetValue;
 struct IRender;
 class UIComponent;
 class JsonOperation;
@@ -16,6 +17,7 @@ public:
 	bool operator==(const TransformComponent& o) const noexcept;
 
 	bool LoadResources(ILoadData* load);
+	bool SetDatas(IGetValue* value);
 	bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept;
 	void SetSelected(bool selected) noexcept;
 	bool IsSelected() const noexcept;

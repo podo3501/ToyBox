@@ -10,9 +10,12 @@ class TransformComponent;
 
 class UIComponent
 {
+protected:
+	UIComponent();	//이 클래스는 단독으로 만들 수 없다. 상속 받은 클래스만이 생성 가능
+
 public:
-	UIComponent();
 	virtual ~UIComponent();
+	UIComponent(const string& name, const Rectangle& rect);
 	UIComponent(const UIComponent& other);
 	UIComponent(UIComponent&& o) noexcept;
 	UIComponent& operator=(const UIComponent& other);
@@ -22,7 +25,7 @@ public:
 	virtual unique_ptr<UIComponent> Clone();
 	virtual void Render(IRender* render);
 	virtual bool LoadResources(ILoadData* load);
-	virtual bool SetDatas(IGetValue*) { return true; }
+	virtual bool SetDatas(IGetValue*);
 	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* mouseTracker) noexcept;
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);

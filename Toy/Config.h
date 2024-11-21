@@ -4,3 +4,4 @@ void InitializeConfig(const wstring& resourcePath, const Vector2& resolution) no
 
 const wstring& GetResourcePath() noexcept;
 const Vector2& GetResolution() noexcept;
+Rectangle GetRectResolution() noexcept;

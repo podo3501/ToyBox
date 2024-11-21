@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GuiWidget.h"
 #include "../Toy/Utility.h"
+#include "../Toy/Config.h"
 #include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/BGImage.h"
 
@@ -9,7 +10,7 @@ GuiWidget::~GuiWidget()
 
 GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer{ renderer },
-    m_widgetScene{ make_unique<Scene>() },
+    m_widgetScene{ make_unique<Scene>(GetRectResolution()) },
     m_component{ nullptr }
 {
     m_renderer->AddImguiComponent(this);

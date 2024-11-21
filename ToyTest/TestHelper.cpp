@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "../Toy/Config.h"
 #include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/JsonOperation.h"
 
@@ -12,7 +13,7 @@ bool WriteReadTest(Scene& sourceScene, const wstring& filename = L"UI/Data/Write
 
 	unique_ptr<JsonOperation> jsonReadOp = make_unique<JsonOperation>();
 	jsonReadOp->Read(L"UI/Data/JOPTest.json");
-	Scene destReadOpScene;
+	Scene destReadOpScene(GetRectResolution());
 	destReadOpScene.SerializeIO(jsonReadOp.get());
 
 	EXPECT_TRUE(sourceScene == destReadOpScene);

@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "ImagePart.h"
 #include "../../Include/IRenderer.h"
-#include "../Utility.h"
 #include "Config.h"
 #include "JsonOperation.h"
 

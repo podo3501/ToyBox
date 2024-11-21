@@ -3,6 +3,7 @@
 #include "TestImgui.h"
 #include "GuiWidget.h"
 #include "GuiAppWindow.h"
+#include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/UIType.h"
@@ -30,25 +31,25 @@ ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
     ::MainLoop(window, renderer),
     m_window{ window },
     m_renderer{ renderer },
-    m_testImgui{ make_unique<TestImgui>(renderer) },
-    m_toolScene{ make_unique<Scene>() }
-{
-    m_renderer->AddLoadScene(m_toolScene.get());
-    m_renderer->AddRenderScene(m_toolScene.get());
-}
+    m_testImgui{ make_unique<TestImgui>(renderer) }
+{}
 
 bool ToolMainLoop::InitializeDerived()
 {
+    m_toolScene = make_unique<Scene>(GetRectResolution());
+    m_renderer->AddLoadScene(m_toolScene.get());
+    m_renderer->AddRenderScene(m_toolScene.get());
+
     return true;
 }
 
 bool ToolMainLoop::LoadResources()
 {
     //다이얼로그를 열면 0.1씩 벗어나야 하고, 최종창에는 벗어나지 않아야 한다.
-    unique_ptr<Dialog> dialog = make_unique<Dialog>();
+    //unique_ptr<Dialog> dialog = make_unique<Dialog>();
     //ReturnIfFalse(dialog->SetResources(L"UI/Data/Dialog.json"));
 
-    m_toolScene->AddComponent({ 0.f, 0.f }, move(dialog));
+    //m_toolScene->AddComponent({ 0.f, 0.f }, move(dialog));
 
     return true;
 }

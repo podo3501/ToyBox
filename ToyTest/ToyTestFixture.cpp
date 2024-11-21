@@ -4,6 +4,7 @@
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/Scene.h"
+#include "../Toy/Config.h"
 #include "Utility.h"
 
 ToyTestFixture::ToyTestFixture() = default;
@@ -23,7 +24,7 @@ void ToyTestFixture::SetUp()
 	const auto& outputSize = m_window->GetOutputSize();
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
-	m_testScene = make_unique<Scene>();
+	m_testScene = make_unique<Scene>(GetRectResolution());
 
 	m_renderer->AddLoadScene(m_testScene.get());
 	m_renderer->AddRenderScene(m_testScene.get());
