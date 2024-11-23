@@ -4,7 +4,7 @@
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="PracticeTest.cpp" />
-    <ClCompile Include="WriteReadTest.cpp" />
+    <ClCompile Include="ToolTest.cpp" />
     <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="TestMain.cpp" />

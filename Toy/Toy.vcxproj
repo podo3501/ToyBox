@@ -209,6 +209,7 @@
     <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="UserInterface\Dialog.h" />
+    <ClInclude Include="UserInterface\JsonHelper.h" />
     <ClInclude Include="UserInterface\JsonOperation.h" />
     <ClInclude Include="UserInterface\TransformComponent.h" />
     <ClInclude Include="UserInterface\UIComponent.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="UserInterface\Dialog.cpp" />
+    <ClCompile Include="UserInterface\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation.cpp" />
     <ClCompile Include="UserInterface\TransformComponent.cpp" />
     <ClCompile Include="UserInterface\UIComponent.cpp" />

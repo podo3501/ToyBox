@@ -2,6 +2,7 @@
 
 class UIComponent;
 class ImagePartSet;
+class Scene;
 enum class Origin;
 enum class ButtonState;
 

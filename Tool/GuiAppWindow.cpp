@@ -38,55 +38,6 @@ void GuiAppWindow::Update()
     m_scene->Update(nullptr);
 }
 
-bool openFileDialog = false;
-std::string selectedFile;
-void ShowOpenFileDialog(bool* isOpen, std::string& selectedFile) {
-    static std::string currentPath = std::filesystem::current_path().string();
-    static std::vector<std::string> fileList;
-
-    // 현재 디렉토리의 파일과 폴더 목록 업데이트
-    if (fileList.empty()) {
-        for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
-            fileList.push_back(entry.path().filename().string());
-        }
-    }
-
-    if (*isOpen) {
-        ImGui::Begin("Open File Dialog", isOpen);
-
-        // 상단 경로 표시
-        ImGui::Text("Current Path: %s", currentPath.c_str());
-
-        // 상위 디렉토리로 이동
-        if (ImGui::Button("..")) {
-            currentPath = std::filesystem::path(currentPath).parent_path().string();
-            fileList.clear(); // 파일 목록 갱신
-        }
-
-        ImGui::Separator();
-
-        // 파일/폴더 목록 출력
-        for (const auto& file : fileList) {
-            bool isDirectory = std::filesystem::is_directory(currentPath + "/" + file);
-
-            if (isDirectory) {
-                if (ImGui::Selectable((file + "/").c_str(), false)) {
-                    currentPath += "/" + file;
-                    fileList.clear(); // 파일 목록 갱신
-                }
-            }
-            else {
-                if (ImGui::Selectable(file.c_str(), false)) {
-                    selectedFile = currentPath + "/" + file;
-                    *isOpen = false; // Dialog 닫기
-                }
-            }
-        }
-
-        ImGui::End();
-    }
-}
-
 #include <shobjidl.h> // IFileOpenDialog 정의
 void ShowFileOpenDialog(const std::wstring& initialPath, std::wstring& selectedFilePath) {
     // COM 초기화
@@ -141,6 +92,7 @@ void GuiAppWindow::Render(ImGuiIO* io)
                 wstring path = std::filesystem::current_path().wstring();
                 wstring selectedFilename{};
                 ShowFileOpenDialog(path, selectedFilename);
+                
             }
             ImGui::EndMenu();
         }
