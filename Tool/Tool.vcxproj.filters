@@ -13,6 +13,7 @@
     <ClCompile Include="TestImgui.cpp" />
     <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="GuiAppWindow.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -20,5 +21,6 @@
     <ClInclude Include="TestImgui.h" />
     <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="GuiAppWindow.h" />
+    <ClInclude Include="MainWindow.h" />
   </ItemGroup>
 </Project>

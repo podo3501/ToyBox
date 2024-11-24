@@ -3,6 +3,7 @@
 
 struct IRenderScene;
 class UIComponent;
+class MainWindow;
 class GuiWidget;
 
 class GuiAppWindow : public IImguiComponent
@@ -26,5 +27,6 @@ private:
 
     XMUINT2 m_size{};
 
+    unique_ptr<MainWindow> m_mainWindow;
     unique_ptr<GuiWidget> m_guiWidget;
 };

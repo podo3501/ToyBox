@@ -36,9 +36,9 @@ ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
 
 bool ToolMainLoop::InitializeDerived()
 {
-    m_toolScene = make_unique<Scene>(GetRectResolution());
-    m_renderer->AddLoadScene(m_toolScene.get());
-    m_renderer->AddRenderScene(m_toolScene.get());
+    //m_toolScene = make_unique<Scene>(GetRectResolution());
+    //m_renderer->AddLoadScene(m_toolScene.get());
+    //m_renderer->AddRenderScene(m_toolScene.get());
 
     return true;
 }
@@ -58,8 +58,8 @@ bool ToolMainLoop::SetDatas(IGetValue* getValue)
 {
     m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
 
-    auto cloneScene = m_toolScene->Clone();
-    ReturnIfFalse(m_guiAppWindow->Create(move(cloneScene), { 400, 300 }));
+    //auto cloneScene = m_toolScene->Clone();
+    //ReturnIfFalse(m_guiAppWindow->Create(move(cloneScene), { 400, 300 }));
 
     return true;
 }
@@ -71,7 +71,7 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTr
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_toolScene->Update(mouseTracker);
+    //m_toolScene->Update(mouseTracker);
 
     m_guiAppWindow->Update();
 

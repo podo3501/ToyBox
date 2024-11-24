@@ -6,6 +6,7 @@
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
+#include "MainWindow.h"
 
 GuiAppWindow::~GuiAppWindow() = default;
 GuiAppWindow::GuiAppWindow(IRenderer* renderer) :
@@ -28,14 +29,14 @@ bool GuiAppWindow::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
     //
     //ReturnIfFalse(m_guiWidget->Create(move(clone)));
     
-    m_scene = move(scene);
+    //m_scene = move(scene);
     return true;
 }
 
 void GuiAppWindow::Update()
 {
     //m_guiWidget->Update();
-    m_scene->Update(nullptr);
+    //m_scene->Update(nullptr);
 }
 
 #include <shobjidl.h> // IFileOpenDialog 정의
@@ -81,6 +82,9 @@ void ShowFileOpenDialog(const std::wstring& initialPath, std::wstring& selectedF
     CoUninitialize();
 }
 
+bool showErrorDialog = false;
+
+//ToolCore라고 명명하자.
 void GuiAppWindow::Render(ImGuiIO* io)
 {
     if (ImGui::BeginMainMenuBar())
@@ -92,11 +96,34 @@ void GuiAppWindow::Render(ImGuiIO* io)
                 wstring path = std::filesystem::current_path().wstring();
                 wstring selectedFilename{};
                 ShowFileOpenDialog(path, selectedFilename);
-                
+                m_mainWindow = make_unique<MainWindow>(m_renderer);
+                auto result = m_mainWindow->CreateScene(selectedFilename);
+                if (result == false)
+                {
+                    showErrorDialog = true;
+                    m_mainWindow.reset();
+                }
             }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
+
+        //if (showErrorDialog) {
+        //    ImGui::OpenPopup("Error");
+        //}
+
+        //// 다이얼로그 정의
+        //if (ImGui::BeginPopupModal("Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+        //{
+        //    ImGui::Text("Failed to open the file. Please check the file path.");
+        //    ImGui::Separator();
+        //    if (ImGui::Button("OK", ImVec2(120, 0)))
+        //    {
+        //        showErrorDialog = false; // 다이얼로그 닫기
+        //        ImGui::CloseCurrentPopup();
+        //    }
+        //    ImGui::EndPopup();
+        //}
     }
 
     return;
