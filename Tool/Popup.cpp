@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Popup.h"
 #include <shobjidl.h>
+#include <wrl/wrappers/corewrappers.h>
 
 using namespace Tool;
 
@@ -9,47 +10,42 @@ Popup::~Popup() = default;
 
 bool Popup::OpenFileDialog(wstring& filename)
 {
-    // COM 초기화
-    HRESULT hr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
-    if (FAILED(hr)) return false;
+    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
 
     wstring initialPath = std::filesystem::current_path().wstring();
     IFileOpenDialog* pFileOpen = nullptr;
 
     // 파일 열기 대화상자 생성
-    hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileOpen));
-    if (SUCCEEDED(hr)) 
-    {
-        // 초기 폴더 설정
-        if (!initialPath.empty()) {
-            IShellItem* pInitialFolder = nullptr;
-            hr = SHCreateItemFromParsingName(initialPath.c_str(), nullptr, IID_PPV_ARGS(&pInitialFolder));
-            if (SUCCEEDED(hr)) {
-                pFileOpen->SetFolder(pInitialFolder); // 초기 폴더 설정
-                pInitialFolder->Release();
-            }
-        }
-
-        // 대화상자 표시
-        hr = pFileOpen->Show(nullptr);
+    HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileOpen));
+    if (!SUCCEEDED(hr))
+        return false;
+    
+    // 초기 폴더 설정
+    if (!initialPath.empty()) {
+        IShellItem* pInitialFolder = nullptr;
+        hr = SHCreateItemFromParsingName(initialPath.c_str(), nullptr, IID_PPV_ARGS(&pInitialFolder));
         if (SUCCEEDED(hr)) {
-            IShellItem* pItem = nullptr;
-            hr = pFileOpen->GetResult(&pItem);
-            if (SUCCEEDED(hr)) {
-                PWSTR filePath = nullptr;
-                hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &filePath);
-                if (SUCCEEDED(hr)) {
-                    filename = filePath;
-                    CoTaskMemFree(filePath);
-                }
-                pItem->Release();
-            }
+            hr = pFileOpen->SetFolder(pInitialFolder); // 초기 폴더 설정
+            pInitialFolder->Release();
         }
-        pFileOpen->Release();
     }
 
-    // COM 종료
-    CoUninitialize();
+    // 대화상자 표시
+    hr = pFileOpen->Show(nullptr);
+    if (SUCCEEDED(hr)) {
+        IShellItem* pItem = nullptr;
+        hr = pFileOpen->GetResult(&pItem);
+        if (SUCCEEDED(hr)) {
+            PWSTR filePath = nullptr;
+            hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &filePath);
+            if (SUCCEEDED(hr)) {
+                filename = filePath;
+                CoTaskMemFree(filePath);
+            }
+            pItem->Release();
+        }
+    }
+    pFileOpen->Release();
 
     return true;
 }

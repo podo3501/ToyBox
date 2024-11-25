@@ -18,8 +18,13 @@ ToolSystem::ToolSystem(IRenderer* renderer) :
     m_popup{ make_unique<Popup>() },
     m_component{ nullptr }
 {
-    m_mainMenuBar = make_unique<MainMenuBar>(m_popup.get());
+    m_mainMenuBar = make_unique<MainMenuBar>(this, m_popup.get());
     m_renderer->AddImguiComponent(this);
+}
+
+void ToolSystem::SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept
+{
+    m_mainWindow = move(mainWindow); 
 }
 
 bool ToolSystem::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
@@ -45,11 +50,10 @@ void ToolSystem::Update()
     //m_scene->Update(nullptr);
 }
 
-//ToolMenu·Î »©¾ß ÇÒµí?
 void ToolSystem::Render(ImGuiIO* io)
 {
     m_popup->Render();
-    m_mainWindow = m_mainMenuBar->OpenFile(m_renderer);
+    m_mainMenuBar->Excute();
 
     return;
 

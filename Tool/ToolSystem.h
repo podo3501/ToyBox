@@ -23,6 +23,9 @@ public:
     virtual void Update() override;
     virtual void Render(ImGuiIO* io) override;
 
+    void SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept;
+    IRenderer* GetRenderer() const noexcept { return m_renderer; }
+
 private:
     IRenderer* m_renderer;
     unique_ptr<Tool::MainMenuBar> m_mainMenuBar;
