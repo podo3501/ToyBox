@@ -6,7 +6,7 @@ class Window;
 class TestImgui;
 class Scene;
 
-class GuiAppWindow;
+class ToolSystem;
 class GuiWidget;
 
 class ToolMainLoop final : public MainLoop
@@ -29,6 +29,6 @@ private:
 	unique_ptr<TestImgui> m_testImgui;
 	unique_ptr<Scene> m_toolScene;
 
-	unique_ptr<GuiAppWindow> m_guiAppWindow;
+	unique_ptr<ToolSystem> m_toolSystem;
 };
 

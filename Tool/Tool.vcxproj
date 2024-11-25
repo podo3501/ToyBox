@@ -143,7 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GuiAppWindow.cpp" />
+    <ClCompile Include="MainMenuBar.cpp" />
+    <ClCompile Include="Popup.cpp" />
+    <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="TestImgui.cpp" />
@@ -157,7 +159,9 @@
     <ClCompile Include="ToolMainLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GuiAppWindow.h" />
+    <ClInclude Include="MainMenuBar.h" />
+    <ClInclude Include="Popup.h" />
+    <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="TestImgui.h" />

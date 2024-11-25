@@ -2,7 +2,7 @@
 #include "ToolMainLoop.h"
 #include "TestImgui.h"
 #include "GuiWidget.h"
-#include "GuiAppWindow.h"
+#include "ToolSystem.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Scene.h"
@@ -56,7 +56,7 @@ bool ToolMainLoop::LoadResources()
 
 bool ToolMainLoop::SetDatas(IGetValue* getValue)
 {
-    m_guiAppWindow = make_unique<GuiAppWindow>(m_renderer);
+    m_toolSystem = make_unique<ToolSystem>(m_renderer);
 
     //auto cloneScene = m_toolScene->Clone();
     //ReturnIfFalse(m_guiAppWindow->Create(move(cloneScene), { 400, 300 }));
@@ -73,7 +73,7 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTr
 
     //m_toolScene->Update(mouseTracker);
 
-    m_guiAppWindow->Update();
+    m_toolSystem->Update();
 
     PIXEndEvent();
 }

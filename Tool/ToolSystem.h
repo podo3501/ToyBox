@@ -5,12 +5,17 @@ struct IRenderScene;
 class UIComponent;
 class MainWindow;
 class GuiWidget;
+namespace Tool
+{
+    class MainMenuBar;
+    class Popup;
+}
 
-class GuiAppWindow : public IImguiComponent
+class ToolSystem : public IImguiComponent
 {
 public:
-    ~GuiAppWindow();
-    GuiAppWindow(IRenderer* renderer);
+    ~ToolSystem();
+    ToolSystem(IRenderer* renderer);
 
     bool Create(unique_ptr<IRenderScene> scene, const XMUINT2& size);
 
@@ -20,6 +25,8 @@ public:
 
 private:
     IRenderer* m_renderer;
+    unique_ptr<Tool::MainMenuBar> m_mainMenuBar;
+    unique_ptr<Tool::Popup> m_popup;    //modal 창을 띄워주는 클래스(다른것들도 들어가서 나중에 확장될 가능성이 있음)
     unique_ptr<IRenderScene> m_scene;
     UIComponent* m_component;
     ImTextureID m_textureID{};

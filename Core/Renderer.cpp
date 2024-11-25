@@ -295,6 +295,7 @@ IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
 void Renderer::AddLoadScene(IRenderScene* scene) { m_loadScenes.emplace_back(scene); }
 void Renderer::AddRenderScene(IRenderScene* scene) { m_renderScenes.emplace_back(scene); }
 void Renderer::AddImguiComponent(IImguiComponent* comp) { m_imgui->AddComponent(comp); }
+void Renderer::RemoveImguiComponent(IImguiComponent* comp) noexcept { m_imgui->RemoveComponent(comp); }
 
 bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID)
 {

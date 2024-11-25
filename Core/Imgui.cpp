@@ -52,6 +52,11 @@ void Imgui::AddComponent(IImguiComponent* comp)
     m_components.emplace_back(comp);
 }
 
+void Imgui::RemoveComponent(IImguiComponent* comp) noexcept
+{
+    erase(m_components, comp);
+}
+
 void Imgui::Render(ID3D12GraphicsCommandList* commandList)
 {
     ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);

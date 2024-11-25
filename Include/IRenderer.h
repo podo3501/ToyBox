@@ -51,6 +51,7 @@ public:
     virtual void AddLoadScene(IRenderScene* scene) = 0;
     virtual void AddRenderScene(IRenderScene* scene) = 0;
     virtual void AddImguiComponent(IImguiComponent* item) = 0;
+    virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept = 0;
 
     //Scene에 Component를 넣고 읽어들일 데이터를 셋팅후 LoadScene을 호출한다. 
     virtual bool LoadScenes() = 0;
