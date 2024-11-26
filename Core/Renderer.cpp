@@ -292,7 +292,14 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 #pragma endregion
 
 IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
-void Renderer::AddLoadScene(IRenderScene* scene) { m_loadScenes.emplace_back(scene); }
+void Renderer::AddLoadScene(IRenderScene* scene) 
+{ 
+    m_loadScenes.emplace_back(scene); 
+}
+void Renderer::RemoveLoadScene(IRenderScene* scene) noexcept 
+{ 
+    erase(m_loadScenes, scene); 
+}
 void Renderer::AddRenderScene(IRenderScene* scene) { m_renderScenes.emplace_back(scene); }
 void Renderer::AddImguiComponent(IImguiComponent* comp) { m_imgui->AddComponent(comp); }
 void Renderer::RemoveImguiComponent(IImguiComponent* comp) noexcept { m_imgui->RemoveComponent(comp); }
@@ -310,6 +317,11 @@ bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImT
     m_renderTextures.insert(make_pair(outTextureID, move(renderTexture)));
 
     return true;
+}
+
+void Renderer::RemoveRenderTexture(ImTextureID textureID)
+{
+    m_renderTextures.erase(textureID);
 }
 
 bool Renderer::ModifyRenderTexture(ImTextureID id, const XMUINT2& size)

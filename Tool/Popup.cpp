@@ -12,7 +12,8 @@ bool Popup::OpenFileDialog(wstring& filename)
 {
     Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
 
-    wstring initialPath = std::filesystem::current_path().wstring();
+    wstring initialPath = L"../Resources/";
+    //wstring initialPath = std::filesystem::current_path().wstring();
     IFileOpenDialog* pFileOpen = nullptr;
 
     // 파일 열기 대화상자 생성

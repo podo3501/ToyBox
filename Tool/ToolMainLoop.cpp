@@ -73,7 +73,7 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTr
 
     //m_toolScene->Update(mouseTracker);
 
-    m_toolSystem->Update();
+    m_toolSystem->Update(timer, mouseTracker);
 
     PIXEndEvent();
 }

@@ -16,7 +16,7 @@ public:
 	virtual unique_ptr<IRenderScene> Clone() override;
 	virtual bool LoadScene(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* value) override;
-	virtual bool Update(const Mouse::ButtonStateTracker* mouseTracker) override;
+	virtual bool Update(const Mouse::ButtonStateTracker* mouseTracker) noexcept override;
 	virtual void RenderScene(IRender* render) override;
 	virtual void AddComponent(const Vector2& position, unique_ptr<UIComponent> comp) override;
 	virtual UIComponent* GetComponent(const string& name) override;

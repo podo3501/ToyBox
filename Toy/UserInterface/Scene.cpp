@@ -62,7 +62,7 @@ void Scene::AddComponent(const Vector2& position, unique_ptr<UIComponent> comp)
 	m_mainPanel->AddComponent(move(comp), position);
 }
 
-bool Scene::Update(const Mouse::ButtonStateTracker* mouseTracker)
+bool Scene::Update(const Mouse::ButtonStateTracker* mouseTracker) noexcept
 {
 	return m_mainPanel->Update({}, mouseTracker);
 }

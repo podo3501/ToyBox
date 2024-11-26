@@ -20,7 +20,7 @@ string ImagePart::GetType() const { return string(typeid(ImagePart).name()); }
 bool ImagePart::Load(ILoadData* load)
 {
 	XMUINT2 size{};
-	auto result = load->LoadTexture(GetResourcePath() + m_filename, nullptr, m_index, &size);
+	auto result = load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, &size);
 	if (!m_source.IsEmpty()) return result;
 
 	m_source = { 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };

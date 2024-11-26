@@ -14,6 +14,7 @@ public:
     inline DirectX::SimpleMath::Vector2 GetOutputSize() const noexcept;
     inline void OnWindowSizeChanged(const RECT& size) noexcept;
     inline HWND GetHandle() const noexcept { return m_wnd; }
+    static void ExitGame() noexcept;
     
 private:
     bool WindowRegisterClass(HINSTANCE hInstance, const std::wstring& className);

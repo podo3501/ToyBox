@@ -39,9 +39,16 @@ json& JsonOperation::GetRead()
     return m_read->GetCurrent();
 }
 
+bool IsJsonFile(const wstring& filename)
+{
+    return filesystem::path(filename).extension() == ".json";
+}
+
 bool JsonOperation::Write(const wstring& filename)
 {
-    ofstream file(GetResourcePath() + filename);
+    ReturnIfFalse(IsJsonFile(filename));
+
+    ofstream file(GetResourceFullFilename(filename));
     if (!file.is_open())
         return false;
 
@@ -54,7 +61,9 @@ bool JsonOperation::Write(const wstring& filename)
 
 bool JsonOperation::Read(const wstring& filename)
 {
-    ifstream file(GetResourcePath() + filename);
+    ReturnIfFalse(IsJsonFile(filename));
+
+    ifstream file(GetResourceFullFilename(filename));
     if (!file.is_open())
         return false;
 

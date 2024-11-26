@@ -22,9 +22,9 @@ ToolSystem::ToolSystem(IRenderer* renderer) :
     m_renderer->AddImguiComponent(this);
 }
 
-void ToolSystem::SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept
+void ToolSystem::SetMainWindow(shared_ptr<MainWindow> mainWindow) noexcept
 {
-    m_mainWindow = move(mainWindow); 
+    m_mainWindow = mainWindow; 
 }
 
 bool ToolSystem::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
@@ -44,8 +44,11 @@ bool ToolSystem::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
     return true;
 }
 
-void ToolSystem::Update()
+void ToolSystem::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker)
 {
+    m_mainMenuBar->Update();
+    if (m_mainWindow)
+        m_mainWindow->Update(timer, mouseTracker);
     //m_guiWidget->Update();
     //m_scene->Update(nullptr);
 }

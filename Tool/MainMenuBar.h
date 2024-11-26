@@ -26,8 +26,8 @@ namespace Tool
 		MainMenuBar(ToolSystem* toolSystem, Popup* popup);
 		~MainMenuBar();
 
-		//Render에서 호출해야함.
-		bool Excute();
+		void Update();
+		bool Excute(); //Render에서 호출해야함.
 
 	private:
 		void ShowMainMenuBar();

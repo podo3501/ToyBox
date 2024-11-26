@@ -56,7 +56,7 @@ bool TextArea::LoadResources(ILoadData* load)
 	for (const auto& file : m_fontFileList)
 	{
 		size_t index{ 0 };
-		ReturnIfFalse(load->LoadFont(GetResourcePath() + file.second, index));
+		ReturnIfFalse(load->LoadFont(GetResourceFullFilename(file.second), index));
 		m_font.insert(make_pair(file.first, index));
 	}
 

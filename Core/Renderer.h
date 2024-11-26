@@ -46,6 +46,7 @@ public:
     virtual bool Initialize() override;
 
     virtual void AddLoadScene(IRenderScene* scene) override;
+    virtual void RemoveLoadScene(IRenderScene* scene) noexcept override;
     virtual void AddRenderScene(IRenderScene* scene) override;
     virtual void AddImguiComponent(IImguiComponent* item) override;
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept override;
@@ -53,6 +54,7 @@ public:
     virtual bool LoadScenes() override;
     virtual IGetValue* GetValue() const noexcept override;
     virtual bool CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID) override;
+    virtual void RemoveRenderTexture(ImTextureID textureID) override;
     virtual bool ModifyRenderTexture(ImTextureID id, const XMUINT2& size) override;
     virtual void Draw() override;
 

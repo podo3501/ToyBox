@@ -70,7 +70,11 @@ void Imgui::PrepareRender()
     ImGui::NewFrame();
 
     //여기서 ui 만드는 부분 호출한다.
-    ranges::for_each(m_components, [this](const auto& item) { item->Render(m_io); });
+    ranges::for_each(m_components, [this](const auto& item) 
+        { 
+            item->Render(m_io); 
+        }
+    );
 
     // Rendering
     ImGui::Render();

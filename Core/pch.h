@@ -70,6 +70,7 @@
 #include <cwchar>
 #include <exception>
 #include <fstream>
+#include <filesystem>
 #include <functional>
 #include <iterator>
 #include <numbers>

@@ -38,7 +38,7 @@ public:
     virtual ~IImguiComponent() {};
 
     virtual void Render(ImGuiIO* io) = 0;
-    virtual void Update() = 0;
+    //virtual void Update() = 0;
 };
 
 struct IRenderScene;
@@ -49,6 +49,7 @@ public:
 
     virtual bool Initialize() = 0;
     virtual void AddLoadScene(IRenderScene* scene) = 0;
+    virtual void RemoveLoadScene(IRenderScene* scene) noexcept = 0;
     virtual void AddRenderScene(IRenderScene* scene) = 0;
     virtual void AddImguiComponent(IImguiComponent* item) = 0;
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept = 0;
@@ -58,6 +59,7 @@ public:
     virtual IGetValue* GetValue() const noexcept = 0;
     virtual bool CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID) = 0;
     virtual bool ModifyRenderTexture(ImTextureID id, const XMUINT2& size) = 0;
+    virtual void RemoveRenderTexture(ImTextureID textureID) = 0;
     virtual void Draw() = 0;
 
     virtual void OnActivated() = 0;
