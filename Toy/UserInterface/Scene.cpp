@@ -4,6 +4,7 @@
 #include "../Include/IRenderer.h"
 #include "Panel.h"
 #include "JsonOperation.h"
+#include "../HelperClass.h"
 
 using json = nlohmann::json;
 
@@ -62,7 +63,7 @@ void Scene::AddComponent(const Vector2& position, unique_ptr<UIComponent> comp)
 	m_mainPanel->AddComponent(move(comp), position);
 }
 
-bool Scene::Update(const Mouse::ButtonStateTracker* mouseTracker) noexcept
+bool Scene::Update(CustomButtonStateTracker* mouseTracker) noexcept
 {
 	return m_mainPanel->Update({}, mouseTracker);
 }

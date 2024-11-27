@@ -18,7 +18,7 @@ public:
 	virtual unique_ptr<UIComponent> Clone();
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* getValue) override;
-	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept override;
+	virtual bool Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept override;
 	virtual void Render(IRender* render) override;
 
 	void SetFont(const string& name,

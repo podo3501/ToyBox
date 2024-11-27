@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Button.h"
 #include "../Utility.h"
+#include "../HelperClass.h"
 #include "UIType.h"
 #include "UILayout.h"
 #include "ImagePartSet.h"
@@ -64,7 +65,7 @@ bool Button::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool Button::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept
+bool Button::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
 {
 	auto layout = GetLayout();
 	const Vector2& pos = layout->GetPosition(position);
@@ -72,8 +73,9 @@ bool Button::Update(const Vector2& position, const Mouse::ButtonStateTracker* tr
 	for (const auto& partSet : m_image | views::values)
 		ReturnIfFalse(partSet->Update(pos));
 
-	bool bHover = ranges::any_of(m_image | views::values, [mouseState = tracker->GetLastState()](const auto& partSet) {
-		return partSet->IsHover(mouseState.x, mouseState.y);
+	auto test = tracker->GetOffsetPosition();
+	bool bHover = ranges::any_of(m_image | views::values, [mousePos = tracker->GetOffsetPosition()](const auto& partSet) {
+		return partSet->IsHover(mousePos.x, mousePos.y);
 		});
 
 	if (!bHover)

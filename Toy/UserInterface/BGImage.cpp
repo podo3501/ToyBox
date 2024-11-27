@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "BGImage.h"
 #include "../Utility.h"
+#include "../HelperClass.h"
 #include "UILayout.h"
 #include "ImagePartSet.h"
 #include "JsonOperation.h"
@@ -55,7 +56,7 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool BGImage::Update(const Vector2& position, const Mouse::ButtonStateTracker*) noexcept
+bool BGImage::Update(const Vector2& position, CustomButtonStateTracker*) noexcept
 {
 	auto layout = GetLayout();
 	const Vector2 pos = layout->GetPosition(position);

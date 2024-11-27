@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "TextArea.h"
 #include "../Include/IRenderer.h"
-#include "UILayout.h"
 #include "../Utility.h"
-#include "UIUtility.h"
+#include "../HelperClass.h"
 #include "../Config.h"
+#include "UILayout.h"
+#include "UIUtility.h"
 #include "JsonOperation.h"
 
 using json = nlohmann::json;
@@ -129,7 +130,7 @@ void TextArea::SetFont(const string& name,
 		});
 }
 
-bool TextArea::Update(const Vector2& position, const Mouse::ButtonStateTracker*) noexcept
+bool TextArea::Update(const Vector2& position, CustomButtonStateTracker*) noexcept
 {
 	auto layout = GetLayout();
 	m_posByResolution = layout->GetPosition(position);

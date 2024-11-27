@@ -21,7 +21,7 @@ public:
 
 	virtual unique_ptr<UIComponent> Clone() override;
 	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* mouseTracker) noexcept;
+	virtual bool Update(const Vector2& position, CustomButtonStateTracker* mouseTracker) noexcept;
 	virtual void Render(IRender* renderer) override;
 
 	bool ChangeArea(const Rectangle& area) noexcept;

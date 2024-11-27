@@ -5,6 +5,7 @@ struct IGetValue;
 struct IRender;
 class UIComponent;
 class JsonOperation;
+class CustomButtonStateTracker;
 
 class TransformComponent
 {
@@ -18,7 +19,7 @@ public:
 
 	bool LoadResources(ILoadData* load);
 	bool SetDatas(IGetValue* value);
-	bool Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept;
+	bool Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept;
 	void SetSelected(bool selected) noexcept;
 	bool IsSelected() const noexcept;
 	bool IsPicking(const Vector2& pos) const noexcept;

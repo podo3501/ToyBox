@@ -2,6 +2,7 @@
 #include "CoreTestFixture.h"
 #include "../Core/TextureIndexing.h"
 #include "../Core/DeviceResources.h"
+#include "../Core/Utility.h"
 
 namespace BasicCore
 {
@@ -68,5 +69,18 @@ namespace BasicCore
 			m_deviceResources->GetD3DDevice(), m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
 		EXPECT_TRUE(LoadResources(LoadFont, texIndexing.get()));
+	}
+
+	TEST(CoreUtility, CycleIterator)
+	{
+		CycleIterator addIter(1, 7);
+		for (int a = 1; a != 7; ++a)
+			addIter.Increase();
+		EXPECT_EQ(addIter.GetCurrent(), 1);
+
+		CycleIterator subIter(-1, 7);
+		for (int a = 1; a != 2; ++a)
+			subIter.Decrease();
+		EXPECT_EQ(subIter.GetCurrent(), 6);
 	}
 }

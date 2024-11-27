@@ -3,6 +3,7 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "../Utility.h"
+#include "../HelperClass.h"
 #include "TransformComponent.h"
 #include "JsonOperation.h"
 
@@ -110,7 +111,7 @@ bool UIComponent::SetDatas(IGetValue* value)
 		});
 }
 
-bool UIComponent::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept
+bool UIComponent::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
 {
 	return ranges::all_of(m_components, [&position, tracker](const auto& prop) {
 		return prop->Update(position, tracker);

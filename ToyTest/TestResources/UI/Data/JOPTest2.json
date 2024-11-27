@@ -20,71 +20,73 @@
         "Components": [
             {
                 "Position": {
-                    "x": 0.2,
-                    "y": 0.2
+                    "x": 0.5,
+                    "y": 0.5
                 },
                 "Component": {
-                    "Type": "class Button",
-                    "StateImage": [
-                        {
-                            "Normal": {
-                                "Images": [
-                                    {
-                                        "Index": 0,
-                                        "Filename": "UI/Blue/check_square_color_cross.png",
-                                        "Source": {
-                                            "x": 0,
-                                            "y": 0,
-                                            "width": 32,
-                                            "height": 32
-                                        }
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "Hover": {
-                                "Images": [
-                                    {
-                                        "Index": 1,
-                                        "Filename": "UI/Blue/check_square_grey_cross.png",
-                                        "Source": {
-                                            "x": 0,
-                                            "y": 0,
-                                            "width": 32,
-                                            "height": 32
-                                        }
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "Pressed": {
-                                "Images": [
-                                    {
-                                        "Index": 2,
-                                        "Filename": "UI/Gray/check_square_grey_cross.png",
-                                        "Source": {
-                                            "x": 0,
-                                            "y": 0,
-                                            "width": 32,
-                                            "height": 32
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ],
-                    "Name": "Button",
+                    "Type": "class TextArea",
+                    "FontFileList": {
+                        "English": "UI/Font/CourierNewBoldS18.spritefont",
+                        "Hangle": "UI/Font/MaleunGothicS16.spritefont"
+                    },
+                    "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
+                    "Name": "TextArea",
                     "Layout": {
                         "Area": {
                             "x": 0,
                             "y": 0,
-                            "width": 32,
-                            "height": 32
+                            "width": 320,
+                            "height": 120
                         },
                         "Origin": "Center"
-                    }
+                    },
+                    "Components": [
+                        {
+                            "Position": {
+                                "x": 1.0,
+                                "y": 2.0
+                            },
+                            "Component": {
+                                "Type": "class TextArea",
+                                "FontFileList": {
+                                    "English": "UI/Font/CourierNewBoldS18.spritefont",
+                                    "Hangle": "UI/Font/MaleunGothicS16.spritefont"
+                                },
+                                "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
+                                "Name": "rTextArea",
+                                "Layout": {
+                                    "Area": {
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 320,
+                                        "height": 120
+                                    },
+                                    "Origin": "Center"
+                                }
+                            }
+                        },
+                        {
+                            "Position": {
+                                "x": 3.0,
+                                "y": 4.0
+                            },
+                            "Component": {
+                                "Type": "class TextArea",
+                                "FontFileList": null,
+                                "Text": "",
+                                "Name": "emptyTextArea",
+                                "Layout": {
+                                    "Area": {
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 0,
+                                        "height": 0
+                                    },
+                                    "Origin": "LeftTop"
+                                }
+                            }
+                        }
+                    ]
                 }
             }
         ]

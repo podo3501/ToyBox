@@ -6,6 +6,7 @@
 #include "../Toy/WindowProcedure.h"
 #include "../Toy/Window.h"
 #include "../Toy/Utility.h"
+#include "../Toy/HelperClass.h"
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/UIType.h"
@@ -45,7 +46,7 @@ namespace BasicClient
 			EXPECT_TRUE(source->right == 24 && source->bottom == 48);
 	}
 
-	void SetMouse(int x, int y, Mouse::ButtonStateTracker& mouseTracker)
+	void SetMouse(int x, int y, CustomButtonStateTracker& mouseTracker)
 	{
 		Mouse::State mouseState;
 		mouseState.x = x;
@@ -82,7 +83,7 @@ namespace BasicClient
 
 		Button* button = static_cast<Button*>(m_testScene->GetComponent("Button"));
 		//normal 버튼일 경우
-		Mouse::ButtonStateTracker mouseTracker;
+		CustomButtonStateTracker mouseTracker;
 		SetMouse(100, 100, mouseTracker);
 		button->ChangeArea({ 0, 0, 126,48 });
 		m_testScene->Update(&mouseTracker);
@@ -169,7 +170,7 @@ namespace BasicClient
 
 		auto button = m_testScene->GetComponent("Button");
 		//normal 버튼일 경우
-		Mouse::ButtonStateTracker mouseTracker;
+		CustomButtonStateTracker mouseTracker;
 		SetMouse(150, 110, mouseTracker);
 		m_testScene->Update(&mouseTracker);
 

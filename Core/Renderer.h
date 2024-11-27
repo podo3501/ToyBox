@@ -10,6 +10,7 @@
 struct IImgui;
 class TextureIndexing;
 class RenderTexture;
+class CycleIterator;
 
 namespace DX
 {
@@ -82,7 +83,8 @@ private:
     unique_ptr<IImgui> m_imgui;
     unique_ptr<SpriteBatch> m_spriteBatch;
     unique_ptr<TextureIndexing> m_texIndexing;
-    unique_ptr<RenderTexture> m_renderTexture;
+
+    unique_ptr<CycleIterator> m_renderTexOffset;
     map<ImTextureID, unique_ptr<RenderTexture>> m_renderTextures;
 
     vector<IRenderScene*> m_loadScenes;

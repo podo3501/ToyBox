@@ -17,7 +17,7 @@ protected:
 	virtual bool InitializeDerived() override;
 	virtual bool LoadResources() override;
 	virtual bool SetDatas(IGetValue* getValue) override;
-	virtual void Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker) override;
+	virtual void Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker) override;
 
 private:
 	Window* m_window;

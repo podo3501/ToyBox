@@ -205,6 +205,7 @@
   <ItemGroup>
     <ClInclude Include="Config.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="HelperClass.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="MainLoop.h" />
@@ -231,6 +232,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="HelperClass.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="UserInterface\Dialog.cpp" />

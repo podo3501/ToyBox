@@ -3,6 +3,7 @@
 #include "UIComponent.h"
 #include "JsonOperation.h"
 #include "../Utility.h"
+#include "../HelperClass.h"
 
 TransformComponent::TransformComponent() 
 {}
@@ -47,7 +48,7 @@ bool TransformComponent::SetDatas(IGetValue* value)
 	return m_component->SetDatas(value);
 }
 
-bool TransformComponent::Update(const Vector2& position, const Mouse::ButtonStateTracker* tracker) noexcept 
+bool TransformComponent::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
 { 
 	return m_component->Update(m_position + position, tracker); 
 }

@@ -6,6 +6,7 @@
 #include "StepTimer.h"
 #include "WindowProcedure.h"
 #include "Config.h"
+#include "HelperClass.h"
 
 MainLoop::~MainLoop() = default;
 MainLoop::MainLoop(Window* window, IRenderer* renderer) :
@@ -73,14 +74,20 @@ int MainLoop::Run()
 }
 
 Mouse::ButtonStateTracker mouseTracker;
+CustomButtonStateTracker customMouseTracker;
 void MainLoop::Tick()
 {
     auto timer = m_timer.get();
+    customMouseTracker.Update(m_mouse->GetState());
+    if (customMouseTracker.GetLastState().x != 0)
+    {
+        int a = 1;
+    }
     mouseTracker.Update(m_mouse->GetState());
 
     m_timer->Tick([&]()
         {
-            Update(timer, &mouseTracker);
+            Update(timer, &customMouseTracker);
         });
    
     // Don't try to render anything before the first Update.

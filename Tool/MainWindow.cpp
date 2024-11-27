@@ -5,6 +5,7 @@
 #include "../Toy/UserInterface/Scene.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
+#include "../Toy/HelperClass.h"
 
 MainWindow::~MainWindow()
 {
@@ -15,6 +16,7 @@ MainWindow::~MainWindow()
 
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
+	m_name{ "MainWindow" },
 	m_scene{ make_unique<Scene>(GetRectResolution()) }
 {
 	m_renderer->AddImguiComponent(this);
@@ -33,10 +35,26 @@ bool MainWindow::CreateScene(const wstring& filename)
 	return true;
 }
 
-void MainWindow::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker)
+void MainWindow::Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker)
 {
+	ImGuiWindow* window = ImGui::FindWindowByName(m_name.c_str());
+	if (window == nullptr || window->Active == false)
+		return;
+
+	ImGuiWindow* focusedWindow = GImGui->NavWindow;
+	if (window != focusedWindow)
+		return;
+
+	float frameHeight = ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
+	XMUINT2 offset{};
+	offset.x = static_cast<uint32_t>(window->Pos.x);
+	offset.y = static_cast<uint32_t>(window->Pos.y) + static_cast<uint32_t>(frameHeight);
+	mouseTracker->SetOffset(offset);
+
 	m_scene->Update(mouseTracker);
 }
+
+bool isPinned = false;
 
 void MainWindow::Render(ImGuiIO* io)
 {
@@ -44,15 +62,11 @@ void MainWindow::Render(ImGuiIO* io)
 		return;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::Begin("App Window", &m_visible, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin(m_name.c_str(), &m_visible, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
+
+	ImVec2 windowPos = ImGui::GetWindowPos();
 
 	ImGui::Image(m_textureID, { 800.f, 600.f });
 	ImGui::End();
-
-	//if (!m_visible)	//창이 닫혔다면
-	//{
-	//	auto shared_this = shared_from_this();
-	//	shared_this.reset();
-	//}
 }

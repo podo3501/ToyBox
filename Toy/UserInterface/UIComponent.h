@@ -6,6 +6,7 @@ struct IRender;
 class UILayout;
 class TestClass;
 class JsonOperation;
+class CustomButtonStateTracker;
 class TransformComponent;
 
 class UIComponent
@@ -26,7 +27,7 @@ public:
 	virtual void Render(IRender* render);
 	virtual bool LoadResources(ILoadData* load);
 	virtual bool SetDatas(IGetValue*);
-	virtual bool Update(const Vector2& position, const Mouse::ButtonStateTracker* mouseTracker) noexcept;
+	virtual bool Update(const Vector2& position, CustomButtonStateTracker* mouseTracker) noexcept;
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 	bool ChangeArea(const Rectangle& area) noexcept;

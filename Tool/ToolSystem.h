@@ -3,6 +3,7 @@
 
 struct IRenderScene;
 class UIComponent;
+class CustomButtonStateTracker;
 class MainWindow;
 class GuiWidget;
 
@@ -24,7 +25,7 @@ public:
     ToolSystem(IRenderer* renderer);
 
     bool Create(unique_ptr<IRenderScene> scene, const XMUINT2& size);
-    void Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker);
+    void Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker);
 
     //IImguiComponent
     //virtual void Update() override;

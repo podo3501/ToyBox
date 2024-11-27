@@ -122,7 +122,7 @@ bool GameMainLoop::SetDatas(IGetValue* getValue)
     //return result;
 }
 
-void GameMainLoop::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker)
+void GameMainLoop::Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 

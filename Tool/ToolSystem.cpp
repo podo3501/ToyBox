@@ -44,7 +44,7 @@ bool ToolSystem::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
     return true;
 }
 
-void ToolSystem::Update(const DX::StepTimer* timer, const Mouse::ButtonStateTracker* mouseTracker)
+void ToolSystem::Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker)
 {
     m_mainMenuBar->Update();
     if (m_mainWindow)
