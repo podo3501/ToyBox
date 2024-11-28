@@ -20,7 +20,7 @@ public:
 
 	//bool SetResources(const wstring& filename);
 	bool LoadResources(ILoadData* load);
-	bool Update(const Vector2& position) noexcept;
+	bool SetPosition(const Vector2& position) noexcept;
 	void Render(IRender* render);
 	bool IsPicking(const Vector2& pos)  const noexcept;
 	const Rectangle& GetArea() const noexcept;

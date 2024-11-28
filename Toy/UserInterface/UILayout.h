@@ -23,7 +23,7 @@ public:
 	void Set(const Origin& origin) noexcept;
 
 	const Rectangle& GetArea() const noexcept { return m_area; }
-	Vector2 GetPosition(const Vector2& resolution) const noexcept;
+	Vector2 GetPosition(const Vector2& resolution = {}) const noexcept;
 
 	void Union(const Rectangle& area) noexcept;
 

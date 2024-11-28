@@ -132,8 +132,7 @@ void TextArea::SetFont(const string& name,
 
 bool TextArea::Update(const Vector2& position, CustomButtonStateTracker*) noexcept
 {
-	auto layout = GetLayout();
-	m_posByResolution = layout->GetPosition(position);
+	m_posByResolution = GetPositionByLayout(position);
 
 	return true;
 }

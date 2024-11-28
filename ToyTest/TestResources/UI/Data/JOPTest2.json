@@ -1,19 +1,13 @@
 {
     "Component": {
         "Type": "class Panel",
-        "Area": {
-            "x": 0,
-            "y": 0,
-            "width": 0,
-            "height": 0
-        },
         "Name": "Main",
         "Layout": {
             "Area": {
                 "x": 0,
                 "y": 0,
-                "width": 0,
-                "height": 0
+                "width": 800,
+                "height": 600
             },
             "Origin": "LeftTop"
         },
@@ -43,8 +37,8 @@
                     "Components": [
                         {
                             "Position": {
-                                "x": 1.0,
-                                "y": 2.0
+                                "x": 0.03,
+                                "y": 0.04
                             },
                             "Component": {
                                 "Type": "class TextArea",
@@ -67,8 +61,8 @@
                         },
                         {
                             "Position": {
-                                "x": 3.0,
-                                "y": 4.0
+                                "x": 0.3,
+                                "y": 0.4
                             },
                             "Component": {
                                 "Type": "class TextArea",

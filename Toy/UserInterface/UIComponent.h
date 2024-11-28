@@ -45,6 +45,9 @@ public:
 	void SetLayout(const UILayout& layout) noexcept;
 
 	virtual void SerializeIO(JsonOperation* operation);
+
+protected:
+	Vector2 GetPositionByLayout(const Vector2& position) noexcept;
 	
 private:
 	TransformComponent* FindTransformComponent(const string& name) const noexcept;

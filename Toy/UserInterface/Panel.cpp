@@ -24,19 +24,19 @@ unique_ptr<UIComponent> Panel::Clone()
     return clone;
 }
 
-const Rectangle& Panel::GetArea() const noexcept
-{
-    return m_area;
-}
-
-void Panel::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos)
-{
-    m_area = Rectangle::Union(m_area, comp->GetArea());
-    UIComponent::AddComponent(move(comp), pos);
-}
+//const Rectangle& Panel::GetArea() const noexcept
+//{
+//    return m_area;
+//}
+//
+//void Panel::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos)
+//{
+//    m_area = Rectangle::Union(m_area, comp->GetArea());
+//    UIComponent::AddComponent(move(comp), pos);
+//}
 
 void Panel::SerializeIO(JsonOperation* operation)
 {
-    operation->Process("Area", m_area);
+    //operation->Process("Area", m_area);
     UIComponent::SerializeIO(operation);
 }

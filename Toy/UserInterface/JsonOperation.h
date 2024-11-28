@@ -76,9 +76,26 @@ private:
 	std::stack<T*> parentStack;      // 부모 객체 추적을 위한 스택
 };
 
+// STL 컨테이너인지 확인하는 메타함수
+template <typename T>
+struct is_stl_container : std::false_type {};
+
+// STL 컨테이너 특수화
+template <typename... Args>
+struct is_stl_container<std::vector<Args...>> : std::true_type {};
+
+template <typename... Args>
+struct is_stl_container<std::list<Args...>> : std::true_type {};
+
+template <typename... Args>
+struct is_stl_container<std::deque<Args...>> : std::true_type {};
 
 template<typename T>
-concept JsonPrimitive = is_arithmetic<T>::value || is_same_v<T, string> || is_same_v<T, size_t>;
+concept Available = 
+	is_arithmetic<T>::value ||
+	is_same_v<T, string> ||
+	is_same_v<T, size_t> ||
+	is_stl_container<T>::value;               // STL 컨테이너
 
 template<typename T>
 concept IsNotUIComponent = !std::is_same_v<T, UIComponent>;
@@ -95,7 +112,7 @@ public:
 	bool Write(const wstring& filename);
 	bool Read(const wstring& filename);
 
-	template<JsonPrimitive T>
+	template<Available T>
 	void Process(const string& key, T& data) noexcept;
 	template<IsNotUIComponent T>
 	void Process(const string& key, unique_ptr<T>& data);
@@ -131,7 +148,7 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 
-template<JsonPrimitive T>
+template<Available T>
 void JsonOperation::Process(const string& key, T& data) noexcept
 {
 	if (IsWrite())

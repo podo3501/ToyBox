@@ -28,6 +28,7 @@ bool MainWindow::CreateScene(const wstring& filename)
 {
 	ReturnIfFalse(ReadScene(filename, *m_scene));
 	ReturnIfFalse(m_renderer->LoadScenes());
+	ReturnIfFalse(m_scene->SetDatas(m_renderer->GetValue()));
 
 	ReturnIfFalse(m_renderer->CreateRenderTexture({ 800, 600 }, m_scene.get(), m_textureID));
 	m_visible = true;

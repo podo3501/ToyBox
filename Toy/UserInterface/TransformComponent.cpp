@@ -2,6 +2,7 @@
 #include "TransformComponent.h"
 #include "UIComponent.h"
 #include "JsonOperation.h"
+#include "UILayout.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
 
@@ -50,7 +51,7 @@ bool TransformComponent::SetDatas(IGetValue* value)
 
 bool TransformComponent::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
 { 
-	return m_component->Update(m_position + position, tracker); 
+	return m_component->Update(position, tracker);
 }
 
 void TransformComponent::SetSelected(bool selected) noexcept 
@@ -76,6 +77,11 @@ void TransformComponent::Render(IRender* render)
 void TransformComponent::SetPosition(const Vector2& position) noexcept 
 { 
 	m_position = position; 
+}
+
+Vector2 TransformComponent::GetPosition() const noexcept
+{
+	return m_position;
 }
 
 UIComponent* TransformComponent::GetComponent() const noexcept 

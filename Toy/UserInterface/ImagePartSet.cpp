@@ -108,7 +108,7 @@ bool ImagePartSet::SetDestination(const Rectangle& area) noexcept
 	return true;
 }
 
-bool ImagePartSet::Update(const Vector2& position) noexcept
+bool ImagePartSet::SetPosition(const Vector2& position) noexcept
 {
 	for (const auto& part : m_images)
 		part->SetPosition(position);

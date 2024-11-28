@@ -214,23 +214,40 @@ namespace BasicClient
 		std::unique_ptr<UIComponent> rTextArea = textArea->Clone();
 		rTextArea->SetName("rTextArea");
 		TextArea& writeComp = *textArea;
-		writeComp.AddComponent(move(rTextArea), { 1.f, 2.f });
+		writeComp.AddComponent(move(rTextArea), { 0.03f, 0.04f });
 		std::unique_ptr<UIComponent> emptyTextArea = make_unique<TextArea>();
 		emptyTextArea->SetName("emptyTextArea");
-		writeComp.AddComponent(move(emptyTextArea), { 3.f, 4.f });
+		writeComp.AddComponent(move(emptyTextArea), { 0.3f, 0.4f });
 
 		EXPECT_TRUE(WriteReadTest(*m_testScene));
 		////클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
 	}
 
+	void TestPanelRender(size_t index, const RECT& dest, const RECT* source)
+	{
+		if (dest.left == 60 && dest.top == 55) EXPECT_TRUE(dest.right == 90 && dest.bottom == 91);
+	}
+
 	TEST_F(ToyTestFixture, Panel)
 	{
 		unique_ptr<Panel> panel = std::make_unique<Panel>();
+		panel->ChangeArea({ 100, 100, 700, 500 });
 		unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
+		bgImg->GetLayout()->Set(Origin::Center);
+
 		Rectangle bgArea = bgImg->GetArea();
 		panel->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
-		EXPECT_EQ(bgArea, panel->GetArea());
+		Rectangle panelArea = panel->GetArea();
+		m_testScene->AddComponent({ 0.f, 0.f }, move(panel));
+
+		EXPECT_TRUE(m_renderer->LoadScenes());
+		CustomButtonStateTracker mouseTracker;
+		m_testScene->Update(&mouseTracker);
+
+		MockRender mockRender;
+		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestPanelRender));
+		m_testScene->RenderScene(& mockRender);
 
 		EXPECT_TRUE(WriteReadTest(*m_testScene));
 	}
@@ -240,9 +257,13 @@ namespace BasicClient
 		unique_ptr<UIComponent> cDialog = std::make_unique<Dialog>();
 		cDialog->SetName("Dialog");
 		unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
-		cDialog->AddComponent(move(bgImg), { 0.1f, 0.1f });
+		cDialog->AddComponent(move(bgImg), { 0.0f, 0.1f });
+
+		unique_ptr<UIComponent> cloneDialog = cDialog->Clone();
 
 		m_testScene->AddComponent({ 0.f, 0.f }, move(cDialog));
+		m_testScene->AddComponent({ 0.f, 0.4f }, move(cloneDialog));
+
 		EXPECT_TRUE(m_renderer->LoadScenes());
 
 		//auto dialog = m_testScene->GetComponent("Dialog");

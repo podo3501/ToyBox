@@ -67,13 +67,10 @@ bool Button::ChangeArea(const Rectangle& area) noexcept
 
 bool Button::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
 {
-	auto layout = GetLayout();
-	const Vector2& pos = layout->GetPosition(position);
-
+	const Vector2& pos = GetPositionByLayout(position);
 	for (const auto& partSet : m_image | views::values)
-		ReturnIfFalse(partSet->Update(pos));
+		ReturnIfFalse(partSet->SetPosition(pos));
 
-	auto test = tracker->GetOffsetPosition();
 	bool bHover = ranges::any_of(m_image | views::values, [mousePos = tracker->GetOffsetPosition()](const auto& partSet) {
 		return partSet->IsHover(mousePos.x, mousePos.y);
 		});

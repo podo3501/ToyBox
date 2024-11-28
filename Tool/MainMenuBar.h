@@ -3,6 +3,7 @@
 struct IRenderer;
 class ToolSystem;
 class MainWindow;
+class RecentFiles;
 
 namespace Tool
 {
@@ -18,6 +19,7 @@ namespace Tool
 			None,
 			NewFile,
 			OpenFile,
+			OpenRecent,
 			Quit
 		};
 
@@ -35,10 +37,13 @@ namespace Tool
 		bool HandleFileMenu();
 		void HandleFileMenuAction(FileMenuAction action);
 
+		bool NewFile() noexcept;
 		bool CreateMainWindowFromFile();
+		bool OpenRecentFile();
 
 		ToolSystem* m_toolSystem;
 		Tool::Popup* m_popup;
+		unique_ptr<RecentFiles> m_recentFiles;
 		std::optional<FileMenuAction> m_currentAction; // 현재 메뉴 상태를 저장
 	};
 }

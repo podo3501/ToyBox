@@ -58,10 +58,8 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 
 bool BGImage::Update(const Vector2& position, CustomButtonStateTracker*) noexcept
 {
-	auto layout = GetLayout();
-	const Vector2 pos = layout->GetPosition(position);
-
-	ReturnIfFalse(m_imagePartSet->Update(pos));	//Update보다 SetPosition으로 바꾸는게 더 직관적일듯
+	const Vector2& pos = GetPositionByLayout(position);
+	ReturnIfFalse(m_imagePartSet->SetPosition(pos));	
 
 	return true;
 }
@@ -73,6 +71,6 @@ void BGImage::Render(IRender* renderer)
 
 void BGImage::SerializeIO(JsonOperation* operation)
 {
-	operation->Process("ImagePartSet", m_imagePartSet);
 	UIComponent::SerializeIO(operation);
+	operation->Process("ImagePartSet", m_imagePartSet);
 }

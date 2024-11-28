@@ -11,6 +11,12 @@
     <Filter Include="UserInterface">
       <UniqueIdentifier>{7d2930d3-03cc-4bfc-956f-bf8ef99a4472}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{b118d2aa-8523-43d9-b617-b205a4a1d25b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Tool">
+      <UniqueIdentifier>{556a383a-b07e-4797-8ed9-cefd0861b90d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -145,5 +151,10 @@
     <Manifest Include="settings.manifest">
       <Filter>Assets</Filter>
     </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\Tool\OpenRecentFiles.json">
+      <Filter>Resources\Tool</Filter>
+    </None>
   </ItemGroup>
 </Project>

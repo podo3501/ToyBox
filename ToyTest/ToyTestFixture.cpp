@@ -22,6 +22,7 @@ void ToyTestFixture::SetUp()
 	RECT rc{0, 0, 800, 600};
 	EXPECT_TRUE(m_window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
 	const auto& outputSize = m_window->GetOutputSize();
+	InitializeConfig(L"ToyTest/TestResources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
 	m_testScene = make_unique<Scene>(GetRectResolution());
@@ -29,7 +30,6 @@ void ToyTestFixture::SetUp()
 	m_renderer->AddLoadScene(m_testScene.get());
 	m_renderer->AddRenderScene(m_testScene.get());
 
-	InitializeConfig(L"ToyTest/TestResources/", outputSize);
 	//InitializeConfig(L"Resources/", outputSize);
 }
 

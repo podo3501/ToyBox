@@ -73,17 +73,11 @@ int MainLoop::Run()
     return static_cast<int>(msg.wParam);
 }
 
-Mouse::ButtonStateTracker mouseTracker;
-CustomButtonStateTracker customMouseTracker;
 void MainLoop::Tick()
 {
     auto timer = m_timer.get();
+    static CustomButtonStateTracker customMouseTracker;
     customMouseTracker.Update(m_mouse->GetState());
-    if (customMouseTracker.GetLastState().x != 0)
-    {
-        int a = 1;
-    }
-    mouseTracker.Update(m_mouse->GetState());
 
     m_timer->Tick([&]()
         {

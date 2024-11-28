@@ -27,8 +27,8 @@ UIComponent& UIComponent::operator=(const UIComponent& other)
 
 	m_name = other.m_name;
 	m_layout = std::make_unique<UILayout>(*other.m_layout);
-	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& prop) {
-		return make_unique<TransformComponent>(*prop.get());
+	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& transComp) {
+		return make_unique<TransformComponent>(*transComp.get());
 		});
 
 	return *this;
@@ -56,8 +56,8 @@ UIComponent::UIComponent(const UIComponent& other)
 {
 	m_name = other.m_name;
 	m_layout = make_unique<UILayout>(*other.m_layout);
-	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& prop) {
-		return make_unique<TransformComponent>(*prop.get());
+	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& transComp) {
+		return make_unique<TransformComponent>(*transComp.get());
 		});
 }
 
@@ -69,15 +69,15 @@ UIComponent::UIComponent(UIComponent&& o) noexcept :
 
 bool UIComponent::LoadResources(ILoadData* load)
 {
-	return ranges::all_of(m_components, [load](const auto& prop) {
-		return prop->LoadResources(load);
+	return ranges::all_of(m_components, [load](const auto& transComp) {
+		return transComp->LoadResources(load);
 		});
 }
 
 TransformComponent* UIComponent::FindTransformComponent(const string& name) const noexcept
 {
-	auto find = ranges::find_if(m_components, [&name](const auto& prop) {
-		return prop->GetName() == name;
+	auto find = ranges::find_if(m_components, [&name](const auto& transComp) {
+		return transComp->GetName() == name;
 		});
 
 	if (find == m_components.end()) return nullptr;
@@ -113,15 +113,16 @@ bool UIComponent::SetDatas(IGetValue* value)
 
 bool UIComponent::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
 {
-	return ranges::all_of(m_components, [&position, tracker](const auto& prop) {
-		return prop->Update(position, tracker);
+	return ranges::all_of(m_components, [this, &position, tracker](const auto& transComp) {
+		const auto& curPosition = m_layout->GetPosition(transComp->GetPosition()) + position;
+		return transComp->Update(curPosition, tracker);
 		});
 }
 
 void UIComponent::Render(IRender* render)
 {
-	ranges::for_each(m_components, [render](const auto& prop) {
-		prop->Render(render);
+	ranges::for_each(m_components, [render](const auto& transComp) {
+		transComp->Render(render);
 		});
 }
 
@@ -129,8 +130,8 @@ bool UIComponent::IsPicking(const Vector2& pos)  const noexcept
 {
 	if (m_layout->IsArea(pos)) return true;
 
-	return ranges::any_of(m_components, [&pos](const auto& prop) {
-		return prop->IsPicking(pos);
+	return ranges::any_of(m_components, [&pos](const auto& transComp) {
+		return transComp->IsPicking(pos);
 		});
 }
 
@@ -184,7 +185,6 @@ void UIComponent::SetLayout(const UILayout& layout) noexcept
 		m_layout = make_unique<UILayout>(layout);
 	else
 		*m_layout = layout;
-	//(*m_layout.get()) = layout;
 }
 
 UILayout* UIComponent::GetLayout() const noexcept
@@ -197,4 +197,9 @@ void UIComponent::SerializeIO(JsonOperation* operation)
 	operation->Process("Name", m_name);
 	operation->Process("Layout", m_layout);
 	operation->Process("Components", m_components);
+}
+
+Vector2 UIComponent::GetPositionByLayout(const Vector2& position) noexcept
+{
+	return position + m_layout->GetPosition();
 }

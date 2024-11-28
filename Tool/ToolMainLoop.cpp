@@ -57,11 +57,12 @@ bool ToolMainLoop::LoadResources()
 bool ToolMainLoop::SetDatas(IGetValue* getValue)
 {
     m_toolSystem = make_unique<ToolSystem>(m_renderer);
+    return true;
 
     //auto cloneScene = m_toolScene->Clone();
     //ReturnIfFalse(m_guiAppWindow->Create(move(cloneScene), { 400, 300 }));
 
-    return true;
+    //return true;
 }
 
 void ToolMainLoop::Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker)

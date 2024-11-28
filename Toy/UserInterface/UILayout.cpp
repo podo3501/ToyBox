@@ -73,9 +73,15 @@ void UILayout::Set(const Origin& origin) noexcept
 	m_origin = origin;
 }
 
+Vector2 TransformVectorByRect(const Rectangle& rect, const Vector2& vec)
+{
+	return Vector2(rect.x + vec.x * rect.width, rect.y + vec.y * rect.height);
+}
+
 Vector2 UILayout::GetPosition(const Vector2& position) const noexcept
 {
-	return GetResolution() * position - m_originPoint;
+	//return GetResolution() * position - m_originPoint;
+	return TransformVectorByRect(m_area, position) - m_originPoint;
 }
 
 bool UILayout::IsArea(const Vector2& pos) const noexcept
@@ -92,4 +98,5 @@ void UILayout::SerializeIO(JsonOperation* operation)
 {
 	operation->Process("Area", m_area);
 	operation->Process("Origin", m_origin);
+	m_originPoint = GetOriginPoint(m_origin);	//load 했을때에는 m_originPoint를 계산해준다.
 }

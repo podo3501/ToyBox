@@ -25,6 +25,7 @@ public:
 	bool IsPicking(const Vector2& pos) const noexcept;
 	void Render(IRender* render);
 	void SetPosition(const Vector2& position) noexcept;
+	Vector2 GetPosition() const noexcept;
 	UIComponent* GetComponent() const noexcept;
 	const string& GetName() const;
 

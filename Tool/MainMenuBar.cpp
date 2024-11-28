@@ -4,12 +4,85 @@
 #include "MainWindow.h"
 #include "ToolSystem.h"
 #include "../Toy/Window.h"
+#include "../Toy/UserInterface/JsonOperation.h"
+#include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/Config.h"
+
+class RecentFiles
+{
+    const size_t maxRecentFiles = 20;
+    const size_t maxShownFiles = 5;    // "Open Recent" 메뉴에 표시할 파일 개수
+
+public:
+    RecentFiles()
+    {
+        JsonOperation jsonOp;
+        jsonOp.Read(L"Tool/OpenRecentFiles.json");
+        SerializeIO(jsonOp);
+    }
+
+    void AddFile(const std::string& filename)
+    {
+        auto it = ranges::find(m_recentFiles, filename);
+        if (it != m_recentFiles.end()) {
+            m_recentFiles.erase(it);
+        }
+
+        m_recentFiles.push_front(filename);
+        if (m_recentFiles.size() > maxRecentFiles)
+            m_recentFiles.pop_back();
+
+        JsonOperation jsonOp;
+        SerializeIO(jsonOp);
+        jsonOp.Write(L"Tool/OpenRecentFiles.json"); 
+    }
+    
+    void SerializeIO(JsonOperation& jsonOp)
+    {
+        jsonOp.Process("RecentFiles", m_recentFiles);
+    }
+
+    void ShowUI() {
+        if (ImGui::BeginMenu("Open Recent")) {
+            size_t shownCount = 0;
+            for (const auto& file : m_recentFiles) {
+                // 최대 표시 개수 제한
+                if (shownCount >= maxShownFiles) break;
+
+                if (ImGui::MenuItem(file.c_str())) {
+                    //OpenFile(file);
+                }
+                shownCount++;
+            }
+
+            // "More.." 메뉴 표시
+            if (m_recentFiles.size() > maxShownFiles) {
+                if (ImGui::BeginMenu("More..")) {
+                    for (size_t i = maxShownFiles; i < m_recentFiles.size(); ++i) {
+                        if (ImGui::MenuItem(m_recentFiles[i].c_str())) {
+                            //OpenFile(m_recentFiles[i]);
+                        }
+                    }
+                    ImGui::EndMenu();
+                }
+            }
+
+            ImGui::EndMenu();
+        }
+    }
+
+private:
+    deque<string> m_recentFiles;
+};
+
+///////////////////////////////////////////////////////
 
 using namespace Tool;
 
 MainMenuBar::MainMenuBar(ToolSystem* toolSystem, Popup* popup) :
     m_toolSystem{ toolSystem },
-    m_popup{ popup }
+    m_popup{ popup },
+    m_recentFiles{ make_unique<RecentFiles>() }
 {}
 
 MainMenuBar::~MainMenuBar() = default;
@@ -40,22 +113,22 @@ void MainMenuBar::ShowMainMenuBar()
 
 void MainMenuBar::RenderFileMenu()
 {
-    if (ImGui::MenuItem("New", "Ctrl+N"))
-    {
-        HandleFileMenuAction(FileMenuAction::NewFile);
-    }
+    if (ImGui::MenuItem("New", "Ctrl+N")) HandleFileMenuAction(FileMenuAction::NewFile);
+    if (ImGui::MenuItem("Open", "Ctrl+O")) HandleFileMenuAction(FileMenuAction::OpenFile);
+    m_recentFiles->ShowUI();
+    //if (ImGui::BeginMenu("Open Recent"))
+    //{
+    //    if (ImGui::MenuItem("test1.json"))
+    //    {
+    //        int a = 1;
+    //    }
 
-    if (ImGui::MenuItem("Open", "Ctrl+O"))
-    {
-        HandleFileMenuAction(FileMenuAction::OpenFile);
-    }
+    //    ImGui::EndMenu();
+    //}
 
     ImGui::Separator();
 
-    if (ImGui::MenuItem("Quit"))
-    {
-        HandleFileMenuAction(FileMenuAction::Quit);
-    }
+    if (ImGui::MenuItem("Quit")) HandleFileMenuAction(FileMenuAction::Quit);
 }
 
 void MainMenuBar::HandleFileMenuAction(FileMenuAction action)
@@ -70,22 +143,24 @@ bool MainMenuBar::HandleFileMenu()
     auto result{ true };
     switch (m_currentAction.value())
     {
-    case FileMenuAction::OpenFile:
-        result = CreateMainWindowFromFile();
-        break;
-    case FileMenuAction::NewFile:
-        // NewFile 관련 로직 추가
-        break;
-    case FileMenuAction::Quit:
-        // Quit 관련 로직 추가
-        Window::ExitGame();
-        break;
+    case FileMenuAction::NewFile: result = NewFile();  break;
+    case FileMenuAction::OpenFile: result = CreateMainWindowFromFile(); break;
+    
+    case FileMenuAction::Quit: Window::ExitGame(); break;
     default:
        break;
     }
     m_currentAction.reset(); // 상태 초기화
 
     return result;
+}
+
+bool MainMenuBar::NewFile() noexcept
+{
+    static auto idx{ 0 };
+    string filename = "test" + to_string(idx++) + ".json";
+    m_recentFiles->AddFile(filename);
+    return true;
 }
 
 bool MainMenuBar::CreateMainWindowFromFile()
@@ -103,5 +178,10 @@ bool MainMenuBar::CreateMainWindowFromFile()
 
     m_toolSystem->SetMainWindow(mainWindow);
 
+    return true;
+}
+
+bool MainMenuBar::OpenRecentFile()
+{
     return true;
 }
