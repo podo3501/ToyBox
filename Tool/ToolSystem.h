@@ -3,7 +3,7 @@
 
 struct IRenderScene;
 class UIComponent;
-class CustomButtonStateTracker;
+class MouseTracker;
 class MainWindow;
 class GuiWidget;
 
@@ -24,14 +24,14 @@ public:
     ~ToolSystem();
     ToolSystem(IRenderer* renderer);
 
-    bool Create(unique_ptr<IRenderScene> scene, const XMUINT2& size);
-    void Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker);
+    void Update(const DX::StepTimer* timer, MouseTracker* mouseTracker);
 
     //IImguiComponent
     //virtual void Update() override;
     virtual void Render(ImGuiIO* io) override;
 
-    void SetMainWindow(shared_ptr<MainWindow> mainWindow) noexcept;
+    const MainWindow* GetFocusMainWindow() const noexcept;
+    void SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept;
     IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
 private:
@@ -45,6 +45,7 @@ private:
 
     XMUINT2 m_size{};
 
-    shared_ptr<MainWindow> m_mainWindow;
+    //unique_ptr<MainWindow> m_mainWindow;
+    vector<unique_ptr<MainWindow>> m_mainWindows;
     unique_ptr<GuiWidget> m_guiWidget;
 };

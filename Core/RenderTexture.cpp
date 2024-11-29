@@ -8,6 +8,7 @@ constexpr FLOAT ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 RenderTexture::~RenderTexture()
 {
 }
+
 RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor) :
     m_device(device),
     m_srvDescriptor{ srvDescriptor },

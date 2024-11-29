@@ -22,33 +22,40 @@ ToolSystem::ToolSystem(IRenderer* renderer) :
     m_renderer->AddImguiComponent(this);
 }
 
-void ToolSystem::SetMainWindow(shared_ptr<MainWindow> mainWindow) noexcept
+void ToolSystem::SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept
 {
-    m_mainWindow = mainWindow; 
+    m_mainWindows.emplace_back(move(mainWindow));
 }
 
-bool ToolSystem::Create(unique_ptr<IRenderScene> scene, const XMUINT2& size)
+const MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
 {
-    //ReturnIfFalse(m_renderer->CreateRenderTexture(size, scene.get(), m_textureID));
-    //auto dialog = scene->GetComponent("Dialog_clone");
-    //m_component = dialog->GetComponent("BGImage_clone");
-    //m_size = size;
+    auto it = ranges::max_element(
+        m_mainWindows,
+        [](const auto& rhs, const auto& lhs) {
+            const ImGuiWindow* wRhs = rhs->GetImGuiWindow();
+            const ImGuiWindow* wlhs = lhs->GetImGuiWindow();
+            return wRhs->FocusOrder < wlhs->FocusOrder;
+        });
 
-    ////임시로 bgImage가 선택되었다고 가정한다.
-    //m_guiWidget = make_unique<GuiWidget>(m_renderer);
-    //unique_ptr<UIComponent> clone = m_component->Clone();
-    //
-    //ReturnIfFalse(m_guiWidget->Create(move(clone)));
-    
-    //m_scene = move(scene);
-    return true;
+    //auto it = ranges::find_if(m_mainWindows, [](const auto& wnd) {
+       // return wnd->IsFocus();
+        //});
+
+    if (it == m_mainWindows.end())
+        return nullptr;
+
+    return it->get();
 }
 
-void ToolSystem::Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker)
+void ToolSystem::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 {
     m_mainMenuBar->Update();
-    if (m_mainWindow)
-        m_mainWindow->Update(timer, mouseTracker);
+
+    erase_if(m_mainWindows, [](auto& wnd) { return !wnd->IsOpen(); });
+    ranges::for_each(m_mainWindows, [timer, mouseTracker](const auto& wnd) {
+        wnd->Update(timer, mouseTracker);
+        });
+
     //m_guiWidget->Update();
     //m_scene->Update(nullptr);
 }

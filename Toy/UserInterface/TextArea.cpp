@@ -130,7 +130,7 @@ void TextArea::SetFont(const string& name,
 		});
 }
 
-bool TextArea::Update(const Vector2& position, CustomButtonStateTracker*) noexcept
+bool TextArea::Update(const Vector2& position, MouseTracker*) noexcept
 {
 	m_posByResolution = GetPositionByLayout(position);
 
@@ -145,9 +145,9 @@ void TextArea::Render(IRender* render)
 			XMLoadFloat4(&word.color));
 }
 
-void TextArea::SerializeIO(JsonOperation* operation)
+void TextArea::SerializeIO(JsonOperation& operation)
 {
-	operation->Process("FontFileList", m_fontFileList);
-	operation->Process("Text", m_text);
+	operation.Process("FontFileList", m_fontFileList);
+	operation.Process("Text", m_text);
 	UIComponent::SerializeIO(operation);
 }

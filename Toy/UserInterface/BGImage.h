@@ -21,13 +21,13 @@ public:
 
 	virtual unique_ptr<UIComponent> Clone() override;
 	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool Update(const Vector2& position, CustomButtonStateTracker* mouseTracker) noexcept;
+	virtual bool Update(const Vector2& position, MouseTracker* mouseTracker) noexcept;
 	virtual void Render(IRender* renderer) override;
 
 	bool ChangeArea(const Rectangle& area) noexcept;
 	void SetImage(const string& name, const UILayout& layout, const ImageSource& sources);
 
-	virtual void SerializeIO(JsonOperation* operation) override;
+	virtual void SerializeIO(JsonOperation& operation) override;
 	
 private:
 	unique_ptr<ImagePartSet> m_imagePartSet;

@@ -65,11 +65,14 @@ bool Button::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool Button::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
+bool Button::Update(const Vector2& position, MouseTracker* tracker) noexcept
 {
 	const Vector2& pos = GetPositionByLayout(position);
 	for (const auto& partSet : m_image | views::values)
 		ReturnIfFalse(partSet->SetPosition(pos));
+	
+	if (tracker == nullptr)
+		return true;
 
 	bool bHover = ranges::any_of(m_image | views::values, [mousePos = tracker->GetOffsetPosition()](const auto& partSet) {
 		return partSet->IsHover(mousePos.x, mousePos.y);
@@ -123,8 +126,8 @@ void Button::InsertImage(ButtonState btnState, unique_ptr<ImagePartSet>&& imgPar
 	m_image.insert(make_pair(btnState, move(imgPartSet)));
 }
 
-void Button::SerializeIO(JsonOperation* operation)
+void Button::SerializeIO(JsonOperation& operation)
 {
-	operation->Process("StateImage", m_image);
+	operation.Process("StateImage", m_image);
 	UIComponent::SerializeIO(operation);
 }

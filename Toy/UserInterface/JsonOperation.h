@@ -126,6 +126,7 @@ public:
 	void Process(const string& key, wstring& data) noexcept;
 	void Process(const string& key, map<wstring, wstring>& data) noexcept;
 	void Process(const string& key, map<ButtonState, unique_ptr<ImagePartSet>>& data);
+	void Process(const string& key, deque<wstring>& data) noexcept;
 
 private:
 	template<typename T>
@@ -169,9 +170,9 @@ unique_ptr<T> JsonOperation::CreateData(const nlohmann::json& readJ)
 	JsonOperation js(readJ);
 	auto comp = std::make_unique<T>();
 	if (readJ == nullptr)
-		comp->SerializeIO(this);
+		comp->SerializeIO(*this);
 	else
-		comp->SerializeIO(&js);
+		comp->SerializeIO(js);
 	return comp;
 }
 
@@ -182,7 +183,7 @@ void JsonOperation::Process(const string& key, unique_ptr<T>& data)
 	if (IsWrite())
 	{
 		m_write->GotoKey(key);
-		data->SerializeIO(this);
+		data->SerializeIO(*this);
 		m_write->GoBack();
 	}
 	else
@@ -225,7 +226,7 @@ void JsonOperation::Process(const string& key, vector<unique_ptr<T>>& data)
 			for (auto& comp : data) 
 			{
 				JsonOperation jsOp{};
-				comp->SerializeIO(&jsOp);
+				comp->SerializeIO(jsOp);
 				currentJson.push_back(jsOp.GetWrite());
 			}
 			});

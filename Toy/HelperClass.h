@@ -1,6 +1,6 @@
 #pragma once
 
-class CustomButtonStateTracker : public Mouse::ButtonStateTracker
+class MouseTracker : public Mouse::ButtonStateTracker
 {
 public:
     void SetOffset(XMUINT2 offset) noexcept;

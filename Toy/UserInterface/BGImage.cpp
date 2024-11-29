@@ -56,7 +56,7 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool BGImage::Update(const Vector2& position, CustomButtonStateTracker*) noexcept
+bool BGImage::Update(const Vector2& position, MouseTracker*) noexcept
 {
 	const Vector2& pos = GetPositionByLayout(position);
 	ReturnIfFalse(m_imagePartSet->SetPosition(pos));	
@@ -69,8 +69,8 @@ void BGImage::Render(IRender* renderer)
 	m_imagePartSet->Render(renderer);
 }
 
-void BGImage::SerializeIO(JsonOperation* operation)
+void BGImage::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
-	operation->Process("ImagePartSet", m_imagePartSet);
+	operation.Process("ImagePartSet", m_imagePartSet);
 }

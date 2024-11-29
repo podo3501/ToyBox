@@ -18,69 +18,127 @@
                     "y": 0.5
                 },
                 "Component": {
-                    "Type": "class TextArea",
-                    "FontFileList": {
-                        "English": "UI/Font/CourierNewBoldS18.spritefont",
-                        "Hangle": "UI/Font/MaleunGothicS16.spritefont"
-                    },
-                    "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
-                    "Name": "TextArea",
+                    "Type": "class Button",
+                    "StateImage": [
+                        {
+                            "Normal": {
+                                "Images": [
+                                    {
+                                        "Index": 0,
+                                        "Filename": "UI/Blue/bar_square_large_l.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 24,
+                                            "height": 48
+                                        }
+                                    },
+                                    {
+                                        "Index": 1,
+                                        "Filename": "UI/Blue/bar_square_large_m.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 48,
+                                            "height": 48
+                                        }
+                                    },
+                                    {
+                                        "Index": 2,
+                                        "Filename": "UI/Blue/bar_square_large_r.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 24,
+                                            "height": 48
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Hover": {
+                                "Images": [
+                                    {
+                                        "Index": 3,
+                                        "Filename": "UI/Red/bar_square_large_l.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 24,
+                                            "height": 48
+                                        }
+                                    },
+                                    {
+                                        "Index": 4,
+                                        "Filename": "UI/Red/bar_square_large_m.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 48,
+                                            "height": 48
+                                        }
+                                    },
+                                    {
+                                        "Index": 5,
+                                        "Filename": "UI/Red/bar_square_large_r.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 24,
+                                            "height": 48
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Pressed": {
+                                "Images": [
+                                    {
+                                        "Index": 6,
+                                        "Filename": "UI/Gray/bar_square_large_l.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 24,
+                                            "height": 48
+                                        }
+                                    },
+                                    {
+                                        "Index": 7,
+                                        "Filename": "UI/Gray/bar_square_large_m.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 48,
+                                            "height": 48
+                                        }
+                                    },
+                                    {
+                                        "Index": 8,
+                                        "Filename": "UI/Gray/bar_square_large_r.png",
+                                        "Source": {
+                                            "x": 0,
+                                            "y": 0,
+                                            "width": 24,
+                                            "height": 48
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "Name": "Button",
                     "Layout": {
                         "Area": {
                             "x": 0,
                             "y": 0,
-                            "width": 320,
-                            "height": 120
+                            "width": 126,
+                            "height": 48
                         },
-                        "Origin": "Center"
-                    },
-                    "Components": [
-                        {
-                            "Position": {
-                                "x": 0.03,
-                                "y": 0.04
-                            },
-                            "Component": {
-                                "Type": "class TextArea",
-                                "FontFileList": {
-                                    "English": "UI/Font/CourierNewBoldS18.spritefont",
-                                    "Hangle": "UI/Font/MaleunGothicS16.spritefont"
-                                },
-                                "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
-                                "Name": "rTextArea",
-                                "Layout": {
-                                    "Area": {
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 320,
-                                        "height": 120
-                                    },
-                                    "Origin": "Center"
-                                }
-                            }
-                        },
-                        {
-                            "Position": {
-                                "x": 0.3,
-                                "y": 0.4
-                            },
-                            "Component": {
-                                "Type": "class TextArea",
-                                "FontFileList": null,
-                                "Text": "",
-                                "Name": "emptyTextArea",
-                                "Layout": {
-                                    "Area": {
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 0,
-                                        "height": 0
-                                    },
-                                    "Origin": "LeftTop"
-                                }
-                            }
-                        }
-                    ]
+                        "Origin": "LeftTop"
+                    }
                 }
             }
         ]

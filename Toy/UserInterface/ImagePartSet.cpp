@@ -145,7 +145,7 @@ const Rectangle& ImagePartSet::GetArea() const noexcept
 	return empty;
 }
 
-void ImagePartSet::SerializeIO(JsonOperation* operation)
+void ImagePartSet::SerializeIO(JsonOperation& operation)
 {
-	operation->Process("Images", m_images);
+	operation.Process("Images", m_images);
 }

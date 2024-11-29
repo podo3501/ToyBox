@@ -28,7 +28,7 @@ public:
 	bool SetDestination(const Rectangle& area) noexcept;
 	bool IsHover(int mouseX, int mouseY) noexcept;
 	
-	void SerializeIO(JsonOperation* operation);
+	void SerializeIO(JsonOperation& operation);
 
 private:
 	void CreateImagePart(const ImageSource& imgSource);

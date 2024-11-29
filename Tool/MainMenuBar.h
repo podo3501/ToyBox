@@ -1,6 +1,5 @@
 #pragma once
 
-struct IRenderer;
 class ToolSystem;
 class MainWindow;
 class RecentFiles;
@@ -20,6 +19,7 @@ namespace Tool
 			NewFile,
 			OpenFile,
 			OpenRecent,
+			SaveFile,
 			Quit
 		};
 
@@ -30,6 +30,7 @@ namespace Tool
 
 		void Update();
 		bool Excute(); //Render에서 호출해야함.
+		bool CreateMainWindowFromFile(const wstring& filename);
 
 	private:
 		void ShowMainMenuBar();
@@ -38,8 +39,8 @@ namespace Tool
 		void HandleFileMenuAction(FileMenuAction action);
 
 		bool NewFile() noexcept;
-		bool CreateMainWindowFromFile();
-		bool OpenRecentFile();
+		bool CreateMainWindow();
+		bool SaveMainWindow();
 
 		ToolSystem* m_toolSystem;
 		Tool::Popup* m_popup;

@@ -124,7 +124,7 @@ LRESULT CALLBACK Window::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         break;
 
     case WM_DESTROY:
-        ExitGame();
+        PostQuitMessage(0);
         break;
 
     case WM_MENUCHAR:
@@ -139,6 +139,9 @@ LRESULT CALLBACK Window::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 // Exit helper
 void Window::ExitGame() noexcept
 {
-    PostQuitMessage(0);
+    if (gWindow->m_wnd == nullptr)
+        return;
+
+    PostMessage(gWindow->m_wnd, WM_CLOSE, 0, 0);
 }
 

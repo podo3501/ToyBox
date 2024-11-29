@@ -63,7 +63,7 @@ void Scene::AddComponent(const Vector2& position, unique_ptr<UIComponent> comp)
 	m_mainPanel->AddComponent(move(comp), position);
 }
 
-bool Scene::Update(CustomButtonStateTracker* mouseTracker) noexcept
+bool Scene::Update(MouseTracker* mouseTracker) noexcept
 {
 	return m_mainPanel->Update({}, mouseTracker);
 }
@@ -73,7 +73,7 @@ UIComponent* Scene::GetComponent(const string& name)
 	return m_mainPanel->GetComponent(name);
 }
 
-void Scene::SerializeIO(JsonOperation* operation)
+void Scene::SerializeIO(JsonOperation& operation)
 {
-	operation->Process("Component", m_mainPanel);
+	operation.Process("Component", m_mainPanel);
 }

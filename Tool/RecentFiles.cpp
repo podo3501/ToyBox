@@ -1,0 +1,93 @@
+#include "pch.h"
+#include "RecentFiles.h"
+#include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/Utility.h"
+#include "MainMenuBar.h"
+
+using namespace Tool;
+
+RecentFiles::RecentFiles()
+{
+    ReadJsonFile(RecentFilename, *this);
+}
+
+void RecentFiles::AddFile(const wstring& filename)
+{
+    auto it = ranges::find(m_recentFiles, filename);
+    if (it != m_recentFiles.end())
+        m_recentFiles.erase(it);
+
+    m_recentFiles.push_front(filename);
+    if (m_recentFiles.size() > MaxRecentFiles)
+        m_recentFiles.pop_back();
+
+    WriteJsonFile(*this, RecentFilename);
+}
+
+bool RecentFiles::OpenFile(Tool::MainMenuBar& mainMenuBar)
+{
+    auto result = mainMenuBar.CreateMainWindowFromFile(m_file);
+    if(result)
+        AddFile(m_file);
+
+    m_file.clear();    
+    return result;
+}
+
+void RecentFiles::SerializeIO(JsonOperation& jsonOp)
+{
+    jsonOp.Process("RecentFiles", m_recentFiles);
+}
+
+// "More.." 메뉴 표시
+bool RecentFiles::ShowRecentFilesMenu()
+{
+    if (!ImGui::BeginMenu("Open Recent"))
+        return false;
+
+    size_t shownCount = 0;
+    for (const auto& file : m_recentFiles)
+    {
+        if (shownCount >= MaxShownFiles)
+            break;
+
+        if (file.empty())
+            continue;
+
+        if (ImGui::MenuItem(WStringToString(file).c_str()))
+        {
+            //OpenFile(file); // 파일 열기 처리
+            //m_mainMenuBar->CreateMainWindowFromFile(file);
+            m_file = file;
+        }
+        ++shownCount;
+    }
+
+    ShowMoreMenu();
+    ImGui::EndMenu();
+
+    if (!m_file.empty())
+        return true;
+
+    return false;
+}
+
+void RecentFiles::ShowMoreMenu()
+{
+    if (m_recentFiles.size() <= MaxShownFiles)
+        return;
+
+    if (!ImGui::BeginMenu("More.."))
+        return;
+
+    for (size_t i = MaxShownFiles; i < m_recentFiles.size(); ++i)
+    {
+        if (ImGui::MenuItem(WStringToString(m_recentFiles[i]).c_str()))
+        {
+            //m_mainMenuBar->CreateMainWindowFromFile(m_recentFiles[i]);
+            //OpenFile(m_recentFiles[i]);
+            m_file = m_recentFiles[i];
+        }
+    }
+    ImGui::EndMenu();
+}

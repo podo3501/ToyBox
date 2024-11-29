@@ -76,7 +76,7 @@ int MainLoop::Run()
 void MainLoop::Tick()
 {
     auto timer = m_timer.get();
-    static CustomButtonStateTracker customMouseTracker;
+    static MouseTracker customMouseTracker;
     customMouseTracker.Update(m_mouse->GetState());
 
     m_timer->Tick([&]()

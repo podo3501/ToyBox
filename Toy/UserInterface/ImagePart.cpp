@@ -43,11 +43,11 @@ void ImagePart::Render(IRender* render)
 	render->Render(m_index, destination, &source);
 }
 
-void ImagePart::SerializeIO(JsonOperation* operation)
+void ImagePart::SerializeIO(JsonOperation& operation)
 {
-	operation->Process("Index", m_index);
-	operation->Process("Filename", m_filename);
-	operation->Process("Source", m_source);
+	operation.Process("Index", m_index);
+	operation.Process("Filename", m_filename);
+	operation.Process("Source", m_source);
 }
 
 

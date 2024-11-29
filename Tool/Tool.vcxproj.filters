@@ -16,6 +16,7 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Popup.cpp" />
     <ClCompile Include="MainMenuBar.cpp" />
+    <ClCompile Include="RecentFiles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -26,5 +27,6 @@
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Popup.h" />
     <ClInclude Include="MainMenuBar.h" />
+    <ClInclude Include="RecentFiles.h" />
   </ItemGroup>
 </Project>

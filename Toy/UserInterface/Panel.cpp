@@ -35,7 +35,7 @@ unique_ptr<UIComponent> Panel::Clone()
 //    UIComponent::AddComponent(move(comp), pos);
 //}
 
-void Panel::SerializeIO(JsonOperation* operation)
+void Panel::SerializeIO(JsonOperation& operation)
 {
     //operation->Process("Area", m_area);
     UIComponent::SerializeIO(operation);

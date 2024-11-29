@@ -94,9 +94,9 @@ void UILayout::Union(const Rectangle& area) noexcept
 	m_area = Rectangle::Union(m_area, area);
 }
 
-void UILayout::SerializeIO(JsonOperation* operation)
+void UILayout::SerializeIO(JsonOperation& operation)
 {
-	operation->Process("Area", m_area);
-	operation->Process("Origin", m_origin);
+	operation.Process("Area", m_area);
+	operation.Process("Origin", m_origin);
 	m_originPoint = GetOriginPoint(m_origin);	//load 했을때에는 m_originPoint를 계산해준다.
 }

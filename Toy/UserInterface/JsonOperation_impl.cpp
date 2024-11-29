@@ -11,7 +11,7 @@
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {
     JsonOperation jsOp{};
-    data->SerializeIO(&jsOp);
+    data->SerializeIO(jsOp);
     //static_cast를 해서 json으로 할당하면 json내의 타입값이 바뀌면서 새로운 타입이 되어 이전 정보 (여기서는 position)값이 사라진다. 그래서 update를 해서 병합하는 것.
     if (jsOp.GetWrite().empty())
         return;
@@ -29,7 +29,7 @@ unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typ
     if (comp == nullptr) 
         return nullptr;
 
-    comp->SerializeIO(this);
+    comp->SerializeIO(*this);
     return comp;
 }
 

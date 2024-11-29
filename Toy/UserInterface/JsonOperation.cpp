@@ -161,3 +161,25 @@ void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noex
 
     ProcessImpl(key, writeFunc, readFunc);
 }
+
+void JsonOperation::Process(const string& key, deque<wstring>& data) noexcept
+{
+    if (IsWrite())
+    {
+        if (data.empty())
+            return;
+
+        ProcessWriteKey(key, [&data](auto& currentJson) {
+            for (auto& wstr : data)
+                currentJson.push_back(RemoveNullWToSA(wstr));
+            });
+    }
+    else
+    {
+        data.clear();
+        ProcessReadKey(key, [&data, this](const auto& currentJson) {
+            for (const auto& item : currentJson)
+                data.emplace_back(StringToWString(item));
+            });
+    }
+}

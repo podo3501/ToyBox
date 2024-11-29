@@ -322,6 +322,7 @@ bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImT
 
 void Renderer::RemoveRenderTexture(ImTextureID textureID)
 {
+    m_deviceResources->WaitForGpu();    //텍스츄어를 Gpu는 쓰고 있을 수 있기 때문에 하는일이 끝나고 지우게끔 동기화 시킨다.
     m_renderTextures.erase(textureID);
 }
 

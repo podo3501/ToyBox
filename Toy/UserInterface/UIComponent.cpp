@@ -111,7 +111,7 @@ bool UIComponent::SetDatas(IGetValue* value)
 		});
 }
 
-bool UIComponent::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
+bool UIComponent::Update(const Vector2& position, MouseTracker* tracker) noexcept
 {
 	return ranges::all_of(m_components, [this, &position, tracker](const auto& transComp) {
 		const auto& curPosition = m_layout->GetPosition(transComp->GetPosition()) + position;
@@ -192,11 +192,11 @@ UILayout* UIComponent::GetLayout() const noexcept
 	return m_layout.get();
 }
 
-void UIComponent::SerializeIO(JsonOperation* operation)
+void UIComponent::SerializeIO(JsonOperation& operation)
 {
-	operation->Process("Name", m_name);
-	operation->Process("Layout", m_layout);
-	operation->Process("Components", m_components);
+	operation.Process("Name", m_name);
+	operation.Process("Layout", m_layout);
+	operation.Process("Components", m_components);
 }
 
 Vector2 UIComponent::GetPositionByLayout(const Vector2& position) noexcept

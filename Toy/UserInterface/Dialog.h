@@ -14,7 +14,7 @@ public:
 	virtual bool operator==(const UIComponent& other) const noexcept override;
 	virtual unique_ptr<UIComponent> Clone() override;
 
-	virtual void SerializeIO(JsonOperation* operation) override;
+	virtual void SerializeIO(JsonOperation& operation) override;
 	
 private:
 };

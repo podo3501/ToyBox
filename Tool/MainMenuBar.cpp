@@ -4,78 +4,9 @@
 #include "MainWindow.h"
 #include "ToolSystem.h"
 #include "../Toy/Window.h"
-#include "../Toy/UserInterface/JsonOperation.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/Config.h"
-
-class RecentFiles
-{
-    const size_t maxRecentFiles = 20;
-    const size_t maxShownFiles = 5;    // "Open Recent" 메뉴에 표시할 파일 개수
-
-public:
-    RecentFiles()
-    {
-        JsonOperation jsonOp;
-        jsonOp.Read(L"Tool/OpenRecentFiles.json");
-        SerializeIO(jsonOp);
-    }
-
-    void AddFile(const std::string& filename)
-    {
-        auto it = ranges::find(m_recentFiles, filename);
-        if (it != m_recentFiles.end()) {
-            m_recentFiles.erase(it);
-        }
-
-        m_recentFiles.push_front(filename);
-        if (m_recentFiles.size() > maxRecentFiles)
-            m_recentFiles.pop_back();
-
-        JsonOperation jsonOp;
-        SerializeIO(jsonOp);
-        jsonOp.Write(L"Tool/OpenRecentFiles.json"); 
-    }
-    
-    void SerializeIO(JsonOperation& jsonOp)
-    {
-        jsonOp.Process("RecentFiles", m_recentFiles);
-    }
-
-    void ShowUI() {
-        if (ImGui::BeginMenu("Open Recent")) {
-            size_t shownCount = 0;
-            for (const auto& file : m_recentFiles) {
-                // 최대 표시 개수 제한
-                if (shownCount >= maxShownFiles) break;
-
-                if (ImGui::MenuItem(file.c_str())) {
-                    //OpenFile(file);
-                }
-                shownCount++;
-            }
-
-            // "More.." 메뉴 표시
-            if (m_recentFiles.size() > maxShownFiles) {
-                if (ImGui::BeginMenu("More..")) {
-                    for (size_t i = maxShownFiles; i < m_recentFiles.size(); ++i) {
-                        if (ImGui::MenuItem(m_recentFiles[i].c_str())) {
-                            //OpenFile(m_recentFiles[i]);
-                        }
-                    }
-                    ImGui::EndMenu();
-                }
-            }
-
-            ImGui::EndMenu();
-        }
-    }
-
-private:
-    deque<string> m_recentFiles;
-};
-
-///////////////////////////////////////////////////////
+#include "RecentFiles.h"
 
 using namespace Tool;
 
@@ -113,18 +44,10 @@ void MainMenuBar::ShowMainMenuBar()
 
 void MainMenuBar::RenderFileMenu()
 {
-    if (ImGui::MenuItem("New", "Ctrl+N")) HandleFileMenuAction(FileMenuAction::NewFile);
+    if (ImGui::MenuItem("New")) HandleFileMenuAction(FileMenuAction::NewFile);
     if (ImGui::MenuItem("Open", "Ctrl+O")) HandleFileMenuAction(FileMenuAction::OpenFile);
-    m_recentFiles->ShowUI();
-    //if (ImGui::BeginMenu("Open Recent"))
-    //{
-    //    if (ImGui::MenuItem("test1.json"))
-    //    {
-    //        int a = 1;
-    //    }
-
-    //    ImGui::EndMenu();
-    //}
+    if (m_recentFiles->ShowRecentFilesMenu()) HandleFileMenuAction(FileMenuAction::OpenRecent);
+    if (ImGui::MenuItem("Save", "Ctrl+S")) HandleFileMenuAction(FileMenuAction::SaveFile);
 
     ImGui::Separator();
 
@@ -144,7 +67,9 @@ bool MainMenuBar::HandleFileMenu()
     switch (m_currentAction.value())
     {
     case FileMenuAction::NewFile: result = NewFile();  break;
-    case FileMenuAction::OpenFile: result = CreateMainWindowFromFile(); break;
+    case FileMenuAction::OpenFile: result = CreateMainWindow(); break;
+    case FileMenuAction::OpenRecent: result = m_recentFiles->OpenFile(*this); break;
+    case FileMenuAction::SaveFile: result = SaveMainWindow(); break;
     
     case FileMenuAction::Quit: Window::ExitGame(); break;
     default:
@@ -158,30 +83,53 @@ bool MainMenuBar::HandleFileMenu()
 bool MainMenuBar::NewFile() noexcept
 {
     static auto idx{ 0 };
-    string filename = "test" + to_string(idx++) + ".json";
+    wstring filename = L"test" + to_wstring(idx++) + L".json";
     m_recentFiles->AddFile(filename);
     return true;
 }
 
-bool MainMenuBar::CreateMainWindowFromFile()
+bool MainMenuBar::CreateMainWindowFromFile(const wstring& filename)
 {
-    std::wstring selectedFilename{};
-    if (!m_popup->OpenFileDialog(selectedFilename))
-        return false;
-
-    auto mainWindow = std::make_shared<MainWindow>(m_toolSystem->GetRenderer());
-    if (!mainWindow->CreateScene(selectedFilename))
+    auto mainWindow = std::make_unique<MainWindow>(m_toolSystem->GetRenderer());
+    if (!mainWindow->CreateScene(filename))
     {
         m_popup->ShowErrorDialog("Failed to open the file. Please check the file path.");
-        return true;
+        return false;
     }
 
-    m_toolSystem->SetMainWindow(mainWindow);
+    m_toolSystem->SetMainWindow(move(mainWindow));
 
     return true;
 }
 
-bool MainMenuBar::OpenRecentFile()
+bool MainMenuBar::CreateMainWindow()
 {
+    wstring selectedFilename{};
+    if (!m_popup->OpenFileDialog(selectedFilename))
+        return false;
+
+    if (selectedFilename.empty())   //다이얼로그를 닫거나 취소를 눌리면 파일명이 없다.
+        return true;
+
+    CreateMainWindowFromFile(selectedFilename);
+    m_recentFiles->AddFile(selectedFilename);
+
     return true;
+}
+
+bool MainMenuBar::SaveMainWindow()
+{
+    const MainWindow* focusWnd = m_toolSystem->GetFocusMainWindow();
+    if (focusWnd == nullptr) return true;
+
+    auto result = focusWnd->SaveScene();
+    if (result)
+    {
+        //m_popup->ShowErrorDialog("Failed to save the file.");
+        //Saved to a.json
+    }
+    else
+        m_popup->ShowErrorDialog("Failed to save the file.");
+
+    return result;
 }

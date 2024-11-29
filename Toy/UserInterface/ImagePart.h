@@ -24,7 +24,7 @@ public:
 	inline const Rectangle& GetSource() const noexcept { return m_source; }
 	inline XMUINT2 GetSize() const noexcept { return XMUINT2(m_source.width, m_source.height); }
 
-	void SerializeIO(JsonOperation* operation);
+	void SerializeIO(JsonOperation& operation);
 
 private:
 	size_t m_index{ 0 };

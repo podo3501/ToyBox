@@ -35,7 +35,7 @@ unique_ptr<UIComponent> Dialog::Clone()
 	return clone;
 }
 
-void Dialog::SerializeIO(JsonOperation* operation)
+void Dialog::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
 }

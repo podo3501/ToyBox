@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="MainMenuBar.cpp" />
     <ClCompile Include="Popup.cpp" />
+    <ClCompile Include="RecentFiles.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="MainWindow.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="MainMenuBar.h" />
     <ClInclude Include="Popup.h" />
+    <ClInclude Include="RecentFiles.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="MainWindow.h" />

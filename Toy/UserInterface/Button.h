@@ -21,7 +21,7 @@ public:
 
 	virtual unique_ptr<UIComponent> Clone() override;
 	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept override;
+	virtual bool Update(const Vector2& position, MouseTracker* tracker) noexcept override;
 	virtual void Render(IRender* renderer) override;
 	
 	void SetImage(const string& name,
@@ -32,7 +32,7 @@ public:
 	void ChangeOrigin(Origin&& origin) noexcept;
 	bool ChangeArea(const Rectangle& area) noexcept;
 
-	void SerializeIO(JsonOperation* operation);
+	void SerializeIO(JsonOperation& operation);
 
 private:
 	bool SetDestination(const Rectangle& area) noexcept;

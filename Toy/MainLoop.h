@@ -1,7 +1,7 @@
 #pragma once
 
 class Window;
-class CustomButtonStateTracker;
+class MouseTracker;
 struct IRenderer;
 struct IImguiItem;
 struct IGetValue;
@@ -25,7 +25,7 @@ protected:
     virtual bool InitializeDerived() = 0;
     virtual bool LoadResources() = 0;
     virtual bool SetDatas(IGetValue* getValue) = 0;
-    virtual void Update(const DX::StepTimer* timer, CustomButtonStateTracker* mouseTracker) = 0;
+    virtual void Update(const DX::StepTimer* timer, MouseTracker* mouseTracker) = 0;
 
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

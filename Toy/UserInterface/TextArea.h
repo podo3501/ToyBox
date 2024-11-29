@@ -18,7 +18,7 @@ public:
 	virtual unique_ptr<UIComponent> Clone();
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* getValue) override;
-	virtual bool Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept override;
+	virtual bool Update(const Vector2& position, MouseTracker* tracker) noexcept override;
 	virtual void Render(IRender* render) override;
 
 	void SetFont(const string& name,
@@ -26,7 +26,7 @@ public:
 		const UILayout& layout,
 		const map<wstring, wstring>& fontFileList);
 
-	virtual void SerializeIO(JsonOperation* operation) override;
+	virtual void SerializeIO(JsonOperation& operation) override;
 
 private:
 	Vector2 m_posByResolution{};

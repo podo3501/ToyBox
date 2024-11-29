@@ -1,6 +1,22 @@
 #pragma once
+#include "JsonOperation.h"
 
-class Scene;
+template<typename T>
+bool ReadJsonFile(const wstring& filename, T& data)
+{
+	JsonOperation readJ;
+	if (!readJ.Read(filename)) 
+		return false;
+	data.SerializeIO(readJ);
 
-bool ReadScene(const wstring& filename, Scene& outScene);
-bool WriteScene(Scene& scene, const wstring& filename);
+	return true;
+}
+
+template<typename T>
+bool WriteJsonFile(T& data, const wstring& filename)
+{
+	JsonOperation writeJ;
+	data.SerializeIO(writeJ);
+	return writeJ.Write(filename);
+}
+

@@ -46,7 +46,7 @@ namespace BasicClient
 			EXPECT_TRUE(source->right == 24 && source->bottom == 48);
 	}
 
-	void SetMouse(int x, int y, CustomButtonStateTracker& mouseTracker)
+	void SetMouse(int x, int y, MouseTracker& mouseTracker)
 	{
 		Mouse::State mouseState;
 		mouseState.x = x;
@@ -83,7 +83,7 @@ namespace BasicClient
 
 		Button* button = static_cast<Button*>(m_testScene->GetComponent("Button"));
 		//normal 버튼일 경우
-		CustomButtonStateTracker mouseTracker;
+		MouseTracker mouseTracker;
 		SetMouse(100, 100, mouseTracker);
 		button->ChangeArea({ 0, 0, 126,48 });
 		m_testScene->Update(&mouseTracker);
@@ -170,7 +170,7 @@ namespace BasicClient
 
 		auto button = m_testScene->GetComponent("Button");
 		//normal 버튼일 경우
-		CustomButtonStateTracker mouseTracker;
+		MouseTracker mouseTracker;
 		SetMouse(150, 110, mouseTracker);
 		m_testScene->Update(&mouseTracker);
 
@@ -242,7 +242,7 @@ namespace BasicClient
 		m_testScene->AddComponent({ 0.f, 0.f }, move(panel));
 
 		EXPECT_TRUE(m_renderer->LoadScenes());
-		CustomButtonStateTracker mouseTracker;
+		MouseTracker mouseTracker;
 		m_testScene->Update(&mouseTracker);
 
 		MockRender mockRender;

@@ -29,7 +29,7 @@ public:
 
 	bool IsArea(const Vector2& pos) const noexcept;
 
-	void SerializeIO(JsonOperation* operation);
+	void SerializeIO(JsonOperation& operation);
 
 private:
 	Vector2 GetOriginPoint(Origin origin) const noexcept;

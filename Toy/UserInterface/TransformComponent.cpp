@@ -49,7 +49,7 @@ bool TransformComponent::SetDatas(IGetValue* value)
 	return m_component->SetDatas(value);
 }
 
-bool TransformComponent::Update(const Vector2& position, CustomButtonStateTracker* tracker) noexcept
+bool TransformComponent::Update(const Vector2& position, MouseTracker* tracker) noexcept
 { 
 	return m_component->Update(position, tracker);
 }
@@ -94,8 +94,8 @@ const string& TransformComponent::GetName() const
 	return m_component->GetName(); 
 }
 
-void TransformComponent::SerializeIO(JsonOperation* operation)
+void TransformComponent::SerializeIO(JsonOperation& operation)
 {
-	operation->Process("Position", m_position);
-	operation->Process("Component", m_component);
+	operation.Process("Position", m_position);
+	operation.Process("Component", m_component);
 }

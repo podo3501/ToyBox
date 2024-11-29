@@ -15,7 +15,7 @@ public:
 
     //void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 
-    virtual void SerializeIO(JsonOperation* operation) override;
+    virtual void SerializeIO(JsonOperation& operation) override;
 
 private:
     Rectangle m_area{};
