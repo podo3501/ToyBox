@@ -39,9 +39,17 @@ bool MainWindow::CreateScene(const wstring& filename)
 	return true;
 }
 
-bool MainWindow::SaveScene() const
+bool MainWindow::SaveScene(const wstring& filename)
 {
-	return WriteJsonFile(*m_scene, m_filename);
+	wstring curFilename = m_filename;
+	if (!filename.empty())
+		curFilename = filename;
+
+	auto result = WriteJsonFile(*m_scene, curFilename);
+	if (result)
+		m_filename = curFilename;
+
+	return result;
 }
 
 const ImGuiWindow* MainWindow::GetImGuiWindow() const noexcept

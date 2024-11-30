@@ -79,7 +79,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -97,7 +97,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,7 +115,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -133,7 +133,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -143,9 +143,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MainMenuBar.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Menu\FileTab.cpp" />
+    <ClCompile Include="Menu\MenuBar.cpp" />
+    <ClCompile Include="Menu\RecentFiles.cpp" />
+    <ClCompile Include="Menu\MenuHelper.cpp" />
     <ClCompile Include="Popup.cpp" />
-    <ClCompile Include="RecentFiles.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="MainWindow.cpp" />
@@ -160,9 +163,12 @@
     <ClCompile Include="ToolMainLoop.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainMenuBar.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="Menu\FileTab.h" />
+    <ClInclude Include="Menu\MenuBar.h" />
+    <ClInclude Include="Menu\RecentFiles.h" />
+    <ClInclude Include="Menu\MenuHelper.h" />
     <ClInclude Include="Popup.h" />
-    <ClInclude Include="RecentFiles.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="MainWindow.h" />

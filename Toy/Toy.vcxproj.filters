@@ -79,6 +79,9 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="HelperClass.h" />
+    <ClInclude Include="UserInterface\EnumUtility.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -138,6 +141,9 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="HelperClass.cpp" />
+    <ClCompile Include="UserInterface\EnumUtility.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -154,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\Tool\OpenRecentFiles.json">
+      <Filter>Resources\Tool</Filter>
+    </None>
+    <None Include="..\Resources\Tool\Config.json">
       <Filter>Resources\Tool</Filter>
     </None>
   </ItemGroup>

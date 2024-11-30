@@ -14,9 +14,11 @@ namespace DX
 
 namespace Tool
 {
-    class MainMenuBar;
     class Popup;
+    class Config;
 }
+
+class MenuBar;
 
 class ToolSystem : public IImguiComponent
 {
@@ -30,13 +32,14 @@ public:
     //virtual void Update() override;
     virtual void Render(ImGuiIO* io) override;
 
-    const MainWindow* GetFocusMainWindow() const noexcept;
+    MainWindow* GetFocusMainWindow() const noexcept;
     void SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept;
     IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
 private:
     IRenderer* m_renderer;
-    unique_ptr<Tool::MainMenuBar> m_mainMenuBar;
+    unique_ptr<Tool::Config> m_config;
+    unique_ptr<MenuBar> m_menuBar;
     unique_ptr<Tool::Popup> m_popup;    //modal 창을 띄워주는 클래스(다른것들도 들어가서 나중에 확장될 가능성이 있음)
     unique_ptr<IRenderScene> m_scene;
     UIComponent* m_component;

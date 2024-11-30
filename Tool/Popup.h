@@ -1,5 +1,19 @@
 #pragma once
 
+enum class FileDialogType
+{
+	Open,  // 파일 열기
+	Save   // 파일 저장
+};
+
+enum class DialogType
+{
+	Init,
+	Alert,
+	Message,
+	Error
+};
+
 namespace Tool
 {
 	class Popup
@@ -8,12 +22,12 @@ namespace Tool
 		Popup();
 		~Popup();
 
-		bool OpenFileDialog(wstring& filename);
-		void ShowErrorDialog(const string& errorMsg) noexcept;
+		bool ShowFileDialog(wstring& filename, FileDialogType type);
+		void ShowInfoDialog(const DialogType dialogType, const string& m_msg) noexcept;
 		void Render() noexcept;
 
 	private:
-		bool m_errorDialog{ false };
-		string m_errorMsg;
+		DialogType m_dialogType{ DialogType::Init };
+		string m_msg;
 	};
 }

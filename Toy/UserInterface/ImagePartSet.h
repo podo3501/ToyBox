@@ -18,7 +18,6 @@ public:
 	bool operator==(const ImagePartSet& o) const noexcept;
 	string GetType() const;
 
-	//bool SetResources(const wstring& filename);
 	bool LoadResources(ILoadData* load);
 	bool SetPosition(const Vector2& position) noexcept;
 	void Render(IRender* render);

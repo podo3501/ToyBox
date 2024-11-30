@@ -7,18 +7,20 @@
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
 #include "MainWindow.h"
-#include "MainMenuBar.h"
+#include "Menu/MenuBar.h"
 #include "Popup.h"
+#include "Config.h"
 
 using namespace Tool;
 
 ToolSystem::~ToolSystem() = default;
 ToolSystem::ToolSystem(IRenderer* renderer) :
     m_renderer{ renderer },
+    m_config{ make_unique<Config>() },
     m_popup{ make_unique<Popup>() },
     m_component{ nullptr }
 {
-    m_mainMenuBar = make_unique<MainMenuBar>(this, m_popup.get());
+    m_menuBar = make_unique<MenuBar>(this, m_popup.get());
     m_renderer->AddImguiComponent(this);
 }
 
@@ -27,7 +29,7 @@ void ToolSystem::SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept
     m_mainWindows.emplace_back(move(mainWindow));
 }
 
-const MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
+MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
 {
     auto it = ranges::max_element(
         m_mainWindows,
@@ -49,7 +51,7 @@ const MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
 
 void ToolSystem::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 {
-    m_mainMenuBar->Update();
+    m_menuBar->Update();
 
     erase_if(m_mainWindows, [](auto& wnd) { return !wnd->IsOpen(); });
     ranges::for_each(m_mainWindows, [timer, mouseTracker](const auto& wnd) {
@@ -63,7 +65,7 @@ void ToolSystem::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 void ToolSystem::Render(ImGuiIO* io)
 {
     m_popup->Render();
-    m_mainMenuBar->Excute();
+    m_menuBar->Render();
 
     return;
 

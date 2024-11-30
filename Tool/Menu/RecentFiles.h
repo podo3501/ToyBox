@@ -1,9 +1,6 @@
 #pragma once
 
-namespace Tool
-{
-    class MainMenuBar;
-}
+class FileTab;
 class JsonOperation;
 
 class RecentFiles
@@ -16,8 +13,8 @@ public:
     RecentFiles();
 
     void AddFile(const wstring& filename);
-    bool OpenFile(Tool::MainMenuBar& mainMenuBar);
-    bool ShowRecentFilesMenu();
+    bool OpenFile(FileTab& menuBar);
+    bool Show();
     void SerializeIO(JsonOperation& jsonOp);
 
 private:

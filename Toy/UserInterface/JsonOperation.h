@@ -6,6 +6,11 @@ class Scene;
 enum class Origin;
 enum class ButtonState;
 
+namespace Tool
+{
+	enum class ResolutionType;
+}
+
 template <typename T>
 class JsonNavigator {
 public:
@@ -90,11 +95,14 @@ struct is_stl_container<std::list<Args...>> : std::true_type {};
 template <typename... Args>
 struct is_stl_container<std::deque<Args...>> : std::true_type {};
 
+//Json이 stl에 어떤 것을 지원하는지 검색하고 지원이 된다면 stl 컨테이너 특수화에 추가해서 
+//기본 Process를 사용해서 되는지 먼저 확인후, 지원이 안된다면 Process함수를 추가하자.
 template<typename T>
 concept Available = 
 	is_arithmetic<T>::value ||
 	is_same_v<T, string> ||
 	is_same_v<T, size_t> ||
+	is_same_v<T, Tool::ResolutionType> ||
 	is_stl_container<T>::value;               // STL 컨테이너
 
 template<typename T>

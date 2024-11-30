@@ -15,10 +15,11 @@ public:
     MainWindow(IRenderer* renderer);
     ~MainWindow();
     bool CreateScene(const wstring& filename);
-    bool SaveScene() const;
+    bool SaveScene(const wstring& filename);
     bool IsFocus() const noexcept;
     inline bool IsOpen() const noexcept { return m_isOpen; }
     inline const ImGuiWindow* GetImGuiWindow() const noexcept;
+    inline const wstring& GetSaveFilename() const noexcept { return m_filename; }
     void Update(const DX::StepTimer* timer, MouseTracker* mouseTracker);
     //IImguiComponent
     //virtual void Update() override;

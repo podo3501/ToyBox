@@ -2,7 +2,7 @@
 #include "RecentFiles.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/Utility.h"
-#include "MainMenuBar.h"
+#include "FileTab.h"
 
 using namespace Tool;
 
@@ -24,9 +24,9 @@ void RecentFiles::AddFile(const wstring& filename)
     WriteJsonFile(*this, RecentFilename);
 }
 
-bool RecentFiles::OpenFile(Tool::MainMenuBar& mainMenuBar)
+bool RecentFiles::OpenFile(FileTab& menuBar)
 {
-    auto result = mainMenuBar.CreateMainWindowFromFile(m_file);
+    auto result = menuBar.CreateMainWindowFromFile(m_file);
     if(result)
         AddFile(m_file);
 
@@ -39,8 +39,7 @@ void RecentFiles::SerializeIO(JsonOperation& jsonOp)
     jsonOp.Process("RecentFiles", m_recentFiles);
 }
 
-// "More.." 메뉴 표시
-bool RecentFiles::ShowRecentFilesMenu()
+bool RecentFiles::Show()
 {
     if (!ImGui::BeginMenu("Open Recent"))
         return false;
@@ -55,11 +54,7 @@ bool RecentFiles::ShowRecentFilesMenu()
             continue;
 
         if (ImGui::MenuItem(WStringToString(file).c_str()))
-        {
-            //OpenFile(file); // 파일 열기 처리
-            //m_mainMenuBar->CreateMainWindowFromFile(file);
             m_file = file;
-        }
         ++shownCount;
     }
 
@@ -83,11 +78,7 @@ void RecentFiles::ShowMoreMenu()
     for (size_t i = MaxShownFiles; i < m_recentFiles.size(); ++i)
     {
         if (ImGui::MenuItem(WStringToString(m_recentFiles[i]).c_str()))
-        {
-            //m_mainMenuBar->CreateMainWindowFromFile(m_recentFiles[i]);
-            //OpenFile(m_recentFiles[i]);
             m_file = m_recentFiles[i];
-        }
     }
     ImGui::EndMenu();
 }

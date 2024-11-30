@@ -2,80 +2,121 @@
 #include "Popup.h"
 #include <shobjidl.h>
 #include <wrl/wrappers/corewrappers.h>
+#include "../Toy/UserInterface/EnumUtility.h"
+
+template<>
+constexpr std::size_t EnumSize<DialogType>() { return 4; }
+
+template<>
+constexpr auto EnumToStringMap<DialogType>()->std::array<const char*, EnumSize<DialogType>()> {
+    return { {
+        { "Init" },
+        { "Alert" },
+        { "Message" },
+        { "Error" },
+    } };
+}
 
 using namespace Tool;
+using Microsoft::WRL::ComPtr;
 
-Popup::Popup() = default;
+inline bool IsSuccess(HRESULT hr)
+{
+    return SUCCEEDED(hr);
+}
+
+Popup::Popup()
+{}
 Popup::~Popup() = default;
 
-bool Popup::OpenFileDialog(wstring& filename)
+bool Popup::ShowFileDialog(wstring& filename, FileDialogType type)
 {
     Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
 
-    wstring initialPath = L"../Resources/";
-    //wstring initialPath = std::filesystem::current_path().wstring();
-    IFileOpenDialog* pFileOpen = nullptr;
-
-    // 파일 열기 대화상자 생성
-    HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileOpen));
-    if (!SUCCEEDED(hr))
+    if (FAILED(initialize)) 
         return false;
-    
-    // 초기 폴더 설정
-    if (!initialPath.empty()) {
-        IShellItem* pInitialFolder = nullptr;
-        hr = SHCreateItemFromParsingName(initialPath.c_str(), nullptr, IID_PPV_ARGS(&pInitialFolder));
-        if (SUCCEEDED(hr)) {
-            hr = pFileOpen->SetFolder(pInitialFolder); // 초기 폴더 설정
-            pInitialFolder->Release();
-        }
+
+    IFileDialog* pFileDialog = nullptr;
+    // 파일 열기 대화상자 생성
+    if (type == FileDialogType::Open)
+    {
+        if (!IsSuccess(CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileDialog))))
+            return false;
     }
+    else if (type == FileDialogType::Save)
+    {
+        if (!IsSuccess(CoCreateInstance(CLSID_FileSaveDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileDialog))))
+            return false;
+    }
+
+    const COMDLG_FILTERSPEC fileTypes[] = {
+        { L"JSON Files (*.json)", L"*.json" },
+        { L"All Files (*.*)", L"*.*" }
+    };
+    pFileDialog->SetFileTypes(ARRAYSIZE(fileTypes), fileTypes);
+
+    if (type == FileDialogType::Save)
+        pFileDialog->SetFileName(L"untitled.json");
+
+    //// 초기 폴더 설정
+    //wstring initialPath = L"D:\\ProgrammingStudy\\ToyBox\\Resources\\Tool";
+    //wstring initialPath = std::filesystem::current_path().wstring();
+    //if (!initialPath.empty()) 
+    //{
+    //    ComPtr<IShellItem> pInitialFolder;
+    //    if (IsSuccess(SHCreateItemFromParsingName(initialPath.c_str(), nullptr, IID_PPV_ARGS(&pInitialFolder)))) {
+    //        pFileOpen->SetFolder(pInitialFolder.Get());
+    //    }
+    //}
 
     // 대화상자 표시
-    hr = pFileOpen->Show(nullptr);
-    if (SUCCEEDED(hr)) {
-        IShellItem* pItem = nullptr;
-        hr = pFileOpen->GetResult(&pItem);
-        if (SUCCEEDED(hr)) {
-            PWSTR filePath = nullptr;
-            hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &filePath);
-            if (SUCCEEDED(hr)) {
-                filename = filePath;
-                CoTaskMemFree(filePath);
-            }
-            pItem->Release();
+    if (!IsSuccess(pFileDialog->Show(nullptr)))
+        return false;
+    
+    ComPtr<IShellItem> pItem;
+    if (IsSuccess(pFileDialog->GetResult(&pItem)))
+    {
+        PWSTR filePath = nullptr;
+        if (IsSuccess(pItem->GetDisplayName(SIGDN_FILESYSPATH, &filePath)) && filePath != nullptr)
+        {
+            filename = filePath;
+            CoTaskMemFree(filePath);
         }
     }
-    pFileOpen->Release();
+    
+    pFileDialog->Release();
 
     return true;
 }
 
-void Popup::ShowErrorDialog(const string& errorMsg) noexcept
+void Popup::ShowInfoDialog(const DialogType dialogType, const string& msg) noexcept
 {
-    m_errorDialog = true;
-    m_errorMsg = errorMsg;
+    m_dialogType = dialogType;
+    m_msg = msg;
 }
 
 void Popup::Render() noexcept
 {
-    if (m_errorDialog) 
-        ImGui::OpenPopup("Error");
+    const string& strDiagType = EnumToString(m_dialogType);
+    if (m_dialogType != DialogType::Init)
+        ImGui::OpenPopup(strDiagType.c_str());
 
     // 다이얼로그 정의
-    if (ImGui::BeginPopupModal("Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+    if (!ImGui::BeginPopupModal(strDiagType.c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+        return;
+    
+    ImGui::Text(m_msg.c_str());
+    ImGui::Separator();
+
+    ImVec2 buttonSize(100, 0);
+    float windowWidth = ImGui::GetWindowSize().x;
+    ImGui::SetCursorPosX((windowWidth - buttonSize.x) / 2.0f);
+
+    if (ImGui::Button("OK", buttonSize))
     {
-        ImGui::Text(m_errorMsg.c_str());
-        ImGui::Separator();
-        ImVec2 buttonSize(100, 0);
-        float windowWidth = ImGui::GetWindowSize().x;
-        float centeredX = (windowWidth - buttonSize.x) / 2.0f;
-        ImGui::SetCursorPosX(centeredX);
-        if (ImGui::Button("OK", buttonSize))
-        {
-            m_errorDialog = false; // 다이얼로그 닫기
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
+        m_dialogType = DialogType::Init;
+        ImGui::CloseCurrentPopup();
     }
+
+    ImGui::EndPopup();
 }

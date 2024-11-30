@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{d5550658-07c9-4753-b8c9-0b376d5f32e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -15,8 +14,19 @@
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Popup.cpp" />
-    <ClCompile Include="MainMenuBar.cpp" />
-    <ClCompile Include="RecentFiles.cpp" />
+    <ClCompile Include="Menu\MenuBar.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\RecentFiles.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\FileTab.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\MenuHelper.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -26,7 +36,18 @@
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Popup.h" />
-    <ClInclude Include="MainMenuBar.h" />
-    <ClInclude Include="RecentFiles.h" />
+    <ClInclude Include="Menu\MenuBar.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\RecentFiles.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\FileTab.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\MenuHelper.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h" />
   </ItemGroup>
 </Project>
