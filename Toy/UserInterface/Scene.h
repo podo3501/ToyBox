@@ -21,11 +21,14 @@ public:
 	virtual void AddComponent(const Vector2& position, unique_ptr<UIComponent> comp) override;
 	virtual UIComponent* GetComponent(const string& name) override;
 
-	//파일을 로드하는 부분. 지금은 파일이 없이 값을 바로 넣는다.
-	bool LoadData(const wstring& filename);
-	
+	bool LoadFile(const wstring& filename);
+	bool SaveFile(const wstring& filename);
+	inline const wstring& GetFilename() const noexcept { return m_filename; }
+	void SetSize(const XMUINT2& size);
+	XMUINT2 GetSize() const noexcept;
 	void SerializeIO(JsonOperation& operation);
 
 private:
+	wstring m_filename;
 	unique_ptr<UIComponent> m_mainPanel;
 };

@@ -7,6 +7,7 @@
 #include "../MainWindow.h"
 #include "MenuHelper.h"
 #include "RecentFiles.h"
+#include "../Config.h"
 
 using namespace Tool;
 
@@ -53,6 +54,7 @@ bool FileTab::Excute()
     case FileMenuAction::OpenRecent: result = m_recentFiles->OpenFile(*this); break;
     case FileMenuAction::SaveFile: result = SaveMainWindow(); break;
     case FileMenuAction::SaveAsFile: result = SaveAsMainWindow(); break;
+    case FileMenuAction::Resolution: result = SetResolution(); break;
 
     case FileMenuAction::Quit: Window::ExitGame(); break;
     default:
@@ -65,9 +67,12 @@ bool FileTab::Excute()
 
 bool FileTab::NewFile() noexcept
 {
-    static auto idx{ 0 };
-    wstring filename = L"test" + to_wstring(idx++) + L".json";
-    m_recentFiles->AddFile(filename);
+    auto mainWindow = std::make_unique<MainWindow>(m_toolSystem->GetRenderer());
+    const XMUINT2& resolution = Config::GetResolutionInCoordinate();
+    ReturnIfFalse(mainWindow->CreateScene(resolution));
+
+    m_toolSystem->SetMainWindow(move(mainWindow));
+
     return true;
 }
 
@@ -103,25 +108,21 @@ bool FileTab::CreateMainWindow()
 
 MainWindow* FileTab::GetFocusWindow() const noexcept
 {
-    MainWindow* focusWnd = m_toolSystem->GetFocusMainWindow();
-    if (focusWnd == nullptr)
-    {
-        m_popup->ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
-        return focusWnd;
-    }
-
-    return focusWnd;
+    return m_toolSystem->GetFocusMainWindow();
 }
 
 bool FileTab::Save(MainWindow* focusWnd, const wstring& filename) const 
 {
     auto result = focusWnd->SaveScene(filename);
     if (result)
-        m_popup->ShowInfoDialog(DialogType::Message, "Saved to " + WStringToString(focusWnd->GetSaveFilename()));
+    {
+        const wstring& curFilename = focusWnd->GetSaveFilename();
+        m_recentFiles->AddFile(curFilename);
+        m_popup->ShowInfoDialog(DialogType::Message, "Saved to " + WStringToString(curFilename));
+    }
     else
         m_popup->ShowInfoDialog(DialogType::Error, "Failed to save the file.");
 
-    m_recentFiles->AddFile(focusWnd->GetSaveFilename());
     return result;
 }
 
@@ -129,7 +130,10 @@ bool FileTab::SaveMainWindow()
 {
     MainWindow* focusWnd = GetFocusWindow();
     if (focusWnd == nullptr)
+    {
+        m_popup->ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
         return true;
+    }
 
     return Save(focusWnd);
 }
@@ -138,7 +142,10 @@ bool FileTab::SaveAsMainWindow()
 {
     MainWindow* focusWnd = GetFocusWindow();
     if (focusWnd == nullptr)
+    {
+        m_popup->ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
         return true;
+    }
 
     wstring selectedFilename{};
     if (!m_popup->ShowFileDialog(selectedFilename, FileDialogType::Save))
@@ -148,4 +155,16 @@ bool FileTab::SaveAsMainWindow()
         return true;
 
     return Save(focusWnd, selectedFilename);
+}
+
+bool FileTab::SetResolution()
+{
+    //MainWindow* focusWnd = GetFocusWindow();
+    //if (focusWnd == nullptr)
+    //    return true;
+
+    //XMUINT2 resolution = Config::GetResolutionInCoordinate();
+    //focusWnd->ChangeWindowSize({ static_cast<float>(resolution.x), static_cast<float>(resolution.y) });
+
+    return true;
 }

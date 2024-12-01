@@ -3,8 +3,8 @@
 #include "../Utility.h"
 #include "../Include/IRenderer.h"
 #include "Panel.h"
-#include "JsonOperation.h"
-#include "../HelperClass.h"
+#include "JsonHelper.h"
+#include "UILayout.h"
 
 using json = nlohmann::json;
 
@@ -52,10 +52,25 @@ void Scene::RenderScene(IRender* render)
 	m_mainPanel->Render(render);
 }
 
-bool Scene::LoadData(const wstring& filename)
+bool Scene::LoadFile(const wstring& filename)
 {
-	filename;
+	ReturnIfFalse(ReadJsonFile(filename, *this));
+	m_filename = filename;
+
 	return true;
+}
+
+bool Scene::SaveFile(const wstring& filename)
+{
+	wstring curFilename = m_filename;
+	if (!filename.empty())
+		curFilename = filename;
+
+	auto result = WriteJsonFile(*this, curFilename);
+	if (result)
+		m_filename = curFilename;
+
+	return result;
 }
 
 void Scene::AddComponent(const Vector2& position, unique_ptr<UIComponent> comp)
@@ -71,6 +86,18 @@ bool Scene::Update(MouseTracker* mouseTracker) noexcept
 UIComponent* Scene::GetComponent(const string& name)
 {
 	return m_mainPanel->GetComponent(name);
+}
+
+void Scene::SetSize(const XMUINT2& size)
+{
+	auto layout = m_mainPanel->GetLayout();
+	layout->Set({ 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) });
+}
+
+XMUINT2 Scene::GetSize() const noexcept
+{
+	const auto& area = m_mainPanel->GetArea();
+	return { static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
 }
 
 void Scene::SerializeIO(JsonOperation& operation)

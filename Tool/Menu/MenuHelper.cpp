@@ -26,6 +26,7 @@ bool ResolutionSettingShow()
     if (!ImGui::BeginMenu("Resolution"))
         return false;
 
+    auto select{ false };
     auto selectedResolution = Config::GetResolution();
     for (auto i : views::iota(0u, EnumSize<ResolutionType>()))
     {
@@ -33,10 +34,13 @@ bool ResolutionSettingShow()
         bool isSelected = (selectedResolution == curType);
         
         if (ImGui::MenuItem(EnumToString(curType).c_str(), nullptr, isSelected))
+        {
             Config::SetResolution(curType);
+            select = true;
+        }
     }
 
     ImGui::EndMenu();
 
-    return true;
+    return select;
 }

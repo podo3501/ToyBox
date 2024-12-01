@@ -161,6 +161,7 @@
     </ClCompile>
     <ClCompile Include="Tool.cpp" />
     <ClCompile Include="ToolMainLoop.cpp" />
+    <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="TestImgui.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToolMainLoop.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DirectXTK12\DirectXTK_Desktop_2022_Win10.vcxproj">

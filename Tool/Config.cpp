@@ -33,6 +33,16 @@ ResolutionType Config::GetResolution() noexcept
 
 XMUINT2 Config::GetResolutionInCoordinate() noexcept
 {
+	switch (m_resolutionType)
+	{
+	case ResolutionType::R2560x1440: return XMUINT2{ 2560, 1440 };
+	case ResolutionType::R1920x1080: return XMUINT2{ 1920, 1080 };
+	case ResolutionType::R1600x900: return XMUINT2{ 1600, 900 };
+	case ResolutionType::R1280x720: return XMUINT2{ 1280, 720 };
+	case ResolutionType::R1024x768: return XMUINT2{ 1024, 768 };
+	case ResolutionType::R800x600: return XMUINT2{ 800, 600 };
+	}
+
 	return XMUINT2{ 800, 600 };
 }
 

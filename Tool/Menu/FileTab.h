@@ -40,6 +40,7 @@ private:
 	bool Save(MainWindow* focusWnd, const wstring& filename = L"") const;
 	bool SaveMainWindow();
 	bool SaveAsMainWindow();
+	bool SetResolution();
 
 private:
 	ToolSystem* m_toolSystem;

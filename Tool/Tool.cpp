@@ -47,7 +47,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 
 		Window window;
 		HWND hwnd{};
-		result = window.Create(hInstance, nShowCmd, { 0, 0, 800, 600 }, hwnd);
+		result = window.Create(hInstance, nShowCmd, { 0, 0, 1280, 960 }, hwnd);
 		if (not result)
 			return 1;
 

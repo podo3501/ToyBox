@@ -282,7 +282,7 @@ namespace BasicClient
 	TEST_F(ToyTestFixture, Scene)
 	{
 		unique_ptr<Scene>testScene = std::make_unique<Scene>(GetRectResolution());
-		EXPECT_TRUE(testScene->LoadData(L"UI/Data/FirstScene.json"));
+		EXPECT_TRUE(testScene->LoadFile(L"UI/Data/FirstScene.json"));
 
 		m_renderer->AddLoadScene(testScene.get());
 		m_renderer->AddRenderScene(testScene.get());
