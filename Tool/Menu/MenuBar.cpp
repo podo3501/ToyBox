@@ -4,8 +4,8 @@
 
 using namespace Tool;
 
-MenuBar::MenuBar(ToolSystem* toolSystem, Popup* popup) :
-    m_fileTab{ make_unique<FileTab>(toolSystem, popup) }
+MenuBar::MenuBar(ToolSystem* toolSystem, Dialog* dialog) :
+    m_fileTab{ make_unique<FileTab>(toolSystem, dialog) }
 {}
 
 MenuBar::~MenuBar() = default;

@@ -8,6 +8,7 @@
 #include "IDeviceNotify.h"
 
 struct IImgui;
+struct IComponent;
 class TextureIndexing;
 class RenderTexture;
 class CycleIterator;
@@ -49,10 +50,15 @@ public:
     virtual void AddLoadScene(IRenderScene* scene) override;
     virtual void RemoveLoadScene(IRenderScene* scene) noexcept override;
     virtual void AddRenderScene(IRenderScene* scene) override;
+
+    virtual void AddComponent(IComponent* component, bool render) override;
+
     virtual void AddImguiComponent(IImguiComponent* item) override;
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept override;
 
     virtual bool LoadScenes() override;
+    virtual bool LoadComponents() override;
+
     virtual IGetValue* GetValue() const noexcept override;
     virtual bool CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID) override;
     virtual void RemoveRenderTexture(ImTextureID textureID) override;
@@ -89,4 +95,11 @@ private:
 
     vector<IRenderScene*> m_loadScenes;
     vector<IRenderScene*> m_renderScenes;
+
+    struct ComponentInfo 
+    {
+        IComponent* component{ nullptr };
+        bool isRender{ false };
+    };
+    vector<ComponentInfo> m_components;
 };

@@ -7,6 +7,7 @@
 #include "../Toy/Utility.h"
 #include "Utility.h"
 #include "../Toy/HelperClass.h"
+#include "Popup.h"
 
 MainWindow::~MainWindow()
 {
@@ -17,7 +18,8 @@ MainWindow::~MainWindow()
 
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
-	m_scene{ make_unique<Scene>(GetRectResolution()) }
+	m_scene{ make_unique<Scene>(GetRectResolution()) },
+	m_popup{ make_unique<Tool::Popup>( renderer ) }
 {
 	static int idx{ 0 };
 	m_name = "Main Window " + to_string(idx++);
@@ -102,7 +104,7 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window, MouseTracker* mous
 void MainWindow::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 {
 	if (!IsFocus()) return;
-
+	
 	const ImGuiWindow* window = GetImGuiWindow();
 	float frameHeight = GetFrameHeight();
 	XMUINT2 offset{};
@@ -114,6 +116,7 @@ void MainWindow::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 	CheckChangeWindow(window, mouseTracker);
 
 	m_scene->Update(mouseTracker);
+	m_popup->Excute(mouseTracker);
 }
 
 void MainWindow::Render(ImGuiIO* io)
@@ -129,21 +132,8 @@ void MainWindow::Render(ImGuiIO* io)
 
 	//ImVec2 windowPos = ImGui::GetWindowPos();
 
-			// 마우스 오른쪽 버튼 클릭 시 팝업 메뉴 띄우기
-	if (ImGui::BeginPopupContextWindow("PopupMenu"))
-	{
-		if (ImGui::MenuItem("Option 1")) {
-			// Option 1 선택 시 동작
-		}
-		if (ImGui::MenuItem("Option 2")) {
-			// Option 2 선택 시 동작
-		}
-		if (ImGui::MenuItem("Close")) {
-			// Close 선택 시 동작
-		}
-		ImGui::EndPopup();
-	}
-
 	ImGui::Image(m_textureID, m_size);
+	m_popup->Show();
+	
 	ImGui::End();
 }

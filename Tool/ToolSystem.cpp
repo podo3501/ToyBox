@@ -8,19 +8,17 @@
 #include "../Toy/Config.h"
 #include "MainWindow.h"
 #include "Menu/MenuBar.h"
-#include "Popup.h"
+#include "Dialog.h"
 #include "Config.h"
-
-using namespace Tool;
 
 ToolSystem::~ToolSystem() = default;
 ToolSystem::ToolSystem(IRenderer* renderer) :
     m_renderer{ renderer },
-    m_config{ make_unique<Config>() },
-    m_popup{ make_unique<Popup>() },
+    m_config{ make_unique<Tool::Config>() },
+    m_dialog{ make_unique<Tool::Dialog>() },
     m_component{ nullptr }
 {
-    m_menuBar = make_unique<MenuBar>(this, m_popup.get());
+    m_menuBar = make_unique<MenuBar>(this, m_dialog.get());
     m_renderer->AddImguiComponent(this);
 }
 
@@ -64,7 +62,7 @@ void ToolSystem::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 
 void ToolSystem::Render(ImGuiIO* io)
 {
-    m_popup->Render();
+    m_dialog->Render();
     m_menuBar->Render();
 
     return;

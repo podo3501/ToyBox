@@ -1,15 +1,13 @@
 #pragma once
 
-struct ILoadData;
-struct IGetValue;
-struct IRender;
-class UILayout;
-class TestClass;
-class JsonOperation;
-class MouseTracker;
-class TransformComponent;
+#include "../Include/IComponent.h"
 
-class UIComponent
+class UILayout;
+class JsonOperation;
+class TransformComponent;
+enum class Origin;
+
+class UIComponent : public IComponent
 {
 protected:
 	UIComponent();	//이 클래스는 단독으로 만들 수 없다. 상속 받은 클래스만이 생성 가능
@@ -31,6 +29,7 @@ public:
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 	bool ChangeArea(const Rectangle& area) noexcept;
+	void ChangeOrigin(const Origin& origin) noexcept;
 	bool IsPicking(const Vector2& pos)  const noexcept;
 
 	UIComponent* GetComponent(const string& name) const noexcept;

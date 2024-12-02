@@ -163,6 +163,11 @@ bool UIComponent::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
+void UIComponent::ChangeOrigin(const Origin& origin) noexcept
+{
+	m_layout->Set(origin);
+}
+
 void UIComponent::SetName(const string& name) noexcept
 {
 	m_name = name;

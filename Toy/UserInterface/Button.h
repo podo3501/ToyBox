@@ -8,7 +8,6 @@ struct ImageSource;
 class ImagePartSet;
 class UILayout;
 
-enum class Origin;
 enum class ButtonState;
 
 class Button : public UIComponent
@@ -29,7 +28,6 @@ public:
 		const vector<ImageSource>& normal,
 		const vector<ImageSource>& hover,
 		const vector<ImageSource>& pressed);
-	void ChangeOrigin(Origin&& origin) noexcept;
 	bool ChangeArea(const Rectangle& area) noexcept;
 
 	void SerializeIO(JsonOperation& operation);

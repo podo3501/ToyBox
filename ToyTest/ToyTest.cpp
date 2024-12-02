@@ -56,8 +56,7 @@ namespace BasicClient
 
 	TEST_F(ToyTestFixture, ButtonTest)
 	{
-		vector<ImageSource> normal
-		{
+		vector<ImageSource> normal {
 			{ L"UI/Blue/bar_square_large_l.png" },
 			{ L"UI/Blue/bar_square_large_m.png" },
 			{ L"UI/Blue/bar_square_large_r.png" },
@@ -76,34 +75,35 @@ namespace BasicClient
 		};
 
 		UILayout layout({ 0, 0, 116, 48 }, Origin::Center);
-		std::unique_ptr<Button> cButton = std::make_unique<Button>();
-		cButton->SetImage("Button", layout, normal, hover, pressed);
-		m_testScene->AddComponent({ 0.5f, 0.5f }, move(cButton));
-		EXPECT_TRUE(m_renderer->LoadScenes());
+		unique_ptr<Button> button = make_unique<Button>();
+		button->SetImage("Button", layout, normal, hover, pressed);
+		m_renderer->AddComponent(button.get(), true);
+		m_renderer->LoadComponents();
 
-		Button* button = static_cast<Button*>(m_testScene->GetComponent("Button"));
 		//normal 버튼일 경우
 		MouseTracker mouseTracker;
 		SetMouse(100, 100, mouseTracker);
 		button->ChangeArea({ 0, 0, 126,48 });
-		m_testScene->Update(&mouseTracker);
+
+		unique_ptr<UIComponent> panel = make_unique<Panel>("Main", GetRectResolution());
+		panel->AddComponent(move(button), { 0.5f, 0.5f });
+		panel->Update({ 0.f, 0.f }, &mouseTracker);
 
 		//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 		//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
-		MockRender mockRender;
-		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestCenterRender));
-		button->Render(&mockRender);
+		CallMockRender(panel.get(), TestCenterRender);
 
-		button->ChangeOrigin(Origin::LeftTop);	//정렬을 왼쪽위로 옮긴다.
+		UIComponent* btn = panel->GetComponent("Button");
+		btn->ChangeOrigin(Origin::LeftTop);	//정렬을 왼쪽위로 옮긴다.
+
 		//clicked 버튼일 경우
 		SetMouse(420, 320, mouseTracker);
 		mouseTracker.leftButton = Mouse::ButtonStateTracker::PRESSED;
-		m_testScene->Update(&mouseTracker);
+		panel->Update({0.f, 0.f}, &mouseTracker);
 
-		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestLeftTopRender));
-		button->Render(&mockRender);
+		CallMockRender(panel.get(), TestLeftTopRender);
 
-		EXPECT_TRUE(WriteReadTest(*m_testScene));
+		EXPECT_TRUE(WriteReadTest(panel));
 	}
 
 	void TestBGImageRender(size_t index, const RECT& dest, const RECT* source)
@@ -134,18 +134,14 @@ namespace BasicClient
 	TEST_F(ToyTestFixture, BGImageTest)
 	{
 		unique_ptr<UIComponent> cBgImage = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 170, 120 });
-		m_testScene->AddComponent({ 0.f, 0.f }, move(cBgImage));
-		auto bgImage = m_testScene->GetComponent("BGImage");
-		bgImage->ChangeArea({ 0, 0, 200, 150 });
-		EXPECT_TRUE(m_renderer->LoadScenes());
+		m_renderer->AddComponent(cBgImage.get(), true);
 
-		bgImage->Update({ 0.f, 0.f }, nullptr);
+		cBgImage->ChangeArea({ 0, 0, 200, 150 });
+		EXPECT_TRUE(m_renderer->LoadComponents());
 
-		MockRender mockRender;
-		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestBGImageRender));
-		bgImage->Render(&mockRender);
+		CallMockRender(cBgImage.get(), TestBGImageRender);
 
-		EXPECT_TRUE(WriteReadTest(*m_testScene));
+		EXPECT_TRUE(WriteReadTest(cBgImage));
 	}
 
 	void TestCloseButtonRender(size_t index, const RECT& dest, const RECT* source)

@@ -1,122 +1,104 @@
 #include "pch.h"
 #include "Popup.h"
-#include <shobjidl.h>
-#include <wrl/wrappers/corewrappers.h>
-#include "../Toy/UserInterface/EnumUtility.h"
-
-template<>
-constexpr std::size_t EnumSize<DialogType>() { return 4; }
-
-template<>
-constexpr auto EnumToStringMap<DialogType>()->std::array<const char*, EnumSize<DialogType>()> {
-    return { {
-        { "Init" },
-        { "Alert" },
-        { "Message" },
-        { "Error" },
-    } };
-}
+#include "../Toy/UserInterface/UIType.h"
+#include "../Toy/UserInterface/UILayout.h"
+#include "../Toy/UserInterface/BGImage.h"
+#include "../Toy/UserInterface/Scene.h"
+#include "../Include/IRenderer.h"
+#include "../Toy/UserInterface/Scene.h"
+#include "../Toy/Config.h"
+#include "../Toy/Utility.h"
+#include "Utility.h"
+#include "../Toy/HelperClass.h"
 
 using namespace Tool;
-using Microsoft::WRL::ComPtr;
 
-inline bool IsSuccess(HRESULT hr)
+Popup::Popup(IRenderer* renderer) :
+	m_renderer{ renderer },
+	m_scene{ make_unique<Scene>(GetRectResolution()) }
 {
-    return SUCCEEDED(hr);
+	m_renderer->AddLoadScene(m_scene.get());
 }
 
-Popup::Popup()
+Popup::~Popup()
 {}
-Popup::~Popup() = default;
 
-bool Popup::ShowFileDialog(wstring& filename, FileDialogType type)
+bool Popup::Excute(MouseTracker* mouseTracker)
 {
-    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
+	m_position = XMUINT2ToImVec2(mouseTracker->GetOffsetPosition());
 
-    if (FAILED(initialize)) 
-        return false;
+	if (!m_currentAction.has_value()) return true;
 
-    IFileDialog* pFileDialog = nullptr;
-    // 파일 열기 대화상자 생성
-    if (type == FileDialogType::Open)
-    {
-        if (!IsSuccess(CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileDialog))))
-            return false;
-    }
-    else if (type == FileDialogType::Save)
-    {
-        if (!IsSuccess(CoCreateInstance(CLSID_FileSaveDialog, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFileDialog))))
-            return false;
-    }
+	auto result{ true };
+	switch (m_currentAction.value())
+	{
+	case MakeComponent::Dialog: result = MakeDialog(); break;
+	}
 
-    const COMDLG_FILTERSPEC fileTypes[] = {
-        { L"JSON Files (*.json)", L"*.json" },
-        { L"All Files (*.*)", L"*.*" }
-    };
-    pFileDialog->SetFileTypes(ARRAYSIZE(fileTypes), fileTypes);
+	m_currentAction.reset(); // 상태 초기화
 
-    if (type == FileDialogType::Save)
-        pFileDialog->SetFileName(L"untitled.json");
-
-    //// 초기 폴더 설정
-    //wstring initialPath = L"D:\\ProgrammingStudy\\ToyBox\\Resources\\Tool";
-    //wstring initialPath = std::filesystem::current_path().wstring();
-    //if (!initialPath.empty()) 
-    //{
-    //    ComPtr<IShellItem> pInitialFolder;
-    //    if (IsSuccess(SHCreateItemFromParsingName(initialPath.c_str(), nullptr, IID_PPV_ARGS(&pInitialFolder)))) {
-    //        pFileOpen->SetFolder(pInitialFolder.Get());
-    //    }
-    //}
-
-    // 대화상자 표시
-    if (!IsSuccess(pFileDialog->Show(nullptr)))
-        return false;
-    
-    ComPtr<IShellItem> pItem;
-    if (IsSuccess(pFileDialog->GetResult(&pItem)))
-    {
-        PWSTR filePath = nullptr;
-        if (IsSuccess(pItem->GetDisplayName(SIGDN_FILESYSPATH, &filePath)) && filePath != nullptr)
-        {
-            filename = filePath;
-            CoTaskMemFree(filePath);
-        }
-    }
-    
-    pFileDialog->Release();
-
-    return true;
+	return true;
 }
 
-void Popup::ShowInfoDialog(const DialogType dialogType, const string& msg) noexcept
+void Popup::DrawMakeComponent()
 {
-    m_dialogType = dialogType;
-    m_msg = msg;
+	ImVec2 size = XMUINT2ToImVec2(m_scene->GetSize());
+	// 텍스처를 사각형 형태로 그리기
+	ImVec2 mousePos = ImGui::GetMousePos();
+	ImDrawList* drawList = ImGui::GetWindowDrawList();
+	drawList->AddImage(
+		m_textureID,
+		m_position,                                // 시작 좌표
+		ImVec2(m_position.x + size.x, m_position.y + size.y) // 종료 좌표
+	);
 }
 
-void Popup::Render() noexcept
+void Popup::Show()
 {
-    const string& strDiagType = EnumToString(m_dialogType);
-    if (m_dialogType != DialogType::Init)
-        ImGui::OpenPopup(strDiagType.c_str());
+	if (m_draw)
+	{
+		DrawMakeComponent();
+		return;
+	}
 
-    // 다이얼로그 정의
-    if (!ImGui::BeginPopupModal(strDiagType.c_str(), nullptr, ImGuiWindowFlags_AlwaysAutoResize))
-        return;
-    
-    ImGui::Text(m_msg.c_str());
-    ImGui::Separator();
+	// 마우스 오른쪽 버튼 클릭 시 팝업 메뉴 띄우기
+	if (!ImGui::BeginPopupContextWindow("PopupMenu")) return;
 
-    ImVec2 buttonSize(100, 0);
-    float windowWidth = ImGui::GetWindowSize().x;
-    ImGui::SetCursorPosX((windowWidth - buttonSize.x) / 2.0f);
+	if (ImGui::MenuItem("Dialog")) m_currentAction = MakeComponent::Dialog;
+	if (ImGui::MenuItem("Option 2")) {}
+	if (ImGui::MenuItem("Close")) {}
 
-    if (ImGui::Button("OK", buttonSize))
-    {
-        m_dialogType = DialogType::Init;
-        ImGui::CloseCurrentPopup();
-    }
+	ImGui::EndPopup();
+}
 
-    ImGui::EndPopup();
+bool Popup::CreateScene(const XMUINT2& size)
+{
+	m_scene->SetSize(size);
+	ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_scene.get(), m_textureID));
+	m_draw = true;
+
+	return true;
+}
+
+bool Popup::MakeDialog()
+{
+	UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
+	ImageSource dialogSource{
+		L"UI/Blue/button_square_header_large_square_screws.png", {
+			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+		}
+	};
+	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
+	bgImg->SetImage("untitled_dialog", layout, dialogSource);
+
+	CreateScene({ 170, 120 });
+	m_scene->AddComponent({ 0.f, 0.f }, move(bgImg));
+
+	ReturnIfFalse(m_renderer->LoadScenes());
+	ReturnIfFalse(m_scene->SetDatas(m_renderer->GetValue()));
+	ReturnIfFalse(m_scene->Update(nullptr));	//position 갱신. 안하면 {0, 0}에 1프레임 정도 잠깐 나타난다.
+	
+	return true;
 }

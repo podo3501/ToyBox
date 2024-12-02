@@ -14,7 +14,7 @@ namespace DX
 
 namespace Tool
 {
-    class Popup;
+    class Dialog;
     class Config;
 }
 
@@ -40,7 +40,7 @@ private:
     IRenderer* m_renderer;
     unique_ptr<Tool::Config> m_config;
     unique_ptr<MenuBar> m_menuBar;
-    unique_ptr<Tool::Popup> m_popup;    //modal 창을 띄워주는 클래스(다른것들도 들어가서 나중에 확장될 가능성이 있음)
+    unique_ptr<Tool::Dialog> m_dialog;    //modal 창을 띄워주는 클래스(다른것들도 들어가서 나중에 확장될 가능성이 있음)
     unique_ptr<IRenderScene> m_scene;
     UIComponent* m_component;
     ImTextureID m_textureID{};

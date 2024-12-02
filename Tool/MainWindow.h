@@ -6,6 +6,11 @@ namespace DX
     class StepTimer;
 }
 
+namespace Tool
+{
+    class Popup;
+}
+
 class MouseTracker;
 class Scene;
 
@@ -31,6 +36,8 @@ private:
     void CheckChangeWindow(const ImGuiWindow* window, MouseTracker* mouseTracker);
 
     IRenderer* m_renderer;
+    unique_ptr<Tool::Popup> m_popup;
+
     string m_name{};
     unique_ptr<Scene> m_scene;
     ImTextureID m_textureID{};

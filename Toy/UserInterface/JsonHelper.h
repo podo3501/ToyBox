@@ -20,3 +20,21 @@ bool WriteJsonFile(T& data, const wstring& filename)
 	return writeJ.Write(filename);
 }
 
+template<typename T>
+bool WriteJsonFile(unique_ptr<T>& data, const wstring& filename)
+{
+	JsonOperation writeJ;
+	writeJ.Process("Component", data);
+	return writeJ.Write(filename);
+}
+
+template<typename T>
+bool ReadJsonFile(const wstring& filename, unique_ptr<T>& data)
+{
+	JsonOperation readJ;
+	if (!readJ.Read(filename))
+		return false;
+	readJ.Process("Component", data);
+	return true;
+}
+

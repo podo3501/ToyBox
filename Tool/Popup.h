@@ -1,33 +1,34 @@
 #pragma once
 
-enum class FileDialogType
-{
-	Open,  // 파일 열기
-	Save   // 파일 저장
-};
-
-enum class DialogType
-{
-	Init,
-	Alert,
-	Message,
-	Error
-};
+struct IRenderer;
+class Scene;
+class MouseTracker;
 
 namespace Tool
 {
 	class Popup
 	{
-	public:
-		Popup();
-		~Popup();
+		enum class MakeComponent
+		{
+			Dialog
+		};
 
-		bool ShowFileDialog(wstring& filename, FileDialogType type);
-		void ShowInfoDialog(const DialogType dialogType, const string& m_msg) noexcept;
-		void Render() noexcept;
+	public:
+		Popup(IRenderer* renderer);
+		~Popup();
+		bool Excute(MouseTracker* mouseTracker);
+		void Show();
 
 	private:
-		DialogType m_dialogType{ DialogType::Init };
-		string m_msg;
+		void DrawMakeComponent();
+		bool CreateScene(const XMUINT2& size);
+		bool MakeDialog();
+
+		IRenderer* m_renderer;
+		unique_ptr<Scene> m_scene;
+		ImTextureID m_textureID{};
+		optional<MakeComponent> m_currentAction;
+		bool m_draw{ false };
+		ImVec2 m_position{};
 	};
 }

@@ -115,12 +115,6 @@ void Button::SetImage(const string& name,
 	}
 }
 
-void Button::ChangeOrigin(Origin&& origin) noexcept
-{
-	auto layout = GetLayout();
-	layout->Set(move(origin));
-}
-
 void Button::InsertImage(ButtonState btnState, unique_ptr<ImagePartSet>&& imgPartSet)
 {
 	m_image.insert(make_pair(btnState, move(imgPartSet)));

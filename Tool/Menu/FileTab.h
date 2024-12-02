@@ -7,7 +7,7 @@ class ResolutionSetting;
 
 namespace Tool
 {
-	class Popup;
+	class Dialog;
 }
 
 class FileTab
@@ -25,7 +25,7 @@ class FileTab
 	};
 
 public:
-	FileTab(ToolSystem* toolSystem, Tool::Popup* popup);
+	FileTab(ToolSystem* toolSystem, Tool::Dialog* dialog);
 	~FileTab();
 
 	void Show();
@@ -44,7 +44,7 @@ private:
 
 private:
 	ToolSystem* m_toolSystem;
-	Tool::Popup* m_popup;
+	Tool::Dialog* m_dialog;
 	unique_ptr<RecentFiles> m_recentFiles;
 	optional<FileMenuAction> m_currentAction; // 현재 메뉴 상태를 저장
 };

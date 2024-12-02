@@ -148,6 +148,7 @@
     <ClCompile Include="Menu\MenuBar.cpp" />
     <ClCompile Include="Menu\RecentFiles.cpp" />
     <ClCompile Include="Menu\MenuHelper.cpp" />
+    <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="Popup.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="GuiWidget.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Menu\MenuBar.h" />
     <ClInclude Include="Menu\RecentFiles.h" />
     <ClInclude Include="Menu\MenuHelper.h" />
+    <ClInclude Include="Dialog.h" />
     <ClInclude Include="Popup.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="GuiWidget.h" />

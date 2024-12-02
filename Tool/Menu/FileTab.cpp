@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "FileTab.h"
-#include "../Popup.h"
+#include "../Dialog.h"
 #include "../Toy/Window.h"
 #include "../Toy/Utility.h"
 #include "../ToolSystem.h"
@@ -12,9 +12,9 @@
 using namespace Tool;
 
 FileTab::~FileTab() = default;
-FileTab::FileTab(ToolSystem* toolSystem, Popup* popup) :
+FileTab::FileTab(ToolSystem* toolSystem, Dialog* dialog) :
     m_toolSystem{ toolSystem },
-    m_popup{ popup },
+    m_dialog{ dialog },
     m_recentFiles{ make_unique<RecentFiles>() }
 {}
 
@@ -81,7 +81,7 @@ bool FileTab::CreateMainWindowFromFile(const wstring& filename)
     auto mainWindow = std::make_unique<MainWindow>(m_toolSystem->GetRenderer());
     if (!mainWindow->CreateScene(filename))
     {
-        m_popup->ShowInfoDialog(DialogType::Error, "Failed to open the file. Please check the file path.");
+        m_dialog->ShowInfoDialog(DialogType::Error, "Failed to open the file. Please check the file path.");
         return false;
     }
 
@@ -93,7 +93,7 @@ bool FileTab::CreateMainWindowFromFile(const wstring& filename)
 bool FileTab::CreateMainWindow()
 {
     wstring selectedFilename{};
-    if (!m_popup->ShowFileDialog(selectedFilename, FileDialogType::Open))
+    if (!m_dialog->ShowFileDialog(selectedFilename, FileDialogType::Open))
         return false;
 
     if (selectedFilename.empty())   //다이얼로그를 닫거나 취소를 눌리면 파일명이 없다.
@@ -118,10 +118,10 @@ bool FileTab::Save(MainWindow* focusWnd, const wstring& filename) const
     {
         const wstring& curFilename = focusWnd->GetSaveFilename();
         m_recentFiles->AddFile(curFilename);
-        m_popup->ShowInfoDialog(DialogType::Message, "Saved to " + WStringToString(curFilename));
+        m_dialog->ShowInfoDialog(DialogType::Message, "Saved to " + WStringToString(curFilename));
     }
     else
-        m_popup->ShowInfoDialog(DialogType::Error, "Failed to save the file.");
+        m_dialog->ShowInfoDialog(DialogType::Error, "Failed to save the file.");
 
     return result;
 }
@@ -131,7 +131,7 @@ bool FileTab::SaveMainWindow()
     MainWindow* focusWnd = GetFocusWindow();
     if (focusWnd == nullptr)
     {
-        m_popup->ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
+        m_dialog->ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
         return true;
     }
 
@@ -143,12 +143,12 @@ bool FileTab::SaveAsMainWindow()
     MainWindow* focusWnd = GetFocusWindow();
     if (focusWnd == nullptr)
     {
-        m_popup->ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
+        m_dialog->ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
         return true;
     }
 
     wstring selectedFilename{};
-    if (!m_popup->ShowFileDialog(selectedFilename, FileDialogType::Save))
+    if (!m_dialog->ShowFileDialog(selectedFilename, FileDialogType::Save))
         return false;
 
     if (selectedFilename.empty())

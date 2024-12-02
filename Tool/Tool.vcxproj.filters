@@ -13,7 +13,7 @@
     <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="MainWindow.cpp" />
-    <ClCompile Include="Popup.cpp" />
+    <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="Menu\MenuBar.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -28,6 +28,7 @@
     </ClCompile>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="Popup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -36,7 +37,7 @@
     <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="MainWindow.h" />
-    <ClInclude Include="Popup.h" />
+    <ClInclude Include="Dialog.h" />
     <ClInclude Include="Menu\MenuBar.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -51,5 +52,6 @@
     </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="Popup.h" />
   </ItemGroup>
 </Project>

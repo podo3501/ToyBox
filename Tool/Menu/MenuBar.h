@@ -5,14 +5,14 @@ class FileTab;
 
 namespace Tool
 {
-	class Popup;
+	class Dialog;
 }
 
 class MenuBar
 {
 public:
 	MenuBar() = delete;
-	MenuBar(ToolSystem* toolSystem, Tool::Popup* popup);
+	MenuBar(ToolSystem* toolSystem, Tool::Dialog* dialog);
 	~MenuBar();
 
 	void Update() const;

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Renderer.h"
 #include "../Include/IRenderScene.h"
+#include "../Include/IComponent.h"
 #include "DeviceResources.h"
 #include "TextureIndexing.h"
 #include "RenderTexture.h"
@@ -177,6 +178,38 @@ bool Renderer::LoadScenes()
     return true;
 }
 
+bool Renderer::LoadComponents()
+{
+    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
+#ifdef __MINGW32__
+    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
+#else
+    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
+    if (FAILED(initialize)) return false;
+#endif
+
+    m_batch->Begin();
+
+    ReturnIfFalse(ranges::all_of(m_components, [load = m_texIndexing.get()](const auto& item) {
+        return item.component->LoadResources(load);
+        }));
+
+    auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
+    uploadResourcesFinished.wait();
+
+    //로드 하고 나서 필요한 셋팅을 할 수 있게끔 한다.
+    ReturnIfFalse(ranges::all_of(m_components, [load = m_texIndexing.get()](const auto& item) {
+        return item.component->SetDatas(load);
+        }));
+
+    //update를 한번 돌려서 위치등등을 계산해 준다.
+    ReturnIfFalse(ranges::all_of(m_components, [load = m_texIndexing.get()](const auto& item) {
+        return item.component->Update({ 0.f, 0.f }, nullptr);
+        }));
+
+    return true;
+}
+
 
 #pragma region Frame Draw
 // Draws the scene.
@@ -302,6 +335,12 @@ void Renderer::RemoveLoadScene(IRenderScene* scene) noexcept
 { 
     erase(m_loadScenes, scene); 
 }
+
+void Renderer::AddComponent(IComponent* component, bool render)
+{
+    m_components.emplace_back(ComponentInfo{ component, render });
+}
+
 void Renderer::AddRenderScene(IRenderScene* scene) { m_renderScenes.emplace_back(scene); }
 void Renderer::AddImguiComponent(IImguiComponent* comp) { m_imgui->AddComponent(comp); }
 void Renderer::RemoveImguiComponent(IImguiComponent* comp) noexcept { m_imgui->RemoveComponent(comp); }
