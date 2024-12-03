@@ -1,7 +1,7 @@
 #pragma once
 
 struct IRenderer;
-class Scene;
+class UIComponent;
 class MouseTracker;
 
 namespace Tool
@@ -16,16 +16,19 @@ namespace Tool
 	public:
 		Popup(IRenderer* renderer);
 		~Popup();
+		bool IsComponent() const noexcept;
+		unique_ptr<UIComponent> GetComponent() noexcept;
 		bool Excute(MouseTracker* mouseTracker);
 		void Show();
+		const ImVec2& GetPosition() const noexcept { return m_position; }
 
 	private:
+		void Reset() noexcept;
 		void DrawMakeComponent();
-		bool CreateScene(const XMUINT2& size);
 		bool MakeDialog();
 
 		IRenderer* m_renderer;
-		unique_ptr<Scene> m_scene;
+		unique_ptr<UIComponent> m_component;
 		ImTextureID m_textureID{};
 		optional<MakeComponent> m_currentAction;
 		bool m_draw{ false };

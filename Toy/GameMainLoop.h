@@ -1,10 +1,9 @@
 #pragma once
 #include "MainLoop.h"
 
-struct IRenderScene;
 class Button;
 class TextArea;
-class Panel;
+class UIComponent;
 
 class GameMainLoop final : public MainLoop
 {
@@ -16,12 +15,12 @@ public:
 protected:
 	virtual bool InitializeDerived() override;
 	virtual bool LoadResources() override;
-	virtual bool SetDatas(IGetValue* getValue) override;
+	virtual bool SetDatas(IGetValue*) override { return true; }
 	virtual void Update(const DX::StepTimer* timer, MouseTracker* mouseTracker) override;
 
 private:
 	Window* m_window;
 	IRenderer* m_renderer;
 
-	unique_ptr<IRenderScene> m_gameScene;
+	unique_ptr<UIComponent> m_gamePanel;
 };

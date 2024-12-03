@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Renderer.h"
-#include "../Include/IRenderScene.h"
 #include "../Include/IComponent.h"
 #include "DeviceResources.h"
 #include "TextureIndexing.h"
@@ -154,30 +153,6 @@ void Renderer::OnDeviceRestored()
 }
 #pragma endregion
 
-bool Renderer::LoadScenes()
-{
-    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
-#ifdef __MINGW32__
-    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
-#else
-    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
-    if (FAILED(initialize)) return false;
-#endif
-    //ResourceUploadBatch resourceUpload(device);
-
-    m_batch->Begin();
-    //resourceUpload.Begin();
-
-    ReturnIfFalse(ranges::all_of(m_loadScenes, [load = m_texIndexing.get()](const auto item) {
-        return item->LoadScene(load);
-        }));
-
-    auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
-    uploadResourcesFinished.wait();
-
-    return true;
-}
-
 bool Renderer::LoadComponents()
 {
     //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
@@ -237,9 +212,14 @@ void Renderer::Draw()
     Clear();
 
     m_spriteBatch->Begin(commandList);
-    ranges::for_each(m_renderScenes, [renderer = m_texIndexing.get()](const auto& scene) {
-        scene->RenderScene(renderer);
-        });
+    //ranges::for_each(m_renderScenes, [renderer = m_texIndexing.get()](const auto& scene) {
+       // scene->RenderScene(renderer);
+        //});
+    ranges::for_each(m_components, [renderer = m_texIndexing.get()](const auto& compInfo) {
+        if(compInfo.isRender)
+            compInfo.component->Render(renderer);
+         });
+    
     m_spriteBatch->End();
 
     //imgui들을 렌더링 한다.
@@ -327,31 +307,32 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 #pragma endregion
 
 IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
-void Renderer::AddLoadScene(IRenderScene* scene) 
-{ 
-    m_loadScenes.emplace_back(scene); 
-}
-void Renderer::RemoveLoadScene(IRenderScene* scene) noexcept 
-{ 
-    erase(m_loadScenes, scene); 
-}
 
 void Renderer::AddComponent(IComponent* component, bool render)
 {
     m_components.emplace_back(ComponentInfo{ component, render });
 }
 
-void Renderer::AddRenderScene(IRenderScene* scene) { m_renderScenes.emplace_back(scene); }
+void Renderer::RemoveComponent(IComponent* component)
+{
+    auto it = ranges::find_if(m_components, [component](const auto& compInfo) {
+        return compInfo.component == component;
+        });
+
+    if (it != m_components.end())
+        m_components.erase(it);
+}
+
 void Renderer::AddImguiComponent(IImguiComponent* comp) { m_imgui->AddComponent(comp); }
 void Renderer::RemoveImguiComponent(IImguiComponent* comp) noexcept { m_imgui->RemoveComponent(comp); }
 
-bool Renderer::CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID)
+bool Renderer::CreateRenderTexture(const XMUINT2& size, IComponent* component, ImTextureID& outTextureID)
 {
     auto device = m_deviceResources->GetD3DDevice();
     unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>(device, m_srvDescriptors.get());
 
     auto format = m_deviceResources->GetBackBufferFormat();
-    ReturnIfFalse(renderTexture->Create(format, size, m_renderTexOffset->Increase(), scene));
+    ReturnIfFalse(renderTexture->Create(format, size, m_renderTexOffset->Increase(), component));
     outTextureID = renderTexture->GetTextureID();
 
     m_renderTextures.insert(make_pair(outTextureID, move(renderTexture)));

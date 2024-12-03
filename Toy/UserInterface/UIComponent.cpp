@@ -156,6 +156,17 @@ UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 	return TransformComponent->GetComponent();
 }
 
+void UIComponent::SetSize(const XMUINT2& size)
+{
+	m_layout->Set({ 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) });
+}
+
+XMUINT2 UIComponent::GetSize() const noexcept
+{
+	const auto& area = m_layout->GetArea();
+	return { static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
+}
+
 bool UIComponent::ChangeArea(const Rectangle& area) noexcept
 {
 	m_layout->Set(area);
@@ -166,6 +177,16 @@ bool UIComponent::ChangeArea(const Rectangle& area) noexcept
 void UIComponent::ChangeOrigin(const Origin& origin) noexcept
 {
 	m_layout->Set(origin);
+}
+
+void UIComponent::SetFilename(const wstring& filename) noexcept
+{
+	m_filename = filename;
+}
+
+const wstring& UIComponent::GetFilename() const noexcept
+{
+	return m_filename;
 }
 
 void UIComponent::SetName(const string& name) noexcept

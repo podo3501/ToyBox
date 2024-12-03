@@ -5,7 +5,6 @@
 #include "ToolSystem.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/Dialog.h"
@@ -36,33 +35,20 @@ ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
 
 bool ToolMainLoop::InitializeDerived()
 {
-    //m_toolScene = make_unique<Scene>(GetRectResolution());
-    //m_renderer->AddLoadScene(m_toolScene.get());
-    //m_renderer->AddRenderScene(m_toolScene.get());
+    m_toolSystem = make_unique<ToolSystem>(m_renderer);
 
     return true;
 }
 
 bool ToolMainLoop::LoadResources()
 {
-    //다이얼로그를 열면 0.1씩 벗어나야 하고, 최종창에는 벗어나지 않아야 한다.
-    //unique_ptr<Dialog> dialog = make_unique<Dialog>();
-    //ReturnIfFalse(dialog->SetResources(L"UI/Data/Dialog.json"));
-
-    //m_toolScene->AddComponent({ 0.f, 0.f }, move(dialog));
-
     return true;
 }
 
 bool ToolMainLoop::SetDatas(IGetValue* getValue)
 {
-    m_toolSystem = make_unique<ToolSystem>(m_renderer);
+    //m_toolSystem = make_unique<ToolSystem>(m_renderer);
     return true;
-
-    //auto cloneScene = m_toolScene->Clone();
-    //ReturnIfFalse(m_guiAppWindow->Create(move(cloneScene), { 400, 300 }));
-
-    //return true;
 }
 
 void ToolMainLoop::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
@@ -71,8 +57,6 @@ void ToolMainLoop::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker
 
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
-
-    //m_toolScene->Update(mouseTracker);
 
     m_toolSystem->Update(timer, mouseTracker);
 

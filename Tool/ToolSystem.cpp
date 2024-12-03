@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "ToolSystem.h"
 #include "GuiWidget.h"
-#include "../Include/IRenderScene.h"
 #include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/Utility.h"
@@ -15,8 +14,7 @@ ToolSystem::~ToolSystem() = default;
 ToolSystem::ToolSystem(IRenderer* renderer) :
     m_renderer{ renderer },
     m_config{ make_unique<Tool::Config>() },
-    m_dialog{ make_unique<Tool::Dialog>() },
-    m_component{ nullptr }
+    m_dialog{ make_unique<Tool::Dialog>() }
 {
     m_menuBar = make_unique<MenuBar>(this, m_dialog.get());
     m_renderer->AddImguiComponent(this);
@@ -57,7 +55,6 @@ void ToolSystem::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
         });
 
     //m_guiWidget->Update();
-    //m_scene->Update(nullptr);
 }
 
 void ToolSystem::Render(ImGuiIO* io)

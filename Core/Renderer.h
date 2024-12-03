@@ -47,20 +47,16 @@ public:
     // Initialization and management
     virtual bool Initialize() override;
 
-    virtual void AddLoadScene(IRenderScene* scene) override;
-    virtual void RemoveLoadScene(IRenderScene* scene) noexcept override;
-    virtual void AddRenderScene(IRenderScene* scene) override;
-
     virtual void AddComponent(IComponent* component, bool render) override;
+    virtual void RemoveComponent(IComponent* component) override;
 
     virtual void AddImguiComponent(IImguiComponent* item) override;
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept override;
 
-    virtual bool LoadScenes() override;
     virtual bool LoadComponents() override;
 
     virtual IGetValue* GetValue() const noexcept override;
-    virtual bool CreateRenderTexture(const XMUINT2& size, IRenderScene* scene, ImTextureID& outTextureID) override;
+    virtual bool CreateRenderTexture(const XMUINT2& size, IComponent* component, ImTextureID& outTextureID) override;
     virtual void RemoveRenderTexture(ImTextureID textureID) override;
     virtual bool ModifyRenderTexture(ImTextureID id, const XMUINT2& size) override;
     virtual void Draw() override;
@@ -92,9 +88,6 @@ private:
 
     unique_ptr<CycleIterator> m_renderTexOffset;
     map<ImTextureID, unique_ptr<RenderTexture>> m_renderTextures;
-
-    vector<IRenderScene*> m_loadScenes;
-    vector<IRenderScene*> m_renderScenes;
 
     struct ComponentInfo 
     {

@@ -1,7 +1,6 @@
 #pragma once
 #include "../Include/IRenderer.h"
 
-struct IRenderScene;
 class UIComponent;
 
 class GuiWidget : public IImguiComponent
@@ -19,7 +18,6 @@ public:
 
 private:
     IRenderer* m_renderer{ nullptr };
-    unique_ptr<IRenderScene> m_widgetScene;
     UIComponent* m_component;
     ImTextureID m_textureID{};
     

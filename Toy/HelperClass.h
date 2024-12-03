@@ -9,8 +9,3 @@ public:
 private:
     XMUINT2 m_offset{};
 };
-
-struct IRenderer;
-class Scene;
-
-bool LoadScene(const wstring& filename, Scene* scene, IRenderer* renderer);

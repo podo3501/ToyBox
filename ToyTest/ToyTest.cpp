@@ -15,7 +15,6 @@
 #include "../Toy/UserInterface/TextArea.h"
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/UserInterface/Dialog.h"
-#include "../Toy/UserInterface/Scene.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -77,33 +76,29 @@ namespace BasicClient
 		UILayout layout({ 0, 0, 116, 48 }, Origin::Center);
 		unique_ptr<Button> button = make_unique<Button>();
 		button->SetImage("Button", layout, normal, hover, pressed);
-		m_renderer->AddComponent(button.get(), true);
-		m_renderer->LoadComponents();
+		button->ChangeArea({ 0, 0, 126,48 });
 
+		m_panel->AddComponent(move(button), { 0.5f, 0.5f });
+		m_renderer->LoadComponents();
+		
 		//normal 버튼일 경우
 		MouseTracker mouseTracker;
 		SetMouse(100, 100, mouseTracker);
-		button->ChangeArea({ 0, 0, 126,48 });
-
-		unique_ptr<UIComponent> panel = make_unique<Panel>("Main", GetRectResolution());
-		panel->AddComponent(move(button), { 0.5f, 0.5f });
-		panel->Update({ 0.f, 0.f }, &mouseTracker);
+		m_panel->Update({}, &mouseTracker);
 
 		//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 		//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
-		CallMockRender(panel.get(), TestCenterRender);
+		CallMockRender(m_panel.get(), TestCenterRender);
 
-		UIComponent* btn = panel->GetComponent("Button");
+		UIComponent* btn = m_panel->GetComponent("Button");
 		btn->ChangeOrigin(Origin::LeftTop);	//정렬을 왼쪽위로 옮긴다.
-
-		//clicked 버튼일 경우
 		SetMouse(420, 320, mouseTracker);
-		mouseTracker.leftButton = Mouse::ButtonStateTracker::PRESSED;
-		panel->Update({0.f, 0.f}, &mouseTracker);
+		mouseTracker.leftButton = Mouse::ButtonStateTracker::PRESSED;	//clicked 버튼일 경우
+		m_panel->Update({}, &mouseTracker);
 
-		CallMockRender(panel.get(), TestLeftTopRender);
+		CallMockRender(m_panel.get(), TestLeftTopRender);
 
-		EXPECT_TRUE(WriteReadTest(panel));
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	void TestBGImageRender(size_t index, const RECT& dest, const RECT* source)
@@ -133,15 +128,15 @@ namespace BasicClient
 
 	TEST_F(ToyTestFixture, BGImageTest)
 	{
-		unique_ptr<UIComponent> cBgImage = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 170, 120 });
-		m_renderer->AddComponent(cBgImage.get(), true);
+		unique_ptr<UIComponent> bgImage = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 170, 120 });
+		m_renderer->AddComponent(bgImage.get(), true);
 
-		cBgImage->ChangeArea({ 0, 0, 200, 150 });
+		bgImage->ChangeArea({ 0, 0, 200, 150 });
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
-		CallMockRender(cBgImage.get(), TestBGImageRender);
+		CallMockRender(bgImage.get(), TestBGImageRender);
 
-		EXPECT_TRUE(WriteReadTest(cBgImage));
+		EXPECT_TRUE(WriteReadTest(bgImage));
 	}
 
 	void TestCloseButtonRender(size_t index, const RECT& dest, const RECT* source)
@@ -153,30 +148,28 @@ namespace BasicClient
 
 	TEST_F(ToyTestFixture, CloseButton)
 	{
-		std::unique_ptr<Button> cButton = std::make_unique<Button>();
+		std::unique_ptr<Button> button = std::make_unique<Button>();
 
 		vector<ImageSource> normal{ { L"UI/Blue/check_square_color_cross.png" } };
 		vector<ImageSource> hover{ { L"UI/Blue/check_square_grey_cross.png" } };
 		vector<ImageSource> pressed{ { L"UI/Gray/check_square_grey_cross.png" } };
 
 		UILayout layout({ 0, 0, 32, 32 }, Origin::Center);
-		cButton->SetImage("Button", layout, normal, hover, pressed);
-		m_testScene->AddComponent({ 0.2f, 0.2f }, move(cButton));
-		EXPECT_TRUE(m_renderer->LoadScenes());
+		button->SetImage("Button", layout, normal, hover, pressed);
 
-		auto button = m_testScene->GetComponent("Button");
+		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
+		m_renderer->LoadComponents();
+
 		//normal 버튼일 경우
 		MouseTracker mouseTracker;
 		SetMouse(150, 110, mouseTracker);
-		m_testScene->Update(&mouseTracker);
+		m_panel->Update({}, &mouseTracker);
 
 		//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 		//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
-		MockRender mockRender;
-		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestCloseButtonRender));
-		button->Render(&mockRender);
+		CallMockRender(m_panel.get(), TestCloseButtonRender);
 
-		EXPECT_TRUE(WriteReadTest(*m_testScene));
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
@@ -196,17 +189,16 @@ namespace BasicClient
 		fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
 		cTextArea->SetFont("TextArea", text, layout, fontFileList);
-		m_testScene->AddComponent({ 0.5f, 0.5f }, move(cTextArea));
-		m_renderer->LoadScenes();
-		EXPECT_TRUE(m_testScene->SetDatas(m_renderer->GetValue()));
 
-		TextArea* textArea = static_cast<TextArea*>(m_testScene->GetComponent("TextArea"));
-		m_testScene->Update(nullptr);
+		m_panel->AddComponent(move(cTextArea), { 0.5f, 0.5f });
+		m_renderer->LoadComponents();
 
 		MockRender mockRender;
 		EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
-		textArea->Render(&mockRender);
+		m_panel->Render(&mockRender);
 
+		//clone test
+		TextArea* textArea = static_cast<TextArea*>(m_panel->GetComponent("TextArea"));
 		std::unique_ptr<UIComponent> rTextArea = textArea->Clone();
 		rTextArea->SetName("rTextArea");
 		TextArea& writeComp = *textArea;
@@ -215,7 +207,7 @@ namespace BasicClient
 		emptyTextArea->SetName("emptyTextArea");
 		writeComp.AddComponent(move(emptyTextArea), { 0.3f, 0.4f });
 
-		EXPECT_TRUE(WriteReadTest(*m_testScene));
+		EXPECT_TRUE(WriteReadTest(m_panel));
 		////클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
 	}
 
@@ -226,64 +218,35 @@ namespace BasicClient
 
 	TEST_F(ToyTestFixture, Panel)
 	{
-		unique_ptr<Panel> panel = std::make_unique<Panel>();
-		panel->ChangeArea({ 100, 100, 700, 500 });
+		m_panel->ChangeArea({ 100, 100, 700, 500 });
 		unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
 		bgImg->GetLayout()->Set(Origin::Center);
 
 		Rectangle bgArea = bgImg->GetArea();
-		panel->AddComponent(move(bgImg), { 0.1f, 0.1f });
+		m_panel->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
-		Rectangle panelArea = panel->GetArea();
-		m_testScene->AddComponent({ 0.f, 0.f }, move(panel));
+		Rectangle panelArea = m_panel->GetArea();
+		m_renderer->LoadComponents();
 
-		EXPECT_TRUE(m_renderer->LoadScenes());
-		MouseTracker mouseTracker;
-		m_testScene->Update(&mouseTracker);
+		CallMockRender(m_panel.get(), TestPanelRender);
 
-		MockRender mockRender;
-		EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(TestPanelRender));
-		m_testScene->RenderScene(& mockRender);
-
-		EXPECT_TRUE(WriteReadTest(*m_testScene));
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	TEST_F(ToyTestFixture, Dialog)
 	{
-		unique_ptr<UIComponent> cDialog = std::make_unique<Dialog>();
-		cDialog->SetName("Dialog");
+		unique_ptr<UIComponent> dialog = std::make_unique<Dialog>();
+		dialog->SetName("Dialog");
 		unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
-		cDialog->AddComponent(move(bgImg), { 0.0f, 0.1f });
+		dialog->AddComponent(move(bgImg), { 0.0f, 0.1f });
 
-		unique_ptr<UIComponent> cloneDialog = cDialog->Clone();
+		unique_ptr<UIComponent> cloneDialog = dialog->Clone();
 
-		m_testScene->AddComponent({ 0.f, 0.f }, move(cDialog));
-		m_testScene->AddComponent({ 0.f, 0.4f }, move(cloneDialog));
+		m_panel->AddComponent(move(dialog), {});
+		m_panel->AddComponent(move(cloneDialog), { 0.f, 0.4f });
+		m_renderer->LoadComponents();
 
-		EXPECT_TRUE(m_renderer->LoadScenes());
-
-		//auto dialog = m_testScene->GetComponent("Dialog");
-		//클론을 만들어서 둘이 같지 않음을 확인한다.
-		//unique_ptr<UIComponent> cloneDialog = dialog->Clone();
-
-		//cloneDialog->SetChildPosition("BGImage_clone", { 0.2f, 0.2f });
-		//auto cloneDialogBgImg = cloneDialog->GetComponent("BGImage_clone");
-
-		//auto dialogBgImg = dialog->GetComponent("BGImage");
-		//EXPECT_NE(cloneDialogBgImg, dialogBgImg);
-
-		EXPECT_TRUE(WriteReadTest(*m_testScene));
-	}
-
-	TEST_F(ToyTestFixture, Scene)
-	{
-		unique_ptr<Scene>testScene = std::make_unique<Scene>(GetRectResolution());
-		EXPECT_TRUE(testScene->LoadFile(L"UI/Data/FirstScene.json"));
-
-		m_renderer->AddLoadScene(testScene.get());
-		m_renderer->AddRenderScene(testScene.get());
-
-		EXPECT_TRUE(m_renderer->LoadScenes());
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	//여러번 실행해서 오동작이 나는지 확인한다.

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../Include/IRenderScene.h"
+#include "../Include/IComponent.h"
 #include "RenderTexture.h"
 #include "Utility.h"
 
@@ -12,7 +12,8 @@ RenderTexture::~RenderTexture()
 RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor) :
     m_device(device),
     m_srvDescriptor{ srvDescriptor },
-    m_scene{ nullptr }
+    m_scene{ nullptr },
+    m_component{ nullptr }
 {
     m_rtvDescriptor = make_unique<DescriptorHeap>(device,
         D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
@@ -76,6 +77,30 @@ bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, I
     return true;
 }
 
+bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IComponent* component)
+{
+    m_component = component;
+    m_offset = offset;
+    //화면을 저장할 Texture를 만든다.
+    m_resDesc = GetResourceDesc(texFormat, size);
+    auto& texResource = GetTextureResource();
+    const CD3DX12_HEAP_PROPERTIES renderTextureHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
+    D3D12_CLEAR_VALUE clear = GetClearValue();
+
+    ReturnIfFailed(m_device->CreateCommittedResource(
+        &renderTextureHeapProperties,
+        D3D12_HEAP_FLAG_NONE,
+        &m_resDesc,
+        D3D12_RESOURCE_STATE_RENDER_TARGET,
+        &clear,
+        IID_PPV_ARGS(texResource.ReleaseAndGetAddressOf())
+    ));
+
+    CreateRtvAndSrv(texResource.Get());
+
+    return true;
+}
+
 bool RenderTexture::ModifyRenderTexture(const XMUINT2& size)
 {
     m_resDesc = GetResourceDesc(m_resDesc.Format, size);
@@ -99,7 +124,7 @@ bool RenderTexture::ModifyRenderTexture(const XMUINT2& size)
 
 void RenderTexture::Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite)
 {
-    if (m_scene == nullptr)
+    if (m_component == nullptr)
         return;
 
     //D3D12_VIEWPORT viewport{};
@@ -121,7 +146,8 @@ void RenderTexture::Render(ID3D12GraphicsCommandList* commandList, IRender* rend
 
     sprite->Begin(commandList);
 
-    m_scene->RenderScene(renderer);
+    //m_scene->RenderScene(renderer);
+    m_component->Render(renderer);
 
     sprite->End();
 }

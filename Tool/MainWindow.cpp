@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "MainWindow.h"
-#include "../Include/IRenderScene.h"
 #include "../Toy/UserInterface/JsonHelper.h"
-#include "../Toy/UserInterface/Scene.h"
+#include "../Toy/UserInterface/Panel.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "Utility.h"
@@ -12,26 +11,24 @@
 MainWindow::~MainWindow()
 {
 	m_renderer->RemoveRenderTexture(m_textureID);
-	m_renderer->RemoveLoadScene(m_scene.get());
+	m_renderer->RemoveComponent(m_panel.get());
 	m_renderer->RemoveImguiComponent(this);
 }
 
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
-	m_scene{ make_unique<Scene>(GetRectResolution()) },
+	m_panel{ make_unique<Panel>("Main", GetRectResolution())},
 	m_popup{ make_unique<Tool::Popup>( renderer ) }
 {
 	static int idx{ 0 };
 	m_name = "Main Window " + to_string(idx++);
 	m_renderer->AddImguiComponent(this);
-	m_renderer->AddLoadScene(m_scene.get());
-	//m_renderer->AddRenderScene(m_scene.get());	//메인 창에는 그리지 않는다.
 }
 
 bool MainWindow::CreateScene(const XMUINT2& size)
 {
-	m_scene->SetSize(size);
-	ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_scene.get(), m_textureID));
+	m_panel->SetSize(size);
+	ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_panel.get(), m_textureID));
 	m_size = XMUINT2ToImVec2(size);
 	m_isOpen = true;
 
@@ -40,11 +37,13 @@ bool MainWindow::CreateScene(const XMUINT2& size)
 
 bool MainWindow::CreateScene(const wstring& filename)
 {
-	ReturnIfFalse(LoadScene(filename, m_scene.get(), m_renderer));
-		
-	const auto& sceneSize = m_scene->GetSize();
-	ReturnIfFalse(m_renderer->CreateRenderTexture(sceneSize, m_scene.get(), m_textureID));
-	m_size = XMUINT2ToImVec2(sceneSize);
+	ReturnIfFalse(ReadJsonFile(filename, m_panel));
+	m_renderer->AddComponent(m_panel.get(), false);	//메인 창에는 그리지 않는다.
+	ReturnIfFalse(m_renderer->LoadComponents());
+
+	const auto& panelSize = m_panel->GetSize();
+	ReturnIfFalse(m_renderer->CreateRenderTexture(panelSize, m_panel.get(), m_textureID));
+	m_size = XMUINT2ToImVec2(panelSize);
 	m_isOpen = true;
 
 	return true;
@@ -52,7 +51,7 @@ bool MainWindow::CreateScene(const wstring& filename)
 
 bool MainWindow::SaveScene(const wstring& filename)
 {
-	return m_scene->SaveFile(filename);
+	return WriteJsonFile(m_panel, filename);
 }
 
 const ImGuiWindow* MainWindow::GetImGuiWindow() const noexcept
@@ -62,7 +61,7 @@ const ImGuiWindow* MainWindow::GetImGuiWindow() const noexcept
 
 const wstring& MainWindow::GetSaveFilename() const noexcept
 {
-	return m_scene->GetFilename();
+	return m_panel->GetFilename();
 }
 
 bool MainWindow::IsFocus() const noexcept
@@ -81,7 +80,7 @@ bool MainWindow::IsFocus() const noexcept
 void MainWindow::ChangeWindowSize(const ImVec2& size)
 {
 	m_renderer->RemoveRenderTexture(m_textureID);
-	m_renderer->CreateRenderTexture(ImVec2ToXMUINT2(size), m_scene.get(), m_textureID);
+	m_renderer->CreateRenderTexture(ImVec2ToXMUINT2(size), m_panel.get(), m_textureID);
 	m_size = size;
 }
 
@@ -115,7 +114,19 @@ void MainWindow::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 	//창이 변했을때 RenderTexture를 다시 만들어준다.
 	CheckChangeWindow(window, mouseTracker);
 
-	m_scene->Update(mouseTracker);
+	if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
+	{
+		if(m_popup->IsComponent())
+		{
+			const XMUINT2 size = m_panel->GetSize();
+			const ImVec2& pos = m_popup->GetPosition();
+			Vector2 curPos{ pos.x / static_cast<float>(size.x), pos.y / static_cast<float>(size.y) };
+
+			m_panel->AddComponent(m_popup->GetComponent(), curPos);
+		}
+	}
+
+	m_panel->Update({}, mouseTracker);
 	m_popup->Excute(mouseTracker);
 }
 

@@ -2,7 +2,7 @@
 #include "../Toy/MainLoop.h"
 
 class Window;
-class Scene;
+class UIComponent;
 struct IRenderer;
 
 class ToyTestFixture : public ::testing::Test
@@ -17,5 +17,5 @@ protected:
 
 	unique_ptr<Window> m_window;
 	unique_ptr<IRenderer> m_renderer;
-	unique_ptr<Scene> m_testScene;
+	unique_ptr<UIComponent> m_panel;
 };

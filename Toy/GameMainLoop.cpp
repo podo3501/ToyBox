@@ -4,7 +4,6 @@
 #include "UserInterface/UIType.h"
 #include "Utility.h"
 #include "Config.h"
-#include "UserInterface/Scene.h"
 #include "UserInterface/UILayout.h"
 #include "UserInterface/Button.h"
 #include "UserInterface/BGImage.h"
@@ -36,9 +35,8 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 
 bool GameMainLoop::InitializeDerived()
 {
-    m_gameScene = make_unique<Scene>(GetRectResolution());
-    m_renderer->AddLoadScene(m_gameScene.get());
-    m_renderer->AddRenderScene(m_gameScene.get());
+    m_gamePanel = make_unique<Panel>("Main", GetRectResolution());
+    m_renderer->AddComponent(m_gamePanel.get(), true);
 
     return true;
 }
@@ -70,8 +68,8 @@ bool GameMainLoop::LoadResources()
     unique_ptr<Button> button_2 = make_unique<Button>();
     button_2->SetImage("Button2", layout, normal, hover, pressed);
 
-    m_gameScene->AddComponent({0.5f, 0.5f}, move(button));
-    m_gameScene->AddComponent({ 0.5f, 0.4f }, move(button_2));
+    m_gamePanel->AddComponent(move(button), {0.5f, 0.5f});
+    m_gamePanel->AddComponent(move(button_2), { 0.5f, 0.4f });
 
     vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
     vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
@@ -80,7 +78,7 @@ bool GameMainLoop::LoadResources()
     layout.Set({ 0, 0, 32, 32 }, Origin::Center);
     unique_ptr<Button> closeButton = make_unique<Button>();
     closeButton->SetImage("CloseButton", layout, normal2, hover2, pressed2);
-    m_gameScene->AddComponent({ 0.2f, 0.2f }, move(closeButton));
+    m_gamePanel->AddComponent(move(closeButton), { 0.2f, 0.2f });
 
     layout.Set({ 0, 0, 250, 120 }, Origin::Center);
     map<wstring, wstring> fontFileList;
@@ -90,7 +88,7 @@ bool GameMainLoop::LoadResources()
     wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
     textArea->SetFont("TextArea", text, layout, fontFileList);
 
-    m_gameScene->AddComponent({ 0.2f, 0.7f }, move(textArea));
+    m_gamePanel->AddComponent(move(textArea), { 0.2f, 0.7f });
 
     layout.Set({ 0, 0, 220, 190 }, Origin::LeftTop);
     ImageSource bgImageSource{
@@ -103,23 +101,13 @@ bool GameMainLoop::LoadResources()
     unique_ptr<BGImage> bgImage = make_unique<BGImage>();
     bgImage->SetImage("BGImage", layout, bgImageSource);
 
-    unique_ptr<Panel> panel = make_unique<Panel>();
+    unique_ptr<Panel> panel = make_unique<Panel>("Panel", GetRectResolution());
     panel->AddComponent(move(bgImage), { 0.5f, 0.5f });
     Rectangle test = panel->GetArea();
 
-    m_gameScene->AddComponent({ 0.f, 0.f }, move(panel));
+    m_gamePanel->AddComponent(move(panel), { 0.f, 0.f });
 
     return true;
-}
-
-bool GameMainLoop::SetDatas(IGetValue* getValue)
-{
-    return m_gameScene->SetDatas(getValue);
-    //auto comp = m_gameScene->GetComponent("TextArea");
-    //TextArea* textArea = static_cast<TextArea*>(comp);
-    //auto result = textArea->ParseText(getValue);
-
-    //return result;
 }
 
 void GameMainLoop::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
@@ -129,7 +117,7 @@ void GameMainLoop::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_gameScene->Update(mouseTracker);
+    m_gamePanel->Update({}, mouseTracker);
 
     PIXEndEvent();
 }

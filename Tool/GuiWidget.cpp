@@ -2,7 +2,6 @@
 #include "GuiWidget.h"
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/BGImage.h"
 
 GuiWidget::~GuiWidget()
@@ -10,7 +9,6 @@ GuiWidget::~GuiWidget()
 
 GuiWidget::GuiWidget(IRenderer* renderer) :
     m_renderer{ renderer },
-    m_widgetScene{ make_unique<Scene>(GetRectResolution()) },
     m_component{ nullptr }
 {
     m_renderer->AddImguiComponent(this);
@@ -21,18 +19,18 @@ bool GuiWidget::Create(unique_ptr<UIComponent> comp)
     const string& name = comp->GetName();
     const Rectangle& area = comp->GetArea();
 
-    m_widgetScene->AddComponent({ 0.f, 0.f }, move(comp));
+    /*m_widgetScene->AddComponent({ 0.f, 0.f }, move(comp));
     m_component = m_widgetScene->GetComponent(name);
     
     XMUINT2 size{ static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
-    ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_widgetScene.get(), m_textureID));
+    ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_widgetScene.get(), m_textureID));*/
 
     return true;    
 }
 
 void GuiWidget::Update()
 {
-    m_widgetScene->Update(nullptr);
+    //m_widgetScene->Update(nullptr);
     //m_component->Update({ 0.f, 0.f }, nullptr);
 }
 

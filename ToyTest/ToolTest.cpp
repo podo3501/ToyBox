@@ -4,7 +4,6 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/UILayout.h"
-#include "../Toy/UserInterface/Scene.h"
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/UserInterface/Button.h"
 #include "../Toy/UserInterface/TextArea.h"

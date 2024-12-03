@@ -28,6 +28,8 @@ public:
 	virtual bool Update(const Vector2& position, MouseTracker* mouseTracker) noexcept;
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
+	void SetSize(const XMUINT2& size);
+	XMUINT2 GetSize() const noexcept;
 	bool ChangeArea(const Rectangle& area) noexcept;
 	void ChangeOrigin(const Origin& origin) noexcept;
 	bool IsPicking(const Vector2& pos)  const noexcept;
@@ -36,11 +38,13 @@ public:
 	UIComponent* GetSelected() const noexcept;
 	const Rectangle& GetArea() const noexcept;
 	const string& GetName() const noexcept;
+	const wstring& GetFilename() const noexcept;
 	UILayout* GetLayout() const noexcept;
 
 	void SetSelected(const string& name, bool selected) noexcept;
 	void SetChildPosition(const string& name, const Vector2& pos) noexcept;
 	void SetName(const string& name) noexcept;
+	void SetFilename(const wstring& filename) noexcept;
 	void SetLayout(const UILayout& layout) noexcept;
 
 	virtual void SerializeIO(JsonOperation& operation);
@@ -52,6 +56,7 @@ private:
 	TransformComponent* FindTransformComponent(const string& name) const noexcept;
 
 	string m_name{};
+	wstring m_filename{};
 	unique_ptr<UILayout> m_layout;
 	vector<unique_ptr<TransformComponent>> m_components;
 };

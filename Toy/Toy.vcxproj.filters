@@ -62,9 +62,6 @@
     <ClInclude Include="UserInterface\Dialog.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\Scene.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="UserInterface\UIComponent.h">
       <Filter>UserInterface</Filter>
@@ -116,9 +113,6 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Dialog.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Scene.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="Config.cpp" />

@@ -4,7 +4,6 @@
 struct IRenderer;
 class Window;
 class TestImgui;
-class Scene;
 
 class ToolSystem;
 class GuiWidget;
@@ -19,7 +18,8 @@ public:
 protected:
 	virtual bool InitializeDerived() override;
 	virtual bool LoadResources() override;
-	virtual bool SetDatas(IGetValue* getValue) override;
+	//virtual bool SetDatas(IGetValue*) override { return true; }
+	virtual bool SetDatas(IGetValue*) override;
 	virtual void Update(const DX::StepTimer* timer, MouseTracker* mouseTracker) override;
 
 private:
@@ -27,7 +27,6 @@ private:
 	IRenderer* m_renderer;
 
 	unique_ptr<TestImgui> m_testImgui;
-	unique_ptr<Scene> m_toolScene;
 
 	unique_ptr<ToolSystem> m_toolSystem;
 };

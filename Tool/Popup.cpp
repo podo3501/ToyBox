@@ -3,9 +3,7 @@
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/BGImage.h"
-#include "../Toy/UserInterface/Scene.h"
 #include "../Include/IRenderer.h"
-#include "../Toy/UserInterface/Scene.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "Utility.h"
@@ -14,19 +12,36 @@
 using namespace Tool;
 
 Popup::Popup(IRenderer* renderer) :
-	m_renderer{ renderer },
-	m_scene{ make_unique<Scene>(GetRectResolution()) }
-{
-	m_renderer->AddLoadScene(m_scene.get());
-}
+	m_renderer{ renderer }
+{}
 
 Popup::~Popup()
-{}
+{
+	Reset();
+}
+
+void Popup::Reset() noexcept
+{
+	m_draw = false;
+	m_currentAction.reset();
+	m_renderer->RemoveRenderTexture(m_textureID);
+	m_renderer->RemoveComponent(m_component.get());
+	m_textureID = 0;
+}
+
+bool Popup::IsComponent() const noexcept
+{
+	return m_component != nullptr;
+}
+
+unique_ptr<UIComponent> Popup::GetComponent() noexcept
+{
+	Reset();
+	return move(m_component);
+}
 
 bool Popup::Excute(MouseTracker* mouseTracker)
 {
-	m_position = XMUINT2ToImVec2(mouseTracker->GetOffsetPosition());
-
 	if (!m_currentAction.has_value()) return true;
 
 	auto result{ true };
@@ -42,14 +57,15 @@ bool Popup::Excute(MouseTracker* mouseTracker)
 
 void Popup::DrawMakeComponent()
 {
-	ImVec2 size = XMUINT2ToImVec2(m_scene->GetSize());
+	const auto size = XMUINT2ToImVec2(m_component->GetSize());
+	ImVec2 halfSize{ size.x / 2.f, size.y / 2.f };
 	// 텍스처를 사각형 형태로 그리기
-	ImVec2 mousePos = ImGui::GetMousePos();
+	m_position = ImGui::GetMousePos();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
 	drawList->AddImage(
 		m_textureID,
-		m_position,                                // 시작 좌표
-		ImVec2(m_position.x + size.x, m_position.y + size.y) // 종료 좌표
+		{ m_position.x, m_position.y }, // 시작 좌표
+		{ m_position.x + size.x, m_position.y + size.y } // 종료 좌표
 	);
 }
 
@@ -71,15 +87,6 @@ void Popup::Show()
 	ImGui::EndPopup();
 }
 
-bool Popup::CreateScene(const XMUINT2& size)
-{
-	m_scene->SetSize(size);
-	ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_scene.get(), m_textureID));
-	m_draw = true;
-
-	return true;
-}
-
 bool Popup::MakeDialog()
 {
 	UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
@@ -92,13 +99,12 @@ bool Popup::MakeDialog()
 	};
 	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
 	bgImg->SetImage("untitled_dialog", layout, dialogSource);
+	m_component = move(bgImg);
 
-	CreateScene({ 170, 120 });
-	m_scene->AddComponent({ 0.f, 0.f }, move(bgImg));
+	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
+	m_renderer->AddComponent(m_component.get(), false);
+	m_renderer->LoadComponents();
+	m_draw = true;
 
-	ReturnIfFalse(m_renderer->LoadScenes());
-	ReturnIfFalse(m_scene->SetDatas(m_renderer->GetValue()));
-	ReturnIfFalse(m_scene->Update(nullptr));	//position 갱신. 안하면 {0, 0}에 1프레임 정도 잠깐 나타난다.
-	
 	return true;
 }

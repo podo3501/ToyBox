@@ -12,7 +12,7 @@ namespace Tool
 }
 
 class MouseTracker;
-class Scene;
+class UIComponent;
 
 class MainWindow : public IImguiComponent
 {
@@ -39,7 +39,7 @@ private:
     unique_ptr<Tool::Popup> m_popup;
 
     string m_name{};
-    unique_ptr<Scene> m_scene;
+    unique_ptr<UIComponent> m_panel;
     ImTextureID m_textureID{};
     bool m_isOpen{ false };
     ImVec2 m_size{ 800.f, 600.f };

@@ -3,7 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/Scene.h"
+#include "../Toy/UserInterface/Panel.h"
 #include "../Toy/Config.h"
 #include "Utility.h"
 
@@ -25,12 +25,8 @@ void ToyTestFixture::SetUp()
 	InitializeConfig(L"ToyTest/TestResources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
-	m_testScene = make_unique<Scene>(GetRectResolution());
-
-	m_renderer->AddLoadScene(m_testScene.get());
-	m_renderer->AddRenderScene(m_testScene.get());
-
-	//InitializeConfig(L"Resources/", outputSize);
+	m_panel = make_unique<Panel>("Main", GetRectResolution());
+	m_renderer->AddComponent(m_panel.get(), true);
 }
 
 void ToyTestFixture::TearDown()
