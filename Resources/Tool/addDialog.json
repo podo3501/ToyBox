@@ -14,8 +14,8 @@
         "Components": [
             {
                 "Position": {
-                    "x": 0.115234,
-                    "y": 0.270833
+                    "x": 0.207031,
+                    "y": 0.234375
                 },
                 "Component": {
                     "Type": "class BGImage",
@@ -127,8 +127,8 @@
             },
             {
                 "Position": {
-                    "x": 0.428711,
-                    "y": 0.18099
+                    "x": 0.441406,
+                    "y": 0.278646
                 },
                 "Component": {
                     "Type": "class BGImage",
@@ -240,8 +240,573 @@
             },
             {
                 "Position": {
-                    "x": 0.392578,
-                    "y": 0.68099
+                    "x": 0.104492,
+                    "y": 0.60026
+                },
+                "Component": {
+                    "Type": "class BGImage",
+                    "Name": "untitled_dialog",
+                    "Layout": {
+                        "Area": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 170,
+                            "height": 120
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "ImagePartSet": {
+                        "Images": [
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 0,
+                                    "width": 4,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 36,
+                                    "width": 4,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 38,
+                                    "width": 4,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "Position": {
+                    "x": 0.302734,
+                    "y": 0.464844
+                },
+                "Component": {
+                    "Type": "class BGImage",
+                    "Name": "untitled_dialog",
+                    "Layout": {
+                        "Area": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 170,
+                            "height": 120
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "ImagePartSet": {
+                        "Images": [
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 0,
+                                    "width": 4,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 36,
+                                    "width": 4,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 38,
+                                    "width": 4,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "Position": {
+                    "x": 0.606445,
+                    "y": 0.53125
+                },
+                "Component": {
+                    "Type": "class BGImage",
+                    "Name": "untitled_dialog",
+                    "Layout": {
+                        "Area": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 170,
+                            "height": 120
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "ImagePartSet": {
+                        "Images": [
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 0,
+                                    "width": 4,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 36,
+                                    "width": 4,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 38,
+                                    "width": 4,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "Position": {
+                    "x": 0.411133,
+                    "y": 0.69401
+                },
+                "Component": {
+                    "Type": "class BGImage",
+                    "Name": "untitled_dialog",
+                    "Layout": {
+                        "Area": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 170,
+                            "height": 120
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "ImagePartSet": {
+                        "Images": [
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 0,
+                                    "width": 4,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 36,
+                                    "width": 4,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 38,
+                                    "width": 4,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "Position": {
+                    "x": 0.511719,
+                    "y": 0.057292
+                },
+                "Component": {
+                    "Type": "class BGImage",
+                    "Name": "untitled_dialog",
+                    "Layout": {
+                        "Area": {
+                            "x": 0,
+                            "y": 0,
+                            "width": 170,
+                            "height": 120
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "ImagePartSet": {
+                        "Images": [
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 0,
+                                    "width": 4,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 36,
+                                    "width": 4,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 36,
+                                    "width": 30,
+                                    "height": 2
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 38,
+                                    "width": 4,
+                                    "height": 26
+                                }
+                            },
+                            {
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 38,
+                                    "width": 30,
+                                    "height": 26
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "Position": {
+                    "x": 0.524414,
+                    "y": 0.333333
                 },
                 "Component": {
                     "Type": "class BGImage",

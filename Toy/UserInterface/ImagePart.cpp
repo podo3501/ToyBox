@@ -30,14 +30,14 @@ bool ImagePart::Load(ILoadData* load)
 
 bool ImagePart::IsHover(int mouseX, int mouseY) const noexcept
 {
-	Vector2 mouseLocalPos(static_cast<float>(mouseX) - m_position.x, static_cast<float>(mouseY) - m_position.y);
-	return m_destination.Contains(mouseLocalPos);
+	XMINT2 mouseLocalPos(mouseX - m_position.x, mouseY - m_position.y);
+	return m_destination.Contains(mouseLocalPos.x, mouseLocalPos.y);
 }
 
 void ImagePart::Render(IRender* render) 
 {
 	Rectangle destination(m_destination);
-	destination.Offset(static_cast<long>(m_position.x), static_cast<long>(m_position.y));
+	destination.Offset(m_position.x, m_position.y);
 
 	RECT source(m_source);
 	render->Render(m_index, destination, &source);

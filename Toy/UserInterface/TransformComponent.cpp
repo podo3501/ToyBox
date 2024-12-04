@@ -49,7 +49,7 @@ bool TransformComponent::SetDatas(IGetValue* value)
 	return m_component->SetDatas(value);
 }
 
-bool TransformComponent::Update(const Vector2& position, MouseTracker* tracker) noexcept
+bool TransformComponent::Update(const XMINT2& position, MouseTracker* tracker) noexcept
 { 
 	return m_component->Update(position, tracker);
 }

@@ -120,7 +120,8 @@ void MainWindow::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 		{
 			const XMUINT2 size = m_panel->GetSize();
 			const ImVec2& pos = m_popup->GetPosition();
-			Vector2 curPos{ pos.x / static_cast<float>(size.x), pos.y / static_cast<float>(size.y) };
+			Vector2 curPos{ (pos.x - window->Pos.x) / static_cast<float>(size.x),
+				(pos.y - window->Pos.y - frameHeight) / static_cast<float>(size.y) };
 
 			m_panel->AddComponent(m_popup->GetComponent(), curPos);
 		}

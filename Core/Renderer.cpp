@@ -179,7 +179,7 @@ bool Renderer::LoadComponents()
 
     //update를 한번 돌려서 위치등등을 계산해 준다.
     ReturnIfFalse(ranges::all_of(m_components, [load = m_texIndexing.get()](const auto& item) {
-        return item.component->Update({ 0.f, 0.f }, nullptr);
+        return item.component->Update({ 0, 0 }, nullptr);
         }));
 
     return true;

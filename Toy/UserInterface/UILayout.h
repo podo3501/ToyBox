@@ -23,7 +23,7 @@ public:
 	void Set(const Origin& origin) noexcept;
 
 	const Rectangle& GetArea() const noexcept { return m_area; }
-	Vector2 GetPosition(const Vector2& resolution = {}) const noexcept;
+	XMINT2 GetPosition(const Vector2& resolution = {}) const noexcept;
 
 	void Union(const Rectangle& area) noexcept;
 
@@ -32,9 +32,9 @@ public:
 	void SerializeIO(JsonOperation& operation);
 
 private:
-	Vector2 GetOriginPoint(Origin origin) const noexcept;
+	XMINT2 GetOriginPoint(Origin origin) const noexcept;
 
 	Rectangle m_area{};
-	Vector2 m_originPoint{};
+	XMINT2 m_originPoint{};
 	Origin m_origin;
 };

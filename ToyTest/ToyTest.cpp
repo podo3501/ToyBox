@@ -246,6 +246,12 @@ namespace BasicClient
 		m_panel->AddComponent(move(cloneDialog), { 0.f, 0.4f });
 		m_renderer->LoadComponents();
 
+		//MouseTracker mouseTracker;
+		//SetMouse(100, 100, mouseTracker);
+		//m_panel->Update({}, &mouseTracker);
+
+		//m_panel->GetComponent()
+
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 

@@ -19,7 +19,7 @@ public:
 	string GetType() const;
 
 	bool LoadResources(ILoadData* load);
-	bool SetPosition(const Vector2& position) noexcept;
+	bool SetPosition(const XMINT2& position) noexcept;
 	void Render(IRender* render);
 	bool IsPicking(const Vector2& pos)  const noexcept;
 	const Rectangle& GetArea() const noexcept;

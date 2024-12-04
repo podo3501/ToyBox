@@ -25,7 +25,7 @@ public:
 	virtual void Render(IRender* render);
 	virtual bool LoadResources(ILoadData* load);
 	virtual bool SetDatas(IGetValue*);
-	virtual bool Update(const Vector2& position, MouseTracker* mouseTracker) noexcept;
+	virtual bool Update(const XMINT2& position, MouseTracker* mouseTracker) noexcept;
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 	void SetSize(const XMUINT2& size);
@@ -50,7 +50,7 @@ public:
 	virtual void SerializeIO(JsonOperation& operation);
 
 protected:
-	Vector2 GetPositionByLayout(const Vector2& position) noexcept;
+	XMINT2 GetPositionByLayout(const XMINT2& position) noexcept;
 	
 private:
 	TransformComponent* FindTransformComponent(const string& name) const noexcept;

@@ -2,6 +2,7 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "../Config.h"
+#include "../Utility.h"
 #include "JsonOperation.h"
 
 using json = nlohmann::json;
@@ -45,14 +46,14 @@ bool UILayout::operator==(const UILayout& o) const noexcept
 	return tie(m_area, m_origin) == tie(o.m_area, o.m_origin);
 }
 
-Vector2 UILayout::GetOriginPoint(Origin origin) const noexcept
+XMINT2 UILayout::GetOriginPoint(Origin origin) const noexcept
 {
 	switch (origin)
 	{
-	case Origin::Center: return Vector2(static_cast<float>(m_area.width) / 2.f, static_cast<float>(m_area.height) / 2.f);
-	case Origin::LeftTop: return { 0.f, 0.f };
+	case Origin::Center: return XMINT2(m_area.width / 2, m_area.height / 2);
+	case Origin::LeftTop: return { 0, 0 };
 	}
-	return { 0.f, 0.f };
+	return { 0, 0 };
 }
 
 void UILayout::Set(const Rectangle& area, const Origin& origin) noexcept
@@ -73,12 +74,12 @@ void UILayout::Set(const Origin& origin) noexcept
 	m_origin = origin;
 }
 
-Vector2 TransformVectorByRect(const Rectangle& rect, const Vector2& vec)
+XMINT2 TransformVectorByRect(const Rectangle& rect, const Vector2& vec)
 {
-	return Vector2(rect.x + vec.x * rect.width, rect.y + vec.y * rect.height);
+	return XMINT2(rect.x + static_cast<uint32_t>(vec.x * rect.width), rect.y + static_cast<uint32_t>(vec.y * rect.height));
 }
 
-Vector2 UILayout::GetPosition(const Vector2& position) const noexcept
+XMINT2 UILayout::GetPosition(const Vector2& position) const noexcept
 {
 	//return GetResolution() * position - m_originPoint;
 	return TransformVectorByRect(m_area, position) - m_originPoint;

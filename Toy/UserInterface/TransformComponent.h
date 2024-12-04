@@ -19,7 +19,7 @@ public:
 
 	bool LoadResources(ILoadData* load);
 	bool SetDatas(IGetValue* value);
-	bool Update(const Vector2& position, MouseTracker* tracker) noexcept;
+	bool Update(const XMINT2& position, MouseTracker* tracker) noexcept;
 	void SetSelected(bool selected) noexcept;
 	bool IsSelected() const noexcept;
 	bool IsPicking(const Vector2& pos) const noexcept;

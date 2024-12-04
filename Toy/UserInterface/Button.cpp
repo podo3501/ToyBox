@@ -65,9 +65,9 @@ bool Button::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool Button::Update(const Vector2& position, MouseTracker* tracker) noexcept
+bool Button::Update(const XMINT2& position, MouseTracker* tracker) noexcept
 {
-	const Vector2& pos = GetPositionByLayout(position);
+	const XMINT2& pos = GetPositionByLayout(position);
 	for (const auto& partSet : m_image | views::values)
 		ReturnIfFalse(partSet->SetPosition(pos));
 	

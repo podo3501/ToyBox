@@ -10,13 +10,19 @@ TextData::TextData() noexcept :
 {
 	XMStoreFloat4(&color, Colors::Black);
 }
+
+bool IsZero(const XMFLOAT4& color) 
+{
+	return color.x == 0.0f && color.y == 0.0f && color.z == 0.0f && color.w == 0.0f;
+}
+
 TextData::TextData(const wstring& _fontStyle, const XMFLOAT4& _color, const wstring& _text) noexcept :
 	fontStyle(L"English"), color{}, text{ _text }
 {
 	XMStoreFloat4(&color, Colors::Black);
 
 	if (!_fontStyle.empty()) fontStyle = _fontStyle;
-	if (!(_color == XMFLOAT4{})) color = _color;
+	if (!IsZero(_color)) color = _color;
 }
 
 TextProperty::TextProperty() = default;

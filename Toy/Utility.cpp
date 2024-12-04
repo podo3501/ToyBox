@@ -38,3 +38,37 @@ string WStringToString(const wstring& wstr)
 	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
 	return str;
 }
+
+//// µ¡¼À ¿¬»êÀÚ ¿À¹ö·Îµù
+//XMINT2 operator+(const XMINT2& a, const XMINT2& b)
+//{
+//    return XMINT2(a.x + b.x, a.y + b.y);
+//}
+
+//// »¬¼À ¿¬»êÀÚ ¿À¹ö·Îµù
+//XMINT2 operator-(const XMINT2& a, const XMINT2& b)
+//{
+//    return XMINT2(a.x - b.x, a.y - b.y);
+//}
+
+//// °ö¼À ¿¬»êÀÚ ¿À¹ö·Îµù
+//XMINT2 operator*(const XMINT2& a, const XMINT2& b)
+//{
+//    return XMINT2(a.x * b.x, a.y * b.y);
+//}
+//
+//// ³ª´°¼À ¿¬»êÀÚ ¿À¹ö·Îµù
+//XMINT2 operator/(const XMINT2& a, const XMINT2& b)
+//{
+//    return XMINT2((b.x != 0) ? a.x / b.x : 0, (b.y != 0) ? a.y / b.y : 0);
+//}
+//
+//XMINT2 Vector2ToXMINT2(const Vector2& rhs)
+//{
+//    return { static_cast<int32_t>(rhs.x), static_cast<int32_t>(rhs.y) };
+//}
+//
+//Vector2 XMINT2ToVector2(const XMINT2& rhs)
+//{
+//    return { static_cast<float>(rhs.x), static_cast<float>(rhs.y) };
+//}

@@ -130,9 +130,9 @@ void TextArea::SetFont(const string& name,
 		});
 }
 
-bool TextArea::Update(const Vector2& position, MouseTracker*) noexcept
+bool TextArea::Update(const XMINT2& position, MouseTracker*) noexcept
 {
-	m_posByResolution = GetPositionByLayout(position);
+	m_posByResolution = XMINT2ToVector2(GetPositionByLayout(position));
 
 	return true;
 }
