@@ -33,6 +33,7 @@ public:
     void ChangeWindowSize(const ImVec2& size);
 
 private:
+    void ShowTooltip();
     void CheckChangeWindow(const ImGuiWindow* window, MouseTracker* mouseTracker);
 
     IRenderer* m_renderer;

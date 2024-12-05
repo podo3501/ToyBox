@@ -64,9 +64,14 @@ bool TransformComponent::IsSelected() const noexcept
 	return m_selected; 
 }
 
-bool TransformComponent::IsPicking(const Vector2& pos) const noexcept 
+bool TransformComponent::IsPicking(const XMINT2& pos) const noexcept 
 { 
 	return m_component->IsPicking(pos); 
+}
+
+void TransformComponent::GetComponents(const XMINT2& pos, vector<const UIComponent*>& outList) const noexcept
+{
+	return m_component->GetComponents(pos, outList);
 }
 
 void TransformComponent::Render(IRender* render) 

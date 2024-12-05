@@ -22,7 +22,8 @@ public:
 	bool Update(const XMINT2& position, MouseTracker* tracker) noexcept;
 	void SetSelected(bool selected) noexcept;
 	bool IsSelected() const noexcept;
-	bool IsPicking(const Vector2& pos) const noexcept;
+	bool IsPicking(const XMINT2& pos) const noexcept;
+	void GetComponents(const XMINT2& pos, vector<const UIComponent*>& outList) const noexcept;
 	void Render(IRender* render);
 	void SetPosition(const Vector2& position) noexcept;
 	Vector2 GetPosition() const noexcept;

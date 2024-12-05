@@ -5,6 +5,9 @@ inline float GetFrameHeight()
 	return ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
 }
 
+ImVec2 GetWindowStartPosition(const ImGuiWindow* window) noexcept;
+ImVec2 GetMousePosition(const ImGuiWindow* window) noexcept;
+
 inline XMUINT2 ImVec2ToXMUINT2(const ImVec2& vec)
 {
 	return { static_cast<uint32_t>(vec.x), static_cast<uint32_t>(vec.y) };
@@ -23,4 +26,9 @@ inline bool operator==(const ImVec2& lhs, const ImVec2& rhs)
 inline bool operator!=(const ImVec2& lhs, const ImVec2& rhs)
 {
 	return !(lhs == rhs);
+}
+
+inline Vector2 GetNormalPosition(const ImVec2& position, const XMUINT2& size)
+{
+	return { position.x / static_cast<float>(size.x), position.y / static_cast<float>(size.y) };
 }

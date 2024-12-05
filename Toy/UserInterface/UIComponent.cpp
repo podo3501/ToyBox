@@ -126,7 +126,7 @@ void UIComponent::Render(IRender* render)
 		});
 }
 
-bool UIComponent::IsPicking(const Vector2& pos)  const noexcept
+bool UIComponent::IsPicking(const XMINT2& pos)  const noexcept
 {
 	if (m_layout->IsArea(pos)) return true;
 
@@ -154,6 +154,17 @@ UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 	if (TransformComponent == nullptr) return nullptr;
 
 	return TransformComponent->GetComponent();
+}
+
+void UIComponent::GetComponents(const XMINT2& pos, vector<const UIComponent*>& outList) const noexcept
+{
+	if (m_layout->IsArea(pos))
+		outList.emplace_back(this);
+	
+	ranges::for_each(m_components, [this, &pos, &outList](const auto& transComponent) {
+		const auto& curPosition = pos - m_layout->GetPosition(transComponent->GetPosition());
+		transComponent->GetComponents(curPosition, outList);
+		});
 }
 
 void UIComponent::SetSize(const XMUINT2& size)

@@ -85,9 +85,9 @@ XMINT2 UILayout::GetPosition(const Vector2& position) const noexcept
 	return TransformVectorByRect(m_area, position) - m_originPoint;
 }
 
-bool UILayout::IsArea(const Vector2& pos) const noexcept
+bool UILayout::IsArea(const XMINT2& pos) const noexcept
 {
-	return m_area.Contains(pos);
+	return m_area.Contains(pos.x, pos.y);
 }
 
 void UILayout::Union(const Rectangle& area) noexcept

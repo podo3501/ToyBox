@@ -246,13 +246,21 @@ namespace BasicClient
 		m_panel->AddComponent(move(cloneDialog), { 0.f, 0.4f });
 		m_renderer->LoadComponents();
 
-		//MouseTracker mouseTracker;
-		//SetMouse(100, 100, mouseTracker);
-		//m_panel->Update({}, &mouseTracker);
-
-		//m_panel->GetComponent()
-
 		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	TEST_F(ToyTestFixture, GetComponents)
+	{
+		unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
+		m_panel->AddComponent(move(bgImg), { 0.1f, 0.1f });
+
+		vector<const UIComponent*> componentList;
+		m_panel->GetComponents({ 0, 0 }, componentList);
+		EXPECT_EQ(componentList.size(), 1);
+
+		componentList.clear();
+		m_panel->GetComponents({ 100, 100 }, componentList);
+		EXPECT_EQ(componentList.size(), 2);
 	}
 
 	//여러번 실행해서 오동작이 나는지 확인한다.

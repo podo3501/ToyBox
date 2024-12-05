@@ -43,6 +43,12 @@ bool Imgui::Initialize(ID3D12Device* device, DescriptorHeap* descHeap, DXGI_FORM
     ReturnIfFalse(ImGui_ImplDX12_Init(device, NUM_FRAMES_IN_FLIGHT, format, descHeap->Heap(),
         descHeap->GetCpuHandle(srvOffset),
         descHeap->GetGpuHandle(srvOffset)));
+
+    //폰트 설정(제일 위에 있는 폰트가 index 0를 가지며 default 폰트이다.
+    string ttfFilename = "D:\\ProgrammingStudy\\ToyBox\\Imgui\\misc\\fonts\\DroidSans.ttf";
+    auto font = m_io->Fonts;
+    font->AddFontFromFileTTF(ttfFilename.c_str(), 15.0f);
+    font->AddFontFromFileTTF(ttfFilename.c_str(), 18.0f);
     
     return true;
 }

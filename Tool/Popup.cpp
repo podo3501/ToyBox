@@ -79,11 +79,11 @@ void Popup::Show()
 
 	// 마우스 오른쪽 버튼 클릭 시 팝업 메뉴 띄우기
 	if (!ImGui::BeginPopupContextWindow("PopupMenu")) return;
-
+	
 	if (ImGui::MenuItem("Dialog")) m_currentAction = MakeComponent::Dialog;
 	if (ImGui::MenuItem("Option 2")) {}
 	if (ImGui::MenuItem("Close")) {}
-
+	
 	ImGui::EndPopup();
 }
 

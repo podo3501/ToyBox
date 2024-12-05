@@ -58,7 +58,7 @@ void GuiWidget::Render(ImGuiIO* io)
         realMousePos.y = mousePos.y - startPos.y;
 
         //클릭했을때 픽킹이 되었는지 확인
-        if (m_component->IsPicking(realMousePos))
+        if (m_component->IsPicking(XMINT2{ static_cast<int32_t>(realMousePos.x), static_cast<int32_t>(realMousePos.y) }))
             bPicking = !bPicking;
     }
 

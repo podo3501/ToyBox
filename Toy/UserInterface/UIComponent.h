@@ -32,9 +32,10 @@ public:
 	XMUINT2 GetSize() const noexcept;
 	bool ChangeArea(const Rectangle& area) noexcept;
 	void ChangeOrigin(const Origin& origin) noexcept;
-	bool IsPicking(const Vector2& pos)  const noexcept;
+	bool IsPicking(const XMINT2& pos)  const noexcept;
 
 	UIComponent* GetComponent(const string& name) const noexcept;
+	void GetComponents(const XMINT2& pos, vector<const UIComponent*>& outList) const noexcept;
 	UIComponent* GetSelected() const noexcept;
 	const Rectangle& GetArea() const noexcept;
 	const string& GetName() const noexcept;

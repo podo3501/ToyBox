@@ -3,9 +3,9 @@
 class MouseTracker : public Mouse::ButtonStateTracker
 {
 public:
-    void SetOffset(XMUINT2 offset) noexcept;
-    XMUINT2 GetOffsetPosition() const noexcept;
+    void SetOffset(XMINT2 offset) noexcept;
+    XMINT2 GetOffsetPosition() const noexcept;
 
 private:
-    XMUINT2 m_offset{};
+    XMINT2 m_offset{};
 };
