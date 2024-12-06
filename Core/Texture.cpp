@@ -46,7 +46,7 @@ void Texture::SetRectangle(const Rectangle* rect) noexcept
     }
 }
 
-void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source)
+void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source, bool selected)
 {
     //텍스춰 크기는 고정으로 함
     //dest는 화면에 보여주는 사각형(크기가 안 맞으면 강제로 늘림)
@@ -55,9 +55,13 @@ void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, con
     //텍스춰가 늘어나면 텍스춰가 여러장일 경우 origin 값으로 설정했을때 조금씩 어긋나는 현상이 벌어진다.
     //origin을 0, 0 로 고정후 위치값을 계산해서 넘겨주는 식으로 해야겠다.
 
-    XMVECTORF32 semiTransparentWhite = { 0.3f, 0.3f, 1.0f, 1.f };
-
-    spriteBatch->Draw(descHeap->GetGpuHandle(m_descHeapIdx), m_size, dest, source, semiTransparentWhite, 0.f);
+    spriteBatch->Draw(descHeap->GetGpuHandle(m_descHeapIdx), m_size, dest, source, Colors::White, 0.f);
+    if (selected)   //선택되었다면 이미지를 엷게 한번 더 그린다.
+    {
+        float brightness = 0.35f;
+        spriteBatch->Draw(descHeap->GetGpuHandle(m_descHeapIdx), 
+            m_size, dest, source, { brightness, brightness, brightness, 0.0f }, 0.f);
+    }
 }
 
 void Texture::Reset() 

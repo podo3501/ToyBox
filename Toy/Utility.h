@@ -64,6 +64,16 @@ bool CompareSeq(const vector<unique_ptr<T>>& lhs, const vector<unique_ptr<T>>& r
 	return equal(lhs.begin(), lhs.end(), rhs.begin(), CompareUniquePtr<T>);
 }
 
+//원소가 몇번째에 있는지 확인
+template <typename Container, typename T>
+std::optional<int> FindIndex(const Container& container, const T& target)
+{
+	auto it = std::ranges::find(container, target);
+	if (it != container.end())
+		return static_cast<int>(std::distance(container.begin(), it));
+	return std::nullopt;
+}
+
 //연관 컨테이너 비교
 template <typename Key, typename Value>
 bool CompareAssoc(const map<Key, unique_ptr<Value>>& lhs, const map<Key, unique_ptr<Value>>& rhs)

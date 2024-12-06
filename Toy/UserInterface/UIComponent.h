@@ -35,18 +35,22 @@ public:
 	bool IsPicking(const XMINT2& pos)  const noexcept;
 
 	UIComponent* GetComponent(const string& name) const noexcept;
-	void GetComponents(const XMINT2& pos, vector<const UIComponent*>& outList) const noexcept;
-	UIComponent* GetSelected() const noexcept;
-	const Rectangle& GetArea() const noexcept;
-	const string& GetName() const noexcept;
-	const wstring& GetFilename() const noexcept;
-	UILayout* GetLayout() const noexcept;
-
-	void SetSelected(const string& name, bool selected) noexcept;
+	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
+	const Rectangle& GetArea() const noexcept;	
 	void SetChildPosition(const string& name, const Vector2& pos) noexcept;
+
+	const string& GetName() const noexcept;
 	void SetName(const string& name) noexcept;
+
+	const wstring& GetFilename() const noexcept;
 	void SetFilename(const wstring& filename) noexcept;
+
+	UILayout* GetLayout() const noexcept;
 	void SetLayout(const UILayout& layout) noexcept;
+
+	void ClearSelected() noexcept;
+	void SetSelected(bool selected) noexcept;
+	bool GetSelected() const noexcept;
 
 	virtual void SerializeIO(JsonOperation& operation);
 
@@ -59,5 +63,6 @@ private:
 	string m_name{};
 	wstring m_filename{};
 	unique_ptr<UILayout> m_layout;
+	bool m_selected{ false };
 	vector<unique_ptr<TransformComponent>> m_components;
 };

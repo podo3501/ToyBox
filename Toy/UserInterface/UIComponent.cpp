@@ -84,24 +84,14 @@ TransformComponent* UIComponent::FindTransformComponent(const string& name) cons
 	return find->get();
 }
 
-void UIComponent::SetSelected(const string& name, bool selected) noexcept
+void UIComponent::SetSelected(bool selected) noexcept
 {
-	auto TransformComponent = FindTransformComponent(name);
-	if (TransformComponent == nullptr) return;
-
-	TransformComponent->SetSelected(selected);
+	m_selected = selected;
 }
 
-UIComponent* UIComponent::GetSelected() const noexcept
+bool UIComponent::GetSelected() const noexcept
 {
-	auto find = ranges::find_if(m_components, [](const auto& prop) {
-		return prop->IsSelected();
-		});
-
-	if (find == m_components.end())
-		return nullptr;
-
-	return (*find)->GetComponent();
+	return m_selected;
 }
 
 bool UIComponent::SetDatas(IGetValue* value)
@@ -156,12 +146,12 @@ UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 	return TransformComponent->GetComponent();
 }
 
-void UIComponent::GetComponents(const XMINT2& pos, vector<const UIComponent*>& outList) const noexcept
+void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
 {
 	if (m_layout->IsArea(pos))
-		outList.emplace_back(this);
+		outList.push_back(this);
 	
-	ranges::for_each(m_components, [this, &pos, &outList](const auto& transComponent) {
+	ranges::for_each(m_components, [this, &pos, &outList](auto& transComponent) {
 		const auto& curPosition = pos - m_layout->GetPosition(transComponent->GetPosition());
 		transComponent->GetComponents(curPosition, outList);
 		});

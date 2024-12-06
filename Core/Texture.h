@@ -8,7 +8,7 @@ public:
     ~Texture();
 
     void Upload(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* resUpload, const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx);
-    void Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source);
+    void Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source, bool selected);
     void Reset();
 
     inline XMUINT2 GetSize() const noexcept;

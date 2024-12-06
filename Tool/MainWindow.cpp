@@ -19,8 +19,9 @@ ImFont* gfont = nullptr;
 
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
-	m_panel{ make_unique<Panel>("Main", GetRectResolution())},
-	m_popup{ make_unique<Tool::Popup>( renderer ) }
+	m_panel{ make_unique<Panel>("Main", GetRectResolution()) },
+	m_popup{ make_unique<Tool::Popup>(renderer) },
+	m_selectCom{ nullptr }
 {
 	static int idx{ 0 };
 	m_name = "Main Window " + to_string(idx++);
@@ -86,7 +87,7 @@ void MainWindow::ChangeWindowSize(const ImVec2& size)
 	m_size = size;
 }
 
-void MainWindow::CheckChangeWindow(const ImGuiWindow* window, MouseTracker* mouseTracker)
+void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker* mouseTracker)
 {
 	static ImVec2 startSize{};
 	if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
@@ -102,6 +103,56 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window, MouseTracker* mous
 	}
 }
 
+void MainWindow::SelectComponent(UIComponent* component) noexcept
+{
+	if (m_selectCom != nullptr)
+		m_selectCom->SetSelected(false);
+	
+	m_selectCom = component;
+	m_selectCom->SetSelected(true);
+}
+
+void MainWindow::CheckSelectedComponent(const MouseTracker* mouseTracker) noexcept
+{
+	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;	//왼쪽버튼 눌렀을때 
+	if (m_popup->IsComponent())  return;
+
+	static vector<UIComponent*> preComponentList{ nullptr };
+	vector<UIComponent*> componentList;
+	const XMINT2& pos = mouseTracker->GetOffsetPosition();
+	m_panel->GetComponents(pos, componentList);
+	if (componentList.empty()) return;
+
+	if (preComponentList == componentList)
+	{
+		auto findIdx = FindIndex(componentList, m_selectCom);
+		if (!findIdx.has_value())
+		{
+			SelectComponent(componentList.back());
+			return;
+		}
+
+		int idx = findIdx.value() - 1;
+		if (idx < 0) idx = static_cast<int>(componentList.size() - 1);
+		SelectComponent(componentList[idx]);
+	}
+	else //마우스가 다른 컴포넌트를 선택해서 리스트가 바뀌었다면 제일 첫번째 원소를 찍어준다.
+	{
+		SelectComponent(componentList.back());
+		preComponentList = move(componentList);
+	}
+}
+
+void MainWindow::CheckAddComponent(const MouseTracker* mouseTracker) noexcept
+{
+	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;	//왼쪽버튼 눌렀을때 
+	if (!m_popup->IsComponent())  return;
+
+	const XMUINT2 size = m_panel->GetSize();
+	const XMINT2& pos = mouseTracker->GetOffsetPosition();
+	m_panel->AddComponent(m_popup->GetComponent(), GetNormalPosition(pos, size));
+}
+
 void MainWindow::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 {
 	if (!IsFocus()) return;
@@ -112,17 +163,8 @@ void MainWindow::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 
 	//창이 변했을때 RenderTexture를 다시 만들어준다.
 	CheckChangeWindow(window, mouseTracker);
-
-	if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
-	{
-		if(m_popup->IsComponent())
-		{
-			const XMUINT2 size = m_panel->GetSize();
-			const ImVec2& pos = GetMousePosition(window);
-
-			m_panel->AddComponent(m_popup->GetComponent(), GetNormalPosition(pos, size));
-		}
-	}
+	CheckSelectedComponent(mouseTracker);
+	CheckAddComponent(mouseTracker);
 
 	m_panel->Update({}, mouseTracker);
 	m_popup->Excute(mouseTracker);
@@ -131,53 +173,41 @@ void MainWindow::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
 void MainWindow::ShowTooltip()
 {
 	const ImGuiWindow* window = GetImGuiWindow();
-	const ImVec2& mousePos = GetMousePosition(window);
+	const ImVec2& windowMousePos = GetMousePosition(window);
 
-	vector<const UIComponent*> componentList;
-	m_panel->GetComponents(ImVec2ToXMINT2(mousePos), componentList);
+	vector<UIComponent*> componentList;
+	m_panel->GetComponents(ImVec2ToXMINT2(windowMousePos), componentList);
 	if (componentList.empty()) return;
-
-	//vector<string> tooltipList;
-	//tooltipList.push_back("tooltip 1");
-	//tooltipList.push_back("tooltip 2");
-	//tooltipList.push_back("tooltip 3");
-
-	static int selected{ 0 };
-	if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) 
-	{
-		++selected;
-		if (selected >= componentList.size()) selected = 0;
-	}
-
-	//if (!ImGui::IsItemHovered()) return;
 	
-	ImVec2 padding{};
-	padding = ImGui::GetStyle().WindowPadding;
+	const ImVec2& padding = ImGui::GetStyle().WindowPadding;
+	const ImVec2& mousePos = ImGui::GetMousePos();
 
 	float textY{};
 	float curTextY = 20.f;
-	for (int idx{ 0 }; idx != componentList.size(); ++idx)
+	for (int idx{ 0 }; !componentList.empty(); ++idx)
 	{
-		string strIdx = "tooltip_" + to_string(idx);
-		float y = static_cast<float>(idx) * 40;
+		UIComponent* curComponent = componentList.back();
+		std::string strIdx = "tooltip_" + std::to_string(idx);
+		std::string tooltipContext = curComponent->GetType();
 
-		const ImVec2& mousePos = ImGui::GetMousePos();
-		ImVec2 tooltipPos = ImVec2(mousePos.x + 20, mousePos.y + curTextY);
+		// 마우스 위치 기반 툴팁 위치 설정
+		const ImVec2& tooltipPos = ImVec2(mousePos.x + 20, mousePos.y + curTextY);
+		const ImVec2& curSize = ImGui::CalcTextSize(tooltipContext.c_str());
+		const ImVec2& tooltipSize = ImVec2(curSize.x + padding.x * 2, curSize.y + padding.y * 2);
+
 		ImGui::SetNextWindowPos(tooltipPos);
-
-		string tooltipContext = componentList[idx]->GetType();
-		ImVec2 curSize = ImGui::CalcTextSize(tooltipContext.c_str());
-		ImVec2 tooltipSize = ImVec2(curSize.x + padding.x * 2, curSize.y + padding.y * 2);
 		ImGui::SetNextWindowSize(tooltipSize);
 
-		if (selected == idx) ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+		bool selected = (curComponent == m_selectCom);
+		if (selected) ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
 		ImGui::Begin(strIdx.c_str(), nullptr, ImGuiWindowFlags_Tooltip | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-		if (selected == idx) ImGui::PopStyleColor();
+		if (selected) ImGui::PopStyleColor();
 		
 		ImGui::Text(tooltipContext.c_str());
-		ImVec2 curGapSize = ImGui::CalcTextSize(tooltipContext.c_str());
-		curTextY += padding.y * 2 + curGapSize.y + 5;
 		ImGui::End();
+
+		curTextY += tooltipSize.y + 5; // 다음 툴팁 위치 업데이트
+		componentList.pop_back();
 	}
 }
 
@@ -192,70 +222,10 @@ void MainWindow::Render(ImGuiIO* io)
 	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
 
-	//ImVec2 windowPos = ImGui::GetWindowPos();
-		// 첫 번째 툴팁
-	//if (ImGui::Button("Hover me"))
-	{
-		// 버튼 클릭 시 실행될 코드
-	}
-	
-	//ShowTooltip(GetComponent());
-	ShowTooltip();
-	//if (ImGui::IsItemHovered())
-	//{
-	//	//// 첫 번째 툴팁
-	//	//ImVec2 tooltipPos = ImVec2(ImGui::GetMousePos().x + 10, ImGui::GetMousePos().y + 20); // 마우스 위치에서 20픽셀 아래, 오른쪽에 툴팁 표시
-	//	//ImGui::SetNextWindowPos(tooltipPos, ImGuiCond_None); // 툴팁의 위치를 설정
-
-	//	//ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(1.f, 0.0f, 0.0f, 1.0f));
-	//	//ImGui::BeginTooltip();
-	//	//ImGui::PopStyleColor();
-	//	////ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1.0f, 0.0f, 0.0f, 1.0f)); // 빨간색 테두리
-	//	////ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10)); // 패딩 설정
-	//	////ImGui::InvisibleButton("Rect1", ImVec2(10, 10)); // 첫 번째 사각형
-	//	////if (ImGui::IsItemHovered()) {
-
-	//	//ImFont* font1 = io->Fonts->Fonts[1];
-	//	//ImGui::PushFont(font1);
-	//	//ImGui::Text("This is tooltip 1");
-	//	//ImVec2 text_size = ImGui::CalcTextSize("This is tooltip 1");
-	//	//ImGui::PopFont();
-	//	//ImGui::Text("This is tooltip 2");
-	//	//ImVec2 text_size2 = ImGui::CalcTextSize("This is tooltip 2");
-	//	//ImVec2 padding = ImGui::GetStyle().WindowPadding;
-
-	//	////}
-	//	////ImGui::PopStyleVar();
-	//	////ImGui::PopStyleColor();
-	//	//ImGui::EndTooltip();
-
-	//	//ImVec2 tooltip_size = ImVec2(text_size.x + text_size2.x + padding.x * 2, text_size.y + text_size2.y + padding.y * 2);
-
-	//	//tooltipPos = ImVec2(ImGui::GetMousePos().x + 10, ImGui::GetMousePos().y + 160); // 마우스 위치에서 20픽셀 아래, 오른쪽에 툴팁 표시
-	//	//ImGui::SetNextWindowPos(tooltipPos, ImGuiCond_None); // 툴팁의 위치를 설정
-
-	//	//ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(1.f, 0.0f, 0.0f, 1.0f));
-	//	//ImGui::BeginTooltip();
-	//	//ImGui::PopStyleColor();
-
-	//	//ImGui::Text("This is tooltip 3");
-
-	//	//ImGui::EndTooltip();
-
-	//	//ImGui::SetNextWindowPos(ImGui::GetMousePos() + ImVec2(20, 20)); // 마우스 기준 오프셋
-	//	ImVec2 tooltipPos = ImVec2(ImGui::GetMousePos().x + 10, ImGui::GetMousePos().y + 20); // 마우스 위치에서 20픽셀 아래, 오른쪽에 툴팁 표시
-	//	ImGui::SetNextWindowPos(tooltipPos);
-	//	ImGui::Begin("Custom Tooltip 1", nullptr, ImGuiWindowFlags_Tooltip | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-	//	ImGui::Text("This is the second tooltip!");
-	//	ImGui::End();
-
-	//	tooltipPos = ImVec2(ImGui::GetMousePos().x + 10, ImGui::GetMousePos().y + 60); // 마우스 위치에서 20픽셀 아래, 오른쪽에 툴팁 표시
-	//	ImGui::SetNextWindowPos(tooltipPos);
-	//	ImGui::Begin("Custom Tooltip 2", nullptr, ImGuiWindowFlags_Tooltip | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-	//	ImGui::Text("This is the second tooltip!");
-	//	ImGui::End();
-	//}
-
+	if(!m_popup->IsShowed() && 
+		!m_popup->IsComponent() &&
+		!ImGui::IsMouseDown(ImGuiMouseButton_Right))
+		ShowTooltip();
 
 	ImGui::Image(m_textureID, m_size);
 	m_popup->Show();

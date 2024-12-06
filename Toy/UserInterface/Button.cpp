@@ -95,7 +95,7 @@ bool Button::Update(const XMINT2& position, MouseTracker* tracker) noexcept
 
 void Button::Render(IRender* render)
 {
-	m_image[m_state]->Render(render);
+	m_image[m_state]->Render(render, GetSelected());
 }
 
 void Button::SetImage(const string& name,

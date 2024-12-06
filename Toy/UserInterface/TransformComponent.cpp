@@ -54,22 +54,12 @@ bool TransformComponent::Update(const XMINT2& position, MouseTracker* tracker) n
 	return m_component->Update(position, tracker);
 }
 
-void TransformComponent::SetSelected(bool selected) noexcept 
-{ 
-	m_selected = selected; 
-}
-
-bool TransformComponent::IsSelected() const noexcept 
-{ 
-	return m_selected; 
-}
-
 bool TransformComponent::IsPicking(const XMINT2& pos) const noexcept 
 { 
 	return m_component->IsPicking(pos); 
 }
 
-void TransformComponent::GetComponents(const XMINT2& pos, vector<const UIComponent*>& outList) const noexcept
+void TransformComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
 {
 	return m_component->GetComponents(pos, outList);
 }

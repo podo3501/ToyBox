@@ -28,7 +28,10 @@ inline bool operator!=(const ImVec2& lhs, const ImVec2& rhs)
 	return !(lhs == rhs);
 }
 
-inline Vector2 GetNormalPosition(const ImVec2& position, const XMUINT2& size)
+inline Vector2 GetNormalPosition(const XMINT2& position, const XMUINT2& size)
 {
-	return { position.x / static_cast<float>(size.x), position.y / static_cast<float>(size.y) };
+	return {
+		static_cast<float>(position.x) / static_cast<float>(size.x),
+		static_cast<float>(position.y) / static_cast<float>(size.y)
+	};
 }

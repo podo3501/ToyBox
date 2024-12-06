@@ -66,7 +66,7 @@ bool BGImage::Update(const XMINT2& position, MouseTracker*) noexcept
 
 void BGImage::Render(IRender* renderer)
 {
-	m_imagePartSet->Render(renderer);
+	m_imagePartSet->Render(renderer, GetSelected());
 }
 
 void BGImage::SerializeIO(JsonOperation& operation)

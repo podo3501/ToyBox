@@ -127,10 +127,10 @@ bool ImagePartSet::IsHover(int mouseX, int mouseY) noexcept
 	return false;
 }
 
-void ImagePartSet::Render(IRender* render)
+void ImagePartSet::Render(IRender* render, bool selected)
 {
 	for (const auto& part : m_images)
-		part->Render(render);
+		part->Render(render, selected);
 }
 
 bool ImagePartSet::IsPicking(const Vector2& pos)  const noexcept

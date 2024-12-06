@@ -34,13 +34,17 @@ public:
 
 private:
     void ShowTooltip();
-    void CheckChangeWindow(const ImGuiWindow* window, MouseTracker* mouseTracker);
+    void SelectComponent(UIComponent* component) noexcept;
+    void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker* mouseTracker);
+    void CheckSelectedComponent(const MouseTracker* mouseTracker) noexcept;
+    void CheckAddComponent(const MouseTracker* mouseTracker) noexcept;
 
     IRenderer* m_renderer;
     unique_ptr<Tool::Popup> m_popup;
 
     string m_name{};
     unique_ptr<UIComponent> m_panel;
+    UIComponent* m_selectCom;
     ImTextureID m_textureID{};
     bool m_isOpen{ false };
     ImVec2 m_size{ 800.f, 600.f };

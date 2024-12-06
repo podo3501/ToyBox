@@ -19,12 +19,12 @@ bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"U
 	return true;
 }
 
-void CallMockRender(IComponent* component, function<void(size_t, const RECT&, const RECT*)> testRenderFunc)
+void CallMockRender(IComponent* component, function<void(size_t, const RECT&, const RECT*, bool)> testRenderFunc)
 {
 	using ::testing::_;
 	using ::testing::Invoke;
 
 	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _)).WillRepeatedly(Invoke(testRenderFunc));
+	EXPECT_CALL(mockRender, Render(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
 	component->Render(&mockRender);
 }

@@ -20,7 +20,7 @@ public:
 
 	bool LoadResources(ILoadData* load);
 	bool SetPosition(const XMINT2& position) noexcept;
-	void Render(IRender* render);
+	void Render(IRender* render, bool selected);
 	bool IsPicking(const Vector2& pos)  const noexcept;
 	const Rectangle& GetArea() const noexcept;
 

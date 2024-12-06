@@ -21,7 +21,7 @@ using ::testing::Invoke;
 
 namespace BasicClient
 {
-	void TestCenterRender(size_t index, const RECT& dest, const RECT* source)
+	void TestCenterRender(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		EXPECT_TRUE(index == 0 || index == 1 || index == 2);
 
@@ -33,7 +33,7 @@ namespace BasicClient
 			EXPECT_TRUE(source->right == 24 && source->bottom == 48);
 	}
 
-	void TestLeftTopRender(size_t index, const RECT& dest, const RECT* source)
+	void TestLeftTopRender(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		EXPECT_TRUE(index == 6 || index == 7 || index == 8);
 
@@ -101,7 +101,7 @@ namespace BasicClient
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
-	void TestBGImageRender(size_t index, const RECT& dest, const RECT* source)
+	void TestBGImageRender(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		if (dest.left == 300 && dest.top == 225) EXPECT_TRUE(dest.right == 330 && dest.bottom == 261);
 		if (dest.left == 330 && dest.top == 225) EXPECT_TRUE(dest.right == 470 && dest.bottom == 261);
@@ -139,7 +139,7 @@ namespace BasicClient
 		EXPECT_TRUE(WriteReadTest(bgImage));
 	}
 
-	void TestCloseButtonRender(size_t index, const RECT& dest, const RECT* source)
+	void TestCloseButtonRender(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		if (dest.left == 144 && dest.top == 104) EXPECT_TRUE(dest.right == 176 && dest.bottom == 136);
 
@@ -211,7 +211,7 @@ namespace BasicClient
 		////클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
 	}
 
-	void TestPanelRender(size_t index, const RECT& dest, const RECT* source)
+	void TestPanelRender(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		if (dest.left == 60 && dest.top == 55) EXPECT_TRUE(dest.right == 90 && dest.bottom == 91);
 	}
@@ -254,13 +254,13 @@ namespace BasicClient
 		unique_ptr<UIComponent> bgImg = CreateTestBGImage(m_renderer.get(), "BGImage", { 0, 0, 220, 190 });
 		m_panel->AddComponent(move(bgImg), { 0.1f, 0.1f });
 
-		vector<const UIComponent*> componentList;
-		m_panel->GetComponents({ 0, 0 }, componentList);
-		EXPECT_EQ(componentList.size(), 1);
+		vector<UIComponent*> componentList1;
+		m_panel->GetComponents({ 0, 0 }, componentList1);
+		EXPECT_EQ(componentList1.size(), 1);
 
-		componentList.clear();
-		m_panel->GetComponents({ 100, 100 }, componentList);
-		EXPECT_EQ(componentList.size(), 2);
+		vector<UIComponent*> componentList2;
+		m_panel->GetComponents({ 100, 100 }, componentList2);
+		EXPECT_EQ(componentList2.size(), 2);
 	}
 
 	//여러번 실행해서 오동작이 나는지 확인한다.

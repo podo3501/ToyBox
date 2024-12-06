@@ -10,7 +10,7 @@ namespace Tool
 	{
 		enum class MakeComponent
 		{
-			Dialog
+			BGImage
 		};
 
 	public:
@@ -20,12 +20,13 @@ namespace Tool
 		unique_ptr<UIComponent> GetComponent() noexcept;
 		bool Excute(MouseTracker* mouseTracker);
 		void Show();
+		bool IsShowed() const noexcept;
 		const ImVec2& GetPosition() const noexcept { return m_position; }
 
 	private:
 		void Reset() noexcept;
 		void DrawMakeComponent();
-		bool MakeDialog();
+		bool MakeBGImage();
 
 		IRenderer* m_renderer;
 		unique_ptr<UIComponent> m_component;

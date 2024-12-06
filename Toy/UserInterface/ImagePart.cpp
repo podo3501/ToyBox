@@ -34,13 +34,13 @@ bool ImagePart::IsHover(int mouseX, int mouseY) const noexcept
 	return m_destination.Contains(mouseLocalPos.x, mouseLocalPos.y);
 }
 
-void ImagePart::Render(IRender* render) 
+void ImagePart::Render(IRender* render, bool selected) 
 {
 	Rectangle destination(m_destination);
 	destination.Offset(m_position.x, m_position.y);
 
 	RECT source(m_source);
-	render->Render(m_index, destination, &source);
+	render->Render(m_index, destination, &source, selected);
 }
 
 void ImagePart::SerializeIO(JsonOperation& operation)

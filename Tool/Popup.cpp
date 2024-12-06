@@ -11,6 +11,8 @@
 
 using namespace Tool;
 
+static constexpr const char* PopupName = "PopupMenu";
+
 Popup::Popup(IRenderer* renderer) :
 	m_renderer{ renderer }
 {}
@@ -47,7 +49,7 @@ bool Popup::Excute(MouseTracker* mouseTracker)
 	auto result{ true };
 	switch (m_currentAction.value())
 	{
-	case MakeComponent::Dialog: result = MakeDialog(); break;
+	case MakeComponent::BGImage: result = MakeBGImage(); break;
 	}
 
 	m_currentAction.reset(); // 상태 초기화
@@ -78,19 +80,24 @@ void Popup::Show()
 	}
 
 	// 마우스 오른쪽 버튼 클릭 시 팝업 메뉴 띄우기
-	if (!ImGui::BeginPopupContextWindow("PopupMenu")) return;
+	if (!ImGui::BeginPopupContextWindow(PopupName))
+		return;
 	
-	if (ImGui::MenuItem("Dialog")) m_currentAction = MakeComponent::Dialog;
-	if (ImGui::MenuItem("Option 2")) {}
+	if (ImGui::MenuItem("Background Image")) m_currentAction = MakeComponent::BGImage;
 	if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();
 }
 
-bool Popup::MakeDialog()
+bool Popup::IsShowed() const noexcept
+{
+	return ImGui::IsPopupOpen(PopupName);
+}
+
+bool Popup::MakeBGImage()
 {
 	UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
-	ImageSource dialogSource{
+	ImageSource source{
 		L"UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
 			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
@@ -98,7 +105,7 @@ bool Popup::MakeDialog()
 		}
 	};
 	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
-	bgImg->SetImage("untitled_dialog", layout, dialogSource);
+	bgImg->SetImage("untitled_bgImage", layout, source);
 	m_component = move(bgImg);
 
 	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));

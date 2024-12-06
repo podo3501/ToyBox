@@ -26,7 +26,7 @@ struct IRender
 public:
     virtual ~IRender() {};
 
-    virtual void Render(size_t index, const RECT& dest, const RECT* source) = 0;
+    virtual void Render(size_t index, const RECT& dest, const RECT* source, bool selected) = 0;
     virtual void DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const = 0;
 };
 

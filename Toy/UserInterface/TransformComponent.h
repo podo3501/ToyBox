@@ -20,10 +20,8 @@ public:
 	bool LoadResources(ILoadData* load);
 	bool SetDatas(IGetValue* value);
 	bool Update(const XMINT2& position, MouseTracker* tracker) noexcept;
-	void SetSelected(bool selected) noexcept;
-	bool IsSelected() const noexcept;
 	bool IsPicking(const XMINT2& pos) const noexcept;
-	void GetComponents(const XMINT2& pos, vector<const UIComponent*>& outList) const noexcept;
+	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
 	void Render(IRender* render);
 	void SetPosition(const Vector2& position) noexcept;
 	Vector2 GetPosition() const noexcept;
@@ -35,5 +33,4 @@ public:
 private:
 	unique_ptr<UIComponent> m_component;
 	Vector2 m_position{};
-	bool m_selected{ false };
 };
