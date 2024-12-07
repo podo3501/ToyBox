@@ -79,6 +79,7 @@
     <ClInclude Include="UserInterface\EnumUtility.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="UserInterface\EnumUtility.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

@@ -11,6 +11,8 @@ namespace DX
     class StepTimer;
 }
 
+class InputManager;
+
 class MainLoop
 {
 public:
@@ -25,7 +27,7 @@ protected:
     virtual bool InitializeDerived() = 0;
     virtual bool LoadResources() = 0;
     virtual bool SetDatas(IGetValue* getValue) = 0;
-    virtual void Update(const DX::StepTimer* timer, MouseTracker* mouseTracker) = 0;
+    virtual void Update(const DX::StepTimer* timer, InputManager* inputManager) = 0;
 
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -38,10 +40,10 @@ private:
     bool m_suspend{ false };
     bool m_minimized{ false };
     bool m_fullscreen{ false };
-
+    
     wstring m_resourcePath;
     Window* m_window;
     IRenderer* m_renderer;
-    unique_ptr<DirectX::Mouse> m_mouse;
     unique_ptr<DX::StepTimer> m_timer;
+    unique_ptr<InputManager> m_inputManager;
 };

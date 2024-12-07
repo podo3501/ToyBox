@@ -15,6 +15,7 @@
 #include "../Toy/UserInterface/TextArea.h"
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/InputManager.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -45,12 +46,12 @@ namespace BasicClient
 			EXPECT_TRUE(source->right == 24 && source->bottom == 48);
 	}
 
-	void SetMouse(int x, int y, MouseTracker& mouseTracker)
+	void SetMouse(int x, int y, InputManager& inputManager)
 	{
 		Mouse::State mouseState;
 		mouseState.x = x;
 		mouseState.y = y;
-		mouseTracker.Update(mouseState);
+		inputManager.Update(mouseState);
 	}
 
 	TEST_F(ToyTestFixture, ButtonTest)
@@ -82,9 +83,9 @@ namespace BasicClient
 		m_renderer->LoadComponents();
 		
 		//normal 버튼일 경우
-		MouseTracker mouseTracker;
-		SetMouse(100, 100, mouseTracker);
-		m_panel->Update({}, &mouseTracker);
+		InputManager inputManager(m_window->GetHandle());
+		SetMouse(100, 100, inputManager);
+		m_panel->Update({}, &inputManager);
 
 		//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 		//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.
@@ -92,9 +93,9 @@ namespace BasicClient
 
 		UIComponent* btn = m_panel->GetComponent("Button");
 		btn->ChangeOrigin(Origin::LeftTop);	//정렬을 왼쪽위로 옮긴다.
-		SetMouse(420, 320, mouseTracker);
-		mouseTracker.leftButton = Mouse::ButtonStateTracker::PRESSED;	//clicked 버튼일 경우
-		m_panel->Update({}, &mouseTracker);
+		SetMouse(420, 320, inputManager);
+		inputManager.GetMouse()->leftButton = Mouse::ButtonStateTracker::PRESSED;	//clicked 버튼일 경우
+		m_panel->Update({}, &inputManager);
 
 		CallMockRender(m_panel.get(), TestLeftTopRender);
 
@@ -161,9 +162,9 @@ namespace BasicClient
 		m_renderer->LoadComponents();
 
 		//normal 버튼일 경우
-		MouseTracker mouseTracker;
-		SetMouse(150, 110, mouseTracker);
-		m_panel->Update({}, &mouseTracker);
+		InputManager inputManager(m_window->GetHandle());
+		SetMouse(150, 110, inputManager);
+		m_panel->Update({}, &inputManager);
 
 		//테스트를 하려면 renderer를 인자로 넣어주어야 한다.
 		//그 값들을 테스트 하고 싶다면 testRenderer를 만들어서 넘어오는 값들에 대해서 분석한다.

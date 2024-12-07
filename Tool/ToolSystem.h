@@ -1,7 +1,6 @@
 #pragma once
 #include "../Include/IRenderer.h"
 
-class MouseTracker;
 class MainWindow;
 class GuiWidget;
 
@@ -17,6 +16,7 @@ namespace Tool
 }
 
 class MenuBar;
+class InputManager;
 
 class ToolSystem : public IImguiComponent
 {
@@ -24,7 +24,7 @@ public:
     ~ToolSystem();
     ToolSystem(IRenderer* renderer);
 
-    void Update(const DX::StepTimer* timer, MouseTracker* mouseTracker);
+    void Update(const DX::StepTimer* timer, InputManager* inputManager);
 
     //IImguiComponent
     //virtual void Update() override;

@@ -12,6 +12,8 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             m_renderer->OnActivated();
         else
             m_renderer->OnDeactivated();
+
+        Keyboard::ProcessMessage(message, wParam, lParam);
         break;
 
     case WM_DISPLAYCHANGE:
@@ -99,6 +101,12 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
 
+    case WM_KEYDOWN:
+    case WM_KEYUP:
+    case WM_SYSKEYUP:
+        Keyboard::ProcessMessage(message, wParam, lParam);
+        break;
+
     case WM_SYSKEYDOWN:
         if (wParam == VK_RETURN && (lParam & 0x60000000) == 0x20000000)
         {
@@ -126,6 +134,7 @@ LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             m_fullscreen = !m_fullscreen;
         }
+        Keyboard::ProcessMessage(message, wParam, lParam);
         break;
     }
 

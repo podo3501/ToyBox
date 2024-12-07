@@ -4,6 +4,7 @@
 #include "UIType.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
+#include "../InputManager.h"
 #include "TransformComponent.h"
 #include "JsonOperation.h"
 
@@ -101,11 +102,11 @@ bool UIComponent::SetDatas(IGetValue* value)
 		});
 }
 
-bool UIComponent::Update(const XMINT2& position, MouseTracker* tracker) noexcept
+bool UIComponent::Update(const XMINT2& position, InputManager* inputManager) noexcept
 {
-	return ranges::all_of(m_components, [this, &position, tracker](const auto& transComp) {
+	return ranges::all_of(m_components, [this, &position, inputManager](const auto& transComp) {
 		const auto& curPosition = m_layout->GetPosition(transComp->GetPosition()) + position;
-		return transComp->Update(curPosition, tracker);
+		return transComp->Update(curPosition, inputManager);
 		});
 }
 

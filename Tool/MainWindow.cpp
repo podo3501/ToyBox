@@ -6,6 +6,7 @@
 #include "../Toy/Utility.h"
 #include "Utility.h"
 #include "../Toy/HelperClass.h"
+#include "../Toy/InputManager.h"
 #include "Popup.h"
 
 MainWindow::~MainWindow()
@@ -109,11 +110,21 @@ void MainWindow::SelectComponent(UIComponent* component) noexcept
 		m_selectCom->SetSelected(false);
 	
 	m_selectCom = component;
-	m_selectCom->SetSelected(true);
+
+	if(m_selectCom)
+		m_selectCom->SetSelected(true);
 }
 
-void MainWindow::CheckSelectedComponent(const MouseTracker* mouseTracker) noexcept
+void MainWindow::CheckSelectedComponent(InputManager* inputManager) noexcept
 {
+	auto pressedKey = inputManager->GetKeyboard()->pressed;
+	if (pressedKey.Escape)
+	{
+		SelectComponent(nullptr);
+		return;
+	}
+
+	auto mouseTracker = inputManager->GetMouse();
 	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;	//왼쪽버튼 눌렀을때 
 	if (m_popup->IsComponent())  return;
 
@@ -153,20 +164,21 @@ void MainWindow::CheckAddComponent(const MouseTracker* mouseTracker) noexcept
 	m_panel->AddComponent(m_popup->GetComponent(), GetNormalPosition(pos, size));
 }
 
-void MainWindow::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
+void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 {
 	if (!IsFocus()) return;
 	
 	const ImGuiWindow* window = GetImGuiWindow();
 	const ImVec2& offset = GetWindowStartPosition(window);
+	auto mouseTracker = inputManager->GetMouse();
 	mouseTracker->SetOffset(ImVec2ToXMINT2(offset));
 
 	//창이 변했을때 RenderTexture를 다시 만들어준다.
 	CheckChangeWindow(window, mouseTracker);
-	CheckSelectedComponent(mouseTracker);
+	CheckSelectedComponent(inputManager);
 	CheckAddComponent(mouseTracker);
 
-	m_panel->Update({}, mouseTracker);
+	m_panel->Update({}, inputManager);
 	m_popup->Excute(mouseTracker);
 }
 

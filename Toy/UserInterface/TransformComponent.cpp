@@ -5,6 +5,7 @@
 #include "UILayout.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
+#include "../InputManager.h"
 
 TransformComponent::TransformComponent() 
 {}
@@ -49,9 +50,9 @@ bool TransformComponent::SetDatas(IGetValue* value)
 	return m_component->SetDatas(value);
 }
 
-bool TransformComponent::Update(const XMINT2& position, MouseTracker* tracker) noexcept
+bool TransformComponent::Update(const XMINT2& position, InputManager* inputManager) noexcept
 { 
-	return m_component->Update(position, tracker);
+	return m_component->Update(position, inputManager);
 }
 
 bool TransformComponent::IsPicking(const XMINT2& pos) const noexcept 

@@ -5,7 +5,7 @@ struct IGetValue;
 struct IRender;
 class UIComponent;
 class JsonOperation;
-class MouseTracker;
+class InputManager;
 
 class TransformComponent
 {
@@ -19,7 +19,7 @@ public:
 
 	bool LoadResources(ILoadData* load);
 	bool SetDatas(IGetValue* value);
-	bool Update(const XMINT2& position, MouseTracker* tracker) noexcept;
+	bool Update(const XMINT2& position, InputManager* tracker) noexcept;
 	bool IsPicking(const XMINT2& pos) const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
 	void Render(IRender* render);

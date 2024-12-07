@@ -110,14 +110,14 @@ bool GameMainLoop::LoadResources()
     return true;
 }
 
-void GameMainLoop::Update(const DX::StepTimer* timer, MouseTracker* mouseTracker)
+void GameMainLoop::Update(const DX::StepTimer* timer, InputManager* inputManager)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_gamePanel->Update({}, mouseTracker);
+    m_gamePanel->Update({}, inputManager);
 
     PIXEndEvent();
 }

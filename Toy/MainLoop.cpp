@@ -2,16 +2,18 @@
 #include "MainLoop.h"
 #include "../Include/IRenderer.h"
 #include "Utility.h"
+#include "Config.h"
 #include "Window.h"
 #include "StepTimer.h"
 #include "WindowProcedure.h"
-#include "Config.h"
 #include "HelperClass.h"
+#include "InputManager.h"
 
 MainLoop::~MainLoop() = default;
 MainLoop::MainLoop(Window* window, IRenderer* renderer) :
     m_window{ window },
-    m_renderer{ renderer }
+    m_renderer{ renderer },
+    m_inputManager{ nullptr }
 {}
 
 bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
@@ -30,9 +32,8 @@ bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
 
 bool MainLoop::InitializeClass()
 {
-    m_mouse = make_unique<Mouse>();
+    m_inputManager = make_unique<InputManager>(m_window->GetHandle());
     m_timer = make_unique<DX::StepTimer>();
-    m_mouse->SetWindow(m_window->GetHandle());
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
@@ -73,12 +74,11 @@ int MainLoop::Run()
 void MainLoop::Tick()
 {
     auto timer = m_timer.get();
-    static MouseTracker customMouseTracker;
-    customMouseTracker.Update(m_mouse->GetState());
+    m_inputManager->Update();
 
-    m_timer->Tick([&]()
+    m_timer->Tick([&, this]()
         {
-            Update(timer, &customMouseTracker);
+            Update(timer, m_inputManager.get());
         });
    
     // Don't try to render anything before the first Update.

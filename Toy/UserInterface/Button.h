@@ -20,7 +20,7 @@ public:
 
 	virtual unique_ptr<UIComponent> Clone() override;
 	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool Update(const XMINT2& position, MouseTracker* tracker) noexcept override;
+	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept override;
 	virtual void Render(IRender* renderer) override;
 	
 	void SetImage(const string& name,

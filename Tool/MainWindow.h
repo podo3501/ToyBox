@@ -11,8 +11,9 @@ namespace Tool
     class Popup;
 }
 
-class MouseTracker;
 class UIComponent;
+class InputManager;
+class MouseTracker;
 
 class MainWindow : public IImguiComponent
 {
@@ -26,7 +27,7 @@ public:
     inline bool IsOpen() const noexcept { return m_isOpen; }
     inline const ImGuiWindow* GetImGuiWindow() const noexcept;
     const wstring& GetSaveFilename() const noexcept;
-    void Update(const DX::StepTimer* timer, MouseTracker* mouseTracker);
+    void Update(const DX::StepTimer* timer, InputManager* inputManager);
     //IImguiComponent
     //virtual void Update() override;
     virtual void Render(ImGuiIO* io) override;
@@ -36,7 +37,7 @@ private:
     void ShowTooltip();
     void SelectComponent(UIComponent* component) noexcept;
     void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker* mouseTracker);
-    void CheckSelectedComponent(const MouseTracker* mouseTracker) noexcept;
+    void CheckSelectedComponent(InputManager* inputManager) noexcept;
     void CheckAddComponent(const MouseTracker* mouseTracker) noexcept;
 
     IRenderer* m_renderer;

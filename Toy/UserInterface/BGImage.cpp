@@ -56,7 +56,7 @@ bool BGImage::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool BGImage::Update(const XMINT2& position, MouseTracker*) noexcept
+bool BGImage::Update(const XMINT2& position, InputManager*) noexcept
 {
 	const XMINT2& pos = GetPositionByLayout(position);
 	ReturnIfFalse(m_imagePartSet->SetPosition(pos));	

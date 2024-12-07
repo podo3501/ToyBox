@@ -25,7 +25,7 @@ public:
 	virtual void Render(IRender* render);
 	virtual bool LoadResources(ILoadData* load);
 	virtual bool SetDatas(IGetValue*);
-	virtual bool Update(const XMINT2& position, MouseTracker* mouseTracker) noexcept;
+	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept;
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 	void SetSize(const XMUINT2& size);

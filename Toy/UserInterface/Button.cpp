@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
+#include "../InputManager.h"
 #include "UIType.h"
 #include "UILayout.h"
 #include "ImagePartSet.h"
@@ -65,15 +66,16 @@ bool Button::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool Button::Update(const XMINT2& position, MouseTracker* tracker) noexcept
+bool Button::Update(const XMINT2& position, InputManager* inputManager) noexcept
 {
 	const XMINT2& pos = GetPositionByLayout(position);
 	for (const auto& partSet : m_image | views::values)
 		ReturnIfFalse(partSet->SetPosition(pos));
 	
-	if (tracker == nullptr)
+	if (inputManager == nullptr)
 		return true;
 
+	auto tracker = inputManager->GetMouse();
 	bool bHover = ranges::any_of(m_image | views::values, [mousePos = tracker->GetOffsetPosition()](const auto& partSet) {
 		return partSet->IsHover(mousePos.x, mousePos.y);
 		});
