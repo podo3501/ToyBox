@@ -1,28 +1,26 @@
 #include "pch.h"
-#include "Popup.h"
-#include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/UILayout.h"
-#include "../Toy/UserInterface/BGImage.h"
+#include "ComponentPopup.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
-#include "Utility.h"
+#include "../Utility.h"
+#include "../Toy/UserInterface/UIType.h"
+#include "../Toy/UserInterface/UILayout.h"
+#include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/HelperClass.h"
-
-using namespace Tool;
 
 static constexpr const char* PopupName = "PopupMenu";
 
-Popup::Popup(IRenderer* renderer) :
+ComponentPopup::ComponentPopup(IRenderer* renderer) :
 	m_renderer{ renderer }
 {}
 
-Popup::~Popup()
+ComponentPopup::~ComponentPopup()
 {
 	Reset();
 }
 
-void Popup::Reset() noexcept
+void ComponentPopup::Reset() noexcept
 {
 	m_draw = false;
 	m_currentAction.reset();
@@ -31,18 +29,18 @@ void Popup::Reset() noexcept
 	m_textureID = 0;
 }
 
-bool Popup::IsComponent() const noexcept
+bool ComponentPopup::IsComponent() const noexcept
 {
 	return m_component != nullptr;
 }
 
-unique_ptr<UIComponent> Popup::GetComponent() noexcept
+unique_ptr<UIComponent> ComponentPopup::GetComponent() noexcept
 {
 	Reset();
 	return move(m_component);
 }
 
-bool Popup::Excute(MouseTracker* mouseTracker)
+bool ComponentPopup::Excute(MouseTracker* mouseTracker)
 {
 	if (!m_currentAction.has_value()) return true;
 
@@ -57,7 +55,7 @@ bool Popup::Excute(MouseTracker* mouseTracker)
 	return true;
 }
 
-void Popup::DrawMakeComponent()
+void ComponentPopup::DrawMakeComponent()
 {
 	const auto size = XMUINT2ToImVec2(m_component->GetSize());
 	ImVec2 halfSize{ size.x / 2.f, size.y / 2.f };
@@ -71,7 +69,7 @@ void Popup::DrawMakeComponent()
 	);
 }
 
-void Popup::Show()
+void ComponentPopup::Show()
 {
 	if (m_draw)
 	{
@@ -89,12 +87,12 @@ void Popup::Show()
 	ImGui::EndPopup();
 }
 
-bool Popup::IsShowed() const noexcept
+bool ComponentPopup::IsShowed() const noexcept
 {
 	return ImGui::IsPopupOpen(PopupName);
 }
 
-bool Popup::MakeBGImage()
+bool ComponentPopup::MakeBGImage()
 {
 	UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
 	ImageSource source{

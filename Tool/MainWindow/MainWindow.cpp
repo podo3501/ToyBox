@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "MainWindow.h"
-#include "../Toy/UserInterface/JsonHelper.h"
-#include "../Toy/UserInterface/Panel.h"
+#include "../Utility.h"
+#include "ComponentPopup.h"
+#include "ComponentTooltip.h"
+#include "ComponentWindow.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
-#include "Utility.h"
+#include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/UserInterface/Panel.h"
 #include "../Toy/HelperClass.h"
 #include "../Toy/InputManager.h"
-#include "Popup.h"
 
 MainWindow::~MainWindow()
 {
@@ -21,8 +23,9 @@ ImFont* gfont = nullptr;
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
 	m_panel{ make_unique<Panel>("Main", GetRectResolution()) },
-	m_popup{ make_unique<Tool::Popup>(renderer) },
-	m_selectCom{ nullptr }
+	m_popup{ make_unique<ComponentPopup>(renderer) },
+	m_comWindow{ make_unique<ComponentWindow>() },
+	m_tooltip{ make_unique<ComponentTooltip>(m_panel.get(), m_comWindow.get()) }
 {
 	static int idx{ 0 };
 	m_name = "Main Window " + to_string(idx++);
@@ -104,56 +107,6 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker
 	}
 }
 
-void MainWindow::SelectComponent(UIComponent* component) noexcept
-{
-	if (m_selectCom != nullptr)
-		m_selectCom->SetSelected(false);
-	
-	m_selectCom = component;
-
-	if(m_selectCom)
-		m_selectCom->SetSelected(true);
-}
-
-void MainWindow::CheckSelectedComponent(InputManager* inputManager) noexcept
-{
-	auto pressedKey = inputManager->GetKeyboard()->pressed;
-	if (pressedKey.Escape)
-	{
-		SelectComponent(nullptr);
-		return;
-	}
-
-	auto mouseTracker = inputManager->GetMouse();
-	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;	//왼쪽버튼 눌렀을때 
-	if (m_popup->IsComponent())  return;
-
-	static vector<UIComponent*> preComponentList{ nullptr };
-	vector<UIComponent*> componentList;
-	const XMINT2& pos = mouseTracker->GetOffsetPosition();
-	m_panel->GetComponents(pos, componentList);
-	if (componentList.empty()) return;
-
-	if (preComponentList == componentList)
-	{
-		auto findIdx = FindIndex(componentList, m_selectCom);
-		if (!findIdx.has_value())
-		{
-			SelectComponent(componentList.back());
-			return;
-		}
-
-		int idx = findIdx.value() - 1;
-		if (idx < 0) idx = static_cast<int>(componentList.size() - 1);
-		SelectComponent(componentList[idx]);
-	}
-	else //마우스가 다른 컴포넌트를 선택해서 리스트가 바뀌었다면 제일 첫번째 원소를 찍어준다.
-	{
-		SelectComponent(componentList.back());
-		preComponentList = move(componentList);
-	}
-}
-
 void MainWindow::CheckAddComponent(const MouseTracker* mouseTracker) noexcept
 {
 	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;	//왼쪽버튼 눌렀을때 
@@ -175,52 +128,31 @@ void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 
 	//창이 변했을때 RenderTexture를 다시 만들어준다.
 	CheckChangeWindow(window, mouseTracker);
-	CheckSelectedComponent(inputManager);
+	if (!m_popup->IsComponent())
+		m_tooltip->CheckSelectedComponent(inputManager);
 	CheckAddComponent(mouseTracker);
 
 	m_panel->Update({}, inputManager);
 	m_popup->Excute(mouseTracker);
 }
 
-void MainWindow::ShowTooltip()
+void MainWindow::RenderMain()
 {
-	const ImGuiWindow* window = GetImGuiWindow();
-	const ImVec2& windowMousePos = GetMousePosition(window);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::SetNextWindowSize({ m_size.x, m_size.y + GetFrameHeight() });
+	ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_None);
+	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
 
-	vector<UIComponent*> componentList;
-	m_panel->GetComponents(ImVec2ToXMINT2(windowMousePos), componentList);
-	if (componentList.empty()) return;
-	
-	const ImVec2& padding = ImGui::GetStyle().WindowPadding;
-	const ImVec2& mousePos = ImGui::GetMousePos();
+	if (!m_popup->IsShowed() &&
+		!m_popup->IsComponent() &&
+		!ImGui::IsMouseDown(ImGuiMouseButton_Right))
+		m_tooltip->ShowTooltip(GetImGuiWindow());
 
-	float textY{};
-	float curTextY = 20.f;
-	for (int idx{ 0 }; !componentList.empty(); ++idx)
-	{
-		UIComponent* curComponent = componentList.back();
-		std::string strIdx = "tooltip_" + std::to_string(idx);
-		std::string tooltipContext = curComponent->GetType();
+	ImGui::Image(m_textureID, m_size);
+	m_popup->Show();
 
-		// 마우스 위치 기반 툴팁 위치 설정
-		const ImVec2& tooltipPos = ImVec2(mousePos.x + 20, mousePos.y + curTextY);
-		const ImVec2& curSize = ImGui::CalcTextSize(tooltipContext.c_str());
-		const ImVec2& tooltipSize = ImVec2(curSize.x + padding.x * 2, curSize.y + padding.y * 2);
-
-		ImGui::SetNextWindowPos(tooltipPos);
-		ImGui::SetNextWindowSize(tooltipSize);
-
-		bool selected = (curComponent == m_selectCom);
-		if (selected) ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-		ImGui::Begin(strIdx.c_str(), nullptr, ImGuiWindowFlags_Tooltip | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-		if (selected) ImGui::PopStyleColor();
-		
-		ImGui::Text(tooltipContext.c_str());
-		ImGui::End();
-
-		curTextY += tooltipSize.y + 5; // 다음 툴팁 위치 업데이트
-		componentList.pop_back();
-	}
+	ImGui::End();
 }
 
 void MainWindow::Render(ImGuiIO* io)
@@ -228,19 +160,6 @@ void MainWindow::Render(ImGuiIO* io)
 	if (!m_isOpen)
 		return;
 
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::SetNextWindowSize({ m_size.x, m_size.y + GetFrameHeight() });
-	ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_None);
-	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
-
-	if(!m_popup->IsShowed() && 
-		!m_popup->IsComponent() &&
-		!ImGui::IsMouseDown(ImGuiMouseButton_Right))
-		ShowTooltip();
-
-	ImGui::Image(m_textureID, m_size);
-	m_popup->Show();
-	
-	ImGui::End();
+	RenderMain();
+	m_comWindow->Render();
 }

@@ -6,46 +6,44 @@ namespace DX
     class StepTimer;
 }
 
-namespace Tool
-{
-    class Popup;
-}
-
 class UIComponent;
 class InputManager;
 class MouseTracker;
+class ComponentTooltip;
+class ComponentPopup;
+class ComponentWindow;
 
 class MainWindow : public IImguiComponent
 {
 public:
     MainWindow(IRenderer* renderer);
     ~MainWindow();
+
+    virtual void Render(ImGuiIO* io) override;
+
     bool CreateScene(const XMUINT2& size);
     bool CreateScene(const wstring& filename);
     bool SaveScene(const wstring& filename);
     bool IsFocus() const noexcept;
-    inline bool IsOpen() const noexcept { return m_isOpen; }
-    inline const ImGuiWindow* GetImGuiWindow() const noexcept;
     const wstring& GetSaveFilename() const noexcept;
     void Update(const DX::StepTimer* timer, InputManager* inputManager);
-    //IImguiComponent
-    //virtual void Update() override;
-    virtual void Render(ImGuiIO* io) override;
     void ChangeWindowSize(const ImVec2& size);
 
+    inline bool IsOpen() const noexcept { return m_isOpen; }
+    inline const ImGuiWindow* GetImGuiWindow() const noexcept;
+
 private:
-    void ShowTooltip();
-    void SelectComponent(UIComponent* component) noexcept;
     void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker* mouseTracker);
-    void CheckSelectedComponent(InputManager* inputManager) noexcept;
     void CheckAddComponent(const MouseTracker* mouseTracker) noexcept;
+    void RenderMain();
 
     IRenderer* m_renderer;
-    unique_ptr<Tool::Popup> m_popup;
+    unique_ptr<UIComponent> m_panel;
+    unique_ptr<ComponentPopup> m_popup;
+    unique_ptr<ComponentWindow> m_comWindow;
+    unique_ptr<ComponentTooltip> m_tooltip;
 
     string m_name{};
-    unique_ptr<UIComponent> m_panel;
-    UIComponent* m_selectCom;
     ImTextureID m_textureID{};
     bool m_isOpen{ false };
     ImVec2 m_size{ 800.f, 600.f };

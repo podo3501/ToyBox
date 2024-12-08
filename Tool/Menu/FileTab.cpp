@@ -4,7 +4,7 @@
 #include "../Toy/Window.h"
 #include "../Toy/Utility.h"
 #include "../ToolSystem.h"
-#include "../MainWindow.h"
+#include "../MainWindow/MainWindow.h"
 #include "MenuHelper.h"
 #include "RecentFiles.h"
 #include "../Config.h"

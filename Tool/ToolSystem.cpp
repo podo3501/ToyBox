@@ -6,7 +6,7 @@
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
-#include "MainWindow.h"
+#include "MainWindow/MainWindow.h"
 #include "Menu/MenuBar.h"
 #include "Dialog.h"
 #include "Config.h"

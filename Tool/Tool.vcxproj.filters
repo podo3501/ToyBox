@@ -4,6 +4,9 @@
     <Filter Include="Menu">
       <UniqueIdentifier>{d5550658-07c9-4753-b8c9-0b376d5f32e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainWindow">
+      <UniqueIdentifier>{7d670e93-cddd-4a1e-a2ea-0416b7924d34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp" />
@@ -12,7 +15,6 @@
     <ClCompile Include="TestImgui.cpp" />
     <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
-    <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="Menu\MenuBar.cpp">
       <Filter>Menu</Filter>
@@ -28,7 +30,18 @@
     </ClCompile>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="Popup.cpp" />
+    <ClCompile Include="MainWindow\MainWindow.cpp">
+      <Filter>MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\ComponentPopup.cpp">
+      <Filter>MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\ComponentTooltip.cpp">
+      <Filter>MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\ComponentWindow.cpp">
+      <Filter>MainWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -36,7 +49,6 @@
     <ClInclude Include="TestImgui.h" />
     <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="ToolSystem.h" />
-    <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Dialog.h" />
     <ClInclude Include="Menu\MenuBar.h">
       <Filter>Menu</Filter>
@@ -52,6 +64,17 @@
     </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="Utility.h" />
-    <ClInclude Include="Popup.h" />
+    <ClInclude Include="MainWindow\MainWindow.h">
+      <Filter>MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\ComponentPopup.h">
+      <Filter>MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\ComponentTooltip.h">
+      <Filter>MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\ComponentWindow.h">
+      <Filter>MainWindow</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
