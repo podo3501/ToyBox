@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "ComponentTooltip.h"
-#include "ComponentWindow.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/Utility.h"
@@ -8,9 +7,8 @@
 #include "../Utility.h"
 
 ComponentTooltip::~ComponentTooltip() = default;
-ComponentTooltip::ComponentTooltip(UIComponent* panel, ComponentWindow* comWindow) :
+ComponentTooltip::ComponentTooltip(UIComponent* panel) :
 	m_panel{ panel },
-	m_comWindow{ comWindow },
 	m_selectCom{ nullptr }
 {}
 
@@ -23,8 +21,6 @@ void ComponentTooltip::SelectComponent(UIComponent* component) noexcept
 
 	if (m_selectCom)
 		m_selectCom->SetSelected(true);
-
-	m_comWindow->SetComponent(m_selectCom);
 }
 
 void ComponentTooltip::CheckSelectedComponent(InputManager* inputManager) noexcept

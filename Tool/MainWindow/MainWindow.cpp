@@ -24,8 +24,8 @@ MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
 	m_panel{ make_unique<Panel>("Main", GetRectResolution()) },
 	m_popup{ make_unique<ComponentPopup>(renderer) },
-	m_comWindow{ make_unique<ComponentWindow>() },
-	m_tooltip{ make_unique<ComponentTooltip>(m_panel.get(), m_comWindow.get()) }
+	m_comWindow{ nullptr },
+	m_tooltip{ make_unique<ComponentTooltip>(m_panel.get()) }
 {
 	static int idx{ 0 };
 	m_name = "Main Window " + to_string(idx++);
@@ -117,6 +117,32 @@ void MainWindow::CheckAddComponent(const MouseTracker* mouseTracker) noexcept
 	m_panel->AddComponent(m_popup->GetComponent(), GetNormalPosition(pos, size));
 }
 
+unique_ptr<ComponentWindow> CreateComponentWindow(const UIComponent* component)
+{
+	const string& type = component->GetType();
+
+	if (type == "class Panel") return make_unique<ComponentPanel>();
+	if (type == "class BGImage") return make_unique<ComponentBGImage>();
+
+	return nullptr;
+}
+
+void MainWindow::CheckSelectedComponent(InputManager* inputManager)
+{
+	if (m_popup->IsComponent())
+		return; //만들기 팝업창이 열려있으면 하지 않는다.
+
+	m_tooltip->CheckSelectedComponent(inputManager);
+	UIComponent* component = m_tooltip->GetComponent();
+	if (component == nullptr) return;
+	
+	const UIComponent* winComponent = (m_comWindow != nullptr) ? m_comWindow->GetComponent() : nullptr;
+	if (winComponent == component) return;
+
+	m_comWindow = CreateComponentWindow(component);
+	m_comWindow->SetComponent(component);
+}
+
 void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 {
 	if (!IsFocus()) return;
@@ -126,10 +152,8 @@ void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 	auto mouseTracker = inputManager->GetMouse();
 	mouseTracker->SetOffset(ImVec2ToXMINT2(offset));
 
-	//창이 변했을때 RenderTexture를 다시 만들어준다.
-	CheckChangeWindow(window, mouseTracker);
-	if (!m_popup->IsComponent())
-		m_tooltip->CheckSelectedComponent(inputManager);
+	CheckChangeWindow(window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
+	CheckSelectedComponent(inputManager);
 	CheckAddComponent(mouseTracker);
 
 	m_panel->Update({}, inputManager);
@@ -161,5 +185,6 @@ void MainWindow::Render(ImGuiIO* io)
 		return;
 
 	RenderMain();
-	m_comWindow->Render();
+	if (m_comWindow != nullptr)
+		m_comWindow->Render();
 }
