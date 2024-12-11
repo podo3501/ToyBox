@@ -2,6 +2,7 @@
 #include "ComponentWindow.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/UILayout.h"
+#include "../Toy/UserInterface/BGImage.h"
 
 ComponentWindow::~ComponentWindow() = default;
 ComponentWindow::ComponentWindow() :
@@ -28,6 +29,8 @@ void ComponentWindow::Render()
         m_component->SetName(buffer); // 이름 업데이트
 
     RenderRectangleInput(*m_component->GetLayout());
+
+    RenderComponent(m_component);
 
     ImGui::End();
 }
@@ -89,3 +92,8 @@ bool ComponentWindow::RenderIntegerInput(const char* label, long& value, int min
 //{
 //
 //}
+
+void ComponentBGImage::RenderComponent(UIComponent* component)
+{
+    BGImage* bgCom = static_cast<BGImage*>(component);
+}

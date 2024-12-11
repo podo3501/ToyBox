@@ -2,6 +2,7 @@
 
 class UILayout;
 class UIComponent;
+class BGImage;
 
 class ComponentWindow
 {
@@ -9,8 +10,9 @@ public:
 	ComponentWindow();
 	virtual ~ComponentWindow();
 	virtual void SetComponent(UIComponent* component);
-	virtual void Render();
+	virtual void RenderComponent(UIComponent* component) {};
 	
+	void Render();
 	const UIComponent* GetComponent() const noexcept { return m_component; }
 
 protected:
@@ -34,8 +36,7 @@ private:
 class ComponentBGImage : public ComponentWindow
 {
 public:
-	/*virtual void SetComponent(UIComponent* component);
-	virtual void Render();*/
+	virtual void RenderComponent(UIComponent* component) override;
 
 private:
 };
