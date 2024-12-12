@@ -26,11 +26,12 @@ public:
 	virtual bool LoadResources(ILoadData* load);
 	virtual bool SetDatas(IGetValue*);
 	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept;
+	virtual bool ChangeArea(const Rectangle& area) noexcept;
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 	void SetSize(const XMUINT2& size);
 	XMUINT2 GetSize() const noexcept;
-	bool ChangeArea(const Rectangle& area) noexcept;
+	
 	void ChangeOrigin(const Origin& origin) noexcept;
 	bool IsPicking(const XMINT2& pos)  const noexcept;
 

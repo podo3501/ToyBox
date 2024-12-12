@@ -48,6 +48,11 @@ void BGImage::SetImage(const string& name, const UILayout& layout, const ImageSo
 	m_imagePartSet = make_unique<ImagePartSet>(sources);
 }
 
+void BGImage::GetImageSource() const noexcept
+{
+	//m_imagePartSet->GetImageSource()
+}
+
 bool BGImage::ChangeArea(const Rectangle& area) noexcept
 {
 	ReturnIfFalse(m_imagePartSet->SetDestination(area));

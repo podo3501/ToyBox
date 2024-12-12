@@ -80,6 +80,9 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="UserInterface\SingleImage.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -140,6 +143,9 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="UserInterface\SingleImage.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

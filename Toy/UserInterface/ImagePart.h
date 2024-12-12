@@ -17,7 +17,8 @@ public:
 	bool Load(ILoadData* load);
 	bool IsHover(int mouseX, int mouseY) const noexcept;
 	void Render(IRender* render, bool selected);
-	
+	void SyncSourceDest() noexcept { m_destination = m_source; }
+
 	inline void SetPosition(const XMINT2& position) noexcept { m_position = position; }
 	inline void SetDestination(const Rectangle& destination) noexcept { m_destination = destination; }
 

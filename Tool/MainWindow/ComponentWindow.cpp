@@ -49,10 +49,7 @@ void ComponentWindow::RenderRectangleInput(UILayout& layout)
     changed |= RenderIntegerInput("Height Area", newRect.height);
 
     if (changed)
-    {
-        layout.Set(newRect);
-        m_component->Update({}, nullptr);
-    }
+        m_component->ChangeArea(newRect);
 }
 
 bool ComponentWindow::RenderIntegerInput(const char* label, long& value, int min, int max)

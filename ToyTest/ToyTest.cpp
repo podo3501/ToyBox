@@ -15,6 +15,7 @@
 #include "../Toy/UserInterface/TextArea.h"
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/UserInterface/Dialog.h"
+#include "../Toy/UserInterface/SingleImage.h"
 #include "../Toy/InputManager.h"
 
 using ::testing::_;
@@ -22,6 +23,30 @@ using ::testing::Invoke;
 
 namespace BasicClient
 {
+	void TestSingleImageRender(size_t index, const RECT& dest, const RECT* source, bool selected)
+	{
+		EXPECT_TRUE(index == 0);
+		EXPECT_TRUE(source->right == 64 && source->bottom == 64);
+		EXPECT_TRUE(dest.right == 464 && dest.bottom == 364);
+
+		return;
+	}
+
+	TEST_F(ToyTestFixture, SingleImageTest)
+	{
+		UILayout layout({}, Origin::LeftTop);
+		unique_ptr<SingleImage> singleImg = make_unique<SingleImage>();
+		singleImg->SetImage("singleImg", layout, L"UI/Blue/button_square_header_large_square_screws.png");
+
+		m_panel->AddComponent(move(singleImg), { 0.5f, 0.5f });
+		m_renderer->LoadComponents();
+
+		m_panel->Update({}, nullptr);
+		CallMockRender(m_panel.get(), TestSingleImageRender);
+
+		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
 	void TestCenterRender(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		EXPECT_TRUE(index == 0 || index == 1 || index == 2);
