@@ -121,3 +121,14 @@ inline XMINT2 ImVec2ToXMINT2(const ImVec2& rhs) {
 inline ImVec2 XMINT2ToImVec2(const XMINT2& rhs) {
 	return { static_cast<float>(rhs.x), static_cast<float>(rhs.y) };
 }
+
+inline bool operator==(const RECT& lhs, const RECT& rhs) {
+	return lhs.left == rhs.left &&
+		lhs.top == rhs.top &&
+		lhs.right == rhs.right &&
+		lhs.bottom == rhs.bottom;
+}
+
+inline bool operator!=(const RECT& lhs, const RECT& rhs) {
+	return !(lhs == rhs);
+}

@@ -213,6 +213,7 @@
     <ClInclude Include="UserInterface\Dialog.h" />
     <ClInclude Include="UserInterface\EnumUtility.h" />
     <ClInclude Include="UserInterface\ImageGrid3.h" />
+    <ClInclude Include="UserInterface\ImageGrid9.h" />
     <ClInclude Include="UserInterface\JsonHelper.h" />
     <ClInclude Include="UserInterface\JsonOperation.h" />
     <ClInclude Include="UserInterface\ImageGrid1.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="UserInterface\Dialog.cpp" />
     <ClCompile Include="UserInterface\EnumUtility.cpp" />
     <ClCompile Include="UserInterface\ImageGrid3.cpp" />
+    <ClCompile Include="UserInterface\ImageGrid9.cpp" />
     <ClCompile Include="UserInterface\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation.cpp" />
     <ClCompile Include="UserInterface\ImageGrid1.cpp" />

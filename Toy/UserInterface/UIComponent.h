@@ -37,6 +37,10 @@ public:
 
 	UIComponent* GetComponent(const string& name) const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
+
+	template<typename T>
+	bool GetComponent(const string& name, T** outComponent) const noexcept;
+
 	const Rectangle& GetArea() const noexcept;	
 	void SetChildPosition(const string& name, const Vector2& pos) noexcept;
 
@@ -67,3 +71,14 @@ private:
 	bool m_selected{ false };
 	vector<unique_ptr<TransformComponent>> m_components;
 };
+
+template<typename T>
+bool UIComponent::GetComponent(const string& name, T** outComponent) const noexcept
+{
+	UIComponent* component = GetComponent(name);
+	assert(component->GetType() == string(typeid(T).name()));
+
+	*outComponent = static_cast<T*>(component);
+
+	return false;
+}

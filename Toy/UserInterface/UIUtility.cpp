@@ -149,16 +149,43 @@ vector<PositionRectangle> StretchSize(const Rectangle& area, const vector<Rectan
 		for (auto ix = xPoints.begin(); ix != prev(xPoints.end()); ++ix)
 			destinations.emplace_back(Rectangle(*ix, *iy, *(ix + 1) - *(ix), *(iy + 1) - *(iy)));
 
-	vector<PositionRectangle> positionRectangles;
-	for (const auto& dest : destinations)
+	vector<PositionRectangle> result;
+	if (data.size() == 3)
 	{
-		PositionRectangle posRect;
-		posRect.pos.x = float(dest.x) / float(area.width);
-		posRect.pos.y = float(dest.y) / float(area.height);
+		for (const auto& dest : destinations)
+		{
+			PositionRectangle posRect;
+			posRect.pos.x = float(dest.x) / float(area.width);
+			posRect.pos.y = float(dest.y) / float(area.height);
 
-		posRect.area = Rectangle(0, 0, dest.width, dest.height);
-		positionRectangles.emplace_back(posRect);
+			posRect.area = Rectangle(0, 0, dest.width, dest.height);
+			result.emplace_back(posRect);
+		}
 	}
 
-	return positionRectangles;
+	if (data.size() == 9)
+	{
+		vector<PositionRectangle> res9;
+		for (const auto& dest : destinations)
+		{
+			PositionRectangle posRect;
+			posRect.pos.x = float(dest.x) / float(area.width);
+			posRect.pos.y = float(dest.y) / float(area.height);
+
+			posRect.area = Rectangle(0, 0, dest.width, dest.height);
+			res9.emplace_back(posRect);
+		}
+
+		for (int idx{ 0 }; idx < res9.size(); idx += 3)
+		{
+			PositionRectangle posRect;
+			posRect.pos = res9[idx].pos;
+			long width = res9[idx + 0].area.width + res9[idx + 1].area.width + res9[idx + 2].area.width;
+			long height = res9[idx].area.height;
+			posRect.area = Rectangle(0, 0, width, height);
+			result.emplace_back(posRect);
+		}
+	}
+
+	return result;
 }

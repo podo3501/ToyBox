@@ -86,6 +86,9 @@
     <ClInclude Include="UserInterface\ImageGrid3.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\ImageGrid9.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -150,6 +153,9 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\ImageGrid3.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\ImageGrid9.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

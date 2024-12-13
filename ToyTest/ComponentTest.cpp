@@ -2,11 +2,15 @@
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
 #include "TestHelper.h"
+#include "Utility.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid3.h"
+#include "../Toy/UserInterface/ImageGrid9.h"
+#include "../Toy/UserInterface/BGImage.h"
+#include "../Toy/UserInterface/UIComponent.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -16,10 +20,7 @@ namespace ComponentTest
 	void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		EXPECT_TRUE(index == 0);
-		EXPECT_TRUE(source->right == 64 && source->bottom == 64);
-		EXPECT_TRUE(dest.right == 464 && dest.bottom == 364);
-
-		return;
+		EXPECT_TRUE(IsTrue(dest, { 400, 300, 464, 364 }, *source, { 0, 0, 64, 64 }));
 	}
 
 	TEST_F(ToyTestFixture, ImageGrid1Test)
@@ -34,7 +35,7 @@ namespace ComponentTest
 		EXPECT_TRUE(imgGrid1->SetImage("ImgGrid1", layout, grid1Source));
 
 		m_panel->AddComponent(move(imgGrid1), { 0.5f, 0.5f });
-		m_renderer->LoadComponents();
+		EXPECT_TRUE(m_renderer->LoadComponents());
 
 		m_panel->Update({}, nullptr);
 		CallMockRender(m_panel.get(), TestImageGrid1Render);
@@ -44,32 +45,72 @@ namespace ComponentTest
 
 	////////////////////////////////////////////////////////
 
-
 	void TestImageGrid3Render(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
-		/*EXPECT_TRUE(index == 0);
-		EXPECT_TRUE(source->right == 64 && source->bottom == 64);
-		EXPECT_TRUE(dest.right == 464 && dest.bottom == 364);*/
+		EXPECT_TRUE(index == 0);
 
-		return;
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 400, 300, 430, 336 }, *source, { 0, 0, 30, 36 });
+		testResult |= IsTrue(dest, { 430, 300, 470, 336 }, *source, { 30, 0, 34, 36 });
+		testResult |= IsTrue(dest, { 470, 300, 500, 336 }, *source, { 34, 0, 64, 36 });
+		
+		EXPECT_TRUE(testResult);
 	}
 
 	TEST_F(ToyTestFixture, ImageGrid3Test)
 	{
 		UILayout layout({ 0, 0, 100, 36 }, Origin::LeftTop);
-		unique_ptr<ImageGrid3> imgGrid3 = make_unique<ImageGrid3>();
 		ImageSource grid3Source{
 			L"UI/Blue/button_square_header_large_square_screws.png", {
 				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 }
 			}
 		};
+		unique_ptr<ImageGrid3> imgGrid3 = make_unique<ImageGrid3>();
 		imgGrid3->SetImage("ImgGrid3", layout, grid3Source);
 
 		m_panel->AddComponent(move(imgGrid3), { 0.5f, 0.5f });
-		m_renderer->LoadComponents();
+		EXPECT_TRUE(m_renderer->LoadComponents());
 
 		m_panel->Update({}, nullptr);
 		CallMockRender(m_panel.get(), TestImageGrid3Render);
+
+		ImageGrid3* grid3 = nullptr;
+		m_panel->GetComponent("ImgGrid3", &grid3);
+		
+		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	void TestImageGrid9Render(size_t index, const RECT& dest, const RECT* source, bool selected)
+	{
+		EXPECT_TRUE(index == 0);
+
+		//auto testResult{ false };
+		//testResult |= IsTrue(dest, { 400, 300, 430, 336 }, *source, { 0, 0, 30, 36 });
+		//testResult |= IsTrue(dest, { 430, 300, 470, 336 }, *source, { 30, 0, 34, 36 });
+		//testResult |= IsTrue(dest, { 470, 300, 500, 336 }, *source, { 34, 0, 64, 36 });
+
+		//EXPECT_TRUE(testResult);
+	}
+
+	TEST_F(ToyTestFixture, ImageGrid9Test)
+	{
+		UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
+		ImageSource grid9Source{
+			L"UI/Blue/button_square_header_large_square_screws.png", {
+				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
+				{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
+				{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+			}
+		};
+
+		unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
+		imgGrid9->SetImage("ImgGrid9", layout, grid9Source);
+
+		m_panel->AddComponent(move(imgGrid9), { 0.5f, 0.5f });
+		EXPECT_TRUE(m_renderer->LoadComponents());
+
+		m_panel->Update({}, nullptr);
+		CallMockRender(m_panel.get(), TestImageGrid9Render);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}

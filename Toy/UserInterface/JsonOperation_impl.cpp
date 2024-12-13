@@ -4,6 +4,7 @@
 #include "Panel.h"
 #include "ImageGrid1.h"
 #include "ImageGrid3.h"
+#include "ImageGrid9.h"
 #include "Dialog.h"
 #include "BGImage.h"
 #include "TextArea.h"
@@ -26,6 +27,7 @@ unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typ
     if (typeName == "class Panel") comp = make_unique<Panel>();
     if (typeName == "class ImageGrid1") comp = make_unique<ImageGrid1>();
     if (typeName == "class ImageGrid3") comp = make_unique<ImageGrid3>();
+    if (typeName == "class ImageGrid9") comp = make_unique<ImageGrid9>();
     if (typeName == "class Dialog") comp = make_unique<Dialog>();
     if (typeName == "class BGImage") comp = make_unique<BGImage>();
     if (typeName == "class TextArea") comp = make_unique<TextArea>();
