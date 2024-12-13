@@ -57,7 +57,7 @@ bool ImagePartSet::LoadResources(ILoadData* load)
 //양 끝단을 빼고 중간길이를 구한다음 총 4점을 리턴한다.
 //가로 4점 세로2점이면 3개의 Rectangle을 구할 수 있다.
 //중간에 한쪽 방향으로만 늘어나고 옆으로 늘릴때에는 높이, 위아래로 늘릴때는 넓이가 일정하다고 가정한다.
-vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) noexcept
+static vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) noexcept
 {
 	long middle = 0;
 	if (length > thisEdge + thatEdge)

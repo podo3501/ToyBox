@@ -2,7 +2,8 @@
 #include "JsonOperation.h"
 #include "UIType.h"
 #include "Panel.h"
-#include "SingleImage.h"
+#include "ImageGrid1.h"
+#include "ImageGrid3.h"
 #include "Dialog.h"
 #include "BGImage.h"
 #include "TextArea.h"
@@ -23,7 +24,8 @@ unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typ
 {
     unique_ptr<UIComponent> comp{ nullptr };
     if (typeName == "class Panel") comp = make_unique<Panel>();
-    if (typeName == "class SingleImage") comp = make_unique<SingleImage>();
+    if (typeName == "class ImageGrid1") comp = make_unique<ImageGrid1>();
+    if (typeName == "class ImageGrid3") comp = make_unique<ImageGrid3>();
     if (typeName == "class Dialog") comp = make_unique<Dialog>();
     if (typeName == "class BGImage") comp = make_unique<BGImage>();
     if (typeName == "class TextArea") comp = make_unique<TextArea>();

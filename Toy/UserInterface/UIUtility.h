@@ -25,3 +25,11 @@ private:
 
 //L"<Hangle><Red>Å×½ºÆ®, </Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>()</English>"
 bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept;
+
+
+struct PositionRectangle
+{
+	Rectangle area;
+	Vector2 pos;
+};
+vector<PositionRectangle> StretchSize(const Rectangle& area, const vector<Rectangle>& data) noexcept;

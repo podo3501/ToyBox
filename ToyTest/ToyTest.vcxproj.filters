@@ -11,6 +11,7 @@
     <ClCompile Include="ToyTestFixture.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="TestHelper.cpp" />
+    <ClCompile Include="ComponentTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />

@@ -116,3 +116,49 @@ bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept
 
 	return true;
 }
+
+//양 끝단을 빼고 중간길이를 구한다음 총 4점을 리턴한다.
+//가로 4점 세로2점이면 3개의 Rectangle을 구할 수 있다.
+//중간에 한쪽 방향으로만 늘어나고 옆으로 늘릴때에는 높이, 위아래로 늘릴때는 넓이가 일정하다고 가정한다.
+static vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) noexcept
+{
+	long middle = 0;
+	if (length > thisEdge + thatEdge)
+		middle = length - (thisEdge + thatEdge);
+
+	return { 0, thisEdge, thisEdge + middle, length };
+}
+
+vector<PositionRectangle> StretchSize(const Rectangle& area, const vector<Rectangle>& data) noexcept
+{
+	if (data.size() != 3 && data.size() != 9) return {};	//3개짜리와 9개짜리만 취급한다.
+
+	//필요한 데이터는 0, 2, 6 번째 데이터 뿐이다.
+	vector<long> xPoints = GetStretchedSize(area.width, data.at(0).width, data.at(2).width);
+	vector<long> yPoints{};
+	if (data.size() == 3) yPoints = { 0, static_cast<long>(data.at(0).height) };
+	if (data.size() == 9) yPoints = GetStretchedSize(area.height, data.at(0).height, data.at(6).height);
+
+	//. . . .	. . . . 
+	//. . . .	. . . .
+	//. . . .
+	//. . . .
+	//4x4나 4x2점을 이용해서 Rectangle을 만드는 코드
+	vector<Rectangle> destinations{};
+	for (auto iy = yPoints.begin(); iy != prev(yPoints.end()); ++iy)
+		for (auto ix = xPoints.begin(); ix != prev(xPoints.end()); ++ix)
+			destinations.emplace_back(Rectangle(*ix, *iy, *(ix + 1) - *(ix), *(iy + 1) - *(iy)));
+
+	vector<PositionRectangle> positionRectangles;
+	for (const auto& dest : destinations)
+	{
+		PositionRectangle posRect;
+		posRect.pos.x = float(dest.x) / float(area.width);
+		posRect.pos.y = float(dest.y) / float(area.height);
+
+		posRect.area = Rectangle(0, 0, dest.width, dest.height);
+		positionRectangles.emplace_back(posRect);
+	}
+
+	return positionRectangles;
+}

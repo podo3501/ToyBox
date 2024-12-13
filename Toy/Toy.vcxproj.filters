@@ -80,7 +80,10 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="UserInterface\SingleImage.h">
+    <ClInclude Include="UserInterface\ImageGrid1.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\ImageGrid3.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,7 +146,10 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="UserInterface\SingleImage.cpp">
+    <ClCompile Include="UserInterface\ImageGrid1.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\ImageGrid3.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

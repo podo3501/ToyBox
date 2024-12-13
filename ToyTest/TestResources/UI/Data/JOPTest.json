@@ -18,27 +18,100 @@
                     "y": 0.5
                 },
                 "Component": {
-                    "Type": "class SingleImage",
-                    "Name": "singleImg",
+                    "Type": "class ImageGrid3",
+                    "Name": "ImgGrid3",
                     "Layout": {
                         "Area": {
                             "x": 0,
                             "y": 0,
-                            "width": 0,
-                            "height": 0
+                            "width": 100,
+                            "height": 36
                         },
                         "Origin": "LeftTop"
                     },
-                    "ImagePart": {
-                        "Index": 0,
-                        "Filename": "UI/Blue/button_square_header_large_square_screws.png",
-                        "Source": {
-                            "x": 0,
-                            "y": 0,
-                            "width": 64,
-                            "height": 64
+                    "Components": [
+                        {
+                            "Position": {
+                                "x": 0.0,
+                                "y": 0.0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "ImgGrid3_0",
+                                "Layout": {
+                                    "Area": {
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 30,
+                                        "height": 36
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 0,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            }
+                        },
+                        {
+                            "Position": {
+                                "x": 0.3,
+                                "y": 0.0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "ImgGrid3_1",
+                                "Layout": {
+                                    "Area": {
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 40,
+                                        "height": 36
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 0,
+                                    "width": 4,
+                                    "height": 36
+                                }
+                            }
+                        },
+                        {
+                            "Position": {
+                                "x": 0.7,
+                                "y": 0.0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "ImgGrid3_2",
+                                "Layout": {
+                                    "Area": {
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 30,
+                                        "height": 36
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            }
                         }
-                    }
+                    ]
                 }
             }
         ]
