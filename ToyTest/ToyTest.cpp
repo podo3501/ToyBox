@@ -10,7 +10,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/Button.h"
+#include "../Toy/UserInterface/OButton.h"
 #include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/TextArea.h"
 #include "../Toy/UserInterface/Panel.h"
@@ -75,7 +75,7 @@ namespace BasicClient
 		};
 
 		UILayout layout({ 0, 0, 116, 48 }, Origin::Center);
-		unique_ptr<Button> button = make_unique<Button>();
+		unique_ptr<OButton> button = make_unique<OButton>();
 		button->SetImage("Button", layout, normal, hover, pressed);
 		button->ChangeArea({ 0, 0, 126,48 });
 
@@ -149,7 +149,7 @@ namespace BasicClient
 
 	TEST_F(ToyTestFixture, CloseButton)
 	{
-		std::unique_ptr<Button> button = std::make_unique<Button>();
+		std::unique_ptr<OButton> button = std::make_unique<OButton>();
 
 		vector<ImageSource> normal{ { L"UI/Blue/check_square_color_cross.png" } };
 		vector<ImageSource> hover{ { L"UI/Blue/check_square_grey_cross.png" } };

@@ -5,7 +5,7 @@
 #include "Utility.h"
 #include "Config.h"
 #include "UserInterface/UILayout.h"
-#include "UserInterface/Button.h"
+#include "UserInterface/OButton.h"
 #include "UserInterface/BGImage.h"
 #include "UserInterface/TextArea.h"
 #include "UserInterface/Panel.h"
@@ -63,9 +63,9 @@ bool GameMainLoop::LoadResources()
     };
 
     UILayout layout({ 0, 0, 180, 48 }, Origin::Center);
-    unique_ptr<Button> button = make_unique<Button>();
+    unique_ptr<OButton> button = make_unique<OButton>();
     button->SetImage("Button", layout, normal, hover, pressed);
-    unique_ptr<Button> button_2 = make_unique<Button>();
+    unique_ptr<OButton> button_2 = make_unique<OButton>();
     button_2->SetImage("Button2", layout, normal, hover, pressed);
 
     m_gamePanel->AddComponent(move(button), {0.5f, 0.5f});
@@ -76,7 +76,7 @@ bool GameMainLoop::LoadResources()
     vector<ImageSource> pressed2{ { L"UI/Gray/check_square_grey_cross.png" } };
 
     layout.Set({ 0, 0, 32, 32 }, Origin::Center);
-    unique_ptr<Button> closeButton = make_unique<Button>();
+    unique_ptr<OButton> closeButton = make_unique<OButton>();
     closeButton->SetImage("CloseButton", layout, normal2, hover2, pressed2);
     m_gamePanel->AddComponent(move(closeButton), { 0.2f, 0.2f });
 

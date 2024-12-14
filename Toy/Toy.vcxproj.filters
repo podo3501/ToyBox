@@ -30,7 +30,7 @@
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowProcedure.h" />
-    <ClInclude Include="UserInterface\Button.h">
+    <ClInclude Include="UserInterface\OButton.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\BGImage.h">
@@ -96,7 +96,7 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="WindowProcedure.cpp" />
-    <ClCompile Include="UserInterface\Button.cpp">
+    <ClCompile Include="UserInterface\OButton.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\BGImage.cpp">

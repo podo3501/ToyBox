@@ -35,7 +35,7 @@ TransformComponent& TransformComponent::operator=(const TransformComponent& othe
 bool TransformComponent::operator==(const TransformComponent& o) const noexcept
 {
 	ReturnIfFalse(CompareUniquePtr(m_component, o.m_component));
-	ReturnIfFalse(tie(m_position) == tie(o.m_position));
+	ReturnIfFalse(CompareEpsilon(m_position, o.m_position));
 
 	return true;
 }

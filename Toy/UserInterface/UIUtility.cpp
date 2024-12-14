@@ -129,61 +129,39 @@ static vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) 
 	return { 0, thisEdge, thisEdge + middle, length };
 }
 
-vector<PositionRectangle> StretchSize(const Rectangle& area, const vector<Rectangle>& data) noexcept
+vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& area, const vector<Rectangle>& data, bool isMidStretch) noexcept
 {
-	if (data.size() != 3 && data.size() != 9) return {};	//3개짜리와 9개짜리만 취급한다.
+	if (data.size() != 3) return {};
 
-	//필요한 데이터는 0, 2, 6 번째 데이터 뿐이다.
-	vector<long> xPoints = GetStretchedSize(area.width, data.at(0).width, data.at(2).width);
-	vector<long> yPoints{};
-	if (data.size() == 3) yPoints = { 0, static_cast<long>(data.at(0).height) };
-	if (data.size() == 9) yPoints = GetStretchedSize(area.height, data.at(0).height, data.at(6).height);
+	vector<long> xPoints, yPoints;
+	long stretchedValue{ 0 };
 
-	//. . . .	. . . . 
-	//. . . .	. . . .
-	//. . . .
-	//. . . .
-	//4x4나 4x2점을 이용해서 Rectangle을 만드는 코드
-	vector<Rectangle> destinations{};
-	for (auto iy = yPoints.begin(); iy != prev(yPoints.end()); ++iy)
-		for (auto ix = xPoints.begin(); ix != prev(xPoints.end()); ++ix)
-			destinations.emplace_back(Rectangle(*ix, *iy, *(ix + 1) - *(ix), *(iy + 1) - *(iy)));
-
-	vector<PositionRectangle> result;
-	if (data.size() == 3)
-	{
-		for (const auto& dest : destinations)
-		{
-			PositionRectangle posRect;
-			posRect.pos.x = float(dest.x) / float(area.width);
-			posRect.pos.y = float(dest.y) / float(area.height);
-
-			posRect.area = Rectangle(0, 0, dest.width, dest.height);
-			result.emplace_back(posRect);
-		}
+	switch (stretchType) {
+	case StretchType::Width:
+		// 가로 확장
+		xPoints = GetStretchedSize(area.width, data[0].width, data[2].width);
+		stretchedValue = (isMidStretch) ? area.height : static_cast<long>(data[0].height);
+		yPoints = { 0, stretchedValue };
+		break;
+	case StretchType::Height:
+		// 세로 확장
+		yPoints = GetStretchedSize(area.height, data[0].height, data[2].height);
+		stretchedValue = (isMidStretch) ? area.width : static_cast<long>(data[0].width);
+		xPoints = { 0, stretchedValue };
+		break;
 	}
 
-	if (data.size() == 9)
-	{
-		vector<PositionRectangle> res9;
-		for (const auto& dest : destinations)
-		{
-			PositionRectangle posRect;
-			posRect.pos.x = float(dest.x) / float(area.width);
-			posRect.pos.y = float(dest.y) / float(area.height);
+	// 결과 리스트 생성
+	vector<PositionRectangle> result;
+	result.reserve((xPoints.size() - 1) * (yPoints.size() - 1)); // 메모리 예약
 
-			posRect.area = Rectangle(0, 0, dest.width, dest.height);
-			res9.emplace_back(posRect);
-		}
-
-		for (int idx{ 0 }; idx < res9.size(); idx += 3)
-		{
-			PositionRectangle posRect;
-			posRect.pos = res9[idx].pos;
-			long width = res9[idx + 0].area.width + res9[idx + 1].area.width + res9[idx + 2].area.width;
-			long height = res9[idx].area.height;
-			posRect.area = Rectangle(0, 0, width, height);
-			result.emplace_back(posRect);
+	// PositionRectangle 생성
+	for (size_t iy = 0; iy < yPoints.size() - 1; ++iy) {
+		for (size_t ix = 0; ix < xPoints.size() - 1; ++ix) {
+			result.emplace_back(PositionRectangle{
+				{ float(xPoints[ix]) / area.width, float(yPoints[iy]) / area.height },
+				{ 0, 0, xPoints[ix + 1] - xPoints[ix], yPoints[iy + 1] - yPoints[iy] }
+				});
 		}
 	}
 

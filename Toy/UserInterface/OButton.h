@@ -10,12 +10,12 @@ class UILayout;
 
 enum class ButtonState;
 
-class Button : public UIComponent
+class OButton : public UIComponent
 {
 public:
-	virtual ~Button();
-	Button();
-	Button(const Button& other);
+	virtual ~OButton();
+	OButton();
+	OButton(const OButton& other);
 	bool operator==(const UIComponent& o) const noexcept;
 
 	virtual unique_ptr<UIComponent> Clone() override;

@@ -223,7 +223,7 @@
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
-    <ClInclude Include="UserInterface\Button.h" />
+    <ClInclude Include="UserInterface\OButton.h" />
     <ClInclude Include="UserInterface\BGImage.h" />
     <ClInclude Include="UserInterface\ImagePart.h" />
     <ClInclude Include="UserInterface\ImagePartSet.h" />
@@ -253,7 +253,7 @@
     <ClCompile Include="UserInterface\JsonOperation_impl.cpp" />
     <ClCompile Include="UserInterface\UIType.cpp" />
     <ClCompile Include="WindowProcedure.cpp" />
-    <ClCompile Include="UserInterface\Button.cpp" />
+    <ClCompile Include="UserInterface\OButton.cpp" />
     <ClCompile Include="UserInterface\BGImage.cpp" />
     <ClCompile Include="UserInterface\ImagePart.cpp" />
     <ClCompile Include="UserInterface\ImagePartSet.cpp" />

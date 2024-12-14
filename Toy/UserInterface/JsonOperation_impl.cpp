@@ -9,7 +9,7 @@
 #include "BGImage.h"
 #include "TextArea.h"
 #include "ImagePartSet.h"
-#include "Button.h"
+#include "OButton.h"
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {
@@ -31,7 +31,7 @@ unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typ
     if (typeName == "class Dialog") comp = make_unique<Dialog>();
     if (typeName == "class BGImage") comp = make_unique<BGImage>();
     if (typeName == "class TextArea") comp = make_unique<TextArea>();
-    if (typeName == "class Button") comp = make_unique<Button>();
+    if (typeName == "class OButton") comp = make_unique<OButton>();
     if (comp == nullptr) 
         return nullptr;
 

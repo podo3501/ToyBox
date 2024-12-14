@@ -15,7 +15,10 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const ImageGrid1* o = static_cast<const ImageGrid1*>(&rhs);
 
-	return tie(m_index, m_filename, m_source) == tie(o->m_index, o->m_filename, o->m_source);
+	auto result = tie(m_index, m_filename, m_source) == tie(o->m_index, o->m_filename, o->m_source);
+	assert(result);
+
+	return result;
 }
 
 bool ImageGrid1::LoadResources(ILoadData* load)
@@ -61,4 +64,12 @@ void ImageGrid1::SerializeIO(JsonOperation& operation)
 	operation.Process("Index", m_index);
 	operation.Process("Filename", m_filename);
 	operation.Process("Source", m_source);
+}
+
+unique_ptr<ImageGrid1> CreateGrid1(const string& name, const UILayout& layout, const ImageSource& source)
+{
+	auto imgGrid1 = make_unique<ImageGrid1>();
+	if(!imgGrid1->SetImage(name, layout, source)) return nullptr;
+	
+	return imgGrid1;
 }

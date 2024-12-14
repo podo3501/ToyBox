@@ -51,7 +51,10 @@ bool CompareUniquePtr(const unique_ptr<T>& lhs, const unique_ptr<T>& rhs)
 	if (lhs == nullptr || rhs == nullptr)
 		return false;
 
-	return *lhs == *rhs; // 가리키는 값 비교
+	auto result{ *lhs == *rhs }; // 가리키는 값 비교
+	assert(result);
+
+	return result;
 }
 
 //시퀀스 컨테이너 비교
@@ -98,6 +101,16 @@ bool CompareAssoc(const map<Key, unique_ptr<Value>>& lhs, const map<Key, unique_
 	}
 
 	return true;
+}
+
+inline bool CompareEpsilon(float a, float b, float epsilon = 1e-6f) 
+{
+	return fabs(a - b) <= epsilon;
+}
+
+inline bool CompareEpsilon(const Vector2& a, const Vector2& b, float epsilon = 1e-6f)
+{
+	return CompareEpsilon(a.x, b.x, epsilon) && CompareEpsilon(a.y, b.y, epsilon);
 }
 
 inline XMINT2 operator+(const XMINT2& a, const XMINT2& b) { return XMINT2(a.x + b.x, a.y + b.y); }

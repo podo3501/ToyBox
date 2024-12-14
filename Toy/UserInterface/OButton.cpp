@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Button.h"
+#include "OButton.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
 #include "../InputManager.h"
@@ -8,12 +8,12 @@
 #include "ImagePartSet.h"
 #include "JsonOperation.h"
 
-Button::~Button() = default;
-Button::Button() :
+OButton::~OButton() = default;
+OButton::OButton() :
 	m_state{ ButtonState::Normal }
 {}
 
-Button::Button(const Button& other)
+OButton::OButton(const OButton& other)
 	: UIComponent{ other }
 {
 	ranges::for_each(other.m_image, [this](const auto& pair) {
@@ -23,20 +23,20 @@ Button::Button(const Button& other)
 		});
 }
 
-bool Button::operator==(const UIComponent& o) const noexcept
+bool OButton::operator==(const UIComponent& o) const noexcept
 {
 	ReturnIfFalse(UIComponent::operator==(o));
-	const Button* rhs = static_cast<const Button*>(&o);
+	const OButton* rhs = static_cast<const OButton*>(&o);
 
 	return CompareAssoc(m_image, rhs->m_image);
 }
 
-unique_ptr<UIComponent> Button::Clone()
+unique_ptr<UIComponent> OButton::Clone()
 {
-	return make_unique<Button>(*this);
+	return make_unique<OButton>(*this);
 }
 
-bool Button::LoadResources(ILoadData* load)
+bool OButton::LoadResources(ILoadData* load)
 {
 	ReturnIfFalse(ranges::all_of(m_image | views::values, [this, load](const auto& imgPartSet) {
 		return imgPartSet->LoadResources(load);
@@ -49,7 +49,7 @@ bool Button::LoadResources(ILoadData* load)
 	return true;
 }
 
-bool Button::SetDestination(const Rectangle& area) noexcept
+bool OButton::SetDestination(const Rectangle& area) noexcept
 {
 	for (const auto& partSet : m_image | views::values)
 		ReturnIfFalse(partSet->SetDestination(area));
@@ -57,7 +57,7 @@ bool Button::SetDestination(const Rectangle& area) noexcept
 	return true;
 }
 
-bool Button::ChangeArea(const Rectangle& area) noexcept
+bool OButton::ChangeArea(const Rectangle& area) noexcept
 {
 	ReturnIfFalse(SetDestination(area));
 
@@ -66,7 +66,7 @@ bool Button::ChangeArea(const Rectangle& area) noexcept
 	return true;
 }
 
-bool Button::Update(const XMINT2& position, InputManager* inputManager) noexcept
+bool OButton::Update(const XMINT2& position, InputManager* inputManager) noexcept
 {
 	const XMINT2& pos = GetPositionByLayout(position);
 	for (const auto& partSet : m_image | views::values)
@@ -95,12 +95,12 @@ bool Button::Update(const XMINT2& position, InputManager* inputManager) noexcept
 	return true;
 }
 
-void Button::Render(IRender* render)
+void OButton::Render(IRender* render)
 {
 	m_image[m_state]->Render(render, GetSelected());
 }
 
-void Button::SetImage(const string& name,
+void OButton::SetImage(const string& name,
 	const UILayout& layout,
 	const vector<ImageSource>& normal,
 	const vector<ImageSource>& hover,
@@ -117,12 +117,12 @@ void Button::SetImage(const string& name,
 	}
 }
 
-void Button::InsertImage(ButtonState btnState, unique_ptr<ImagePartSet>&& imgPartSet)
+void OButton::InsertImage(ButtonState btnState, unique_ptr<ImagePartSet>&& imgPartSet)
 {
 	m_image.insert(make_pair(btnState, move(imgPartSet)));
 }
 
-void Button::SerializeIO(JsonOperation& operation)
+void OButton::SerializeIO(JsonOperation& operation)
 {
 	operation.Process("StateImage", m_image);
 	UIComponent::SerializeIO(operation);

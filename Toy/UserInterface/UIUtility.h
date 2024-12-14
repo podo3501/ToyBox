@@ -26,10 +26,16 @@ private:
 //L"<Hangle><Red>Å×½ºÆ®, </Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>()</English>"
 bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept;
 
+enum class StretchType 
+{
+	Width,
+	Height
+};
 
 struct PositionRectangle
 {
-	Rectangle area;
 	Vector2 pos;
+	Rectangle area;
 };
-vector<PositionRectangle> StretchSize(const Rectangle& area, const vector<Rectangle>& data) noexcept;
+
+vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& area, const vector<Rectangle>& data, bool isMidStretch) noexcept;

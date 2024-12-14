@@ -28,3 +28,5 @@ private:
 	Rectangle m_destination{};
 	XMINT2 m_position{};
 };
+
+unique_ptr<ImageGrid1> CreateGrid1(const string& name, const UILayout& layout, const ImageSource& source);
