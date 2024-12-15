@@ -104,14 +104,20 @@ bool UIComponent::SetDatas(IGetValue* value)
 
 bool UIComponent::Update(const XMINT2& position, InputManager* inputManager) noexcept
 {
+	if (!m_enable) return true;
+
 	return ranges::all_of(m_components, [this, &position, inputManager](const auto& transComp) {
 		const auto& curPosition = m_layout->GetPosition(transComp->GetPosition()) + position;
+		if (inputManager)
+			inputManager->GetMouse()->SetOffset(curPosition);
 		return transComp->Update(curPosition, inputManager);
 		});
 }
 
 void UIComponent::Render(IRender* render)
 {
+	if (!m_enable) return;
+
 	ranges::for_each(m_components, [render](const auto& transComp) {
 		transComp->Render(render);
 		});
@@ -147,6 +153,26 @@ UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 	return TransformComponent->GetComponent();
 }
 
+vector<UIComponent*> UIComponent::GetComponents() const noexcept
+{
+	vector<UIComponent*> componentList;
+	ranges::transform(m_components, back_inserter(componentList), [](const auto& transCompo) {
+		return transCompo->GetComponent();
+		});
+
+	return componentList;
+}
+
+bool UIComponent::IsHover(const XMINT2& pos) const noexcept
+{
+	if (m_layout->IsArea(pos)) return true;
+
+	return ranges::any_of(m_components, [this, &pos](const auto& transComponent) {
+		const auto& curPosition = pos - m_layout->GetPosition(transComponent->GetPosition());
+		return transComponent->IsHover(curPosition);
+		});
+}
+
 void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
 {
 	if (m_layout->IsArea(pos))
@@ -155,6 +181,22 @@ void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList
 	ranges::for_each(m_components, [this, &pos, &outList](auto& transComponent) {
 		const auto& curPosition = pos - m_layout->GetPosition(transComponent->GetPosition());
 		transComponent->GetComponents(curPosition, outList);
+		});
+}
+
+bool UIComponent::NIsArea(const XMINT2& pos) const noexcept
+{
+	return m_layout->NIsArea(pos);
+}
+
+void UIComponent::NGetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
+{
+	if (m_layout->NIsArea(pos))
+		outList.push_back(this);
+
+	ranges::for_each(m_components, [this, &pos, &outList](auto& transComponent) {
+		const auto& curPosition = pos - m_layout->GetPosition(transComponent->GetPosition());
+		transComponent->NGetComponents(curPosition, outList);
 		});
 }
 
@@ -224,10 +266,16 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 {
 	operation.Process("Name", m_name);
 	operation.Process("Layout", m_layout);
+	operation.Process("Enable", m_enable);
 	operation.Process("Components", m_components);
 }
 
 XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) noexcept
 {
 	return position + m_layout->GetPosition();
+}
+
+void UIComponent::SetEnable(bool enable)
+{
+	m_enable = enable;
 }

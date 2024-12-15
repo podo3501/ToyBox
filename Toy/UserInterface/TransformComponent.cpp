@@ -60,9 +60,19 @@ bool TransformComponent::IsPicking(const XMINT2& pos) const noexcept
 	return m_component->IsPicking(pos); 
 }
 
+bool TransformComponent::IsHover(const XMINT2& pos) const noexcept
+{
+	return m_component->IsHover(pos);
+}
+
 void TransformComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
 {
 	return m_component->GetComponents(pos, outList);
+}
+
+void TransformComponent::NGetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
+{
+	return m_component->NGetComponents(pos, outList);
 }
 
 void TransformComponent::Render(IRender* render) 

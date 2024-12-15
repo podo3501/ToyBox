@@ -33,10 +33,13 @@ public:
 	XMUINT2 GetSize() const noexcept;
 	
 	void ChangeOrigin(const Origin& origin) noexcept;
-	bool IsPicking(const XMINT2& pos)  const noexcept;
+	bool IsPicking(const XMINT2& pos) const noexcept;
+	bool IsHover(const XMINT2& pos) const noexcept;
 
 	UIComponent* GetComponent(const string& name) const noexcept;
+	vector<UIComponent*> GetComponents() const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
+	void NGetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
 
 	template<typename T>
 	bool GetComponent(const string& name, T** outComponent) const noexcept;
@@ -53,9 +56,13 @@ public:
 	UILayout* GetLayout() const noexcept;
 	void SetLayout(const UILayout& layout) noexcept;
 
+	bool NIsArea(const XMINT2& pos) const noexcept;
+
 	void ClearSelected() noexcept;
 	void SetSelected(bool selected) noexcept;
 	bool GetSelected() const noexcept;
+
+	void SetEnable(bool enable);
 
 	virtual void SerializeIO(JsonOperation& operation);
 
@@ -68,6 +75,7 @@ private:
 	string m_name{};
 	wstring m_filename{};
 	unique_ptr<UILayout> m_layout;
+	bool m_enable{ true };
 	bool m_selected{ false };
 	vector<unique_ptr<TransformComponent>> m_components;
 };

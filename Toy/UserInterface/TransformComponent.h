@@ -21,7 +21,9 @@ public:
 	bool SetDatas(IGetValue* value);
 	bool Update(const XMINT2& position, InputManager* tracker) noexcept;
 	bool IsPicking(const XMINT2& pos) const noexcept;
+	bool IsHover(const XMINT2& pos) const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
+	void NGetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
 	void Render(IRender* render);
 	void SetPosition(const Vector2& position) noexcept;
 	Vector2 GetPosition() const noexcept;

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "../Include/IComponent.h"
 #include "../Toy/Config.h"
+#include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "IMockRenderer.h"
@@ -27,4 +28,15 @@ void CallMockRender(IComponent* component, function<void(size_t, const RECT&, co
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
 	component->Render(&mockRender);
+}
+
+void TestUpdate(HWND hwnd, UIComponent* component, int mouseX, int mouseY)
+{
+	InputManager inputManager(hwnd);
+	Mouse::State mouseState;
+	mouseState.x = mouseX;
+	mouseState.y = mouseY;
+	inputManager.Update(mouseState);
+
+	component->Update({}, &inputManager);
 }

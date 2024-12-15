@@ -3,36 +3,16 @@
 #include "IMockRenderer.h"
 #include "TestHelper.h"
 #include "Utility.h"
+#include "../Toy/Window.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/UILayout.h"
-#include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid3.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
+#include "../Toy/UserInterface/Button.h"
 #include "../Toy/UserInterface/BGImage.h"
-
-class Button : public UIComponent
-{
-public:
-	bool SetImage(const string& name, const UILayout& layout,
-		unique_ptr<UIComponent>&& normal,
-		unique_ptr<UIComponent>&& hover,
-		unique_ptr<UIComponent>&& pressed)
-	{
-		SetName(name);
-		SetLayout(layout);
-
-		m_images.emplace(ButtonState::Normal, move(normal));
-		m_images.emplace(ButtonState::Hover, move(hover));
-		m_images.emplace(ButtonState::Pressed, move(pressed));
-
-		return true;
-	}
-
-private:
-	map<ButtonState, unique_ptr<UIComponent>> m_images;
-};
+#include "../Toy/UserInterface/Panel.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -45,12 +25,12 @@ namespace ComponentTest
 		EXPECT_TRUE(IsTrue(dest, { 400, 300, 464, 364 }, *source, { 0, 0, 64, 64 }));
 	}
 
-	TEST_F(ToyTestFixture, ImageGrid1Test)
+	TEST_F(ToyTestFixture, TestImageGrid1)
 	{
 		UILayout layout({ 0, 0, 64, 64 }, Origin::LeftTop);
 		ImageSource grid1Source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
 
-		m_panel->AddComponent(CreateGrid1("ImgGrid1", layout, grid1Source), { 0.5f, 0.5f });
+		m_panel->AddComponent(CreateImageGrid1("ImgGrid1", layout, grid1Source), { 0.5f, 0.5f });
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
 		CallMockRender(m_panel.get(), TestImageGrid1Render);
@@ -72,7 +52,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	TEST_F(ToyTestFixture, ImageGrid3Test)
+	TEST_F(ToyTestFixture, TestImageGrid3)
 	{
 		UILayout layout({ 0, 0, 100, 36 }, Origin::LeftTop);
 		ImageSource grid3Source{
@@ -116,7 +96,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	TEST_F(ToyTestFixture, ImageGrid9Test)
+	TEST_F(ToyTestFixture, TestImageGrid9)
 	{
 		UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
 		ImageSource grid9Source{
@@ -138,7 +118,7 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
-	TEST_F(ToyTestFixture, ButtonTest)
+	TEST_F(ToyTestFixture, TestButton_ImageGrid1)
 	{
 		UILayout loButton({ 0, 0, 32, 32 }, Origin::Center);
 		UILayout loImgGrid({ 0, 0, 32, 32 }, Origin::LeftTop);
@@ -148,8 +128,39 @@ namespace ComponentTest
 
 		std::unique_ptr<Button> button = std::make_unique<Button>();
 		button->SetImage("Button", loButton,
-			CreateGrid1("Button_normal", loImgGrid, normal),
-			CreateGrid1("Button_hover", loImgGrid, hover),
-			CreateGrid1("Button_pressed", loImgGrid, pressed));
+			CreateImageGrid1("Button_normal", loImgGrid, normal),
+			CreateImageGrid1("Button_hover", loImgGrid, hover),
+			CreateImageGrid1("Button_pressed", loImgGrid, pressed));
+
+		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
+		EXPECT_TRUE(m_renderer->LoadComponents());
+
+		//normal 버튼일 경우
+		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );
+
+		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	TEST_F(ToyTestFixture, TestRecursivePosition)
+	{
+		std::unique_ptr<Panel> panel2 = std::make_unique<Panel>();
+		panel2->SetLayout({ { 0, 0, 20, 20 }, Origin::Center });
+		Panel* ptrPanel = panel2.get();
+
+		std::unique_ptr<Panel> panel1 = std::make_unique<Panel>();
+		panel1->SetLayout({ { 0, 0, 400, 400 }, Origin::Center });
+
+		panel1->AddComponent(move(panel2), { 0.1f, 0.1f });
+		m_panel->AddComponent(move(panel1), { 0.5f, 0.5f });
+
+		vector<UIComponent*> outList;
+		m_panel->NGetComponents({ 240, 140 }, outList);
+		EXPECT_EQ(outList.size(), 3);
+
+		ptrPanel->ChangeOrigin(Origin::LeftTop);
+
+		outList.clear();
+		m_panel->NGetComponents({ 239, 140 }, outList);
+		EXPECT_EQ(outList.size(), 2);
 	}
 }

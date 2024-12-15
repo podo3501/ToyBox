@@ -29,4 +29,4 @@ private:
 	XMINT2 m_position{};
 };
 
-unique_ptr<ImageGrid1> CreateGrid1(const string& name, const UILayout& layout, const ImageSource& source);
+unique_ptr<ImageGrid1> CreateImageGrid1(const string& name, const UILayout& layout, const ImageSource& source);
