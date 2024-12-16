@@ -5,6 +5,33 @@
 #include "UIUtility.h"
 #include "UIType.h"
 #include "UILayout.h"
+#include "JsonOperation.h"
+
+static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
+{
+    vector<Rectangle> srcList;
+    ranges::transform(components, back_inserter(srcList), [](auto component) {
+        ImageGrid1* image = ComponentCast<ImageGrid1*>(component);
+        return image->GetSource();
+        });
+    return srcList;
+}
+
+bool ImageGrid3::ChangeArea(const Rectangle& area) noexcept
+{
+    const vector<UIComponent*> components = GetComponents();
+    vector<Rectangle> list = GetSourceList(components);
+    vector<PositionRectangle> posRects = StretchSize(StretchType::Width, area, list);
+
+    for (int idx{ 0 }; idx < components.size(); ++idx)
+    {
+        ChangePosition(idx, posRects[idx].pos);
+        components[idx]->ChangeArea(posRects[idx].area);
+    }
+    UIComponent::ChangeArea(area);
+
+    return true;
+}
 
 static bool ValidateInput(const string& name, const ImageSource& source)
 {
@@ -29,14 +56,14 @@ static unique_ptr<ImageGrid1> CreateImageGrid1(const string& baseName, size_t id
     return grid1;
 }
 
-bool ImageGrid3::SetImage(const string& name, const UILayout& layout, const ImageSource& source, bool yStretched)
+bool ImageGrid3::SetImage(const string& name, const UILayout& layout, const ImageSource& source)
 {
     ReturnIfFalse(ValidateInput(name, source));
 
 	SetName(name);
 	SetLayout(layout);
 
-    vector<PositionRectangle> posRects = StretchSize(StretchType::Width, layout.GetArea(), source.list, yStretched);
+    vector<PositionRectangle> posRects = StretchSize(StretchType::Width, layout.GetArea(), source.list);
     for (std::size_t idx = 0; idx < source.list.size(); ++idx) 
     {
         auto grid1 = CreateImageGrid1(name, idx, source, posRects[idx]);
@@ -44,4 +71,12 @@ bool ImageGrid3::SetImage(const string& name, const UILayout& layout, const Imag
     }
 
 	return true;
+}
+
+unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, const UILayout& layout, const ImageSource& source)
+{
+    auto imgGrid3 = make_unique<ImageGrid3>();
+    if (!imgGrid3->SetImage(name, layout, source)) return nullptr;
+
+    return imgGrid3;
 }

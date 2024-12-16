@@ -129,25 +129,22 @@ static vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) 
 	return { 0, thisEdge, thisEdge + middle, length };
 }
 
-vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& area, const vector<Rectangle>& data, bool isMidStretch) noexcept
+vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& area, const vector<Rectangle>& data) noexcept
 {
 	if (data.size() != 3) return {};
 
 	vector<long> xPoints, yPoints;
-	long stretchedValue{ 0 };
 
 	switch (stretchType) {
 	case StretchType::Width:
 		// 가로 확장
 		xPoints = GetStretchedSize(area.width, data[0].width, data[2].width);
-		stretchedValue = (isMidStretch) ? area.height : static_cast<long>(data[0].height);
-		yPoints = { 0, stretchedValue };
+		yPoints = { 0, area.height };
 		break;
 	case StretchType::Height:
 		// 세로 확장
 		yPoints = GetStretchedSize(area.height, data[0].height, data[2].height);
-		stretchedValue = (isMidStretch) ? area.width : static_cast<long>(data[0].width);
-		xPoints = { 0, stretchedValue };
+		xPoints = { 0, area.width };
 		break;
 	}
 

@@ -15,18 +15,18 @@
         "Components": [
             {
                 "Position": {
-                    "x": 0.2,
-                    "y": 0.2
+                    "x": 0.5,
+                    "y": 0.5
                 },
                 "Component": {
-                    "Type": "class Button",
-                    "Name": "Button",
+                    "Type": "class ImageGrid3",
+                    "Name": "ImgGrid3",
                     "Layout": {
                         "Area": {
                             "x": 0,
                             "y": 0,
-                            "width": 32,
-                            "height": 32
+                            "width": 120,
+                            "height": 36
                         },
                         "Origin": "Center"
                     },
@@ -39,80 +39,80 @@
                             },
                             "Component": {
                                 "Type": "class ImageGrid1",
-                                "Name": "Button_normal",
+                                "Name": "ImgGrid3_0",
                                 "Layout": {
                                     "Area": {
                                         "x": 0,
                                         "y": 0,
-                                        "width": 32,
-                                        "height": 32
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Enable": false,
-                                "Index": 0,
-                                "Filename": "UI/Texture/Test_01.png",
-                                "Source": {
-                                    "x": 0,
-                                    "y": 0,
-                                    "width": 32,
-                                    "height": 32
-                                }
-                            }
-                        },
-                        {
-                            "Position": {
-                                "x": 0.0,
-                                "y": 0.0
-                            },
-                            "Component": {
-                                "Type": "class ImageGrid1",
-                                "Name": "Button_hover",
-                                "Layout": {
-                                    "Area": {
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 32,
-                                        "height": 32
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Enable": false,
-                                "Index": 0,
-                                "Filename": "UI/Texture/Test_01.png",
-                                "Source": {
-                                    "x": 35,
-                                    "y": 0,
-                                    "width": 32,
-                                    "height": 32
-                                }
-                            }
-                        },
-                        {
-                            "Position": {
-                                "x": 0.0,
-                                "y": 0.0
-                            },
-                            "Component": {
-                                "Type": "class ImageGrid1",
-                                "Name": "Button_pressed",
-                                "Layout": {
-                                    "Area": {
-                                        "x": 0,
-                                        "y": 0,
-                                        "width": 32,
-                                        "height": 32
+                                        "width": 30,
+                                        "height": 36
                                     },
                                     "Origin": "LeftTop"
                                 },
                                 "Enable": true,
                                 "Index": 0,
-                                "Filename": "UI/Texture/Test_01.png",
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
                                 "Source": {
-                                    "x": 70,
+                                    "x": 0,
                                     "y": 0,
-                                    "width": 32,
-                                    "height": 32
+                                    "width": 30,
+                                    "height": 36
+                                }
+                            }
+                        },
+                        {
+                            "Position": {
+                                "x": 0.25,
+                                "y": 0.0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "ImgGrid3_1",
+                                "Layout": {
+                                    "Area": {
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 60,
+                                        "height": 36
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Enable": true,
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 30,
+                                    "y": 0,
+                                    "width": 4,
+                                    "height": 36
+                                }
+                            }
+                        },
+                        {
+                            "Position": {
+                                "x": 0.75,
+                                "y": 0.0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "ImgGrid3_2",
+                                "Layout": {
+                                    "Area": {
+                                        "x": 0,
+                                        "y": 0,
+                                        "width": 30,
+                                        "height": 36
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Enable": true,
+                                "Index": 0,
+                                "Filename": "UI/Blue/button_square_header_large_square_screws.png",
+                                "Source": {
+                                    "x": 34,
+                                    "y": 0,
+                                    "width": 30,
+                                    "height": 36
                                 }
                             }
                         }

@@ -38,4 +38,4 @@ struct PositionRectangle
 	Rectangle area;
 };
 
-vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& area, const vector<Rectangle>& data, bool isMidStretch) noexcept;
+vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& area, const vector<Rectangle>& data) noexcept;

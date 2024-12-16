@@ -58,6 +58,14 @@ bool ImageGrid1::SetImage(const string& name, const UILayout& layout, const Imag
 	return true;
 }
 
+bool ImageGrid1::ChangeArea(const Rectangle& area) noexcept
+{
+	m_destination = area;
+	UIComponent::ChangeArea(area);
+
+	return true;
+}
+
 void ImageGrid1::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);

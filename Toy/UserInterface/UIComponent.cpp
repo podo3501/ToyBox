@@ -223,6 +223,14 @@ void UIComponent::ChangeOrigin(const Origin& origin) noexcept
 	m_layout->Set(origin);
 }
 
+bool UIComponent::ChangePosition(int index, const Vector2& pos) noexcept
+{
+	if (index >= m_components.size()) return false;
+	m_components[index]->SetPosition(pos);
+
+	return true;
+}
+
 void UIComponent::SetFilename(const wstring& filename) noexcept
 {
 	m_filename = filename;

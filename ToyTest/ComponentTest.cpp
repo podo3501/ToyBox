@@ -52,6 +52,18 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
+	void TestImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source, bool selected)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 340, 282, 370, 318 }, *source, { 0, 0, 30, 36 });
+		testResult |= IsTrue(dest, { 370, 282, 430, 318 }, *source, { 30, 0, 34, 36 });
+		testResult |= IsTrue(dest, { 430, 282, 460, 318 }, *source, { 34, 0, 64, 36 });
+
+		EXPECT_TRUE(testResult);
+	}
+
 	TEST_F(ToyTestFixture, TestImageGrid3)
 	{
 		UILayout layout({ 0, 0, 100, 36 }, Origin::LeftTop);
@@ -61,7 +73,7 @@ namespace ComponentTest
 			}
 		};
 		unique_ptr<ImageGrid3> imgGrid3 = make_unique<ImageGrid3>();
-		imgGrid3->SetImage("ImgGrid3", layout, grid3Source, false);
+		imgGrid3->SetImage("ImgGrid3", layout, grid3Source);
 
 		m_panel->AddComponent(move(imgGrid3), { 0.5f, 0.5f });
 		EXPECT_TRUE(m_renderer->LoadComponents());
@@ -70,10 +82,15 @@ namespace ComponentTest
 
 		ImageGrid3* grid3 = nullptr;
 		m_panel->GetComponent("ImgGrid3", &grid3);
+		grid3->ChangeOrigin(Origin::Center);
+		grid3->ChangeArea({ 0, 0, 120, 36 });
+		m_panel->Update({}, nullptr);	//위치값을 재계산한다.
+
+		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender);
 		
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
-
+	
 	////////////////////////////////////////////////////////
 
 	void TestImageGrid9Render(size_t index, const RECT& dest, const RECT* source, bool selected)
@@ -127,16 +144,37 @@ namespace ComponentTest
 		ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 70, 0, 32, 32} } };
 
 		std::unique_ptr<Button> button = std::make_unique<Button>();
-		button->SetImage("Button", loButton,
+		EXPECT_TRUE(button->SetImage("Button", loButton,
 			CreateImageGrid1("Button_normal", loImgGrid, normal),
 			CreateImageGrid1("Button_hover", loImgGrid, hover),
-			CreateImageGrid1("Button_pressed", loImgGrid, pressed));
+			CreateImageGrid1("Button_pressed", loImgGrid, pressed)));
 
 		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
-		//normal 버튼일 경우
-		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );
+		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );	//Pressed
+
+		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	TEST_F(ToyTestFixture, TestButton_ImageGrid3)
+	{
+		UILayout loButton({ 0, 0, 100, 48 }, Origin::Center);
+		UILayout loImgGrid({ 0, 0, 100, 48 }, Origin::LeftTop);
+		ImageSource normal{ { L"UI/Texture/Test_01.png" }, { { 67, 35, 22, 48}, { 89, 35, 4, 48 }, { 93, 35, 22, 48 } } };
+		ImageSource hover{ { L"UI/Texture/Test_01.png" }, { { 118, 35, 22, 48}, { 140, 35, 4, 48 }, { 144, 35, 22, 48 } } };
+		ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 169, 35, 22, 48}, { 191, 35, 4, 48 }, { 195, 35, 22, 48 } } };
+
+		std::unique_ptr<Button> button = std::make_unique<Button>();
+		EXPECT_TRUE(button->SetImage("Button", loButton,
+			CreateImageGrid3("Button_normal", loImgGrid, normal),
+			CreateImageGrid3("Button_hover", loImgGrid, hover),
+			CreateImageGrid3("Button_pressed", loImgGrid, pressed)));
+
+		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
+		EXPECT_TRUE(m_renderer->LoadComponents());
+
+		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Pressed
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}

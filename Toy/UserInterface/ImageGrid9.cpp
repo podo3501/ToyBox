@@ -31,10 +31,9 @@ static std::unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, size_t i
 		source.filename,
 		{ source.list[idx * 3], source.list[idx * 3 + 1], source.list[idx * 3 + 2] }
 	};
-	bool yStretched = (idx == 1); // 중간 이미지는 늘어나는 이미지.
 
 	auto grid3 = std::make_unique<ImageGrid3>();
-	grid3->SetImage(grid3name, grid3layout, imgSource, yStretched);
+	grid3->SetImage(grid3name, grid3layout, imgSource);
 
 	return grid3;
 }
@@ -47,7 +46,7 @@ bool ImageGrid9::SetImage(const string& name, const UILayout& layout, const Imag
 	SetLayout(layout);
 
 	auto srcHList = ExtractSourceRects(source);
-	auto posRects = StretchSize(StretchType::Height, layout.GetArea(), srcHList, true);
+	auto posRects = StretchSize(StretchType::Height, layout.GetArea(), srcHList);
 	for (size_t idx = 0; idx < srcHList.size(); ++idx)
 	{
 		auto grid3 = CreateImageGrid3(name, idx, source, posRects[idx]);
