@@ -11,6 +11,7 @@ public:
 	Button();
 
 	virtual bool operator==(const UIComponent& other) const noexcept override;
+	virtual bool ChangeArea(const Rectangle& area) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool LoadResources(ILoadData* load);
@@ -21,6 +22,7 @@ public:
 	bool Update(const XMINT2& position, InputManager* inputManager) noexcept;
 
 private:
+	bool UpdateButton(const XMINT2&, InputManager* inputManager) noexcept;
 	void AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable);
 	void EnableButtonImage(ButtonState btnState);
 

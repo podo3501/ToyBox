@@ -122,7 +122,9 @@ unique_ptr<ComponentWindow> CreateComponentWindow(const UIComponent* component)
 	const string& type = component->GetType();
 
 	if (type == "class Panel") return make_unique<ComponentPanel>();
-	if (type == "class BGImage") return make_unique<ComponentBGImage>();
+	if (type == "class ImageGrid1") return make_unique<ComponentImageGrid1>();
+	if (type == "class ImageGrid3") return make_unique<ComponentImageGrid3>();
+	if (type == "class ImageGrid9") return make_unique<ComponentImageGrid9>();
 
 	return nullptr;
 }
@@ -156,7 +158,7 @@ void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 	CheckSelectedComponent(inputManager);
 	CheckAddComponent(mouseTracker);
 
-	m_panel->Update({}, inputManager);
+	m_panel->ProcessUpdate({}, inputManager);
 	m_popup->Excute(mouseTracker);
 }
 

@@ -1,7 +1,6 @@
 #pragma once
 
 class UIComponent;
-class ImagePartSet;
 class Scene;
 enum class Origin;
 enum class ButtonState;
@@ -133,7 +132,6 @@ public:
 	void Process(const string& key, unique_ptr<UIComponent>& data);
 	void Process(const string& key, wstring& data) noexcept;
 	void Process(const string& key, map<wstring, wstring>& data) noexcept;
-	void Process(const string& key, map<ButtonState, unique_ptr<ImagePartSet>>& data);
 	void Process(const string& key, deque<wstring>& data) noexcept;
 
 private:

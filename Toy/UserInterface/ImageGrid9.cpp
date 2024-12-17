@@ -55,3 +55,29 @@ bool ImageGrid9::SetImage(const string& name, const UILayout& layout, const Imag
 
 	return true;
 }
+
+static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
+{
+	vector<Rectangle> srcList;
+	ranges::transform(components, back_inserter(srcList), [](auto component) {
+		ImageGrid3* image = ComponentCast<ImageGrid3*>(component);
+		return image->GetFirstComponentSource();
+		});
+	return srcList;
+}
+
+bool ImageGrid9::ChangeArea(const Rectangle& area) noexcept
+{
+	const vector<UIComponent*> components = GetComponents();
+	vector<Rectangle> list = GetSourceList(components);
+	vector<PositionRectangle> posRects = StretchSize(StretchType::Height, area, list);
+
+	for (int idx{ 0 }; idx < components.size(); ++idx)
+	{
+		ChangePosition(idx, posRects[idx].pos);
+		components[idx]->ChangeArea(posRects[idx].area);
+	}
+	UIComponent::ChangeArea(area);
+
+	return true;
+}

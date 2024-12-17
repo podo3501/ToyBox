@@ -7,10 +7,7 @@
 #include "ImageGrid9.h"
 #include "Button.h"
 #include "Dialog.h"
-#include "BGImage.h"
 #include "TextArea.h"
-#include "ImagePartSet.h"
-#include "OButton.h"
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {
@@ -31,9 +28,7 @@ unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typ
     if (typeName == "class ImageGrid9") comp = make_unique<ImageGrid9>();
     if (typeName == "class Button") comp = make_unique<Button>();
     if (typeName == "class Dialog") comp = make_unique<Dialog>();
-    if (typeName == "class BGImage") comp = make_unique<BGImage>();
     if (typeName == "class TextArea") comp = make_unique<TextArea>();
-    if (typeName == "class OButton") comp = make_unique<OButton>();
     if (comp == nullptr) 
         return nullptr;
 
@@ -59,33 +54,6 @@ void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data)
         ProcessReadKey(key, [&data, this](auto& currentJson) {
             string curType{ currentJson["Type"] };
             data = move(CreateComponentFromType(curType));
-            });
-    }
-}
-
-void JsonOperation::Process(const string& key, map<ButtonState, unique_ptr<ImagePartSet>>& data)
-{
-    if (IsWrite())
-    {
-        if (data.empty())
-            return;
-
-        ProcessWriteKey(key, [&data](auto& currentJson) {
-            for (auto& iter : data) 
-            {
-                JsonOperation jsOp{};
-                jsOp.Process(EnumToString<ButtonState>(iter.first), iter.second);
-                currentJson.push_back(jsOp.GetWrite());
-            }
-            });
-    }
-    else
-    {
-        data.clear();
-        ProcessReadKey(key, [&data, this](const auto& currentJson) {
-            for (const auto& keyJ : currentJson) 
-                for (const auto& [k, v] : keyJ.items())
-                    data.insert(make_pair( StringToEnum<ButtonState>(k), CreateData<ImagePartSet>(v)));
             });
     }
 }

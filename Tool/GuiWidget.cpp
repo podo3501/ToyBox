@@ -2,7 +2,7 @@
 #include "GuiWidget.h"
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/BGImage.h"
+#include "../Toy/UserInterface/UIComponent.h"
 
 GuiWidget::~GuiWidget()
 {}
@@ -58,8 +58,8 @@ void GuiWidget::Render(ImGuiIO* io)
         realMousePos.y = mousePos.y - startPos.y;
 
         //클릭했을때 픽킹이 되었는지 확인
-        if (m_component->IsPicking(XMINT2{ static_cast<int32_t>(realMousePos.x), static_cast<int32_t>(realMousePos.y) }))
-            bPicking = !bPicking;
+        //if (m_component->IsPicking(XMINT2{ static_cast<int32_t>(realMousePos.x), static_cast<int32_t>(realMousePos.y) }))
+           // bPicking = !bPicking;
     }
 
     //BGImage* bgImage = static_cast<BGImage*>(m_component);

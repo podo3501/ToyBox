@@ -2,8 +2,6 @@
 #include "ToolSystem.h"
 #include "GuiWidget.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/UserInterface/BGImage.h"
-#include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
 #include "MainWindow/MainWindow.h"

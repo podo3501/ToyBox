@@ -179,7 +179,7 @@ bool Renderer::LoadComponents()
 
     //update를 한번 돌려서 위치등등을 계산해 준다.
     ReturnIfFalse(ranges::all_of(m_components, [load = m_texIndexing.get()](const auto& item) {
-        return item.component->Update({ 0, 0 }, nullptr);
+        return item.component->ProcessUpdate({ 0, 0 }, nullptr);
         }));
 
     return true;
@@ -217,7 +217,7 @@ void Renderer::Draw()
         //});
     ranges::for_each(m_components, [renderer = m_texIndexing.get()](const auto& compInfo) {
         if(compInfo.isRender)
-            compInfo.component->Render(renderer);
+            compInfo.component->ProcessRender(renderer);
          });
     
     m_spriteBatch->End();

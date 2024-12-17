@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Panel.h"
-#include "BGImage.h"
 #include "../Utility.h"
 #include "JsonOperation.h"
 

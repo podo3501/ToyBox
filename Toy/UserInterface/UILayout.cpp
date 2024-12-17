@@ -87,11 +87,6 @@ XMINT2 UILayout::GetPosition(const Vector2& position) const noexcept
 
 bool UILayout::IsArea(const XMINT2& pos) const noexcept
 {
-	return m_area.Contains(pos.x, pos.y);
-}
-
-bool UILayout::NIsArea(const XMINT2& pos) const noexcept
-{
 	//정렬값을 기준으로 포지션이 여기에 포함되는지 확인한다.
 	Rectangle curArea{ -m_originPoint.x, -m_originPoint.y, 
 		m_area.width, m_area.height};	

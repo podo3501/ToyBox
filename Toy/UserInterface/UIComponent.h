@@ -12,20 +12,27 @@ class UIComponent : public IComponent
 protected:
 	UIComponent();	//이 클래스는 단독으로 만들 수 없다. 상속 받은 클래스만이 생성 가능
 
+	virtual void Render(IRender*) {};
+	virtual bool Update(const XMINT2&, InputManager*) noexcept { return true; }
+	XMINT2 GetPositionByLayout(const XMINT2& position) noexcept;
+
 public:
 	virtual ~UIComponent();
 	UIComponent(const string& name, const Rectangle& rect);
 	UIComponent(const UIComponent& other);
 	UIComponent(UIComponent&& o) noexcept;
 	UIComponent& operator=(const UIComponent& other);
-	virtual bool operator==(const UIComponent& other) const noexcept;
 	virtual string GetType() const;
 
+	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
+	virtual bool LoadResources(ILoadData* load) override;
+	virtual bool SetDatas(IGetValue*) override;
+	virtual bool ProcessUpdate(const XMINT2& position, InputManager* inputManager) noexcept override final;
+	virtual void ProcessRender(IRender* render) override final;
+
+	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
+	virtual bool operator==(const UIComponent& other) const noexcept;
 	virtual unique_ptr<UIComponent> Clone();
-	virtual void Render(IRender* render);
-	virtual bool LoadResources(ILoadData* load);
-	virtual bool SetDatas(IGetValue*);
-	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept;
 	virtual bool ChangeArea(const Rectangle& area) noexcept;
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
@@ -34,13 +41,11 @@ public:
 	
 	bool ChangePosition(int index, const Vector2& pos) noexcept;
 	void ChangeOrigin(const Origin& origin) noexcept;
-	bool IsPicking(const XMINT2& pos) const noexcept;
 	bool IsHover(const XMINT2& pos) const noexcept;
 
 	UIComponent* GetComponent(const string& name) const noexcept;
 	vector<UIComponent*> GetComponents() const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
-	void NGetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
 
 	template<typename T>
 	bool GetComponent(const string& name, T** outComponent) const noexcept;
@@ -48,16 +53,15 @@ public:
 	const Rectangle& GetArea() const noexcept;	
 	void SetChildPosition(const string& name, const Vector2& pos) noexcept;
 
-	const string& GetName() const noexcept;
-	void SetName(const string& name) noexcept;
-
-	const wstring& GetFilename() const noexcept;
-	void SetFilename(const wstring& filename) noexcept;
+	inline void SetFilename(const wstring& filename) noexcept { m_filename = filename; }
+	inline const wstring& GetFilename() const noexcept { return m_filename; }
+	inline void SetName(const string& name) noexcept { m_name = name; }
+	inline const string& GetName() const noexcept { return m_name; }
 
 	UILayout* GetLayout() const noexcept;
 	void SetLayout(const UILayout& layout) noexcept;
 
-	bool NIsArea(const XMINT2& pos) const noexcept;
+	bool IsArea(const XMINT2& pos) const noexcept;
 
 	void ClearSelected() noexcept;
 	void SetSelected(bool selected) noexcept;
@@ -66,9 +70,6 @@ public:
 	void SetEnable(bool enable);
 
 	virtual void SerializeIO(JsonOperation& operation);
-
-protected:
-	XMINT2 GetPositionByLayout(const XMINT2& position) noexcept;
 	
 private:
 	TransformComponent* FindTransformComponent(const string& name) const noexcept;

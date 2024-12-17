@@ -28,7 +28,6 @@ public:
 	void Union(const Rectangle& area) noexcept;
 
 	bool IsArea(const XMINT2& pos) const noexcept;
-	bool NIsArea(const XMINT2& pos) const noexcept;
 
 	void SerializeIO(JsonOperation& operation);
 

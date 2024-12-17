@@ -7,32 +7,6 @@
 #include "UILayout.h"
 #include "JsonOperation.h"
 
-static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
-{
-    vector<Rectangle> srcList;
-    ranges::transform(components, back_inserter(srcList), [](auto component) {
-        ImageGrid1* image = ComponentCast<ImageGrid1*>(component);
-        return image->GetSource();
-        });
-    return srcList;
-}
-
-bool ImageGrid3::ChangeArea(const Rectangle& area) noexcept
-{
-    const vector<UIComponent*> components = GetComponents();
-    vector<Rectangle> list = GetSourceList(components);
-    vector<PositionRectangle> posRects = StretchSize(StretchType::Width, area, list);
-
-    for (int idx{ 0 }; idx < components.size(); ++idx)
-    {
-        ChangePosition(idx, posRects[idx].pos);
-        components[idx]->ChangeArea(posRects[idx].area);
-    }
-    UIComponent::ChangeArea(area);
-
-    return true;
-}
-
 static bool ValidateInput(const string& name, const ImageSource& source)
 {
     if (name.empty()) return false;
@@ -71,6 +45,41 @@ bool ImageGrid3::SetImage(const string& name, const UILayout& layout, const Imag
     }
 
 	return true;
+}
+
+static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
+{
+    vector<Rectangle> srcList;
+    ranges::transform(components, back_inserter(srcList), [](auto component) {
+        ImageGrid1* image = ComponentCast<ImageGrid1*>(component);
+        return image->GetSource();
+        });
+    return srcList;
+}
+
+bool ImageGrid3::ChangeArea(const Rectangle& area) noexcept
+{
+    const vector<UIComponent*> components = GetComponents();
+    vector<Rectangle> list = GetSourceList(components);
+    vector<PositionRectangle> posRects = StretchSize(StretchType::Width, area, list);
+
+    for (int idx{ 0 }; idx < components.size(); ++idx)
+    {
+        ChangePosition(idx, posRects[idx].pos);
+        components[idx]->ChangeArea(posRects[idx].area);
+    }
+    UIComponent::ChangeArea(area);
+
+    return true;
+}
+
+Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
+{
+    const vector<UIComponent*> components = GetComponents();
+    if (components.empty()) return {};
+    
+    const ImageGrid1* img1 = ComponentCast<ImageGrid1*>(components[0]);
+    return img1->GetSource();
 }
 
 unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, const UILayout& layout, const ImageSource& source)

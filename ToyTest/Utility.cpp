@@ -24,6 +24,6 @@ void ReportLiveObjects()
 
 bool IsTrue(const RECT& dest, const RECT& destRect, const RECT& source, const RECT& sourceRect)
 {
-	if (dest == destRect) { EXPECT_TRUE(source == sourceRect); return true; }
+	if (dest == destRect) { if(source == sourceRect) return true; }
 	return false;
 }

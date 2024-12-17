@@ -147,7 +147,7 @@ void RenderTexture::Render(ID3D12GraphicsCommandList* commandList, IRender* rend
     sprite->Begin(commandList);
 
     //m_scene->RenderScene(renderer);
-    m_component->Render(renderer);
+    m_component->ProcessRender(renderer);
 
     sprite->End();
 }

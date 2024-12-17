@@ -157,16 +157,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="TestResources\UI\Data\BGImage.json" />
-    <None Include="TestResources\UI\Data\Button.json" />
-    <None Include="TestResources\UI\Data\Dialog.json" />
-    <None Include="TestResources\UI\Data\FirstScene.json" />
     <None Include="TestResources\UI\Data\JOPTest.json" />
     <None Include="TestResources\UI\Data\JOPTest2.json" />
-    <None Include="TestResources\UI\Data\JsonOperation.json" />
-    <None Include="TestResources\UI\Data\Main.json" />
-    <None Include="TestResources\UI\Data\WriteReadTest.json" />
-    <None Include="TestResources\UI\Data\WriteTextArea.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -2,7 +2,7 @@
 #include "ComponentWindow.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/UILayout.h"
-#include "../Toy/UserInterface/BGImage.h"
+#include "../Toy/UserInterface/ImageGrid9.h"
 
 ComponentWindow::~ComponentWindow() = default;
 ComponentWindow::ComponentWindow() :
@@ -66,31 +66,17 @@ bool ComponentWindow::RenderIntegerInput(const char* label, long& value, int min
     return false;
 }
 
-////////////////////////////////////////////////////////
-//
-//void ComponentPanel::SetComponent(UIComponent* component)
-//{
-//
-//}
-//
-//void ComponentPanel::Render()
-//{
-//
-//}
-//
-////////////////////////////////////////////////////////
-//
-//void ComponentBGImage::SetComponent(UIComponent* component)
-//{
-//
-//}
-//
-//void ComponentBGImage::Render()
-//{
-//
-//}
+////////////////////////////////////////////////
 
-void ComponentBGImage::RenderComponent(UIComponent* component)
+void ComponentImageGrid1::RenderComponent(UIComponent* component)
 {
-    BGImage* bgCom = static_cast<BGImage*>(component);
+}
+
+void ComponentImageGrid3::RenderComponent(UIComponent* component)
+{
+}
+
+void ComponentImageGrid9::RenderComponent(UIComponent* component)
+{
+    ImageGrid9* imgGrid9 = ComponentCast<ImageGrid9*>(component);
 }

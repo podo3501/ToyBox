@@ -6,7 +6,6 @@
 #include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/Dialog.h"
 #include "../Toy/UserInterface/TextArea.h"
-#include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 
 using json = nlohmann::json;

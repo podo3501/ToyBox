@@ -50,14 +50,9 @@ bool TransformComponent::SetDatas(IGetValue* value)
 	return m_component->SetDatas(value);
 }
 
-bool TransformComponent::Update(const XMINT2& position, InputManager* inputManager) noexcept
+bool TransformComponent::ProcessUpdate(const XMINT2& position, InputManager* inputManager) noexcept
 { 
-	return m_component->Update(position, inputManager);
-}
-
-bool TransformComponent::IsPicking(const XMINT2& pos) const noexcept 
-{ 
-	return m_component->IsPicking(pos); 
+	return m_component->ProcessUpdate(position, inputManager);
 }
 
 bool TransformComponent::IsHover(const XMINT2& pos) const noexcept
@@ -70,14 +65,9 @@ void TransformComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& 
 	return m_component->GetComponents(pos, outList);
 }
 
-void TransformComponent::NGetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
-{
-	return m_component->NGetComponents(pos, outList);
-}
-
-void TransformComponent::Render(IRender* render) 
+void TransformComponent::ProcessRender(IRender* render)
 { 
-	m_component->Render(render); 
+	m_component->ProcessRender(render);
 }
 
 void TransformComponent::SetPosition(const Vector2& position) noexcept 

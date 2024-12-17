@@ -10,6 +10,7 @@ public:
 	virtual bool ChangeArea(const Rectangle& area) noexcept override;
 
 	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);
+	Rectangle GetFirstComponentSource() const noexcept;
 
 private:
 };

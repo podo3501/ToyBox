@@ -43,10 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{2F6D95B4-BF9C-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{980E4560-95EA-456C-8F2C-490C0D152447}"
 	ProjectSection(SolutionItems) = preProject
-		Resources\UI\Data\BGImage.json = Resources\UI\Data\BGImage.json
 		Resources\UI\Data\Dialog.json = Resources\UI\Data\Dialog.json
 		Resources\UI\Data\FirstScene.json = Resources\UI\Data\FirstScene.json
-		Resources\UI\Data\ImagePartSet.json = Resources\UI\Data\ImagePartSet.json
 	EndProjectSection
 EndProject
 Global

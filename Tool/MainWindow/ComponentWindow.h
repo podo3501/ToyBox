@@ -33,7 +33,23 @@ public:
 private:
 };
 
-class ComponentBGImage : public ComponentWindow
+class ComponentImageGrid1 : public ComponentWindow
+{
+public:
+	virtual void RenderComponent(UIComponent* component) override;
+
+private:
+};
+
+class ComponentImageGrid3 : public ComponentWindow
+{
+public:
+	virtual void RenderComponent(UIComponent* component) override;
+
+private:
+};
+
+class ComponentImageGrid9 : public ComponentWindow
 {
 public:
 	virtual void RenderComponent(UIComponent* component) override;

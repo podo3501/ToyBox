@@ -7,6 +7,7 @@ class ImageGrid9 : public UIComponent
 {
 public:
 	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);
+	bool ChangeArea(const Rectangle& area) noexcept;
 
 private:
 };

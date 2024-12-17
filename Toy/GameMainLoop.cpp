@@ -5,10 +5,12 @@
 #include "Utility.h"
 #include "Config.h"
 #include "UserInterface/UILayout.h"
-#include "UserInterface/OButton.h"
-#include "UserInterface/BGImage.h"
 #include "UserInterface/TextArea.h"
 #include "UserInterface/Panel.h"
+#include "UserInterface/ImageGrid1.h"
+#include "UserInterface/ImageGrid3.h"
+#include "UserInterface/ImageGrid9.h"
+#include "UserInterface/Button.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -43,44 +45,41 @@ bool GameMainLoop::InitializeDerived()
 
 bool GameMainLoop::LoadResources()
 {
-    vector<ImageSource> normal
-    {
-        { L"UI/Blue/bar_square_large_l.png" },
-        { L"UI/Blue/bar_square_large_m.png" },
-        { L"UI/Blue/bar_square_large_r.png" },
-    };
-    vector<ImageSource> hover
-    {
-        { L"UI/Red/bar_square_large_l.png" },
-        { L"UI/Red/bar_square_large_m.png" },
-        { L"UI/Red/bar_square_large_r.png" },
-    };
-    vector<ImageSource> pressed
-    {
-        { L"UI/Gray/bar_square_large_l.png" },
-        { L"UI/Gray/bar_square_large_m.png" },
-        { L"UI/Gray/bar_square_large_r.png" },
-    };
+    UILayout loButton({ 0, 0, 180, 48 }, Origin::Center);
+    UILayout loImgGrid({ 0, 0, 180, 48 }, Origin::LeftTop);
+    ImageSource normal{ { L"UI/Texture/Test_01.png" }, { { 67, 35, 22, 48}, { 89, 35, 4, 48 }, { 93, 35, 22, 48 } } };
+    ImageSource hover{ { L"UI/Texture/Test_01.png" }, { { 118, 35, 22, 48}, { 140, 35, 4, 48 }, { 144, 35, 22, 48 } } };
+    ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 169, 35, 22, 48}, { 191, 35, 4, 48 }, { 195, 35, 22, 48 } } };
 
-    UILayout layout({ 0, 0, 180, 48 }, Origin::Center);
-    unique_ptr<OButton> button = make_unique<OButton>();
-    button->SetImage("Button", layout, normal, hover, pressed);
-    unique_ptr<OButton> button_2 = make_unique<OButton>();
-    button_2->SetImage("Button2", layout, normal, hover, pressed);
+    std::unique_ptr<Button> button = std::make_unique<Button>();
+    button->SetImage("Button", loButton,
+        CreateImageGrid3("Button_normal", loImgGrid, normal),
+        CreateImageGrid3("Button_hover", loImgGrid, hover),
+        CreateImageGrid3("Button_pressed", loImgGrid, pressed));
+    std::unique_ptr<Button> button2 = std::make_unique<Button>();
+    button2->SetImage("Button", loButton,
+        CreateImageGrid3("Button_normal", loImgGrid, normal),
+        CreateImageGrid3("Button_hover", loImgGrid, hover),
+        CreateImageGrid3("Button_pressed", loImgGrid, pressed));
 
-    m_gamePanel->AddComponent(move(button), {0.5f, 0.5f});
-    m_gamePanel->AddComponent(move(button_2), { 0.5f, 0.4f });
+    m_gamePanel->AddComponent(move(button), { 0.5f, 0.5f });
+    m_gamePanel->AddComponent(move(button2), { 0.5f, 0.4f });
 
-    vector<ImageSource> normal2{ { L"UI/Blue/check_square_color_cross.png" } };
-    vector<ImageSource> hover2{ { L"UI/Blue/check_square_grey_cross.png" } };
-    vector<ImageSource> pressed2{ { L"UI/Gray/check_square_grey_cross.png" } };
+    UILayout loButton2({ 0, 0, 32, 32 }, Origin::Center);
+    UILayout loImgGrid2({ 0, 0, 32, 32 }, Origin::LeftTop);
+    ImageSource normal2{ { L"UI/Texture/Test_01.png" }, { { 0, 0, 32, 32} } };
+    ImageSource hover2{ { L"UI/Texture/Test_01.png" }, { { 35, 0, 32, 32} } };
+    ImageSource pressed2{ { L"UI/Texture/Test_01.png" }, { { 70, 0, 32, 32} } };
 
-    layout.Set({ 0, 0, 32, 32 }, Origin::Center);
-    unique_ptr<OButton> closeButton = make_unique<OButton>();
-    closeButton->SetImage("CloseButton", layout, normal2, hover2, pressed2);
+    std::unique_ptr<Button> closeButton = std::make_unique<Button>();
+    closeButton->SetImage("Button", loButton2,
+        CreateImageGrid1("Button_normal", loImgGrid2, normal2),
+        CreateImageGrid1("Button_hover", loImgGrid2, hover2),
+        CreateImageGrid1("Button_pressed", loImgGrid2, pressed2));
+
     m_gamePanel->AddComponent(move(closeButton), { 0.2f, 0.2f });
 
-    layout.Set({ 0, 0, 250, 120 }, Origin::Center);
+    UILayout layout({ 0, 0, 250, 120 }, Origin::Center);
     map<wstring, wstring> fontFileList;
     fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
     fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
@@ -90,22 +89,18 @@ bool GameMainLoop::LoadResources()
 
     m_gamePanel->AddComponent(move(textArea), { 0.2f, 0.7f });
 
-    layout.Set({ 0, 0, 220, 190 }, Origin::LeftTop);
-    ImageSource bgImageSource{
+    layout.Set({ 0, 0, 210, 150 }, Origin::LeftTop);
+    ImageSource img9Source{
         L"UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
             { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
             { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
         }
     };
-    unique_ptr<BGImage> bgImage = make_unique<BGImage>();
-    bgImage->SetImage("BGImage", layout, bgImageSource);
 
-    unique_ptr<Panel> panel = make_unique<Panel>("Panel", GetRectResolution());
-    panel->AddComponent(move(bgImage), { 0.5f, 0.5f });
-    Rectangle test = panel->GetArea();
-
-    m_gamePanel->AddComponent(move(panel), { 0.f, 0.f });
+    unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
+    imgGrid9->SetImage("ImgGrid9", layout, img9Source);
+    m_gamePanel->AddComponent(move(imgGrid9), { 0.5f, 0.5f });
 
     return true;
 }
@@ -117,7 +112,7 @@ void GameMainLoop::Update(const DX::StepTimer* timer, InputManager* inputManager
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_gamePanel->Update({}, inputManager);
+    m_gamePanel->ProcessUpdate({}, inputManager);
 
     PIXEndEvent();
 }

@@ -30,15 +30,6 @@
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowProcedure.h" />
-    <ClInclude Include="UserInterface\OButton.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\BGImage.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\ImagePart.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIType.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
@@ -46,9 +37,6 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="Locator.h" />
-    <ClInclude Include="UserInterface\ImagePartSet.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\TextArea.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
@@ -99,19 +87,7 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="WindowProcedure.cpp" />
-    <ClCompile Include="UserInterface\OButton.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\BGImage.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\ImagePart.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UILayout.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\ImagePartSet.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\TextArea.cpp">

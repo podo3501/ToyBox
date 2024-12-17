@@ -6,7 +6,7 @@
 #include "../Utility.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/UILayout.h"
-#include "../Toy/UserInterface/BGImage.h"
+#include "../Toy/UserInterface/ImageGrid9.h"
 #include "../Toy/HelperClass.h"
 
 static constexpr const char* PopupName = "PopupMenu";
@@ -47,7 +47,7 @@ bool ComponentPopup::Excute(MouseTracker* mouseTracker)
 	auto result{ true };
 	switch (m_currentAction.value())
 	{
-	case MakeComponent::BGImage: result = MakeBGImage(); break;
+	case MakeComponent::ImageGrid9: result = MakeImageGrid9(); break;
 	}
 
 	m_currentAction.reset(); // 상태 초기화
@@ -81,7 +81,7 @@ void ComponentPopup::Show()
 	if (!ImGui::BeginPopupContextWindow(PopupName))
 		return;
 	
-	if (ImGui::MenuItem("Background Image")) m_currentAction = MakeComponent::BGImage;
+	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = MakeComponent::ImageGrid9;
 	if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();
@@ -92,7 +92,7 @@ bool ComponentPopup::IsShowed() const noexcept
 	return ImGui::IsPopupOpen(PopupName);
 }
 
-bool ComponentPopup::MakeBGImage()
+bool ComponentPopup::MakeImageGrid9()
 {
 	UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
 	ImageSource source{
@@ -102,9 +102,9 @@ bool ComponentPopup::MakeBGImage()
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
-	unique_ptr<BGImage> bgImg = make_unique<BGImage>();
-	bgImg->SetImage("untitled_bgImage", layout, source);
-	m_component = move(bgImg);
+	unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
+	imgGrid9->SetImage("untitled_imageGrid9", layout, source);
+	m_component = move(imgGrid9);
 
 	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
 	m_renderer->AddComponent(m_component.get(), false);

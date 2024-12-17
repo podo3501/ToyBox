@@ -52,13 +52,13 @@ void Button::EnableButtonImage(ButtonState btnState)
 		image->SetEnable(state == btnState);
 }
 
-bool Button::Update(const XMINT2&, InputManager* inputManager) noexcept
+bool Button::UpdateButton(const XMINT2&, InputManager* inputManager) noexcept
 {
 	if (inputManager == nullptr)
 		return true;
 
 	auto tracker = inputManager->GetMouse();
-	bool isArea = NIsArea(tracker->GetOffsetPosition());
+	bool isArea = IsArea(tracker->GetOffsetPosition());
 
 	if (!isArea)
 		m_state = ButtonState::Normal;
@@ -72,6 +72,23 @@ bool Button::Update(const XMINT2&, InputManager* inputManager) noexcept
 	}
 
 	EnableButtonImage(m_state);
+
+	return true;
+}
+
+bool Button::Update(const XMINT2& position, InputManager* inputManager) noexcept
+{
+	UpdateButton(position, inputManager);
+
+	return true;
+}
+
+bool Button::ChangeArea(const Rectangle& area) noexcept
+{
+	const vector<UIComponent*> components = GetComponents();
+	for (const auto& component : components)
+		component->ChangeArea(area);
+	UIComponent::ChangeArea(area);
 
 	return true;
 }

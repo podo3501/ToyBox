@@ -102,33 +102,29 @@ bool UIComponent::SetDatas(IGetValue* value)
 		});
 }
 
-bool UIComponent::Update(const XMINT2& position, InputManager* inputManager) noexcept
+bool UIComponent::ProcessUpdate(const XMINT2& position, InputManager* inputManager) noexcept
 {
 	if (!m_enable) return true;
+
+	Update(position, inputManager);
 
 	return ranges::all_of(m_components, [this, &position, inputManager](const auto& transComp) {
 		const auto& curPosition = m_layout->GetPosition(transComp->GetPosition()) + position;
 		if (inputManager)
 			inputManager->GetMouse()->SetOffset(curPosition);
-		return transComp->Update(curPosition, inputManager);
+		return transComp->ProcessUpdate(curPosition, inputManager);
 		});
 }
 
-void UIComponent::Render(IRender* render)
+void UIComponent::ProcessRender(IRender* render)
 {
-	if (!m_enable) return;
+	if (!m_enable) 
+		return;
+
+	Render(render);
 
 	ranges::for_each(m_components, [render](const auto& transComp) {
-		transComp->Render(render);
-		});
-}
-
-bool UIComponent::IsPicking(const XMINT2& pos)  const noexcept
-{
-	if (m_layout->IsArea(pos)) return true;
-
-	return ranges::any_of(m_components, [&pos](const auto& transComp) {
-		return transComp->IsPicking(pos);
+		transComp->ProcessRender(render);
 		});
 }
 
@@ -173,30 +169,19 @@ bool UIComponent::IsHover(const XMINT2& pos) const noexcept
 		});
 }
 
+bool UIComponent::IsArea(const XMINT2& pos) const noexcept
+{
+	return m_layout->IsArea(pos);
+}
+
 void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
 {
 	if (m_layout->IsArea(pos))
 		outList.push_back(this);
-	
+
 	ranges::for_each(m_components, [this, &pos, &outList](auto& transComponent) {
 		const auto& curPosition = pos - m_layout->GetPosition(transComponent->GetPosition());
 		transComponent->GetComponents(curPosition, outList);
-		});
-}
-
-bool UIComponent::NIsArea(const XMINT2& pos) const noexcept
-{
-	return m_layout->NIsArea(pos);
-}
-
-void UIComponent::NGetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
-{
-	if (m_layout->NIsArea(pos))
-		outList.push_back(this);
-
-	ranges::for_each(m_components, [this, &pos, &outList](auto& transComponent) {
-		const auto& curPosition = pos - m_layout->GetPosition(transComponent->GetPosition());
-		transComponent->NGetComponents(curPosition, outList);
 		});
 }
 
@@ -229,26 +214,6 @@ bool UIComponent::ChangePosition(int index, const Vector2& pos) noexcept
 	m_components[index]->SetPosition(pos);
 
 	return true;
-}
-
-void UIComponent::SetFilename(const wstring& filename) noexcept
-{
-	m_filename = filename;
-}
-
-const wstring& UIComponent::GetFilename() const noexcept
-{
-	return m_filename;
-}
-
-void UIComponent::SetName(const string& name) noexcept
-{
-	m_name = name;
-}
-
-const string& UIComponent::GetName() const noexcept
-{
-	return m_name;
 }
 
 void UIComponent::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos)

@@ -27,7 +27,7 @@ void CallMockRender(IComponent* component, function<void(size_t, const RECT&, co
 
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
-	component->Render(&mockRender);
+	component->ProcessRender(&mockRender);
 }
 
 void TestUpdate(HWND hwnd, UIComponent* component, int mouseX, int mouseY)
@@ -38,5 +38,5 @@ void TestUpdate(HWND hwnd, UIComponent* component, int mouseX, int mouseY)
 	mouseState.y = mouseY;
 	inputManager.Update(mouseState);
 
-	component->Update({}, &inputManager);
+	component->ProcessUpdate({}, &inputManager);
 }

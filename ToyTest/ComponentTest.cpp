@@ -11,7 +11,6 @@
 #include "../Toy/UserInterface/ImageGrid3.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
 #include "../Toy/UserInterface/Button.h"
-#include "../Toy/UserInterface/BGImage.h"
 #include "../Toy/UserInterface/Panel.h"
 
 using ::testing::_;
@@ -80,11 +79,11 @@ namespace ComponentTest
 
 		CallMockRender(m_panel.get(), TestImageGrid3Render);
 
-		ImageGrid3* grid3 = nullptr;
-		m_panel->GetComponent("ImgGrid3", &grid3);
-		grid3->ChangeOrigin(Origin::Center);
-		grid3->ChangeArea({ 0, 0, 120, 36 });
-		m_panel->Update({}, nullptr);	//위치값을 재계산한다.
+		ImageGrid3* img3 = nullptr;
+		m_panel->GetComponent("ImgGrid3", &img3);
+		img3->ChangeOrigin(Origin::Center);
+		img3->ChangeArea({ 0, 0, 120, 36 });
+		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender);
 		
@@ -113,6 +112,26 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
+	void TestImageGrid9ChangeAreaRender(size_t index, const RECT& dest, const RECT* source, bool selected)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 310, 225, 340, 261 }, *source, { 0, 0, 30, 36 });
+		testResult |= IsTrue(dest, { 340, 225, 460, 261 }, *source, { 30, 0, 34, 36 });
+		testResult |= IsTrue(dest, { 460, 225, 490, 261 }, *source, { 34, 0, 64, 36 });
+
+		testResult |= IsTrue(dest, { 310, 261, 340, 349 }, *source, { 0, 36, 30, 38 });
+		testResult |= IsTrue(dest, { 340, 261, 460, 349 }, *source, { 30, 36, 34, 38 });
+		testResult |= IsTrue(dest, { 460, 261, 490, 349 }, *source, { 34, 36, 64, 38 });
+
+		testResult |= IsTrue(dest, { 310, 349, 340, 375 }, *source, { 0, 38, 30, 64 });
+		testResult |= IsTrue(dest, { 340, 349, 460, 375 }, *source, { 30, 38, 34, 64 });
+		testResult |= IsTrue(dest, { 460, 349, 490, 375 }, *source, { 34, 38, 64, 64 });
+
+		EXPECT_TRUE(testResult);
+	}
+
 	TEST_F(ToyTestFixture, TestImageGrid9)
 	{
 		UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
@@ -132,7 +151,27 @@ namespace ComponentTest
 
 		CallMockRender(m_panel.get(), TestImageGrid9Render);
 
+		ImageGrid9* img9 = nullptr;
+		m_panel->GetComponent("ImgGrid9", &img9);
+		img9->ChangeOrigin(Origin::Center);
+		img9->ChangeArea({ 0, 0, 180, 150 });
+		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
+
+		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender);
+
 		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source, bool selected)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 0, 0, 32, 32 });
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 35, 0, 67, 32 });
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 70, 0, 102, 32 });
+
+		EXPECT_TRUE(testResult);
 	}
 
 	TEST_F(ToyTestFixture, TestButton_ImageGrid1)
@@ -153,9 +192,35 @@ namespace ComponentTest
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );	//Pressed
+		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
+
+	void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source, bool selected)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 110, 96, 132, 144 }, *source, { 169, 35, 191, 83 });
+		testResult |= IsTrue(dest, { 132, 96, 188, 144 }, *source, { 191, 35, 195, 83 });
+		testResult |= IsTrue(dest, { 188, 96, 210, 144 }, *source, { 195, 35, 217, 83 });
+
+		EXPECT_TRUE(testResult);
+	}
+
+	void TestButton_ImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source, bool selected)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 85, 96, 107, 144 }, *source, { 169, 35, 191, 83 });
+		testResult |= IsTrue(dest, { 107, 96, 213, 144 }, *source, { 191, 35, 195, 83 });
+		testResult |= IsTrue(dest, { 213, 96, 235, 144 }, *source, { 195, 35, 217, 83 });
+
+		EXPECT_TRUE(testResult);
+	}
+	
 
 	TEST_F(ToyTestFixture, TestButton_ImageGrid3)
 	{
@@ -175,6 +240,14 @@ namespace ComponentTest
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Pressed
+		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render);
+
+		Button* btn = nullptr;
+		m_panel->GetComponent("Button", &btn);
+		btn->ChangeArea({ 0, 0, 150, 48 });
+		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
+
+		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
@@ -192,13 +265,13 @@ namespace ComponentTest
 		m_panel->AddComponent(move(panel1), { 0.5f, 0.5f });
 
 		vector<UIComponent*> outList;
-		m_panel->NGetComponents({ 240, 140 }, outList);
+		m_panel->GetComponents({ 240, 140 }, outList);
 		EXPECT_EQ(outList.size(), 3);
 
 		ptrPanel->ChangeOrigin(Origin::LeftTop);
 
 		outList.clear();
-		m_panel->NGetComponents({ 239, 140 }, outList);
+		m_panel->GetComponents({ 239, 140 }, outList);
 		EXPECT_EQ(outList.size(), 2);
 	}
 }
