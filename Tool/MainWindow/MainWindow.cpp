@@ -44,7 +44,8 @@ bool MainWindow::CreateScene(const XMUINT2& size)
 
 bool MainWindow::CreateScene(const wstring& filename)
 {
-	ReturnIfFalse(ReadJsonFile(filename, m_panel));
+	ReturnIfFalse(JsonFile::ReadComponent(filename, m_panel));
+	m_tooltip->SetPanel(m_panel.get());
 	m_renderer->AddComponent(m_panel.get(), false);	//메인 창에는 그리지 않는다.
 	ReturnIfFalse(m_renderer->LoadComponents());
 
@@ -58,7 +59,7 @@ bool MainWindow::CreateScene(const wstring& filename)
 
 bool MainWindow::SaveScene(const wstring& filename)
 {
-	return WriteJsonFile(m_panel, filename);
+	return JsonFile::WriteComponent(m_panel, filename);
 }
 
 const ImGuiWindow* MainWindow::GetImGuiWindow() const noexcept
@@ -66,9 +67,9 @@ const ImGuiWindow* MainWindow::GetImGuiWindow() const noexcept
 	return ImGui::FindWindowByName(m_name.c_str());
 }
 
-const wstring& MainWindow::GetSaveFilename() const noexcept
+wstring MainWindow::GetSaveFilename() const noexcept
 {
-	return m_panel->GetFilename();
+	return JsonFile::GetJsonFilename(m_panel.get());
 }
 
 bool MainWindow::IsFocus() const noexcept

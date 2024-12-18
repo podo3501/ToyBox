@@ -15,7 +15,8 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const ImageGrid1* o = static_cast<const ImageGrid1*>(&rhs);
 
-	auto result = tie(m_index, m_filename, m_source) == tie(o->m_index, o->m_filename, o->m_source);
+	auto result = tie(m_index, m_filename, m_source, m_destination) == 
+		tie(o->m_index, o->m_filename, o->m_source, o->m_destination);
 	assert(result);
 
 	return result;
@@ -72,6 +73,10 @@ void ImageGrid1::SerializeIO(JsonOperation& operation)
 	operation.Process("Index", m_index);
 	operation.Process("Filename", m_filename);
 	operation.Process("Source", m_source);
+
+	//UIComponent 정리하면서 dest 값과 layout값이 일치되는 문제도 해결해야 함.
+	if (operation.IsWrite()) return;
+	m_destination = GetLayout()->GetArea();
 }
 
 unique_ptr<ImageGrid1> CreateImageGrid1(const string& name, const UILayout& layout, const ImageSource& source)

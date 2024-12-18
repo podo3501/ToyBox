@@ -128,6 +128,7 @@
     <ClCompile Include="ComponentTest.cpp" />
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
+    <ClCompile Include="JsonSerializeTest.cpp" />
     <ClCompile Include="PracticeTest.cpp" />
     <ClCompile Include="TestHelper.cpp" />
     <ClCompile Include="ToolTest.cpp" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <None Include="TestResources\UI\Data\JOPTest.json" />
     <None Include="TestResources\UI\Data\JOPTest2.json" />
+    <None Include="TestResources\UI\Data\JsonSerializeTest.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

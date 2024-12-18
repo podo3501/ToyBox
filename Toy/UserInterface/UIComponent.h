@@ -53,8 +53,6 @@ public:
 	const Rectangle& GetArea() const noexcept;	
 	void SetChildPosition(const string& name, const Vector2& pos) noexcept;
 
-	inline void SetFilename(const wstring& filename) noexcept { m_filename = filename; }
-	inline const wstring& GetFilename() const noexcept { return m_filename; }
 	inline void SetName(const string& name) noexcept { m_name = name; }
 	inline const string& GetName() const noexcept { return m_name; }
 
@@ -63,7 +61,6 @@ public:
 
 	bool IsArea(const XMINT2& pos) const noexcept;
 
-	void ClearSelected() noexcept;
 	void SetSelected(bool selected) noexcept;
 	bool GetSelected() const noexcept;
 
@@ -75,10 +72,9 @@ private:
 	TransformComponent* FindTransformComponent(const string& name) const noexcept;
 
 	string m_name{};
-	wstring m_filename{};
 	unique_ptr<UILayout> m_layout;
 	bool m_enable{ true };
-	bool m_selected{ false };
+	bool m_selected{ false };	//삭제 예정
 	vector<unique_ptr<TransformComponent>> m_components;
 };
 

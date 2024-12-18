@@ -25,7 +25,7 @@ public:
     bool CreateScene(const wstring& filename);
     bool SaveScene(const wstring& filename);
     bool IsFocus() const noexcept;
-    const wstring& GetSaveFilename() const noexcept;
+    wstring GetSaveFilename() const noexcept;
     void Update(const DX::StepTimer* timer, InputManager* inputManager);
     void ChangeWindowSize(const ImVec2& size);
 

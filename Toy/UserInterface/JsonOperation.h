@@ -94,6 +94,11 @@ struct is_stl_container<std::list<Args...>> : std::true_type {};
 template <typename... Args>
 struct is_stl_container<std::deque<Args...>> : std::true_type {};
 
+template<typename T>
+concept IsClassContainer =
+	is_stl_container<T>::value &&
+	std::is_class_v<typename T::value_type>;
+
 //Json이 stl에 어떤 것을 지원하는지 검색하고 지원이 된다면 stl 컨테이너 특수화에 추가해서 
 //기본 Process를 사용해서 되는지 먼저 확인후, 지원이 안된다면 Process함수를 추가하자.
 template<typename T>
@@ -102,7 +107,8 @@ concept Available =
 	is_same_v<T, string> ||
 	is_same_v<T, size_t> ||
 	is_same_v<T, Tool::ResolutionType> ||
-	is_stl_container<T>::value;               // STL 컨테이너
+	is_stl_container<T>::value &&	// stl 컨테이너가 기본(int같은)형일때 그리고 
+	!std::is_class_v<typename T::value_type>;	//그 데이터가 클래스나 스트럭쳐가 아닌경우
 
 template<typename T>
 concept IsNotUIComponent = !std::is_same_v<T, UIComponent>;
@@ -123,6 +129,8 @@ public:
 	void Process(const string& key, T& data) noexcept;
 	template<IsNotUIComponent T>
 	void Process(const string& key, unique_ptr<T>& data);
+	template<IsClassContainer T>
+	void Process(const string& key, T& data) noexcept;
 	template<typename T>
 	void Process(const string& key, vector<unique_ptr<T>>& data);
 
@@ -153,96 +161,5 @@ private:
 	unique_ptr<JsonNavigator<nlohmann::json>> m_read;
 };
 
-//////////////////////////////////////////////////////////////////////////
+#include "JsonOperation.hpp"
 
-template<Available T>
-void JsonOperation::Process(const string& key, T& data) noexcept
-{
-	if (IsWrite())
-	{
-		auto& j = GetWrite();
-		j[key] = data;
-	}
-	else
-	{
-		auto& j = GetRead();
-		data = j[key];
-	}
-}
-
-template<typename T>
-unique_ptr<T> JsonOperation::CreateData(const nlohmann::json& readJ)
-{
-	JsonOperation js(readJ);
-	auto comp = std::make_unique<T>();
-	if (readJ == nullptr)
-		comp->SerializeIO(*this);
-	else
-		comp->SerializeIO(js);
-	return comp;
-}
-
-//UIComponent overload 된 함수가 존재한다. 그래서 이건 Component가 아닌 unique_ptr에 관한 함수
-template<IsNotUIComponent T>	
-void JsonOperation::Process(const string& key, unique_ptr<T>& data)
-{
-	if (IsWrite())
-	{
-		m_write->GotoKey(key);
-		data->SerializeIO(*this);
-		m_write->GoBack();
-	}
-	else
-	{
-		m_read->GotoKey(key);
-		data = CreateData<T>();
-		m_read->GoBack();
-	}
-}
-
-template <typename ProcessFunc>
-void JsonOperation::ProcessWriteKey(const string& key, ProcessFunc processFunc)
-{
-	m_write->GotoKey(key, true);
-	processFunc(m_write->GetCurrent());
-	m_write->GoBack();
-}
-
-template <typename ProcessFunc>
-void JsonOperation::ProcessReadKey( const string& key, ProcessFunc processFunc)
-{
-	const auto& j = m_read->GetCurrent();
-	if (!j.contains(key))
-		return;
-
-	m_read->GotoKey(key);
-	processFunc(m_read->GetCurrent());
-	m_read->GoBack();
-}
-
-template<typename T>
-void JsonOperation::Process(const string& key, vector<unique_ptr<T>>& data)
-{
-	if (IsWrite())
-	{
-		if (data.empty())
-			return;
-
-		ProcessWriteKey(key, [&data](auto& currentJson) {
-			for (auto& comp : data) 
-			{
-				JsonOperation jsOp{};
-				comp->SerializeIO(jsOp);
-				currentJson.push_back(jsOp.GetWrite());
-			}
-			});
-	}
-	else
-	{
-		data.clear();
-		ProcessReadKey(key, [&data, this](const auto& currentJson) {
-			for (const auto& compJson : currentJson) 
-				data.emplace_back(CreateData<T>(compJson));
-			});
-	}
-}

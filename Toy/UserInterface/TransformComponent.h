@@ -30,7 +30,7 @@ public:
 
 	void SerializeIO(JsonOperation& operation);
 
-private:
+public:
 	unique_ptr<UIComponent> m_component;
 	Vector2 m_position{};
 };

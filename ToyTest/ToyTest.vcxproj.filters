@@ -12,6 +12,7 @@
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="TestHelper.cpp" />
     <ClCompile Include="ComponentTest.cpp" />
+    <ClCompile Include="JsonSerializeTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />
@@ -38,6 +39,9 @@
       <Filter>TestResources\UI\Data</Filter>
     </None>
     <None Include="TestResources\UI\Data\JOPTest2.json">
+      <Filter>TestResources\UI\Data</Filter>
+    </None>
+    <None Include="TestResources\UI\Data\JsonSerializeTest.json">
       <Filter>TestResources\UI\Data</Filter>
     </None>
   </ItemGroup>

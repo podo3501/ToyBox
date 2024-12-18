@@ -8,7 +8,7 @@ using namespace Tool;
 
 RecentFiles::RecentFiles()
 {
-    ReadJsonFile(RecentFilename, *this);
+    JsonFile::Read(RecentFilename, *this);
 }
 
 void RecentFiles::AddFile(const wstring& filename)
@@ -21,7 +21,7 @@ void RecentFiles::AddFile(const wstring& filename)
     if (m_recentFiles.size() > MaxRecentFiles)
         m_recentFiles.pop_back();
 
-    WriteJsonFile(*this, RecentFilename);
+    JsonFile::Write(*this, RecentFilename);
 }
 
 bool RecentFiles::OpenFile(FileTab& menuBar)

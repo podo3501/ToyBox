@@ -14,6 +14,7 @@ public:
 	void ShowTooltip(const ImGuiWindow* window);
 
 	UIComponent* GetComponent() const noexcept { return m_selectCom; }
+	void SetPanel(UIComponent* panel) noexcept { m_panel = panel; }
 
 private:
 	void RepeatedSelection(const std::vector<UIComponent*>& componentList);
