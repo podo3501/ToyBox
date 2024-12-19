@@ -11,6 +11,7 @@ class UIComponent : public IComponent
 {
 protected:
 	UIComponent();	//이 클래스는 단독으로 만들 수 없다. 상속 받은 클래스만이 생성 가능
+	UIComponent(const UIComponent& other);
 
 	virtual void Render(IRender*) {};
 	virtual bool Update(const XMINT2&, InputManager*) noexcept { return true; }
@@ -19,9 +20,8 @@ protected:
 public:
 	virtual ~UIComponent();
 	UIComponent(const string& name, const Rectangle& rect);
-	UIComponent(const UIComponent& other);
 	UIComponent(UIComponent&& o) noexcept;
-	UIComponent& operator=(const UIComponent& other);
+	//UIComponent& operator=(const UIComponent& other);
 	virtual string GetType() const;
 
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
@@ -32,7 +32,7 @@ public:
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;
-	virtual unique_ptr<UIComponent> Clone();
+	virtual unique_ptr<UIComponent> Clone() { return nullptr; }
 	virtual bool ChangeArea(const Rectangle& area) noexcept;
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
@@ -69,13 +69,14 @@ public:
 	virtual void SerializeIO(JsonOperation& operation);
 	
 private:
-	TransformComponent* FindTransformComponent(const string& name) const noexcept;
+	const TransformComponent* FindTransformComponent(const string& name) const noexcept;
 
 	string m_name{};
 	unique_ptr<UILayout> m_layout;
 	bool m_enable{ true };
 	bool m_selected{ false };	//삭제 예정
-	vector<unique_ptr<TransformComponent>> m_components;
+	//vector<unique_ptr<TransformComponent>> m_components;
+	vector<TransformComponent> m_components;
 };
 
 template<typename T>

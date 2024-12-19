@@ -10,6 +10,22 @@
 ImageGrid1::~ImageGrid1() = default;
 ImageGrid1::ImageGrid1() = default;
 
+ImageGrid1::ImageGrid1(const ImageGrid1& o) :
+	UIComponent{ o }
+{
+	m_index = o.m_index;
+	m_filename = o.m_filename;
+	m_source = o.m_source;
+	m_destination = o.m_destination;
+}
+
+unique_ptr<UIComponent> ImageGrid1::Clone()
+{
+	auto clone = std::unique_ptr<ImageGrid1>(new ImageGrid1(*this));
+	clone->SetName(clone->GetName() + "_clone");
+	return clone;
+}
+
 bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 {
 	ReturnIfFalse(UIComponent::operator==(rhs));

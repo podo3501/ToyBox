@@ -5,10 +5,12 @@ class JsonOperation;
 
 class Panel : public UIComponent
 {
+protected:
+    Panel(const Panel& other);
+
 public:
     Panel();
     ~Panel();
-    Panel(const Panel& other);
     Panel(const string& name, const Rectangle& rect);
     virtual unique_ptr<UIComponent> Clone() override;
     //virtual const Rectangle& GetArea() const noexcept;

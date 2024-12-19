@@ -13,9 +13,6 @@
 #include "../Toy/UserInterface/Button.h"
 #include "../Toy/UserInterface/Panel.h"
 
-using ::testing::_;
-using ::testing::Invoke;
-
 namespace ComponentTest
 {
 	void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source, bool selected)
@@ -32,9 +29,14 @@ namespace ComponentTest
 		m_panel->AddComponent(CreateImageGrid1("ImgGrid1", layout, grid1Source), { 0.5f, 0.5f });
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
-		CallMockRender(m_panel.get(), TestImageGrid1Render);
-
+		CallMockRender(m_panel.get(), TestImageGrid1Render, 1);
 		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		unique_ptr<UIComponent> clonePanel = m_panel->Clone();
+		clonePanel->ProcessUpdate({}, nullptr);
+
+		CallMockRender(clonePanel.get(), TestImageGrid1Render, 1);
+		EXPECT_TRUE(WriteReadTest(clonePanel));
 	}
 
 	////////////////////////////////////////////////////////
@@ -77,7 +79,7 @@ namespace ComponentTest
 		m_panel->AddComponent(move(imgGrid3), { 0.5f, 0.5f });
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
-		CallMockRender(m_panel.get(), TestImageGrid3Render);
+		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
 
 		ImageGrid3* img3 = nullptr;
 		m_panel->GetComponent("ImgGrid3", &img3);
@@ -85,7 +87,7 @@ namespace ComponentTest
 		img3->ChangeArea({ 0, 0, 120, 36 });
 		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
-		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender);
+		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
 		
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
@@ -149,7 +151,7 @@ namespace ComponentTest
 		m_panel->AddComponent(move(imgGrid9), { 0.5f, 0.5f });
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
-		CallMockRender(m_panel.get(), TestImageGrid9Render);
+		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
 
 		ImageGrid9* img9 = nullptr;
 		m_panel->GetComponent("ImgGrid9", &img9);
@@ -157,7 +159,7 @@ namespace ComponentTest
 		img9->ChangeArea({ 0, 0, 180, 150 });
 		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
-		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender);
+		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
@@ -192,7 +194,7 @@ namespace ComponentTest
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );	//Pressed
-		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render);
+		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
@@ -240,14 +242,14 @@ namespace ComponentTest
 		EXPECT_TRUE(m_renderer->LoadComponents());
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Pressed
-		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render);
+		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
 
 		Button* btn = nullptr;
 		m_panel->GetComponent("Button", &btn);
 		btn->ChangeArea({ 0, 0, 150, 48 });
 		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
-		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender);
+		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}

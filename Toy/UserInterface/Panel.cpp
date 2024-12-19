@@ -18,7 +18,7 @@ Panel::Panel(const string& name, const Rectangle& rect) :
 
 unique_ptr<UIComponent> Panel::Clone()
 {
-    auto clone = make_unique<Panel>(*this);
+    auto clone = std::unique_ptr<Panel>(new Panel(*this));  //make_unique를 쓰면 protected 생성자에 접근할 수 없다.
     clone->SetName(clone->GetName() + "_clone");
     return clone;
 }

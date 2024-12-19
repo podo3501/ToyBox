@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/UserInterface/UIComponent.h"
 #include "ToyTestFixture.h"
 
 namespace JsonSerializeTest

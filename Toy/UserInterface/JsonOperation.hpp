@@ -92,7 +92,7 @@ void JsonOperation::Process(const string& key, T& datas) noexcept
 				typename T::value_type data{};
 				JsonOperation jsOp(compJson);
 				data.SerializeIO(jsOp);
-				datas.emplace_back(data);
+				datas.emplace_back(move(data));
 			}
 			});
 	}

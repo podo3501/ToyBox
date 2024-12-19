@@ -11,11 +11,11 @@ class TextArea : public UIComponent
 public:
 	~TextArea();
 	TextArea();
-	TextArea(const TextArea& other);
-	TextArea& operator=(const TextArea& o);
+	//TextArea(const TextArea& other);
+	//TextArea& operator=(const TextArea& o);
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 
-	virtual unique_ptr<UIComponent> Clone();
+	//virtual unique_ptr<UIComponent> Clone();
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* getValue) override;
 	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept override;

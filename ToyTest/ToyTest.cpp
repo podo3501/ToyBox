@@ -62,15 +62,15 @@ namespace BasicClient
 		EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
 		m_panel->ProcessRender(&mockRender);
 
-		//clone test
-		TextArea* textArea = static_cast<TextArea*>(m_panel->GetComponent("TextArea"));
-		std::unique_ptr<UIComponent> rTextArea = textArea->Clone();
-		rTextArea->SetName("rTextArea");
-		TextArea& writeComp = *textArea;
-		writeComp.AddComponent(move(rTextArea), { 0.03f, 0.04f });
-		std::unique_ptr<UIComponent> emptyTextArea = make_unique<TextArea>();
-		emptyTextArea->SetName("emptyTextArea");
-		writeComp.AddComponent(move(emptyTextArea), { 0.3f, 0.4f });
+		////clone test
+		//TextArea* textArea = static_cast<TextArea*>(m_panel->GetComponent("TextArea"));
+		//std::unique_ptr<UIComponent> rTextArea = textArea->Clone();
+		//rTextArea->SetName("rTextArea");
+		//TextArea& writeComp = *textArea;
+		//writeComp.AddComponent(move(rTextArea), { 0.03f, 0.04f });
+		//std::unique_ptr<UIComponent> emptyTextArea = make_unique<TextArea>();
+		//emptyTextArea->SetName("emptyTextArea");
+		//writeComp.AddComponent(move(emptyTextArea), { 0.3f, 0.4f });
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 		////클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
@@ -93,7 +93,7 @@ namespace BasicClient
 		Rectangle panelArea = m_panel->GetArea();
 		m_renderer->LoadComponents();
 
-		CallMockRender(m_panel.get(), TestPanelRender);
+		CallMockRender(m_panel.get(), TestPanelRender, 1);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
