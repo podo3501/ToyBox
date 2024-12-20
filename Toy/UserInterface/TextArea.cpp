@@ -16,33 +16,21 @@ using ordered_json = nlohmann::ordered_json;
 TextArea::~TextArea() = default;
 TextArea::TextArea()
 {}
-//TextArea::TextArea(const TextArea& other)
-//	: UIComponent{ other }
-//{
-//	m_posByResolution = other.m_posByResolution;
-//	m_text = other.m_text;
-//	m_fontFileList = other.m_fontFileList;
-//	m_font = other.m_font;
-//	m_lines = other.m_lines;
-//}
 
-//unique_ptr<UIComponent> TextArea::Clone()
-//{
-//	auto clone = make_unique<TextArea>(*this);
-//	clone->SetName(clone->GetName() + "_clone");
-//	return clone;
-//}
-//
-//TextArea& TextArea::operator=(const TextArea& o)
-//{
-//	if (this == &o)
-//		return *this;
-//
-//	UIComponent::operator=(o);
-//	tie(m_fontFileList, m_text) = tie(o.m_fontFileList, o.m_text);
-//
-//	return *this;
-//}
+TextArea::TextArea(const TextArea& other) :
+	UIComponent{ other }
+{
+	m_posByResolution = other.m_posByResolution;
+	m_text = other.m_text;
+	m_fontFileList = other.m_fontFileList;
+	m_font = other.m_font;
+	m_lines = other.m_lines;
+}
+
+unique_ptr<UIComponent> TextArea::CreateClone() const
+{
+	return unique_ptr<TextArea>(new TextArea(*this));
+}
 
 bool TextArea::operator==(const UIComponent& o) const noexcept
 {

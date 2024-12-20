@@ -7,9 +7,21 @@
 #include "JsonOperation.h"
 
 Button::~Button() = default;
-Button::Button()
-	: m_state{ ButtonState::Normal }
+Button::Button() :
+	m_state{ ButtonState::Normal }
 {}
+
+Button::Button(const Button& o) :
+	UIComponent{ o },
+	m_state{ o.m_state }
+{
+	ReloadDatas();
+}
+
+unique_ptr<UIComponent> Button::CreateClone() const
+{
+	return unique_ptr<Button>(new Button(*this));
+}
 
 bool Button::operator==(const UIComponent& o) const noexcept
 {
@@ -100,13 +112,21 @@ void Button::AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>
 	AddComponent(move(component), {});
 }
 
+//m_images값은 Button 밑에 달려있는 component인데 읽거나 복사 했을 경우 이 값은 존재하지 않는다. 그럴경우 다시 연결해 준다.
+void Button::ReloadDatas() noexcept
+{
+	vector<UIComponent*> componentList = GetComponents();
+	m_images.emplace(ButtonState::Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
+	m_images.emplace(ButtonState::Hover, componentList[1]);
+	m_images.emplace(ButtonState::Pressed, componentList[2]);
+
+	EnableButtonImage(m_state);
+}
+
 void Button::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
 
 	if (operation.IsWrite()) return;
-	vector<UIComponent*> componentList = GetComponents();
-	m_images.emplace(ButtonState::Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
-	m_images.emplace(ButtonState::Hover, componentList[1]);
-	m_images.emplace(ButtonState::Pressed, componentList[2]);
+	ReloadDatas();
 }

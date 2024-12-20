@@ -19,26 +19,23 @@
                     "y": 0.5
                 },
                 "Component": {
-                    "Type": "class ImageGrid1",
-                    "Name": "ImgGrid1_clone",
+                    "Type": "class TextArea",
+                    "FontFileList": {
+                        "English": "UI/Font/CourierNewBoldS18.spritefont",
+                        "Hangle": "UI/Font/MaleunGothicS16.spritefont"
+                    },
+                    "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
+                    "Name": "TextArea_clone",
                     "Layout": {
                         "Area": {
                             "x": 0,
                             "y": 0,
-                            "width": 64,
-                            "height": 64
+                            "width": 320,
+                            "height": 120
                         },
-                        "Origin": "LeftTop"
+                        "Origin": "Center"
                     },
-                    "Enable": true,
-                    "Index": 0,
-                    "Filename": "UI/Blue/button_square_header_large_square_screws.png",
-                    "Source": {
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 64
-                    }
+                    "Enable": true
                 }
             }
         ]

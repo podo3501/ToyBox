@@ -27,32 +27,11 @@ UIComponent::UIComponent(const UIComponent& other)
 	m_name = other.m_name;
 	m_layout = make_unique<UILayout>(*other.m_layout);
 	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& transCom) {
-		return move(transCom.Clone());
-		//return make_unique<TransformComponent>(*transComp.get());
+		return move(TransformComponent(transCom.component->Clone(), transCom.position));
 		});
 }
 
-//UIComponent& UIComponent::operator=(const UIComponent& other)
-//{
-//	if (this == &other) return *this;
-//
-//	m_name = other.m_name;
-//	m_layout = std::make_unique<UILayout>(*other.m_layout);
-//	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& transCom) {
-//		return move(transCom);
-//		//return TransformComponent(transCom);
-//		//return make_unique<TransformComponent>(*transComp.get());
-//		});
-//
-//	return *this;
-//}
-
 string UIComponent::GetType() const { return string(typeid(*this).name()); }
-
-//unique_ptr<UIComponent> UIComponent::Clone() 
-//{
-//	return make_unique<UIComponent>(*this);
-//}
 
 bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
@@ -71,17 +50,24 @@ UIComponent::UIComponent(UIComponent&& o) noexcept :
 	m_components{ move(o.m_components) }
 {}
 
+unique_ptr<UIComponent> UIComponent::Clone() const 
+{ 
+	auto clone = CreateClone();
+	clone->SetName(clone->GetName() + "_clone");
+	return clone;
+}
+
 bool UIComponent::LoadResources(ILoadData* load)
 {
 	return ranges::all_of(m_components, [load](const auto& transComp) {
-		return transComp.m_component->LoadResources(load);
+		return transComp.component->LoadResources(load);
 		});
 }
 
 const TransformComponent* UIComponent::FindTransformComponent(const string& name) const noexcept
 {
 	auto find = ranges::find_if(m_components, [&name](const auto& transComp) {
-		return transComp.m_component->GetName() == name;
+		return transComp.component->GetName() == name;
 		});
 
 	if (find == m_components.end()) return nullptr;
@@ -101,7 +87,7 @@ bool UIComponent::GetSelected() const noexcept
 bool UIComponent::SetDatas(IGetValue* value)
 {
 	return ranges::all_of(m_components, [value](const auto& transCom) {
-		return transCom.m_component->SetDatas(value);
+		return transCom.component->SetDatas(value);
 		});
 }
 
@@ -112,10 +98,10 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, InputManager* inputManag
 	Update(position, inputManager);
 
 	return ranges::all_of(m_components, [this, &position, inputManager](const auto& transCom) {
-		const auto& curPosition = m_layout->GetPosition(transCom.m_position) + position;
+		const auto& curPosition = m_layout->GetPosition(transCom.position) + position;
 		if (inputManager)
 			inputManager->GetMouse()->SetOffset(curPosition);
-		return transCom.m_component->ProcessUpdate(curPosition, inputManager);
+		return transCom.component->ProcessUpdate(curPosition, inputManager);
 		});
 }
 
@@ -127,7 +113,7 @@ void UIComponent::ProcessRender(IRender* render)
 	Render(render);
 
 	ranges::for_each(m_components, [render](const auto& transCom) {
-		transCom.m_component->ProcessRender(render);
+		transCom.component->ProcessRender(render);
 		});
 }
 
@@ -141,7 +127,7 @@ void UIComponent::SetChildPosition(const string& name, const Vector2& position) 
 	auto transComponent = const_cast<TransformComponent*>(FindTransformComponent(name));
 	if (transComponent == nullptr) return;
 
-	transComponent->m_position = position;
+	transComponent->position = position;
 }
 
 UIComponent* UIComponent::GetComponent(const string& name) const noexcept
@@ -149,14 +135,14 @@ UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 	auto transComponent = FindTransformComponent(name);
 	if (transComponent == nullptr) return nullptr;
 
-	return transComponent->m_component.get();
+	return transComponent->component.get();
 }
 
 vector<UIComponent*> UIComponent::GetComponents() const noexcept
 {
 	vector<UIComponent*> componentList;
 	ranges::transform(m_components, back_inserter(componentList), [](const auto& transCom) {
-		return transCom.m_component.get();
+		return transCom.component.get();
 		});
 
 	return componentList;
@@ -167,8 +153,8 @@ bool UIComponent::IsHover(const XMINT2& pos) const noexcept
 	if (m_layout->IsArea(pos)) return true;
 
 	return ranges::any_of(m_components, [this, &pos](const auto& transCom) {
-		const auto& curPosition = pos - m_layout->GetPosition(transCom.m_position);
-		return transCom.m_component->IsHover(curPosition);
+		const auto& curPosition = pos - m_layout->GetPosition(transCom.position);
+		return transCom.component->IsHover(curPosition);
 		});
 }
 
@@ -183,8 +169,8 @@ void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList
 		outList.push_back(this);
 
 	ranges::for_each(m_components, [this, &pos, &outList](auto& transCom) {
-		const auto& curPosition = pos - m_layout->GetPosition(transCom.m_position);
-		transCom.m_component->GetComponents(curPosition, outList);
+		const auto& curPosition = pos - m_layout->GetPosition(transCom.position);
+		transCom.component->GetComponents(curPosition, outList);
 		});
 }
 
@@ -214,14 +200,13 @@ void UIComponent::ChangeOrigin(const Origin& origin) noexcept
 bool UIComponent::ChangePosition(int index, const Vector2& pos) noexcept
 {
 	if (index >= m_components.size()) return false;
-	m_components[index].m_position = pos;
+	m_components[index].position = pos;
 
 	return true;
 }
 
 void UIComponent::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos)
 {
-	//auto prop = make_unique<TransformComponent>(move(comp), pos);
 	auto component = TransformComponent(move(comp), pos);
 	m_components.emplace_back(move(component));
 }

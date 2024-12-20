@@ -7,6 +7,18 @@
 #include "UILayout.h"
 #include "JsonOperation.h"
 
+ImageGrid3::~ImageGrid3() = default;
+ImageGrid3::ImageGrid3() = default;
+
+ImageGrid3::ImageGrid3(const ImageGrid3& o) :
+    UIComponent{ o }
+{}
+
+unique_ptr<UIComponent> ImageGrid3::CreateClone() const
+{
+    return unique_ptr<ImageGrid3>(new ImageGrid3(*this));
+}
+
 static bool ValidateInput(const string& name, const ImageSource& source)
 {
     if (name.empty()) return false;

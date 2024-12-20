@@ -1,6 +1,7 @@
 #pragma once
 #include "JsonOperation.h"
 
+//Json이 지원하는 기본 타입 
 template<Available T>
 void JsonOperation::Process(const string& key, T& data) noexcept
 {
@@ -13,6 +14,24 @@ void JsonOperation::Process(const string& key, T& data) noexcept
 	{
 		auto& j = GetRead();
 		data = j[key];
+	}
+}
+
+//기본 타입이 아니라 클래스 타입일 경우
+template<IsClass T>
+void JsonOperation::Process(const string& key, T& data) noexcept
+{
+	if (IsWrite())
+	{
+		m_write->GotoKey(key);
+		data.SerializeIO(*this);
+		m_write->GoBack();
+	}
+	else
+	{
+		m_read->GotoKey(key);
+		data.SerializeIO(*this);
+		m_read->GoBack();
 	}
 }
 

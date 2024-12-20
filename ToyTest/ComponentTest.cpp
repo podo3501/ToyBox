@@ -12,9 +12,19 @@
 #include "../Toy/UserInterface/ImageGrid9.h"
 #include "../Toy/UserInterface/Button.h"
 #include "../Toy/UserInterface/Panel.h"
+#include "../Toy/UserInterface/TextArea.h"
 
 namespace ComponentTest
 {
+	void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, bool)> renderFunc, int times)
+	{
+		unique_ptr<UIComponent> clonePanel = component->Clone();
+		clonePanel->ProcessUpdate({}, nullptr);
+
+		CallMockRender(clonePanel.get(), renderFunc, times);
+		EXPECT_TRUE(WriteReadTest(clonePanel));
+	}
+
 	void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		EXPECT_TRUE(index == 0);
@@ -32,11 +42,7 @@ namespace ComponentTest
 		CallMockRender(m_panel.get(), TestImageGrid1Render, 1);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		unique_ptr<UIComponent> clonePanel = m_panel->Clone();
-		clonePanel->ProcessUpdate({}, nullptr);
-
-		CallMockRender(clonePanel.get(), TestImageGrid1Render, 1);
-		EXPECT_TRUE(WriteReadTest(clonePanel));
+		CloneTest(m_panel.get(), TestImageGrid1Render, 1);
 	}
 
 	////////////////////////////////////////////////////////
@@ -87,9 +93,10 @@ namespace ComponentTest
 		img3->ChangeArea({ 0, 0, 120, 36 });
 		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
-		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
-		
+		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);		
 		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		CloneTest(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
 	}
 	
 	////////////////////////////////////////////////////////
@@ -160,8 +167,9 @@ namespace ComponentTest
 		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
 		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
-
 		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		CloneTest(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
 	}
 
 	void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source, bool selected)
@@ -195,8 +203,9 @@ namespace ComponentTest
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );	//Pressed
 		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
-
 		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		CloneTest(m_panel.get(), TestButton_ImageGrid1Render, 1);
 	}
 
 	void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source, bool selected)
@@ -222,7 +231,6 @@ namespace ComponentTest
 
 		EXPECT_TRUE(testResult);
 	}
-	
 
 	TEST_F(ToyTestFixture, TestButton_ImageGrid3)
 	{
@@ -250,8 +258,40 @@ namespace ComponentTest
 		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
-
 		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
+	}
+
+	void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
+	{
+		if (text == L"테스") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
+		if (text == L"테스트2") EXPECT_TRUE(index == 1 && pos == Vector2(282, 268.375f) && DirectX::XMVector4Equal(color, Colors::Red));
+		if (text == L"^") EXPECT_TRUE(index == 0 && pos == Vector2(531.f, 268.375f) && DirectX::XMVector4Equal(color, Colors::Black));
+		if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(240.f, 296.75f) && DirectX::XMVector4Equal(color, Colors::Blue));
+	}
+
+	TEST_F(ToyTestFixture, TestTextArea)
+	{
+		std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
+		UILayout layout({ 0, 0, 320, 120 }, Origin::Center);
+		map<wstring, wstring> fontFileList;
+		fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
+		fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
+		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
+		textArea->SetFont("TextArea", text, layout, fontFileList);
+
+		m_panel->AddComponent(move(textArea), { 0.5f, 0.5f });
+		EXPECT_TRUE(m_renderer->LoadComponents());
+
+		CallMockRender(m_panel.get(), TestTextAreaRender);
+		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		unique_ptr<UIComponent> clonePanel = m_panel->Clone();
+		clonePanel->ProcessUpdate({}, nullptr);
+
+		CallMockRender(clonePanel.get(), TestTextAreaRender);
+		EXPECT_TRUE(WriteReadTest(clonePanel));
 	}
 
 	TEST_F(ToyTestFixture, TestRecursivePosition)

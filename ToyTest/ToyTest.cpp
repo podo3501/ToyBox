@@ -37,65 +37,9 @@ namespace BasicClient
 		return move(img9);
 	}
 
-	void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
-	{
-		if (text == L"테스") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
-		if (text == L"테스트2") EXPECT_TRUE(index == 1 && pos == Vector2(282, 268.375f) && DirectX::XMVector4Equal(color, Colors::Red));
-		if (text == L"^") EXPECT_TRUE(index == 0 && pos == Vector2(531.f, 268.375f) && DirectX::XMVector4Equal(color, Colors::Black));
-		if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(240.f, 296.75f) && DirectX::XMVector4Equal(color, Colors::Blue));
-	}
-
-	TEST_F(ToyTestFixture, TextArea)
-	{
-		std::unique_ptr<TextArea> cTextArea = std::make_unique<TextArea>();
-		UILayout layout({ 0, 0, 320, 120 }, Origin::Center);
-		map<wstring, wstring> fontFileList;
-		fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
-		fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
-		cTextArea->SetFont("TextArea", text, layout, fontFileList);
-
-		m_panel->AddComponent(move(cTextArea), { 0.5f, 0.5f });
-		m_renderer->LoadComponents();
-
-		MockRender mockRender;
-		EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(TestTextAreaRender));
-		m_panel->ProcessRender(&mockRender);
-
-		////clone test
-		//TextArea* textArea = static_cast<TextArea*>(m_panel->GetComponent("TextArea"));
-		//std::unique_ptr<UIComponent> rTextArea = textArea->Clone();
-		//rTextArea->SetName("rTextArea");
-		//TextArea& writeComp = *textArea;
-		//writeComp.AddComponent(move(rTextArea), { 0.03f, 0.04f });
-		//std::unique_ptr<UIComponent> emptyTextArea = make_unique<TextArea>();
-		//emptyTextArea->SetName("emptyTextArea");
-		//writeComp.AddComponent(move(emptyTextArea), { 0.3f, 0.4f });
-
-		EXPECT_TRUE(WriteReadTest(m_panel));
-		////클론 했을때 이름 바꾸는 것은 Clone 함수 안에서 바꾸도록 수정
-	}
-
 	void TestPanelRender(size_t index, const RECT& dest, const RECT* source, bool selected)
 	{
 		if (dest.left == 60 && dest.top == 55) EXPECT_TRUE(dest.right == 90 && dest.bottom == 91);
-	}
-
-	TEST_F(ToyTestFixture, Panel)
-	{
-		m_panel->ChangeArea({ 100, 100, 700, 500 });
-		unique_ptr<UIComponent> bgImg = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 0, 0, 220, 190 });
-		bgImg->GetLayout()->Set(Origin::Center);
-
-		Rectangle bgArea = bgImg->GetArea();
-		m_panel->AddComponent(move(bgImg), { 0.1f, 0.1f });
-
-		Rectangle panelArea = m_panel->GetArea();
-		m_renderer->LoadComponents();
-
-		CallMockRender(m_panel.get(), TestPanelRender, 1);
-
-		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	TEST_F(ToyTestFixture, GetComponents)

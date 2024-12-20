@@ -6,7 +6,14 @@ class ImageGrid1;
 
 class ImageGrid3 : public UIComponent
 {
+protected:
+	ImageGrid3(const ImageGrid3& o);
+	virtual unique_ptr<UIComponent> CreateClone() const override;
+
 public:
+	~ImageGrid3();
+	ImageGrid3();
+
 	virtual bool ChangeArea(const Rectangle& area) noexcept override;
 
 	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);

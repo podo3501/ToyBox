@@ -17,9 +17,8 @@ public:
 	TransformComponent(TransformComponent&& o) noexcept;
 	bool operator==(const TransformComponent& o) const noexcept;
 
-	TransformComponent Clone() const;
 	void SerializeIO(JsonOperation& operation);
 
-	unique_ptr<UIComponent> m_component;
-	Vector2 m_position{};
+	unique_ptr<UIComponent> component;
+	Vector2 position{};
 };

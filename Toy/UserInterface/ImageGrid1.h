@@ -9,12 +9,12 @@ class ImageGrid1 : public UIComponent
 {
 protected:
 	ImageGrid1(const ImageGrid1& other);
+	virtual unique_ptr<UIComponent> CreateClone() const override;
 
 public:
 	~ImageGrid1();
 	ImageGrid1();
 
-	virtual unique_ptr<UIComponent> Clone() override;
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept override;

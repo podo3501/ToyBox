@@ -20,16 +20,22 @@ bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"U
 	return true;
 }
 
+using ::testing::_;
+using ::testing::Invoke;
+
 void CallMockRender(IComponent* component, function<void(size_t, const RECT&, const RECT*, bool)> testRenderFunc, int times)
 {
-	using ::testing::_;
-	using ::testing::Invoke;
-
 	MockRender mockRender;
-	//EXPECT_CALL(mockRender, Render(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
 	EXPECT_CALL(mockRender, Render(_, _, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke(testRenderFunc));
+	component->ProcessRender(&mockRender);
+}
+
+void CallMockRender(IComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
+{
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
 	component->ProcessRender(&mockRender);
 }
 

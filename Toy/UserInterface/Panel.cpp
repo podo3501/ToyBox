@@ -16,12 +16,17 @@ Panel::Panel(const string& name, const Rectangle& rect) :
     UIComponent(name, rect)
 {}
 
-unique_ptr<UIComponent> Panel::Clone()
+unique_ptr<UIComponent> Panel::CreateClone() const
 {
-    auto clone = std::unique_ptr<Panel>(new Panel(*this));  //make_unique를 쓰면 protected 생성자에 접근할 수 없다.
-    clone->SetName(clone->GetName() + "_clone");
-    return clone;
+    return unique_ptr<Panel>(new Panel(*this));
 }
+
+//unique_ptr<UIComponent> Panel::Clone() const
+//{
+//    auto clone = std::unique_ptr<Panel>(new Panel(*this));  //make_unique를 쓰면 protected 생성자에 접근할 수 없다.
+//    clone->SetName(clone->GetName() + "_clone");
+//    return clone;
+//}
 
 //const Rectangle& Panel::GetArea() const noexcept
 //{

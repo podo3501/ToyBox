@@ -8,14 +8,15 @@ struct TextData;
 
 class TextArea : public UIComponent
 {
+protected:
+	TextArea(const TextArea& o);
+	virtual unique_ptr<UIComponent> CreateClone() const override;
+
 public:
 	~TextArea();
 	TextArea();
-	//TextArea(const TextArea& other);
-	//TextArea& operator=(const TextArea& o);
-	virtual bool operator==(const UIComponent& o) const noexcept override;
 
-	//virtual unique_ptr<UIComponent> Clone();
+	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* getValue) override;
 	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept override;

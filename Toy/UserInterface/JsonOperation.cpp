@@ -3,6 +3,7 @@
 #include "../Config.h"
 #include "../Utility.h"
 #include "UIType.h"
+#include "UILayout.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;

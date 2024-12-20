@@ -19,11 +19,9 @@ ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	m_destination = o.m_destination;
 }
 
-unique_ptr<UIComponent> ImageGrid1::Clone()
+unique_ptr<UIComponent> ImageGrid1::CreateClone() const
 {
-	auto clone = std::unique_ptr<ImageGrid1>(new ImageGrid1(*this));
-	clone->SetName(clone->GetName() + "_clone");
-	return clone;
+	return unique_ptr<ImageGrid1>(new ImageGrid1(*this));
 }
 
 bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept

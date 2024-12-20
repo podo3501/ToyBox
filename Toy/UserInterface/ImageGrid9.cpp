@@ -6,6 +6,19 @@
 #include "UIType.h"
 #include "UILayout.h"
 
+ImageGrid9::~ImageGrid9() = default;
+ImageGrid9::ImageGrid9() = default;
+
+ImageGrid9::ImageGrid9(const ImageGrid9& o) :
+	UIComponent{ o }
+{
+}
+
+unique_ptr<UIComponent> ImageGrid9::CreateClone() const
+{
+	return unique_ptr<ImageGrid9>(new ImageGrid9(*this));
+}
+
 static bool ValidateInput(const string& name, const ImageSource& source)
 {
 	if (name.empty()) return false;

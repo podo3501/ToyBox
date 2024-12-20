@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/UIComponent.h"
+#include "../Toy/UserInterface/UILayout.h"
+#include "../Toy/UserInterface/UIType.h"
 #include "ToyTestFixture.h"
 
 namespace JsonSerializeTest
@@ -43,11 +45,14 @@ namespace JsonSerializeTest
 			Data data2({ 0.2f, 0.2f });
 			m_data.emplace_back(data1);
 			m_data.emplace_back(data2);
+
+			m_layout.Set({ 0, 0, 50, 100 }, Origin::Center);
 		}
 
 		bool operator==(const UserComponent& other) const noexcept
 		{
 			if (m_data != other.m_data) return false;
+			if (m_layout != other.m_layout) return false;
 
 			return true;
 		}
@@ -55,10 +60,12 @@ namespace JsonSerializeTest
 		void SerializeIO(JsonOperation& operation)
 		{
 			operation.Process("Data", m_data);
+			operation.Process("Layout", m_layout);
 		}
 
 	private:
 		vector<Data> m_data;
+		UILayout m_layout;
 	};
 
 	//컨테이너 안에 값이 클래스 또는 스트럭쳐 일 경우 Serialize 테스트
