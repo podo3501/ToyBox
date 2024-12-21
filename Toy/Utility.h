@@ -145,3 +145,18 @@ inline bool operator==(const RECT& lhs, const RECT& rhs) {
 inline bool operator!=(const RECT& lhs, const RECT& rhs) {
 	return !(lhs == rhs);
 }
+
+inline Rectangle XMUINT2ToRectangle(const XMUINT2& size) {
+	return Rectangle{
+		0, 0,
+		static_cast<int>(size.x),
+		static_cast<int>(size.y),
+	};
+}
+
+inline XMUINT2 RectangleToXMUINT2(const Rectangle& rect) {
+	return XMUINT2{
+		static_cast<uint32_t>(rect.width - rect.x),
+		static_cast<uint32_t>(rect.height - rect.y)
+	};
+}

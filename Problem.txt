@@ -135,3 +135,17 @@ clone을 만들때 복사 생성자를 사용하게 되는데 public으로 만�
 만들지 않고 unique_ptr<xxx>(new xxx(*this)); 로 해서 내부에서 protected로 만들었음에도 호출 하게끔 하게 한
 다. 복사 생성자는 protected이므로 컨테이너에서는 복사 하지 못한다고 오류가 나올 것이다. 그때 clone으로 대
 체하자.
+
+C2665 make_unique에서 생성 못했을때의 에러코드가 너무 길어서 어디 줄인지 모를때가 많다.
+다음의 문장이 보이면 그 밑에 해당 코드줄이 있다.
+예시)
+템플릿 인스턴스화 컨텍스트(가장 오래된 인스턴스화 컨텍스트)가
+D:\ProgrammingStudy\ToyBox\Toy\GameMainLoop.cpp(39,19):
+컴파일되는 함수 템플릿 인스턴스화 'std::unique_ptr<Panel,std::default_delete<Panel>> 
+std::make_unique<Panel,const char(&)[5],DirectX::SimpleMath::Rectangle,0>
+(const char (&)[5],DirectX::SimpleMath::Rectangle &&)'에 대한 참조를 확인하세요.
+
+msvc는 특별한 설정을 하지 않으면 /std:c++가 설정돼있든 말든 __cplusplus 값이 199711L로 predefine 돼 있음.
+XMINT2를 == 할려고 하는데 안되어서 자세히 보니 __cplusplus 값이 1997년 11월 짜리로 돼 있음. c++20으로 
+바꾸어도 바뀌지 않음. __cplusplus의 값을 바꾸려면 컴파일러 옵션에 /Zc:__cplusplus를 추가하고
+/std:c++ 설정(14든 17이든 20이든)을 해 줘야 함. 

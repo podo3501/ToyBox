@@ -13,8 +13,10 @@ public:
 	~ImageGrid9();
 	ImageGrid9();
 
+	virtual void ChangeSize(const XMUINT2& size) noexcept override;
+
 	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);
-	bool ChangeArea(const Rectangle& area) noexcept;
+	
 
 private:
 };

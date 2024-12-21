@@ -5,16 +5,13 @@ class JsonOperation;
 
 class Dialog : public UIComponent
 {
+protected:
+	Dialog(const Dialog& o);
+	virtual unique_ptr<UIComponent> CreateClone() const override;
+
 public:
 	Dialog();
 	~Dialog();
-	//Dialog(const Dialog& other);
-	//Dialog& operator=(const Dialog& other);
-	
-	virtual bool operator==(const UIComponent& other) const noexcept override;
-	//virtual unique_ptr<UIComponent> Clone() override;
-
-	virtual void SerializeIO(JsonOperation& operation) override;
 	
 private:
 };

@@ -64,6 +64,18 @@ void ComponentTooltip::RepeatedSelection(const std::vector<UIComponent*>& compon
 	SelectComponent(componentList[idx]);
 }
 
+void ComponentTooltip::Render(const ImGuiWindow* window)
+{
+	ShowTooltip(window);
+	ShowSelectComponent();
+}
+
+void ComponentTooltip::ShowSelectComponent()
+{
+	if (m_selectCom == nullptr) return;
+	//XMINT2 pos = m_panel->GetPosition();
+}
+
 void ComponentTooltip::ShowTooltip(const ImGuiWindow* window)
 {
 	const ImVec2& windowMousePos = GetMousePosition(window);
@@ -78,7 +90,7 @@ void ComponentTooltip::ShowTooltip(const ImGuiWindow* window)
 	float tooltipOffsetY = 20.f; // 초기 Y 오프셋
 	const float tooltipGap = 5.f; // 툴팁 간 간격
 
-	for (int idx{ 0 }; UIComponent* curComponent : views::reverse(componentList))
+	for (int idx{ 0 }; UIComponent * curComponent : views::reverse(componentList))
 	{
 		// 툴팁 위치와 크기 계산
 		const std::string& tooltipContext = curComponent->GetType();

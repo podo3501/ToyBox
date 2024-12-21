@@ -32,10 +32,10 @@ enum class StretchType
 	Height
 };
 
-struct PositionRectangle
+struct PositionSize
 {
 	Vector2 pos;
-	Rectangle area;
+	XMUINT2 size;
 };
 
-vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& area, const vector<Rectangle>& data) noexcept;
+vector<PositionSize> StretchSize(StretchType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept;

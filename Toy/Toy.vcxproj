@@ -222,6 +222,7 @@
     <ClInclude Include="UserInterface\TransformComponent.h" />
     <ClInclude Include="UserInterface\UIComponent.h" />
     <ClInclude Include="UserInterface\Panel.h" />
+    <ClInclude Include="UserInterface\UIComponent.hpp" />
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />

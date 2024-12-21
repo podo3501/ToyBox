@@ -22,7 +22,7 @@ ImFont* gfont = nullptr;
 
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
-	m_panel{ make_unique<Panel>("Main", GetRectResolution()) },
+	m_panel{ make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution())) },
 	m_popup{ make_unique<ComponentPopup>(renderer) },
 	m_comWindow{ nullptr },
 	m_tooltip{ make_unique<ComponentTooltip>(m_panel.get()) }
@@ -174,10 +174,10 @@ void MainWindow::RenderMain()
 	if (!m_popup->IsShowed() &&
 		!m_popup->IsComponent() &&
 		!ImGui::IsMouseDown(ImGuiMouseButton_Right))
-		m_tooltip->ShowTooltip(GetImGuiWindow());
+		m_tooltip->Render(GetImGuiWindow());
 
 	ImGui::Image(m_textureID, m_size);
-	m_popup->Show();
+	m_popup->Render();
 
 	ImGui::End();
 }

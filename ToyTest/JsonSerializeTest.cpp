@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/UIComponent.h"
-#include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "ToyTestFixture.h"
 
@@ -46,7 +45,7 @@ namespace JsonSerializeTest
 			m_data.emplace_back(data1);
 			m_data.emplace_back(data2);
 
-			m_layout.Set({ 0, 0, 50, 100 }, Origin::Center);
+			m_layout.Set({ 50, 100 }, Origin::Center);
 		}
 
 		bool operator==(const UserComponent& other) const noexcept

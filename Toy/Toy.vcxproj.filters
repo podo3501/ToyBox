@@ -83,6 +83,9 @@
     <ClInclude Include="UserInterface\JsonOperation.hpp">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent.hpp">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

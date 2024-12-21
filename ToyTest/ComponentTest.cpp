@@ -6,7 +6,6 @@
 #include "../Toy/Window.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid3.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
@@ -33,7 +32,7 @@ namespace ComponentTest
 
 	TEST_F(ToyTestFixture, TestImageGrid1)
 	{
-		UILayout layout({ 0, 0, 64, 64 }, Origin::LeftTop);
+		UILayout layout({ 64, 64 }, Origin::LeftTop);
 		ImageSource grid1Source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
 
 		m_panel->AddComponent(CreateImageGrid1("ImgGrid1", layout, grid1Source), { 0.5f, 0.5f });
@@ -73,7 +72,7 @@ namespace ComponentTest
 
 	TEST_F(ToyTestFixture, TestImageGrid3)
 	{
-		UILayout layout({ 0, 0, 100, 36 }, Origin::LeftTop);
+		UILayout layout({ 100, 36 }, Origin::LeftTop);
 		ImageSource grid3Source{
 			L"UI/Blue/button_square_header_large_square_screws.png", {
 				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 }
@@ -90,8 +89,8 @@ namespace ComponentTest
 		ImageGrid3* img3 = nullptr;
 		m_panel->GetComponent("ImgGrid3", &img3);
 		img3->ChangeOrigin(Origin::Center);
-		img3->ChangeArea({ 0, 0, 120, 36 });
-		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
+		img3->ChangeSize({ 120, 36 });
+		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다. parent를 구현했기 때문에 parent로 올라가면서 계산 로직을 적용하고 이것은 삭제예정.
 
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);		
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -143,7 +142,7 @@ namespace ComponentTest
 
 	TEST_F(ToyTestFixture, TestImageGrid9)
 	{
-		UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
+		UILayout layout({ 170, 120 }, Origin::LeftTop);
 		ImageSource grid9Source{
 			L"UI/Blue/button_square_header_large_square_screws.png", {
 				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
@@ -163,7 +162,7 @@ namespace ComponentTest
 		ImageGrid9* img9 = nullptr;
 		m_panel->GetComponent("ImgGrid9", &img9);
 		img9->ChangeOrigin(Origin::Center);
-		img9->ChangeArea({ 0, 0, 180, 150 });
+		img9->ChangeSize({ 180, 150 });
 		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
 		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
@@ -186,8 +185,8 @@ namespace ComponentTest
 
 	TEST_F(ToyTestFixture, TestButton_ImageGrid1)
 	{
-		UILayout loButton({ 0, 0, 32, 32 }, Origin::Center);
-		UILayout loImgGrid({ 0, 0, 32, 32 }, Origin::LeftTop);
+		UILayout loButton({ 32, 32 }, Origin::Center);
+		UILayout loImgGrid({ 32, 32 }, Origin::LeftTop);
 		ImageSource normal{ { L"UI/Texture/Test_01.png" }, { { 0, 0, 32, 32} } };
 		ImageSource hover{ { L"UI/Texture/Test_01.png" }, { { 35, 0, 32, 32} } };
 		ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 70, 0, 32, 32} } };
@@ -234,8 +233,8 @@ namespace ComponentTest
 
 	TEST_F(ToyTestFixture, TestButton_ImageGrid3)
 	{
-		UILayout loButton({ 0, 0, 100, 48 }, Origin::Center);
-		UILayout loImgGrid({ 0, 0, 100, 48 }, Origin::LeftTop);
+		UILayout loButton({ 100, 48 }, Origin::Center);
+		UILayout loImgGrid({ 100, 48 }, Origin::LeftTop);
 		ImageSource normal{ { L"UI/Texture/Test_01.png" }, { { 67, 35, 22, 48}, { 89, 35, 4, 48 }, { 93, 35, 22, 48 } } };
 		ImageSource hover{ { L"UI/Texture/Test_01.png" }, { { 118, 35, 22, 48}, { 140, 35, 4, 48 }, { 144, 35, 22, 48 } } };
 		ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 169, 35, 22, 48}, { 191, 35, 4, 48 }, { 195, 35, 22, 48 } } };
@@ -254,7 +253,7 @@ namespace ComponentTest
 
 		Button* btn = nullptr;
 		m_panel->GetComponent("Button", &btn);
-		btn->ChangeArea({ 0, 0, 150, 48 });
+		btn->ChangeSize({ 150, 48 });
 		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
@@ -274,7 +273,7 @@ namespace ComponentTest
 	TEST_F(ToyTestFixture, TestTextArea)
 	{
 		std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
-		UILayout layout({ 0, 0, 320, 120 }, Origin::Center);
+		UILayout layout({ 320, 120 }, Origin::Center);
 		map<wstring, wstring> fontFileList;
 		fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
 		fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
@@ -297,11 +296,11 @@ namespace ComponentTest
 	TEST_F(ToyTestFixture, TestRecursivePosition)
 	{
 		std::unique_ptr<Panel> panel2 = std::make_unique<Panel>();
-		panel2->SetLayout({ { 0, 0, 20, 20 }, Origin::Center });
+		panel2->SetLayout({ { 20, 20 }, Origin::Center });
 		Panel* ptrPanel = panel2.get();
 
 		std::unique_ptr<Panel> panel1 = std::make_unique<Panel>();
-		panel1->SetLayout({ { 0, 0, 400, 400 }, Origin::Center });
+		panel1->SetLayout({ { 400, 400 }, Origin::Center });
 
 		panel1->AddComponent(move(panel2), { 0.1f, 0.1f });
 		m_panel->AddComponent(move(panel1), { 0.5f, 0.5f });

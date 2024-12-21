@@ -17,7 +17,7 @@ public:
 	bool IsComponent() const noexcept;
 	unique_ptr<UIComponent> GetComponent() noexcept;
 	bool Excute(MouseTracker* mouseTracker);
-	void Show();
+	void Render();
 	bool IsShowed() const noexcept;
 	const ImVec2& GetPosition() const noexcept { return m_position; }
 

@@ -152,6 +152,7 @@ public:
 	template<typename T>
 	void Process(const string& key, vector<unique_ptr<T>>& data);
 
+	void Process(const string& key, XMUINT2& data) noexcept;
 	void Process(const string& key, Rectangle& data) noexcept;
 	void Process(const string& key, Origin& data) noexcept;
 	void Process(const string& key, Vector2& data) noexcept;

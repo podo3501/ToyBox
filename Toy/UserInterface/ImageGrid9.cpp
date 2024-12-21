@@ -4,7 +4,6 @@
 #include "../Utility.h"
 #include "UIUtility.h"
 #include "UIType.h"
-#include "UILayout.h"
 
 ImageGrid9::~ImageGrid9() = default;
 ImageGrid9::ImageGrid9() = default;
@@ -34,10 +33,10 @@ static inline vector<Rectangle> ExtractSourceRects(const ImageSource& source)
 }
 
 static std::unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, size_t idx,
-	const ImageSource& source, const PositionRectangle& posRect)
+	const ImageSource& source, const XMUINT2& size)
 {
 	const auto& grid3name = name + "_" + std::to_string(idx);
-	UILayout grid3layout(posRect.area, Origin::LeftTop);
+	UILayout grid3layout(size, Origin::LeftTop);
 
 	ImageSource imgSource
 	{
@@ -59,10 +58,10 @@ bool ImageGrid9::SetImage(const string& name, const UILayout& layout, const Imag
 	SetLayout(layout);
 
 	auto srcHList = ExtractSourceRects(source);
-	auto posRects = StretchSize(StretchType::Height, layout.GetArea(), srcHList);
+	auto posRects = StretchSize(StretchType::Height, layout.GetSize(), srcHList);
 	for (size_t idx = 0; idx < srcHList.size(); ++idx)
 	{
-		auto grid3 = CreateImageGrid3(name, idx, source, posRects[idx]);
+		auto grid3 = CreateImageGrid3(name, idx, source, posRects[idx].size);
 		AddComponent(move(grid3), posRects[idx].pos);
 	}
 
@@ -79,18 +78,16 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
 	return srcList;
 }
 
-bool ImageGrid9::ChangeArea(const Rectangle& area) noexcept
+void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetComponents();
 	vector<Rectangle> list = GetSourceList(components);
-	vector<PositionRectangle> posRects = StretchSize(StretchType::Height, area, list);
+	vector<PositionSize> posRects = StretchSize(StretchType::Height, size, list);
 
 	for (int idx{ 0 }; idx < components.size(); ++idx)
 	{
 		ChangePosition(idx, posRects[idx].pos);
-		components[idx]->ChangeArea(posRects[idx].area);
+		components[idx]->ChangeSize(posRects[idx].size);
 	}
-	UIComponent::ChangeArea(area);
-
-	return true;
+	UIComponent::ChangeSize(size);
 }

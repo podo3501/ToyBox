@@ -4,7 +4,6 @@
 #include "../Utility.h"
 #include "../HelperClass.h"
 #include "../Config.h"
-#include "UILayout.h"
 #include "UIUtility.h"
 #include "JsonOperation.h"
 
@@ -57,9 +56,8 @@ bool TextArea::SetDatas(IGetValue* getValue)
 	TextProperty textProperty;
 	ReturnIfFalse(Parser(m_text, textProperty));
 
-	auto layout = GetLayout();
-	Rectangle usableArea = layout->GetArea();
-	Vector2 startPos = usableArea.Location();
+	Rectangle usableArea = XMUINT2ToRectangle(GetSize());
+	Vector2 startPos{};
 	float lineSpacing = 0.0f;
 	long maxHeight = 0;
 

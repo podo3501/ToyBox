@@ -95,14 +95,12 @@ bool Button::Update(const XMINT2& position, InputManager* inputManager) noexcept
 	return true;
 }
 
-bool Button::ChangeArea(const Rectangle& area) noexcept
+void Button::ChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetComponents();
 	for (const auto& component : components)
-		component->ChangeArea(area);
-	UIComponent::ChangeArea(area);
-
-	return true;
+		component->ChangeSize(size);
+	UIComponent::ChangeSize(size);
 }
 
 void Button::AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable)

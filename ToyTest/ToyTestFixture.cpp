@@ -5,6 +5,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/Config.h"
+#include "../Toy/Utility.h"
 #include "Utility.h"
 
 ToyTestFixture::ToyTestFixture() = default;
@@ -25,7 +26,7 @@ void ToyTestFixture::SetUp()
 	InitializeConfig(L"ToyTest/TestResources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
-	m_panel = make_unique<Panel>("Main", GetRectResolution());
+	m_panel = make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution()));
 	m_renderer->AddComponent(m_panel.get(), true);
 }
 

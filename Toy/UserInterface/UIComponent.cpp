@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "UIComponent.h"
-#include "UILayout.h"
 #include "UIType.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
@@ -8,24 +7,22 @@
 #include "TransformComponent.h"
 #include "JsonOperation.h"
 
-using json = nlohmann::json;
-using ordered_json = nlohmann::ordered_json;
-
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
 	m_name{},
-	m_layout{ make_unique<UILayout>(Rectangle{}, Origin::LeftTop) }
+	m_layout{ XMUINT2{}, Origin::LeftTop }
 {}
 
-UIComponent::UIComponent(const string& name, const Rectangle& rect) :
+UIComponent::UIComponent(const string& name, const XMUINT2& size) :
 	m_name{ name },
-	m_layout{ make_unique<UILayout>(rect, Origin::LeftTop) }
+	m_layout{ size, Origin::LeftTop }
 {}
 
+//상속받은 곳에서만 복사생성자를 호출할 수 있다.
 UIComponent::UIComponent(const UIComponent& other)
 {
 	m_name = other.m_name;
-	m_layout = make_unique<UILayout>(*other.m_layout);
+	m_layout = other.m_layout;
 	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& transCom) {
 		return move(TransformComponent(transCom.component->Clone(), transCom.position));
 		});
@@ -37,9 +34,7 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetType() != o.GetType()) return false;
 
-	ReturnIfFalse(tie(m_name) == tie(o.m_name));
-	ReturnIfFalse(CompareUniquePtr(m_layout, o.m_layout));
-	ReturnIfFalse(m_components == o.m_components);
+	ReturnIfFalse(tie(m_name, m_layout, m_components) == tie(o.m_name, o.m_layout, o.m_components));
 
 	return true;
 }
@@ -64,26 +59,6 @@ bool UIComponent::LoadResources(ILoadData* load)
 		});
 }
 
-const TransformComponent* UIComponent::FindTransformComponent(const string& name) const noexcept
-{
-	auto find = ranges::find_if(m_components, [&name](const auto& transComp) {
-		return transComp.component->GetName() == name;
-		});
-
-	if (find == m_components.end()) return nullptr;
-	return &(*find);
-}
-
-void UIComponent::SetSelected(bool selected) noexcept
-{
-	m_selected = selected;
-}
-
-bool UIComponent::GetSelected() const noexcept
-{
-	return m_selected;
-}
-
 bool UIComponent::SetDatas(IGetValue* value)
 {
 	return ranges::all_of(m_components, [value](const auto& transCom) {
@@ -98,7 +73,7 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, InputManager* inputManag
 	Update(position, inputManager);
 
 	return ranges::all_of(m_components, [this, &position, inputManager](const auto& transCom) {
-		const auto& curPosition = m_layout->GetPosition(transCom.position) + position;
+		const auto& curPosition = m_layout.GetPosition(transCom.position) + position;
 		if (inputManager)
 			inputManager->GetMouse()->SetOffset(curPosition);
 		return transCom.component->ProcessUpdate(curPosition, inputManager);
@@ -117,11 +92,6 @@ void UIComponent::ProcessRender(IRender* render)
 		});
 }
 
-const Rectangle& UIComponent::GetArea() const noexcept
-{
-	return m_layout->GetArea();
-}
-
 void UIComponent::SetChildPosition(const string& name, const Vector2& position) noexcept
 {
 	auto transComponent = const_cast<TransformComponent*>(FindTransformComponent(name));
@@ -130,12 +100,82 @@ void UIComponent::SetChildPosition(const string& name, const Vector2& position) 
 	transComponent->position = position;
 }
 
+bool UIComponent::ChangePosition(int index, const Vector2& pos) noexcept
+{
+	if (index >= m_components.size()) return false;
+	m_components[index].position = pos;
+
+	return true;
+}
+
+void UIComponent::AddComponent(unique_ptr<UIComponent>&& component, const Vector2& pos)
+{
+	component->SetParent(this);
+	auto transComponent = TransformComponent(move(component), pos);
+	m_components.emplace_back(move(transComponent));
+}
+
+void UIComponent::SerializeIO(JsonOperation& operation)
+{
+	operation.Process("Name", m_name);
+	operation.Process("Layout", m_layout);
+	operation.Process("Enable", m_enable);
+	operation.Process("Components", m_components);
+	
+	if (operation.IsWrite()) return;
+	//parent를 다시 이어준다.
+}
+
+XMINT2 UIComponent::GetPositionRecursive(const UIComponent* component) const noexcept
+{
+	if (component == nullptr || component->m_parent == nullptr) return { 0, 0 };
+
+	return GetComponentPosition(component) + GetPositionRecursive(component->m_parent);
+}
+
+XMINT2 UIComponent::GetComponentPosition(const UIComponent* component) const noexcept
+{
+	UIComponent* parent = component->m_parent;
+	if (parent == nullptr) return { 0, 0 };
+
+	auto transComponent = parent->FindTransformComponent(component->GetName());
+	assert(transComponent);	//없다는 것은 parent가 잘못 돼 있다던지, 이름이 잘못 돼 있다던지 있어서는 안되는 일이다.
+	return parent->GetLayout().GetPosition(transComponent->position);
+}
+
+XMINT2 UIComponent::GetPosition() const noexcept
+{
+	return GetPositionByLayout(GetPositionRecursive(this));
+}
+
+XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept
+{
+	return position + m_layout.GetPosition();
+}
+
+void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
+{
+	if (IsArea(pos))
+		outList.push_back(this);
+
+	ranges::for_each(m_components, [this, &pos, &outList](auto& transCom) {
+		const auto& curPosition = pos - m_layout.GetPosition(transCom.position);
+		transCom.component->GetComponents(curPosition, outList);
+		});
+}
+
 UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 {
-	auto transComponent = FindTransformComponent(name);
-	if (transComponent == nullptr) return nullptr;
+	if (GetName() == name)
+		return const_cast<UIComponent*>(this);
 
-	return transComponent->component.get();
+	for (const auto& transComponent : m_components)
+	{
+		UIComponent* find = transComponent.component->GetComponent(name);
+		if (find) return find;
+	}
+	
+	return nullptr;
 }
 
 vector<UIComponent*> UIComponent::GetComponents() const noexcept
@@ -148,96 +188,12 @@ vector<UIComponent*> UIComponent::GetComponents() const noexcept
 	return componentList;
 }
 
-bool UIComponent::IsHover(const XMINT2& pos) const noexcept
+const TransformComponent* UIComponent::FindTransformComponent(const string& name) const noexcept
 {
-	if (m_layout->IsArea(pos)) return true;
-
-	return ranges::any_of(m_components, [this, &pos](const auto& transCom) {
-		const auto& curPosition = pos - m_layout->GetPosition(transCom.position);
-		return transCom.component->IsHover(curPosition);
+	auto find = ranges::find_if(m_components, [&name](const auto& transComp) {
+		return transComp.component->GetName() == name;
 		});
-}
 
-bool UIComponent::IsArea(const XMINT2& pos) const noexcept
-{
-	return m_layout->IsArea(pos);
-}
-
-void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
-{
-	if (m_layout->IsArea(pos))
-		outList.push_back(this);
-
-	ranges::for_each(m_components, [this, &pos, &outList](auto& transCom) {
-		const auto& curPosition = pos - m_layout->GetPosition(transCom.position);
-		transCom.component->GetComponents(curPosition, outList);
-		});
-}
-
-void UIComponent::SetSize(const XMUINT2& size)
-{
-	m_layout->Set({ 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) });
-}
-
-XMUINT2 UIComponent::GetSize() const noexcept
-{
-	const auto& area = m_layout->GetArea();
-	return { static_cast<uint32_t>(area.width - area.x), static_cast<uint32_t>(area.height - area.y) };
-}
-
-bool UIComponent::ChangeArea(const Rectangle& area) noexcept
-{
-	m_layout->Set(area);
-
-	return true;
-}
-
-void UIComponent::ChangeOrigin(const Origin& origin) noexcept
-{
-	m_layout->Set(origin);
-}
-
-bool UIComponent::ChangePosition(int index, const Vector2& pos) noexcept
-{
-	if (index >= m_components.size()) return false;
-	m_components[index].position = pos;
-
-	return true;
-}
-
-void UIComponent::AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos)
-{
-	auto component = TransformComponent(move(comp), pos);
-	m_components.emplace_back(move(component));
-}
-
-void UIComponent::SetLayout(const UILayout& layout) noexcept
-{
-	if (m_layout == nullptr)
-		m_layout = make_unique<UILayout>(layout);
-	else
-		*m_layout = layout;
-}
-
-UILayout* UIComponent::GetLayout() const noexcept
-{
-	return m_layout.get();
-}
-
-void UIComponent::SerializeIO(JsonOperation& operation)
-{
-	operation.Process("Name", m_name);
-	operation.Process("Layout", m_layout);
-	operation.Process("Enable", m_enable);
-	operation.Process("Components", m_components);
-}
-
-XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) noexcept
-{
-	return position + m_layout->GetPosition();
-}
-
-void UIComponent::SetEnable(bool enable)
-{
-	m_enable = enable;
+	if (find == m_components.end()) return nullptr;
+	return &(*find);
 }

@@ -19,7 +19,7 @@ public:
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept override;
 	virtual void Render(IRender* render) override;
-	virtual bool ChangeArea(const Rectangle& area) noexcept override;
+	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);

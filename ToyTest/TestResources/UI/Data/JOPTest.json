@@ -3,11 +3,9 @@
         "Type": "class Panel",
         "Name": "Main_clone",
         "Layout": {
-            "Area": {
-                "x": 0,
-                "y": 0,
-                "width": 800,
-                "height": 600
+            "Size": {
+                "x": 800,
+                "y": 600
             },
             "Origin": "LeftTop"
         },
@@ -27,11 +25,9 @@
                     "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
                     "Name": "TextArea_clone",
                     "Layout": {
-                        "Area": {
-                            "x": 0,
-                            "y": 0,
-                            "width": 320,
-                            "height": 120
+                        "Size": {
+                            "x": 320,
+                            "y": 120
                         },
                         "Origin": "Center"
                     },

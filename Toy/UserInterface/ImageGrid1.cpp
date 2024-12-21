@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "ImageGrid1.h"
 #include "../../Include/IRenderer.h"
-#include "UILayout.h"
 #include "../Utility.h"
 #include "../Config.h"
 #include "UIType.h"
@@ -68,17 +67,15 @@ bool ImageGrid1::SetImage(const string& name, const UILayout& layout, const Imag
 
 	m_filename = source.filename;
 	m_source = source.list.at(0);
-	m_destination = layout.GetArea();
+	m_destination = XMUINT2ToRectangle(layout.GetSize());
 
 	return true;
 }
 
-bool ImageGrid1::ChangeArea(const Rectangle& area) noexcept
+void ImageGrid1::ChangeSize(const XMUINT2& size) noexcept
 {
-	m_destination = area;
-	UIComponent::ChangeArea(area);
-
-	return true;
+	m_destination = XMUINT2ToRectangle(size);
+	UIComponent::ChangeSize(size);
 }
 
 void ImageGrid1::SerializeIO(JsonOperation& operation)
@@ -90,7 +87,7 @@ void ImageGrid1::SerializeIO(JsonOperation& operation)
 
 	//UIComponent 정리하면서 dest 값과 layout값이 일치되는 문제도 해결해야 함.
 	if (operation.IsWrite()) return;
-	m_destination = GetLayout()->GetArea();
+	m_destination = XMUINT2ToRectangle(GetSize());
 }
 
 unique_ptr<ImageGrid1> CreateImageGrid1(const string& name, const UILayout& layout, const ImageSource& source)

@@ -15,7 +15,7 @@ public:
 	Button();
 
 	virtual bool operator==(const UIComponent& other) const noexcept override;
-	virtual bool ChangeArea(const Rectangle& area) noexcept override;
+	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool LoadResources(ILoadData* load);

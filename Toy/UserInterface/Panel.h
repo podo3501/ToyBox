@@ -12,7 +12,7 @@ protected:
 public:
     Panel();
     ~Panel();
-    Panel(const string& name, const Rectangle& rect);
+    Panel(const string& name, const XMUINT2& size);
     //virtual unique_ptr<UIComponent> Clone() const override;
     //virtual const Rectangle& GetArea() const noexcept;
 

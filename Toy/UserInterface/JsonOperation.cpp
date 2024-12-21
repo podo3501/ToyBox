@@ -3,7 +3,6 @@
 #include "../Config.h"
 #include "../Utility.h"
 #include "UIType.h"
-#include "UILayout.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -90,6 +89,21 @@ void JsonOperation::ProcessImpl(const string& key, auto writeFunc, auto readFunc
     }
 }
 
+void JsonOperation::Process(const string& key, XMUINT2& data) noexcept
+{
+    auto writeFunc = [&data](auto& j) {
+        j["x"] = data.x;
+        j["y"] = data.y;
+    };
+
+    auto readFunc = [&data](const auto& j) {
+        data.x = j["x"];
+        data.y = j["y"];
+    };
+
+    ProcessImpl(key, writeFunc, readFunc);
+}
+
 void JsonOperation::Process(const string& key, Rectangle& data) noexcept
 {
     auto writeFunc = [&data](auto& j) {
@@ -97,14 +111,14 @@ void JsonOperation::Process(const string& key, Rectangle& data) noexcept
         j["y"] = data.y;
         j["width"] = data.width;
         j["height"] = data.height;
-        };
+    };
 
     auto readFunc = [&data](const auto& j) {
         data.x = j["x"];
         data.y = j["y"];
         data.width = j["width"];
         data.height = j["height"];
-        };
+    };
 
     ProcessImpl(key, writeFunc, readFunc);
 }

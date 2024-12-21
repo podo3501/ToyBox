@@ -4,7 +4,6 @@
 #include "UserInterface/UIType.h"
 #include "Utility.h"
 #include "Config.h"
-#include "UserInterface/UILayout.h"
 #include "UserInterface/TextArea.h"
 #include "UserInterface/Panel.h"
 #include "UserInterface/ImageGrid1.h"
@@ -37,7 +36,7 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 
 bool GameMainLoop::InitializeDerived()
 {
-    m_gamePanel = make_unique<Panel>("Main", GetRectResolution());
+    m_gamePanel = make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution()));
     m_renderer->AddComponent(m_gamePanel.get(), true);
 
     return true;
@@ -45,8 +44,8 @@ bool GameMainLoop::InitializeDerived()
 
 bool GameMainLoop::LoadResources()
 {
-    UILayout loButton({ 0, 0, 180, 48 }, Origin::Center);
-    UILayout loImgGrid({ 0, 0, 180, 48 }, Origin::LeftTop);
+    UILayout loButton({ 180, 48 }, Origin::Center);
+    UILayout loImgGrid({ 180, 48 }, Origin::LeftTop);
     ImageSource normal{ { L"UI/Texture/Test_01.png" }, { { 67, 35, 22, 48}, { 89, 35, 4, 48 }, { 93, 35, 22, 48 } } };
     ImageSource hover{ { L"UI/Texture/Test_01.png" }, { { 118, 35, 22, 48}, { 140, 35, 4, 48 }, { 144, 35, 22, 48 } } };
     ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 169, 35, 22, 48}, { 191, 35, 4, 48 }, { 195, 35, 22, 48 } } };
@@ -65,8 +64,8 @@ bool GameMainLoop::LoadResources()
     m_gamePanel->AddComponent(move(button), { 0.5f, 0.5f });
     m_gamePanel->AddComponent(move(button2), { 0.5f, 0.4f });
 
-    UILayout loButton2({ 0, 0, 32, 32 }, Origin::Center);
-    UILayout loImgGrid2({ 0, 0, 32, 32 }, Origin::LeftTop);
+    UILayout loButton2({ 32, 32 }, Origin::Center);
+    UILayout loImgGrid2({ 32, 32 }, Origin::LeftTop);
     ImageSource normal2{ { L"UI/Texture/Test_01.png" }, { { 0, 0, 32, 32} } };
     ImageSource hover2{ { L"UI/Texture/Test_01.png" }, { { 35, 0, 32, 32} } };
     ImageSource pressed2{ { L"UI/Texture/Test_01.png" }, { { 70, 0, 32, 32} } };
@@ -79,7 +78,7 @@ bool GameMainLoop::LoadResources()
 
     m_gamePanel->AddComponent(move(closeButton), { 0.2f, 0.2f });
 
-    UILayout layout({ 0, 0, 250, 120 }, Origin::Center);
+    UILayout layout({ 250, 120 }, Origin::Center);
     map<wstring, wstring> fontFileList;
     fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
     fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
@@ -89,7 +88,7 @@ bool GameMainLoop::LoadResources()
 
     m_gamePanel->AddComponent(move(textArea), { 0.2f, 0.7f });
 
-    layout.Set({ 0, 0, 210, 150 }, Origin::LeftTop);
+    layout.Set({ 210, 150 }, Origin::LeftTop);
     ImageSource img9Source{
         L"UI/Blue/button_square_header_large_square_screws.png", {
             { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },

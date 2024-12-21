@@ -5,102 +5,83 @@
 #include "../Utility.h"
 #include "JsonOperation.h"
 
-using json = nlohmann::json;
-using ordered_json = nlohmann::ordered_json;
-
-UILayout::UILayout() = default;
 UILayout::~UILayout() = default;
-Origin GetOrigin(const string& strOrigin)
-{
-	if (strOrigin == "LeftTop") return Origin::LeftTop;
-	if (strOrigin == "Center") return Origin::Center;
+UILayout::UILayout() :
+	UILayout(XMUINT2{}, Origin::LeftTop) // 기본 생성자 통합
+{}
 
-	return Origin::Init;
-}
+UILayout::UILayout(const XMUINT2& size, const Origin& origin) :
+	m_size{ size },
+	m_originPoint{ GetOriginPoint(origin) },
+	m_origin{ origin }
+{}
 
 UILayout& UILayout::operator=(const UILayout& other) = default;
 
 string UILayout::GetType() const { return string(typeid(UILayout).name()); }
 
-UILayout::UILayout(const json& data)
-{
-	const auto& rect = data["Area"];
-	m_area.x = rect["x"];
-	m_area.y = rect["y"];
-	m_area.width = rect["width"];
-	m_area.height = rect["height"];
-
-	m_origin = GetOrigin(data["Origin"]);
-}
-
-UILayout::UILayout(const Rectangle& area, const Origin& origin) :
-	m_area{ area },
-	m_originPoint{},
-	m_origin{ Origin::Init }
-{
-	Set(origin);
-}
-
 bool UILayout::operator==(const UILayout& o) const noexcept
 {
-	return tie(m_area, m_origin) == tie(o.m_area, o.m_origin);
+	return tie(m_size, m_origin) == tie(o.m_size, o.m_origin);
 }
 
 XMINT2 UILayout::GetOriginPoint(Origin origin) const noexcept
 {
 	switch (origin)
 	{
-	case Origin::Center: return XMINT2(m_area.width / 2, m_area.height / 2);
+	case Origin::Center: return XMINT2(m_size.x / 2, m_size.y / 2);
 	case Origin::LeftTop: return { 0, 0 };
 	}
 	return { 0, 0 };
 }
 
-void UILayout::Set(const Rectangle& area, const Origin& origin) noexcept
+void UILayout::Set(const XMUINT2& size, const Origin& origin) noexcept
 {
-	m_area = area;
+	m_size = size;
 	Set(origin);
 }
 
-void UILayout::Set(const Rectangle& area) noexcept
+void UILayout::Set(const XMUINT2& size) noexcept
 {
-	m_area = area;
-	Set(m_origin);
+    Set(size, m_origin);
 }
 
 void UILayout::Set(const Origin& origin) noexcept
 {
-	m_originPoint = GetOriginPoint(origin);
-	m_origin = origin;
+    m_origin = origin;
+    m_originPoint = GetOriginPoint(origin);
 }
 
-XMINT2 TransformVectorByRect(const Rectangle& rect, const Vector2& vec)
+static inline XMINT2 TransformVectorByRect(const XMUINT2& size, const Vector2& vec)
 {
-	return XMINT2(rect.x + static_cast<uint32_t>(vec.x * rect.width), rect.y + static_cast<uint32_t>(vec.y * rect.height));
+	return XMINT2(
+		static_cast<int32_t>(vec.x * static_cast<float>(size.x)),
+		static_cast<int32_t>(vec.y * static_cast<float>(size.y))
+	);
 }
 
 XMINT2 UILayout::GetPosition(const Vector2& position) const noexcept
 {
-	//return GetResolution() * position - m_originPoint;
-	return TransformVectorByRect(m_area, position) - m_originPoint;
+	return TransformVectorByRect(m_size, position) - m_originPoint;
 }
 
 bool UILayout::IsArea(const XMINT2& pos) const noexcept
 {
 	//정렬값을 기준으로 포지션이 여기에 포함되는지 확인한다.
-	Rectangle curArea{ -m_originPoint.x, -m_originPoint.y, 
-		m_area.width, m_area.height};	
+	Rectangle curArea{ 
+		-m_originPoint.x, 
+		-m_originPoint.y, 
+		static_cast<long>(m_size.x), 
+		static_cast<long>(m_size.y)
+	};	
 	return curArea.Contains(pos.x, pos.y);
-}
-
-void UILayout::Union(const Rectangle& area) noexcept
-{
-	m_area = Rectangle::Union(m_area, area);
 }
 
 void UILayout::SerializeIO(JsonOperation& operation)
 {
-	operation.Process("Area", m_area);
+	operation.Process("Size", m_size);
 	operation.Process("Origin", m_origin);
+
+	if (operation.IsWrite()) return;
 	m_originPoint = GetOriginPoint(m_origin);	//load 했을때에는 m_originPoint를 계산해준다.
 }

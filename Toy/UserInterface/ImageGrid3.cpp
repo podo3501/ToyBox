@@ -4,7 +4,6 @@
 #include "../Utility.h"
 #include "UIUtility.h"
 #include "UIType.h"
-#include "UILayout.h"
 #include "JsonOperation.h"
 
 ImageGrid3::~ImageGrid3() = default;
@@ -29,10 +28,10 @@ static bool ValidateInput(const string& name, const ImageSource& source)
 }
 
 static unique_ptr<ImageGrid1> CreateImageGrid1(const string& baseName, size_t idx, 
-    const ImageSource& source, const PositionRectangle& posRect)
+    const ImageSource& source, const XMUINT2& size)
 {
     const auto& grid1name = baseName + "_" + to_string(idx);
-    UILayout grid1layout(posRect.area, Origin::LeftTop);
+    UILayout grid1layout(size, Origin::LeftTop);
 
     ImageSource imgSource{ source.filename, { source.list[idx] } };
 
@@ -49,11 +48,11 @@ bool ImageGrid3::SetImage(const string& name, const UILayout& layout, const Imag
 	SetName(name);
 	SetLayout(layout);
 
-    vector<PositionRectangle> posRects = StretchSize(StretchType::Width, layout.GetArea(), source.list);
+    vector<PositionSize> posSizes = StretchSize(StretchType::Width, layout.GetSize(), source.list);
     for (std::size_t idx = 0; idx < source.list.size(); ++idx) 
     {
-        auto grid1 = CreateImageGrid1(name, idx, source, posRects[idx]);
-        AddComponent(move(grid1), posRects[idx].pos);	//rectangle이 아니라 XMINT로 해야 하지 않나? x, y 값은 언제나 0이다.
+        auto grid1 = CreateImageGrid1(name, idx, source, posSizes[idx].size);
+        AddComponent(move(grid1), posSizes[idx].pos);
     }
 
 	return true;
@@ -69,20 +68,18 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
     return srcList;
 }
 
-bool ImageGrid3::ChangeArea(const Rectangle& area) noexcept
+void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
 {
     const vector<UIComponent*> components = GetComponents();
     vector<Rectangle> list = GetSourceList(components);
-    vector<PositionRectangle> posRects = StretchSize(StretchType::Width, area, list);
+    vector<PositionSize> posSizes = StretchSize(StretchType::Width, size, list);
 
     for (int idx{ 0 }; idx < components.size(); ++idx)
     {
-        ChangePosition(idx, posRects[idx].pos);
-        components[idx]->ChangeArea(posRects[idx].area);
+        ChangePosition(idx, posSizes[idx].pos);
+        components[idx]->ChangeSize(posSizes[idx].size);
     }
-    UIComponent::ChangeArea(area);
-
-    return true;
+    UIComponent::ChangeSize(size);
 }
 
 Rectangle ImageGrid3::GetFirstComponentSource() const noexcept

@@ -14,11 +14,9 @@
         }
     ],
     "Layout": {
-        "Area": {
-            "x": 0,
-            "y": 0,
-            "width": 50,
-            "height": 100
+        "Size": {
+            "x": 50,
+            "y": 100
         },
         "Origin": "Center"
     }

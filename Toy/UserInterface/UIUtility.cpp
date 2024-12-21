@@ -129,7 +129,7 @@ static vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) 
 	return { 0, thisEdge, thisEdge + middle, length };
 }
 
-vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& area, const vector<Rectangle>& data) noexcept
+vector<PositionSize> StretchSize(StretchType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept
 {
 	if (data.size() != 3) return {};
 
@@ -138,27 +138,30 @@ vector<PositionRectangle> StretchSize(StretchType stretchType, const Rectangle& 
 	switch (stretchType) {
 	case StretchType::Width:
 		// 가로 확장
-		xPoints = GetStretchedSize(area.width, data[0].width, data[2].width);
-		yPoints = { 0, area.height };
+		xPoints = GetStretchedSize(size.x, data[0].width, data[2].width);
+		yPoints = { 0, static_cast<long>(size.y) };
 		break;
 	case StretchType::Height:
 		// 세로 확장
-		yPoints = GetStretchedSize(area.height, data[0].height, data[2].height);
-		xPoints = { 0, area.width };
+		yPoints = GetStretchedSize(size.y, data[0].height, data[2].height);
+		xPoints = { 0, static_cast<long>(size.x) };
 		break;
 	}
 
 	// 결과 리스트 생성
-	vector<PositionRectangle> result;
+	vector<PositionSize> result;
 	result.reserve((xPoints.size() - 1) * (yPoints.size() - 1)); // 메모리 예약
 
 	// PositionRectangle 생성
 	for (size_t iy = 0; iy < yPoints.size() - 1; ++iy) {
 		for (size_t ix = 0; ix < xPoints.size() - 1; ++ix) {
-			result.emplace_back(PositionRectangle{
-				{ float(xPoints[ix]) / area.width, float(yPoints[iy]) / area.height },
-				{ 0, 0, xPoints[ix + 1] - xPoints[ix], yPoints[iy + 1] - yPoints[iy] }
-				});
+			result.emplace_back(PositionSize{
+				{ float(xPoints[ix]) / size.x, float(yPoints[iy]) / size.y },
+				{	
+					static_cast<uint32_t>(xPoints[ix + 1] - xPoints[ix]),
+					static_cast<uint32_t>(yPoints[iy + 1] - yPoints[iy]) 
+				}
+			});
 		}
 	}
 

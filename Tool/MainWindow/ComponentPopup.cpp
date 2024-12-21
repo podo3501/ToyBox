@@ -5,7 +5,6 @@
 #include "../Toy/Utility.h"
 #include "../Utility.h"
 #include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/UILayout.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
 #include "../Toy/HelperClass.h"
 
@@ -69,7 +68,7 @@ void ComponentPopup::DrawMakeComponent()
 	);
 }
 
-void ComponentPopup::Show()
+void ComponentPopup::Render()
 {
 	if (m_draw)
 	{
@@ -94,7 +93,7 @@ bool ComponentPopup::IsShowed() const noexcept
 
 bool ComponentPopup::MakeImageGrid9()
 {
-	UILayout layout({ 0, 0, 170, 120 }, Origin::LeftTop);
+	UILayout layout({ 170, 120 }, Origin::LeftTop);
 	ImageSource source{
 		L"UI/Blue/button_square_header_large_square_screws.png", {
 			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },

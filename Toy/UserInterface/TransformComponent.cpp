@@ -2,7 +2,6 @@
 #include "TransformComponent.h"
 #include "UIComponent.h"
 #include "JsonOperation.h"
-#include "UILayout.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
 #include "../InputManager.h"
@@ -17,8 +16,7 @@ TransformComponent::TransformComponent(unique_ptr<UIComponent> comp, const Vecto
 TransformComponent::TransformComponent(TransformComponent&& o) noexcept :
 	component{ move(o.component) },
 	position{ move(o.position) }
-{
-}
+{}
 
 bool TransformComponent::operator==(const TransformComponent& o) const noexcept
 {
