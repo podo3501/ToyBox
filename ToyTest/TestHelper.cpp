@@ -23,10 +23,10 @@ bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"U
 using ::testing::_;
 using ::testing::Invoke;
 
-void CallMockRender(IComponent* component, function<void(size_t, const RECT&, const RECT*, bool)> testRenderFunc, int times)
+void CallMockRender(IComponent* component, function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
 {
 	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _, _))
+	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke(testRenderFunc));
 	component->ProcessRender(&mockRender);

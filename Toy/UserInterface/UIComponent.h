@@ -17,6 +17,8 @@ protected:
 	virtual void Render(IRender*) {};
 	virtual bool Update(const XMINT2&, InputManager*) noexcept { return true; }
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
+	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
+	bool IsDirty() const noexcept { return m_isDirty; }
 
 public:
 	virtual ~UIComponent();
@@ -34,23 +36,22 @@ public:
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;
-	virtual void ChangeSize(const XMUINT2& size) noexcept { m_layout.Set(size); }
+	virtual void ChangeSize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
 	virtual void SerializeIO(JsonOperation& operation);
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 	
+	Rectangle GetRectangle() const noexcept;
 	XMINT2 GetPosition() const noexcept;
 	bool ChangePosition(int index, const Vector2& pos) noexcept;
-	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); }
+	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
 
 	void SetChildPosition(const string& name, const Vector2& pos) noexcept;
-
-	inline void SetParent(UIComponent* component) { m_parent = component; }
 
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
 	inline void SetEnable(bool enable) { m_enable = enable; }
 
-	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); }
+	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); MarkDirty(); }
 	inline const XMUINT2& GetSize() const noexcept { return m_layout.GetSize(); }
 
 	inline void SetName(const string& name) noexcept { m_name = name; }
@@ -58,9 +59,6 @@ public:
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline UILayout GetLayout() const noexcept { return m_layout; }
-
-	inline void SetSelected(bool selected) noexcept { m_selected = selected; }
-	inline bool GetSelected() const noexcept { return m_selected; }
 
 	UIComponent* GetComponent(const string& name) const noexcept;
 	vector<UIComponent*> GetComponents() const noexcept;
@@ -70,15 +68,16 @@ public:
 	
 private:
 	const TransformComponent* FindTransformComponent(const string& name) const noexcept;
-	XMINT2 GetPositionRecursive(const UIComponent* component) const noexcept;
 	XMINT2 GetComponentPosition(const UIComponent* component) const noexcept;
+	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
+	void MarkDirty() noexcept;
 
 	string m_name{};
 	UILayout m_layout;
 	UIComponent* m_parent{ nullptr };
 	vector<TransformComponent> m_components;
 	bool m_enable{ true };
-	bool m_selected{ false };	//삭제 예정
+	bool m_isDirty{ true };
 };
 
 #include "UIComponent.hpp"

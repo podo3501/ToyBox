@@ -23,9 +23,12 @@ UIComponent::UIComponent(const UIComponent& other)
 {
 	m_name = other.m_name;
 	m_layout = other.m_layout;
-	ranges::transform(other.m_components, back_inserter(m_components), [](const auto& transCom) {
-		return move(TransformComponent(transCom.component->Clone(), transCom.position));
+	ranges::transform(other.m_components, back_inserter(m_components), [this](const auto& transCom) {
+		auto component = transCom.component->Clone();
+		component->SetParent(this);
+		return move(TransformComponent(move(component), transCom.position));
 		});
+	m_enable = other.m_enable;
 }
 
 string UIComponent::GetType() const { return string(typeid(*this).name()); }
@@ -34,7 +37,19 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetType() != o.GetType()) return false;
 
-	ReturnIfFalse(tie(m_name, m_layout, m_components) == tie(o.m_name, o.m_layout, o.m_components));
+	ReturnIfFalse(tie(m_name, m_layout, m_components) == 
+		tie(o.m_name, o.m_layout, o.m_components));
+	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
+
+	return true;
+}
+
+bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept
+{
+	if (lhs == nullptr && rhs == nullptr) return true;
+	if (lhs == nullptr || rhs == nullptr) return false;
+
+	if (lhs->GetName() != rhs->GetName()) return false;
 
 	return true;
 }
@@ -72,12 +87,15 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, InputManager* inputManag
 
 	Update(position, inputManager);
 
-	return ranges::all_of(m_components, [this, &position, inputManager](const auto& transCom) {
-		const auto& curPosition = m_layout.GetPosition(transCom.position) + position;
+	auto result = ranges::all_of(m_components, [this, &position, inputManager](auto& transCom) {
+		const auto& curPosition = transCom.GetPosition(m_isDirty, m_layout, position);
 		if (inputManager)
 			inputManager->GetMouse()->SetOffset(curPosition);
 		return transCom.component->ProcessUpdate(curPosition, inputManager);
 		});
+	m_isDirty = false;
+
+	return result;
 }
 
 void UIComponent::ProcessRender(IRender* render)
@@ -98,12 +116,14 @@ void UIComponent::SetChildPosition(const string& name, const Vector2& position) 
 	if (transComponent == nullptr) return;
 
 	transComponent->position = position;
+	MarkDirty();
 }
 
 bool UIComponent::ChangePosition(int index, const Vector2& pos) noexcept
 {
 	if (index >= m_components.size()) return false;
 	m_components[index].position = pos;
+	MarkDirty();
 
 	return true;
 }
@@ -113,24 +133,29 @@ void UIComponent::AddComponent(unique_ptr<UIComponent>&& component, const Vector
 	component->SetParent(this);
 	auto transComponent = TransformComponent(move(component), pos);
 	m_components.emplace_back(move(transComponent));
+	MarkDirty();
 }
 
 void UIComponent::SerializeIO(JsonOperation& operation)
 {
 	operation.Process("Name", m_name);
 	operation.Process("Layout", m_layout);
-	operation.Process("Enable", m_enable);
 	operation.Process("Components", m_components);
 	
 	if (operation.IsWrite()) return;
-	//parent를 다시 이어준다.
+	ranges::for_each(m_components, [this](auto& transComponent) {
+		transComponent.component->SetParent(this);
+		});
 }
 
-XMINT2 UIComponent::GetPositionRecursive(const UIComponent* component) const noexcept
+void UIComponent::MarkDirty() noexcept
 {
-	if (component == nullptr || component->m_parent == nullptr) return { 0, 0 };
-
-	return GetComponentPosition(component) + GetPositionRecursive(component->m_parent);
+	if (m_isDirty) return;
+	
+	m_isDirty = true;
+	ranges::for_each(m_components, [](auto& transComponent) {
+		transComponent.component->MarkDirty();
+		});
 }
 
 XMINT2 UIComponent::GetComponentPosition(const UIComponent* component) const noexcept
@@ -145,7 +170,20 @@ XMINT2 UIComponent::GetComponentPosition(const UIComponent* component) const noe
 
 XMINT2 UIComponent::GetPosition() const noexcept
 {
-	return GetPositionByLayout(GetPositionRecursive(this));
+	XMINT2 parentPosition{ 0, 0 };
+	if (m_parent)
+	{
+		auto transformComponent = m_parent->FindTransformComponent(this->GetName());
+		parentPosition = transformComponent->realPosition;
+	}
+
+	return GetPositionByLayout(parentPosition);
+}
+
+Rectangle UIComponent::GetRectangle() const noexcept
+{
+	XMINT2 curPosition = GetPosition();
+	return Rectangle(curPosition.x, curPosition.y, GetSize().x, GetSize().y);
 }
 
 XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept

@@ -19,7 +19,7 @@ public:
     virtual float GetLineSpacing(size_t index) const noexcept override;
 
     //IRender
-    virtual void Render(size_t index, const RECT& dest, const RECT* source, bool selected) override;
+    virtual void Render(size_t index, const RECT& dest, const RECT* source) override;
     virtual void DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const override;
 
     void Reset();

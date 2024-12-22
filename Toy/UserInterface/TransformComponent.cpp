@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TransformComponent.h"
+#include "UILayout.h"
 #include "UIComponent.h"
 #include "JsonOperation.h"
 #include "../Utility.h"
@@ -24,6 +25,14 @@ bool TransformComponent::operator==(const TransformComponent& o) const noexcept
 	ReturnIfFalse(CompareEpsilon(position, o.position));
 
 	return true;
+}
+
+XMINT2 TransformComponent::GetPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept
+{
+	if (!IsDirty) return realPosition;
+	realPosition = layout.GetPosition(position) + parentPosition;
+
+	return realPosition;
 }
 
 void TransformComponent::SerializeIO(JsonOperation& operation)

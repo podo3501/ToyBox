@@ -46,7 +46,7 @@ void Texture::SetRectangle(const Rectangle* rect) noexcept
     }
 }
 
-void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source, bool selected)
+void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source)
 {
     //텍스춰 크기는 고정으로 함
     //dest는 화면에 보여주는 사각형(크기가 안 맞으면 강제로 늘림)
@@ -56,12 +56,6 @@ void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, con
     //origin을 0, 0 로 고정후 위치값을 계산해서 넘겨주는 식으로 해야겠다.
 
     spriteBatch->Draw(descHeap->GetGpuHandle(m_descHeapIdx), m_size, dest, source, Colors::White, 0.f);
-    if (selected)   //선택되었다면 이미지를 엷게 한번 더 그린다.
-    {
-        float brightness = 0.35f;
-        spriteBatch->Draw(descHeap->GetGpuHandle(m_descHeapIdx), 
-            m_size, dest, source, { brightness, brightness, brightness, 0.0f }, 0.f);
-    }
 }
 
 void Texture::Reset() 

@@ -48,10 +48,14 @@ namespace BasicClient
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		panel->AddComponent(move(img9), { 0.1f, 0.1f });
 		m_panel->AddComponent(move(panel), { 0.5f, 0.5f });
+		m_panel->ProcessUpdate({}, nullptr);
 
 		UIComponent* component = m_panel->GetComponent("ImageGrid9_1_1");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
+
+		auto rect = component->GetRectangle();
+		EXPECT_EQ(rect, Rectangle(270, 216, 160, 128));
 	}
 
 	//여러번 실행해서 오동작이 나는지 확인한다.

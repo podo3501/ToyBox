@@ -42,7 +42,8 @@ bool ImageGrid1::LoadResources(ILoadData* load)
 
 bool ImageGrid1::Update(const XMINT2& position, InputManager*) noexcept
 {
-	m_position = GetPositionByLayout(position);
+	//if(IsDirty())
+		m_position = GetPositionByLayout(position);
 
 	return true;
 }
@@ -53,7 +54,7 @@ void ImageGrid1::Render(IRender* render)
 	destination.Offset(m_position.x, m_position.y);
 
 	RECT source(m_source);
-	render->Render(m_index, destination, &source, GetSelected());
+	render->Render(m_index, destination, &source);
 }
 
 bool ImageGrid1::SetImage(const string& name, const UILayout& layout, const ImageSource& source)

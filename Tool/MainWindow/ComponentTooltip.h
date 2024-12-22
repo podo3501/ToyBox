@@ -21,7 +21,7 @@ private:
 	void ShowTooltip(const ImGuiWindow* window);
 	void ShowTooltipComponent(bool isSelected, 
 		const ImVec2& tooltipPos, const ImVec2& tooltipSize, const string& id, const string& context);
-	void ShowSelectComponent();
+	void ShowSelectComponent(const ImGuiWindow* window) const;
 
 	UIComponent* m_panel;
 	UIComponent* m_selectCom;

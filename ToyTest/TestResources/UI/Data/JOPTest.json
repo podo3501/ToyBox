@@ -9,7 +9,6 @@
             },
             "Origin": "LeftTop"
         },
-        "Enable": true,
         "Components": [
             {
                 "Position": {
@@ -30,8 +29,7 @@
                             "y": 120
                         },
                         "Origin": "Center"
-                    },
-                    "Enable": true
+                    }
                 }
             }
         ]

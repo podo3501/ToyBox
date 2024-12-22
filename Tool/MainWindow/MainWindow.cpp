@@ -171,13 +171,12 @@ void MainWindow::RenderMain()
 	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
 
+	ImGui::Image(m_textureID, m_size);
+	m_popup->Render();
 	if (!m_popup->IsShowed() &&
 		!m_popup->IsComponent() &&
 		!ImGui::IsMouseDown(ImGuiMouseButton_Right))
 		m_tooltip->Render(GetImGuiWindow());
-
-	ImGui::Image(m_textureID, m_size);
-	m_popup->Render();
 
 	ImGui::End();
 }

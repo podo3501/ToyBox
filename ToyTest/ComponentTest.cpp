@@ -15,7 +15,7 @@
 
 namespace ComponentTest
 {
-	void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, bool)> renderFunc, int times)
+	void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
 	{
 		unique_ptr<UIComponent> clonePanel = component->Clone();
 		clonePanel->ProcessUpdate({}, nullptr);
@@ -24,7 +24,7 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(clonePanel));
 	}
 
-	void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source, bool selected)
+	void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 		EXPECT_TRUE(IsTrue(dest, { 400, 300, 464, 364 }, *source, { 0, 0, 64, 64 }));
@@ -46,7 +46,7 @@ namespace ComponentTest
 
 	////////////////////////////////////////////////////////
 
-	void TestImageGrid3Render(size_t index, const RECT& dest, const RECT* source, bool selected)
+	void TestImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -58,7 +58,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	void TestImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source, bool selected)
+	void TestImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -90,7 +90,7 @@ namespace ComponentTest
 		m_panel->GetComponent("ImgGrid3", &img3);
 		img3->ChangeOrigin(Origin::Center);
 		img3->ChangeSize({ 120, 36 });
-		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다. parent를 구현했기 때문에 parent로 올라가면서 계산 로직을 적용하고 이것은 삭제예정.
+		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
 
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);		
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -100,7 +100,7 @@ namespace ComponentTest
 	
 	////////////////////////////////////////////////////////
 
-	void TestImageGrid9Render(size_t index, const RECT& dest, const RECT* source, bool selected)
+	void TestImageGrid9Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -120,7 +120,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	void TestImageGrid9ChangeAreaRender(size_t index, const RECT& dest, const RECT* source, bool selected)
+	void TestImageGrid9ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -171,7 +171,7 @@ namespace ComponentTest
 		CloneTest(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
 	}
 
-	void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source, bool selected)
+	void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -207,7 +207,7 @@ namespace ComponentTest
 		CloneTest(m_panel.get(), TestButton_ImageGrid1Render, 1);
 	}
 
-	void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source, bool selected)
+	void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -219,7 +219,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	void TestButton_ImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source, bool selected)
+	void TestButton_ImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
