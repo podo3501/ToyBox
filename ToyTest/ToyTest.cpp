@@ -39,6 +39,12 @@ namespace BasicClient
 		vector<UIComponent*> componentList2;
 		m_panel->GetComponents({ 100, 100 }, componentList2);
 		EXPECT_EQ(componentList2.size(), 4);
+
+		unique_ptr<UIComponent> img9_2 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 221, 191 });
+		m_panel->AddComponent(move(img9_2), { 0.11f, 0.11f });
+
+		vector<UIComponent*> componentList3;
+		m_panel->GetComponents({ 180, 160 }, componentList3);
 	}
 
 	TEST_F(ToyTestFixture, GetPosition)

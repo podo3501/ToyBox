@@ -78,17 +78,21 @@ void ComponentPopup::Render()
 
 	// 마우스 오른쪽 버튼 클릭 시 팝업 메뉴 띄우기
 	if (!ImGui::BeginPopupContextWindow(PopupName))
+	{
+		m_isActive = false;
 		return;
+	}
 	
+	m_isActive = true;
 	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = MakeComponent::ImageGrid9;
 	if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();
 }
 
-bool ComponentPopup::IsShowed() const noexcept
+bool ComponentPopup::IsActive() const noexcept
 {
-	return ImGui::IsPopupOpen(PopupName);
+	return m_isActive;
 }
 
 bool ComponentPopup::MakeImageGrid9()

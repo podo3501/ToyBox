@@ -78,9 +78,9 @@ bool MainWindow::IsFocus() const noexcept
 	if (window == nullptr || window->Active == false)
 		return false;
 
-	ImGuiWindow* focusedWindow = GImGui->NavWindow;
-	if (window != focusedWindow)
-		return false;
+	//ImGuiWindow* focusedWindow = GImGui->NavWindow;
+	//if (window != focusedWindow)
+	//	return false;
 
 	return true;
 }
@@ -132,13 +132,12 @@ unique_ptr<ComponentWindow> CreateComponentWindow(const UIComponent* component)
 
 void MainWindow::CheckSelectedComponent(InputManager* inputManager)
 {
-	if (m_popup->IsComponent())
-		return; //만들기 팝업창이 열려있으면 하지 않는다.
+	if (m_popup->IsActive()) return;
 
 	m_tooltip->CheckSelectedComponent(inputManager);
 	UIComponent* component = m_tooltip->GetComponent();
 	if (component == nullptr) return;
-	
+
 	const UIComponent* winComponent = (m_comWindow != nullptr) ? m_comWindow->GetComponent() : nullptr;
 	if (winComponent == component) return;
 
@@ -156,8 +155,8 @@ void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 	mouseTracker->SetOffset(ImVec2ToXMINT2(offset));
 
 	CheckChangeWindow(window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
-	CheckSelectedComponent(inputManager);
 	CheckAddComponent(mouseTracker);
+	CheckSelectedComponent(inputManager);
 
 	m_panel->ProcessUpdate({}, inputManager);
 	m_popup->Excute(mouseTracker);
@@ -173,10 +172,7 @@ void MainWindow::RenderMain()
 
 	ImGui::Image(m_textureID, m_size);
 	m_popup->Render();
-	if (!m_popup->IsShowed() &&
-		!m_popup->IsComponent() &&
-		!ImGui::IsMouseDown(ImGuiMouseButton_Right))
-		m_tooltip->Render(GetImGuiWindow());
+	m_tooltip->Render(GetImGuiWindow());
 
 	ImGui::End();
 }

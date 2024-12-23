@@ -163,7 +163,7 @@ XMINT2 UIComponent::GetComponentPosition(const UIComponent* component) const noe
 	UIComponent* parent = component->m_parent;
 	if (parent == nullptr) return { 0, 0 };
 
-	auto transComponent = parent->FindTransformComponent(component->GetName());
+	auto transComponent = parent->FindTransformComponent(component);
 	assert(transComponent);	//없다는 것은 parent가 잘못 돼 있다던지, 이름이 잘못 돼 있다던지 있어서는 안되는 일이다.
 	return parent->GetLayout().GetPosition(transComponent->position);
 }
@@ -173,7 +173,7 @@ XMINT2 UIComponent::GetPosition() const noexcept
 	XMINT2 parentPosition{ 0, 0 };
 	if (m_parent)
 	{
-		auto transformComponent = m_parent->FindTransformComponent(this->GetName());
+		auto transformComponent = m_parent->FindTransformComponent(this);
 		parentPosition = transformComponent->realPosition;
 	}
 
@@ -235,3 +235,14 @@ const TransformComponent* UIComponent::FindTransformComponent(const string& name
 	if (find == m_components.end()) return nullptr;
 	return &(*find);
 }
+
+const TransformComponent* UIComponent::FindTransformComponent(const UIComponent* component) const noexcept
+{
+	auto find = ranges::find_if(m_components, [component](const auto& transComp) {
+		return transComp.component.get() == component;
+		});
+
+	if (find == m_components.end()) return nullptr;
+	return &(*find);
+}
+

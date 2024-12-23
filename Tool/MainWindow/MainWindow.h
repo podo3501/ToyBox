@@ -36,6 +36,7 @@ private:
     void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker* mouseTracker);
     void CheckAddComponent(const MouseTracker* mouseTracker) noexcept;
     void CheckSelectedComponent(InputManager* inputManager);
+
     void RenderMain();
 
     IRenderer* m_renderer;

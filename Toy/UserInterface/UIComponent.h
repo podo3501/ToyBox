@@ -68,6 +68,7 @@ public:
 	
 private:
 	const TransformComponent* FindTransformComponent(const string& name) const noexcept;
+	const TransformComponent* FindTransformComponent(const UIComponent* component) const noexcept;
 	XMINT2 GetComponentPosition(const UIComponent* component) const noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	void MarkDirty() noexcept;

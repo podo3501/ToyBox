@@ -18,7 +18,7 @@ public:
 	unique_ptr<UIComponent> GetComponent() noexcept;
 	bool Excute(MouseTracker* mouseTracker);
 	void Render();
-	bool IsShowed() const noexcept;
+	bool IsActive() const noexcept;
 	const ImVec2& GetPosition() const noexcept { return m_position; }
 
 private:
@@ -31,6 +31,7 @@ private:
 	ImTextureID m_textureID{};
 	optional<MakeComponent> m_currentAction;
 	bool m_draw{ false };
+	bool m_isActive{ false };
 	ImVec2 m_position{};
 };
 
