@@ -1,5 +1,7 @@
 #pragma once
 
+template<typename T> requires std::is_default_constructible_v<T>&& std::is_copy_assignable_v<T>
+class Property;
 class UIComponent;
 class Scene;
 enum class Origin;
@@ -151,6 +153,8 @@ public:
 	void Process(const string& key, T& data) noexcept;
 	template<typename T>
 	void Process(const string& key, vector<unique_ptr<T>>& data);
+	template<typename T>
+	void Process(const string& key, Property<T>& data);
 
 	void Process(const string& key, XMUINT2& data) noexcept;
 	void Process(const string& key, Rectangle& data) noexcept;

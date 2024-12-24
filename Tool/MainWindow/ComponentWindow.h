@@ -16,8 +16,7 @@ public:
 	const UIComponent* GetComponent() const noexcept { return m_component; }
 
 protected:
-	void RenderRectangleInput(const UILayout& layout);
-	bool RenderIntegerInput(const char* label, uint32_t& value, int min = 0, int max = 10000);
+	void EditSize(const XMUINT2& size);
 
 private:
 	bool m_visible{ false };

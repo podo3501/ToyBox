@@ -58,7 +58,7 @@ public:
 	inline const string& GetName() const noexcept { return m_name; }
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
-	inline UILayout GetLayout() const noexcept { return m_layout; }
+	inline const UILayout& GetLayout() const noexcept { return m_layout; }
 
 	UIComponent* GetComponent(const string& name) const noexcept;
 	vector<UIComponent*> GetComponents() const noexcept;

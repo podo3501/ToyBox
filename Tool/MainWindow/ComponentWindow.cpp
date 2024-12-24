@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "ComponentWindow.h"
 #include "../Toy/UserInterface/UIComponent.h"
+#include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
+#include "EditUtility.h"
 
 ComponentWindow::~ComponentWindow() = default;
 ComponentWindow::ComponentWindow() :
@@ -27,47 +29,48 @@ void ComponentWindow::Render()
     if (ImGui::InputText("Name", buffer, IM_ARRAYSIZE(buffer)))
         m_component->SetName(buffer); // 이름 업데이트
 
-    RenderRectangleInput(m_component->GetLayout());
+    const auto& layout = m_component->GetLayout();
+    EditSize(layout.GetSize());
 
     RenderComponent(m_component);
 
     ImGui::End();
 }
 
-// Rectangle 수정 UI 생성 함수
-void ComponentWindow::RenderRectangleInput(const UILayout& layout)
+void ComponentWindow::EditSize(const XMUINT2& size)
 {
-    const XMUINT2& size = layout.GetSize();
     XMUINT2 newSize = size;
 
     bool changed{ false };
 
-    changed |= RenderIntegerInput("Width", newSize.x);
-    changed |= RenderIntegerInput("Height", newSize.y);
+    changed |= EditInteger("Width", newSize.x);
+    changed |= EditInteger("Height", newSize.y);
 
     if (changed)
         m_component->ChangeSize(newSize);
 }
 
-bool ComponentWindow::RenderIntegerInput(const char* label, uint32_t& value, int min, int max)
+////////////////////////////////////////////////
+
+bool EditInt(const char* label, Property<int>& value, int min = 0, int max = 10000)
 {
     int temp = value;
-    if (ImGui::InputInt(label, &temp))
-    {
-        if (temp >= min && temp <= max)
-        {
-            value = temp;
-            return true;
-        }
-    }
-    return false;
-}
 
-////////////////////////////////////////////////
+    if (!ImGui::InputInt(label, &temp)) return false;
+    if (temp < min || temp > max) return false;
+
+    value = temp;
+    return true;
+}
 
 void ComponentImageGrid1::RenderComponent(UIComponent* component)
 {
+    ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(component);
+    //EditInt("TempValue", imgGrid1->TempValue);
+    //EditFilename(imgGrid1->GetFilename());
 }
+
+////////////////////////////////////////////////
 
 void ComponentImageGrid3::RenderComponent(UIComponent* component)
 {

@@ -143,3 +143,19 @@ void JsonOperation::Process(const string& key, vector<unique_ptr<T>>& data)
 			});
 	}
 }
+
+template<typename T>
+void JsonOperation::Process(const string& key, Property<T>& data)
+{
+	if (IsWrite())
+	{
+		T tempValue = data.Get();
+		Process(key, tempValue);
+	}
+	else
+	{
+		T tempValue{};
+		Process(key, tempValue);
+		data.Set(tempValue);
+	}
+}

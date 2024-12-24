@@ -13,9 +13,8 @@ ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	UIComponent{ o }
 {
 	m_index = o.m_index;
-	m_filename = o.m_filename;
-	m_source = o.m_source;
-	m_destination = o.m_destination;
+	Filename = o.Filename;
+	Source = o.Source;
 }
 
 unique_ptr<UIComponent> ImageGrid1::CreateClone() const
@@ -28,8 +27,7 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const ImageGrid1* o = static_cast<const ImageGrid1*>(&rhs);
 
-	auto result = tie(m_index, m_filename, m_source, m_destination) == 
-		tie(o->m_index, o->m_filename, o->m_source, o->m_destination);
+	auto result = tie(m_index, Filename, Source) == tie(o->m_index, o->Filename, o->Source);
 	assert(result);
 
 	return result;
@@ -37,7 +35,7 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 
 bool ImageGrid1::LoadResources(ILoadData* load)
 {
-	return load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, nullptr);
+	return load->LoadTexture(GetResourceFullFilename(Filename), nullptr, m_index, nullptr);
 }
 
 bool ImageGrid1::Update(const XMINT2& position, InputManager*) noexcept
@@ -50,10 +48,10 @@ bool ImageGrid1::Update(const XMINT2& position, InputManager*) noexcept
 
 void ImageGrid1::Render(IRender* render)
 {
-	Rectangle destination(m_destination);
-	destination.Offset(m_position.x, m_position.y);
+	const auto& size = GetSize();
+	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
 
-	RECT source(m_source);
+	RECT source(Rectangle(Source.Get()));
 	render->Render(m_index, destination, &source);
 }
 
@@ -66,29 +64,18 @@ bool ImageGrid1::SetImage(const string& name, const UILayout& layout, const Imag
 	SetName(name);
 	SetLayout(layout);
 
-	m_filename = source.filename;
-	m_source = source.list.at(0);
-	m_destination = XMUINT2ToRectangle(layout.GetSize());
+	Filename = source.filename;
+	Source = source.list.at(0);
 
 	return true;
-}
-
-void ImageGrid1::ChangeSize(const XMUINT2& size) noexcept
-{
-	m_destination = XMUINT2ToRectangle(size);
-	UIComponent::ChangeSize(size);
 }
 
 void ImageGrid1::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
 	operation.Process("Index", m_index);
-	operation.Process("Filename", m_filename);
-	operation.Process("Source", m_source);
-
-	//UIComponent 정리하면서 dest 값과 layout값이 일치되는 문제도 해결해야 함.
-	if (operation.IsWrite()) return;
-	m_destination = XMUINT2ToRectangle(GetSize());
+	operation.Process("Filename", Filename);
+	operation.Process("Source", Source);
 }
 
 unique_ptr<ImageGrid1> CreateImageGrid1(const string& name, const UILayout& layout, const ImageSource& source)

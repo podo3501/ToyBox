@@ -1,6 +1,29 @@
 #pragma once
 #include "UIComponent.h"
 
+template <typename T>
+	requires std::is_default_constructible_v<T>&& std::is_copy_assignable_v<T>
+class Property 
+{
+public:
+	Property() = default;
+	Property(const T& initialValue) : value(initialValue) {}
+	bool operator==(const Property<T>& rhs) const noexcept { return value == rhs.value; }
+
+	const T& Get() const { return value; }
+	void Set(const T& newValue) { value = newValue; }
+
+	operator T() const { return value; }
+	Property& operator=(const T& newValue) 
+	{
+		Set(newValue);
+		return *this;
+	}
+
+private:
+	T value;
+};
+
 struct IRenderer;
 struct ImageSource;
 class ImagePart;
@@ -19,18 +42,16 @@ public:
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept override;
 	virtual void Render(IRender* render) override;
-	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);
-	inline Rectangle GetSource() const noexcept { return m_source; }
+
+public:
+	Property<wstring> Filename{};
+	Property<Rectangle> Source{};
 
 private:
 	size_t m_index{ 0 };
-	std::wstring m_filename{};
-
-	Rectangle m_source{};
-	Rectangle m_destination{};
 	XMINT2 m_position{};
 };
 

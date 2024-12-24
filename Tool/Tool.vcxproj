@@ -150,6 +150,7 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="MainWindow\ComponentTooltip.cpp" />
     <ClCompile Include="MainWindow\ComponentWindow.cpp" />
+    <ClCompile Include="MainWindow\EditUtility.cpp" />
     <ClCompile Include="MainWindow\MainWindow.cpp" />
     <ClCompile Include="MainWindow\ComponentPopup.cpp" />
     <ClCompile Include="Menu\FileTab.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="MainWindow\ComponentTooltip.h" />
     <ClInclude Include="MainWindow\ComponentWindow.h" />
+    <ClInclude Include="MainWindow\EditUtility.h" />
     <ClInclude Include="MainWindow\MainWindow.h" />
     <ClInclude Include="MainWindow\ComponentPopup.h" />
     <ClInclude Include="Menu\FileTab.h" />

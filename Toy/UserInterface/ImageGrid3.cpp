@@ -63,7 +63,7 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
     vector<Rectangle> srcList;
     ranges::transform(components, back_inserter(srcList), [](auto component) {
         ImageGrid1* image = ComponentCast<ImageGrid1*>(component);
-        return image->GetSource();
+        return image->Source;
         });
     return srcList;
 }
@@ -88,7 +88,7 @@ Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
     if (components.empty()) return {};
     
     const ImageGrid1* img1 = ComponentCast<ImageGrid1*>(components[0]);
-    return img1->GetSource();
+    return img1->Source;
 }
 
 unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, const UILayout& layout, const ImageSource& source)
