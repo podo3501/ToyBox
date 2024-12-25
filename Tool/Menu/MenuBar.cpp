@@ -2,13 +2,10 @@
 #include "MenuBar.h"
 #include "FileTab.h"
 
-using namespace Tool;
-
-MenuBar::MenuBar(ToolSystem* toolSystem, Dialog* dialog) :
-    m_fileTab{ make_unique<FileTab>(toolSystem, dialog) }
-{}
-
 MenuBar::~MenuBar() = default;
+MenuBar::MenuBar(ToolSystem* toolSystem) :
+    m_fileTab{ make_unique<FileTab>(toolSystem) }
+{}
 
 void MenuBar::Update() const
 {

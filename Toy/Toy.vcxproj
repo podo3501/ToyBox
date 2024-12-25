@@ -219,6 +219,7 @@
     <ClInclude Include="UserInterface\JsonOperation.h" />
     <ClInclude Include="UserInterface\ImageGrid1.h" />
     <ClInclude Include="UserInterface\JsonOperation.hpp" />
+    <ClInclude Include="UserInterface\Property.h" />
     <ClInclude Include="UserInterface\TransformComponent.h" />
     <ClInclude Include="UserInterface\UIComponent.h" />
     <ClInclude Include="UserInterface\Panel.h" />

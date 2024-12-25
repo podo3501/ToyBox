@@ -38,3 +38,10 @@ string WStringToString(const wstring& wstr)
 	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
 	return str;
 }
+
+void WStringToChar(const wstring& wstr, span<char> outstr)
+{
+	const string& temp = WStringToString(wstr);
+	strncpy_s(outstr.data(), outstr.size() - 1, temp.c_str(), _TRUNCATE);
+	outstr[outstr.size() - 1] = '\0';
+}

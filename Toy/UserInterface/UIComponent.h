@@ -2,6 +2,7 @@
 
 #include "../Include/IComponent.h"
 #include "UILayout.h"
+#include "Property.h"
 
 class JsonOperation;
 class TransformComponent;

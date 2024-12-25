@@ -1,13 +1,38 @@
 #include "pch.h"
 #include "EditUtility.h"
+#include "../Toy/Config.h"
+#include "../Toy/Utility.h"
+#include "../Dialog.h"
 
-bool EditInteger(const char* label, uint32_t& value, int min, int max)
+void EditRectangle(const char* label, Property<Rectangle>& rect)
 {
-	int temp = value;
+    ImGui::Text("%s", label);
+    ImGui::PushID(label);
 
-	if (!ImGui::InputInt(label, &temp)) return false;
-	if (temp < min || temp > max) return false;
+    EditInteger("X", rect->x);
+    EditInteger("Y", rect->y);
+    EditInteger("Width", rect->width);
+    EditInteger("Height", rect->height);
 
-	value = temp;
-	return true;
+    ImGui::PopID();
+}
+
+void EditFilename(const string& label, Property<wstring>& filename)
+{
+    if (ImGui::Button("Change Filename"))
+    {
+        wstring selectedFilename{};
+        if (!Tool::Dialog::ShowFileDialog(selectedFilename, FileDialogType::Open))
+            return;
+
+        if (selectedFilename.empty())
+            return;
+
+        const wstring& relativePath = GetRelativePath(selectedFilename);
+        filename = relativePath;
+    }
+
+    char filenameBuffer[256] = ""; // 파일 이름을 저장할 버퍼
+    WStringToChar(filename, filenameBuffer);
+    ImGui::InputText(label.c_str(), filenameBuffer, sizeof(filenameBuffer));
 }

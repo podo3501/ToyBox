@@ -26,3 +26,22 @@ wstring GetResourceFullFilename(const wstring& filename) noexcept
 
 	return g_resourcePath + filename;
 }
+
+void normalizePath(wstring& path, char targetSeparator = '/') 
+{
+	char currentSeparator = (targetSeparator == '/') ? '\\' : '/';
+	std::replace(path.begin(), path.end(), currentSeparator, targetSeparator);
+}
+
+wstring GetRelativePath(const wstring& fullPath) noexcept
+{
+	filesystem::path full = filesystem::absolute(fullPath);
+	filesystem::path base = filesystem::absolute(g_resourcePath);
+
+	wstring relativePath = fullPath;
+	if (full.wstring().find(base.wstring()) != wstring::npos)
+		relativePath = full.wstring().substr(base.wstring().length());
+	
+	normalizePath(relativePath);
+	return relativePath;
+}

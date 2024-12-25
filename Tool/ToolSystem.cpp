@@ -12,10 +12,9 @@
 ToolSystem::~ToolSystem() = default;
 ToolSystem::ToolSystem(IRenderer* renderer) :
     m_renderer{ renderer },
-    m_config{ make_unique<Tool::Config>() },
-    m_dialog{ make_unique<Tool::Dialog>() }
+    m_config{ make_unique<Tool::Config>() }
 {
-    m_menuBar = make_unique<MenuBar>(this, m_dialog.get());
+    m_menuBar = make_unique<MenuBar>(this);
     m_renderer->AddImguiComponent(this);
 }
 
@@ -58,7 +57,7 @@ void ToolSystem::Update(const DX::StepTimer* timer, InputManager* inputManager)
 
 void ToolSystem::Render(ImGuiIO* io)
 {
-    m_dialog->Render();
+    Tool::Dialog::Render();
     m_menuBar->Render();
 
     return;

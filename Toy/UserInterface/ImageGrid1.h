@@ -1,29 +1,6 @@
 #pragma once
 #include "UIComponent.h"
 
-template <typename T>
-	requires std::is_default_constructible_v<T>&& std::is_copy_assignable_v<T>
-class Property 
-{
-public:
-	Property() = default;
-	Property(const T& initialValue) : value(initialValue) {}
-	bool operator==(const Property<T>& rhs) const noexcept { return value == rhs.value; }
-
-	const T& Get() const { return value; }
-	void Set(const T& newValue) { value = newValue; }
-
-	operator T() const { return value; }
-	Property& operator=(const T& newValue) 
-	{
-		Set(newValue);
-		return *this;
-	}
-
-private:
-	T value;
-};
-
 struct IRenderer;
 struct ImageSource;
 class ImagePart;

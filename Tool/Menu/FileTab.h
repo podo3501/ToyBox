@@ -5,11 +5,6 @@ class RecentFiles;
 class MainWindow;
 class ResolutionSetting;
 
-namespace Tool
-{
-	class Dialog;
-}
-
 class FileTab
 {
 	enum class FileMenuAction
@@ -25,7 +20,7 @@ class FileTab
 	};
 
 public:
-	FileTab(ToolSystem* toolSystem, Tool::Dialog* dialog);
+	FileTab(ToolSystem* toolSystem);
 	~FileTab();
 
 	void Show();
@@ -44,7 +39,6 @@ private:
 
 private:
 	ToolSystem* m_toolSystem;
-	Tool::Dialog* m_dialog;
 	unique_ptr<RecentFiles> m_recentFiles;
 	optional<FileMenuAction> m_currentAction; // 현재 메뉴 상태를 저장
 };

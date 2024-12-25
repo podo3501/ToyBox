@@ -3,16 +3,11 @@
 class ToolSystem;
 class FileTab;
 
-namespace Tool
-{
-	class Dialog;
-}
-
 class MenuBar
 {
 public:
 	MenuBar() = delete;
-	MenuBar(ToolSystem* toolSystem, Tool::Dialog* dialog);
+	MenuBar(ToolSystem* toolSystem);
 	~MenuBar();
 
 	void Update() const;

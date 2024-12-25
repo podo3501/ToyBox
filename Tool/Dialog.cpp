@@ -25,9 +25,8 @@ inline bool IsSuccess(HRESULT hr)
     return SUCCEEDED(hr);
 }
 
-Dialog::Dialog()
-{}
-Dialog::~Dialog() = default;
+DialogType Tool::Dialog::m_dialogType{ DialogType::Init };
+string Tool::Dialog::m_msg{};
 
 bool Dialog::ShowFileDialog(wstring& filename, FileDialogType type)
 {

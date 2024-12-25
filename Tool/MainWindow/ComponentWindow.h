@@ -1,8 +1,6 @@
 #pragma once
 
-class UILayout;
 class UIComponent;
-class BGImage;
 
 class ComponentWindow
 {

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "ComponentWindow.h"
-#include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
 #include "EditUtility.h"
@@ -32,6 +31,9 @@ void ComponentWindow::Render()
     const auto& layout = m_component->GetLayout();
     EditSize(layout.GetSize());
 
+    ImGui::Separator();
+    ImGui::Spacing();
+
     RenderComponent(m_component);
 
     ImGui::End();
@@ -52,22 +54,11 @@ void ComponentWindow::EditSize(const XMUINT2& size)
 
 ////////////////////////////////////////////////
 
-bool EditInt(const char* label, Property<int>& value, int min = 0, int max = 10000)
-{
-    int temp = value;
-
-    if (!ImGui::InputInt(label, &temp)) return false;
-    if (temp < min || temp > max) return false;
-
-    value = temp;
-    return true;
-}
-
 void ComponentImageGrid1::RenderComponent(UIComponent* component)
 {
     ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(component);
-    //EditInt("TempValue", imgGrid1->TempValue);
-    //EditFilename(imgGrid1->GetFilename());
+    EditFilename("Filename", imgGrid1->Filename);
+    EditRectangle("Source", imgGrid1->Source);
 }
 
 ////////////////////////////////////////////////

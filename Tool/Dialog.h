@@ -19,15 +19,12 @@ namespace Tool
 	class Dialog
 	{
 	public:
-		Dialog();
-		~Dialog();
-
-		bool ShowFileDialog(wstring& filename, FileDialogType type);
-		void ShowInfoDialog(const DialogType dialogType, const string& m_msg) noexcept;
-		void Render() noexcept;
+		static bool ShowFileDialog(wstring& filename, FileDialogType type);
+		static void ShowInfoDialog(const DialogType dialogType, const string& m_msg) noexcept;
+		static void Render() noexcept;
 
 	private:
-		DialogType m_dialogType{ DialogType::Init };
-		string m_msg;
+		static DialogType m_dialogType;
+		static string m_msg;
 	};
 }
