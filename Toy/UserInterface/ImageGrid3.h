@@ -16,7 +16,6 @@ public:
 
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 
-
 	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);
 	Rectangle GetFirstComponentSource() const noexcept;
 

@@ -27,7 +27,7 @@ void ToyTestFixture::SetUp()
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
 	m_panel = make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution()));
-	m_renderer->AddComponent(m_panel.get(), true);
+	m_renderer->AddRenderComponent(m_panel.get());
 }
 
 void ToyTestFixture::TearDown()

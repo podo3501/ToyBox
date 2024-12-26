@@ -153,8 +153,9 @@ void Renderer::OnDeviceRestored()
 }
 #pragma endregion
 
-bool Renderer::LoadComponents()
+bool Renderer::LoadComponent(IComponent* component)
 {
+    if (!component) return false;
     //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
 #ifdef __MINGW32__
     ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
@@ -163,28 +164,24 @@ bool Renderer::LoadComponents()
     if (FAILED(initialize)) return false;
 #endif
 
-    m_batch->Begin();
+    auto load = m_texIndexing.get();
 
-    ReturnIfFalse(ranges::all_of(m_components, [load = m_texIndexing.get()](const auto& item) {
-        return item.component->LoadResources(load);
-        }));
+    m_batch->Begin();
+    if (!component->LoadResources(load))
+    {
+        m_batch->End(m_deviceResources->GetCommandQueue());
+        return false;
+    }
 
     auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
     uploadResourcesFinished.wait();
 
-    //로드 하고 나서 필요한 셋팅을 할 수 있게끔 한다.
-    ReturnIfFalse(ranges::all_of(m_components, [load = m_texIndexing.get()](const auto& item) {
-        return item.component->SetDatas(load);
-        }));
-
-    //update를 한번 돌려서 위치등등을 계산해 준다.
-    ReturnIfFalse(ranges::all_of(m_components, [load = m_texIndexing.get()](const auto& item) {
-        return item.component->ProcessUpdate({ 0, 0 }, nullptr);
-        }));
+    //로드 하고 나서 필요한 셋팅 및 위치계산을 해 준다.
+    if (!component->SetDatas(load) || !component->ProcessUpdate({ 0, 0 }, nullptr))
+        return false;
 
     return true;
 }
-
 
 #pragma region Frame Draw
 // Draws the scene.
@@ -215,9 +212,8 @@ void Renderer::Draw()
     //ranges::for_each(m_renderScenes, [renderer = m_texIndexing.get()](const auto& scene) {
        // scene->RenderScene(renderer);
         //});
-    ranges::for_each(m_components, [renderer = m_texIndexing.get()](const auto& compInfo) {
-        if(compInfo.isRender)
-            compInfo.component->ProcessRender(renderer);
+    ranges::for_each(m_components, [renderer = m_texIndexing.get()](auto compInfo) {
+            compInfo->ProcessRender(renderer);
          });
     
     m_spriteBatch->End();
@@ -308,19 +304,15 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 
 IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
 
-void Renderer::AddComponent(IComponent* component, bool render)
+void Renderer::AddRenderComponent(IComponent* component)
 {
-    m_components.emplace_back(ComponentInfo{ component, render });
+    m_components.emplace_back(component);
 }
 
-void Renderer::RemoveComponent(IComponent* component)
+void Renderer::RemoveRenderComponent(IComponent* component)
 {
-    auto it = ranges::find_if(m_components, [component](const auto& compInfo) {
-        return compInfo.component == component;
-        });
-
-    if (it != m_components.end())
-        m_components.erase(it);
+    erase_if(m_components, [component](auto curComponent) { 
+        return curComponent == component; });
 }
 
 void Renderer::AddImguiComponent(IImguiComponent* comp) { m_imgui->AddComponent(comp); }

@@ -46,7 +46,7 @@ bool ImageGrid1::Update(const XMINT2& position, InputManager*) noexcept
 	return true;
 }
 
-void ImageGrid1::Render(IRender* render)
+void ImageGrid1::Render(IRender* render) const
 {
 	const auto& size = GetSize();
 	Rectangle destination(m_position.x, m_position.y, size.x, size.y);

@@ -37,7 +37,7 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 bool GameMainLoop::InitializeDerived()
 {
     m_gamePanel = make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution()));
-    m_renderer->AddComponent(m_gamePanel.get(), true);
+    m_renderer->AddRenderComponent(m_gamePanel.get());
 
     return true;
 }
@@ -100,6 +100,8 @@ bool GameMainLoop::LoadResources()
     unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
     imgGrid9->SetImage("ImgGrid9", layout, img9Source);
     m_gamePanel->AddComponent(move(imgGrid9), { 0.5f, 0.5f });
+
+    m_renderer->LoadComponent(m_gamePanel.get());
 
     return true;
 }

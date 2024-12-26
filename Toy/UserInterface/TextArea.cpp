@@ -124,10 +124,10 @@ bool TextArea::Update(const XMINT2& position, InputManager*) noexcept
 	return true;
 }
 
-void TextArea::Render(IRender* render)
+void TextArea::Render(IRender* render) const
 {
 	for (const auto& word : m_lines)
-		render->DrawString(m_font[word.fontStyle], 
+		render->DrawString(m_font.at(word.fontStyle), 
 			word.text, m_posByResolution + word.position,
 			XMLoadFloat4(&word.color));
 }

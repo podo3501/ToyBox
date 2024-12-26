@@ -15,7 +15,7 @@ protected:
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
-	virtual void Render(IRender*) {};
+	virtual void Render(IRender*) const {};
 	virtual bool Update(const XMINT2&, InputManager*) noexcept { return true; }
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;

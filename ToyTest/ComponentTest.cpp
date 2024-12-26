@@ -36,7 +36,7 @@ namespace ComponentTest
 		ImageSource grid1Source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
 
 		m_panel->AddComponent(CreateImageGrid1("ImgGrid1", layout, grid1Source), { 0.5f, 0.5f });
-		EXPECT_TRUE(m_renderer->LoadComponents());
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid1Render, 1);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -82,7 +82,7 @@ namespace ComponentTest
 		imgGrid3->SetImage("ImgGrid3", layout, grid3Source);
 
 		m_panel->AddComponent(move(imgGrid3), { 0.5f, 0.5f });
-		EXPECT_TRUE(m_renderer->LoadComponents());
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
 
@@ -155,7 +155,7 @@ namespace ComponentTest
 		imgGrid9->SetImage("ImgGrid9", layout, grid9Source);
 
 		m_panel->AddComponent(move(imgGrid9), { 0.5f, 0.5f });
-		EXPECT_TRUE(m_renderer->LoadComponents());
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
 
@@ -198,7 +198,7 @@ namespace ComponentTest
 			CreateImageGrid1("Button_pressed", loImgGrid, pressed)));
 
 		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
-		EXPECT_TRUE(m_renderer->LoadComponents());
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );	//Pressed
 		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
@@ -246,7 +246,7 @@ namespace ComponentTest
 			CreateImageGrid3("Button_pressed", loImgGrid, pressed)));
 
 		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
-		EXPECT_TRUE(m_renderer->LoadComponents());
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Pressed
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
@@ -281,7 +281,7 @@ namespace ComponentTest
 		textArea->SetFont("TextArea", text, layout, fontFileList);
 
 		m_panel->AddComponent(move(textArea), { 0.5f, 0.5f });
-		EXPECT_TRUE(m_renderer->LoadComponents());
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(m_panel));

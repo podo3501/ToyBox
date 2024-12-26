@@ -25,7 +25,6 @@ bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
     AddWinProcListener();
 
     ReturnIfFalse(LoadResources());
-    m_renderer->LoadComponents();
 
     return true;
 }

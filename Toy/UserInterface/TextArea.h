@@ -20,7 +20,7 @@ public:
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* getValue) override;
 	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept override;
-	virtual void Render(IRender* render) override;
+	virtual void Render(IRender* render) const override;
 
 	void SetFont(const string& name,
 		const wstring& text,

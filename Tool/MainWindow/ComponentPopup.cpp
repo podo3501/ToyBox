@@ -24,7 +24,7 @@ void ComponentPopup::Reset() noexcept
 	m_draw = false;
 	m_currentAction.reset();
 	m_renderer->RemoveRenderTexture(m_textureID);
-	m_renderer->RemoveComponent(m_component.get());
+	m_renderer->RemoveRenderComponent(m_component.get());
 	m_textureID = 0;
 }
 
@@ -110,8 +110,7 @@ bool ComponentPopup::MakeImageGrid9()
 	m_component = move(imgGrid9);
 
 	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
-	m_renderer->AddComponent(m_component.get(), false);
-	m_renderer->LoadComponents();
+	m_renderer->LoadComponent(m_component.get());
 	m_draw = true;
 
 	return true;

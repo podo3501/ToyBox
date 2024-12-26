@@ -23,7 +23,7 @@ private:
     XMUINT2 m_size{};
     size_t m_descHeapIdx{ 0 };
     std::wstring m_filename{};
-    Rectangle m_rect{};
+    Rectangle m_rect{}; //부분 이미지를 사용 할때 쓰는 변수
     bool m_fullSize{ false };
 };
 

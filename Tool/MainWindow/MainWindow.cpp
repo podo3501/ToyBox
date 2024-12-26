@@ -14,7 +14,7 @@
 MainWindow::~MainWindow()
 {
 	m_renderer->RemoveRenderTexture(m_textureID);
-	m_renderer->RemoveComponent(m_panel.get());
+	m_renderer->RemoveRenderComponent(m_panel.get());
 	m_renderer->RemoveImguiComponent(this);
 }
 
@@ -46,8 +46,7 @@ bool MainWindow::CreateScene(const wstring& filename)
 {
 	ReturnIfFalse(JsonFile::ReadComponent(filename, m_panel));
 	m_tooltip->SetPanel(m_panel.get());
-	m_renderer->AddComponent(m_panel.get(), false);	//메인 창에는 그리지 않는다.
-	ReturnIfFalse(m_renderer->LoadComponents());
+	ReturnIfFalse(m_renderer->LoadComponent(m_panel.get()));
 
 	const auto& panelSize = m_panel->GetSize();
 	ReturnIfFalse(m_renderer->CreateRenderTexture(panelSize, m_panel.get(), m_textureID));
@@ -118,16 +117,19 @@ void MainWindow::CheckAddComponent(const MouseTracker* mouseTracker) noexcept
 	m_panel->AddComponent(m_popup->GetComponent(), GetNormalPosition(pos, size));
 }
 
-unique_ptr<ComponentWindow> CreateComponentWindow(const UIComponent* component)
+static unique_ptr<ComponentWindow> CreateComponentWindow(const UIComponent* component, IRenderer* renderer)
 {
 	const string& type = component->GetType();
 
-	if (type == "class Panel") return make_unique<ComponentPanel>();
-	if (type == "class ImageGrid1") return make_unique<ComponentImageGrid1>();
-	if (type == "class ImageGrid3") return make_unique<ComponentImageGrid3>();
-	if (type == "class ImageGrid9") return make_unique<ComponentImageGrid9>();
+	unique_ptr<ComponentWindow> componentWindow{ nullptr };
+	if (type == "class Panel") componentWindow = make_unique<ComponentPanel>();
+	if (type == "class ImageGrid1") componentWindow = make_unique<ComponentImageGrid1>();
+	if (type == "class ImageGrid3") componentWindow = make_unique<ComponentImageGrid3>();
+	if (type == "class ImageGrid9") componentWindow = make_unique<ComponentImageGrid9>();
 
-	return nullptr;
+	componentWindow->SetRenderer(renderer);
+
+	return move(componentWindow);
 }
 
 void MainWindow::CheckSelectedComponent(InputManager* inputManager)
@@ -141,7 +143,7 @@ void MainWindow::CheckSelectedComponent(InputManager* inputManager)
 	const UIComponent* winComponent = (m_comWindow != nullptr) ? m_comWindow->GetComponent() : nullptr;
 	if (winComponent == component) return;
 
-	m_comWindow = CreateComponentWindow(component);
+	m_comWindow = CreateComponentWindow(component, m_renderer);
 	m_comWindow->SetComponent(component);
 }
 
@@ -160,6 +162,9 @@ void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 
 	m_panel->ProcessUpdate({}, inputManager);
 	m_popup->Excute(mouseTracker);
+
+	if (m_comWindow != nullptr)
+		m_comWindow->Update();
 }
 
 void MainWindow::RenderMain()

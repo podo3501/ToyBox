@@ -1,4 +1,4 @@
-#include "pch.h"
+癤�#include "pch.h"
 #include "EditUtility.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -32,7 +32,7 @@ void EditFilename(const string& label, Property<wstring>& filename)
         filename = relativePath;
     }
 
-    char filenameBuffer[256] = ""; // 파일 이름을 저장할 버퍼
+    char filenameBuffer[256] = "";
     WStringToChar(filename, filenameBuffer);
     ImGui::InputText(label.c_str(), filenameBuffer, sizeof(filenameBuffer));
 }
