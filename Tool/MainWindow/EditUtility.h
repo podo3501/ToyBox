@@ -24,5 +24,5 @@ bool EditInteger(const char* label, T& value)
     return true;
 }
 
-void EditRectangle(const char* label, Property<Rectangle>& rect);
+bool EditRectangle(const char* label, Property<Rectangle>& rect);
 void EditFilename(const string& label, Property<wstring>& filename);

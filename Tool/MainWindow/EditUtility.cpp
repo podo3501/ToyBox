@@ -4,17 +4,20 @@
 #include "../Toy/Utility.h"
 #include "../Dialog.h"
 
-void EditRectangle(const char* label, Property<Rectangle>& rect)
+bool EditRectangle(const char* label, Property<Rectangle>& rect)
 {
     ImGui::Text("%s", label);
     ImGui::PushID(label);
 
-    EditInteger("X", rect->x);
-    EditInteger("Y", rect->y);
-    EditInteger("Width", rect->width);
-    EditInteger("Height", rect->height);
+    bool modify{ false };
+    modify |= EditInteger("X", rect->x);
+    modify |= EditInteger("Y", rect->y);
+    modify |= EditInteger("Width", rect->width);
+    modify |= EditInteger("Height", rect->height);
 
     ImGui::PopID();
+
+    return modify;
 }
 
 void EditFilename(const string& label, Property<wstring>& filename)

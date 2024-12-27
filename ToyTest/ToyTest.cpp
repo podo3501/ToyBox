@@ -54,7 +54,7 @@ namespace BasicClient
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		panel->AddComponent(move(img9), { 0.1f, 0.1f });
 		m_panel->AddComponent(move(panel), { 0.5f, 0.5f });
-		m_panel->ProcessUpdate({}, nullptr);
+		m_panel->RefreshPosition();
 
 		UIComponent* component = m_panel->GetComponent("ImageGrid9_1_1");
 		XMINT2 pos = component->GetPosition();

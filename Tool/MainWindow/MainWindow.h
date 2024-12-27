@@ -24,7 +24,6 @@ public:
     bool CreateScene(const XMUINT2& size);
     bool CreateScene(const wstring& filename);
     bool SaveScene(const wstring& filename);
-    bool IsFocus() const noexcept;
     wstring GetSaveFilename() const noexcept;
     void Update(const DX::StepTimer* timer, InputManager* inputManager);
     void ChangeWindowSize(const ImVec2& size);
@@ -40,6 +39,7 @@ private:
     void RenderMain();
 
     IRenderer* m_renderer;
+    ImGuiWindow* m_window{ nullptr };
     unique_ptr<UIComponent> m_panel;
     unique_ptr<ComponentPopup> m_popup;
     unique_ptr<ComponentWindow> m_comWindow;

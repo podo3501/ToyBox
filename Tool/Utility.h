@@ -7,6 +7,7 @@ inline float GetFrameHeight()
 
 ImVec2 GetWindowStartPosition(const ImGuiWindow* window) noexcept;
 ImVec2 GetMousePosition(const ImGuiWindow* window) noexcept;
+bool IsWindowFocus(const ImGuiWindow* window) noexcept;
 
 inline XMUINT2 ImVec2ToXMUINT2(const ImVec2& vec)
 {

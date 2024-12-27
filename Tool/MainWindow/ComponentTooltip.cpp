@@ -60,7 +60,8 @@ void ComponentTooltip::RepeatedSelection(const std::vector<UIComponent*>& compon
 
 void ComponentTooltip::Render(const ImGuiWindow* window)
 {
-	ShowTooltip(window);
+	if (IsWindowFocus(window))
+		ShowTooltip(window);
 	ShowSelectComponent(window);
 }
 

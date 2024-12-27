@@ -71,19 +71,6 @@ wstring MainWindow::GetSaveFilename() const noexcept
 	return JsonFile::GetJsonFilename(m_panel.get());
 }
 
-bool MainWindow::IsFocus() const noexcept
-{
-	const ImGuiWindow* window = GetImGuiWindow();
-	if (window == nullptr || window->Active == false)
-		return false;
-
-	//ImGuiWindow* focusedWindow = GImGui->NavWindow;
-	//if (window != focusedWindow)
-	//	return false;
-
-	return true;
-}
-
 void MainWindow::ChangeWindowSize(const ImVec2& size)
 {
 	m_renderer->RemoveRenderTexture(m_textureID);
@@ -149,14 +136,13 @@ void MainWindow::CheckSelectedComponent(InputManager* inputManager)
 
 void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 {
-	if (!IsFocus()) return;
-	
-	const ImGuiWindow* window = GetImGuiWindow();
-	const ImVec2& offset = GetWindowStartPosition(window);
+	if (!IsWindowFocus(m_window)) return;
+
+	const ImVec2& offset = GetWindowStartPosition(m_window);
 	auto mouseTracker = inputManager->GetMouse();
 	mouseTracker->SetOffset(ImVec2ToXMINT2(offset));
 
-	CheckChangeWindow(window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
+	CheckChangeWindow(m_window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
 	CheckAddComponent(mouseTracker);
 	CheckSelectedComponent(inputManager);
 
@@ -174,10 +160,13 @@ void MainWindow::RenderMain()
 	ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_None);
 	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
+	if(ImGui::IsWindowAppearing())
+		m_window = const_cast<ImGuiWindow*>(GetImGuiWindow());
 
 	ImGui::Image(m_textureID, m_size);
+
 	m_popup->Render();
-	m_tooltip->Render(GetImGuiWindow());
+	m_tooltip->Render(m_window);
 
 	ImGui::End();
 }

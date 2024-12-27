@@ -10,7 +10,7 @@ public:
 	virtual ~ComponentWindow();
 	virtual void SetComponent(UIComponent* component);
 	virtual void UpdateComponent() {};
-	virtual void RenderComponent(UIComponent* component) {};
+	virtual void RenderComponent(UIComponent* component, bool& modify) {};
 	
 	void Update();
 	void Render();
@@ -18,7 +18,7 @@ public:
 	void SetRenderer(IRenderer* renderer) noexcept { m_renderer = renderer; }
 
 protected:
-	void EditSize(const XMUINT2& size);
+	bool EditSize(const XMUINT2& size);
 	IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
 private:
@@ -45,7 +45,7 @@ public:
 	ComponentImageGrid1();
 
 	virtual void UpdateComponent() override;
-	virtual void RenderComponent(UIComponent* component) override;
+	virtual void RenderComponent(UIComponent* component, bool& modify) override;
 
 private:
 	unique_ptr<TextureWindow> m_textureWindow;
@@ -54,7 +54,7 @@ private:
 class ComponentImageGrid3 : public ComponentWindow
 {
 public:
-	virtual void RenderComponent(UIComponent* component) override;
+	virtual void RenderComponent(UIComponent* component, bool& modify) override;
 
 private:
 };
@@ -62,7 +62,7 @@ private:
 class ComponentImageGrid9 : public ComponentWindow
 {
 public:
-	virtual void RenderComponent(UIComponent* component) override;
+	virtual void RenderComponent(UIComponent* component, bool& modify) override;
 
 private:
 };

@@ -191,6 +191,21 @@ XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept
 	return position + m_layout.GetPosition();
 }
 
+UIComponent* UIComponent::GetRoot() noexcept
+{
+	UIComponent* current = this;
+	while (current->m_parent != nullptr)
+		current = current->m_parent;
+	
+	return current;
+}
+
+void UIComponent::RefreshPosition() noexcept
+{
+	UIComponent* component = GetRoot();
+	component->ProcessUpdate({}, nullptr);
+}
+
 void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
 {
 	if (IsArea(pos))
@@ -245,4 +260,6 @@ const TransformComponent* UIComponent::FindTransformComponent(const UIComponent*
 	if (find == m_components.end()) return nullptr;
 	return &(*find);
 }
+
+
 

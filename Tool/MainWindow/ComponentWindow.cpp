@@ -40,18 +40,21 @@ void ComponentWindow::Render()
     if (ImGui::InputText("Name", buffer, IM_ARRAYSIZE(buffer)))
         m_component->SetName(buffer); // 이름 업데이트
 
+    bool modify{ false };
     const auto& layout = m_component->GetLayout();
-    EditSize(layout.GetSize());
-
+    modify |= EditSize(layout.GetSize());
+    
     ImGui::Separator();
     ImGui::Spacing();
 
-    RenderComponent(m_component);
+    RenderComponent(m_component, modify);
+    if (modify)
+        m_component->RefreshPosition();
 
     ImGui::End();
 }
 
-void ComponentWindow::EditSize(const XMUINT2& size)
+bool ComponentWindow::EditSize(const XMUINT2& size)
 {
     XMUINT2 newSize = size;
 
@@ -62,6 +65,8 @@ void ComponentWindow::EditSize(const XMUINT2& size)
 
     if (changed)
         m_component->ChangeSize(newSize);
+
+    return changed;
 }
 
 ////////////////////////////////////////////////
@@ -167,15 +172,15 @@ void ComponentImageGrid1::UpdateComponent()
         m_textureWindow = nullptr;
 }
 
-void ComponentImageGrid1::RenderComponent(UIComponent* component)
+void ComponentImageGrid1::RenderComponent(UIComponent* component, bool& modify)
 {
     if (m_textureWindow)
         m_textureWindow->Render();
 
     ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(component);
     EditFilename("Filename", imgGrid1->Filename);
-    EditRectangle("Source", imgGrid1->Source);
-
+    modify |= EditRectangle("Source", imgGrid1->Source);
+    
     ImGui::Spacing();
 
     if (ImGui::Button("Extract Textrue Area"))
@@ -190,11 +195,11 @@ void ComponentImageGrid1::RenderComponent(UIComponent* component)
 
 ////////////////////////////////////////////////
 
-void ComponentImageGrid3::RenderComponent(UIComponent* component)
+void ComponentImageGrid3::RenderComponent(UIComponent* component, bool& modify)
 {
 }
 
-void ComponentImageGrid9::RenderComponent(UIComponent* component)
+void ComponentImageGrid9::RenderComponent(UIComponent* component, bool& modify)
 {
     ImageGrid9* imgGrid9 = ComponentCast<ImageGrid9*>(component);
 }

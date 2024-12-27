@@ -18,7 +18,7 @@ namespace ComponentTest
 	void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
 	{
 		unique_ptr<UIComponent> clonePanel = component->Clone();
-		clonePanel->ProcessUpdate({}, nullptr);
+		clonePanel->RefreshPosition();
 
 		CallMockRender(clonePanel.get(), renderFunc, times);
 		EXPECT_TRUE(WriteReadTest(clonePanel));
@@ -90,7 +90,7 @@ namespace ComponentTest
 		m_panel->GetComponent("ImgGrid3", &img3);
 		img3->ChangeOrigin(Origin::Center);
 		img3->ChangeSize({ 120, 36 });
-		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
+		img3->RefreshPosition();
 
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);		
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -163,7 +163,7 @@ namespace ComponentTest
 		m_panel->GetComponent("ImgGrid9", &img9);
 		img9->ChangeOrigin(Origin::Center);
 		img9->ChangeSize({ 180, 150 });
-		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
+		img9->RefreshPosition();
 
 		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -254,7 +254,7 @@ namespace ComponentTest
 		Button* btn = nullptr;
 		m_panel->GetComponent("Button", &btn);
 		btn->ChangeSize({ 150, 48 });
-		m_panel->ProcessUpdate({}, nullptr);	//위치값을 재계산한다.
+		m_panel->RefreshPosition();
 
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -287,7 +287,7 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		unique_ptr<UIComponent> clonePanel = m_panel->Clone();
-		clonePanel->ProcessUpdate({}, nullptr);
+		clonePanel->RefreshPosition();
 
 		CallMockRender(clonePanel.get(), TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(clonePanel));

@@ -42,8 +42,10 @@ public:
 
 	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 	
+	
 	Rectangle GetRectangle() const noexcept;
 	XMINT2 GetPosition() const noexcept;
+	void RefreshPosition() noexcept;
 	bool ChangePosition(int index, const Vector2& pos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
 
@@ -72,6 +74,7 @@ private:
 	const TransformComponent* FindTransformComponent(const UIComponent* component) const noexcept;
 	XMINT2 GetComponentPosition(const UIComponent* component) const noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
+	UIComponent* GetRoot() noexcept;
 	void MarkDirty() noexcept;
 
 	string m_name{};
