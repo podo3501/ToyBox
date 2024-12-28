@@ -45,6 +45,9 @@
     <ClCompile Include="MainWindow\EditUtility.cpp">
       <Filter>MainWindow</Filter>
     </ClCompile>
+    <ClCompile Include="MainWindow\SelectComponent.cpp">
+      <Filter>MainWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -80,6 +83,9 @@
       <Filter>MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\EditUtility.h">
+      <Filter>MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectComponent.h">
       <Filter>MainWindow</Filter>
     </ClInclude>
   </ItemGroup>

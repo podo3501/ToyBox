@@ -1,0 +1,40 @@
+{
+    "Component": {
+        "Type": "class Panel",
+        "Name": "Main",
+        "Layout": {
+            "Size": {
+                "x": 1024,
+                "y": 768
+            },
+            "Origin": "LeftTop"
+        },
+        "Components": [
+            {
+                "Position": {
+                    "x": 0.449219,
+                    "y": 0.408854
+                },
+                "Component": {
+                    "Type": "class ImageGrid1",
+                    "Name": "untitled_imageGrid1",
+                    "Layout": {
+                        "Size": {
+                            "x": 64,
+                            "y": 64
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "Index": 0,
+                    "Filename": "UI/Texture/Option_1.png",
+                    "Source": {
+                        "x": 0,
+                        "y": 0,
+                        "width": 64,
+                        "height": 64
+                    }
+                }
+            }
+        ]
+    }
+}

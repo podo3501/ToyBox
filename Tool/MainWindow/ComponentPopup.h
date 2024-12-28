@@ -8,6 +8,7 @@ class ComponentPopup
 {
 	enum class MakeComponent
 	{
+		ImageGrid1,
 		ImageGrid9
 	};
 
@@ -24,6 +25,8 @@ public:
 private:
 	void Reset() noexcept;
 	void DrawMakeComponent();
+	bool LoadImageGrid(unique_ptr<UIComponent>&& imgGrid);
+	bool MakeImageGrid1();
 	bool MakeImageGrid9();
 
 	IRenderer* m_renderer;

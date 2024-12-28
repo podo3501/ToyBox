@@ -90,11 +90,3 @@ Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
     const ImageGrid1* img1 = ComponentCast<ImageGrid1*>(components[0]);
     return img1->Source;
 }
-
-unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, const UILayout& layout, const ImageSource& source)
-{
-    auto imgGrid3 = make_unique<ImageGrid3>();
-    if (!imgGrid3->SetImage(name, layout, source)) return nullptr;
-
-    return imgGrid3;
-}

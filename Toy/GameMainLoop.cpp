@@ -9,6 +9,7 @@
 #include "UserInterface/ImageGrid1.h"
 #include "UserInterface/ImageGrid3.h"
 #include "UserInterface/ImageGrid9.h"
+#include "UserInterface/UIUtility.h"
 #include "UserInterface/Button.h"
 
 #ifdef __clang__
@@ -52,14 +53,14 @@ bool GameMainLoop::LoadResources()
 
     std::unique_ptr<Button> button = std::make_unique<Button>();
     button->SetImage("Button", loButton,
-        CreateImageGrid3("Button_normal", loImgGrid, normal),
-        CreateImageGrid3("Button_hover", loImgGrid, hover),
-        CreateImageGrid3("Button_pressed", loImgGrid, pressed));
+        CreateImageGrid<ImageGrid3>("Button_normal", loImgGrid, normal),
+        CreateImageGrid<ImageGrid3>("Button_hover", loImgGrid, hover),
+        CreateImageGrid<ImageGrid3>("Button_pressed", loImgGrid, pressed));
     std::unique_ptr<Button> button2 = std::make_unique<Button>();
     button2->SetImage("Button", loButton,
-        CreateImageGrid3("Button_normal", loImgGrid, normal),
-        CreateImageGrid3("Button_hover", loImgGrid, hover),
-        CreateImageGrid3("Button_pressed", loImgGrid, pressed));
+        CreateImageGrid<ImageGrid3>("Button_normal", loImgGrid, normal),
+        CreateImageGrid<ImageGrid3>("Button_hover", loImgGrid, hover),
+        CreateImageGrid<ImageGrid3>("Button_pressed", loImgGrid, pressed));
 
     m_gamePanel->AddComponent(move(button), { 0.5f, 0.5f });
     m_gamePanel->AddComponent(move(button2), { 0.5f, 0.4f });
@@ -72,9 +73,9 @@ bool GameMainLoop::LoadResources()
 
     std::unique_ptr<Button> closeButton = std::make_unique<Button>();
     closeButton->SetImage("Button", loButton2,
-        CreateImageGrid1("Button_normal", loImgGrid2, normal2),
-        CreateImageGrid1("Button_hover", loImgGrid2, hover2),
-        CreateImageGrid1("Button_pressed", loImgGrid2, pressed2));
+        CreateImageGrid<ImageGrid1>("Button_normal", loImgGrid2, normal2),
+        CreateImageGrid<ImageGrid1>("Button_hover", loImgGrid2, hover2),
+        CreateImageGrid<ImageGrid1>("Button_pressed", loImgGrid2, pressed2));
 
     m_gamePanel->AddComponent(move(closeButton), { 0.2f, 0.2f });
 

@@ -9,19 +9,22 @@ public:
 	ComponentWindow();
 	virtual ~ComponentWindow();
 	virtual void SetComponent(UIComponent* component);
-	virtual void UpdateComponent() {};
-	virtual void RenderComponent(UIComponent* component, bool& modify) {};
 	
 	void Update();
-	void Render();
+	void Render(const ImGuiWindow* mainWindow);
 	const UIComponent* GetComponent() const noexcept { return m_component; }
 	void SetRenderer(IRenderer* renderer) noexcept { m_renderer = renderer; }
 
 protected:
+	virtual void UpdateComponent() {};
+	virtual void RenderComponent(UIComponent* component, bool& modify) {};
+
 	bool EditSize(const XMUINT2& size);
 	IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
 private:
+	void ShowSelectComponent(const ImGuiWindow* mainWindow) const;
+
 	IRenderer* m_renderer;
 	UIComponent* m_component;
 	bool m_visible{ false };

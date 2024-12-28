@@ -39,3 +39,20 @@ struct PositionSize
 };
 
 vector<PositionSize> StretchSize(StretchType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept;
+
+class UILayout;
+struct ImageSource;
+
+template<typename T>
+concept ImageGridClass = requires(T obj, const string & name, const UILayout & layout, const ImageSource & source) {
+	{ obj.SetImage(name, layout, source) };
+};
+
+template<ImageGridClass T>
+unique_ptr<T> CreateImageGrid(const string& name, const UILayout& layout, const ImageSource& source)
+{
+	auto imgGrid = make_unique<T>();
+	if (!imgGrid->SetImage(name, layout, source)) return nullptr;
+
+	return imgGrid;
+}

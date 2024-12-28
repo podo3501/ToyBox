@@ -77,11 +77,3 @@ void ImageGrid1::SerializeIO(JsonOperation& operation)
 	operation.Process("Filename", Filename);
 	operation.Process("Source", Source);
 }
-
-unique_ptr<ImageGrid1> CreateImageGrid1(const string& name, const UILayout& layout, const ImageSource& source)
-{
-	auto imgGrid1 = make_unique<ImageGrid1>();
-	if(!imgGrid1->SetImage(name, layout, source)) return nullptr;
-	
-	return imgGrid1;
-}

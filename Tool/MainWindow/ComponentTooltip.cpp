@@ -17,47 +17,6 @@ void ComponentTooltip::SelectComponent(UIComponent* component) noexcept
 	m_selectCom = component;
 }
 
-void ComponentTooltip::CheckSelectedComponent(InputManager* inputManager) noexcept
-{
-	auto pressedKey = inputManager->GetKeyboard()->pressed;
-	if (pressedKey.Escape)
-	{
-		SelectComponent(nullptr);
-		return;
-	}
-
-	auto mouseTracker = inputManager->GetMouse();
-	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;	//왼쪽버튼 눌렀을때 
-
-	static vector<UIComponent*> preComponentList{ nullptr };
-	vector<UIComponent*> componentList;
-	const XMINT2& pos = mouseTracker->GetOffsetPosition();
-	m_panel->GetComponents(pos, componentList);
-	if (componentList.empty()) return;
-
-	if (preComponentList == componentList)
-		RepeatedSelection(componentList);
-	else //마우스가 다른 컴포넌트를 선택해서 리스트가 바뀌었다면 제일 첫번째 원소를 찍어준다.
-	{
-		SelectComponent(componentList.back());
-		preComponentList = move(componentList);
-	}
-}
-
-void ComponentTooltip::RepeatedSelection(const std::vector<UIComponent*>& componentList)
-{
-	auto findIdx = FindIndex(componentList, m_selectCom);
-	if (!findIdx.has_value())
-	{
-		SelectComponent(componentList.back());
-		return;
-	}
-
-	int idx = findIdx.value() - 1;
-	if (idx < 0) idx = static_cast<int>(componentList.size() - 1);
-	SelectComponent(componentList[idx]);
-}
-
 void ComponentTooltip::Render(const ImGuiWindow* window)
 {
 	if (IsWindowFocus(window))
@@ -65,30 +24,30 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 	ShowSelectComponent(window);
 }
 
-static tuple<ImVec2, ImVec2> RectangleToImVec2(const Rectangle& rect)
-{
-	return { {static_cast<float>(rect.x), static_cast<float>(rect.y) },
-		{static_cast<float>(rect.width), static_cast<float>(rect.height) } };
-}
+//static tuple<ImVec2, ImVec2> RectangleToImVec2(const Rectangle& rect)
+//{
+//	return { {static_cast<float>(rect.x), static_cast<float>(rect.y) },
+//		{static_cast<float>(rect.width), static_cast<float>(rect.height) } };
+//}
 
 void ComponentTooltip::ShowSelectComponent(const ImGuiWindow* window) const
 {
-	if (m_selectCom == nullptr || window == nullptr) return;
-	
-	const ImVec2& windowOffset = GetWindowStartPosition(window);
+	//if (m_selectCom == nullptr || window == nullptr) return;
+	//
+	//const ImVec2& windowOffset = GetWindowStartPosition(window);
 
-	const Rectangle& rect = m_selectCom->GetRectangle();
-	auto [topLeft, bottomRight ] = RectangleToImVec2(rect);
-	topLeft = topLeft + windowOffset;
-	bottomRight = topLeft + bottomRight;
+	//const Rectangle& rect = m_selectCom->GetRectangle();
+	//auto [topLeft, bottomRight ] = RectangleToImVec2(rect);
+	//topLeft = topLeft + windowOffset;
+	//bottomRight = topLeft + bottomRight;
 
-	constexpr ImU32 outlineColor = IM_COL32(255, 255, 255, 255);
-	constexpr ImU32 fillColor = IM_COL32(255, 255, 255, 100);
-	constexpr float thickness = 1.f;
+	//constexpr ImU32 outlineColor = IM_COL32(255, 255, 255, 255);
+	//constexpr ImU32 fillColor = IM_COL32(255, 255, 255, 100);
+	//constexpr float thickness = 1.f;
 
-	ImDrawList* drawList = ImGui::GetWindowDrawList();
-	drawList->AddRect(topLeft, bottomRight, outlineColor, 0.f, 0, thickness);
-	drawList->AddRectFilled(topLeft, bottomRight, fillColor, 0.0f);
+	//ImDrawList* drawList = ImGui::GetWindowDrawList();
+	//drawList->AddRect(topLeft, bottomRight, outlineColor, 0.f, 0, thickness);
+	//drawList->AddRectFilled(topLeft, bottomRight, fillColor, 0.0f);
 }
 
 void ComponentTooltip::ShowTooltip(const ImGuiWindow* window)

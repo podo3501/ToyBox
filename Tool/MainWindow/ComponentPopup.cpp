@@ -5,7 +5,9 @@
 #include "../Toy/Utility.h"
 #include "../Utility.h"
 #include "../Toy/UserInterface/UIType.h"
+#include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
+#include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/HelperClass.h"
 
 static constexpr const char* PopupName = "PopupMenu";
@@ -46,6 +48,7 @@ bool ComponentPopup::Excute(MouseTracker* mouseTracker)
 	auto result{ true };
 	switch (m_currentAction.value())
 	{
+	case MakeComponent::ImageGrid1: result = MakeImageGrid1(); break;
 	case MakeComponent::ImageGrid9: result = MakeImageGrid9(); break;
 	}
 
@@ -84,6 +87,7 @@ void ComponentPopup::Render()
 	}
 	
 	m_isActive = true;
+	if (ImGui::MenuItem("Image Grid 1")) m_currentAction = MakeComponent::ImageGrid1;
 	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = MakeComponent::ImageGrid9;
 	if (ImGui::MenuItem("Close")) {}
 	
@@ -93,6 +97,29 @@ void ComponentPopup::Render()
 bool ComponentPopup::IsActive() const noexcept
 {
 	return m_isActive;
+}
+
+bool ComponentPopup::LoadImageGrid(unique_ptr<UIComponent>&& imgGrid)
+{
+	ReturnIfNullptr(imgGrid);
+
+	m_component = move(imgGrid);
+	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
+
+	m_renderer->LoadComponent(m_component.get());
+	m_draw = true;
+
+	return true;
+}
+
+
+bool ComponentPopup::MakeImageGrid1()
+{
+	UILayout layout({ 64, 64 }, Origin::LeftTop);
+	ImageSource source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
+	LoadImageGrid(CreateImageGrid<ImageGrid1>("untitled_imageGrid1", layout, source));
+
+	return true;
 }
 
 bool ComponentPopup::MakeImageGrid9()
@@ -105,13 +132,7 @@ bool ComponentPopup::MakeImageGrid9()
 			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
 		}
 	};
-	unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
-	imgGrid9->SetImage("untitled_imageGrid9", layout, source);
-	m_component = move(imgGrid9);
-
-	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
-	m_renderer->LoadComponent(m_component.get());
-	m_draw = true;
+	LoadImageGrid(CreateImageGrid<ImageGrid9>("untitled_imageGrid9", layout, source));
 
 	return true;
 }

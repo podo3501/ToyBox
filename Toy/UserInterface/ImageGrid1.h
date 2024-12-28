@@ -31,5 +31,3 @@ private:
 	size_t m_index{ 0 };
 	XMINT2 m_position{};
 };
-
-unique_ptr<ImageGrid1> CreateImageGrid1(const string& name, const UILayout& layout, const ImageSource& source);

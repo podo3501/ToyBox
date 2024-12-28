@@ -9,9 +9,8 @@ namespace DX
 class UIComponent;
 class InputManager;
 class MouseTracker;
-class ComponentTooltip;
 class ComponentPopup;
-class ComponentWindow;
+class SelectComponent;
 
 class MainWindow : public IImguiComponent
 {
@@ -34,16 +33,12 @@ public:
 private:
     void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker* mouseTracker);
     void CheckAddComponent(const MouseTracker* mouseTracker) noexcept;
-    void CheckSelectedComponent(InputManager* inputManager);
-
-    void RenderMain();
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<UIComponent> m_panel;
     unique_ptr<ComponentPopup> m_popup;
-    unique_ptr<ComponentWindow> m_comWindow;
-    unique_ptr<ComponentTooltip> m_tooltip;
+    unique_ptr<SelectComponent> m_selectComponent;
 
     string m_name{};
     ImTextureID m_textureID{};

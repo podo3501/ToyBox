@@ -35,7 +35,7 @@ namespace ComponentTest
 		UILayout layout({ 64, 64 }, Origin::LeftTop);
 		ImageSource grid1Source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
 
-		m_panel->AddComponent(CreateImageGrid1("ImgGrid1", layout, grid1Source), { 0.5f, 0.5f });
+		m_panel->AddComponent(CreateImageGrid<ImageGrid1>("ImgGrid1", layout, grid1Source), { 0.5f, 0.5f });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid1Render, 1);
@@ -78,10 +78,8 @@ namespace ComponentTest
 				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 }
 			}
 		};
-		unique_ptr<ImageGrid3> imgGrid3 = make_unique<ImageGrid3>();
-		imgGrid3->SetImage("ImgGrid3", layout, grid3Source);
 
-		m_panel->AddComponent(move(imgGrid3), { 0.5f, 0.5f });
+		m_panel->AddComponent(CreateImageGrid<ImageGrid3>("ImgGrid3", layout, grid3Source), { 0.5f, 0.5f });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
@@ -151,10 +149,7 @@ namespace ComponentTest
 			}
 		};
 
-		unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
-		imgGrid9->SetImage("ImgGrid9", layout, grid9Source);
-
-		m_panel->AddComponent(move(imgGrid9), { 0.5f, 0.5f });
+		m_panel->AddComponent(CreateImageGrid<ImageGrid9>("ImgGrid9", layout, grid9Source), { 0.5f, 0.5f });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
@@ -193,9 +188,9 @@ namespace ComponentTest
 
 		std::unique_ptr<Button> button = std::make_unique<Button>();
 		EXPECT_TRUE(button->SetImage("Button", loButton,
-			CreateImageGrid1("Button_normal", loImgGrid, normal),
-			CreateImageGrid1("Button_hover", loImgGrid, hover),
-			CreateImageGrid1("Button_pressed", loImgGrid, pressed)));
+			CreateImageGrid<ImageGrid1>("Button_normal", loImgGrid, normal),
+			CreateImageGrid<ImageGrid1>("Button_hover", loImgGrid, hover),
+			CreateImageGrid<ImageGrid1>("Button_pressed", loImgGrid, pressed)));
 
 		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
@@ -241,9 +236,9 @@ namespace ComponentTest
 
 		std::unique_ptr<Button> button = std::make_unique<Button>();
 		EXPECT_TRUE(button->SetImage("Button", loButton,
-			CreateImageGrid3("Button_normal", loImgGrid, normal),
-			CreateImageGrid3("Button_hover", loImgGrid, hover),
-			CreateImageGrid3("Button_pressed", loImgGrid, pressed)));
+			CreateImageGrid<ImageGrid3>("Button_normal", loImgGrid, normal),
+			CreateImageGrid<ImageGrid3>("Button_hover", loImgGrid, hover),
+			CreateImageGrid<ImageGrid3>("Button_pressed", loImgGrid, pressed)));
 
 		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));

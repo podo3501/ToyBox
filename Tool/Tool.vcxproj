@@ -153,6 +153,7 @@
     <ClCompile Include="MainWindow\EditUtility.cpp" />
     <ClCompile Include="MainWindow\MainWindow.cpp" />
     <ClCompile Include="MainWindow\ComponentPopup.cpp" />
+    <ClCompile Include="MainWindow\SelectComponent.cpp" />
     <ClCompile Include="Menu\FileTab.cpp" />
     <ClCompile Include="Menu\MenuBar.cpp" />
     <ClCompile Include="Menu\RecentFiles.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="MainWindow\EditUtility.h" />
     <ClInclude Include="MainWindow\MainWindow.h" />
     <ClInclude Include="MainWindow\ComponentPopup.h" />
+    <ClInclude Include="MainWindow\SelectComponent.h" />
     <ClInclude Include="Menu\FileTab.h" />
     <ClInclude Include="Menu\MenuBar.h" />
     <ClInclude Include="Menu\RecentFiles.h" />

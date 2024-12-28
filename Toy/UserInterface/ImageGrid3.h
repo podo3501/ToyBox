@@ -21,5 +21,3 @@ public:
 
 private:
 };
-
-unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, const UILayout& layout, const ImageSource& source);

@@ -27,9 +27,37 @@ void ComponentWindow::Update()
     UpdateComponent();
 }
 
-void ComponentWindow::Render()
+static tuple<ImVec2, ImVec2> RectangleToImVec2(const Rectangle& rect)
+{
+    return { {static_cast<float>(rect.x), static_cast<float>(rect.y) },
+        {static_cast<float>(rect.width), static_cast<float>(rect.height) } };
+}
+
+void ComponentWindow::ShowSelectComponent(const ImGuiWindow* mainWindow) const
+{
+    if (m_component == nullptr || mainWindow == nullptr) return;
+
+    const ImVec2& windowOffset = GetWindowStartPosition(mainWindow);
+
+    const Rectangle& rect = m_component->GetRectangle();
+    auto [topLeft, bottomRight] = RectangleToImVec2(rect);
+    topLeft = topLeft + windowOffset;
+    bottomRight = topLeft + bottomRight;
+
+    constexpr ImU32 outlineColor = IM_COL32(255, 255, 255, 255);
+    constexpr ImU32 fillColor = IM_COL32(255, 255, 255, 100);
+    constexpr float thickness = 1.f;
+
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    drawList->AddRect(topLeft, bottomRight, outlineColor, 0.f, 0, thickness);
+    drawList->AddRectFilled(topLeft, bottomRight, fillColor, 0.0f);
+}
+
+void ComponentWindow::Render(const ImGuiWindow* mainWindow)
 {
     if (!m_visible) return;
+
+    ShowSelectComponent(mainWindow);
 
     ImGui::Begin("Component Window - ", &m_visible, ImGuiWindowFlags_NoFocusOnAppearing);
 
