@@ -4,53 +4,20 @@
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/Utility.h"
 #include "../Toy/HelperClass.h"
-#include "../Utility.h"
+#include "../../Utility.h"
 
 ComponentTooltip::~ComponentTooltip() = default;
 ComponentTooltip::ComponentTooltip(UIComponent* panel) :
 	m_panel{ panel },
-	m_selectCom{ nullptr }
+	m_component{ nullptr }
 {}
 
-void ComponentTooltip::SelectComponent(UIComponent* component) noexcept
+void ComponentTooltip::SetComponent(UIComponent* component) noexcept
 {
-	m_selectCom = component;
+	m_component = component;
 }
 
 void ComponentTooltip::Render(const ImGuiWindow* window)
-{
-	if (IsWindowFocus(window))
-		ShowTooltip(window);
-	ShowSelectComponent(window);
-}
-
-//static tuple<ImVec2, ImVec2> RectangleToImVec2(const Rectangle& rect)
-//{
-//	return { {static_cast<float>(rect.x), static_cast<float>(rect.y) },
-//		{static_cast<float>(rect.width), static_cast<float>(rect.height) } };
-//}
-
-void ComponentTooltip::ShowSelectComponent(const ImGuiWindow* window) const
-{
-	//if (m_selectCom == nullptr || window == nullptr) return;
-	//
-	//const ImVec2& windowOffset = GetWindowStartPosition(window);
-
-	//const Rectangle& rect = m_selectCom->GetRectangle();
-	//auto [topLeft, bottomRight ] = RectangleToImVec2(rect);
-	//topLeft = topLeft + windowOffset;
-	//bottomRight = topLeft + bottomRight;
-
-	//constexpr ImU32 outlineColor = IM_COL32(255, 255, 255, 255);
-	//constexpr ImU32 fillColor = IM_COL32(255, 255, 255, 100);
-	//constexpr float thickness = 1.f;
-
-	//ImDrawList* drawList = ImGui::GetWindowDrawList();
-	//drawList->AddRect(topLeft, bottomRight, outlineColor, 0.f, 0, thickness);
-	//drawList->AddRectFilled(topLeft, bottomRight, fillColor, 0.0f);
-}
-
-void ComponentTooltip::ShowTooltip(const ImGuiWindow* window)
 {
 	const ImVec2& windowMousePos = GetMousePosition(window);
 
@@ -64,7 +31,7 @@ void ComponentTooltip::ShowTooltip(const ImGuiWindow* window)
 	constexpr float tooltipOffsetX = 20.f;
 	constexpr float tooltipGap = 5.f; // 툴팁 간 간격
 	float tooltipOffsetY = 20.f; // 초기 Y 오프셋
-	
+
 	for (int idx{ 0 }; UIComponent * curComponent : views::reverse(componentList))
 	{
 		// 툴팁 위치와 크기 계산
@@ -73,7 +40,7 @@ void ComponentTooltip::ShowTooltip(const ImGuiWindow* window)
 		const ImVec2& textSize = ImGui::CalcTextSize(tooltipContext.c_str());
 		const ImVec2& tooltipSize = ImVec2(textSize.x + padding.x * 2, textSize.y + padding.y * 2);
 
-		bool isSelected = (curComponent == m_selectCom);
+		bool isSelected = (curComponent == m_component);
 		const string& windowId = "tooltip_" + std::to_string(idx++);
 		ShowTooltipComponent(isSelected, tooltipPos, tooltipSize, windowId, tooltipContext);
 		tooltipOffsetY += ImGui::CalcTextSize(curComponent->GetType().c_str()).y + padding.y * 2 + tooltipGap;

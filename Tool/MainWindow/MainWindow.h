@@ -10,7 +10,7 @@ class UIComponent;
 class InputManager;
 class MouseTracker;
 class ComponentPopup;
-class SelectComponent;
+class ComponentSelector;
 
 class MainWindow : public IImguiComponent
 {
@@ -38,7 +38,7 @@ private:
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<UIComponent> m_panel;
     unique_ptr<ComponentPopup> m_popup;
-    unique_ptr<SelectComponent> m_selectComponent;
+    unique_ptr<ComponentSelector> m_selector;
 
     string m_name{};
     ImTextureID m_textureID{};

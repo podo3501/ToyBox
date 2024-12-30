@@ -2,7 +2,7 @@
 #include "MainWindow.h"
 #include "../Utility.h"
 #include "ComponentPopup.h"
-#include "SelectComponent.h"
+#include "SelectedComponent/ComponentSelector.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/JsonHelper.h"
@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
 	m_panel{ make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution())) },
-	m_selectComponent{ make_unique<SelectComponent>(renderer, m_panel.get()) },
+	m_selector{ make_unique<ComponentSelector>(renderer, m_panel.get()) },
 	m_popup{ make_unique<ComponentPopup>(renderer) }
 {
 	static int idx{ 0 };
@@ -48,7 +48,7 @@ bool MainWindow::CreateScene(const wstring& filename)
 	m_size = XMUINT2ToImVec2(panelSize);
 	m_isOpen = true;
 
-	m_selectComponent->SetPanel(m_panel.get());
+	m_selector->SetPanel(m_panel.get());
 
 	return true;
 }
@@ -111,7 +111,7 @@ void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 
 	CheckChangeWindow(m_window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
 	CheckAddComponent(mouseTracker);
-	m_selectComponent->Update(inputManager);
+	m_selector->Update(inputManager, m_popup->IsActive());
 
 	m_panel->ProcessUpdate({}, inputManager);
 	m_popup->Excute(mouseTracker);
@@ -133,7 +133,7 @@ void MainWindow::Render(ImGuiIO* io)
 	ImGui::Image(m_textureID, m_size);
 
 	m_popup->Render();
-	m_selectComponent->Render(m_window);
+	m_selector->Render(m_window, m_popup->IsActive());
 
 	ImGui::End();
 }

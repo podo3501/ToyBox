@@ -12,8 +12,8 @@
         "Components": [
             {
                 "Position": {
-                    "x": 0.449219,
-                    "y": 0.408854
+                    "x": 0.356445,
+                    "y": 0.292969
                 },
                 "Component": {
                     "Type": "class ImageGrid1",

@@ -7,6 +7,9 @@
     <Filter Include="MainWindow">
       <UniqueIdentifier>{7d670e93-cddd-4a1e-a2ea-0416b7924d34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainWindow\SelectedComponent">
+      <UniqueIdentifier>{fcca4c53-251c-4659-bb5c-2b7650684204}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp" />
@@ -36,17 +39,26 @@
     <ClCompile Include="MainWindow\ComponentPopup.cpp">
       <Filter>MainWindow</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\ComponentTooltip.cpp">
-      <Filter>MainWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindow\ComponentWindow.cpp">
-      <Filter>MainWindow</Filter>
-    </ClCompile>
     <ClCompile Include="MainWindow\EditUtility.cpp">
       <Filter>MainWindow</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\SelectComponent.cpp">
-      <Filter>MainWindow</Filter>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentSelector.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentWindow.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ExtractTexture.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,17 +88,26 @@
     <ClInclude Include="MainWindow\ComponentPopup.h">
       <Filter>MainWindow</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow\ComponentTooltip.h">
-      <Filter>MainWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow\ComponentWindow.h">
-      <Filter>MainWindow</Filter>
-    </ClInclude>
     <ClInclude Include="MainWindow\EditUtility.h">
       <Filter>MainWindow</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow\SelectComponent.h">
-      <Filter>MainWindow</Filter>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentSelector.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentWindow.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ExtractTexture.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

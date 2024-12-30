@@ -6,19 +6,20 @@ class UIComponent;
 class ComponentTooltip;
 class ComponentWindow;
 
-class SelectComponent
+class ComponentSelector
 {
 public:
-	~SelectComponent();
-	SelectComponent(IRenderer* renderer, UIComponent* panel);
+	~ComponentSelector();
+	ComponentSelector(IRenderer* renderer, UIComponent* panel);
 
 	void SetPanel(UIComponent* panel) noexcept;
 	void SetComponent(UIComponent* component) noexcept;
-	void Update(InputManager* inputManager) noexcept;
-	void Render(const ImGuiWindow* mainWindow);
+	void Update(InputManager* inputManager, bool bPopupActive) noexcept;
+	void Render(const ImGuiWindow* mainWindow, bool bPopupActive);
 
 private:
 	void RepeatedSelection(const std::vector<UIComponent*>& componentList) noexcept;
+	void SelectComponent(InputManager* inputManager) noexcept;
 
 	IRenderer* m_renderer;
 	unique_ptr<ComponentTooltip> m_tooltip;

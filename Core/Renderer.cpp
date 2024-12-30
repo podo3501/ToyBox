@@ -29,7 +29,7 @@ unique_ptr<IRenderer> CreateRenderer(HWND hwnd, int width, int height, bool bUse
 Renderer::Renderer(HWND hwnd, int width, int height, unique_ptr<IImgui>&& imgui) noexcept(false) :
     m_imgui{ move(imgui) }
 {
-    WICOnceInitialize();
+    //WICOnceInitialize();
 
     m_deviceResources = make_unique<DX::DeviceResources>();
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
@@ -163,6 +163,7 @@ bool Renderer::LoadComponent(IComponent* component)
     Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
     if (FAILED(initialize)) return false;
 #endif
+    WICOnceInitialize();
 
     auto load = m_texIndexing.get();
 

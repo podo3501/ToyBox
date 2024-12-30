@@ -1,14 +1,15 @@
 #include "pch.h"
-#include "SelectComponent.h"
+#include "ComponentSelector.h"
 #include "ComponentTooltip.h"
 #include "ComponentWindow.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/HelperClass.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIComponent.h"
+#include "../../Utility.h"
 
-SelectComponent::~SelectComponent() = default;
-SelectComponent::SelectComponent(IRenderer* renderer, UIComponent* panel) :
+ComponentSelector::~ComponentSelector() = default;
+ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
 	m_renderer{ renderer },
 	m_tooltip{ make_unique<ComponentTooltip>(panel) },
 	m_window{ nullptr },
@@ -16,7 +17,7 @@ SelectComponent::SelectComponent(IRenderer* renderer, UIComponent* panel) :
 	m_component{ nullptr }
 {}
 
-void SelectComponent::SetPanel(UIComponent* panel) noexcept
+void ComponentSelector::SetPanel(UIComponent* panel) noexcept
 {
 	m_panel = panel;
 	m_tooltip->SetPanel(panel);
@@ -25,20 +26,22 @@ void SelectComponent::SetPanel(UIComponent* panel) noexcept
 static unique_ptr<ComponentWindow> CreateComponentWindow(const UIComponent* component, IRenderer* renderer)
 {
 	if (!component) return nullptr;
+
 	const string& type = component->GetType();
+	static const unordered_map<string, function<unique_ptr<ComponentWindow>()>> factoryMap{
+		{ "class Panel", []() { return make_unique<ComponentPanel>(); } },
+		{ "class ImageGrid1", [renderer]() { return make_unique<ComponentImageGrid1>(renderer); } },
+		{ "class ImageGrid3", []() { return make_unique<ComponentImageGrid3>(); } },
+		{ "class ImageGrid9", []() { return make_unique<ComponentImageGrid9>(); } },
+	};
 
-	unique_ptr<ComponentWindow> componentWindow{ nullptr };
-	if (type == "class Panel") componentWindow = make_unique<ComponentPanel>();
-	if (type == "class ImageGrid1") componentWindow = make_unique<ComponentImageGrid1>();
-	if (type == "class ImageGrid3") componentWindow = make_unique<ComponentImageGrid3>();
-	if (type == "class ImageGrid9") componentWindow = make_unique<ComponentImageGrid9>();
+	auto it = factoryMap.find(type);
+	if (it == factoryMap.end()) return nullptr;
 
-	componentWindow->SetRenderer(renderer);
-
-	return move(componentWindow);
+	return it->second();
 }
 
-void SelectComponent::SetComponent(UIComponent* component) noexcept
+void ComponentSelector::SetComponent(UIComponent* component) noexcept
 {
 	string preType = (m_component) ? m_component->GetType() : "";
 	string curType = (component) ? component->GetType() : "";
@@ -47,22 +50,16 @@ void SelectComponent::SetComponent(UIComponent* component) noexcept
 	if (preType != curType)
 		m_window = CreateComponentWindow(component, m_renderer);
 
-	m_component = component;
-
 	if (m_window)
 		m_window->SetComponent(component);	//타입은 같지만 다른 UIComponent일지도 모른다.
+
+	m_component = component;
+	m_tooltip->SetComponent(component);
 }
 
-void SelectComponent::Update(InputManager* inputManager) noexcept
+void ComponentSelector::SelectComponent(InputManager* inputManager) noexcept
 {
-	auto pressedKey = inputManager->GetKeyboard()->pressed;
-	if (pressedKey.Escape)
-	{
-		SetComponent(nullptr);
-		return;
-	}
-
-	auto mouseTracker = inputManager->GetMouse();
+	const auto mouseTracker = inputManager->GetMouse();
 	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;
 
 	static vector<UIComponent*> preComponentList{ nullptr };
@@ -78,19 +75,37 @@ void SelectComponent::Update(InputManager* inputManager) noexcept
 		SetComponent(componentList.back());
 		preComponentList = move(componentList);
 	}
+}
+
+void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) noexcept
+{
+	auto pressedKey = inputManager->GetKeyboard()->pressed;
+	if (pressedKey.Escape)
+	{
+		SetComponent(nullptr);
+		return;
+	}
 
 	if (m_window)
 		m_window->Update();
+
+	if (!bPopupActive)	//팝업이 활동중이면
+		SelectComponent(inputManager);
 }
 
-void SelectComponent::Render(const ImGuiWindow* mainWindow)
+void ComponentSelector::Render(const ImGuiWindow* mainWindow, bool bPopupActive)
 {
-	m_tooltip->Render(mainWindow);
+	if(!bPopupActive && IsWindowFocus(mainWindow)) //component를 새로 생성시켜서 붙일려고 한다면 툴팁은 보이지 않게 한다.
+		m_tooltip->Render(mainWindow);
+
+	if(m_component)
+		DrawRectangle(m_component->GetRectangle(), mainWindow);
+
 	if (m_window)
 		m_window->Render(mainWindow);
 }
 
-void SelectComponent::RepeatedSelection(const std::vector<UIComponent*>& componentList) noexcept
+void ComponentSelector::RepeatedSelection(const std::vector<UIComponent*>& componentList) noexcept
 {
 	auto findIdx = FindIndex(componentList, m_component);
 	if (!findIdx.has_value())

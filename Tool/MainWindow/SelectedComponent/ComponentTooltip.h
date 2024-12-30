@@ -9,18 +9,15 @@ public:
 	ComponentTooltip(UIComponent* panel);
 	~ComponentTooltip();
 
-	void SelectComponent(UIComponent* component) noexcept;
+	void SetComponent(UIComponent* component) noexcept;
 	void Render(const ImGuiWindow* window);
 
-	UIComponent* GetComponent() const noexcept { return m_selectCom; }
 	void SetPanel(UIComponent* panel) noexcept { m_panel = panel; }
 
 private:
-	void ShowTooltip(const ImGuiWindow* window);
 	void ShowTooltipComponent(bool isSelected, 
 		const ImVec2& tooltipPos, const ImVec2& tooltipSize, const string& id, const string& context);
-	void ShowSelectComponent(const ImGuiWindow* window) const;
 
 	UIComponent* m_panel;
-	UIComponent* m_selectCom;
+	UIComponent* m_component;
 };

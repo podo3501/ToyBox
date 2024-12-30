@@ -13,19 +13,14 @@ public:
 	void Update();
 	void Render(const ImGuiWindow* mainWindow);
 	const UIComponent* GetComponent() const noexcept { return m_component; }
-	void SetRenderer(IRenderer* renderer) noexcept { m_renderer = renderer; }
 
 protected:
 	virtual void UpdateComponent() {};
 	virtual void RenderComponent(UIComponent* component, bool& modify) {};
 
 	bool EditSize(const XMUINT2& size);
-	IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
 private:
-	void ShowSelectComponent(const ImGuiWindow* mainWindow) const;
-
-	IRenderer* m_renderer;
 	UIComponent* m_component;
 	bool m_visible{ false };
 };
@@ -45,12 +40,14 @@ class ComponentImageGrid1 : public ComponentWindow
 {
 public:
 	~ComponentImageGrid1();
-	ComponentImageGrid1();
+	ComponentImageGrid1() = delete;
+	ComponentImageGrid1(IRenderer* renderer);
 
 	virtual void UpdateComponent() override;
 	virtual void RenderComponent(UIComponent* component, bool& modify) override;
 
 private:
+	IRenderer* m_renderer;
 	unique_ptr<TextureWindow> m_textureWindow;
 };
 
