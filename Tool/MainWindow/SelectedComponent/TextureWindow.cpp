@@ -5,6 +5,8 @@
 #include "../Toy/Utility.h"
 #include "../../Utility.h"
 #include "SourceExtractor.h"
+#include "../Toy/HelperClass.h"
+#include "../Toy/InputManager.h"
 
 TextureWindow::~TextureWindow()
 {
@@ -34,6 +36,16 @@ bool TextureWindow::Create(const wstring& filename)
     return true;
 }
 
+void TextureWindow::Update(InputManager* inputManager)
+{
+    if (!m_window) return;
+
+    const ImVec2& offset = GetWindowStartPosition(m_window);
+    auto mouseTracker = inputManager->GetMouse();
+    mouseTracker->SetOffset(ImVec2ToXMINT2(offset));
+    m_sourceExtractor->Update(inputManager);
+}
+
 void TextureWindow::Render()
 {
     if (!m_isOpen)
@@ -44,11 +56,15 @@ void TextureWindow::Render()
     //ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_None);
     ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
+    if (ImGui::IsWindowAppearing())
+    {
+        m_window = ImGui::FindWindowByName(m_name.c_str());
+        m_sourceExtractor->SetWindow(m_window);
+    }
 
     ImGui::Image(m_textureID, m_size);
 
-    ImGuiWindow* window = ImGui::FindWindowByName(m_name.c_str());
-    m_sourceExtractor->Render(window);
+    m_sourceExtractor->Render();
 
     ImGui::End();
 }

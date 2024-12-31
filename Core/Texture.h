@@ -1,5 +1,10 @@
 #pragma once
 
+namespace DX
+{
+    class DeviceResources;
+}
+
 class Texture
 {
 public:
@@ -10,6 +15,7 @@ public:
     void Upload(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* resUpload, const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx);
     void Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source);
     void Reset();
+    bool GetReadBackBuffer(DX::DeviceResources* deviceRes, ID3D12Resource** outReadbackBuffer);
 
     inline XMUINT2 GetSize() const noexcept;
     inline const std::wstring& GetFilename() const noexcept;

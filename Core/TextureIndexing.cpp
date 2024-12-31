@@ -1,11 +1,15 @@
 #include "pch.h"
 #include "TextureIndexing.h"
+#include "DeviceResources.h"
 #include "Texture.h"
 #include "Font.h"
 
 TextureIndexing::~TextureIndexing() = default;
-TextureIndexing::TextureIndexing(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite) :
-    m_device{ device }, m_descHeap{ descHeap }, m_upload{ upload }, m_sprite{ sprite }
+TextureIndexing::TextureIndexing(DX::DeviceResources* deviceRes, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite) :
+    m_deviceResources{ deviceRes },
+    m_descHeap{ descHeap }, 
+    m_upload{ upload }, 
+    m_sprite{ sprite }
 {}
 
 bool TextureIndexing::IsExist(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize)
@@ -48,7 +52,8 @@ bool TextureIndexing::LoadFont(const wstring& filename, size_t& outIndex)
     }
 
     unique_ptr<CFont> font = make_unique<CFont>();
-    if (!font->Load(m_device, m_upload, m_descHeap, filename, m_resourceFilenames.size())) return false;
+    auto device = m_deviceResources->GetD3DDevice();
+    if (!font->Load(device, m_upload, m_descHeap, filename, m_resourceFilenames.size())) return false;
 
     outIndex = m_fonts.size();    //인덱스를 증가시킨다.
     m_fonts.emplace_back(move(font));
@@ -83,7 +88,8 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     if (findFilename == m_resourceFilenames.end())
     {
         tex = make_unique<Texture>();
-        tex->Upload(m_device, m_descHeap, m_upload, filename, rect, m_resourceFilenames.size());
+        auto device = m_deviceResources->GetD3DDevice();
+        tex->Upload(device, m_descHeap, m_upload, filename, rect, m_resourceFilenames.size());
     }
     else //같은 텍스춰를 로딩하려 한다면
     {
@@ -97,6 +103,18 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     if (outSize) (*outSize) = tex->GetSize();
     m_textures.emplace_back(move(tex));
     m_resourceFilenames.emplace_back(filename);
+
+    return true;
+}
+
+bool TextureIndexing::GetReadTexture(const wstring& filename, ID3D12Resource** outReadbackBuffer)
+{
+    auto find = ranges::find_if(m_textures, [&filename](const auto& tex) {
+        return (tex->GetFilename() == filename);
+        });
+    if (find == m_textures.end()) return false;
+
+    if(!(*find)->GetReadBackBuffer(m_deviceResources, outReadbackBuffer)) return false;
 
     return true;
 }

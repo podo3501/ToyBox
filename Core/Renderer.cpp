@@ -76,10 +76,11 @@ bool Renderer::Initialize()
 
     auto device = m_deviceResources->GetD3DDevice();
     auto format = m_deviceResources->GetBackBufferFormat();
+
     ReturnIfFalse(m_imgui->Initialize(device, m_srvDescriptors.get(), format, Ev(SrvOffset::Imgui)));
     m_batch = make_unique<ResourceUploadBatch>(device);
     m_texIndexing = make_unique<TextureIndexing>(
-        device, m_srvDescriptors.get(), m_batch.get(), m_spriteBatch.get());
+        m_deviceResources.get(), m_srvDescriptors.get(), m_batch.get(), m_spriteBatch.get());
     m_renderTexOffset = make_unique<CycleIterator>(
         static_cast<int>(Ev(SrvOffset::RenderTexture)), 
         static_cast<int>(Ev(SrvOffset::Count)));

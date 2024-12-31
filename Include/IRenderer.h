@@ -16,8 +16,12 @@ struct IGetValue
 public:
     virtual ~IGetValue() {};
 
+    //Text관련
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) = 0;
     virtual float GetLineSpacing(size_t index) const noexcept = 0;
+
+    //Texture
+    virtual bool GetReadTexture(const wstring& filename, ID3D12Resource** outReadbackBuffer) = 0;
 };
 
 //렌더링 할때 사용하는 인터페이스

@@ -4,10 +4,18 @@
 class Texture;
 class CFont;
 
+namespace DX
+{
+    class DeviceResources;
+}
+
 class TextureIndexing : public ILoadData, public IGetValue, public IRender
 {
 public:
-    TextureIndexing(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite); //SpriteBatch는 여기서 만들어 줄 수 있다.
+    TextureIndexing(DX::DeviceResources* deviceRes,
+        DescriptorHeap* descHeap, 
+        ResourceUploadBatch* upload, 
+        SpriteBatch* sprite); //SpriteBatch는 여기서 만들어 줄 수 있다.
     ~TextureIndexing();
 
     //ILoadData
@@ -17,6 +25,8 @@ public:
     //IGetValue
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
     virtual float GetLineSpacing(size_t index) const noexcept override;
+
+    virtual bool GetReadTexture(const wstring& filename, ID3D12Resource** outReadbackBuffer) override;
 
     //IRender
     virtual void Render(size_t index, const RECT& dest, const RECT* source) override;
@@ -28,7 +38,7 @@ public:
 private:
 	bool IsExist(const wstring& filename, const Rectangle* rect, std::size_t& outIndex, DirectX::XMUINT2* outSize);
 
-    ID3D12Device* m_device{ nullptr };
+    DX::DeviceResources* m_deviceResources;
     DescriptorHeap* m_descHeap{ nullptr };
     ResourceUploadBatch* m_upload{ nullptr };
     SpriteBatch* m_sprite{ nullptr };

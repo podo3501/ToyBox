@@ -19,9 +19,9 @@ void ComponentWindow::SetComponent(UIComponent* component)
 	m_visible = (m_component != nullptr);
 }
 
-void ComponentWindow::Update()
+void ComponentWindow::Update(InputManager* inputManager)
 {
-    UpdateComponent();
+    UpdateComponent(inputManager);
 }
 
 void ComponentWindow::Render(const ImGuiWindow* mainWindow)
@@ -73,10 +73,13 @@ ComponentImageGrid1::ComponentImageGrid1(IRenderer* renderer) :
     m_renderer{ renderer }
 {}
 
-void ComponentImageGrid1::UpdateComponent()
+void ComponentImageGrid1::UpdateComponent(InputManager* inputManager)
 {
     if (m_textureWindow != nullptr && !m_textureWindow->IsOpen())
         m_textureWindow = nullptr;
+
+    if (m_textureWindow)
+        m_textureWindow->Update(inputManager);
 }
 
 void ComponentImageGrid1::RenderComponent(UIComponent* component, bool& modify)
@@ -94,7 +97,8 @@ void ComponentImageGrid1::RenderComponent(UIComponent* component, bool& modify)
     {
         if (!m_textureWindow)
         {
-            m_textureWindow = make_unique<TextureWindow>(m_renderer, CreateSourceExtractor(component));
+            m_textureWindow = make_unique<TextureWindow>(m_renderer, 
+                CreateSourceExtractor(m_renderer, imgGrid1->Filename, component));
             m_textureWindow->Create(imgGrid1->Filename);
         }
     }

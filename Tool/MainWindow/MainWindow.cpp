@@ -103,7 +103,8 @@ void MainWindow::CheckAddComponent(const MouseTracker* mouseTracker) noexcept
 
 void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 {
-	if (!IsWindowFocus(m_window)) return;
+	//if (!IsWindowFocus(m_window)) return;
+	if (!m_window) return;
 
 	const ImVec2& offset = GetWindowStartPosition(m_window);
 	auto mouseTracker = inputManager->GetMouse();
@@ -128,12 +129,15 @@ void MainWindow::Render(ImGuiIO* io)
 	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
 	if (ImGui::IsWindowAppearing())
+	{
 		m_window = const_cast<ImGuiWindow*>(GetImGuiWindow());
+		m_selector->SetMainWindow(m_window);
+	}
 
 	ImGui::Image(m_textureID, m_size);
 
 	m_popup->Render();
-	m_selector->Render(m_window, m_popup->IsActive());
+	m_selector->Render(m_popup->IsActive());
 
 	ImGui::End();
 }

@@ -2,6 +2,7 @@
 
 struct IRenderer;
 class UIComponent;
+class InputManager;
 
 class ComponentWindow
 {
@@ -10,12 +11,12 @@ public:
 	virtual ~ComponentWindow();
 	virtual void SetComponent(UIComponent* component);
 	
-	void Update();
+	void Update(InputManager* inputManager);
 	void Render(const ImGuiWindow* mainWindow);
 	const UIComponent* GetComponent() const noexcept { return m_component; }
 
 protected:
-	virtual void UpdateComponent() {};
+	virtual void UpdateComponent(InputManager* inputManager) {};
 	virtual void RenderComponent(UIComponent* component, bool& modify) {};
 
 	bool EditSize(const XMUINT2& size);
@@ -43,7 +44,7 @@ public:
 	ComponentImageGrid1() = delete;
 	ComponentImageGrid1(IRenderer* renderer);
 
-	virtual void UpdateComponent() override;
+	virtual void UpdateComponent(InputManager* inputManager) override;
 	virtual void RenderComponent(UIComponent* component, bool& modify) override;
 
 private:

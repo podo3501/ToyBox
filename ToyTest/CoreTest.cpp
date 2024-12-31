@@ -36,8 +36,8 @@ namespace BasicCore
 
 	TEST_F(CoreTest, TextureLoading)
 	{
-		auto texIndexing = make_unique<TextureIndexing>(
-			m_deviceResources->GetD3DDevice(), m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
+		auto texIndexing = make_unique<TextureIndexing>(m_deviceResources.get(),
+			m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
 		EXPECT_TRUE(LoadResources(LoadTexture, texIndexing.get()));
 	}
@@ -65,8 +65,8 @@ namespace BasicCore
 
 	TEST_F(CoreTest, FontLoading)
 	{
-		auto texIndexing = make_unique<TextureIndexing>(
-			m_deviceResources->GetD3DDevice(), m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
+		auto texIndexing = make_unique<TextureIndexing>(m_deviceResources.get(),
+			m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
 		EXPECT_TRUE(LoadResources(LoadFont, texIndexing.get()));
 	}

@@ -15,13 +15,15 @@ public:
 	void SetPanel(UIComponent* panel) noexcept;
 	void SetComponent(UIComponent* component) noexcept;
 	void Update(InputManager* inputManager, bool bPopupActive) noexcept;
-	void Render(const ImGuiWindow* mainWindow, bool bPopupActive);
+	void Render(bool bPopupActive);
+	void SetMainWindow(ImGuiWindow* mainWnd) noexcept { m_mainWnd = mainWnd; }
 
 private:
-	void RepeatedSelection(const std::vector<UIComponent*>& componentList) noexcept;
+	void RepeatedSelection(const vector<UIComponent*>& componentList) noexcept;
 	void SelectComponent(InputManager* inputManager) noexcept;
 
 	IRenderer* m_renderer;
+	ImGuiWindow* m_mainWnd;
 	unique_ptr<ComponentTooltip> m_tooltip;
 	unique_ptr<ComponentWindow> m_window;
 

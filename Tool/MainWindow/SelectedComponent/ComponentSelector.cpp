@@ -11,6 +11,7 @@
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
 	m_renderer{ renderer },
+	m_mainWnd{ nullptr },
 	m_tooltip{ make_unique<ComponentTooltip>(panel) },
 	m_window{ nullptr },
 	m_panel{ panel },
@@ -43,15 +44,13 @@ static unique_ptr<ComponentWindow> CreateComponentWindow(const UIComponent* comp
 
 void ComponentSelector::SetComponent(UIComponent* component) noexcept
 {
-	string preType = (m_component) ? m_component->GetType() : "";
-	string curType = (component) ? component->GetType() : "";
+	if (m_component == nullptr && component == nullptr) return;
+	if (m_component == component) 
+		return;
 
-	bool change{ false };
-	if (preType != curType)
-		m_window = CreateComponentWindow(component, m_renderer);
-
-	if (m_window)
-		m_window->SetComponent(component);	//타입은 같지만 다른 UIComponent일지도 모른다.
+	m_window = CreateComponentWindow(component, m_renderer);
+	if(m_window)
+		m_window->SetComponent(component);
 
 	m_component = component;
 	m_tooltip->SetComponent(component);
@@ -87,25 +86,25 @@ void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) no
 	}
 
 	if (m_window)
-		m_window->Update();
+		m_window->Update(inputManager);
 
-	if (!bPopupActive)	//팝업이 활동중이면
+	if (!bPopupActive && IsWindowFocus(m_mainWnd))	//팝업이 활동중이면
 		SelectComponent(inputManager);
 }
 
-void ComponentSelector::Render(const ImGuiWindow* mainWindow, bool bPopupActive)
+void ComponentSelector::Render(bool bPopupActive)
 {
-	if(!bPopupActive && IsWindowFocus(mainWindow)) //component를 새로 생성시켜서 붙일려고 한다면 툴팁은 보이지 않게 한다.
-		m_tooltip->Render(mainWindow);
+	if(!bPopupActive && IsWindowFocus(m_mainWnd)) //component를 새로 생성시켜서 붙일려고 한다면 툴팁은 보이지 않게 한다.
+		m_tooltip->Render(m_mainWnd);
 
 	if(m_component)
-		DrawRectangle(m_component->GetRectangle(), mainWindow);
+		DrawRectangle(m_component->GetRectangle(), m_mainWnd);
 
 	if (m_window)
-		m_window->Render(mainWindow);
+		m_window->Render(m_mainWnd);
 }
 
-void ComponentSelector::RepeatedSelection(const std::vector<UIComponent*>& componentList) noexcept
+void ComponentSelector::RepeatedSelection(const vector<UIComponent*>& componentList) noexcept
 {
 	auto findIdx = FindIndex(componentList, m_component);
 	if (!findIdx.has_value())
