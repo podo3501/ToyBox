@@ -87,6 +87,7 @@ namespace DX
         }
 
     private:
+        void WaitForFenceValue(UINT64 fenceValue) noexcept;
         void MoveToNextFrame();
         void GetAdapter(IDXGIAdapter1** ppAdapter);
 

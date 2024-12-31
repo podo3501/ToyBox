@@ -107,14 +107,15 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     return true;
 }
 
-bool TextureIndexing::GetReadTexture(const wstring& filename, ID3D12Resource** outReadbackBuffer)
+bool TextureIndexing::GetReadTexture(const wstring& filename, ID3D12Resource** outReadbackBuffer, 
+    D3D12_PLACED_SUBRESOURCE_FOOTPRINT* outLayout)
 {
     auto find = ranges::find_if(m_textures, [&filename](const auto& tex) {
         return (tex->GetFilename() == filename);
         });
     if (find == m_textures.end()) return false;
 
-    if(!(*find)->GetReadBackBuffer(m_deviceResources, outReadbackBuffer)) return false;
+    if(!(*find)->GetReadBackBuffer(m_deviceResources, outReadbackBuffer, outLayout)) return false;
 
     return true;
 }

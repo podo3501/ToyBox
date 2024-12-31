@@ -15,7 +15,8 @@ public:
     void Upload(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* resUpload, const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx);
     void Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source);
     void Reset();
-    bool GetReadBackBuffer(DX::DeviceResources* deviceRes, ID3D12Resource** outReadbackBuffer);
+    bool GetReadBackBuffer(DX::DeviceResources* deviceRes, ID3D12Resource** outReadbackBuffer, 
+        D3D12_PLACED_SUBRESOURCE_FOOTPRINT* outLayout);
 
     inline XMUINT2 GetSize() const noexcept;
     inline const std::wstring& GetFilename() const noexcept;

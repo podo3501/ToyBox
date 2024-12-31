@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "DeviceResources.h"
+#include "Utility.h"
 
 using namespace DirectX;
 using namespace DX;
@@ -528,27 +529,16 @@ void DeviceResources::Prepare(D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_
     ThrowIfFailed(m_commandAllocators[m_backBufferIndex]->Reset());
     ThrowIfFailed(m_commandList->Reset(m_commandAllocators[m_backBufferIndex].Get(), nullptr));
 
+    // Transition the render target into the correct state to allow for drawing into it.
     if (beforeState != afterState)
-    {
-        // Transition the render target into the correct state to allow for drawing into it.
-        const D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-            m_renderTargets[m_backBufferIndex].Get(),
-            beforeState, afterState);
-        m_commandList->ResourceBarrier(1, &barrier);
-    }
+        TransitionResource(m_commandList.Get(), m_renderTargets[m_backBufferIndex].Get(), beforeState, afterState);
 }
 
 // Present the contents of the swap chain to the screen.
 void DeviceResources::Present(D3D12_RESOURCE_STATES beforeState)
 {
     if (beforeState != D3D12_RESOURCE_STATE_PRESENT)
-    {
-        // Transition the render target to the state that allows it to be presented to the display.
-        const D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-            m_renderTargets[m_backBufferIndex].Get(),
-            beforeState, D3D12_RESOURCE_STATE_PRESENT);
-        m_commandList->ResourceBarrier(1, &barrier);
-    }
+        TransitionResource(m_commandList.Get(), m_renderTargets[m_backBufferIndex].Get(), beforeState, D3D12_RESOURCE_STATE_PRESENT);
 
     // Send the command list off to the GPU for processing.
     ThrowIfFailed(m_commandList->Close());
@@ -593,30 +583,33 @@ void DeviceResources::Present(D3D12_RESOURCE_STATES beforeState)
     }
 }
 
+void DeviceResources::WaitForFenceValue(UINT64 fenceValue) noexcept
+{
+    if (m_fence->GetCompletedValue() >= fenceValue) return;
+    
+    if (SUCCEEDED(m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent.Get())))
+        std::ignore = WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, FALSE);
+}
+
 // Wait for pending GPU work to complete.
 void DeviceResources::WaitForGpu() noexcept
 {
-    if (m_commandQueue && m_fence && m_fenceEvent.IsValid())
-    {
-        // Schedule a Signal command in the GPU queue.
-        const UINT64 fenceValue = m_fenceValues[m_backBufferIndex];
-        if (SUCCEEDED(m_commandQueue->Signal(m_fence.Get(), fenceValue)))
-        {
-            // Wait until the Signal has been processed.
-            if (SUCCEEDED(m_fence->SetEventOnCompletion(fenceValue, m_fenceEvent.Get())))
-            {
-                std::ignore = WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, FALSE);
+    if (!m_commandQueue || !m_fence || !m_fenceEvent.IsValid())
+        return;
 
-                // Increment the fence value for the current frame.
-                m_fenceValues[m_backBufferIndex]++;
-            }
-        }
-    }
+    // Schedule a Signal command in the GPU queue.
+    const UINT64 fenceValue = m_fenceValues[m_backBufferIndex];
+    ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), fenceValue));
+    
+    WaitForFenceValue(fenceValue);
+    ++m_fenceValues[m_backBufferIndex];
 }
 
 // Prepare to render the next frame.
 void DeviceResources::MoveToNextFrame()
 {
+    if (!m_commandQueue || !m_fence || !m_swapChain)
+        return;
     // Schedule a Signal command in the queue.
     const UINT64 currentFenceValue = m_fenceValues[m_backBufferIndex];
     ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), currentFenceValue));
@@ -625,11 +618,7 @@ void DeviceResources::MoveToNextFrame()
     m_backBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
 
     // If the next frame is not ready to be rendered yet, wait until it is ready.
-    if (m_fence->GetCompletedValue() < m_fenceValues[m_backBufferIndex])
-    {
-        ThrowIfFailed(m_fence->SetEventOnCompletion(m_fenceValues[m_backBufferIndex], m_fenceEvent.Get()));
-        std::ignore = WaitForSingleObjectEx(m_fenceEvent.Get(), INFINITE, FALSE);
-    }
+    WaitForFenceValue(m_fenceValues[m_backBufferIndex]);
 
     // Set the fence value for the next frame.
     m_fenceValues[m_backBufferIndex] = currentFenceValue + 1;

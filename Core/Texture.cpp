@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "Texture.h"
 #include "DeviceResources.h"
+#include "Utility.h"
 
 using namespace DirectX;
+using Microsoft::WRL::ComPtr;
 
 Texture::Texture() noexcept = default;
 Texture::~Texture() = default;
@@ -64,73 +66,92 @@ void Texture::Reset()
     m_texture.Reset(); 
 }
 
-bool Texture::GetReadBackBuffer(DX::DeviceResources* deviceRes, ID3D12Resource** outReadbackBuffer)
+static bool CreateReadbackBuffer(ID3D12Device* device, UINT64 totalBytes, ComPtr<ID3D12Resource>& outReadbackBuffer)
+{
+    CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_READBACK);
+    CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(totalBytes);
+
+    ReturnIfFailed(device->CreateCommittedResource(
+        &heapProps,
+        D3D12_HEAP_FLAG_NONE,
+        &bufferDesc,
+        D3D12_RESOURCE_STATE_COPY_DEST,
+        nullptr,
+        IID_PPV_ARGS(&outReadbackBuffer)));
+
+    return true;
+}
+
+static void CopyTextureToBuffer(ID3D12GraphicsCommandList* commandList, ID3D12Resource* texture,
+    const D3D12_PLACED_SUBRESOURCE_FOOTPRINT& layout, ComPtr<ID3D12Resource> readbackBuffer)
+{
+    TransitionResource(commandList, texture,
+        D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_COPY_SOURCE);
+
+    CD3DX12_TEXTURE_COPY_LOCATION destLocation(readbackBuffer.Get(), layout);
+    CD3DX12_TEXTURE_COPY_LOCATION srcLocation(texture, 0);
+    commandList->CopyTextureRegion(&destLocation, 0, 0, 0, &srcLocation, nullptr);
+
+    // 텍스처 리소스 상태 복원
+    TransitionResource(commandList, texture,
+        D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+}
+
+static bool WaitForGpuWork(ID3D12Device* device, ID3D12CommandQueue* commandQueue)
+{
+    Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+    UINT64 fenceValue = 1;
+
+    ReturnIfFailed(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
+    ReturnIfFailed(commandQueue->Signal(fence.Get(), fenceValue));
+    
+    if (fence->GetCompletedValue() < fenceValue) // GPU 작업 완료 대기
+    {
+        HANDLE eventHandle = CreateEventEx(nullptr, nullptr, false, EVENT_ALL_ACCESS);
+        if (eventHandle == nullptr) return false;
+
+        fence->SetEventOnCompletion(fenceValue, eventHandle);
+        std::ignore = WaitForSingleObjectEx(eventHandle, INFINITE, FALSE);
+        CloseHandle(eventHandle);
+    }
+
+    return true;
+}
+
+bool Texture::GetReadBackBuffer(DX::DeviceResources* deviceRes, ID3D12Resource** outReadbackBuffer,
+    D3D12_PLACED_SUBRESOURCE_FOOTPRINT* outLayout)
 {
     auto device = deviceRes->GetD3DDevice();
     auto commandList = deviceRes->GetCommandList();
     auto commandAllocator = deviceRes->GetCommandAllocator();
     auto commandQueue = deviceRes->GetCommandQueue();
 
-    D3D12_PLACED_SUBRESOURCE_FOOTPRINT layout;
-    UINT64 totalBytes = 0;
-
     // 텍스처 리소스의 설명 가져오기
     D3D12_RESOURCE_DESC textureDesc = m_texture->GetDesc();
-    device->GetCopyableFootprints(&textureDesc, 0, 1, 0, &layout, nullptr, nullptr, &totalBytes);
+    D3D12_PLACED_SUBRESOURCE_FOOTPRINT layout{};
+    UINT64 totalBytes{ 0 }, rowPitch{ 0 };
+
+    device->GetCopyableFootprints(&textureDesc, 0, 1, 0, &layout, nullptr, &rowPitch, &totalBytes);
 
     Microsoft::WRL::ComPtr<ID3D12Resource> readbackBuffer;
-    CD3DX12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_READBACK);
-    CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(totalBytes);
+    ReturnIfFalse(CreateReadbackBuffer(device, totalBytes, readbackBuffer));
 
-    auto result = device->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &bufferDesc, 
-        D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&readbackBuffer));
-    if (result != S_OK)
-        return false;
+    ReturnIfFailed(commandList->Reset(commandAllocator, nullptr));
 
-    commandList->Reset(commandAllocator, nullptr);
+    // 텍스처를 복사하는 명령어 실행
+    CopyTextureToBuffer(commandList, m_texture.Get(), layout, readbackBuffer);
 
-    CD3DX12_TEXTURE_COPY_LOCATION destLocation(readbackBuffer.Get(), layout);
-    CD3DX12_TEXTURE_COPY_LOCATION srcLocation(m_texture.Get(), 0);
-    commandList->CopyTextureRegion(&destLocation, 0, 0, 0, &srcLocation, nullptr);
-
-    commandList->Close();
-
+    // 명령 리스트 종료
+    ReturnIfFailed(commandList->Close());
     ID3D12CommandList* commandLists[] = { commandList };
     commandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
 
-    //deviceRes->WaitForGpu();
+    // GPU 작업 완료 대기
+    ReturnIfFalse(WaitForGpuWork(device, commandQueue));
 
-    // GPU가 명령을 완료할 때까지 대기
-    Microsoft::WRL::ComPtr<ID3D12Fence> fence;
-    UINT64 fenceValue = 1;
-    result = device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-
-    HANDLE fenceEvent = CreateEventEx(nullptr, nullptr, false, EVENT_ALL_ACCESS);
-
-    result = commandQueue->Signal(fence.Get(), fenceValue);
-
-    auto completed = fence->GetCompletedValue();
-    result = fence->SetEventOnCompletion(fenceValue, fenceEvent);
-    WaitForSingleObjectEx(fenceEvent, INFINITE, FALSE);
-    //WaitForSingleObject(fenceEvent, INFINITE);
-    CloseHandle(fenceEvent);
-
-    //*outReadbackBuffer = readbackBuffer.Detach();
-
-    UINT8* data;
-    readbackBuffer->Map(0, nullptr, reinterpret_cast<void**>(&data));
-
-    const XMINT2& pos{ 30, 30 };
-    // 픽셀 오프셋 계산 (RGBA 4바이트 기준)
-    UINT pixelOffset = pos.y * 64 * 4 + pos.x * 4;
-    UINT32 pixelValue = *reinterpret_cast<UINT32*>(data + pixelOffset);
-
-    UINT8 r = (pixelValue >> 16) & 0xFF; // R 채널 (상위 8비트)
-    UINT8 g = (pixelValue >> 8) & 0xFF;  // G 채널 (다음 8비트)
-    UINT8 b = pixelValue & 0xFF;         // B 채널 (하위 8비트)
-    UINT8 a = (pixelValue >> 24) & 0xFF; // A 채널 (최상위 8비트)
-
-    readbackBuffer->Unmap(0, nullptr);
+    // 출력 매개변수에 읽어온 버퍼 전달
+    *outReadbackBuffer = readbackBuffer.Detach();
+    if (outLayout) *outLayout = layout;
 
     return true;
 }

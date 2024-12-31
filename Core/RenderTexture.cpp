@@ -12,7 +12,6 @@ RenderTexture::~RenderTexture()
 RenderTexture::RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor) :
     m_device(device),
     m_srvDescriptor{ srvDescriptor },
-    m_scene{ nullptr },
     m_component{ nullptr }
 {
     m_rtvDescriptor = make_unique<DescriptorHeap>(device,
@@ -51,30 +50,6 @@ void RenderTexture::CreateRtvAndSrv(ID3D12Resource* resource)
 {
     CreateRenderTargetView(m_device, resource, m_rtvDescriptor->GetFirstCpuHandle());
     CreateShaderResourceView(m_device, resource, m_srvDescriptor->GetCpuHandle(m_offset));
-}
-
-bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderScene* scene)
-{
-    m_scene = scene;
-    m_offset = offset;
-    //화면을 저장할 Texture를 만든다.
-    m_resDesc = GetResourceDesc(texFormat, size);
-    auto& texResource = GetTextureResource();
-    const CD3DX12_HEAP_PROPERTIES renderTextureHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
-    D3D12_CLEAR_VALUE clear = GetClearValue();
-
-    ReturnIfFailed(m_device->CreateCommittedResource(
-        &renderTextureHeapProperties,
-        D3D12_HEAP_FLAG_NONE,
-        &m_resDesc,
-        D3D12_RESOURCE_STATE_RENDER_TARGET,
-        &clear,
-        IID_PPV_ARGS(texResource.ReleaseAndGetAddressOf())
-    ));
-
-    CreateRtvAndSrv(texResource.Get());
-
-    return true;
 }
 
 bool RenderTexture::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IComponent* component)

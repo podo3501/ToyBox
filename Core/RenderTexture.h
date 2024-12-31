@@ -1,6 +1,5 @@
 #pragma once
 
-struct IRenderScene;
 struct IComponent;
 
 class RenderTexture
@@ -11,7 +10,6 @@ public:
 	RenderTexture(ID3D12Device* device, DescriptorHeap* srvDescriptor);
 	~RenderTexture();
 
-	bool Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IRenderScene* scene);
 	bool Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IComponent* component);
 	bool ModifyRenderTexture(const XMUINT2& size);
 	void Render(ID3D12GraphicsCommandList* commandList, IRender* renderer, SpriteBatch* sprite);
@@ -30,7 +28,6 @@ private:
 	int m_renderTargetIndex{ 0 };
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_renderTargetTexture[RenderTargetCount];
 
-	IRenderScene* m_scene;
 	IComponent* m_component;
 	size_t m_offset{};
 	D3D12_RESOURCE_DESC m_resDesc{};
