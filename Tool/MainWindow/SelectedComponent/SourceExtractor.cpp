@@ -11,7 +11,8 @@
 SourceExtractor::~SourceExtractor() = default;
 SourceExtractor::SourceExtractor(IRenderer* renderer, const wstring& filename) noexcept :
     m_renderer{ renderer },
-    m_filename{ filename }
+    m_filename{ filename },
+    m_window{ nullptr }
 {}
 
 ////////////////////////////////////////////////////////////
@@ -32,6 +33,8 @@ void ImageGrid1Extractor::Update(InputManager* inputManager)
     {
         //현재 윈도우의 마우스가 있는 위치의 픽셀을 얻어온다
         IGetValue* value = GetRenderer()->GetValue();
+        vector<Rectangle> areaList;
+        //value->GetTextureAreaList(GetResourceFullFilename(GetFilename()), areaList);
         Microsoft::WRL::ComPtr<ID3D12Resource> readbackBuffer;
         D3D12_PLACED_SUBRESOURCE_FOOTPRINT layout;
         value->GetReadTexture(GetResourceFullFilename(GetFilename()), readbackBuffer.GetAddressOf(), &layout);

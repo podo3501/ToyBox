@@ -117,7 +117,7 @@ void Renderer::CreateDeviceDependentResources()
 
     RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
 
-    SpriteBatchPipelineStateDescription pd(rtState);
+    SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);   //기본은 알파가 곱해진 형식인데 그러면 PNG파일 에서 알파값이 안 먹는다.
     m_spriteBatch = make_unique<SpriteBatch>(device, resourceUpload, pd);
 
     auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
