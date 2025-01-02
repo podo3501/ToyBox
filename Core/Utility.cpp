@@ -25,7 +25,7 @@ CycleIterator::CycleIterator(int s, int e) : start(s), end(e), current(s)
     assert(s < e);
 }
 
-int mod(int value, int range)
+static int mod(int value, int range)
 {
     return (value % range + range) % range;
 }
@@ -45,4 +45,37 @@ int CycleIterator::Decrease() noexcept
 {
     current = start + mod(current - 1 - start, end - start);
     return current;
+}
+
+void MergeRectangles(vector<Rectangle>& rects) noexcept
+{
+    if (rects.empty()) return;
+
+    bool merged;
+    do
+    {
+        merged = false;
+        vector<Rectangle> tempResult;
+
+        while (!rects.empty())
+        {
+            Rectangle current = rects.back();
+            rects.pop_back();
+
+            // 기존에 합쳐진 직사각형을 찾는 함수
+            auto it = ranges::find_if(tempResult, [&current](const Rectangle& res) {
+                return res.Intersects(current); 
+                });
+
+            if (it != tempResult.end()) // 합쳐질 직사각형을 찾은 경우
+            {
+                *it = Rectangle::Union(*it, current); // 합친 직사각형 업데이트
+                merged = true;
+            }
+            else
+                tempResult.push_back(current); // 합쳐지지 않은 직사각형은 추가
+        }
+
+        rects = std::move(tempResult);
+    } while (merged);
 }

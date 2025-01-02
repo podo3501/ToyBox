@@ -34,6 +34,7 @@ static tuple<ImVec2, ImVec2> RectangleToImVec2(const Rectangle& rect)
 void DrawRectangle(const Rectangle& rect, const ImGuiWindow* window)
 {
 	if (window == nullptr) return;
+	if (rect == Rectangle{}) return;
 
 	auto [topLeft, bottomRight] = RectangleToImVec2(rect);
 	const ImVec2& windowOffset = GetWindowStartPosition(window);

@@ -42,6 +42,7 @@ void TextureWindow::Update(InputManager* inputManager)
 
     const ImVec2& offset = GetWindowStartPosition(m_window);
     auto mouseTracker = inputManager->GetMouse();
+    //텍스춰 창에서 마우스 값이 셋팅되고 메인으로 가서 그 값으로 마우스 위치값을 찾으니 오류가 발생한다.
     mouseTracker->SetOffset(ImVec2ToXMINT2(offset));
     m_sourceExtractor->Update(inputManager);
 }

@@ -6,11 +6,16 @@ class Property
 {
 public:
 	Property() = default;
-	Property(const T& initialValue) : value(initialValue) {}
+	Property(const T& initialValue) : value(initialValue), isDirty{ true } {}
 	bool operator==(const Property<T>& rhs) const noexcept { return value == rhs.value; }
 
 	const T& Get() const { return value; }
-	void Set(const T& newValue) { value = newValue; }
+	void Set(const T& newValue)
+	{ 
+		if (value != newValue)
+			isDirty = true;
+		value = newValue; 
+	}
 
 	operator T() const { return value; }
 	Property& operator=(const T& newValue)
@@ -24,6 +29,10 @@ public:
 	T* operator->() { return &value; }
 	const T* operator->() const { return &value; }
 
+	inline bool IsDirty() const noexcept { return isDirty; }
+	inline void ClearDirty() noexcept { isDirty = false; }
+
 private:
 	T value;
+	bool isDirty{ true };
 };

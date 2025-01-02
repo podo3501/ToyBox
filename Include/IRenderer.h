@@ -21,8 +21,7 @@ public:
     virtual float GetLineSpacing(size_t index) const noexcept = 0;
 
     //Texture
-    virtual bool GetReadTexture(const wstring& filename, ID3D12Resource** outReadbackBuffer,
-        D3D12_PLACED_SUBRESOURCE_FOOTPRINT* outLayout) = 0;
+    virtual bool GetTextureAreaList(const wstring& filename, const UINT32& bgColor, vector<Rectangle>& outList) = 0;
 };
 
 //렌더링 할때 사용하는 인터페이스

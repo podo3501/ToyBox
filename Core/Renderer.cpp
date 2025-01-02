@@ -117,7 +117,8 @@ void Renderer::CreateDeviceDependentResources()
 
     RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(), m_deviceResources->GetDepthBufferFormat());
 
-    SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);   //기본은 알파가 곱해진 형식인데 그러면 PNG파일 에서 알파값이 안 먹는다.
+    //기본은 알파가 곱해진 형식(R*A, G*A, B*A, A)이라고 가정하는데 그러면 PNG파일에서의 알파값이 안 먹는다. 데이터에서 저렇게 뽑으면 처리할 일이 줄어서 빠르긴 하겠지.(DDS형식은 알파가 곱해져 있음)
+    SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);   
     m_spriteBatch = make_unique<SpriteBatch>(device, resourceUpload, pd);
 
     auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());

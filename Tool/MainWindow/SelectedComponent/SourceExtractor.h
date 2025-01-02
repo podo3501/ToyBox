@@ -11,6 +11,7 @@ public:
     virtual ~SourceExtractor();
     SourceExtractor() = delete;
 
+    virtual bool Initialize() { return true; };
     virtual void Update(InputManager* inputManager) {};
     virtual void Render() const {};
 
@@ -34,11 +35,18 @@ public:
     ~ImageGrid1Extractor();
     ImageGrid1Extractor(IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1) noexcept;
 
+    virtual bool Initialize() override;
     virtual void Update(InputManager* inputManager) override;
     virtual void Render() const override;
 
 private:
+    Rectangle FindRectangleContainingPoint(const XMINT2& pos);
+
     ImageGrid1* m_component;
+    bool m_IsInitialize{ false };
+
+    vector<Rectangle> m_areaList;
+    Rectangle m_hoveredRect{};
 };
 
 unique_ptr<SourceExtractor> CreateSourceExtractor(IRenderer* renderer, const wstring& filename, UIComponent* component);

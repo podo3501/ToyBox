@@ -35,7 +35,12 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 
 bool ImageGrid1::LoadResources(ILoadData* load)
 {
-	return load->LoadTexture(GetResourceFullFilename(Filename), nullptr, m_index, nullptr);
+	if (!Filename.IsDirty()) return true;
+	
+	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(Filename), nullptr, m_index, nullptr));
+	Filename.ClearDirty();
+
+	return true;
 }
 
 bool ImageGrid1::Update(const XMINT2& position, InputManager*) noexcept

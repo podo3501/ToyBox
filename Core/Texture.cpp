@@ -118,8 +118,85 @@ static bool WaitForGpuWork(ID3D12Device* device, ID3D12CommandQueue* commandQueu
     return true;
 }
 
-bool Texture::GetReadBackBuffer(DX::DeviceResources* deviceRes, ID3D12Resource** outReadbackBuffer,
-    D3D12_PLACED_SUBRESOURCE_FOOTPRINT* outLayout)
+static vector<vector<UINT32>> ConvertTo2D(UINT8* data, UINT width, UINT height, UINT rowPitch) 
+{
+    vector<vector<UINT32>> image(height, std::vector<UINT32>(width));
+    for (UINT y: views::iota(0u, height))
+    {
+        for (UINT x: views::iota(0u, width))
+        {
+            UINT index = y * rowPitch + x * 4;
+            image[y][x] = *reinterpret_cast<UINT32*>(&data[index]);
+        }
+    }
+    return image;
+}
+
+static vector<Rectangle> FindRectangles(const D3D12_SUBRESOURCE_FOOTPRINT& footPrint, 
+    const UINT32& bgColor, UINT8* data)
+{
+    int imageHeight = footPrint.Height;
+    int imageWidth = footPrint.Width;
+
+    vector<Rectangle> rectangles;
+    vector<vector<bool>> visited(imageHeight, vector<bool>(imageWidth, false));
+
+    auto image = ConvertTo2D(data, imageWidth, imageHeight, footPrint.RowPitch);
+
+    auto isValid = [&](int x, int y) {
+        return x >= 0 && x < imageWidth && y >= 0 && y < imageHeight;
+        };
+
+    for (UINT y : views::iota(0, imageHeight))
+    {
+        for (UINT x : views::iota(0, imageWidth))
+        {
+            if (!visited[y][x] && image[y][x] != bgColor)
+            {
+                // BFS 시작
+                int minX = x, minY = y, maxX = x, maxY = y;
+                queue<pair<int, int>> q;
+                q.push({ x, y });
+                visited[y][x] = true;
+
+                while (!q.empty())
+                {
+                    auto [cx, cy] = q.front();
+                    q.pop();
+
+                    minX = std::min(minX, cx);
+                    minY = std::min(minY, cy);
+                    maxX = std::max(maxX, cx);
+                    maxY = std::max(maxY, cy);
+
+                    // 4방향 탐색
+                    const int dx[] = { -1, 1, 0, 0 };
+                    const int dy[] = { 0, 0, -1, 1 };
+                    for (int d : views::iota(0, 4))
+                    {
+                        int nx = cx + dx[d], ny = cy + dy[d];
+                        if (isValid(nx, ny))
+                        {
+                            if (!visited[ny][nx] && image[ny][nx] != bgColor)
+                            {
+                                visited[ny][nx] = true;
+                                q.push({ nx, ny });
+                            }
+                        }
+                    }
+                }
+
+                int width = maxX - minX + 1;
+                int height = maxY - minY + 1;
+                rectangles.emplace_back(minX, minY, width, height);
+            }
+        }
+    }
+
+    return rectangles;
+}
+
+bool Texture::GetTextureAreaList(DX::DeviceResources* deviceRes, const UINT32& bgColor, vector<Rectangle>& outList)
 {
     auto device = deviceRes->GetD3DDevice();
     auto commandList = deviceRes->GetCommandList();
@@ -148,10 +225,14 @@ bool Texture::GetReadBackBuffer(DX::DeviceResources* deviceRes, ID3D12Resource**
 
     // GPU 작업 완료 대기
     ReturnIfFalse(WaitForGpuWork(device, commandQueue));
+ 
+    UINT8* data{ nullptr };
+    readbackBuffer->Map(0, nullptr, reinterpret_cast<void**>(&data));
+    outList = FindRectangles(layout.Footprint, bgColor, data);
+    readbackBuffer->Unmap(0, nullptr);
 
-    // 출력 매개변수에 읽어온 버퍼 전달
-    *outReadbackBuffer = readbackBuffer.Detach();
-    if (outLayout) *outLayout = layout;
+    //사각형이 중첩돼 있거나 바탕색으로 선이 그어져 있는 경우 같은 이미지라고 판단 할 수 있도록 교자되거나 포함되어 있다면 합쳐준다.
+    MergeRectangles(outList);
 
     return true;
 }

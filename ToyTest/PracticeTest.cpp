@@ -2,7 +2,7 @@
 #include "../Toy/Locator.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/UserInterface/UILayout.h"
-#include <queue>
+#include "../Core/Utility.h"
 
 namespace Practice
 {
@@ -155,47 +155,7 @@ namespace Practice
 		test1 = move(test2); 
 	}
 
-	vector<Rectangle> mergeRectangles(vector<Rectangle>& rects)
-	{
-		if (rects.empty())
-			return {};
-
-		bool merged;
-		do
-		{
-			merged = false;
-			vector<Rectangle> tempResult;
-
-			while (!rects.empty())
-			{
-				Rectangle current = rects.back();
-				rects.pop_back();
-				bool hasMerged = false;
-
-				for (auto& res : tempResult)
-				{
-					if (res.Intersects(current))
-					{
-						res = Rectangle::Union(res, current);
-						hasMerged = true;
-						merged = true;
-						break;
-					}
-				}
-
-				if (!hasMerged)
-				{
-					tempResult.push_back(current);
-				}
-			}
-
-			rects = move(tempResult);
-		} while (merged);
-
-		return rects;
-	}
-
-	const int IMAGE_HEIGHT = 5;
+	const int IMAGE_HEIGHT = 7;
 	const int IMAGE_WIDTH = 7;
 
 	vector<Rectangle> findRectangles(int image[IMAGE_HEIGHT][IMAGE_WIDTH])
@@ -259,25 +219,34 @@ namespace Practice
 
 	TEST(Algorithm, FindRectangles)
 	{
-		/*int image[IMAGE_HEIGHT][IMAGE_WIDTH] = {
-		{0, 0, 0, 0, 0, 1, 2},
-		{0, 1, 0, 9, 0, 1, 7},
-		{0, 7, 0, 4, 0, 0, 0},
-		{0, 7, 6, 1, 2, 2, 0},
-		{0, 0, 0, 0, 0, 1, 3},
-		{0, 1, 2, 0, 0, 7, 0},
-		{1, 4, 8, 0, 0, 1, 0}
-		};*/
-
-		int image[IMAGE_HEIGHT][IMAGE_WIDTH] = {
-		{0, 0, 0, 0, 1, 0, 0},
-		{0, 1, 0, 0, 1, 0, 1},
-		{0, 1, 1, 1, 1, 0, 1},
-		{0, 1, 0, 0, 0, 0, 1},
-		{0, 1, 1, 0, 1, 1, 1}
+		int image[IMAGE_HEIGHT][IMAGE_WIDTH] = 
+		{
+			{0, 0, 0, 0, 0, 1, 2},
+			{0, 1, 0, 9, 0, 1, 7},
+			{0, 7, 0, 4, 0, 0, 0},
+			{0, 7, 6, 1, 2, 2, 0},
+			{0, 0, 0, 0, 0, 1, 3},
+			{0, 1, 2, 0, 0, 7, 0},
+			{1, 4, 8, 0, 0, 1, 0}
 		};
-
 		auto rectangles = findRectangles(image);
-		auto mergedRectangles = mergeRectangles(rectangles);
+		EXPECT_EQ(rectangles[0], Rectangle(5, 0, 2, 2));
+		EXPECT_EQ(rectangles[1], Rectangle(1, 1, 6, 6));
+		EXPECT_EQ(rectangles[2], Rectangle(0, 5, 3, 2));
+	}
+
+	TEST(Algorithm, MergeRectangles)
+	{
+		vector<Rectangle> rectangles{
+			Rectangle{0, 0, 3, 3},
+			Rectangle{2, 0, 2, 2},	//Rectangle{0, 0, 3, 3}와 intersect
+			Rectangle{5, 0, 2, 2},
+			Rectangle{1, 4, 5, 3},
+			Rectangle{1, 5, 2, 2}	//Rectangle{1, 4, 5, 3}에 포함
+		};
+		MergeRectangles(rectangles);
+		EXPECT_EQ(rectangles[0], Rectangle( 0, 0, 4, 3 ));
+		EXPECT_EQ(rectangles[1], Rectangle( 5, 0, 2, 2 ));
+		EXPECT_EQ(rectangles[2], Rectangle( 1, 4, 5, 3 ));
 	}
 }

@@ -7,6 +7,7 @@
 #include "../../Utility.h"
 #include "../Toy/HelperClass.h"
 #include "../Toy/Config.h"
+#include "../Toy/Utility.h"
 
 SourceExtractor::~SourceExtractor() = default;
 SourceExtractor::SourceExtractor(IRenderer* renderer, const wstring& filename) noexcept :
@@ -17,48 +18,63 @@ SourceExtractor::SourceExtractor(IRenderer* renderer, const wstring& filename) n
 
 ////////////////////////////////////////////////////////////
 
+static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a) {
+    return (static_cast<UINT32>(a) << 24) |
+        (static_cast<UINT32>(b) << 16) |
+        (static_cast<UINT32>(g) << 8) |
+        (static_cast<UINT32>(r));
+}
+
 ImageGrid1Extractor::~ImageGrid1Extractor() = default;
 ImageGrid1Extractor::ImageGrid1Extractor( IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1) noexcept :
     SourceExtractor(renderer, filename),
     m_component{ imgGrid1 }
-{}
+{
+}
+
+bool ImageGrid1Extractor::Initialize()
+{
+    IGetValue* value = GetRenderer()->GetValue();
+    ReturnIfFalse(value->GetTextureAreaList(GetResourceFullFilename(GetFilename()), PackRGBA(255, 255, 255, 0), m_areaList));
+    m_IsInitialize = true;
+    return true;
+}
+
+Rectangle ImageGrid1Extractor::FindRectangleContainingPoint(const XMINT2& pos)
+{
+    auto it = ranges::find_if(m_areaList, [&pos](const Rectangle& rect) {
+            return pos.x >= rect.x && pos.x <= rect.x + rect.width && pos.y >= rect.y && pos.y <= rect.y + rect.height;
+        });
+
+    if (it != m_areaList.end()) {
+        return *it;
+    }
+
+    return {};
+}
 
 void ImageGrid1Extractor::Update(InputManager* inputManager)
 {
     ImGuiWindow* window = GetWindow();
     if (!IsWindowFocus(window)) return;
 
+    if (!m_IsInitialize)
+        Initialize();
+
     auto mouseTracker = inputManager->GetMouse();
+    const XMINT2& pos = mouseTracker->GetOffsetPosition();
+    m_hoveredRect = FindRectangleContainingPoint(pos);
     if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
     {
-        //현재 윈도우의 마우스가 있는 위치의 픽셀을 얻어온다
-        IGetValue* value = GetRenderer()->GetValue();
-        vector<Rectangle> areaList;
-        //value->GetTextureAreaList(GetResourceFullFilename(GetFilename()), areaList);
-        Microsoft::WRL::ComPtr<ID3D12Resource> readbackBuffer;
-        D3D12_PLACED_SUBRESOURCE_FOOTPRINT layout;
-        value->GetReadTexture(GetResourceFullFilename(GetFilename()), readbackBuffer.GetAddressOf(), &layout);
-
-        UINT8* data{ nullptr };
-        readbackBuffer->Map(0, nullptr, reinterpret_cast<void**>(&data));
-
-        const XMINT2& pos = mouseTracker->GetOffsetPosition();
-        // 픽셀 오프셋 계산 (RGBA 4바이트 기준)
-        UINT pixelOffset = pos.y * layout.Footprint.RowPitch + pos.x * 4;
-        UINT32 pixelValue = *reinterpret_cast<UINT32*>(data + pixelOffset);
-
-        UINT8 red = (pixelValue >> 0) & 0xFF;    // R 채널 (하위 8비트)
-        UINT8 green = (pixelValue >> 8) & 0xFF;  // G 채널 (다음 8비트)
-        UINT8 blue = (pixelValue >> 16) & 0xFF;  // B 채널 (상위 8비트)
-        UINT8 alpha = (pixelValue >> 24) & 0xFF; // A 채널 (최상위 8비트)
-
-        readbackBuffer->Unmap(0, nullptr);
+        if (m_hoveredRect != Rectangle{})
+            m_component->Source = m_hoveredRect;
     }
 }
 
 void ImageGrid1Extractor::Render() const
 {
     DrawRectangle(m_component->Source, GetWindow());
+    DrawRectangle(m_hoveredRect, GetWindow());
 }
 
 ////////////////////////////////////////////////////////////

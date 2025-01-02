@@ -26,8 +26,7 @@ public:
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
     virtual float GetLineSpacing(size_t index) const noexcept override;
 
-    virtual bool GetReadTexture(const wstring& filename, ID3D12Resource** outReadbackBuffer,
-        D3D12_PLACED_SUBRESOURCE_FOOTPRINT* outLayout) override;
+    virtual bool GetTextureAreaList(const wstring& filename, const UINT32& bgColor, vector<Rectangle>& outList) override;
 
     //IRender
     virtual void Render(size_t index, const RECT& dest, const RECT* source) override;

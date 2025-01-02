@@ -82,14 +82,15 @@ void ComponentImageGrid1::UpdateComponent(InputManager* inputManager)
         m_textureWindow->Update(inputManager);
 }
 
-void ComponentImageGrid1::RenderComponent(UIComponent* component, bool& modify)
+void ComponentImageGrid1::RenderComponent(UIComponent* component, bool& posModify)
 {
     if (m_textureWindow)
         m_textureWindow->Render();
 
     ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(component);
-    EditFilename("Filename", imgGrid1->Filename);
-    modify |= EditRectangle("Source", imgGrid1->Source);
+    if (EditFilename("Filename", imgGrid1->Filename))
+        m_renderer->LoadComponent(component);
+    posModify |= EditRectangle("Source", imgGrid1->Source);
     
     ImGui::Spacing();
 

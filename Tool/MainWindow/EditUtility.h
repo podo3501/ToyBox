@@ -25,4 +25,4 @@ bool EditInteger(const char* label, T& value)
 }
 
 bool EditRectangle(const char* label, Property<Rectangle>& rect);
-void EditFilename(const string& label, Property<wstring>& filename);
+bool EditFilename(const string& label, Property<wstring>& filename);

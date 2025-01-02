@@ -3,6 +3,7 @@
 #include "DeviceResources.h"
 #include "Texture.h"
 #include "Font.h"
+#include "Utility.h"
 
 TextureIndexing::~TextureIndexing() = default;
 TextureIndexing::TextureIndexing(DX::DeviceResources* deviceRes, DescriptorHeap* descHeap, ResourceUploadBatch* upload, SpriteBatch* sprite) :
@@ -107,15 +108,14 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     return true;
 }
 
-bool TextureIndexing::GetReadTexture(const wstring& filename, ID3D12Resource** outReadbackBuffer, 
-    D3D12_PLACED_SUBRESOURCE_FOOTPRINT* outLayout)
+bool TextureIndexing::GetTextureAreaList(const wstring& filename, const UINT32& bgColor, vector<Rectangle>& outList)
 {
     auto find = ranges::find_if(m_textures, [&filename](const auto& tex) {
         return (tex->GetFilename() == filename);
         });
     if (find == m_textures.end()) return false;
 
-    if(!(*find)->GetReadBackBuffer(m_deviceResources, outReadbackBuffer, outLayout)) return false;
+    ReturnIfFalse((*find)->GetTextureAreaList(m_deviceResources, bgColor, outList));
 
     return true;
 }

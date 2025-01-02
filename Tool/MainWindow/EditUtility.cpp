@@ -20,22 +20,31 @@ bool EditRectangle(const char* label, Property<Rectangle>& rect)
     return modify;
 }
 
-void EditFilename(const string& label, Property<wstring>& filename)
+bool EditFilename(const string& label, Property<wstring>& filename)
 {
+    wstring editFilename{ filename };
     if (ImGui::Button("Change Filename"))
     {
         wstring selectedFilename{};
         if (!Tool::Dialog::ShowFileDialog(selectedFilename, FileDialogType::Open))
-            return;
+            return false;
 
         if (selectedFilename.empty())
-            return;
+            return false;
 
         const wstring& relativePath = GetRelativePath(selectedFilename);
-        filename = relativePath;
+        editFilename = relativePath;
     }
 
     char filenameBuffer[256] = "";
-    WStringToChar(filename, filenameBuffer);
+    WStringToChar(editFilename, filenameBuffer);
     ImGui::InputText(label.c_str(), filenameBuffer, sizeof(filenameBuffer));
+
+    if (editFilename != filename)
+    {
+        filename = move(editFilename);
+        return true;
+    }
+
+    return false;
 }

@@ -48,3 +48,5 @@ public:
 private:
     int current{}, start{}, end{};
 };
+
+void MergeRectangles(vector<Rectangle>& rects) noexcept;

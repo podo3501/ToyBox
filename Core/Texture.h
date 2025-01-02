@@ -17,6 +17,7 @@ public:
     void Reset();
     bool GetReadBackBuffer(DX::DeviceResources* deviceRes, ID3D12Resource** outReadbackBuffer, 
         D3D12_PLACED_SUBRESOURCE_FOOTPRINT* outLayout);
+    bool GetTextureAreaList(DX::DeviceResources* deviceRes, const UINT32& bgColor, vector<Rectangle>& outList);
 
     inline XMUINT2 GetSize() const noexcept;
     inline const std::wstring& GetFilename() const noexcept;
