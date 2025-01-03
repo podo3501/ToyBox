@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -151,9 +151,10 @@
     <ClCompile Include="MainWindow\EditUtility.cpp" />
     <ClCompile Include="MainWindow\MainWindow.cpp" />
     <ClCompile Include="MainWindow\ComponentPopup.cpp" />
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentSelector.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp" />
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentWindow.cpp" />
+    <ClCompile Include="MainWindow\SelectedComponent\EditWindow.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ExtractTexture.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp" />
@@ -180,9 +181,10 @@
     <ClInclude Include="MainWindow\EditUtility.h" />
     <ClInclude Include="MainWindow\MainWindow.h" />
     <ClInclude Include="MainWindow\ComponentPopup.h" />
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentSelector.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h" />
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentWindow.h" />
+    <ClInclude Include="MainWindow\SelectedComponent\EditWindow.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ExtractTexture.h" />
     <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h" />
     <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h" />

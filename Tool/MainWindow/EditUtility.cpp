@@ -20,6 +20,29 @@ bool EditRectangle(const char* label, Property<Rectangle>& rect)
     return modify;
 }
 
+bool EditText(const string& label, Property<string>& text)
+{
+    char editBuffer[256] = "";
+    StringToChar(text, editBuffer);
+    if (ImGui::InputText(label.c_str(), editBuffer, IM_ARRAYSIZE(editBuffer)))
+    {
+        text = editBuffer;
+        return true;
+    }
+
+    return false;
+}
+
+bool EditText(const string& label, const wstring& text)
+{
+    char editBuffer[256] = "";
+    WStringToChar(text, editBuffer);
+    if (ImGui::InputText(label.c_str(), editBuffer, IM_ARRAYSIZE(editBuffer)))
+        return true;
+
+    return false;
+}
+
 bool EditFilename(const string& label, Property<wstring>& filename)
 {
     wstring editFilename{ filename };
@@ -36,9 +59,7 @@ bool EditFilename(const string& label, Property<wstring>& filename)
         editFilename = relativePath;
     }
 
-    char filenameBuffer[256] = "";
-    WStringToChar(editFilename, filenameBuffer);
-    ImGui::InputText(label.c_str(), filenameBuffer, sizeof(filenameBuffer));
+    EditText(label, editFilename);
 
     if (editFilename != filename)
     {

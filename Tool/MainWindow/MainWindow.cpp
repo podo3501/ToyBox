@@ -108,7 +108,7 @@ void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 
 	const ImVec2& offset = GetWindowStartPosition(m_window);
 	auto mouseTracker = inputManager->GetMouse();
-	mouseTracker->SetOffset(ImVec2ToXMINT2(offset));
+	mouseTracker->PushOffset(offset);
 
 	CheckChangeWindow(m_window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
 	CheckAddComponent(mouseTracker);
@@ -116,6 +116,7 @@ void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
 
 	m_panel->ProcessUpdate({}, inputManager);
 	m_popup->Excute(mouseTracker);
+	mouseTracker->PopOffset();
 }
 
 void MainWindow::Render(ImGuiIO* io)

@@ -6,6 +6,7 @@
 #include "../Utility.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/ImageGrid1.h"
+#include "../Toy/UserInterface/ImageGrid3.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/HelperClass.h"
@@ -49,6 +50,7 @@ bool ComponentPopup::Excute(MouseTracker* mouseTracker)
 	switch (m_currentAction.value())
 	{
 	case MakeComponent::ImageGrid1: result = MakeImageGrid1(); break;
+	case MakeComponent::ImageGrid3: result = MakeImageGrid3(); break;
 	case MakeComponent::ImageGrid9: result = MakeImageGrid9(); break;
 	}
 
@@ -88,6 +90,7 @@ void ComponentPopup::Render()
 	
 	m_isActive = true;
 	if (ImGui::MenuItem("Image Grid 1")) m_currentAction = MakeComponent::ImageGrid1;
+	if (ImGui::MenuItem("Image Grid 3")) m_currentAction = MakeComponent::ImageGrid3;
 	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = MakeComponent::ImageGrid9;
 	if (ImGui::MenuItem("Close")) {}
 	
@@ -106,7 +109,7 @@ bool ComponentPopup::LoadImageGrid(unique_ptr<UIComponent>&& imgGrid)
 	m_component = move(imgGrid);
 	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
 
-	m_renderer->LoadComponent(m_component.get());
+	ReturnIfFalse(m_renderer->LoadComponent(m_component.get()));
 	m_draw = true;
 
 	return true;
@@ -116,23 +119,30 @@ bool ComponentPopup::LoadImageGrid(unique_ptr<UIComponent>&& imgGrid)
 bool ComponentPopup::MakeImageGrid1()
 {
 	UILayout layout({ 64, 64 }, Origin::LeftTop);
-	ImageSource source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
-	LoadImageGrid(CreateImageGrid<ImageGrid1>("untitled_imageGrid1", layout, source));
+	ImageSource source{ L"UI/SampleTexture/ToolComponentPopup.png", { { 2, 52, 64, 64 } } };
+	return LoadImageGrid(CreateImageGrid<ImageGrid1>("untitled_imageGrid1", layout, source));
+}
 
-	return true;
+bool ComponentPopup::MakeImageGrid3()
+{
+	UILayout layout({ 48, 48 }, Origin::LeftTop);
+	ImageSource source{
+		L"UI/SampleTexture/ToolComponentPopup.png", {
+			{ 2, 2, 23, 48 }, { 25, 2, 2, 48 }, { 27, 2, 23, 48 }
+		}
+	};
+	return LoadImageGrid(CreateImageGrid<ImageGrid3>("untitled_imageGrid3", layout, source));
 }
 
 bool ComponentPopup::MakeImageGrid9()
 {
 	UILayout layout({ 170, 120 }, Origin::LeftTop);
 	ImageSource source{
-		L"UI/Blue/button_square_header_large_square_screws.png", {
-			{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-			{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-			{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+		L"UI/SampleTexture/ToolComponentPopup.png", {
+			{ 2, 52, 30, 36 }, { 32, 52, 4, 36 }, { 36, 52, 30, 36 },
+			{ 2, 88, 30, 2 }, { 32, 88, 4, 2 }, { 36, 88, 30, 2 },
+			{ 2, 90, 30, 26 }, { 32, 90, 4, 26 }, { 36, 90, 30, 26 }
 		}
 	};
-	LoadImageGrid(CreateImageGrid<ImageGrid9>("untitled_imageGrid9", layout, source));
-
-	return true;
+	return LoadImageGrid(CreateImageGrid<ImageGrid9>("untitled_imageGrid9", layout, source));
 }

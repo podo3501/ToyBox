@@ -108,7 +108,7 @@ void TextArea::SetFont(const string& name,
 	const UILayout& layout, 
 	const map<wstring, wstring>& fontFileList)
 {
-	SetName(name);
+	Name = name;
 	m_text = text;
 	SetLayout(layout);
 	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {

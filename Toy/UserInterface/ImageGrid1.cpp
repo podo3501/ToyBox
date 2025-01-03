@@ -66,7 +66,7 @@ bool ImageGrid1::SetImage(const string& name, const UILayout& layout, const Imag
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 1) return false;
 
-	SetName(name);
+	Name = name;
 	SetLayout(layout);
 
 	Filename = source.filename;

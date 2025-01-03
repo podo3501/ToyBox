@@ -9,19 +9,18 @@
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
-	m_name{},
 	m_layout{ XMUINT2{}, Origin::LeftTop }
 {}
 
 UIComponent::UIComponent(const string& name, const XMUINT2& size) :
-	m_name{ name },
+	Name{ name },
 	m_layout{ size, Origin::LeftTop }
 {}
 
 //상속받은 곳에서만 복사생성자를 호출할 수 있다.
 UIComponent::UIComponent(const UIComponent& other)
 {
-	m_name = other.m_name;
+	Name = other.Name;
 	m_layout = other.m_layout;
 	ranges::transform(other.m_components, back_inserter(m_components), [this](const auto& transCom) {
 		auto component = transCom.component->Clone();
@@ -37,8 +36,8 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetType() != o.GetType()) return false;
 
-	ReturnIfFalse(tie(m_name, m_layout, m_components) == 
-		tie(o.m_name, o.m_layout, o.m_components));
+	ReturnIfFalse(tie(Name, m_layout, m_components) == 
+		tie(o.Name, o.m_layout, o.m_components));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
 
 	return true;
@@ -49,13 +48,13 @@ bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs)
 	if (lhs == nullptr && rhs == nullptr) return true;
 	if (lhs == nullptr || rhs == nullptr) return false;
 
-	if (lhs->GetName() != rhs->GetName()) return false;
+	if (lhs->Name != rhs->Name) return false;
 
 	return true;
 }
 
 UIComponent::UIComponent(UIComponent&& o) noexcept :
-	m_name{ move(o.m_name) },
+	Name{ move(o.Name) },
 	m_layout{ move(o.m_layout) },
 	m_components{ move(o.m_components) }
 {}
@@ -63,7 +62,7 @@ UIComponent::UIComponent(UIComponent&& o) noexcept :
 unique_ptr<UIComponent> UIComponent::Clone() const 
 { 
 	auto clone = CreateClone();
-	clone->SetName(clone->GetName() + "_clone");
+	clone->Name = clone->Name.Get() + "_clone";
 	return clone;
 }
 
@@ -89,9 +88,10 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, InputManager* inputManag
 
 	auto result = ranges::all_of(m_components, [this, &position, inputManager](auto& transCom) {
 		const auto& curPosition = transCom.GetPosition(m_isDirty, m_layout, position);
-		if (inputManager)
-			inputManager->GetMouse()->SetOffset(curPosition);
-		return transCom.component->ProcessUpdate(curPosition, inputManager);
+		if (inputManager) inputManager->GetMouse()->PushOffset(curPosition);
+		auto updateResult = transCom.component->ProcessUpdate(curPosition, inputManager);
+		if (inputManager) inputManager->GetMouse()->PopOffset();
+		return updateResult;
 		});
 	m_isDirty = false;
 
@@ -138,7 +138,7 @@ void UIComponent::AddComponent(unique_ptr<UIComponent>&& component, const Vector
 
 void UIComponent::SerializeIO(JsonOperation& operation)
 {
-	operation.Process("Name", m_name);
+	operation.Process("Name", Name);
 	operation.Process("Layout", m_layout);
 	operation.Process("Components", m_components);
 	
@@ -219,7 +219,7 @@ void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList
 
 UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 {
-	if (GetName() == name)
+	if (Name == name)
 		return const_cast<UIComponent*>(this);
 
 	for (const auto& transComponent : m_components)
@@ -244,7 +244,7 @@ vector<UIComponent*> UIComponent::GetComponents() const noexcept
 const TransformComponent* UIComponent::FindTransformComponent(const string& name) const noexcept
 {
 	auto find = ranges::find_if(m_components, [&name](const auto& transComp) {
-		return transComp.component->GetName() == name;
+		return transComp.component->Name == name;
 		});
 
 	if (find == m_components.end()) return nullptr;

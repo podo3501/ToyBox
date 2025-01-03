@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ComponentSelector.h"
 #include "ComponentTooltip.h"
-#include "ComponentWindow.h"
+#include "ComponentEdit/EditImageGrid.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/HelperClass.h"
 #include "../Toy/Utility.h"
@@ -13,7 +13,7 @@ ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
 	m_renderer{ renderer },
 	m_mainWnd{ nullptr },
 	m_tooltip{ make_unique<ComponentTooltip>(panel) },
-	m_window{ nullptr },
+	m_editWindow{ nullptr },
 	m_panel{ panel },
 	m_component{ nullptr }
 {}
@@ -24,16 +24,16 @@ void ComponentSelector::SetPanel(UIComponent* panel) noexcept
 	m_tooltip->SetPanel(panel);
 }
 
-static unique_ptr<ComponentWindow> CreateComponentWindow(const UIComponent* component, IRenderer* renderer)
+static unique_ptr<EditWindow> CreateEditWindow(const UIComponent* component, IRenderer* renderer)
 {
 	if (!component) return nullptr;
 
 	const string& type = component->GetType();
-	static const unordered_map<string, function<unique_ptr<ComponentWindow>()>> factoryMap{
+	static const unordered_map<string, function<unique_ptr<EditWindow>()>> factoryMap{
 		{ "class Panel", []() { return make_unique<ComponentPanel>(); } },
-		{ "class ImageGrid1", [renderer]() { return make_unique<ComponentImageGrid1>(renderer); } },
-		{ "class ImageGrid3", []() { return make_unique<ComponentImageGrid3>(); } },
-		{ "class ImageGrid9", []() { return make_unique<ComponentImageGrid9>(); } },
+		{ "class ImageGrid1", [renderer]() { return make_unique<EditImageGrid1>(renderer); } },
+		{ "class ImageGrid3", [renderer]() { return make_unique<EditImageGrid3>(renderer); } },
+		{ "class ImageGrid9", []() { return make_unique<EditImageGrid9>(); } },
 	};
 
 	auto it = factoryMap.find(type);
@@ -48,9 +48,9 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 	if (m_component == component) 
 		return;
 
-	m_window = CreateComponentWindow(component, m_renderer);
-	if(m_window)
-		m_window->SetComponent(component);
+	m_editWindow = CreateEditWindow(component, m_renderer);
+	if(m_editWindow)
+		m_editWindow->SetComponent(component);
 
 	m_component = component;
 	m_tooltip->SetComponent(component);
@@ -85,8 +85,8 @@ void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) no
 		return;
 	}
 
-	if (m_window)
-		m_window->Update(inputManager);
+	if (m_editWindow)
+		m_editWindow->Update(inputManager);
 
 	if (!bPopupActive && IsWindowFocus(m_mainWnd))	//팝업이 활동중이면
 		SelectComponent(inputManager);
@@ -100,8 +100,8 @@ void ComponentSelector::Render(bool bPopupActive)
 	if(m_component)
 		DrawRectangle(m_component->GetRectangle(), m_mainWnd);
 
-	if (m_window)
-		m_window->Render(m_mainWnd);
+	if (m_editWindow)
+		m_editWindow->Render(m_mainWnd);
 }
 
 void ComponentSelector::RepeatedSelection(const vector<UIComponent*>& componentList) noexcept

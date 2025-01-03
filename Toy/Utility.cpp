@@ -39,9 +39,13 @@ string WStringToString(const wstring& wstr)
 	return str;
 }
 
+void StringToChar(const string& str, span<char> outstr)
+{
+	strncpy_s(outstr.data(), outstr.size() - 1, str.c_str(), _TRUNCATE);
+	outstr[outstr.size() - 1] = '\0';
+}
+
 void WStringToChar(const wstring& wstr, span<char> outstr)
 {
-	const string& temp = WStringToString(wstr);
-	strncpy_s(outstr.data(), outstr.size() - 1, temp.c_str(), _TRUNCATE);
-	outstr[outstr.size() - 1] = '\0';
+	StringToChar(WStringToString(wstr), outstr);
 }

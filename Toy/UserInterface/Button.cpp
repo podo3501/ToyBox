@@ -30,7 +30,7 @@ bool Button::operator==(const UIComponent& o) const noexcept
 
 	return std::all_of(m_images.begin(), m_images.end(), [rhs](const auto& pair) {
 		auto state = pair.first;
-		return pair.second->GetName() == rhs->m_images.at(state)->GetName();
+		return pair.second->Name == rhs->m_images.at(state)->Name;
 		});
 }
 
@@ -48,7 +48,7 @@ bool Button::SetImage(const string& name, const UILayout& layout,
 	unique_ptr<UIComponent>&& hover,
 	unique_ptr<UIComponent>&& pressed)
 {
-	SetName(name);
+	Name = name;
 	SetLayout(layout);
 
 	AddComponentAndEnable(ButtonState::Normal, move(normal), true);

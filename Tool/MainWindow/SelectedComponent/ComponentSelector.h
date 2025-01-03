@@ -4,7 +4,7 @@ struct IRenderer;
 class InputManager;
 class UIComponent;
 class ComponentTooltip;
-class ComponentWindow;
+class EditWindow;
 
 class ComponentSelector
 {
@@ -25,7 +25,7 @@ private:
 	IRenderer* m_renderer;
 	ImGuiWindow* m_mainWnd;
 	unique_ptr<ComponentTooltip> m_tooltip;
-	unique_ptr<ComponentWindow> m_window;
+	unique_ptr<EditWindow> m_editWindow;
 
 	UIComponent* m_panel;
 	UIComponent* m_component;

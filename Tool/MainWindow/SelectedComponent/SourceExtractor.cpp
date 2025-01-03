@@ -43,7 +43,11 @@ bool ImageGrid1Extractor::Initialize()
 Rectangle ImageGrid1Extractor::FindRectangleContainingPoint(const XMINT2& pos)
 {
     auto it = ranges::find_if(m_areaList, [&pos](const Rectangle& rect) {
-            return pos.x >= rect.x && pos.x <= rect.x + rect.width && pos.y >= rect.y && pos.y <= rect.y + rect.height;
+            return 
+                pos.x >= rect.x && 
+                pos.x <= rect.x + rect.width && 
+                pos.y >= rect.y && 
+                pos.y <= rect.y + rect.height;
         });
 
     if (it != m_areaList.end()) {

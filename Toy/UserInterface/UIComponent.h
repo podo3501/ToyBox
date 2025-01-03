@@ -57,9 +57,6 @@ public:
 	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); MarkDirty(); }
 	inline const XMUINT2& GetSize() const noexcept { return m_layout.GetSize(); }
 
-	inline void SetName(const string& name) noexcept { m_name = name; }
-	inline const string& GetName() const noexcept { return m_name; }
-
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const UILayout& GetLayout() const noexcept { return m_layout; }
 
@@ -68,6 +65,9 @@ public:
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
 	template<typename T>
 	bool GetComponent(const string& name, T** outComponent) const noexcept;
+
+public:
+	Property<string> Name{};
 	
 private:
 	const TransformComponent* FindTransformComponent(const string& name) const noexcept;
@@ -77,7 +77,6 @@ private:
 	UIComponent* GetRoot() noexcept;
 	void MarkDirty() noexcept;
 
-	string m_name{};
 	UILayout m_layout;
 	UIComponent* m_parent{ nullptr };
 	vector<TransformComponent> m_components;

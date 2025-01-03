@@ -25,13 +25,13 @@
                         },
                         "Origin": "LeftTop"
                     },
-                    "Index": 0,
+                    "Index": 1,
                     "Filename": "UI/Texture/Option_1.png",
                     "Source": {
-                        "x": 0,
-                        "y": 0,
-                        "width": 64,
-                        "height": 64
+                        "x": 80,
+                        "y": 122,
+                        "width": 26,
+                        "height": 27
                     }
                 }
             }

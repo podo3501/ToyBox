@@ -16,7 +16,7 @@ GuiWidget::GuiWidget(IRenderer* renderer) :
 
 bool GuiWidget::Create(unique_ptr<UIComponent> comp)
 {
-    const string& name = comp->GetName();
+    const string& name = comp->Name;
     //const Rectangle& area = comp->GetSizeR();
 
     /*m_widgetScene->AddComponent({ 0.f, 0.f }, move(comp));
