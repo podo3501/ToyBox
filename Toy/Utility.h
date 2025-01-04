@@ -41,6 +41,7 @@ wstring StringToWString(const string& str);
 string RemoveNullTerminator(const string& str);
 string WStringToString(const wstring& wstr);
 void StringToChar(const string& str, span<char> outstr);
+wstring CharToWString(const span<char> str);
 void WStringToChar(const wstring& wstr, span<char> outstr);
 
 //스마트 포인터 비교

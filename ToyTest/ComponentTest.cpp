@@ -13,6 +13,8 @@
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/UserInterface/TextArea.h"
 
+using testing::ElementsAre;
+
 namespace ComponentTest
 {
 	void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
@@ -51,9 +53,9 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 400, 300, 430, 336 }, *source, { 0, 0, 30, 36 });
-		testResult |= IsTrue(dest, { 430, 300, 470, 336 }, *source, { 30, 0, 34, 36 });
-		testResult |= IsTrue(dest, { 470, 300, 500, 336 }, *source, { 34, 0, 64, 36 });
+		testResult |= IsTrue(dest, { 400, 300, 430, 336 }, *source, { 10, 10, 40, 46 });
+		testResult |= IsTrue(dest, { 430, 300, 470, 336 }, *source, { 40, 10, 44, 46 });
+		testResult |= IsTrue(dest, { 470, 300, 500, 336 }, *source, { 44, 10, 74, 46 });
 		
 		EXPECT_TRUE(testResult);
 	}
@@ -63,9 +65,9 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 340, 282, 370, 318 }, *source, { 0, 0, 30, 36 });
-		testResult |= IsTrue(dest, { 370, 282, 430, 318 }, *source, { 30, 0, 34, 36 });
-		testResult |= IsTrue(dest, { 430, 282, 460, 318 }, *source, { 34, 0, 64, 36 });
+		testResult |= IsTrue(dest, { 340, 282, 370, 318 }, *source, { 10, 10, 40, 46 });
+		testResult |= IsTrue(dest, { 370, 282, 430, 318 }, *source, { 40, 10, 44, 46 });
+		testResult |= IsTrue(dest, { 430, 282, 460, 318 }, *source, { 44, 10, 74, 46 });
 
 		EXPECT_TRUE(testResult);
 	}
@@ -75,7 +77,7 @@ namespace ComponentTest
 		UILayout layout({ 100, 36 }, Origin::LeftTop);
 		ImageSource grid3Source{
 			L"UI/Blue/button_square_header_large_square_screws.png", {
-				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 }
+				{ 10, 10, 30, 36 }, { 40, 10, 4, 36 }, { 44, 10, 30, 36 }
 			}
 		};
 
@@ -89,6 +91,12 @@ namespace ComponentTest
 		img3->ChangeOrigin(Origin::Center);
 		img3->ChangeSize({ 120, 36 });
 		img3->RefreshPosition();
+
+		SourceDivider srcDivider{};
+		img3->GetSourceAnd2Divider(srcDivider);
+		
+		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 36 }));
+		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34));
 
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);		
 		EXPECT_TRUE(WriteReadTest(m_panel));

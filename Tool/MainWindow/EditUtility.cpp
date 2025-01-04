@@ -1,23 +1,36 @@
 ﻿#include "pch.h"
 #include "EditUtility.h"
-#include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Dialog.h"
+#include "../Toy/UserInterface/UIType.h"
 
-bool EditRectangle(const char* label, Property<Rectangle>& rect)
+bool EditRectangle(const string& label, Rectangle& rect)
 {
-    ImGui::Text("%s", label);
-    ImGui::PushID(label);
+    ImGui::Text("%s", label.c_str());
+    ImGui::PushID(label.c_str());
 
     bool modify{ false };
-    modify |= EditInteger("X", rect->x);
-    modify |= EditInteger("Y", rect->y);
-    modify |= EditInteger("Width", rect->width);
-    modify |= EditInteger("Height", rect->height);
+    modify |= EditInteger("X", rect.x);
+    modify |= EditInteger("Y", rect.y);
+    modify |= EditInteger("Width", rect.width);
+    modify |= EditInteger("Height", rect.height);
 
     ImGui::PopID();
 
     return modify;
+}
+
+bool EditRectangle(const string& label, Property<Rectangle>& rect)
+{
+    Rectangle curRect = rect.Get();
+
+    if (EditRectangle(label, curRect))
+    {
+        rect.Set(curRect);
+        return true;
+    }
+
+    return false;
 }
 
 bool EditText(const string& label, Property<string>& text)
@@ -33,32 +46,34 @@ bool EditText(const string& label, Property<string>& text)
     return false;
 }
 
-bool EditText(const string& label, const wstring& text)
+bool EditText(const string& label, Property<wstring>& text)
 {
     char editBuffer[256] = "";
     WStringToChar(text, editBuffer);
     if (ImGui::InputText(label.c_str(), editBuffer, IM_ARRAYSIZE(editBuffer)))
+    {
+        text = CharToWString(editBuffer);
         return true;
+    }
 
     return false;
 }
 
-bool EditFilename(const string& label, Property<wstring>& filename)
+void EditText(const string& label, const wstring& text)
+{
+    char editBuffer[256] = "";
+    WStringToChar(text, editBuffer);
+    ImGui::InputText(label.c_str(), editBuffer, IM_ARRAYSIZE(editBuffer));
+}
+
+bool EditFilename(const string& label, wstring& filename)
 {
     wstring editFilename{ filename };
     if (ImGui::Button("Change Filename"))
-    {
-        wstring selectedFilename{};
-        if (!Tool::Dialog::ShowFileDialog(selectedFilename, FileDialogType::Open))
-            return false;
+        GetRelativePathFromDialog(editFilename);
 
-        if (selectedFilename.empty())
-            return false;
-
-        const wstring& relativePath = GetRelativePath(selectedFilename);
-        editFilename = relativePath;
-    }
-
+    //EditText에서 Property를 바로 쓰지 못하는 이유는 그 TextBox를 입력 했을때만 검출할 수 있기 때문에 
+    //다이얼로그에서 값을 가져와서 한 경우에는 true가 반환되지 않는다.
     EditText(label, editFilename);
 
     if (editFilename != filename)
@@ -68,4 +83,40 @@ bool EditFilename(const string& label, Property<wstring>& filename)
     }
 
     return false;
+}
+
+bool EditFilename(const string& label, Property<wstring>& filename)
+{
+    wstring editFilename{ filename };
+    if (EditFilename(label, editFilename))
+    {
+        filename = editFilename;
+        return true;
+    }
+
+    return false;
+}
+
+static constexpr array<string_view, 4> DividerLabel = { "Left", "Right", "Top", "Botton" };
+
+static bool EditList(const string& listLabel, vector<int>& list)
+{
+    ImGui::Text("%s", listLabel.c_str());
+    ImGui::PushID(listLabel.c_str());
+
+    bool modify{ false };
+    for (auto idx : views::iota(0u, list.size()))
+        modify |= EditInteger(DividerLabel[idx].data(), list[idx]);
+
+    ImGui::PopID();
+
+    return modify;
+}
+
+bool EditSourceAndDivider(const string & sourceLabel, const string & deviderLabel, SourceDivider& rectDivider)
+{
+    bool modify{ false };
+    modify |= EditRectangle(sourceLabel, rectDivider.rect);
+    modify |= EditList(deviderLabel, rectDivider.list);
+    return modify;
 }

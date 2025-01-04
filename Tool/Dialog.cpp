@@ -3,6 +3,7 @@
 #include <shobjidl.h>
 #include <wrl/wrappers/corewrappers.h>
 #include "../Toy/UserInterface/EnumUtility.h"
+#include "../Toy/Config.h"
 
 template<>
 constexpr size_t EnumSize<DialogType>() { return 4; }
@@ -118,4 +119,14 @@ void Dialog::Render() noexcept
     }
 
     ImGui::EndPopup();
+}
+
+void GetRelativePathFromDialog(wstring& outFilename)
+{
+    wstring selectedFilename{};
+    if (!Tool::Dialog::ShowFileDialog(selectedFilename, FileDialogType::Open))
+        return;
+
+    if (!selectedFilename.empty())
+        outFilename = GetRelativePath(selectedFilename);
 }

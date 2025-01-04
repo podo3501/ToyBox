@@ -54,3 +54,9 @@ struct ImageSource
 	wstring filename{};
 	vector<Rectangle> list;
 };
+
+struct SourceDivider
+{
+	Rectangle rect{};
+	vector<int> list;
+};

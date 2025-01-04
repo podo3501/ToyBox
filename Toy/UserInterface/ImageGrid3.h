@@ -2,6 +2,7 @@
 #include "UIComponent.h"
 
 struct ImageSource;
+struct SourceDivider;
 class ImageGrid1;
 
 class ImageGrid3 : public UIComponent
@@ -19,5 +20,15 @@ public:
 	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);
 	Rectangle GetFirstComponentSource() const noexcept;
 
+	bool SetFilename(const wstring& filename) noexcept;
+	bool GetFilename(wstring& outFilename) const noexcept;
+
+	bool SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept;
+	bool GetSourceAnd2Divider(SourceDivider& outSrcDivider) const noexcept;
+
 private:
+	bool GetImageGrid1Components(vector<ImageGrid1*>& outComponents) const noexcept;
+
+	ImageGrid1* GetFirstImageGrid1() const noexcept;
+	
 };

@@ -24,7 +24,7 @@ public:
 		return *this;
 	}
 
-	T& operator*() { return value; }
+	//T& operator*() { return value; }	//이 함수로 내부 값을 변경시키면 isDirty가 작동하지 않게 된다. 그래서 금지.
 	const T& operator*() const { return value; }
 	T* operator->() { return &value; }
 	const T* operator->() const { return &value; }

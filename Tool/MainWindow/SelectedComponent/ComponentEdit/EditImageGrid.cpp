@@ -5,6 +5,8 @@
 #include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid3.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
+#include "../Toy/UserInterface/UIType.h"
+#include "../Toy/Utility.h"
 #include "../../EditUtility.h"
 #include "../SourceExtractor.h"
 
@@ -75,6 +77,18 @@ EditImageGrid3::EditImageGrid3(IRenderer* renderer) :
 void EditImageGrid3::RenderComponentEdit(UIComponent* component, bool& modify)
 {
     ImageGrid3* imgGrid3 = ComponentCast<ImageGrid3*>(component);
+    wstring filename{};
+    assert(imgGrid3->GetFilename(filename));
+    if (EditFilename("Filename", filename))
+    {
+        assert(imgGrid3->SetFilename(filename));
+        m_renderer->LoadComponent(component);
+    }
+    
+    SourceDivider srcDivider{};
+    assert(imgGrid3->GetSourceAnd2Divider(srcDivider));
+    if (EditSourceAndDivider("Source", "Deviders", srcDivider))
+        assert(imgGrid3->SetSourceAnd2Divider(srcDivider));
 }
 
 ////////////////////////////////////////////////

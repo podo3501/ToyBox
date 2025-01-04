@@ -28,3 +28,5 @@ namespace Tool
 		static string m_msg;
 	};
 }
+
+void GetRelativePathFromDialog(wstring& outFilename);

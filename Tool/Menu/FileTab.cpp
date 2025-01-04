@@ -3,6 +3,7 @@
 #include "../Dialog.h"
 #include "../Toy/Window.h"
 #include "../Toy/Utility.h"
+#include "../Toy/Config.h"
 #include "../ToolSystem.h"
 #include "../MainWindow/MainWindow.h"
 #include "MenuHelper.h"
@@ -91,16 +92,13 @@ bool FileTab::CreateMainWindowFromFile(const wstring& filename)
 
 bool FileTab::CreateMainWindow()
 {
-    wstring selectedFilename{};
-    if (!Tool::Dialog::ShowFileDialog(selectedFilename, FileDialogType::Open))
-        return false;
+    wstring relativePath{};
+    GetRelativePathFromDialog(relativePath);
+    if (relativePath.empty()) return true;
 
-    if (selectedFilename.empty())   //다이얼로그를 닫거나 취소를 눌리면 파일명이 없다.
-        return true;
-
-    auto create = CreateMainWindowFromFile(selectedFilename);
+    auto create = CreateMainWindowFromFile(relativePath);
     if (create)
-        m_recentFiles->AddFile(selectedFilename);
+        m_recentFiles->AddFile(relativePath);
 
     return true;
 }
@@ -147,9 +145,7 @@ bool FileTab::SaveAsMainWindow()
     }
 
     wstring selectedFilename{};
-    if (!Tool::Dialog::ShowFileDialog(selectedFilename, FileDialogType::Save))
-        return false;
-
+    GetRelativePathFromDialog(selectedFilename);
     if (selectedFilename.empty())
         return true;
 

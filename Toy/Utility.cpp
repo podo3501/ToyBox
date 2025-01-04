@@ -49,3 +49,8 @@ void WStringToChar(const wstring& wstr, span<char> outstr)
 {
 	StringToChar(WStringToString(wstr), outstr);
 }
+
+wstring CharToWString(const span<char> str)
+{
+	return StringToWString(string(str.data(), str.size()));
+}
