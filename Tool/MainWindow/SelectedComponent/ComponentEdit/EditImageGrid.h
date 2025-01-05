@@ -16,9 +16,10 @@ protected:
 	EditImageGrid(IRenderer* renderer) noexcept;
 	virtual void RenderComponentEdit(UIComponent* component, bool& posModify) {};
 
+	void RenderExtractTextureButton(const wstring& filename, UIComponent* component);
 	inline IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
-protected:	//protected로 선언했기 때문에 변수를 늘려야  할때에는 신중을 기한다.
+private:	//protected로 선언했기 때문에 변수를 늘려야  할때에는 신중을 기한다.
 	IRenderer* m_renderer;
 	unique_ptr<TextureWindow> m_textureWindow;
 };

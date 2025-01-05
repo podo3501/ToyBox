@@ -72,6 +72,18 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
+	void TestImageGrid3SourceAndDivider(size_t index, const RECT& dest, const RECT* source)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 340, 282, 370, 318 }, *source, { 10, 10, 30, 46 });
+		testResult |= IsTrue(dest, { 370, 282, 430, 318 }, *source, { 30, 10, 54, 46 });
+		testResult |= IsTrue(dest, { 430, 282, 460, 318 }, *source, { 54, 10, 74, 46 });
+
+		EXPECT_TRUE(testResult);
+	}
+
 	TEST_F(ToyTestFixture, TestImageGrid3)
 	{
 		UILayout layout({ 100, 36 }, Origin::LeftTop);
@@ -92,16 +104,22 @@ namespace ComponentTest
 		img3->ChangeSize({ 120, 36 });
 		img3->RefreshPosition();
 
-		SourceDivider srcDivider{};
-		img3->GetSourceAnd2Divider(srcDivider);
-		
-		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 36 }));
-		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34));
-
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);		
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		CloneTest(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
+
+		SourceDivider srcDivider{};
+		img3->GetSourceAnd2Divider(srcDivider);
+
+		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 36 }));
+		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34));
+
+		srcDivider.list.clear();
+		srcDivider.list = { 20, 44 };
+		img3->SetSourceAnd2Divider(srcDivider);
+
+		CallMockRender(m_panel.get(), TestImageGrid3SourceAndDivider, 3);
 	}
 	
 	////////////////////////////////////////////////////////

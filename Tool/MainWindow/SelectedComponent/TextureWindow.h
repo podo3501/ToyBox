@@ -16,6 +16,7 @@ public:
     void Update(InputManager* inputManager);
     void Render();
     bool IsOpen() const noexcept { return m_isOpen; }
+    void Open() noexcept { m_isOpen = true; }
 
 private:
     IRenderer* m_renderer;

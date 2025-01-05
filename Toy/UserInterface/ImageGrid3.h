@@ -26,6 +26,9 @@ public:
 	bool SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept;
 	bool GetSourceAnd2Divider(SourceDivider& outSrcDivider) const noexcept;
 
+	bool SetSources(const vector<Rectangle>& sources) noexcept;
+	vector<Rectangle> GetSources() const noexcept;
+
 private:
 	bool GetImageGrid1Components(vector<ImageGrid1*>& outComponents) const noexcept;
 

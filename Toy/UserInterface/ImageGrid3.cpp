@@ -135,10 +135,47 @@ bool ImageGrid3::GetSourceAnd2Divider(SourceDivider& outSrcDivider) const noexce
     return true;
 }
 
-bool ImageGrid3::SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept
+bool ImageGrid3::SetSources(const vector<Rectangle>& sources) noexcept
 {
     vector<ImageGrid1*> components;
     ReturnIfFalse(GetImageGrid1Components(components));
+
+    ranges::for_each(components, [&sources, index = 0](ImageGrid1* component) mutable {
+        component->Source = sources[index++];
+        });
+
+    return true;
+}
+
+vector<Rectangle> ImageGrid3::GetSources() const noexcept
+{
+    vector<Rectangle> areas;
+
+    vector<ImageGrid1*> components;
+    if (!GetImageGrid1Components(components)) return {};
+
+    for (ImageGrid1* imgGrid1 : components)
+        areas.push_back(imgGrid1->Source);
+
+    return areas;
+}
+
+bool ImageGrid3::SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept
+{
+    vector<int> threePoints(srcDivider.list);
+    threePoints.push_back(srcDivider.rect.width);
+    ranges::sort(threePoints);
+
+    vector<int> widths{ 
+        threePoints[0], 
+        threePoints[1] - threePoints[0], 
+        threePoints[2] - threePoints[1] 
+    };
+
+    vector<Rectangle> sources = GetSourcesFromAreaAndGaps(srcDivider.rect, widths);
+    ReturnIfFalse(SetSources(sources));
+
+    return true;
 }
 
 bool ImageGrid3::GetImageGrid1Components(vector<ImageGrid1*>& outComponents) const noexcept

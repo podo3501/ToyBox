@@ -167,3 +167,18 @@ vector<PositionSize> StretchSize(StretchType stretchType, const XMUINT2& size, c
 
 	return result;
 }
+
+vector<Rectangle> GetSourcesFromAreaAndGaps(const Rectangle& area, const vector<int>& widths) noexcept
+{
+	if (area.IsEmpty()) return {};
+
+	vector<Rectangle> areas;
+	long posX = area.x;
+
+	for (auto width : widths)
+	{
+		areas.emplace_back(posX, area.y, width, area.height);
+		posX += width;
+	}
+	return areas;
+}

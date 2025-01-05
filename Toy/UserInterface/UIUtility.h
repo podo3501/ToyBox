@@ -56,3 +56,5 @@ unique_ptr<T> CreateImageGrid(const string& name, const UILayout& layout, const 
 
 	return imgGrid;
 }
+
+vector<Rectangle> GetSourcesFromAreaAndGaps(const Rectangle& area, const vector<int>& widths) noexcept;
