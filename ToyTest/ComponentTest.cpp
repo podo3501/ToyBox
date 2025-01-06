@@ -37,7 +37,7 @@ namespace ComponentTest
 		UILayout layout({ 64, 64 }, Origin::LeftTop);
 		ImageSource grid1Source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
 
-		m_panel->AddComponent(CreateImageGrid<ImageGrid1>("ImgGrid1", layout, grid1Source), { 0.5f, 0.5f });
+		m_panel->AddComponent(CreateImageGrid<ImageGrid1>("ImgGrid1", layout, grid1Source), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid1Render, 1);
@@ -93,7 +93,7 @@ namespace ComponentTest
 			}
 		};
 
-		m_panel->AddComponent(CreateImageGrid<ImageGrid3>("ImgGrid3", layout, grid3Source), { 0.5f, 0.5f });
+		m_panel->AddComponent(CreateImageGrid<ImageGrid3>("ImgGrid3", layout, grid3Source), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
@@ -175,7 +175,7 @@ namespace ComponentTest
 			}
 		};
 
-		m_panel->AddComponent(CreateImageGrid<ImageGrid9>("ImgGrid9", layout, grid9Source), { 0.5f, 0.5f });
+		m_panel->AddComponent(CreateImageGrid<ImageGrid9>("ImgGrid9", layout, grid9Source), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
@@ -218,7 +218,7 @@ namespace ComponentTest
 			CreateImageGrid<ImageGrid1>("Button_hover", loImgGrid, hover),
 			CreateImageGrid<ImageGrid1>("Button_pressed", loImgGrid, pressed)));
 
-		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
+		m_panel->AddComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );	//Pressed
@@ -266,7 +266,7 @@ namespace ComponentTest
 			CreateImageGrid<ImageGrid3>("Button_hover", loImgGrid, hover),
 			CreateImageGrid<ImageGrid3>("Button_pressed", loImgGrid, pressed)));
 
-		m_panel->AddComponent(move(button), { 0.2f, 0.2f });
+		m_panel->AddComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Pressed
@@ -301,7 +301,7 @@ namespace ComponentTest
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
 		textArea->SetFont("TextArea", text, layout, fontFileList);
 
-		m_panel->AddComponent(move(textArea), { 0.5f, 0.5f });
+		m_panel->AddComponent(move(textArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestTextAreaRender);
@@ -323,8 +323,8 @@ namespace ComponentTest
 		std::unique_ptr<Panel> panel1 = std::make_unique<Panel>();
 		panel1->SetLayout({ { 400, 400 }, Origin::Center });
 
-		panel1->AddComponent(move(panel2), { 0.1f, 0.1f });
-		m_panel->AddComponent(move(panel1), { 0.5f, 0.5f });
+		panel1->AddComponent(move(panel2), { 40, 40 });
+		m_panel->AddComponent(move(panel1), { 400, 300 });
 
 		vector<UIComponent*> outList;
 		m_panel->GetComponents({ 240, 140 }, outList);
@@ -335,5 +335,7 @@ namespace ComponentTest
 		outList.clear();
 		m_panel->GetComponents({ 239, 140 }, outList);
 		EXPECT_EQ(outList.size(), 2);
+
+		//사이즈가 바뀌었을때 값이 어떻게 바뀌는지 테스트
 	}
 }

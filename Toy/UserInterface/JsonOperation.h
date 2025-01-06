@@ -156,6 +156,7 @@ public:
 	template<typename T>
 	void Process(const string& key, Property<T>& data);
 
+	void Process(const string& key, XMINT2& data) noexcept;
 	void Process(const string& key, XMUINT2& data) noexcept;
 	void Process(const string& key, Rectangle& data) noexcept;
 	void Process(const string& key, Origin& data) noexcept;

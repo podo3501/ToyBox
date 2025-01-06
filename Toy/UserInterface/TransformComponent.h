@@ -1,18 +1,14 @@
 #pragma once
 
-struct ILoadData;
-struct IGetValue;
-struct IRender;
 class UILayout;
 class UIComponent;
 class JsonOperation;
-class InputManager;
 
 class TransformComponent
 {
 public:
 	TransformComponent();
-	TransformComponent(unique_ptr<UIComponent> comp, const Vector2& position);
+	TransformComponent(unique_ptr<UIComponent> comp, const XMINT2 relativePos);
 	TransformComponent(const TransformComponent&) = delete;
 	TransformComponent& operator=(const TransformComponent&) = delete;
 	TransformComponent(TransformComponent&& o) noexcept;
@@ -22,6 +18,6 @@ public:
 	void SerializeIO(JsonOperation& operation);
 
 	unique_ptr<UIComponent> component;
-	Vector2 position{};
-	XMINT2 realPosition{};
+	XMINT2 relativePosition{};
+	XMINT2 absolutePosition{};
 };

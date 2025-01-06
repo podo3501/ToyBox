@@ -60,9 +60,14 @@ static inline XMINT2 TransformVectorByRect(const XMUINT2& size, const Vector2& v
 	);
 }
 
-XMINT2 UILayout::GetPosition(const Vector2& position) const noexcept
+//XMINT2 UILayout::GetPosition(const Vector2& position) const noexcept
+//{
+//	return TransformVectorByRect(m_size, position) - m_originPoint;
+//}
+
+XMINT2 UILayout::GetPosition(const XMINT2& relativePosition) const noexcept
 {
-	return TransformVectorByRect(m_size, position) - m_originPoint;
+	return relativePosition - m_originPoint;
 }
 
 bool UILayout::IsArea(const XMINT2& pos) const noexcept

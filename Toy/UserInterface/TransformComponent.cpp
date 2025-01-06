@@ -4,39 +4,37 @@
 #include "UIComponent.h"
 #include "JsonOperation.h"
 #include "../Utility.h"
-#include "../HelperClass.h"
-#include "../InputManager.h"
 
 TransformComponent::TransformComponent() 
 {}
 
-TransformComponent::TransformComponent(unique_ptr<UIComponent> comp, const Vector2& position) :
-	component{ move(comp) }, position{ position }
+TransformComponent::TransformComponent(unique_ptr<UIComponent> comp, const XMINT2 relativePos) :
+	component{ move(comp) }, relativePosition{ relativePos }
 {}
 
 TransformComponent::TransformComponent(TransformComponent&& o) noexcept :
 	component{ move(o.component) },
-	position{ move(o.position) }
+	relativePosition{ move(o.relativePosition) }
 {}
 
 bool TransformComponent::operator==(const TransformComponent& o) const noexcept
 {
 	ReturnIfFalse(CompareUniquePtr(component, o.component));
-	ReturnIfFalse(CompareEpsilon(position, o.position));
+	if (relativePosition != o.relativePosition) return false;
 
 	return true;
 }
 
 XMINT2 TransformComponent::GetPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept
 {
-	if (!IsDirty) return realPosition;
-	realPosition = layout.GetPosition(position) + parentPosition;
+	if (!IsDirty) return absolutePosition;
+	absolutePosition = layout.GetPosition(relativePosition) + parentPosition;
 
-	return realPosition;
+	return absolutePosition;
 }
 
 void TransformComponent::SerializeIO(JsonOperation& operation)
 {
-	operation.Process("Position", position);
+	operation.Process("RelativePosition", relativePosition);
 	operation.Process("Component", component);
 }

@@ -156,7 +156,7 @@ vector<PositionSize> StretchSize(StretchType stretchType, const XMUINT2& size, c
 	for (size_t iy = 0; iy < yPoints.size() - 1; ++iy) {
 		for (size_t ix = 0; ix < xPoints.size() - 1; ++ix) {
 			result.emplace_back(PositionSize{
-				{ float(xPoints[ix]) / size.x, float(yPoints[iy]) / size.y },
+				{ static_cast<int32_t>(xPoints[ix]), static_cast<int32_t>(yPoints[iy]) },
 				{	
 					static_cast<uint32_t>(xPoints[ix + 1] - xPoints[ix]),
 					static_cast<uint32_t>(yPoints[iy + 1] - yPoints[iy]) 

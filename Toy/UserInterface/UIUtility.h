@@ -34,7 +34,8 @@ enum class StretchType
 
 struct PositionSize
 {
-	Vector2 pos;
+	//Vector2 pos;
+	XMINT2 pos;
 	XMUINT2 size;
 };
 

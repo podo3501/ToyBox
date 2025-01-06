@@ -89,5 +89,5 @@ void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 		ChangePosition(idx, posRects[idx].pos);
 		components[idx]->ChangeSize(posRects[idx].size);
 	}
-	UIComponent::ChangeSize(size);
+	ApplySize(size);
 }

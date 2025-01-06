@@ -20,6 +20,7 @@ protected:
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	bool IsDirty() const noexcept { return m_isDirty; }
+	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
 
 public:
 	virtual ~UIComponent();
@@ -37,19 +38,21 @@ public:
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;
-	virtual void ChangeSize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
+	virtual void ChangeSize(const XMUINT2& size) noexcept;
 	virtual void SerializeIO(JsonOperation& operation);
 
-	void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
-	
+	//void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
+	void AddComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept;
 	
 	Rectangle GetRectangle() const noexcept;
 	XMINT2 GetPosition() const noexcept;
 	void RefreshPosition() noexcept;
-	bool ChangePosition(int index, const Vector2& pos) noexcept;
+	//bool ChangePosition(int index, const Vector2& pos) noexcept;
+	bool ChangePosition(int index, const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
 
-	void SetChildPosition(const string& name, const Vector2& pos) noexcept;
+	//void SetChildPosition(const string& name, const Vector2& pos) noexcept;
+	void SetChildPosition(const string& name, const XMINT2& relativePos) noexcept;
 
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
 	inline void SetEnable(bool enable) { m_enable = enable; }

@@ -12,8 +12,12 @@
         "Components": [
             {
                 "Position": {
-                    "x": 0.356445,
-                    "y": 0.292969
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "RelativePosition": {
+                    "x": 512,
+                    "y": 312
                 },
                 "Component": {
                     "Type": "class ImageGrid1",
@@ -25,7 +29,7 @@
                         },
                         "Origin": "LeftTop"
                     },
-                    "Index": 0,
+                    "Index": 1,
                     "Filename": "UI/Texture/Option_1.png",
                     "Source": {
                         "x": 80,

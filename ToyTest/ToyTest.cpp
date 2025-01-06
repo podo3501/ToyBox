@@ -30,7 +30,7 @@ namespace BasicClient
 	TEST_F(ToyTestFixture, GetComponents)
 	{
 		unique_ptr<UIComponent> img9 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 220, 190 });
-		m_panel->AddComponent(move(img9), { 0.1f, 0.1f });
+		m_panel->AddComponent(move(img9), { 80, 60 });
 
 		vector<UIComponent*> componentList1;
 		m_panel->GetComponents({ 0, 0 }, componentList1);
@@ -41,7 +41,7 @@ namespace BasicClient
 		EXPECT_EQ(componentList2.size(), 4);
 
 		unique_ptr<UIComponent> img9_2 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 221, 191 });
-		m_panel->AddComponent(move(img9_2), { 0.11f, 0.11f });
+		m_panel->AddComponent(move(img9_2), { 88, 66 });
 
 		vector<UIComponent*> componentList3;
 		m_panel->GetComponents({ 180, 160 }, componentList3);
@@ -52,8 +52,8 @@ namespace BasicClient
 		unique_ptr<UIComponent> img9 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 220, 190 });
 		unique_ptr<UIComponent> panel = make_unique<Panel>();
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
-		panel->AddComponent(move(img9), { 0.1f, 0.1f });
-		m_panel->AddComponent(move(panel), { 0.5f, 0.5f });
+		panel->AddComponent(move(img9), { 40, 30 });
+		m_panel->AddComponent(move(panel), { 400, 300 });
 		m_panel->RefreshPosition();
 
 		UIComponent* component = m_panel->GetComponent("ImageGrid9_1_1");

@@ -89,6 +89,19 @@ void JsonOperation::ProcessImpl(const string& key, auto writeFunc, auto readFunc
     }
 }
 
+//xy가 들어가는 것은 이걸로 바꾸자.
+static void WriteXY(const XMINT2& data, auto& j) { j["x"] = data.x; j["y"] = data.y; }
+static void WriteXY(const XMUINT2& data, auto& j) { j["x"] = data.x; j["y"] = data.y; }
+static void ReadXY(XMINT2& data, const auto& j) { data.x = j["x"]; data.y = j["y"]; }
+static void ReadXY(XMUINT2& data, const auto& j) { data.x = j["x"]; data.y = j["y"]; }
+
+void JsonOperation::Process(const string& key, XMINT2& data) noexcept
+{
+    auto writeFunc = [&data](auto& j) { WriteXY(data, j); };
+    auto readFunc = [&data](const auto& j) { ReadXY(data, j); };
+    ProcessImpl(key, writeFunc, readFunc);
+}
+
 void JsonOperation::Process(const string& key, XMUINT2& data) noexcept
 {
     auto writeFunc = [&data](auto& j) {

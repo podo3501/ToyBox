@@ -79,7 +79,7 @@ void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
         ChangePosition(idx, posSizes[idx].pos);
         components[idx]->ChangeSize(posSizes[idx].size);
     }
-    UIComponent::ChangeSize(size);
+    ApplySize(size);
 }
 
 ImageGrid1* ImageGrid3::GetFirstImageGrid1() const noexcept

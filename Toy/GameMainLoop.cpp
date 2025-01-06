@@ -62,8 +62,8 @@ bool GameMainLoop::LoadResources()
         CreateImageGrid<ImageGrid3>("Button_hover", loImgGrid, hover),
         CreateImageGrid<ImageGrid3>("Button_pressed", loImgGrid, pressed));
 
-    m_gamePanel->AddComponent(move(button), { 0.5f, 0.5f });
-    m_gamePanel->AddComponent(move(button2), { 0.5f, 0.4f });
+    m_gamePanel->AddComponent(move(button), { 400, 300 });
+    m_gamePanel->AddComponent(move(button2), { 400, 240 });
 
     UILayout loButton2({ 32, 32 }, Origin::Center);
     UILayout loImgGrid2({ 32, 32 }, Origin::LeftTop);
@@ -77,7 +77,7 @@ bool GameMainLoop::LoadResources()
         CreateImageGrid<ImageGrid1>("Button_hover", loImgGrid2, hover2),
         CreateImageGrid<ImageGrid1>("Button_pressed", loImgGrid2, pressed2));
 
-    m_gamePanel->AddComponent(move(closeButton), { 0.2f, 0.2f });
+    m_gamePanel->AddComponent(move(closeButton), { 160, 120 });
 
     UILayout layout({ 250, 120 }, Origin::Center);
     map<wstring, wstring> fontFileList;
@@ -87,7 +87,7 @@ bool GameMainLoop::LoadResources()
     wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
     textArea->SetFont("TextArea", text, layout, fontFileList);
 
-    m_gamePanel->AddComponent(move(textArea), { 0.2f, 0.7f });
+    m_gamePanel->AddComponent(move(textArea), { 160, 420 });
 
     layout.Set({ 210, 150 }, Origin::LeftTop);
     ImageSource img9Source{
@@ -100,7 +100,7 @@ bool GameMainLoop::LoadResources()
 
     unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
     imgGrid9->SetImage("ImgGrid9", layout, img9Source);
-    m_gamePanel->AddComponent(move(imgGrid9), { 0.5f, 0.5f });
+    m_gamePanel->AddComponent(move(imgGrid9), { 400, 300 });
 
     m_renderer->LoadComponent(m_gamePanel.get());
 

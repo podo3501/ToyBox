@@ -96,9 +96,8 @@ void MainWindow::CheckAddComponent(const MouseTracker* mouseTracker) noexcept
 	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;	//¿ÞÂÊ¹öÆ° ´­·¶À»¶§ 
 	if (!m_popup->IsComponent())  return;
 
-	const XMUINT2 size = m_panel->GetSize();
 	const XMINT2& pos = mouseTracker->GetOffsetPosition();
-	m_panel->AddComponent(m_popup->GetComponent(), GetNormalPosition(pos, size));
+	m_panel->AddComponent(m_popup->GetComponent(), pos);
 }
 
 void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
