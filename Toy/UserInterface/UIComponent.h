@@ -41,17 +41,16 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept;
 	virtual void SerializeIO(JsonOperation& operation);
 
-	//void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
 	void AddComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept;
 	
 	Rectangle GetRectangle() const noexcept;
 	XMINT2 GetPosition() const noexcept;
+	bool GetRelativePosition(XMINT2& outRelativePos) const noexcept;
+	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
 	void RefreshPosition() noexcept;
-	//bool ChangePosition(int index, const Vector2& pos) noexcept;
 	bool ChangePosition(int index, const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
 
-	//void SetChildPosition(const string& name, const Vector2& pos) noexcept;
 	void SetChildPosition(const string& name, const XMINT2& relativePos) noexcept;
 
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
@@ -73,8 +72,8 @@ public:
 	Property<string> Name{};
 	
 private:
-	const TransformComponent* FindTransformComponent(const string& name) const noexcept;
-	const TransformComponent* FindTransformComponent(const UIComponent* component) const noexcept;
+	TransformComponent* FindTransformComponent(const string& name) noexcept;
+	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
 	XMINT2 GetComponentPosition(const UIComponent* component) const noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	UIComponent* GetRoot() noexcept;

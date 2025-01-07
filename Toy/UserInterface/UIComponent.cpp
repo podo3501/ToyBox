@@ -197,6 +197,27 @@ XMINT2 UIComponent::GetComponentPosition(const UIComponent* component) const noe
 	return parent->GetLayout().GetPosition(transComponent->relativePosition);
 }
 
+bool UIComponent::GetRelativePosition(XMINT2& outRelativePos) const noexcept
+{
+	if (!m_parent) return false;
+	
+	auto transformComponent = m_parent->FindTransformComponent(this);
+	outRelativePos = transformComponent->relativePosition;
+
+	return true;
+}
+
+bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
+{
+	if (!m_parent) return false;
+
+	auto transformComponent = m_parent->FindTransformComponent(this);
+	transformComponent->relativePosition = relativePos;
+	m_parent->MarkDirty();
+
+	return true;
+}
+
 XMINT2 UIComponent::GetPosition() const noexcept
 {
 	XMINT2 parentPosition{ 0, 0 };
@@ -270,7 +291,7 @@ vector<UIComponent*> UIComponent::GetComponents() const noexcept
 	return componentList;
 }
 
-const TransformComponent* UIComponent::FindTransformComponent(const string& name) const noexcept
+TransformComponent* UIComponent::FindTransformComponent(const string& name) noexcept
 {
 	auto find = ranges::find_if(m_components, [&name](const auto& transComp) {
 		return transComp.component->Name == name;
@@ -280,7 +301,7 @@ const TransformComponent* UIComponent::FindTransformComponent(const string& name
 	return &(*find);
 }
 
-const TransformComponent* UIComponent::FindTransformComponent(const UIComponent* component) const noexcept
+TransformComponent* UIComponent::FindTransformComponent(const UIComponent* component) noexcept
 {
 	auto find = ranges::find_if(m_components, [component](const auto& transComp) {
 		return transComp.component.get() == component;

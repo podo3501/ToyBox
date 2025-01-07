@@ -7,6 +7,9 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../../Utility.h"
+#include "../Toy/UserInterface/Panel.h"
+#include "../Toy/UserInterface/ImageGrid1.h"
+#include "../Toy/UserInterface/ImageGrid3.h"
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
@@ -24,22 +27,23 @@ void ComponentSelector::SetPanel(UIComponent* panel) noexcept
 	m_tooltip->SetPanel(panel);
 }
 
-static unique_ptr<EditWindow> CreateEditWindow(const UIComponent* component, IRenderer* renderer)
+template <typename EditType, typename ComponentType, typename... Args>
+unique_ptr<EditWindow> CreateEdit(UIComponent* component, Args&&... args) 
+{
+	return make_unique<EditType>(ComponentCast<ComponentType>(component), forward<Args>(args)...);
+}
+
+//이게 점점 커지면 include도 많이 생기고 해서 static factory클래스로 만들어야 할 것 같다.
+static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, IRenderer* renderer)
 {
 	if (!component) return nullptr;
 
 	const string& type = component->GetType();
-	static const unordered_map<string, function<unique_ptr<EditWindow>()>> factoryMap{
-		{ "class Panel", []() { return make_unique<ComponentPanel>(); } },
-		{ "class ImageGrid1", [renderer]() { return make_unique<EditImageGrid1>(renderer); } },
-		{ "class ImageGrid3", [renderer]() { return make_unique<EditImageGrid3>(renderer); } },
-		{ "class ImageGrid9", []() { return make_unique<EditImageGrid9>(); } },
-	};
+	if (type == "class Panel") return CreateEdit<EditPanel, Panel*>(component);
+	if (type == "class ImageGrid1") return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer);
+	if (type == "class ImageGrid3") return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer);
 
-	auto it = factoryMap.find(type);
-	if (it == factoryMap.end()) return nullptr;
-
-	return it->second();
+	return nullptr;
 }
 
 void ComponentSelector::SetComponent(UIComponent* component) noexcept
@@ -49,8 +53,6 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 		return;
 
 	m_editWindow = CreateEditWindow(component, m_renderer);
-	if(m_editWindow)
-		m_editWindow->SetComponent(component);
 
 	m_component = component;
 	m_tooltip->SetComponent(component);

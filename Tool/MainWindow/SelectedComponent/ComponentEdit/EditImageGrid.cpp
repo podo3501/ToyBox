@@ -22,7 +22,8 @@ static unique_ptr<TextureWindow> CreateTextureWindow( IRenderer* renderer, const
 //////////////////////////////////////////////////////
 
 EditImageGrid::~EditImageGrid() = default;
-EditImageGrid::EditImageGrid(IRenderer* renderer) noexcept :
+EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer) noexcept :
+    EditWindow{ component },
     m_renderer{ renderer }
 {}
 
@@ -33,12 +34,12 @@ void EditImageGrid::UpdateComponent(InputManager* inputManager)
     m_textureWindow->Update(inputManager);
 }
 
-void EditImageGrid::RenderComponent(UIComponent* component, bool& posModify)
+void EditImageGrid::RenderComponent(bool& posModify)
 {
     if (m_textureWindow)
         m_textureWindow->Render();
 
-    RenderComponentEdit(component, posModify);
+    RenderComponentEdit(posModify);
 }
 
 void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UIComponent* component)
@@ -55,53 +56,52 @@ void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UICompon
 //////////////////////////////////////////////////////
 
 EditImageGrid1::~EditImageGrid1() = default;
-EditImageGrid1::EditImageGrid1(IRenderer* renderer) :
-    EditImageGrid{ renderer }
+EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer) noexcept :
+    EditImageGrid{ imgGrid1, renderer },
+    m_imageGrid1{ imgGrid1 }
 {}
 
-void EditImageGrid1::RenderComponentEdit(UIComponent* component, bool& posModify)
+void EditImageGrid1::RenderComponentEdit(bool& posModify)
 {
-    ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(component);
-    if (EditFilename("Filename", imgGrid1->Filename))
-        GetRenderer()->LoadComponent(component);
-    posModify |= EditRectangle("Source", imgGrid1->Source);
+    if (EditFilename("Filename", m_imageGrid1->Filename))
+        GetRenderer()->LoadComponent(m_imageGrid1);
+    posModify |= EditRectangle("Source", m_imageGrid1->Source);
 
     ImGui::Spacing();
-
-    RenderExtractTextureButton(imgGrid1->Filename, component);
+    
+    RenderExtractTextureButton(m_imageGrid1->Filename, m_imageGrid1);
 }
 
 ////////////////////////////////////////////////
 
 EditImageGrid3::~EditImageGrid3() = default;
-EditImageGrid3::EditImageGrid3(IRenderer* renderer) :
-    EditImageGrid{ renderer }
+EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer) noexcept :
+    EditImageGrid{ imgGrid3, renderer },
+    m_imageGrid3{ imgGrid3 }
 {}
 
-void EditImageGrid3::RenderComponentEdit(UIComponent* component, bool& modify)
+void EditImageGrid3::RenderComponentEdit(bool& modify)
 {
-    ImageGrid3* imgGrid3 = ComponentCast<ImageGrid3*>(component);
     wstring filename{};
-    assert(imgGrid3->GetFilename(filename));
+    assert(m_imageGrid3->GetFilename(filename));
     if (EditFilename("Filename", filename))
     {
-        assert(imgGrid3->SetFilename(filename));
-        GetRenderer()->LoadComponent(component);
+        assert(m_imageGrid3->SetFilename(filename));
+        GetRenderer()->LoadComponent(m_imageGrid3);
     }
     
     SourceDivider srcDivider{};
-    assert(imgGrid3->GetSourceAnd2Divider(srcDivider));
+    assert(m_imageGrid3->GetSourceAnd2Divider(srcDivider));
     if (EditSourceAndDivider("Source", "Deviders", srcDivider))
-        assert(imgGrid3->SetSourceAnd2Divider(srcDivider));
+        assert(m_imageGrid3->SetSourceAnd2Divider(srcDivider));
 
     ImGui::Spacing();
 
-    RenderExtractTextureButton(filename, component);
+    RenderExtractTextureButton(filename, m_imageGrid3);
 }
 
 ////////////////////////////////////////////////
 
-void EditImageGrid9::RenderComponent(UIComponent* component, bool& modify)
+void EditImageGrid9::RenderComponentEdit(bool& modify)
 {
-    ImageGrid9* imgGrid9 = ComponentCast<ImageGrid9*>(component);
 }

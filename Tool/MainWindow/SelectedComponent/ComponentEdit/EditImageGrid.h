@@ -10,46 +10,54 @@ public:
 	EditImageGrid() = delete;
 
 	virtual void UpdateComponent(InputManager* inputManager) override;
-	virtual void RenderComponent(UIComponent* component, bool& posModify) override;
+	virtual void RenderComponent(bool& posModify) override;
 
 protected:
-	EditImageGrid(IRenderer* renderer) noexcept;
-	virtual void RenderComponentEdit(UIComponent* component, bool& posModify) {};
+	EditImageGrid(UIComponent* component, IRenderer* renderer) noexcept;
+	virtual void RenderComponentEdit(bool& posModify) {};
 
 	void RenderExtractTextureButton(const wstring& filename, UIComponent* component);
 	inline IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
-private:	//protected로 선언했기 때문에 변수를 늘려야  할때에는 신중을 기한다.
+private:
 	IRenderer* m_renderer;
 	unique_ptr<TextureWindow> m_textureWindow;
 };
 
+class ImageGrid1;
 class EditImageGrid1 : public EditImageGrid
 {
 public:
 	~EditImageGrid1();
 	EditImageGrid1() = delete;
-	EditImageGrid1(IRenderer* renderer);
+	EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer) noexcept;
 
 protected:
-	virtual void RenderComponentEdit(UIComponent* component, bool& posModify) override;
+	virtual void RenderComponentEdit(bool& posModify) override;
+
+private:
+	ImageGrid1* m_imageGrid1;
 };
 
+class ImageGrid3;
 class EditImageGrid3 : public EditImageGrid
 {
 public:
 	~EditImageGrid3();
 	EditImageGrid3() = delete;
-	EditImageGrid3(IRenderer* renderer);
+	EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer) noexcept;
 
 protected:
-	virtual void RenderComponentEdit(UIComponent* component, bool& modify) override;
+	virtual void RenderComponentEdit(bool& posModify) override;
+
+private:
+	ImageGrid3* m_imageGrid3;
 };
 
-class EditImageGrid9 : public EditWindow
+class EditImageGrid9 : public EditImageGrid
 {
 public:
-	virtual void RenderComponent(UIComponent* component, bool& modify) override;
+	virtual void RenderComponentEdit(bool& modify) override;
 
 private:
 };

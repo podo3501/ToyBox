@@ -8,7 +8,7 @@
 TransformComponent::TransformComponent() 
 {}
 
-TransformComponent::TransformComponent(unique_ptr<UIComponent> comp, const XMINT2 relativePos) :
+TransformComponent::TransformComponent(unique_ptr<UIComponent> comp, const XMINT2& relativePos) :
 	component{ move(comp) }, relativePosition{ relativePos }
 {}
 

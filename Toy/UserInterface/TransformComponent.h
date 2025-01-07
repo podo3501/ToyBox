@@ -8,7 +8,7 @@ class TransformComponent
 {
 public:
 	TransformComponent();
-	TransformComponent(unique_ptr<UIComponent> comp, const XMINT2 relativePos);
+	TransformComponent(unique_ptr<UIComponent> comp, const XMINT2& relativePos);
 	TransformComponent(const TransformComponent&) = delete;
 	TransformComponent& operator=(const TransformComponent&) = delete;
 	TransformComponent(TransformComponent&& o) noexcept;

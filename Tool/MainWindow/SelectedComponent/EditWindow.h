@@ -7,28 +7,33 @@ class InputManager;
 class EditWindow
 {
 public:
-	EditWindow();
+	EditWindow() = delete;
+	EditWindow(UIComponent* component) noexcept;
 	virtual ~EditWindow();
-	virtual void SetComponent(UIComponent* component);
 	
 	void Update(InputManager* inputManager);
 	void Render(const ImGuiWindow* mainWindow);
-	const UIComponent* GetComponent() const noexcept { return m_component; }
 
 protected:
 	virtual void UpdateComponent(InputManager* inputManager) {};
-	virtual void RenderComponent(UIComponent* component, bool& modify) {};
+	virtual void RenderComponent(bool& modify) {};
 
 	bool EditSize(const XMUINT2& size);
 
 private:
+	void RenderCommon(bool& modify);
+
 	UIComponent* m_component;
-	bool m_visible{ false };
+	bool m_visible{ true };
 };
 
-class ComponentPanel : public EditWindow
+class Panel;
+class EditPanel : public EditWindow
 {
 public:
+	~EditPanel();
+	EditPanel() = delete;
+	EditPanel(Panel* panel) noexcept;
 	//virtual void SetComponent(UIComponent* component);
 	//virtual void Render();
 

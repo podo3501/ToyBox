@@ -84,7 +84,7 @@ void MainLoop::Tick()
     if (m_timer->GetFrameCount() == 0)
         return;
 
-    m_renderer->Draw(); //Scene(Component의 집합)을 랜더링
+    m_renderer->Draw(); //Scene(Component의 집합)을 렌더링
 }
 
 void MainLoop::OnResuming() const
