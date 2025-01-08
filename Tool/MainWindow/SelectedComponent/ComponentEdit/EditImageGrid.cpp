@@ -102,6 +102,26 @@ void EditImageGrid3::RenderComponentEdit(bool& modify)
 
 ////////////////////////////////////////////////
 
+EditImageGrid9::~EditImageGrid9() = default;
+EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer) noexcept :
+    EditImageGrid{ imgGrid9, renderer },
+    m_imageGrid9{ imgGrid9 }
+{}
+
 void EditImageGrid9::RenderComponentEdit(bool& modify)
 {
+    wstring filename{};
+    assert(m_imageGrid9->GetFilename(filename));
+    if (EditFilename("Filename", filename))
+    {
+        assert(m_imageGrid9->SetFilename(filename));
+        GetRenderer()->LoadComponent(m_imageGrid9);
+    }
+
+    SourceDivider srcDivider{};
+    assert(m_imageGrid9->GetSourceAnd4Divider(srcDivider));
+    if (EditSourceAndDivider("Source", "Deviders", srcDivider))
+        assert(m_imageGrid9->SetSourceAnd4Divider(srcDivider));
+
+    ImGui::Spacing();
 }

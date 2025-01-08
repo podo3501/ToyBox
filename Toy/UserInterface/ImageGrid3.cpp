@@ -5,6 +5,7 @@
 #include "UIUtility.h"
 #include "UIType.h"
 #include "JsonOperation.h"
+#include "ImageGridHelper.hpp"
 
 ImageGrid3::~ImageGrid3() = default;
 ImageGrid3::ImageGrid3() = default;
@@ -82,17 +83,9 @@ void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
     ApplySize(size);
 }
 
-ImageGrid1* ImageGrid3::GetFirstImageGrid1() const noexcept
-{
-    vector<UIComponent*> components = GetComponents();
-    if (components.empty()) return nullptr;
-
-    return ComponentCast<ImageGrid1*>(components[0]);
-}
-
 Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
 {
-    ImageGrid1* img1 = GetFirstImageGrid1();
+    ImageGrid1* img1 = GetFirstImageGrid<ImageGrid1*>(this);
     if(!img1) return {};
 
     return img1->Source;
@@ -100,7 +93,7 @@ Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
 
 bool ImageGrid3::GetFilename(wstring& outFilename) const noexcept
 {
-    ImageGrid1* img1 = GetFirstImageGrid1();
+    ImageGrid1* img1 = GetFirstImageGrid<ImageGrid1*>(this);
     if (!img1) return false;
 
     outFilename = img1->Filename.Get();
@@ -110,7 +103,7 @@ bool ImageGrid3::GetFilename(wstring& outFilename) const noexcept
 bool ImageGrid3::SetFilename(const wstring& filename) noexcept
 {
     vector<ImageGrid1*> components;
-    ReturnIfFalse(GetImageGrid1Components(components));
+    ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
 
     for (ImageGrid1* imgGrid1 : components)
         imgGrid1->Filename = filename;
@@ -121,16 +114,14 @@ bool ImageGrid3::SetFilename(const wstring& filename) noexcept
 bool ImageGrid3::GetSourceAnd2Divider(SourceDivider& outSrcDivider) const noexcept
 {
     vector<ImageGrid1*> components;
-    ReturnIfFalse(GetImageGrid1Components(components));
+    ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
 
-    Rectangle sources = components[0]->Source;
-    for (ImageGrid1* imgGrid1 : components)
-        sources = Rectangle::Union(sources, imgGrid1->Source);
+    Rectangle mergedSource = GetMergedSource();
 
-    outSrcDivider.rect = sources;
+    outSrcDivider.rect = mergedSource;
     const Rectangle& leftSource = components[0]->Source.Get();
-    outSrcDivider.list.push_back(leftSource.x + leftSource.width - sources.x);   //x값 2개와 사각형 하나면 source 사각형 3개를 만들 수 있다.
-    outSrcDivider.list.push_back(components[2]->Source.Get().x - sources.x);
+    outSrcDivider.list.push_back(leftSource.x + leftSource.width - mergedSource.x);   //x값 2개와 사각형 하나면 source 사각형 3개를 만들 수 있다.
+    outSrcDivider.list.push_back(components[2]->Source.Get().x - mergedSource.x);
 
     return true;
 }
@@ -138,7 +129,7 @@ bool ImageGrid3::GetSourceAnd2Divider(SourceDivider& outSrcDivider) const noexce
 bool ImageGrid3::SetSources(const vector<Rectangle>& sources) noexcept
 {
     vector<ImageGrid1*> components;
-    ReturnIfFalse(GetImageGrid1Components(components));
+    ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
 
     ranges::for_each(components, [&sources, index = 0](ImageGrid1* component) mutable {
         component->Source = sources[index++];
@@ -147,12 +138,17 @@ bool ImageGrid3::SetSources(const vector<Rectangle>& sources) noexcept
     return true;
 }
 
+Rectangle ImageGrid3::GetMergedSource() const noexcept
+{
+    return CombineRectangles(GetSources());
+}
+
 vector<Rectangle> ImageGrid3::GetSources() const noexcept
 {
     vector<Rectangle> areas;
 
     vector<ImageGrid1*> components;
-    if (!GetImageGrid1Components(components)) return {};
+    if (!GetImageGridComponents<ImageGrid1*>(this, components)) return {};
 
     for (ImageGrid1* imgGrid1 : components)
         areas.push_back(imgGrid1->Source);
@@ -162,34 +158,11 @@ vector<Rectangle> ImageGrid3::GetSources() const noexcept
 
 bool ImageGrid3::SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept
 {
-    vector<int> threePoints(srcDivider.list);
-    threePoints.push_back(srcDivider.rect.width);
-    ranges::sort(threePoints);
+    vector<int> widths{}, heights{};
+    ReturnIfFalse(GetWidthsAndHeights(srcDivider, widths, heights));
 
-    vector<int> widths{ 
-        threePoints[0], 
-        threePoints[1] - threePoints[0], 
-        threePoints[2] - threePoints[1] 
-    };
-
-    vector<Rectangle> sources = GetSourcesFromAreaAndGaps(srcDivider.rect, widths);
+    vector<Rectangle> sources = GetSourcesFromArea(srcDivider.rect, widths, heights);
     ReturnIfFalse(SetSources(sources));
-
-    return true;
-}
-
-bool ImageGrid3::GetImageGrid1Components(vector<ImageGrid1*>& outComponents) const noexcept
-{
-    vector<UIComponent*> components = GetComponents();
-    if (components.size() != 3) return false;
-
-    outComponents.clear();
-    for (UIComponent* component : components) 
-    {
-        ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(component);
-        if (!imgGrid1) return false;
-        outComponents.push_back(imgGrid1);
-    }
 
     return true;
 }

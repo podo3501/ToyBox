@@ -28,10 +28,5 @@ public:
 
 	bool SetSources(const vector<Rectangle>& sources) noexcept;
 	vector<Rectangle> GetSources() const noexcept;
-
-private:
-	bool GetImageGrid1Components(vector<ImageGrid1*>& outComponents) const noexcept;
-
-	ImageGrid1* GetFirstImageGrid1() const noexcept;
-	
+	Rectangle GetMergedSource() const noexcept;
 };

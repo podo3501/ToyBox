@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "UIUtility.h"
+#include "UIType.h"
 
 bool operator==(const DirectX::XMFLOAT4& a, const DirectX::XMFLOAT4& b) {
 	return (a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w);
@@ -168,17 +169,64 @@ vector<PositionSize> StretchSize(StretchType stretchType, const XMUINT2& size, c
 	return result;
 }
 
-vector<Rectangle> GetSourcesFromAreaAndGaps(const Rectangle& area, const vector<int>& widths) noexcept
+vector<Rectangle> GetSourcesFromArea(const Rectangle& area, const vector<int>& widths, const vector<int>& heights) noexcept
 {
-	if (area.IsEmpty()) return {};
+	if (area.IsEmpty() || widths.empty() || heights.empty()) {
+		return {};
+	}
 
 	vector<Rectangle> areas;
-	long posX = area.x;
-
-	for (auto width : widths)
+	long currentY = area.y;
+	
+	for (auto heightIndex : std::views::iota(size_t{ 0 }, heights.size())) 
 	{
-		areas.emplace_back(posX, area.y, width, area.height);
-		posX += width;
+		long currentX = area.x;  
+		for (auto widthIndex : std::views::iota(size_t{ 0 }, widths.size())) 
+		{
+			areas.emplace_back(currentX, currentY, widths[widthIndex], heights[heightIndex]);
+			currentX += widths[widthIndex];  
+		}
+		currentY += heights[heightIndex];  
 	}
+
 	return areas;
+}
+
+Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept
+{
+	if (rectangles.empty())
+		return {};
+
+	Rectangle result = rectangles[0];
+	for (const Rectangle& rect : rectangles)
+		result = Rectangle::Union(result, rect);
+
+	return result;
+}
+
+bool GetWidthsAndHeights(const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights)
+{
+	if (srcDivider.list.size() != 2 && srcDivider.list.size() != 4)
+		return false;
+
+	auto getDivisions = [](const vector<int>& points, int totalSize) -> vector<int> {
+		vector<int> divisions = points;
+		divisions.push_back(totalSize);
+		ranges::sort(divisions);
+
+		return { divisions[0], divisions[1] - divisions[0], divisions[2] - divisions[1] };
+		};
+
+	// Width 계산
+	outWidths = getDivisions({ srcDivider.list.begin(), srcDivider.list.begin() + 2 }, srcDivider.rect.width);
+
+	if (srcDivider.list.size() == 2) {
+		outHeights = { srcDivider.rect.height };
+		return true;
+	}
+
+	// Height 계산 (srcDivider.list가 4일 때만)
+	outHeights = getDivisions({ srcDivider.list.begin() + 2, srcDivider.list.begin() + 4 }, srcDivider.rect.height);
+
+	return true;
 }

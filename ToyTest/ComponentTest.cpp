@@ -129,17 +129,17 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 400, 300, 430, 336 }, *source, { 0, 0, 30, 36 });
-		testResult |= IsTrue(dest, { 430, 300, 540, 336 }, *source, { 30, 0, 34, 36 });
-		testResult |= IsTrue(dest, { 540, 300, 570, 336 }, *source, { 34, 0, 64, 36 });
+		testResult |= IsTrue(dest, { 400, 300, 430, 336 }, *source, { 10, 10, 40, 46 });
+		testResult |= IsTrue(dest, { 430, 300, 540, 336 }, *source, { 40, 10, 44, 46 });
+		testResult |= IsTrue(dest, { 540, 300, 570, 336 }, *source, { 44, 10, 74, 46 });
 
-		testResult |= IsTrue(dest, { 400, 336, 430, 394 }, *source, { 0, 36, 30, 38 });
-		testResult |= IsTrue(dest, { 430, 336, 540, 394 }, *source, { 30, 36, 34, 38 });
-		testResult |= IsTrue(dest, { 540, 336, 570, 394 }, *source, { 34, 36, 64, 38 });
+		testResult |= IsTrue(dest, { 400, 336, 430, 394 }, *source, { 10, 46, 40, 48 });
+		testResult |= IsTrue(dest, { 430, 336, 540, 394 }, *source, { 40, 46, 44, 48 });
+		testResult |= IsTrue(dest, { 540, 336, 570, 394 }, *source, { 44, 46, 74, 48 });
 
-		testResult |= IsTrue(dest, { 400, 394, 430, 420 }, *source, { 0, 38, 30, 64 });
-		testResult |= IsTrue(dest, { 430, 394, 540, 420 }, *source, { 30, 38, 34, 64 });
-		testResult |= IsTrue(dest, { 540, 394, 570, 420 }, *source, { 34, 38, 64, 64 });
+		testResult |= IsTrue(dest, { 400, 394, 430, 420 }, *source, { 10, 48, 40, 74 });
+		testResult |= IsTrue(dest, { 430, 394, 540, 420 }, *source, { 40, 48, 44, 74 });
+		testResult |= IsTrue(dest, { 540, 394, 570, 420 }, *source, { 44, 48, 74, 74 });
 
 		EXPECT_TRUE(testResult);
 	}
@@ -149,17 +149,37 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 310, 225, 340, 261 }, *source, { 0, 0, 30, 36 });
-		testResult |= IsTrue(dest, { 340, 225, 460, 261 }, *source, { 30, 0, 34, 36 });
-		testResult |= IsTrue(dest, { 460, 225, 490, 261 }, *source, { 34, 0, 64, 36 });
+		testResult |= IsTrue(dest, { 310, 225, 340, 261 }, *source, { 10, 10, 40, 46 });
+		testResult |= IsTrue(dest, { 340, 225, 460, 261 }, *source, { 40, 10, 44, 46 });
+		testResult |= IsTrue(dest, { 460, 225, 490, 261 }, *source, { 44, 10, 74, 46 });
 
-		testResult |= IsTrue(dest, { 310, 261, 340, 349 }, *source, { 0, 36, 30, 38 });
-		testResult |= IsTrue(dest, { 340, 261, 460, 349 }, *source, { 30, 36, 34, 38 });
-		testResult |= IsTrue(dest, { 460, 261, 490, 349 }, *source, { 34, 36, 64, 38 });
+		testResult |= IsTrue(dest, { 310, 261, 340, 349 }, *source, { 10, 46, 40, 48 });
+		testResult |= IsTrue(dest, { 340, 261, 460, 349 }, *source, { 40, 46, 44, 48 });
+		testResult |= IsTrue(dest, { 460, 261, 490, 349 }, *source, { 44, 46, 74, 48 });
 
-		testResult |= IsTrue(dest, { 310, 349, 340, 375 }, *source, { 0, 38, 30, 64 });
-		testResult |= IsTrue(dest, { 340, 349, 460, 375 }, *source, { 30, 38, 34, 64 });
-		testResult |= IsTrue(dest, { 460, 349, 490, 375 }, *source, { 34, 38, 64, 64 });
+		testResult |= IsTrue(dest, { 310, 349, 340, 375 }, *source, { 10, 48, 40, 74 });
+		testResult |= IsTrue(dest, { 340, 349, 460, 375 }, *source, { 40, 48, 44, 74 });
+		testResult |= IsTrue(dest, { 460, 349, 490, 375 }, *source, { 44, 48, 74, 74 });
+
+		EXPECT_TRUE(testResult);
+	}
+
+	void TestImageGrid9SourceAndDivider(size_t index, const RECT& dest, const RECT* source)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 310, 225, 340, 261 }, *source, { 10, 10, 30, 36 });
+		testResult |= IsTrue(dest, { 340, 225, 460, 261 }, *source, { 30, 10, 54, 36 });
+		testResult |= IsTrue(dest, { 460, 225, 490, 261 }, *source, { 54, 10, 74, 36 });
+
+		testResult |= IsTrue(dest, { 310, 261, 340, 349 }, *source, { 10, 36, 30, 58 });
+		testResult |= IsTrue(dest, { 340, 261, 460, 349 }, *source, { 30, 36, 54, 58 });
+		testResult |= IsTrue(dest, { 460, 261, 490, 349 }, *source, { 54, 36, 74, 58 });
+
+		testResult |= IsTrue(dest, { 310, 349, 340, 375 }, *source, { 10, 58, 30, 74 });
+		testResult |= IsTrue(dest, { 340, 349, 460, 375 }, *source, { 30, 58, 54, 74 });
+		testResult |= IsTrue(dest, { 460, 349, 490, 375 }, *source, { 54, 58, 74, 74 });
 
 		EXPECT_TRUE(testResult);
 	}
@@ -169,9 +189,9 @@ namespace ComponentTest
 		UILayout layout({ 170, 120 }, Origin::LeftTop);
 		ImageSource grid9Source{
 			L"UI/Blue/button_square_header_large_square_screws.png", {
-				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-				{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-				{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
+				{ 10, 10, 30, 36 }, { 40, 10, 4, 36 }, { 44, 10, 30, 36 },
+				{ 10, 46, 30, 2 }, { 40, 46, 4, 2 }, { 44, 46, 30, 2 },
+				{ 10, 48, 30, 26 }, { 40, 48, 4, 26 }, { 44, 48, 30, 26 }
 			}
 		};
 
@@ -190,7 +210,21 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		CloneTest(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
+
+		SourceDivider srcDivider{};
+		img9->GetSourceAnd4Divider(srcDivider);
+
+		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 64 }));
+		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34, 36, 38));
+
+		srcDivider.list.clear();
+		srcDivider.list = { 20, 44, 26, 48 };
+		img9->SetSourceAnd4Divider(srcDivider);
+
+		CallMockRender(m_panel.get(), TestImageGrid9SourceAndDivider, 9);
 	}
+
+	/////////////////////////////////////////////////////////////////////////
 
 	void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{

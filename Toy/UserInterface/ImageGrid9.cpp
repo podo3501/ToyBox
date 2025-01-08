@@ -4,6 +4,7 @@
 #include "../Utility.h"
 #include "UIUtility.h"
 #include "UIType.h"
+#include "ImageGridHelper.hpp"
 
 ImageGrid9::~ImageGrid9() = default;
 ImageGrid9::ImageGrid9() = default;
@@ -90,4 +91,67 @@ void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 		components[idx]->ChangeSize(posRects[idx].size);
 	}
 	ApplySize(size);
+}
+
+bool ImageGrid9::GetFilename(wstring& outFilename) const noexcept
+{
+	ImageGrid3* img3 = GetFirstImageGrid<ImageGrid3*>(this);
+	if (!img3) return false;
+
+	return img3->GetFilename(outFilename);
+}
+
+bool ImageGrid9::SetFilename(const wstring& filename) noexcept
+{
+	vector<ImageGrid3*> components;
+	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
+
+	return ranges::all_of(components, [&filename](ImageGrid3* imgGrid3) {
+		return imgGrid3->SetFilename(filename);
+		});
+}
+
+bool ImageGrid9::GetSourceAnd4Divider(SourceDivider& outSrcDivider) const noexcept
+{
+	vector<ImageGrid3*> components;
+	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
+
+	const Rectangle& firstMergedSource = components[0]->GetMergedSource();
+
+	Rectangle mergedSource = firstMergedSource;
+	for (auto imgGrid3 : components)
+		mergedSource = Rectangle::Union(mergedSource, imgGrid3->GetMergedSource());
+
+	outSrcDivider.rect = mergedSource;
+
+	//x값으로 2개 Divider를 담는다.
+	SourceDivider firstComponent;
+	components[0]->GetSourceAnd2Divider(firstComponent);
+	outSrcDivider.list = firstComponent.list;
+
+	//y값으로 2개 Divider를 담는다.
+	const Rectangle& topSource = firstMergedSource;
+	outSrcDivider.list.insert(outSrcDivider.list.end(), {
+		topSource.y + topSource.height - mergedSource.y,
+		components[2]->GetMergedSource().y - mergedSource.y
+		});
+
+	return true;
+}
+
+bool ImageGrid9::SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept
+{
+	vector<int> widths{}, heights{};
+	ReturnIfFalse(GetWidthsAndHeights(srcDivider, widths, heights));
+
+	vector<Rectangle> sources = GetSourcesFromArea(srcDivider.rect, widths, heights);
+	if (sources.size() != 9) return false;
+
+	vector<ImageGrid3*> components;
+	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
+
+	return ranges::all_of(components, [&sources, index = 0](ImageGrid3* component) mutable {
+		vector<Rectangle> rowRects{ sources.begin() + index, sources.begin() + index + 3 }; index += 3;
+		return component->SetSources(rowRects);
+		});
 }

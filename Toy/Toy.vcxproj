@@ -215,6 +215,7 @@
     <ClInclude Include="UserInterface\EnumUtility.h" />
     <ClInclude Include="UserInterface\ImageGrid3.h" />
     <ClInclude Include="UserInterface\ImageGrid9.h" />
+    <ClInclude Include="UserInterface\ImageGridHelper.hpp" />
     <ClInclude Include="UserInterface\JsonHelper.h" />
     <ClInclude Include="UserInterface\JsonOperation.h" />
     <ClInclude Include="UserInterface\ImageGrid1.h" />

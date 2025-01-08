@@ -54,10 +54,17 @@ private:
 	ImageGrid3* m_imageGrid3;
 };
 
+class ImageGrid9;
 class EditImageGrid9 : public EditImageGrid
 {
 public:
+	~EditImageGrid9();
+	EditImageGrid9() = delete;
+	EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer) noexcept;
+
+protected:
 	virtual void RenderComponentEdit(bool& modify) override;
 
 private:
+	ImageGrid9* m_imageGrid9;
 };

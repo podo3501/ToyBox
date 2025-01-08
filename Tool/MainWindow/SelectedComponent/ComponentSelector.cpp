@@ -10,6 +10,7 @@
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid3.h"
+#include "../Toy/UserInterface/ImageGrid9.h"
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
@@ -42,6 +43,7 @@ static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, IRenderer
 	if (type == "class Panel") return CreateEdit<EditPanel, Panel*>(component);
 	if (type == "class ImageGrid1") return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer);
 	if (type == "class ImageGrid3") return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer);
+	if (type == "class ImageGrid9") return CreateEdit<EditImageGrid9, ImageGrid9*>(component, renderer);
 
 	return nullptr;
 }
@@ -49,8 +51,11 @@ static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, IRenderer
 void ComponentSelector::SetComponent(UIComponent* component) noexcept
 {
 	if (m_component == nullptr && component == nullptr) return;
-	if (m_component == component) 
+	if (m_component == component)
+	{
+		SetComponent(nullptr);
 		return;
+	}
 
 	m_editWindow = CreateEditWindow(component, m_renderer);
 

@@ -122,7 +122,7 @@ void ImageGrid3Extractor::UpdateProcess(InputManager* inputManager)
     Rectangle area = FindRectangleContainingPoint(pos);
 
     vector<int> widths = DivideWidthByThree(area);
-    m_hoveredAreas = GetSourcesFromAreaAndGaps(area, widths);
+    m_hoveredAreas = GetSourcesFromArea(area, widths, { area.height });
     if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
     {
         if (!m_hoveredAreas.empty())

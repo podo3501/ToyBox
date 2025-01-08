@@ -1,5 +1,7 @@
 #pragma once
 
+struct SourceDivider;
+
 struct TextData
 {
 	TextData() noexcept;
@@ -58,4 +60,8 @@ unique_ptr<T> CreateImageGrid(const string& name, const UILayout& layout, const 
 	return imgGrid;
 }
 
-vector<Rectangle> GetSourcesFromAreaAndGaps(const Rectangle& area, const vector<int>& widths) noexcept;
+//하나의 사각형과 두개의 점이 있을때 3개의 사각형을 찾는 함수
+vector<Rectangle> GetSourcesFromArea(
+	const Rectangle& area, const vector<int>& widths, const vector<int>& heights) noexcept;
+Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept;
+bool GetWidthsAndHeights(const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights);

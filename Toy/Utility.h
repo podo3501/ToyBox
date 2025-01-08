@@ -37,6 +37,14 @@
 }
 #endif
 
+//std::optional을 사용했을때 매크로
+#ifndef ReturnIfEmpty
+#define ReturnIfEmpty(opt) \
+{                                            \
+    if (!(opt)) return false;     \
+}
+#endif
+
 wstring StringToWString(const string& str);
 string RemoveNullTerminator(const string& str);
 string WStringToString(const wstring& wstr);
