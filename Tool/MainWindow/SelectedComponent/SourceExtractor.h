@@ -5,6 +5,7 @@ class UIComponent;
 class InputManager;
 class ImageGrid1;
 class ImageGrid3;
+class ImageGrid9;
 
 class SourceExtractor
 {
@@ -21,7 +22,7 @@ public:
 
 protected:
     SourceExtractor(IRenderer* renderer, const wstring& filename) noexcept;
-    Rectangle FindRectangleContainingPoint(const XMINT2& pos);
+    Rectangle FindAreaFromMousePosition(InputManager* inputManager) noexcept;
 
     virtual void UpdateProcess(InputManager* inputManager) {};
     virtual void RenderProcess() const {};
@@ -31,6 +32,8 @@ protected:
     inline ImGuiWindow* GetWindow() const noexcept { return m_window; }
 
 private:
+    Rectangle FindRectangleContainingPoint(const XMINT2& pos) noexcept;
+
     IRenderer* m_renderer;
     wstring m_filename;
     ImGuiWindow* m_window;
@@ -68,6 +71,22 @@ protected:
 
 private:
     ImageGrid3* m_component;
+    vector<Rectangle> m_hoveredAreas;
+};
+
+class ImageGrid9Extractor : public SourceExtractor
+{
+public:
+    ~ImageGrid9Extractor();
+    ImageGrid9Extractor() = delete;
+    ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9) noexcept;
+
+protected:
+    virtual void UpdateProcess(InputManager* inputManager) override;
+    virtual void RenderProcess() const override;
+
+private:
+    ImageGrid9* m_component;
     vector<Rectangle> m_hoveredAreas;
 };
 

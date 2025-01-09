@@ -105,7 +105,7 @@ bool ImageGrid3::SetFilename(const wstring& filename) noexcept
     vector<ImageGrid1*> components;
     ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
 
-    for (ImageGrid1* imgGrid1 : components)
+    for (auto imgGrid1 : components)
         imgGrid1->Filename = filename;
 
     return true;
@@ -131,7 +131,7 @@ bool ImageGrid3::SetSources(const vector<Rectangle>& sources) noexcept
     vector<ImageGrid1*> components;
     ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
 
-    ranges::for_each(components, [&sources, index = 0](ImageGrid1* component) mutable {
+    ranges::for_each(components, [&sources, index = 0](auto component) mutable {
         component->Source = sources[index++];
         });
 
@@ -150,7 +150,7 @@ vector<Rectangle> ImageGrid3::GetSources() const noexcept
     vector<ImageGrid1*> components;
     if (!GetImageGridComponents<ImageGrid1*>(this, components)) return {};
 
-    for (ImageGrid1* imgGrid1 : components)
+    for (auto imgGrid1 : components)
         areas.push_back(imgGrid1->Source);
 
     return areas;
@@ -162,7 +162,7 @@ bool ImageGrid3::SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept
     ReturnIfFalse(GetWidthsAndHeights(srcDivider, widths, heights));
 
     vector<Rectangle> sources = GetSourcesFromArea(srcDivider.rect, widths, heights);
-    ReturnIfFalse(SetSources(sources));
+    if (sources.size() != 3) return false;
 
-    return true;
+    return SetSources(sources);
 }

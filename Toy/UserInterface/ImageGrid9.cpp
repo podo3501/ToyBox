@@ -33,10 +33,10 @@ static inline vector<Rectangle> ExtractSourceRects(const ImageSource& source)
 	return { source.list[0], source.list[3], source.list[6] };
 }
 
-static std::unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, size_t idx,
+static unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, size_t idx,
 	const ImageSource& source, const XMUINT2& size)
 {
-	const auto& grid3name = name + "_" + std::to_string(idx);
+	const auto& grid3name = name + "_" + to_string(idx);
 	UILayout grid3layout(size, Origin::LeftTop);
 
 	ImageSource imgSource
@@ -45,7 +45,7 @@ static std::unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, size_t i
 		{ source.list[idx * 3], source.list[idx * 3 + 1], source.list[idx * 3 + 2] }
 	};
 
-	auto grid3 = std::make_unique<ImageGrid3>();
+	auto grid3 = make_unique<ImageGrid3>();
 	grid3->SetImage(grid3name, grid3layout, imgSource);
 
 	return grid3;
@@ -106,7 +106,7 @@ bool ImageGrid9::SetFilename(const wstring& filename) noexcept
 	vector<ImageGrid3*> components;
 	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
 
-	return ranges::all_of(components, [&filename](ImageGrid3* imgGrid3) {
+	return ranges::all_of(components, [&filename](auto imgGrid3) {
 		return imgGrid3->SetFilename(filename);
 		});
 }
@@ -139,6 +139,19 @@ bool ImageGrid9::GetSourceAnd4Divider(SourceDivider& outSrcDivider) const noexce
 	return true;
 }
 
+bool ImageGrid9::SetSources(const vector<Rectangle>& sources) noexcept
+{
+	vector<ImageGrid3*> components;
+	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
+
+	return ranges::all_of(components, [&sources, index = 0](auto component) mutable {
+		vector<Rectangle> rowRects{ sources.begin() + index, sources.begin() + index + 3 }; index += 3;
+		return component->SetSources(rowRects);
+		});
+
+	return true;
+}
+
 bool ImageGrid9::SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept
 {
 	vector<int> widths{}, heights{};
@@ -147,11 +160,17 @@ bool ImageGrid9::SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept
 	vector<Rectangle> sources = GetSourcesFromArea(srcDivider.rect, widths, heights);
 	if (sources.size() != 9) return false;
 
-	vector<ImageGrid3*> components;
-	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
+	return SetSources(sources);
+}
 
-	return ranges::all_of(components, [&sources, index = 0](ImageGrid3* component) mutable {
-		vector<Rectangle> rowRects{ sources.begin() + index, sources.begin() + index + 3 }; index += 3;
-		return component->SetSources(rowRects);
-		});
+vector<Rectangle> ImageGrid9::GetSources() const noexcept
+{
+	vector<ImageGrid3*> components;
+	if (!GetImageGridComponents<ImageGrid3*>(this, components)) return {};
+
+	vector<Rectangle> areas;
+	for (auto imgGrid3 : components)
+		ranges::copy(imgGrid3->GetSources(), back_inserter(areas));
+
+	return areas;
 }

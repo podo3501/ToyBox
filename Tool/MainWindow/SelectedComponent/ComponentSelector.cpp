@@ -12,6 +12,8 @@
 #include "../Toy/UserInterface/ImageGrid3.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
 
+using namespace Tool;
+
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
 	m_renderer{ renderer },
@@ -83,6 +85,30 @@ void ComponentSelector::SelectComponent(InputManager* inputManager) noexcept
 	}
 }
 
+static Rectangle GenerateResizeZone(const XMINT2& point, long padding) noexcept
+{
+	return {
+		point.x - padding,
+		point.y - padding,
+		2 * padding,
+		2 * padding,
+	};
+}
+
+static ImGuiMouseCursor_ IsMouseOverResizeZone(InputManager* inputManager, const UIComponent* component) noexcept
+{
+	if (!inputManager || !component) return ImGuiMouseCursor_Arrow;
+
+	const auto& pos = inputManager->GetMouse()->GetOffsetPosition();
+	const Rectangle& rect = component->GetRectangle();
+	Rectangle resizeZone = GenerateResizeZone({ rect.x + rect.width, rect.y + rect.height }, 4);
+
+	if (Contains(resizeZone, pos))
+		return ImGuiMouseCursor_ResizeNWSE;
+
+	return ImGuiMouseCursor_Arrow;
+}
+
 void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) noexcept
 {
 	auto pressedKey = inputManager->GetKeyboard()->pressed;
@@ -95,8 +121,10 @@ void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) no
 	if (m_editWindow)
 		m_editWindow->Update(inputManager);
 
-	if (!bPopupActive && IsWindowFocus(m_mainWnd))	//팝업이 활동중이면
+	if (!bPopupActive && IsWindowFocus(m_mainWnd))	//팝업이 활동중이면 선택할 수 없다.
 		SelectComponent(inputManager);
+
+	MouseCursor::SetType(IsMouseOverResizeZone(inputManager, m_component));
 }
 
 void ComponentSelector::Render(bool bPopupActive)
@@ -104,7 +132,7 @@ void ComponentSelector::Render(bool bPopupActive)
 	if(!bPopupActive && IsWindowFocus(m_mainWnd)) //component를 새로 생성시켜서 붙일려고 한다면 툴팁은 보이지 않게 한다.
 		m_tooltip->Render(m_mainWnd);
 
-	if(m_component)
+	if (m_component)
 		DrawRectangle(m_component->GetRectangle(), m_mainWnd);
 
 	if (m_editWindow)

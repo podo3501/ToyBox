@@ -171,3 +171,8 @@ inline XMUINT2 RectangleToXMUINT2(const Rectangle& rect) {
 		static_cast<uint32_t>(rect.height - rect.y)
 	};
 }
+
+inline bool Contains(const Rectangle& rect, const XMINT2& pos) noexcept
+{
+	return rect.Contains(static_cast<long>(pos.x), static_cast<long>(pos.y));
+}

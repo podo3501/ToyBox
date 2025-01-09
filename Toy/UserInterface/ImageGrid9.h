@@ -25,6 +25,9 @@ public:
 	bool SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept;
 	bool GetSourceAnd4Divider(SourceDivider& outSrcDivider) const noexcept;
 
+	bool SetSources(const vector<Rectangle>& sources) noexcept;
+	vector<Rectangle> GetSources() const noexcept;
+
 private:
 	
 };

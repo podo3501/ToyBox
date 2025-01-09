@@ -51,3 +51,34 @@ void DrawRectangle(const Rectangle& rect, const ImGuiWindow* window)
 	drawList->AddRect(topLeft, bottomRight, outlineColor, 0.f, 0, thickness);
 	drawList->AddRectFilled(topLeft, bottomRight, fillColor, 0.0f);
 }
+
+void DrawRectangle(const vector<Rectangle>& rects, const ImGuiWindow* window)
+{
+	if (window == nullptr) return;
+	if (rects.empty()) return;
+
+	ranges::for_each(rects, [window](const auto& rect) {
+		DrawRectangle(rect, window);
+		});
+}
+
+//////////////////////////////////////////////////////////////////
+
+using namespace Tool;
+
+ImGuiMouseCursor_ MouseCursor::m_mouseCursor = ImGuiMouseCursor_Arrow;
+bool MouseCursor::m_hasChanged = false;
+
+void MouseCursor::SetType(ImGuiMouseCursor_ cursorType) noexcept
+{
+	m_mouseCursor = cursorType;
+	m_hasChanged = true;
+}
+
+void MouseCursor::Render() noexcept
+{
+	if (!m_hasChanged)	//Render가 호출되기전에 SetType을 하면 바뀐다. 그렇지 않으면 기본값으로 돌아감.
+		m_mouseCursor = ImGuiMouseCursor_Arrow;
+	ImGui::SetMouseCursor(m_mouseCursor);
+	m_hasChanged = false;
+}

@@ -4,6 +4,7 @@
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/ImageGrid1.h"
 #include "../Toy/UserInterface/ImageGrid3.h"
+#include "../Toy/UserInterface/ImageGrid9.h"
 #include "../Toy/InputManager.h"
 #include "../../Utility.h"
 #include "../Toy/HelperClass.h"
@@ -26,14 +27,10 @@ SourceExtractor::SourceExtractor(IRenderer* renderer, const wstring& filename) n
     m_window{ nullptr }
 {}
 
-Rectangle SourceExtractor::FindRectangleContainingPoint(const XMINT2& pos)
+Rectangle SourceExtractor::FindRectangleContainingPoint(const XMINT2& pos) noexcept
 {
     auto it = ranges::find_if(m_areaList, [&pos](const Rectangle& rect) {
-        return
-            pos.x >= rect.x &&
-            pos.x <= rect.x + rect.width &&
-            pos.y >= rect.y &&
-            pos.y <= rect.y + rect.height;
+        return Contains(rect, pos);
         });
 
     if (it != m_areaList.end()) {
@@ -41,6 +38,13 @@ Rectangle SourceExtractor::FindRectangleContainingPoint(const XMINT2& pos)
     }
 
     return {};
+}
+
+Rectangle SourceExtractor::FindAreaFromMousePosition(InputManager* inputManager) noexcept
+{
+    auto mouseTracker = inputManager->GetMouse();
+    const XMINT2& pos = mouseTracker->GetOffsetPosition();
+    return FindRectangleContainingPoint(pos);
 }
 
 bool SourceExtractor::Initialize()
@@ -77,10 +81,8 @@ ImageGrid1Extractor::ImageGrid1Extractor( IRenderer* renderer, const wstring& fi
 
 void ImageGrid1Extractor::UpdateProcess(InputManager* inputManager)
 {
-    auto mouseTracker = inputManager->GetMouse();
-    const XMINT2& pos = mouseTracker->GetOffsetPosition();
-    m_hoveredArea = FindRectangleContainingPoint(pos);
-    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
+    m_hoveredArea = FindAreaFromMousePosition(inputManager);
+    if (inputManager->GetMouse()->leftButton == Mouse::ButtonStateTracker::PRESSED)
     {
         if (m_hoveredArea != Rectangle{})
             m_component->Source = m_hoveredArea;
@@ -95,45 +97,78 @@ void ImageGrid1Extractor::RenderProcess() const
 
 ////////////////////////////////////////////////////////////
 
+static void DivideLengthByThree(const Rectangle& area, vector<int>* outWidth, vector<int>* outHeight)
+{
+    if (area.IsEmpty()) return;
+
+    auto divideByThree = [](int totalSize) -> std::vector<int> {
+        int oneThird = totalSize / 3;
+        return { oneThird, totalSize - oneThird * 2, oneThird };
+        };
+
+    if (outWidth)
+        (*outWidth) = divideByThree(area.width);
+    if (outHeight)
+        (*outHeight) = divideByThree(area.height);
+}
+
+template<typename ImageGrid>
+static void SetSourcesOnMouseClick(InputManager* inputManager, 
+    ImageGrid imageGrid3or9,
+    const vector<Rectangle>& hoveredAreas)
+{
+    auto mouseTracker = inputManager->GetMouse();
+    if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;
+    if (hoveredAreas.empty()) return;
+
+    imageGrid3or9->SetSources(hoveredAreas);
+}
+
+static vector<Rectangle> GenerateSourceAreas(const Rectangle& area, bool is9Grid)
+{
+    vector<int> widths{};
+    vector<int> heights = is9Grid ? vector<int>{} : vector<int>{ area.height };
+    DivideLengthByThree(area, &widths, is9Grid ? &heights : nullptr);
+    
+    return GetSourcesFromArea(area, widths, heights);
+}
+
 ImageGrid3Extractor::~ImageGrid3Extractor() = default;
 ImageGrid3Extractor::ImageGrid3Extractor(IRenderer* renderer, const wstring& filename, ImageGrid3* imgGrid3) noexcept :
     SourceExtractor(renderer, filename),
     m_component{ imgGrid3 }
 {}
 
-vector<int> DivideWidthByThree(const Rectangle& area)
-{
-    if (area.IsEmpty()) return {};
-
-    int oneThirdWidth = area.width / 3;
-
-    vector<int> widths;
-    widths.emplace_back(oneThirdWidth);
-    widths.emplace_back(area.width - oneThirdWidth * 2);
-    widths.emplace_back(oneThirdWidth);
-
-    return widths;
-}
-
 void ImageGrid3Extractor::UpdateProcess(InputManager* inputManager)
 {
-    auto mouseTracker = inputManager->GetMouse();
-    const XMINT2& pos = mouseTracker->GetOffsetPosition();
-    Rectangle area = FindRectangleContainingPoint(pos);
-
-    vector<int> widths = DivideWidthByThree(area);
-    m_hoveredAreas = GetSourcesFromArea(area, widths, { area.height });
-    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
-    {
-        if (!m_hoveredAreas.empty())
-            m_component->SetSources(m_hoveredAreas);
-    }
+    m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePosition(inputManager), false);
+    SetSourcesOnMouseClick(inputManager, m_component, m_hoveredAreas);
 }
 
 void ImageGrid3Extractor::RenderProcess() const
 {
-    ranges::for_each(m_component->GetSources(), [this](const auto& area) { DrawRectangle(area, GetWindow()); });
-    ranges::for_each(m_hoveredAreas, [this](const auto& area) { DrawRectangle(area, GetWindow()); });
+    DrawRectangle(m_component->GetSources(), GetWindow());
+    DrawRectangle(m_hoveredAreas, GetWindow());
+}
+
+////////////////////////////////////////////////////////////
+
+ImageGrid9Extractor::~ImageGrid9Extractor() = default;
+ImageGrid9Extractor::ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9) noexcept :
+    SourceExtractor(renderer, filename),
+    m_component{ imgGrid9 }
+{}
+
+void ImageGrid9Extractor::UpdateProcess(InputManager* inputManager)
+{
+    m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePosition(inputManager), true);
+    SetSourcesOnMouseClick(inputManager, m_component, m_hoveredAreas);
+}
+
+void ImageGrid9Extractor::RenderProcess() const
+{
+    DrawRectangle(m_component->GetSources(), GetWindow());
+    DrawRectangle(m_hoveredAreas, GetWindow());
 }
 
 ////////////////////////////////////////////////////////////
@@ -148,6 +183,8 @@ unique_ptr<SourceExtractor> CreateSourceExtractor(
         return make_unique<ImageGrid1Extractor>(renderer, filename, ComponentCast<ImageGrid1*>(component));
     if (type == "class ImageGrid3")
         return make_unique<ImageGrid3Extractor>(renderer, filename, ComponentCast<ImageGrid3*>(component));
+    if (type == "class ImageGrid9")
+        return make_unique<ImageGrid9Extractor>(renderer, filename, ComponentCast<ImageGrid9*>(component));
 
     return nullptr;
 }

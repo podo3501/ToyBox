@@ -9,6 +9,7 @@ ImVec2 GetWindowStartPosition(const ImGuiWindow* window) noexcept;
 ImVec2 GetMousePosition(const ImGuiWindow* window) noexcept;
 bool IsWindowFocus(const ImGuiWindow* window) noexcept;
 void DrawRectangle(const Rectangle& rect, const ImGuiWindow* window);
+void DrawRectangle(const vector<Rectangle>& rects, const ImGuiWindow* window);
 
 inline XMUINT2 ImVec2ToXMUINT2(const ImVec2& vec)
 {
@@ -35,5 +36,20 @@ inline Vector2 GetNormalPosition(const XMINT2& position, const XMUINT2& size)
 	return {
 		static_cast<float>(position.x) / static_cast<float>(size.x),
 		static_cast<float>(position.y) / static_cast<float>(size.y)
+	};
+}
+
+namespace Tool
+{
+	//마우스 상태를 바꾸는 곳은 Update 함수가 많은데 Render에서 지정을 해야 해서 static 으로 만듦.
+	class MouseCursor
+	{
+	public:
+		static void SetType(ImGuiMouseCursor_ cursorType) noexcept;
+		static void Render() noexcept;
+
+	private:
+		static ImGuiMouseCursor_ m_mouseCursor;
+		static bool m_hasChanged;
 	};
 }

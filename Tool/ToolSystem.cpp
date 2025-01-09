@@ -51,8 +51,6 @@ void ToolSystem::Update(const DX::StepTimer* timer, InputManager* inputManager)
     ranges::for_each(m_mainWindows, [timer, inputManager](const auto& wnd) {
         wnd->Update(timer, inputManager);
         });
-
-    //m_guiWidget->Update();
 }
 
 void ToolSystem::Render(ImGuiIO* io)

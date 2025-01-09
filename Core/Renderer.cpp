@@ -212,9 +212,7 @@ void Renderer::Draw()
     Clear();
 
     m_spriteBatch->Begin(commandList);
-    //ranges::for_each(m_renderScenes, [renderer = m_texIndexing.get()](const auto& scene) {
-       // scene->RenderScene(renderer);
-        //});
+
     ranges::for_each(m_components, [renderer = m_texIndexing.get()](auto compInfo) {
             compInfo->ProcessRender(renderer);
          });

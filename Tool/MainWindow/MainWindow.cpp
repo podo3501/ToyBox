@@ -138,6 +138,7 @@ void MainWindow::Render(ImGuiIO* io)
 
 	m_popup->Render();
 	m_selector->Render(m_popup->IsActive());
+	Tool::MouseCursor::Render();
 
 	ImGui::End();
 }

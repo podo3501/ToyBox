@@ -124,4 +124,6 @@ void EditImageGrid9::RenderComponentEdit(bool& modify)
         assert(m_imageGrid9->SetSourceAnd4Divider(srcDivider));
 
     ImGui::Spacing();
+
+    RenderExtractTextureButton(filename, m_imageGrid9);
 }
