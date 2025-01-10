@@ -95,6 +95,11 @@ static Rectangle GenerateResizeZone(const XMINT2& point, long padding) noexcept
 	};
 }
 
+static Rectangle GenerateResizeNWSEZone(const Rectangle& rect) noexcept
+{
+	return {};
+}
+
 static ImGuiMouseCursor_ IsMouseOverResizeZone(InputManager* inputManager, const UIComponent* component) noexcept
 {
 	if (!inputManager || !component) return ImGuiMouseCursor_Arrow;
@@ -102,6 +107,7 @@ static ImGuiMouseCursor_ IsMouseOverResizeZone(InputManager* inputManager, const
 	const auto& pos = inputManager->GetMouse()->GetOffsetPosition();
 	const Rectangle& rect = component->GetRectangle();
 	Rectangle resizeZone = GenerateResizeZone({ rect.x + rect.width, rect.y + rect.height }, 4);
+	Rectangle resizeNWSEZone = GenerateResizeNWSEZone(rect);
 
 	if (Contains(resizeZone, pos))
 		return ImGuiMouseCursor_ResizeNWSE;
@@ -109,22 +115,49 @@ static ImGuiMouseCursor_ IsMouseOverResizeZone(InputManager* inputManager, const
 	return ImGuiMouseCursor_Arrow;
 }
 
+void ComponentSelector::UpdateMouseCursor(InputManager* inputManager) noexcept
+{
+	MouseCursor::SetType(IsMouseOverResizeZone(inputManager, m_component));
+}
+
 void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) noexcept
 {
-	auto pressedKey = inputManager->GetKeyboard()->pressed;
-	if (pressedKey.Escape)
-	{
-		SetComponent(nullptr);
-		return;
-	}
+	if (HandleEscapeKey(inputManager)) return;
+	if (UpdateEditWindow(inputManager)) return;
 
-	if (m_editWindow)
-		m_editWindow->Update(inputManager);
-
-	if (!bPopupActive && IsWindowFocus(m_mainWnd))	//팝업이 활동중이면 선택할 수 없다.
+	if (CanSelectComponent(bPopupActive))
 		SelectComponent(inputManager);
 
-	MouseCursor::SetType(IsMouseOverResizeZone(inputManager, m_component));
+	UpdateMouseCursor(inputManager);
+}
+
+bool ComponentSelector::HandleEscapeKey(InputManager* inputManager) noexcept
+{
+	if (!inputManager->GetKeyboard()->pressed.Escape)
+		return false;
+	
+	SetComponent(nullptr);
+	return true;
+}
+
+bool ComponentSelector::UpdateEditWindow(InputManager* inputManager) noexcept
+{
+	if (!m_editWindow)
+		return false;
+
+	if (!m_editWindow->IsVisible())
+	{
+		SetComponent(nullptr);  // EditWindow가 보이지 않으면 EditWindow를 없앤다.
+		return true;
+	}
+
+	m_editWindow->Update(inputManager);
+	return false;
+}
+
+bool ComponentSelector::CanSelectComponent(bool bPopupActive) const noexcept
+{
+	return !bPopupActive && IsWindowFocus(m_mainWnd);
 }
 
 void ComponentSelector::Render(bool bPopupActive)

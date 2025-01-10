@@ -13,6 +13,7 @@ public:
 	
 	void Update(InputManager* inputManager);
 	void Render(const ImGuiWindow* mainWindow);
+	inline bool IsVisible() const noexcept { return m_visible; };
 
 protected:
 	virtual void UpdateComponent(InputManager* inputManager) {};

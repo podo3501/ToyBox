@@ -21,6 +21,10 @@ public:
 private:
 	void RepeatedSelection(const vector<UIComponent*>& componentList) noexcept;
 	void SelectComponent(InputManager* inputManager) noexcept;
+	bool HandleEscapeKey(InputManager* inputManager) noexcept;
+	bool UpdateEditWindow(InputManager* inputManager) noexcept;
+	bool CanSelectComponent(bool bPopupActive) const noexcept;
+	void UpdateMouseCursor(InputManager* inputManager) noexcept;
 
 	IRenderer* m_renderer;
 	ImGuiWindow* m_mainWnd;
