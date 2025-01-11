@@ -12,8 +12,6 @@
 #include "../Toy/UserInterface/ImageGrid3.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
 
-using namespace Tool;
-
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
 	m_renderer{ renderer },
@@ -85,41 +83,6 @@ void ComponentSelector::SelectComponent(InputManager* inputManager) noexcept
 	}
 }
 
-static Rectangle GenerateResizeZone(const XMINT2& point, long padding) noexcept
-{
-	return {
-		point.x - padding,
-		point.y - padding,
-		2 * padding,
-		2 * padding,
-	};
-}
-
-static Rectangle GenerateResizeNWSEZone(const Rectangle& rect) noexcept
-{
-	return {};
-}
-
-static ImGuiMouseCursor_ IsMouseOverResizeZone(InputManager* inputManager, const UIComponent* component) noexcept
-{
-	if (!inputManager || !component) return ImGuiMouseCursor_Arrow;
-
-	const auto& pos = inputManager->GetMouse()->GetOffsetPosition();
-	const Rectangle& rect = component->GetRectangle();
-	Rectangle resizeZone = GenerateResizeZone({ rect.x + rect.width, rect.y + rect.height }, 4);
-	Rectangle resizeNWSEZone = GenerateResizeNWSEZone(rect);
-
-	if (Contains(resizeZone, pos))
-		return ImGuiMouseCursor_ResizeNWSE;
-
-	return ImGuiMouseCursor_Arrow;
-}
-
-void ComponentSelector::UpdateMouseCursor(InputManager* inputManager) noexcept
-{
-	MouseCursor::SetType(IsMouseOverResizeZone(inputManager, m_component));
-}
-
 void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) noexcept
 {
 	if (HandleEscapeKey(inputManager)) return;
@@ -127,8 +90,6 @@ void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) no
 
 	if (CanSelectComponent(bPopupActive))
 		SelectComponent(inputManager);
-
-	UpdateMouseCursor(inputManager);
 }
 
 bool ComponentSelector::HandleEscapeKey(InputManager* inputManager) noexcept
@@ -142,17 +103,14 @@ bool ComponentSelector::HandleEscapeKey(InputManager* inputManager) noexcept
 
 bool ComponentSelector::UpdateEditWindow(InputManager* inputManager) noexcept
 {
-	if (!m_editWindow)
+	if (!m_editWindow || !m_editWindow->IsVisible()) {
+		SetComponent(nullptr);
 		return false;
-
-	if (!m_editWindow->IsVisible())
-	{
-		SetComponent(nullptr);  // EditWindow가 보이지 않으면 EditWindow를 없앤다.
-		return true;
 	}
 
-	m_editWindow->Update(inputManager);
-	return false;
+	m_editWindow->Update(inputManager, IsWindowFocus(m_mainWnd));
+
+	return m_editWindow->IsUpdateSizeOnDrag();
 }
 
 bool ComponentSelector::CanSelectComponent(bool bPopupActive) const noexcept

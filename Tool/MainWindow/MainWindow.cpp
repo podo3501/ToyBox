@@ -128,17 +128,28 @@ void MainWindow::Render(ImGuiIO* io)
 	ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_None);
 	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
+
 	if (ImGui::IsWindowAppearing())
 	{
 		m_window = const_cast<ImGuiWindow*>(GetImGuiWindow());
 		m_selector->SetMainWindow(m_window);
 	}
 
+	if (m_window && IsWindowFocus(m_window))
+	{
+		const ImVec2& rectMin = GetWindowStartPosition(m_window);
+		const ImVec2& rectMax = rectMin + m_size;
+		if (ImGui::IsMouseHoveringRect(rectMin, rectMax))
+		{
+			ImGui::GetIO().MouseDown[0] = false;
+			Tool::MouseCursor::Render();
+		}
+	}
+
 	ImGui::Image(m_textureID, m_size);
 
 	m_popup->Render();
 	m_selector->Render(m_popup->IsActive());
-	Tool::MouseCursor::Render();
 
 	ImGui::End();
 }

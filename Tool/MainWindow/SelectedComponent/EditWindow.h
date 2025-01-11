@@ -3,6 +3,10 @@
 struct IRenderer;
 class UIComponent;
 class InputManager;
+enum class OnDrag;
+namespace Tool{
+	class MouseCursor;
+}
 
 class EditWindow
 {
@@ -11,9 +15,10 @@ public:
 	EditWindow(UIComponent* component) noexcept;
 	virtual ~EditWindow();
 	
-	void Update(InputManager* inputManager);
+	void Update(InputManager* inputManager, bool mainWndFocus);
 	void Render(const ImGuiWindow* mainWindow);
 	inline bool IsVisible() const noexcept { return m_visible; };
+	bool IsUpdateSizeOnDrag() const noexcept;
 
 protected:
 	virtual void UpdateComponent(InputManager* inputManager) {};
@@ -23,9 +28,12 @@ protected:
 
 private:
 	void RenderCommon(bool& modify);
+	void UpdateMouseCursor(InputManager* inputManager) noexcept;
+	void ResizeComponentOnClick(InputManager* inputManager) noexcept;
 
 	UIComponent* m_component;
 	bool m_visible{ true };
+	OnDrag m_drag;
 };
 
 class Panel;

@@ -41,15 +41,14 @@ inline Vector2 GetNormalPosition(const XMINT2& position, const XMUINT2& size)
 
 namespace Tool
 {
-	//마우스 상태를 바꾸는 곳은 Update 함수가 많은데 Render에서 지정을 해야 해서 static 으로 만듦.
+	//마우스 상태를 바꾸는 곳은 주로 Update 함수에서 하는데 Render에서 지정을 해야 해서 static 으로 만듦.
 	class MouseCursor
 	{
 	public:
-		static void SetType(ImGuiMouseCursor_ cursorType) noexcept;
-		static void Render() noexcept;
+		inline static void SetType(ImGuiMouseCursor_ cursorType) noexcept { m_mouseCursor = cursorType; }
+		inline static void Render() noexcept { ImGui::SetMouseCursor(m_mouseCursor); }
 
 	private:
 		static ImGuiMouseCursor_ m_mouseCursor;
-		static bool m_hasChanged;
 	};
 }

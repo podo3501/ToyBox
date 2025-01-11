@@ -24,7 +24,6 @@ private:
 	bool HandleEscapeKey(InputManager* inputManager) noexcept;
 	bool UpdateEditWindow(InputManager* inputManager) noexcept;
 	bool CanSelectComponent(bool bPopupActive) const noexcept;
-	void UpdateMouseCursor(InputManager* inputManager) noexcept;
 
 	IRenderer* m_renderer;
 	ImGuiWindow* m_mainWnd;
