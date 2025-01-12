@@ -12,16 +12,16 @@
         "Components": [
             {
                 "RelativePosition": {
-                    "x": 438,
-                    "y": 191
+                    "x": 435,
+                    "y": 263
                 },
                 "Component": {
                     "Type": "class ImageGrid1",
                     "Name": "untitled_imageGrid1",
                     "Layout": {
                         "Size": {
-                            "x": 64,
-                            "y": 64
+                            "x": 170,
+                            "y": 156
                         },
                         "Origin": "LeftTop"
                     },
@@ -37,15 +37,109 @@
             },
             {
                 "RelativePosition": {
-                    "x": 565,
-                    "y": 304
+                    "x": 665,
+                    "y": 170
                 },
                 "Component": {
                     "Type": "class ImageGrid3",
                     "Name": "untitled_imageGrid3",
                     "Layout": {
                         "Size": {
-                            "x": 70,
+                            "x": 174,
+                            "y": 61
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "Components": [
+                        {
+                            "RelativePosition": {
+                                "x": 0,
+                                "y": 0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "untitled_imageGrid3_0",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 23,
+                                        "y": 61
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Index": 0,
+                                "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                "Source": {
+                                    "x": 2,
+                                    "y": 2,
+                                    "width": 23,
+                                    "height": 48
+                                }
+                            }
+                        },
+                        {
+                            "RelativePosition": {
+                                "x": 23,
+                                "y": 0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "untitled_imageGrid3_1",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 128,
+                                        "y": 61
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Index": 0,
+                                "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                "Source": {
+                                    "x": 25,
+                                    "y": 2,
+                                    "width": 2,
+                                    "height": 48
+                                }
+                            }
+                        },
+                        {
+                            "RelativePosition": {
+                                "x": 151,
+                                "y": 0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "untitled_imageGrid3_2",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 23,
+                                        "y": 61
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Index": 0,
+                                "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                "Source": {
+                                    "x": 27,
+                                    "y": 2,
+                                    "width": 23,
+                                    "height": 48
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "RelativePosition": {
+                    "x": 645,
+                    "y": 483
+                },
+                "Component": {
+                    "Type": "class ImageGrid3",
+                    "Name": "untitled_imageGrid3",
+                    "Layout": {
+                        "Size": {
+                            "x": 313,
                             "y": 48
                         },
                         "Origin": "LeftTop"
@@ -61,7 +155,7 @@
                                 "Name": "untitled_imageGrid3_0",
                                 "Layout": {
                                     "Size": {
-                                        "x": 16,
+                                        "x": 23,
                                         "y": 48
                                     },
                                     "Origin": "LeftTop"
@@ -71,14 +165,14 @@
                                 "Source": {
                                     "x": 2,
                                     "y": 2,
-                                    "width": 16,
+                                    "width": 23,
                                     "height": 48
                                 }
                             }
                         },
                         {
                             "RelativePosition": {
-                                "x": 16,
+                                "x": 23,
                                 "y": 0
                             },
                             "Component": {
@@ -86,7 +180,7 @@
                                 "Name": "untitled_imageGrid3_1",
                                 "Layout": {
                                     "Size": {
-                                        "x": 38,
+                                        "x": 267,
                                         "y": 48
                                     },
                                     "Origin": "LeftTop"
@@ -94,16 +188,16 @@
                                 "Index": 0,
                                 "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                 "Source": {
-                                    "x": 18,
+                                    "x": 25,
                                     "y": 2,
-                                    "width": 16,
+                                    "width": 2,
                                     "height": 48
                                 }
                             }
                         },
                         {
                             "RelativePosition": {
-                                "x": 54,
+                                "x": 290,
                                 "y": 0
                             },
                             "Component": {
@@ -111,7 +205,7 @@
                                 "Name": "untitled_imageGrid3_2",
                                 "Layout": {
                                     "Size": {
-                                        "x": 16,
+                                        "x": 23,
                                         "y": 48
                                     },
                                     "Origin": "LeftTop"
@@ -119,9 +213,9 @@
                                 "Index": 0,
                                 "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                 "Source": {
-                                    "x": 34,
+                                    "x": 27,
                                     "y": 2,
-                                    "width": 16,
+                                    "width": 23,
                                     "height": 48
                                 }
                             }
@@ -131,16 +225,16 @@
             },
             {
                 "RelativePosition": {
-                    "x": 701,
-                    "y": 380
+                    "x": 267,
+                    "y": 528
                 },
                 "Component": {
                     "Type": "class ImageGrid9",
                     "Name": "untitled_imageGrid9",
                     "Layout": {
                         "Size": {
-                            "x": 170,
-                            "y": 120
+                            "x": 715,
+                            "y": 228
                         },
                         "Origin": "LeftTop"
                     },
@@ -155,7 +249,7 @@
                                 "Name": "untitled_imageGrid9_0",
                                 "Layout": {
                                     "Size": {
-                                        "x": 170,
+                                        "x": 715,
                                         "y": 36
                                     },
                                     "Origin": "LeftTop"
@@ -180,9 +274,9 @@
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
                                                 "x": 2,
-                                                "y": 2,
-                                                "width": 16,
-                                                "height": 16
+                                                "y": 52,
+                                                "width": 30,
+                                                "height": 36
                                             }
                                         }
                                     },
@@ -196,7 +290,7 @@
                                             "Name": "untitled_imageGrid9_0_1",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 110,
+                                                    "x": 655,
                                                     "y": 36
                                                 },
                                                 "Origin": "LeftTop"
@@ -204,16 +298,16 @@
                                             "Index": 0,
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
-                                                "x": 18,
-                                                "y": 2,
-                                                "width": 16,
-                                                "height": 16
+                                                "x": 32,
+                                                "y": 52,
+                                                "width": 4,
+                                                "height": 36
                                             }
                                         }
                                     },
                                     {
                                         "RelativePosition": {
-                                            "x": 140,
+                                            "x": 685,
                                             "y": 0
                                         },
                                         "Component": {
@@ -229,10 +323,10 @@
                                             "Index": 0,
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
-                                                "x": 34,
-                                                "y": 2,
-                                                "width": 16,
-                                                "height": 16
+                                                "x": 36,
+                                                "y": 52,
+                                                "width": 30,
+                                                "height": 36
                                             }
                                         }
                                     }
@@ -249,8 +343,8 @@
                                 "Name": "untitled_imageGrid9_1",
                                 "Layout": {
                                     "Size": {
-                                        "x": 170,
-                                        "y": 58
+                                        "x": 715,
+                                        "y": 166
                                     },
                                     "Origin": "LeftTop"
                                 },
@@ -266,7 +360,7 @@
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
-                                                    "y": 58
+                                                    "y": 166
                                                 },
                                                 "Origin": "LeftTop"
                                             },
@@ -274,9 +368,9 @@
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
                                                 "x": 2,
-                                                "y": 18,
-                                                "width": 16,
-                                                "height": 16
+                                                "y": 88,
+                                                "width": 30,
+                                                "height": 2
                                             }
                                         }
                                     },
@@ -290,24 +384,24 @@
                                             "Name": "untitled_imageGrid9_1_1",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 110,
-                                                    "y": 58
+                                                    "x": 655,
+                                                    "y": 166
                                                 },
                                                 "Origin": "LeftTop"
                                             },
                                             "Index": 0,
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
-                                                "x": 18,
-                                                "y": 18,
-                                                "width": 16,
-                                                "height": 16
+                                                "x": 32,
+                                                "y": 88,
+                                                "width": 4,
+                                                "height": 2
                                             }
                                         }
                                     },
                                     {
                                         "RelativePosition": {
-                                            "x": 140,
+                                            "x": 685,
                                             "y": 0
                                         },
                                         "Component": {
@@ -316,17 +410,17 @@
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
-                                                    "y": 58
+                                                    "y": 166
                                                 },
                                                 "Origin": "LeftTop"
                                             },
                                             "Index": 0,
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
-                                                "x": 34,
-                                                "y": 18,
-                                                "width": 16,
-                                                "height": 16
+                                                "x": 36,
+                                                "y": 88,
+                                                "width": 30,
+                                                "height": 2
                                             }
                                         }
                                     }
@@ -336,14 +430,14 @@
                         {
                             "RelativePosition": {
                                 "x": 0,
-                                "y": 94
+                                "y": 202
                             },
                             "Component": {
                                 "Type": "class ImageGrid3",
                                 "Name": "untitled_imageGrid9_2",
                                 "Layout": {
                                     "Size": {
-                                        "x": 170,
+                                        "x": 715,
                                         "y": 26
                                     },
                                     "Origin": "LeftTop"
@@ -368,9 +462,9 @@
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
                                                 "x": 2,
-                                                "y": 34,
-                                                "width": 16,
-                                                "height": 16
+                                                "y": 90,
+                                                "width": 30,
+                                                "height": 26
                                             }
                                         }
                                     },
@@ -384,7 +478,7 @@
                                             "Name": "untitled_imageGrid9_2_1",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 110,
+                                                    "x": 655,
                                                     "y": 26
                                                 },
                                                 "Origin": "LeftTop"
@@ -392,16 +486,16 @@
                                             "Index": 0,
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
-                                                "x": 18,
-                                                "y": 34,
-                                                "width": 16,
-                                                "height": 16
+                                                "x": 32,
+                                                "y": 90,
+                                                "width": 4,
+                                                "height": 26
                                             }
                                         }
                                     },
                                     {
                                         "RelativePosition": {
-                                            "x": 140,
+                                            "x": 685,
                                             "y": 0
                                         },
                                         "Component": {
@@ -417,10 +511,10 @@
                                             "Index": 0,
                                             "Filename": "UI/SampleTexture/ToolComponentPopup.png",
                                             "Source": {
-                                                "x": 34,
-                                                "y": 34,
-                                                "width": 16,
-                                                "height": 16
+                                                "x": 36,
+                                                "y": 90,
+                                                "width": 30,
+                                                "height": 26
                                             }
                                         }
                                     }

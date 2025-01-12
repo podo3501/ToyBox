@@ -3,6 +3,7 @@
 struct IRenderer;
 class UIComponent;
 class InputManager;
+class MouseTracker;
 enum class OnDrag;
 namespace Tool{
 	class MouseCursor;
@@ -28,12 +29,13 @@ protected:
 
 private:
 	void RenderCommon(bool& modify);
-	void UpdateMouseCursor(InputManager* inputManager) noexcept;
 	void ResizeComponentOnClick(InputManager* inputManager) noexcept;
+	void UpdateDragState(OnDrag dragState, const MouseTracker* mouseTracker, XMINT2& outStartPos) noexcept;
+	void ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept;
 
 	UIComponent* m_component;
 	bool m_visible{ true };
-	OnDrag m_drag;
+	OnDrag m_dragState;
 };
 
 class Panel;

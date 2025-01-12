@@ -22,7 +22,7 @@ EditWindow::~EditWindow()
 
 EditWindow::EditWindow(UIComponent* component) noexcept:
 	m_component{ component },
-    m_drag{ OnDrag::Normal }
+    m_dragState{ OnDrag::Normal }
 {}
 
 static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
@@ -38,11 +38,9 @@ static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
     };
 }
 
-static OnDrag IsMouseOverResizeZone(InputManager* inputManager, const UIComponent* component) noexcept
+static OnDrag IsMouseOverResizeZone(const MouseTracker* mouseTracker, const UIComponent* component) noexcept
 {
-    if (!inputManager || !component) return OnDrag::Normal;
-
-    const auto& pos = inputManager->GetMouse()->GetOffsetPosition();
+    const auto& pos = mouseTracker->GetOffsetPosition();
     const Rectangle& rect = component->GetRectangle();
     auto zones = GenerateResizeZone(rect, 8);
 
@@ -70,67 +68,76 @@ static ImGuiMouseCursor_ GetCursorImage(OnDrag curDrag) noexcept
 
 bool EditWindow::IsUpdateSizeOnDrag() const noexcept
 {
-    return (m_drag != OnDrag::Normal);
+    return (m_dragState != OnDrag::Normal);
 }
 
-void EditWindow::UpdateMouseCursor(InputManager* inputManager) noexcept
+void EditWindow::UpdateDragState(OnDrag dragState, const MouseTracker* mouseTracker, XMINT2& outStartPos) noexcept
 {
-    m_drag = IsMouseOverResizeZone(inputManager, m_component);
+    const auto& mouseState = mouseTracker->GetLastState();
 
-    Tool::MouseCursor::SetType(GetCursorImage(m_drag));
+    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED && dragState != OnDrag::Normal)
+    {
+        m_dragState = dragState;
+        outStartPos = { mouseState.x, mouseState.y };
+    }
+
+    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::RELEASED)
+    {
+        m_dragState = OnDrag::Normal;
+        outStartPos = {};
+    }
+}
+
+void EditWindow::ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept
+{
+    const int deltaX = mouseState.x - startPos.x;
+    const int deltaY = mouseState.y - startPos.y;
+
+    const XMUINT2& size = m_component->GetSize();
+    XMUINT2 modifySize{ size };
+
+    switch (m_dragState)
+    {
+    case OnDrag::Bottom: modifySize.y += deltaY; break;
+    case OnDrag::Right: modifySize.x += deltaX; break;
+    case OnDrag::Corner:
+        modifySize.x += deltaX;
+        modifySize.y += deltaY;
+        break;
+    default: break;
+    }
+
+    if (size != modifySize)
+    {
+        m_component->ChangeSize(modifySize);
+        m_component->RefreshPosition();
+    }
 }
 
 void EditWindow::ResizeComponentOnClick(InputManager* inputManager) noexcept
 {
+    if (!inputManager || !m_component) return;
+
     auto mouseTracker = inputManager->GetMouse();
-    static bool m_dragOn = false;
-    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED && m_drag != OnDrag::Normal)
-        m_dragOn = true;
-    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::RELEASED && m_drag != OnDrag::Normal)
-        m_dragOn = false;
-    
-    if (!m_dragOn) return;
+    const auto& mouseState = mouseTracker->GetLastState();
 
-    auto mouseState = mouseTracker->GetLastState();
-    static POINT lastMousePos = { mouseState.x, mouseState.y };
+    OnDrag dragState = IsMouseOverResizeZone(mouseTracker, m_component);
+    Tool::MouseCursor::SetType(GetCursorImage(dragState));
 
-    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::HELD && m_dragOn) 
+    static XMINT2 startPos{};
+    UpdateDragState(dragState, mouseTracker, startPos);
+
+    if (IsUpdateSizeOnDrag())
     {
-        int deltaX = mouseState.x - lastMousePos.x;
-        int deltaY = mouseState.y - lastMousePos.y;
-
-        XMUINT2 size = m_component->GetSize();
-        size.x += deltaX;
-        size.y += deltaY;
-        m_component->SetSize(size);
-
-        // 이전 위치 업데이트
-        lastMousePos.x = mouseState.x;
-        lastMousePos.y = mouseState.y;
+        ResizeComponent(startPos, mouseState);
+        startPos = { mouseState.x, mouseState.y };
     }
-
-    //XMINT2 curPosition = mouseTracker->GetOffsetPosition();
-    //if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
-    //{
-    //    pressedPosition = curPosition;
-    //    return;
-    //}
-
-    //if (mouseTracker->leftButton == Mouse::ButtonStateTracker::HELD)
-    //{
-    //    XMINT2 movePosition = curPosition - pressedPosition;
-
-    //}
-    XMUINT2 size = m_component->GetSize();
 }
 
 void EditWindow::Update(InputManager* inputManager, bool mainWndFocus)
 {
     if (mainWndFocus)
-    {
-        UpdateMouseCursor(inputManager);
         ResizeComponentOnClick(inputManager);
-    }
 
     UpdateComponent(inputManager);
 }
