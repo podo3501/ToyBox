@@ -11,7 +11,7 @@ bool ExtractTexture::LoadResources(ILoadData* load)
     return result;
 }
 
-void ExtractTexture::Render(IRender* render) const
+void ExtractTexture::ImplementRender(IRender* render) const
 {
     const auto& size = GetSize();
     RECT source(0, 0, size.x, size.y);

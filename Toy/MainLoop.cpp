@@ -6,14 +6,13 @@
 #include "Window.h"
 #include "StepTimer.h"
 #include "WindowProcedure.h"
-#include "HelperClass.h"
 #include "InputManager.h"
 
 MainLoop::~MainLoop() = default;
 MainLoop::MainLoop(Window* window, IRenderer* renderer) :
     m_window{ window },
     m_renderer{ renderer },
-    m_inputManager{ nullptr }
+    m_inputManager(m_window->GetHandle())
 {}
 
 bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
@@ -31,7 +30,6 @@ bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
 
 bool MainLoop::InitializeClass()
 {
-    m_inputManager = make_unique<InputManager>(m_window->GetHandle());
     m_timer = make_unique<DX::StepTimer>();
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
@@ -73,11 +71,11 @@ int MainLoop::Run()
 void MainLoop::Tick()
 {
     auto timer = m_timer.get();
-    m_inputManager->Update();
+    m_inputManager.Update();
 
     m_timer->Tick([&, this]()
         {
-            Update(timer, m_inputManager.get());
+            Update(timer, m_inputManager);
         });
    
     // Don't try to render anything before the first Update.

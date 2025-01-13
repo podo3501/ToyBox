@@ -13,7 +13,7 @@ public:
     TextureWindow(IRenderer* renderer, unique_ptr<SourceExtractor> sourceExtractor);
     
     bool Create(const wstring& filename);
-    void Update(InputManager* inputManager);
+    void Update(const InputManager& inputManager);
     void Render();
     bool IsOpen() const noexcept { return m_isOpen; }
     void Open() noexcept { m_isOpen = true; }

@@ -7,7 +7,6 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/Panel.h"
-#include "../Toy/HelperClass.h"
 #include "../Toy/InputManager.h"
 
 MainWindow::~MainWindow()
@@ -75,13 +74,13 @@ void MainWindow::ChangeWindowSize(const ImVec2& size)
 	m_size = size;
 }
 
-void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker* mouseTracker)
+void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker& mouseTracker)
 {
 	static ImVec2 startSize{};
-	if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED)
+	if (IsInputPressed(mouseTracker, MouseButton::Left))
 		startSize = window->Size;
 
-	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::RELEASED)
+	if (!IsInputReleased(mouseTracker, MouseButton::Left))
 		return;
 	
 	if(startSize != window->Size && !window->Collapsed)
@@ -91,31 +90,31 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker
 	}
 }
 
-void MainWindow::CheckAddComponent(const MouseTracker* mouseTracker) noexcept
+void MainWindow::CheckAddComponent(const InputManager& inputManager) noexcept
 {
-	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;	//왼쪽버튼 눌렀을때 
 	if (!m_popup->IsComponent())  return;
+	if (!IsInputPressed(inputManager, Keyboard::LeftShift, MouseButton::Left)) return;
 
-	const XMINT2& pos = mouseTracker->GetOffsetPosition();
+	const XMINT2& pos = inputManager.GetMouse().GetOffsetPosition();
 	m_panel->AddComponent(m_popup->GetComponent(), pos);
 }
 
-void MainWindow::Update(const DX::StepTimer* timer, InputManager* inputManager)
+void MainWindow::Update(const DX::StepTimer* timer, const InputManager& inputManager)
 {
 	//if (!IsWindowFocus(m_window)) return;
 	if (!m_window) return;
 
 	const ImVec2& offset = GetWindowStartPosition(m_window);
-	auto mouseTracker = inputManager->GetMouse();
-	mouseTracker->PushOffset(offset);
+	auto& mouseTracker = const_cast<InputManager&>(inputManager).GetMouse();
+	mouseTracker.PushOffset(offset);
 
 	CheckChangeWindow(m_window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
-	CheckAddComponent(mouseTracker);
+	CheckAddComponent(inputManager);
 	m_selector->Update(inputManager, m_popup->IsActive());
 
 	m_panel->ProcessUpdate({}, inputManager);
-	m_popup->Excute(mouseTracker);
-	mouseTracker->PopOffset();
+	m_popup->Excute();
+	mouseTracker.PopOffset();
 }
 
 void MainWindow::Render(ImGuiIO* io)

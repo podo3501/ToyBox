@@ -42,10 +42,10 @@ void CallMockRender(IComponent* component, function<void(size_t, const wstring&,
 void TestUpdate(HWND hwnd, UIComponent* component, int mouseX, int mouseY)
 {
 	InputManager inputManager(hwnd);
-	Mouse::State mouseState;
+	Mouse::State mouseState{};
 	mouseState.x = mouseX;
 	mouseState.y = mouseY;
 	inputManager.Update(mouseState);
 
-	component->ProcessUpdate({}, &inputManager);
+	component->ProcessUpdate({}, inputManager);
 }

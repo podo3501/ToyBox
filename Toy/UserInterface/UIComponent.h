@@ -15,8 +15,10 @@ protected:
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
-	virtual void Render(IRender*) const {};
-	virtual bool Update(const XMINT2&, InputManager*) noexcept { return true; }
+	virtual bool ImplementUpdate(const XMINT2&) noexcept { return true; }
+	virtual bool ImplementInput(const InputManager&) noexcept { return true; }
+	virtual void ImplementRender(IRender*) const {};
+
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	bool IsDirty() const noexcept { return m_isDirty; }
@@ -33,7 +35,7 @@ public:
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue*) override;
-	virtual bool ProcessUpdate(const XMINT2& position, InputManager* inputManager) noexcept override final;
+	virtual bool ProcessUpdate(const XMINT2& position, const InputManager& inputManager) noexcept override final;
 	virtual void ProcessRender(IRender* render) override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
@@ -47,7 +49,7 @@ public:
 	XMINT2 GetPosition() const noexcept;
 	bool GetRelativePosition(XMINT2& outRelativePos) const noexcept;
 	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
-	void RefreshPosition() noexcept;
+	bool RefreshPosition() noexcept;
 	bool ChangePosition(int index, const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
 
@@ -72,6 +74,7 @@ public:
 	Property<string> Name{};
 	
 private:
+	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
 	XMINT2 GetComponentPosition(const UIComponent* component) const noexcept;

@@ -2,7 +2,6 @@
 #include "TextArea.h"
 #include "../Include/IRenderer.h"
 #include "../Utility.h"
-#include "../HelperClass.h"
 #include "../Config.h"
 #include "UIUtility.h"
 #include "JsonOperation.h"
@@ -116,7 +115,7 @@ void TextArea::SetFont(const string& name,
 		});
 }
 
-bool TextArea::Update(const XMINT2& position, InputManager*) noexcept
+bool TextArea::ImplementUpdate(const XMINT2& position) noexcept
 {
 	if (IsDirty())
 		m_posByResolution = XMINT2ToVector2(GetPositionByLayout(position));
@@ -124,7 +123,7 @@ bool TextArea::Update(const XMINT2& position, InputManager*) noexcept
 	return true;
 }
 
-void TextArea::Render(IRender* render) const
+void TextArea::ImplementRender(IRender* render) const
 {
 	for (const auto& word : m_lines)
 		render->DrawString(m_font.at(word.fontStyle), 

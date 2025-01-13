@@ -27,7 +27,7 @@ EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer) noexce
     m_renderer{ renderer }
 {}
 
-void EditImageGrid::UpdateComponent(InputManager* inputManager)
+void EditImageGrid::UpdateComponent(const InputManager& inputManager)
 {
     if (!m_textureWindow || !m_textureWindow->IsOpen()) return;
 

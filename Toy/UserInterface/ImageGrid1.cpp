@@ -43,15 +43,15 @@ bool ImageGrid1::LoadResources(ILoadData* load)
 	return true;
 }
 
-bool ImageGrid1::Update(const XMINT2& position, InputManager*) noexcept
+bool ImageGrid1::ImplementUpdate(const XMINT2& position) noexcept
 {
-	//if(IsDirty())
+	if(IsDirty())
 		m_position = GetPositionByLayout(position);
 
 	return true;
 }
 
-void ImageGrid1::Render(IRender* render) const
+void ImageGrid1::ImplementRender(IRender* render) const
 {
 	const auto& size = GetSize();
 	Rectangle destination(m_position.x, m_position.y, size.x, size.y);

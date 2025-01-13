@@ -24,7 +24,7 @@ public:
     ~ToolSystem();
     ToolSystem(IRenderer* renderer);
 
-    void Update(const DX::StepTimer* timer, InputManager* inputManager);
+    void Update(const DX::StepTimer* timer, const InputManager& inputManager);
 
     //IImguiComponent
     //virtual void Update() override;

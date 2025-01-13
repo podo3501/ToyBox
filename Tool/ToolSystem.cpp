@@ -43,12 +43,12 @@ MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
     return it->get();
 }
 
-void ToolSystem::Update(const DX::StepTimer* timer, InputManager* inputManager)
+void ToolSystem::Update(const DX::StepTimer* timer, const InputManager& inputManager)
 {
     m_menuBar->Update();
 
     erase_if(m_mainWindows, [](auto& wnd) { return !wnd->IsOpen(); });
-    ranges::for_each(m_mainWindows, [timer, inputManager](const auto& wnd) {
+    ranges::for_each(m_mainWindows, [timer, &inputManager](const auto& wnd) {
         wnd->Update(timer, inputManager);
         });
 }

@@ -5,7 +5,6 @@
 #include "../Toy/UserInterface/Panel.h"
 #include "../EditUtility.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/HelperClass.h"
 #include "../../Utility.h"
 #include "../Toy/Utility.h"
 
@@ -38,9 +37,9 @@ static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
     };
 }
 
-static OnDrag IsMouseOverResizeZone(const MouseTracker* mouseTracker, const UIComponent* component) noexcept
+static OnDrag IsMouseOverResizeZone(const MouseTracker& mouseTracker, const UIComponent* component) noexcept
 {
-    const auto& pos = mouseTracker->GetOffsetPosition();
+    const auto& pos = mouseTracker.GetOffsetPosition();
     const Rectangle& rect = component->GetRectangle();
     auto zones = GenerateResizeZone(rect, 8);
 
@@ -71,17 +70,17 @@ bool EditWindow::IsUpdateSizeOnDrag() const noexcept
     return (m_dragState != OnDrag::Normal);
 }
 
-void EditWindow::UpdateDragState(OnDrag dragState, const MouseTracker* mouseTracker, XMINT2& outStartPos) noexcept
+void EditWindow::UpdateDragState(OnDrag dragState, const MouseTracker& mouseTracker, XMINT2& outStartPos) noexcept
 {
-    const auto& mouseState = mouseTracker->GetLastState();
+    const auto& mouseState = mouseTracker.GetLastState();
 
-    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::PRESSED && dragState != OnDrag::Normal)
+    if (IsInputPressed(mouseTracker, MouseButton::Left) && dragState != OnDrag::Normal)
     {
         m_dragState = dragState;
         outStartPos = { mouseState.x, mouseState.y };
     }
 
-    if (mouseTracker->leftButton == Mouse::ButtonStateTracker::RELEASED)
+    if (IsInputReleased(mouseTracker, MouseButton::Left))
     {
         m_dragState = OnDrag::Normal;
         outStartPos = {};
@@ -114,12 +113,12 @@ void EditWindow::ResizeComponent(const XMINT2& startPos, const Mouse::State& mou
     }
 }
 
-void EditWindow::ResizeComponentOnClick(InputManager* inputManager) noexcept
+void EditWindow::ResizeComponentOnClick(const InputManager& inputManager) noexcept
 {
-    if (!inputManager || !m_component) return;
+    if (!m_component) return;
 
-    auto mouseTracker = inputManager->GetMouse();
-    const auto& mouseState = mouseTracker->GetLastState();
+    const auto& mouseTracker = inputManager.GetMouse();
+    const auto& mouseState = mouseTracker.GetLastState();
 
     OnDrag dragState = IsMouseOverResizeZone(mouseTracker, m_component);
     Tool::MouseCursor::SetType(GetCursorImage(dragState));
@@ -134,7 +133,7 @@ void EditWindow::ResizeComponentOnClick(InputManager* inputManager) noexcept
     }
 }
 
-void EditWindow::Update(InputManager* inputManager, bool mainWndFocus)
+void EditWindow::Update(const InputManager& inputManager, bool mainWndFocus)
 {
     if (mainWndFocus)
         ResizeComponentOnClick(inputManager);

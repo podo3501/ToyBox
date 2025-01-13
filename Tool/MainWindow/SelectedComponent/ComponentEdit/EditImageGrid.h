@@ -9,7 +9,7 @@ public:
 	~EditImageGrid();
 	EditImageGrid() = delete;
 
-	virtual void UpdateComponent(InputManager* inputManager) override;
+	virtual void UpdateComponent(const InputManager& inputManager) override;
 	virtual void RenderComponent(bool& posModify) override;
 
 protected:

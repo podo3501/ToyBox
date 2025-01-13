@@ -17,7 +17,7 @@ using testing::ElementsAre;
 
 namespace ComponentTest
 {
-	void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
+	static void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
 	{
 		unique_ptr<UIComponent> clonePanel = component->Clone();
 		clonePanel->RefreshPosition();
@@ -26,7 +26,7 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(clonePanel));
 	}
 
-	void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 		EXPECT_TRUE(IsTrue(dest, { 400, 300, 464, 364 }, *source, { 0, 0, 64, 64 }));
@@ -48,7 +48,7 @@ namespace ComponentTest
 
 	////////////////////////////////////////////////////////
 
-	void TestImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -60,7 +60,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	void TestImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -72,7 +72,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	void TestImageGrid3SourceAndDivider(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid3SourceAndDivider(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -124,7 +124,7 @@ namespace ComponentTest
 	
 	////////////////////////////////////////////////////////
 
-	void TestImageGrid9Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid9Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -144,7 +144,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	void TestImageGrid9ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid9ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -164,7 +164,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	void TestImageGrid9SourceAndDivider(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid9SourceAndDivider(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -226,7 +226,7 @@ namespace ComponentTest
 
 	/////////////////////////////////////////////////////////////////////////
 
-	void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
@@ -255,33 +255,33 @@ namespace ComponentTest
 		m_panel->AddComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );	//Pressed
+		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120 );	//hover
 		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		CloneTest(m_panel.get(), TestButton_ImageGrid1Render, 1);
+		CloneTest(m_panel.get(), TestButton_ImageGrid1Render, 1);	//normal
 	}
 
-	void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 110, 96, 132, 144 }, *source, { 169, 35, 191, 83 });
-		testResult |= IsTrue(dest, { 132, 96, 188, 144 }, *source, { 191, 35, 195, 83 });
-		testResult |= IsTrue(dest, { 188, 96, 210, 144 }, *source, { 195, 35, 217, 83 });
+		testResult |= IsTrue(dest, { 110, 96, 132, 144 }, *source, { 118, 35, 140, 83 });
+		testResult |= IsTrue(dest, { 132, 96, 188, 144 }, *source, { 140, 35, 144, 83 });
+		testResult |= IsTrue(dest, { 188, 96, 210, 144 }, *source, { 144, 35, 166, 83 });
 
 		EXPECT_TRUE(testResult);
 	}
 
-	void TestButton_ImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
+	static void TestButton_ImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 85, 96, 107, 144 }, *source, { 169, 35, 191, 83 });
-		testResult |= IsTrue(dest, { 107, 96, 213, 144 }, *source, { 191, 35, 195, 83 });
-		testResult |= IsTrue(dest, { 213, 96, 235, 144 }, *source, { 195, 35, 217, 83 });
+		testResult |= IsTrue(dest, { 85, 96, 107, 144 }, *source, { 67, 35, 89, 83 });
+		testResult |= IsTrue(dest, { 107, 96, 213, 144 }, *source, { 89, 35, 93, 83 });
+		testResult |= IsTrue(dest, { 213, 96, 235, 144 }, *source, { 93, 35, 115, 83 });
 
 		EXPECT_TRUE(testResult);
 	}
@@ -303,13 +303,13 @@ namespace ComponentTest
 		m_panel->AddComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Pressed
+		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Hover
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
 
 		Button* btn = nullptr;
 		m_panel->GetComponent("Button", &btn);
 		btn->ChangeSize({ 150, 48 });
-		m_panel->RefreshPosition();
+		TestUpdate(m_window->GetHandle(), m_panel.get(), 0, 0);	//Normal
 
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -317,7 +317,7 @@ namespace ComponentTest
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
 	}
 
-	void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
+	static void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
 	{
 		if (text == L"테스") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
 		if (text == L"테스트2") EXPECT_TRUE(index == 1 && pos == Vector2(282, 268.375f) && DirectX::XMVector4Equal(color, Colors::Red));

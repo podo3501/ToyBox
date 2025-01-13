@@ -7,10 +7,6 @@ class ImageGrid3;
 
 class ImageGrid9 : public UIComponent
 {
-protected:
-	ImageGrid9(const ImageGrid9& o);
-	virtual unique_ptr<UIComponent> CreateClone() const override;
-
 public:
 	~ImageGrid9();
 	ImageGrid9();
@@ -28,6 +24,8 @@ public:
 	bool SetSources(const vector<Rectangle>& sources) noexcept;
 	vector<Rectangle> GetSources() const noexcept;
 
-private:
+protected:
+	ImageGrid9(const ImageGrid9& o);
+	virtual unique_ptr<UIComponent> CreateClone() const override;
 	
 };

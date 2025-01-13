@@ -51,7 +51,7 @@ bool ToolMainLoop::SetDatas(IGetValue* getValue)
     return true;
 }
 
-void ToolMainLoop::Update(const DX::StepTimer* timer, InputManager* inputManager)
+void ToolMainLoop::Update(const DX::StepTimer* timer, const InputManager& inputManager)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 

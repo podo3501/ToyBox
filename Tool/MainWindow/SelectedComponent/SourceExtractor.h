@@ -15,16 +15,16 @@ public:
 
     virtual bool Initialize();
 
-    void Update(InputManager* inputManager);
+    void Update(const InputManager& inputManager);
     void Render() const;
 
     inline void SetWindow(ImGuiWindow* texWnd) noexcept { m_window = texWnd; }
 
 protected:
     SourceExtractor(IRenderer* renderer, const wstring& filename) noexcept;
-    Rectangle FindAreaFromMousePosition(InputManager* inputManager) noexcept;
+    Rectangle FindAreaFromMousePosition(const InputManager& inputManager) noexcept;
 
-    virtual void UpdateProcess(InputManager* inputManager) {};
+    virtual void UpdateProcess(const InputManager& inputManager) {};
     virtual void RenderProcess() const {};
 
     inline const wstring& GetFilename() const noexcept { return m_filename; }
@@ -50,7 +50,7 @@ public:
     ImageGrid1Extractor(IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1) noexcept;
 
 protected:
-    virtual void UpdateProcess(InputManager* inputManager) override;
+    virtual void UpdateProcess(const InputManager& inputManager) override;
     virtual void RenderProcess() const override;
 
 private:
@@ -66,7 +66,7 @@ public:
     ImageGrid3Extractor(IRenderer* renderer, const wstring& filename, ImageGrid3* imgGrid3) noexcept;
 
 protected:
-    virtual void UpdateProcess(InputManager* inputManager) override;
+    virtual void UpdateProcess(const InputManager& inputManager) override;
     virtual void RenderProcess() const override;
 
 private:
@@ -82,7 +82,7 @@ public:
     ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9) noexcept;
 
 protected:
-    virtual void UpdateProcess(InputManager* inputManager) override;
+    virtual void UpdateProcess(const InputManager& inputManager) override;
     virtual void RenderProcess() const override;
 
 private:

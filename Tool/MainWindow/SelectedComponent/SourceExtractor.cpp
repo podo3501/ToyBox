@@ -7,7 +7,6 @@
 #include "../Toy/UserInterface/ImageGrid9.h"
 #include "../Toy/InputManager.h"
 #include "../../Utility.h"
-#include "../Toy/HelperClass.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIUtility.h"
@@ -40,10 +39,10 @@ Rectangle SourceExtractor::FindRectangleContainingPoint(const XMINT2& pos) noexc
     return {};
 }
 
-Rectangle SourceExtractor::FindAreaFromMousePosition(InputManager* inputManager) noexcept
+Rectangle SourceExtractor::FindAreaFromMousePosition(const InputManager& inputManager) noexcept
 {
-    auto mouseTracker = inputManager->GetMouse();
-    const XMINT2& pos = mouseTracker->GetOffsetPosition();
+    const auto& mouseTracker = inputManager.GetMouse();
+    const XMINT2& pos = mouseTracker.GetOffsetPosition();
     return FindRectangleContainingPoint(pos);
 }
 
@@ -55,7 +54,7 @@ bool SourceExtractor::Initialize()
     return true;
 }
 
-void SourceExtractor::Update(InputManager* inputManager)
+void SourceExtractor::Update(const InputManager& inputManager)
 {
     ImGuiWindow* window = GetWindow();
     if (!IsWindowFocus(window)) return;
@@ -79,10 +78,10 @@ ImageGrid1Extractor::ImageGrid1Extractor( IRenderer* renderer, const wstring& fi
     m_component{ imgGrid1 }
 {}
 
-void ImageGrid1Extractor::UpdateProcess(InputManager* inputManager)
+void ImageGrid1Extractor::UpdateProcess(const InputManager& inputManager)
 {
     m_hoveredArea = FindAreaFromMousePosition(inputManager);
-    if (inputManager->GetMouse()->leftButton == Mouse::ButtonStateTracker::PRESSED)
+    if(IsInputPressed(inputManager, MouseButton::Left))
     {
         if (m_hoveredArea != Rectangle{})
             m_component->Source = m_hoveredArea;
@@ -113,12 +112,12 @@ static void DivideLengthByThree(const Rectangle& area, vector<int>* outWidth, ve
 }
 
 template<typename ImageGrid>
-static void SetSourcesOnMouseClick(InputManager* inputManager, 
+static void SetSourcesOnMouseClick(const InputManager& inputManager,
     ImageGrid imageGrid3or9,
     const vector<Rectangle>& hoveredAreas)
 {
-    auto mouseTracker = inputManager->GetMouse();
-    if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;
+    const auto& mouseTracker = inputManager.GetMouse();
+    if (!IsInputPressed(mouseTracker, MouseButton::Left)) return;
     if (hoveredAreas.empty()) return;
 
     imageGrid3or9->SetSources(hoveredAreas);
@@ -139,7 +138,7 @@ ImageGrid3Extractor::ImageGrid3Extractor(IRenderer* renderer, const wstring& fil
     m_component{ imgGrid3 }
 {}
 
-void ImageGrid3Extractor::UpdateProcess(InputManager* inputManager)
+void ImageGrid3Extractor::UpdateProcess(const InputManager& inputManager)
 {
     m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePosition(inputManager), false);
     SetSourcesOnMouseClick(inputManager, m_component, m_hoveredAreas);
@@ -159,7 +158,7 @@ ImageGrid9Extractor::ImageGrid9Extractor(IRenderer* renderer, const wstring& fil
     m_component{ imgGrid9 }
 {}
 
-void ImageGrid9Extractor::UpdateProcess(InputManager* inputManager)
+void ImageGrid9Extractor::UpdateProcess(const InputManager& inputManager)
 {
     m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePosition(inputManager), true);
     SetSourcesOnMouseClick(inputManager, m_component, m_hoveredAreas);

@@ -14,15 +14,15 @@ public:
 
 	void SetPanel(UIComponent* panel) noexcept;
 	void SetComponent(UIComponent* component) noexcept;
-	void Update(InputManager* inputManager, bool bPopupActive) noexcept;
+	void Update(const InputManager& inputManager, bool bPopupActive) noexcept;
 	void Render(bool bPopupActive);
 	void SetMainWindow(ImGuiWindow* mainWnd) noexcept { m_mainWnd = mainWnd; }
 
 private:
 	void RepeatedSelection(const vector<UIComponent*>& componentList) noexcept;
-	void SelectComponent(InputManager* inputManager) noexcept;
-	bool HandleEscapeKey(InputManager* inputManager) noexcept;
-	bool UpdateEditWindow(InputManager* inputManager) noexcept;
+	void SelectComponent(const InputManager& inputManager) noexcept;
+	bool HandleEscapeKey(const InputManager& inputManager) noexcept;
+	bool UpdateEditWindow(const InputManager& inputManager) noexcept;
 	bool CanSelectComponent(bool bPopupActive) const noexcept;
 
 	IRenderer* m_renderer;

@@ -3,7 +3,6 @@
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/Panel.h"
 #include "../Toy/Utility.h"
-#include "../Toy/HelperClass.h"
 #include "../../Utility.h"
 
 ComponentTooltip::~ComponentTooltip() = default;

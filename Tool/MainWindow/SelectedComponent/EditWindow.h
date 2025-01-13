@@ -16,21 +16,21 @@ public:
 	EditWindow(UIComponent* component) noexcept;
 	virtual ~EditWindow();
 	
-	void Update(InputManager* inputManager, bool mainWndFocus);
+	void Update(const InputManager& inputManager, bool mainWndFocus);
 	void Render(const ImGuiWindow* mainWindow);
 	inline bool IsVisible() const noexcept { return m_visible; };
 	bool IsUpdateSizeOnDrag() const noexcept;
 
 protected:
-	virtual void UpdateComponent(InputManager* inputManager) {};
+	virtual void UpdateComponent(const InputManager& inputManager) {};
 	virtual void RenderComponent(bool& modify) {};
 
 	bool EditSize(const XMUINT2& size);
 
 private:
 	void RenderCommon(bool& modify);
-	void ResizeComponentOnClick(InputManager* inputManager) noexcept;
-	void UpdateDragState(OnDrag dragState, const MouseTracker* mouseTracker, XMINT2& outStartPos) noexcept;
+	void ResizeComponentOnClick(const InputManager& inputManager) noexcept;
+	void UpdateDragState(OnDrag dragState, const MouseTracker& mouseTracker, XMINT2& outStartPos) noexcept;
 	void ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept;
 
 	UIComponent* m_component;

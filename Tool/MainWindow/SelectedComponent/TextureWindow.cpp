@@ -5,7 +5,6 @@
 #include "../Toy/Utility.h"
 #include "../../Utility.h"
 #include "SourceExtractor.h"
-#include "../Toy/HelperClass.h"
 #include "../Toy/InputManager.h"
 
 TextureWindow::~TextureWindow()
@@ -36,15 +35,15 @@ bool TextureWindow::Create(const wstring& filename)
     return true;
 }
 
-void TextureWindow::Update(InputManager* inputManager)
+void TextureWindow::Update(const InputManager& inputManager)
 {
     if (!m_window) return;
 
     const ImVec2& offset = GetWindowStartPosition(m_window);
-    auto mouseTracker = inputManager->GetMouse();
-    mouseTracker->PushOffset(offset);
+    auto& mouseTracker = const_cast<InputManager&>(inputManager).GetMouse();
+    mouseTracker.PushOffset(offset);
     m_sourceExtractor->Update(inputManager);
-    mouseTracker->PopOffset();
+    mouseTracker.PopOffset();
 }
 
 void TextureWindow::Render()

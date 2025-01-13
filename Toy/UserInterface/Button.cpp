@@ -3,7 +3,6 @@
 #include "UIType.h"
 #include "../Utility.h"
 #include "../InputManager.h"
-#include "../HelperClass.h"
 #include "JsonOperation.h"
 
 Button::~Button() = default;
@@ -64,33 +63,23 @@ void Button::EnableButtonImage(ButtonState btnState)
 		image->SetEnable(state == btnState);
 }
 
-bool Button::UpdateButton(const XMINT2&, InputManager* inputManager) noexcept
+bool Button::ImplementInput(const InputManager& inputManager) noexcept
 {
-	if (inputManager == nullptr)
-		return true;
-
-	auto tracker = inputManager->GetMouse();
-	bool isArea = IsArea(tracker->GetOffsetPosition());
+	const auto& tracker = inputManager.GetMouse();
+	bool isArea = IsArea(tracker.GetOffsetPosition());
 
 	if (!isArea)
 		m_state = ButtonState::Normal;
 	else
 	{
-		if (tracker->leftButton == Mouse::ButtonStateTracker::PRESSED ||
-			m_state == ButtonState::Pressed && tracker->leftButton == Mouse::ButtonStateTracker::HELD)
+		if (tracker.leftButton == Mouse::ButtonStateTracker::PRESSED ||
+			m_state == ButtonState::Pressed && tracker.leftButton == Mouse::ButtonStateTracker::HELD)
 			m_state = ButtonState::Pressed;
 		else
 			m_state = ButtonState::Hover;
 	}
 
 	EnableButtonImage(m_state);
-
-	return true;
-}
-
-bool Button::Update(const XMINT2& position, InputManager* inputManager) noexcept
-{
-	UpdateButton(position, inputManager);
 
 	return true;
 }

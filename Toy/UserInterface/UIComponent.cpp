@@ -2,7 +2,6 @@
 #include "UIComponent.h"
 #include "UIType.h"
 #include "../Utility.h"
-#include "../HelperClass.h"
 #include "../InputManager.h"
 #include "TransformComponent.h"
 #include "JsonOperation.h"
@@ -80,17 +79,42 @@ bool UIComponent::SetDatas(IGetValue* value)
 		});
 }
 
-bool UIComponent::ProcessUpdate(const XMINT2& position, InputManager* inputManager) noexcept
+bool UIComponent::RefreshPosition() noexcept
+{
+	UIComponent* component = GetRoot();
+
+	return component->RefreshPosition({});
+}
+
+bool UIComponent::RefreshPosition(const XMINT2& position) noexcept
 {
 	if (!m_enable) return true;
 
-	Update(position, inputManager);
+	ReturnIfFalse(ImplementUpdate(position));
 
-	auto result = ranges::all_of(m_components, [this, &position, inputManager](auto& transCom) {
+	auto result = ranges::all_of(m_components, [this, &position](auto& transCom) {
 		const auto& curPosition = transCom.GetPosition(m_isDirty, m_layout, position);
-		if (inputManager) inputManager->GetMouse()->PushOffset(curPosition);
+		auto updateResult = transCom.component->RefreshPosition(curPosition);
+		return updateResult;
+		});
+	m_isDirty = false;
+
+	return result;
+}
+
+bool UIComponent::ProcessUpdate(const XMINT2& position, const InputManager& inputManager) noexcept
+{
+	if (!m_enable) return true;
+
+	ReturnIfFalse(ImplementUpdate(position));
+	ReturnIfFalse(ImplementInput(inputManager));
+
+	auto result = ranges::all_of(m_components, [this, &position, &inputManager](auto& transCom) {
+		const auto& curPosition = transCom.GetPosition(m_isDirty, m_layout, position);
+		MouseTracker& curMouse = const_cast<InputManager&>(inputManager).GetMouse();
+		curMouse.PushOffset(curPosition);
 		auto updateResult = transCom.component->ProcessUpdate(curPosition, inputManager);
-		if (inputManager) inputManager->GetMouse()->PopOffset();
+		curMouse.PopOffset();
 		return updateResult;
 		});
 	m_isDirty = false;
@@ -103,7 +127,7 @@ void UIComponent::ProcessRender(IRender* render)
 	if (!m_enable) 
 		return;
 
-	Render(render);
+	ImplementRender(render);
 
 	ranges::for_each(m_components, [render](const auto& transCom) {
 		transCom.component->ProcessRender(render);
@@ -248,12 +272,6 @@ UIComponent* UIComponent::GetRoot() noexcept
 		current = current->m_parent;
 	
 	return current;
-}
-
-void UIComponent::RefreshPosition() noexcept
-{
-	UIComponent* component = GetRoot();
-	component->ProcessUpdate({}, nullptr);
 }
 
 void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept

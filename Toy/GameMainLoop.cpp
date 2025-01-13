@@ -107,7 +107,7 @@ bool GameMainLoop::LoadResources()
     return true;
 }
 
-void GameMainLoop::Update(const DX::StepTimer* timer, InputManager* inputManager)
+void GameMainLoop::Update(const DX::StepTimer* timer, const InputManager& inputManager)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 

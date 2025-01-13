@@ -9,7 +9,6 @@
 #include "../Toy/UserInterface/ImageGrid3.h"
 #include "../Toy/UserInterface/ImageGrid9.h"
 #include "../Toy/UserInterface/UIUtility.h"
-#include "../Toy/HelperClass.h"
 
 static constexpr const char* PopupName = "PopupMenu";
 
@@ -42,7 +41,7 @@ unique_ptr<UIComponent> ComponentPopup::GetComponent() noexcept
 	return move(m_component);
 }
 
-bool ComponentPopup::Excute(MouseTracker* mouseTracker)
+bool ComponentPopup::Excute()
 {
 	if (!m_currentAction.has_value()) return true;
 

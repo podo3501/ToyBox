@@ -12,6 +12,7 @@ public:
 
 	virtual bool LoadResources(ILoadData* load) = 0;
 	virtual bool SetDatas(IGetValue*) = 0;
-	virtual bool ProcessUpdate(const XMINT2& position, InputManager* inputManager) noexcept = 0;
+	virtual bool ProcessUpdate(const XMINT2& position, const InputManager& inputManager) noexcept = 0;
 	virtual void ProcessRender(IRender* render) = 0;
+	virtual bool RefreshPosition() noexcept = 0;
 };

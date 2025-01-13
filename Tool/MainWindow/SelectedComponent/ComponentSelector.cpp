@@ -3,7 +3,6 @@
 #include "ComponentTooltip.h"
 #include "ComponentEdit/EditImageGrid.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/HelperClass.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../../Utility.h"
@@ -63,14 +62,14 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 	m_tooltip->SetComponent(component);
 }
 
-void ComponentSelector::SelectComponent(InputManager* inputManager) noexcept
+void ComponentSelector::SelectComponent(const InputManager& inputManager) noexcept
 {
-	const auto mouseTracker = inputManager->GetMouse();
-	if (mouseTracker->leftButton != Mouse::ButtonStateTracker::PRESSED) return;
+	const auto& mouseTracker = inputManager.GetMouse();
+	if (!IsInputPressed(mouseTracker, MouseButton::Left)) return;
 
 	static vector<UIComponent*> preComponentList{ nullptr };
 	vector<UIComponent*> componentList;
-	const XMINT2& pos = mouseTracker->GetOffsetPosition();
+	const XMINT2& pos = mouseTracker.GetOffsetPosition();
 	m_panel->GetComponents(pos, componentList);
 	if (componentList.empty()) return;
 
@@ -83,7 +82,7 @@ void ComponentSelector::SelectComponent(InputManager* inputManager) noexcept
 	}
 }
 
-void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) noexcept
+void ComponentSelector::Update(const InputManager& inputManager, bool bPopupActive) noexcept
 {
 	if (HandleEscapeKey(inputManager)) return;
 	if (UpdateEditWindow(inputManager)) return;
@@ -92,16 +91,15 @@ void ComponentSelector::Update(InputManager* inputManager, bool bPopupActive) no
 		SelectComponent(inputManager);
 }
 
-bool ComponentSelector::HandleEscapeKey(InputManager* inputManager) noexcept
+bool ComponentSelector::HandleEscapeKey(const InputManager& inputManager) noexcept
 {
-	if (!inputManager->GetKeyboard()->pressed.Escape)
-		return false;
+	if (!IsInputPressed(inputManager, Keyboard::Escape)) return false;
 	
 	SetComponent(nullptr);
 	return true;
 }
 
-bool ComponentSelector::UpdateEditWindow(InputManager* inputManager) noexcept
+bool ComponentSelector::UpdateEditWindow(const InputManager& inputManager) noexcept
 {
 	if (!m_editWindow || !m_editWindow->IsVisible()) {
 		SetComponent(nullptr);

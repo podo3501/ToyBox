@@ -23,3 +23,10 @@ XMINT2 MouseTracker::GetOffsetPosition() const noexcept
     const auto& state = GetLastState();
     return { state.x - offset.x, state.y - offset.y };
 }
+
+///////////////////////////////////////////////////////////
+
+bool __cdecl KeyboardTracker::IsKeyHeld(Keyboard::Keys key) const noexcept 
+{ 
+    return GetLastState().IsKeyDown(key); 
+}

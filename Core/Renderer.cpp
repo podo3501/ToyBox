@@ -178,9 +178,9 @@ bool Renderer::LoadComponent(IComponent* component)
 
     auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
     uploadResourcesFinished.wait();
-
+    
     //로드 하고 나서 필요한 셋팅 및 위치계산을 해 준다.
-    if (!component->SetDatas(load) || !component->ProcessUpdate({ 0, 0 }, nullptr))
+    if (!component->SetDatas(load) || !component->RefreshPosition())
         return false;
 
     return true;

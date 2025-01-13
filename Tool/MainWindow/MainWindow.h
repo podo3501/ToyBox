@@ -24,15 +24,15 @@ public:
     bool CreateScene(const wstring& filename);
     bool SaveScene(const wstring& filename);
     wstring GetSaveFilename() const noexcept;
-    void Update(const DX::StepTimer* timer, InputManager* inputManager);
+    void Update(const DX::StepTimer* timer, const InputManager& inputManager);
     void ChangeWindowSize(const ImVec2& size);
 
     inline bool IsOpen() const noexcept { return m_isOpen; }
     inline const ImGuiWindow* GetImGuiWindow() const noexcept;
 
 private:
-    void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker* mouseTracker);
-    void CheckAddComponent(const MouseTracker* mouseTracker) noexcept;
+    void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker& mouseTracker);
+    void CheckAddComponent(const InputManager& inputManager) noexcept;
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };

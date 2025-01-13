@@ -14,7 +14,9 @@ public:
 	TransformComponent(TransformComponent&& o) noexcept;
 	bool operator==(const TransformComponent& o) const noexcept;
 
+	//Dirty flag로 계산되어진 정확한 포지션
 	XMINT2 GetPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept;
+	const XMINT2& GetPosition() const noexcept { return absolutePosition; }
 	void SerializeIO(JsonOperation& operation);
 
 	unique_ptr<UIComponent> component;

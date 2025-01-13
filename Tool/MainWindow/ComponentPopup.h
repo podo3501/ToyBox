@@ -18,7 +18,7 @@ public:
 	~ComponentPopup();
 	bool IsComponent() const noexcept;
 	unique_ptr<UIComponent> GetComponent() noexcept;
-	bool Excute(MouseTracker* mouseTracker);
+	bool Excute();
 	void Render();
 	bool IsActive() const noexcept;
 	const ImVec2& GetPosition() const noexcept { return m_position; }

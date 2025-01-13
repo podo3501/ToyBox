@@ -8,10 +8,6 @@ struct TextData;
 
 class TextArea : public UIComponent
 {
-protected:
-	TextArea(const TextArea& o);
-	virtual unique_ptr<UIComponent> CreateClone() const override;
-
 public:
 	~TextArea();
 	TextArea();
@@ -19,8 +15,6 @@ public:
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* getValue) override;
-	virtual bool Update(const XMINT2& position, InputManager* inputManager) noexcept override;
-	virtual void Render(IRender* render) const override;
 
 	void SetFont(const string& name,
 		const wstring& text,
@@ -28,6 +22,12 @@ public:
 		const map<wstring, wstring>& fontFileList);
 
 	virtual void SerializeIO(JsonOperation& operation) override;
+
+protected:
+	TextArea(const TextArea& o);
+	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementUpdate(const XMINT2& position) noexcept override;
+	virtual void ImplementRender(IRender* render) const override;
 
 private:
 	Vector2 m_posByResolution{};

@@ -1,4 +1,5 @@
 #pragma once
+#include <stack>
 
 class MouseTracker : public Mouse::ButtonStateTracker
 {
@@ -14,4 +15,10 @@ public:
 private:
     XMINT2 m_offset{};
     stack<XMINT2> m_stackOffset;
+};
+
+class KeyboardTracker : public Keyboard::KeyboardStateTracker
+{
+public:
+    bool __cdecl IsKeyHeld(Keyboard::Keys key) const noexcept;
 };
