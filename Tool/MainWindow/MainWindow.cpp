@@ -6,7 +6,8 @@
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/JsonHelper.h"
-#include "../Toy/UserInterface/Panel.h"
+#include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/UIComponentHelper.h"
 #include "../Toy/InputManager.h"
 
 MainWindow::~MainWindow()
@@ -77,10 +78,10 @@ void MainWindow::ChangeWindowSize(const ImVec2& size)
 void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker& mouseTracker)
 {
 	static ImVec2 startSize{};
-	if (IsInputPressed(mouseTracker, MouseButton::Left))
+	if (IsInputAction(mouseTracker, MouseButton::Left, KeyState::Pressed))
 		startSize = window->Size;
 
-	if (!IsInputReleased(mouseTracker, MouseButton::Left))
+	if (!IsInputAction(mouseTracker, MouseButton::Left, KeyState::Released))
 		return;
 	
 	if(startSize != window->Size && !window->Collapsed)
@@ -90,13 +91,18 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker
 	}
 }
 
-void MainWindow::CheckAddComponent(const InputManager& inputManager) noexcept
+bool MainWindow::CheckAddComponent(const InputManager& inputManager) noexcept
 {
-	if (!m_popup->IsComponent())  return;
-	if (!IsInputPressed(inputManager, Keyboard::LeftShift, MouseButton::Left)) return;
+	if (!m_popup->IsComponent())  return false;
+	if (!IsInputAction(inputManager, Keyboard::LeftShift, MouseButton::Left)) return false;
 
 	const XMINT2& pos = inputManager.GetMouse().GetOffsetPosition();
-	m_panel->AddComponent(m_popup->GetComponent(), pos);
+	UIComponent* selectComponent = m_selector->GetComponent();
+	if (!selectComponent) return false;
+
+	AddComponentFromScreenPos(selectComponent, m_popup->GetComponent(), pos);
+
+	return true;	//Add를 하면 true를 내보낸다.
 }
 
 void MainWindow::Update(const DX::StepTimer* timer, const InputManager& inputManager)
@@ -109,8 +115,10 @@ void MainWindow::Update(const DX::StepTimer* timer, const InputManager& inputMan
 	mouseTracker.PushOffset(offset);
 
 	CheckChangeWindow(m_window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
-	CheckAddComponent(inputManager);
-	m_selector->Update(inputManager, m_popup->IsActive());
+	bool isAdd = CheckAddComponent(inputManager);
+	
+	if(!isAdd) 
+		m_selector->Update(inputManager);
 
 	m_panel->ProcessUpdate({}, inputManager);
 	m_popup->Excute();
@@ -148,7 +156,7 @@ void MainWindow::Render(ImGuiIO* io)
 	ImGui::Image(m_textureID, m_size);
 
 	m_popup->Render();
-	m_selector->Render(m_popup->IsActive());
+	m_selector->Render();
 
 	ImGui::End();
 }

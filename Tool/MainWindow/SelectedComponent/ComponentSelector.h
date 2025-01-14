@@ -13,17 +13,17 @@ public:
 	ComponentSelector(IRenderer* renderer, UIComponent* panel);
 
 	void SetPanel(UIComponent* panel) noexcept;
-	void SetComponent(UIComponent* component) noexcept;
-	void Update(const InputManager& inputManager, bool bPopupActive) noexcept;
-	void Render(bool bPopupActive);
+	void Update(const InputManager& inputManager) noexcept;
+	void Render();
 	void SetMainWindow(ImGuiWindow* mainWnd) noexcept { m_mainWnd = mainWnd; }
+	UIComponent* GetComponent() { return m_component; }
 
 private:
+	void SetComponent(UIComponent* component) noexcept;
 	void RepeatedSelection(const vector<UIComponent*>& componentList) noexcept;
 	void SelectComponent(const InputManager& inputManager) noexcept;
 	bool HandleEscapeKey(const InputManager& inputManager) noexcept;
 	bool UpdateEditWindow(const InputManager& inputManager) noexcept;
-	bool CanSelectComponent(bool bPopupActive) const noexcept;
 
 	IRenderer* m_renderer;
 	ImGuiWindow* m_mainWnd;

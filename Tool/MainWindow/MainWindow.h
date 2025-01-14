@@ -32,7 +32,7 @@ public:
 
 private:
     void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker& mouseTracker);
-    void CheckAddComponent(const InputManager& inputManager) noexcept;
+    bool CheckAddComponent(const InputManager& inputManager) noexcept;
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };

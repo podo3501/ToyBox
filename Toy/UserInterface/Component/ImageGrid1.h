@@ -1,5 +1,5 @@
 #pragma once
-#include "UIComponent.h"
+#include "../UIComponent.h"
 
 struct IRenderer;
 struct ImageSource;

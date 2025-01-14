@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "ImageGrid9.h"
 #include "ImageGrid3.h"
-#include "../Utility.h"
-#include "UIUtility.h"
-#include "UIType.h"
+#include "../../Utility.h"
+#include "../UIUtility.h"
+#include "../UIType.h"
 #include "ImageGridHelper.hpp"
 
 ImageGrid9::~ImageGrid9() = default;
@@ -87,7 +87,7 @@ void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 
 	for (int idx{ 0 }; idx < components.size(); ++idx)
 	{
-		ChangePosition(idx, posRects[idx].pos);
+		ChangePosition(idx, size, posRects[idx].pos);
 		components[idx]->ChangeSize(posRects[idx].size);
 	}
 	ApplySize(size);

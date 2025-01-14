@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "ImageGrid1.h"
-#include "../../Include/IRenderer.h"
-#include "../Utility.h"
-#include "../Config.h"
-#include "UIType.h"
-#include "JsonOperation.h"
+#include "../../../Include/IRenderer.h"
+#include "../../Utility.h"
+#include "../../Config.h"
+#include "../UIType.h"
+#include "../JsonOperation.h"
 
 ImageGrid1::~ImageGrid1() = default;
 ImageGrid1::ImageGrid1() = default;

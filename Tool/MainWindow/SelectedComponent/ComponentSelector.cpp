@@ -6,10 +6,11 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../../Utility.h"
-#include "../Toy/UserInterface/Panel.h"
-#include "../Toy/UserInterface/ImageGrid1.h"
-#include "../Toy/UserInterface/ImageGrid3.h"
-#include "../Toy/UserInterface/ImageGrid9.h"
+#include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/Component/ImageGrid3.h"
+#include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/UIComponentHelper.h"
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
@@ -65,7 +66,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 void ComponentSelector::SelectComponent(const InputManager& inputManager) noexcept
 {
 	const auto& mouseTracker = inputManager.GetMouse();
-	if (!IsInputPressed(mouseTracker, MouseButton::Left)) return;
+	if (!IsInputAction(mouseTracker, MouseButton::Left, KeyState::Pressed)) return;
 
 	static vector<UIComponent*> preComponentList{ nullptr };
 	vector<UIComponent*> componentList;
@@ -82,18 +83,18 @@ void ComponentSelector::SelectComponent(const InputManager& inputManager) noexce
 	}
 }
 
-void ComponentSelector::Update(const InputManager& inputManager, bool bPopupActive) noexcept
+void ComponentSelector::Update(const InputManager& inputManager) noexcept
 {
 	if (HandleEscapeKey(inputManager)) return;
 	if (UpdateEditWindow(inputManager)) return;
 
-	if (CanSelectComponent(bPopupActive))
+	if (IsWindowFocus(m_mainWnd))
 		SelectComponent(inputManager);
 }
 
 bool ComponentSelector::HandleEscapeKey(const InputManager& inputManager) noexcept
 {
-	if (!IsInputPressed(inputManager, Keyboard::Escape)) return false;
+	if (!IsInputAction(inputManager, Keyboard::Escape, KeyState::Pressed)) return false;
 	
 	SetComponent(nullptr);
 	return true;
@@ -111,18 +112,13 @@ bool ComponentSelector::UpdateEditWindow(const InputManager& inputManager) noexc
 	return m_editWindow->IsUpdateSizeOnDrag();
 }
 
-bool ComponentSelector::CanSelectComponent(bool bPopupActive) const noexcept
+void ComponentSelector::Render()
 {
-	return !bPopupActive && IsWindowFocus(m_mainWnd);
-}
-
-void ComponentSelector::Render(bool bPopupActive)
-{
-	if(!bPopupActive && IsWindowFocus(m_mainWnd)) //component를 새로 생성시켜서 붙일려고 한다면 툴팁은 보이지 않게 한다.
+	if (IsWindowFocus(m_mainWnd))
 		m_tooltip->Render(m_mainWnd);
 
 	if (m_component)
-		DrawRectangle(m_component->GetRectangle(), m_mainWnd);
+		DrawRectangle(GetRectangle(m_component), m_mainWnd);
 
 	if (m_editWindow)
 		m_editWindow->Render(m_mainWnd);

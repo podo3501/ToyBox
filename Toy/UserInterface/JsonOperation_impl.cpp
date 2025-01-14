@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "JsonOperation.h"
 #include "UIType.h"
-#include "Panel.h"
-#include "ImageGrid1.h"
-#include "ImageGrid3.h"
-#include "ImageGrid9.h"
-#include "Button.h"
-#include "Dialog.h"
-#include "TextArea.h"
+#include "Component/Panel.h"
+#include "Component/ImageGrid1.h"
+#include "Component/ImageGrid3.h"
+#include "Component/ImageGrid9.h"
+#include "Component/Button.h"
+#include "Component/Dialog.h"
+#include "Component/TextArea.h"
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {

@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "TextArea.h"
 #include "../Include/IRenderer.h"
-#include "../Utility.h"
-#include "../Config.h"
-#include "UIUtility.h"
-#include "JsonOperation.h"
+#include "../../Utility.h"
+#include "../../Config.h"
+#include "../UIUtility.h"
+#include "../JsonOperation.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;

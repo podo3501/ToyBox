@@ -6,12 +6,12 @@
 #include "../Toy/Window.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/ImageGrid1.h"
-#include "../Toy/UserInterface/ImageGrid3.h"
-#include "../Toy/UserInterface/ImageGrid9.h"
-#include "../Toy/UserInterface/Button.h"
-#include "../Toy/UserInterface/Panel.h"
-#include "../Toy/UserInterface/TextArea.h"
+#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/Component/ImageGrid3.h"
+#include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/Component/Button.h"
+#include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/Component/TextArea.h"
 
 using testing::ElementsAre;
 

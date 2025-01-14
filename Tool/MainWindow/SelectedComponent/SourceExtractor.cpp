@@ -2,9 +2,9 @@
 #include "SourceExtractor.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/UIComponent.h"
-#include "../Toy/UserInterface/ImageGrid1.h"
-#include "../Toy/UserInterface/ImageGrid3.h"
-#include "../Toy/UserInterface/ImageGrid9.h"
+#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/Component/ImageGrid3.h"
+#include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/InputManager.h"
 #include "../../Utility.h"
 #include "../Toy/Config.h"
@@ -81,7 +81,7 @@ ImageGrid1Extractor::ImageGrid1Extractor( IRenderer* renderer, const wstring& fi
 void ImageGrid1Extractor::UpdateProcess(const InputManager& inputManager)
 {
     m_hoveredArea = FindAreaFromMousePosition(inputManager);
-    if(IsInputPressed(inputManager, MouseButton::Left))
+    if(IsInputAction(inputManager, MouseButton::Left, KeyState::Pressed))
     {
         if (m_hoveredArea != Rectangle{})
             m_component->Source = m_hoveredArea;
@@ -117,7 +117,7 @@ static void SetSourcesOnMouseClick(const InputManager& inputManager,
     const vector<Rectangle>& hoveredAreas)
 {
     const auto& mouseTracker = inputManager.GetMouse();
-    if (!IsInputPressed(mouseTracker, MouseButton::Left)) return;
+    if (!IsInputAction(mouseTracker, MouseButton::Left, KeyState::Pressed)) return;
     if (hoveredAreas.empty()) return;
 
     imageGrid3or9->SetSources(hoveredAreas);

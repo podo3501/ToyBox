@@ -6,8 +6,9 @@
 #include "../Toy/WindowProcedure.h"
 #include "../Toy/Window.h"
 #include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/ImageGrid9.h"
-#include "../Toy/UserInterface/Panel.h"
+#include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/UIComponentHelper.h"
 
 namespace BasicClient
 {
@@ -59,9 +60,7 @@ namespace BasicClient
 		UIComponent* component = m_panel->GetComponent("ImageGrid9_1_1");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
-
-		auto rect = component->GetRectangle();
-		EXPECT_EQ(rect, Rectangle(270, 216, 160, 128));
+		EXPECT_EQ(GetRectangle(component), Rectangle(270, 216, 160, 128));
 	}
 
 	//여러번 실행해서 오동작이 나는지 확인한다.

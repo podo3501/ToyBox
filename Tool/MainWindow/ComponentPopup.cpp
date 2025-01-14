@@ -5,9 +5,9 @@
 #include "../Toy/Utility.h"
 #include "../Utility.h"
 #include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/ImageGrid1.h"
-#include "../Toy/UserInterface/ImageGrid3.h"
-#include "../Toy/UserInterface/ImageGrid9.h"
+#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/Component/ImageGrid3.h"
+#include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/UIUtility.h"
 
 static constexpr const char* PopupName = "PopupMenu";
@@ -65,10 +65,17 @@ void ComponentPopup::DrawMakeComponent()
 	// 텍스처를 사각형 형태로 그리기
 	m_position = ImGui::GetMousePos();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+	ImVec4 tintColor = ImVec4(1.0f, 1.0f, 1.0f, 0.7f);
+	ImU32 colorU32 = ImGui::GetColorU32(tintColor);
+
 	drawList->AddImage(
 		m_textureID,
-		{ m_position.x, m_position.y }, // 시작 좌표
-		{ m_position.x + size.x, m_position.y + size.y } // 종료 좌표
+		{ m_position.x, m_position.y },                      // 시작 좌표
+		{ m_position.x + size.x, m_position.y + size.y },    // 종료 좌표
+		ImVec2(0, 0),
+		ImVec2(1, 1),
+		colorU32
 	);
 }
 

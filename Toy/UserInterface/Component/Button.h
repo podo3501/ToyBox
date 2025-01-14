@@ -1,5 +1,5 @@
 #pragma once
-#include "UIComponent.h"
+#include "../UIComponent.h"
 
 enum class ButtonState;
 class InputManager;

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ComponentTooltip.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/UserInterface/Panel.h"
+#include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/Utility.h"
 #include "../../Utility.h"
 
@@ -52,9 +52,12 @@ void ComponentTooltip::ShowTooltipComponent(bool isSelected,
 	ImGui::SetNextWindowPos(tooltipPos);
 	ImGui::SetNextWindowSize(tooltipSize);
 
-	if (isSelected) ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+	if (isSelected) 
+		ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.4f, 0.4f, 0.4f, 0.7f));
+	else 
+		ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.0f, 0.0f, 0.0f, 0.7f));
 	ImGui::Begin(id.c_str(), nullptr, ImGuiWindowFlags_Tooltip | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-	if (isSelected) ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 
 	ImGui::Text(context.c_str());
 	ImGui::End();

@@ -3,7 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/Panel.h"
+#include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "Utility.h"

@@ -35,6 +35,7 @@ public:
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue*) override;
+	virtual bool RefreshPosition() noexcept;
 	virtual bool ProcessUpdate(const XMINT2& position, const InputManager& inputManager) noexcept override final;
 	virtual void ProcessRender(IRender* render) override final;
 
@@ -45,15 +46,11 @@ public:
 
 	void AddComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept;
 	
-	Rectangle GetRectangle() const noexcept;
 	XMINT2 GetPosition() const noexcept;
 	bool GetRelativePosition(XMINT2& outRelativePos) const noexcept;
 	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
-	bool RefreshPosition() noexcept;
-	bool ChangePosition(int index, const XMINT2& relativePos) noexcept;
+	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
-
-	void SetChildPosition(const string& name, const XMINT2& relativePos) noexcept;
 
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
 	inline void SetEnable(bool enable) { m_enable = enable; }
@@ -77,7 +74,6 @@ private:
 	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
-	XMINT2 GetComponentPosition(const UIComponent* component) const noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	UIComponent* GetRoot() noexcept;
 	void MarkDirty() noexcept;

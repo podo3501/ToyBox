@@ -2,7 +2,8 @@
 #include "EditWindow.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/UIComponent.h"
-#include "../Toy/UserInterface/Panel.h"
+#include "../Toy/UserInterface/UIComponentHelper.h"
+#include "../Toy/UserInterface/Component/Panel.h"
 #include "../EditUtility.h"
 #include "../Toy/InputManager.h"
 #include "../../Utility.h"
@@ -40,8 +41,7 @@ static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
 static OnDrag IsMouseOverResizeZone(const MouseTracker& mouseTracker, const UIComponent* component) noexcept
 {
     const auto& pos = mouseTracker.GetOffsetPosition();
-    const Rectangle& rect = component->GetRectangle();
-    auto zones = GenerateResizeZone(rect, 8);
+    auto zones = GenerateResizeZone(GetRectangle(component), 8);
 
     for (const auto& zone : zones)
     {
@@ -74,13 +74,13 @@ void EditWindow::UpdateDragState(OnDrag dragState, const MouseTracker& mouseTrac
 {
     const auto& mouseState = mouseTracker.GetLastState();
 
-    if (IsInputPressed(mouseTracker, MouseButton::Left) && dragState != OnDrag::Normal)
+    if (IsInputAction(mouseTracker, MouseButton::Left, KeyState::Pressed) && dragState != OnDrag::Normal)
     {
         m_dragState = dragState;
         outStartPos = { mouseState.x, mouseState.y };
     }
 
-    if (IsInputReleased(mouseTracker, MouseButton::Left))
+    if (IsInputAction(mouseTracker, MouseButton::Left, KeyState::Released))
     {
         m_dragState = OnDrag::Normal;
         outStartPos = {};

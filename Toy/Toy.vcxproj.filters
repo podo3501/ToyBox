@@ -17,6 +17,9 @@
     <Filter Include="Resources\Tool">
       <UniqueIdentifier>{556a383a-b07e-4797-8ed9-cefd0861b90d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserInterface\Component">
+      <UniqueIdentifier>{7a324915-d1e7-41df-90b3-c02402ae2760}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -37,19 +40,10 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="Locator.h" />
-    <ClInclude Include="UserInterface\TextArea.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIUtility.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="MainLoop.h" />
-    <ClInclude Include="UserInterface\Panel.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Dialog.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="Config.h" />
     <ClInclude Include="UserInterface\UIComponent.h">
       <Filter>UserInterface</Filter>
@@ -68,18 +62,6 @@
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="UserInterface\ImageGrid1.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\ImageGrid3.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\ImageGrid9.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Button.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\JsonOperation.hpp">
       <Filter>UserInterface</Filter>
     </ClInclude>
@@ -89,7 +71,31 @@
     <ClInclude Include="UserInterface\Property.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\ImageGridHelper.hpp">
+    <ClInclude Include="UserInterface\Component\Button.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\Dialog.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\ImageGrid1.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\ImageGrid3.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\ImageGrid9.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\ImageGridHelper.hpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\Panel.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\TextArea.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponentHelper.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
   </ItemGroup>
@@ -102,20 +108,11 @@
     <ClCompile Include="UserInterface\UILayout.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\TextArea.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIUtility.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="MainLoop.cpp" />
-    <ClCompile Include="UserInterface\Panel.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Dialog.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="UserInterface\UIComponent.cpp">
       <Filter>UserInterface</Filter>
@@ -140,16 +137,28 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="UserInterface\ImageGrid1.cpp">
-      <Filter>UserInterface</Filter>
+    <ClCompile Include="UserInterface\Component\Button.cpp">
+      <Filter>UserInterface\Component</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\ImageGrid3.cpp">
-      <Filter>UserInterface</Filter>
+    <ClCompile Include="UserInterface\Component\Dialog.cpp">
+      <Filter>UserInterface\Component</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\ImageGrid9.cpp">
-      <Filter>UserInterface</Filter>
+    <ClCompile Include="UserInterface\Component\ImageGrid1.cpp">
+      <Filter>UserInterface\Component</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\Button.cpp">
+    <ClCompile Include="UserInterface\Component\ImageGrid3.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\ImageGrid9.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\Panel.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\TextArea.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponentHelper.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

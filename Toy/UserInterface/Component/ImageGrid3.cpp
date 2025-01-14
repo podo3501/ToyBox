@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "ImageGrid3.h"
 #include "ImageGrid1.h"
-#include "../Utility.h"
-#include "UIUtility.h"
-#include "UIType.h"
-#include "JsonOperation.h"
+#include "../../Utility.h"
+#include "../UIUtility.h"
+#include "../UIType.h"
+#include "../JsonOperation.h"
 #include "ImageGridHelper.hpp"
 
 ImageGrid3::~ImageGrid3() = default;
@@ -77,7 +77,7 @@ void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
 
     for (auto idx : views::iota(0u, components.size()))
     {
-        ChangePosition(idx, posSizes[idx].pos);
+        ChangePosition(idx, size, posSizes[idx].pos);
         components[idx]->ChangeSize(posSizes[idx].size);
     }
     ApplySize(size);

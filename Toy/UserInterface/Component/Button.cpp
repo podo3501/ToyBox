@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "Button.h"
-#include "UIType.h"
-#include "../Utility.h"
-#include "../InputManager.h"
-#include "JsonOperation.h"
+#include "../UIType.h"
+#include "../../Utility.h"
+#include "../../InputManager.h"
+#include "../JsonOperation.h"
 
 Button::~Button() = default;
 Button::Button() :
@@ -72,8 +72,8 @@ bool Button::ImplementInput(const InputManager& inputManager) noexcept
 		m_state = ButtonState::Normal;
 	else
 	{
-		if (tracker.leftButton == Mouse::ButtonStateTracker::PRESSED ||
-			m_state == ButtonState::Pressed && tracker.leftButton == Mouse::ButtonStateTracker::HELD)
+		if (IsInputAction(tracker, MouseButton::Left, KeyState::Pressed) ||
+			m_state == ButtonState::Pressed && IsInputAction(tracker, MouseButton::Left, KeyState::Held))
 			m_state = ButtonState::Pressed;
 		else
 			m_state = ButtonState::Hover;

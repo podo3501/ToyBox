@@ -24,7 +24,10 @@ UIComponent::UIComponent(const UIComponent& other)
 	ranges::transform(other.m_components, back_inserter(m_components), [this](const auto& transCom) {
 		auto component = transCom.component->Clone();
 		component->SetParent(this);
-		return move(TransformComponent(move(component), transCom.relativePosition));
+		return move(TransformComponent(
+			move(component), 
+			transCom.GetRelativePosition(), 
+			transCom.GetRatio()));
 		});
 	m_enable = other.m_enable;
 }
@@ -124,58 +127,36 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, const InputManager& inpu
 
 void UIComponent::ProcessRender(IRender* render)
 {
-	if (!m_enable) 
-		return;
+	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
+	queue<UIComponent*> q;
+	q.push(this);
 
-	ImplementRender(render);
-
-	ranges::for_each(m_components, [render](const auto& transCom) {
-		transCom.component->ProcessRender(render);
-		});
-}
-
-static inline Vector2 CalculateRatio(const XMUINT2& value1, const XMUINT2& value2) noexcept
-{
-	return Vector2
-	{ 
-		static_cast<float>(value2.x) / static_cast<float>(value1.x),
-		static_cast<float>(value2.y) / static_cast<float>(value1.y)
-	};
-}
-
-static XMINT2 MoveByRatio(const XMINT2& relativePosition, const Vector2& ratioSize) noexcept
-{
-	return XMINT2
+	while (!q.empty())
 	{
-		static_cast<int32_t>(static_cast<float>(relativePosition.x) * ratioSize.x),
-		static_cast<int32_t>(static_cast<float>(relativePosition.y) * ratioSize.y)
-	};
+		UIComponent* current = q.front();
+		q.pop();
+
+		current->ImplementRender(render);
+
+		for (const auto& child : current->m_components)
+			q.push(child.component.get());  
+	}
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
 void UIComponent::ChangeSize(const XMUINT2& size) noexcept 
 { 
-	const Vector2& ratioSize = CalculateRatio(m_layout.GetSize(), size);
-	ranges::for_each(m_components, [&ratioSize](auto& transCom) {
-		transCom.relativePosition = MoveByRatio(transCom.relativePosition, ratioSize);
+	ranges::for_each(m_components, [&size](auto& transCom) {
+		transCom.AdjustPosition(size);
 		});
 
 	ApplySize(size);
 }
 
-void UIComponent::SetChildPosition(const string& name, const XMINT2& relativePos) noexcept
-{
-	auto transComponent = const_cast<TransformComponent*>(FindTransformComponent(name));
-	if (transComponent == nullptr) return;
-
-	transComponent->relativePosition = relativePos;
-	MarkDirty();
-}
-
-bool UIComponent::ChangePosition(int index, const XMINT2& relativePos) noexcept
+bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
 	if (index >= m_components.size()) return false;
-	m_components[index].relativePosition = relativePos;
+	m_components[index].SetRelativePosition(size, relativePos);
 	MarkDirty();
 
 	return true;
@@ -184,7 +165,7 @@ bool UIComponent::ChangePosition(int index, const XMINT2& relativePos) noexcept
 void UIComponent::AddComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept
 {
 	component->SetParent(this);
-	auto transComponent = TransformComponent(move(component), relativePos);
+	auto transComponent = TransformComponent(move(component), GetSize(), relativePos);
 	m_components.emplace_back(move(transComponent));
 	MarkDirty();
 }
@@ -211,22 +192,12 @@ void UIComponent::MarkDirty() noexcept
 		});
 }
 
-XMINT2 UIComponent::GetComponentPosition(const UIComponent* component) const noexcept
-{
-	UIComponent* parent = component->m_parent;
-	if (parent == nullptr) return { 0, 0 };
-
-	auto transComponent = parent->FindTransformComponent(component);
-	assert(transComponent);	//없다는 것은 parent가 잘못 돼 있다던지, 이름이 잘못 돼 있다던지 있어서는 안되는 일이다.
-	return parent->GetLayout().GetPosition(transComponent->relativePosition);
-}
-
 bool UIComponent::GetRelativePosition(XMINT2& outRelativePos) const noexcept
 {
 	if (!m_parent) return false;
 	
 	auto transformComponent = m_parent->FindTransformComponent(this);
-	outRelativePos = transformComponent->relativePosition;
+	outRelativePos = transformComponent->GetRelativePosition();
 
 	return true;
 }
@@ -236,7 +207,7 @@ bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
 	if (!m_parent) return false;
 
 	auto transformComponent = m_parent->FindTransformComponent(this);
-	transformComponent->relativePosition = relativePos;
+	transformComponent->SetRelativePosition(m_parent->GetSize(), relativePos);
 	m_parent->MarkDirty();
 
 	return true;
@@ -252,12 +223,6 @@ XMINT2 UIComponent::GetPosition() const noexcept
 	}
 
 	return GetPositionByLayout(parentPosition);
-}
-
-Rectangle UIComponent::GetRectangle() const noexcept
-{
-	XMINT2 curPosition = GetPosition();
-	return Rectangle(curPosition.x, curPosition.y, GetSize().x, GetSize().y);
 }
 
 XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept
@@ -280,7 +245,7 @@ void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList
 		outList.push_back(this);
 
 	ranges::for_each(m_components, [this, &pos, &outList](auto& transCom) {
-		const auto& curPosition = pos - m_layout.GetPosition(transCom.relativePosition);
+		const auto& curPosition = pos - m_layout.GetPosition(transCom.GetRelativePosition());
 		transCom.component->GetComponents(curPosition, outList);
 		});
 }

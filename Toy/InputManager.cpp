@@ -1,10 +1,18 @@
 #include "pch.h"
 #include "InputManager.h"
 
-InputManager::~InputManager() = default;
+bool InputManager::m_instantiated = false;
+
+InputManager::~InputManager()
+{
+    m_instantiated = false;
+}
+
 InputManager::InputManager(HWND hwnd)
 {
+    assert(!m_instantiated);
     m_mouse.SetWindow(hwnd);
+    m_instantiated = true;
 }
 
 void InputManager::Update()
