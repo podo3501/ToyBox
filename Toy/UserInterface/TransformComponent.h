@@ -13,6 +13,7 @@ public:
 	TransformComponent(const TransformComponent&) = delete;
 	TransformComponent& operator=(const TransformComponent&) = delete;
 	TransformComponent(TransformComponent&& o) noexcept;
+	TransformComponent& operator=(TransformComponent&& o) noexcept;
 	bool operator==(const TransformComponent& o) const noexcept;
 
 	const XMINT2& GetPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept;

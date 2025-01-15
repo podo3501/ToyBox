@@ -22,6 +22,7 @@ namespace Tool
 		static bool ShowFileDialog(wstring& filename, FileDialogType type);
 		static void ShowInfoDialog(const DialogType dialogType, const string& m_msg) noexcept;
 		static void Render() noexcept;
+		inline static bool IsOpenDialog() noexcept { return m_dialogType != DialogType::Init; }
 
 	private:
 		static DialogType m_dialogType;

@@ -6,7 +6,8 @@
 #include "../Utility.h"
 
 TransformComponent::TransformComponent() 
-{}
+{
+}
 
 TransformComponent::TransformComponent(
 	unique_ptr<UIComponent> comp, const XMINT2& relativePos, const Vector2& _ratio) :
@@ -25,6 +26,18 @@ TransformComponent::TransformComponent(TransformComponent&& o) noexcept :
 	relativePosition{ move(o.relativePosition) },
 	ratio{ move(o.ratio) }
 {}
+
+//vector의 내용을 삭제할 때에는 복사 생성자 또는 이동생산자가 있어야 한다. vector는 이동을 해서 삭제하는 알고리즘을 가지고 있기 때문이다.
+TransformComponent& TransformComponent::operator=(TransformComponent&& o) noexcept 
+{
+	if (this == &o) return *this;
+	
+	component = move(o.component);
+	relativePosition = move(o.relativePosition);
+	ratio = move(o.ratio);
+
+	return *this;
+}
 
 bool TransformComponent::operator==(const TransformComponent& o) const noexcept
 {

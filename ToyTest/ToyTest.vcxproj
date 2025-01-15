@@ -129,7 +129,8 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ComponentTest.cpp" />
+    <ClCompile Include="ComponentBasicFunctionalityTest.cpp" />
+    <ClCompile Include="ComponentIntegrationTest.cpp" />
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="JsonSerializeTest.cpp" />

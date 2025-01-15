@@ -17,9 +17,9 @@ public:
 	void Render();
 	void SetMainWindow(ImGuiWindow* mainWnd) noexcept { m_mainWnd = mainWnd; }
 	UIComponent* GetComponent() { return m_component; }
+	void SetComponent(UIComponent* component) noexcept;
 
 private:
-	void SetComponent(UIComponent* component) noexcept;
 	void RepeatedSelection(const vector<UIComponent*>& componentList) noexcept;
 	void SelectComponent(const InputManager& inputManager) noexcept;
 	bool HandleEscapeKey(const InputManager& inputManager) noexcept;

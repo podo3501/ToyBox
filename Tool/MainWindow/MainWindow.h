@@ -32,16 +32,21 @@ public:
 
 private:
     void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker& mouseTracker);
-    bool CheckAddComponent(const InputManager& inputManager) noexcept;
+    bool CheckAttachComponent(const InputManager& inputManager) noexcept;
+    bool CheckDetachComponent(const InputManager& inputManager) noexcept;
+    void IgnoreMouseClick();
+    void SetupWindowAppearing() noexcept;
 
     IRenderer* m_renderer;
+    string m_name{};
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<UIComponent> m_panel;
     unique_ptr<ComponentPopup> m_popup;
     unique_ptr<ComponentSelector> m_selector;
 
-    string m_name{};
     ImTextureID m_textureID{};
     bool m_isOpen{ false };
     ImVec2 m_size{ 800.f, 600.f };
+
+    static int m_mainWindowIndex;
 };

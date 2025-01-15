@@ -135,6 +135,8 @@ void UIComponent::ProcessRender(IRender* render)
 	{
 		UIComponent* current = q.front();
 		q.pop();
+		
+		if (!current->m_enable) continue;
 
 		current->ImplementRender(render);
 
@@ -162,12 +164,39 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 	return true;
 }
 
-void UIComponent::AddComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept
+bool UIComponent::AttachComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept
 {
+	if (!m_attachment) return false;
+
 	component->SetParent(this);
 	auto transComponent = TransformComponent(move(component), GetSize(), relativePos);
 	m_components.emplace_back(move(transComponent));
 	MarkDirty();
+
+	return true;
+}
+
+optional<unique_ptr<UIComponent>> UIComponent::DetachComponent(const string& name) noexcept
+{
+	if (!m_attachment) return nullopt;
+
+	auto find = ranges::find_if(m_components, [&name](auto& transComponent) {
+		return (transComponent.component->Name == name);
+		});
+	if (find == m_components.end()) return nullopt;
+
+	unique_ptr<UIComponent> detachedComponent = move(find->component);
+	m_components.erase(find);
+	
+	return detachedComponent;
+}
+
+optional<unique_ptr<UIComponent>> UIComponent::DetachComponent() noexcept
+{
+	if (!m_attachment) return nullopt;
+	if (!m_parent) return nullopt;
+
+	return move(m_parent->DetachComponent(Name.Get()));
 }
 
 void UIComponent::SerializeIO(JsonOperation& operation)
@@ -274,24 +303,25 @@ vector<UIComponent*> UIComponent::GetComponents() const noexcept
 	return componentList;
 }
 
-TransformComponent* UIComponent::FindTransformComponent(const string& name) noexcept
+template<typename Predicate>
+TransformComponent* FindTransformComponentIf(auto& components, Predicate&& pred) noexcept
 {
-	auto find = ranges::find_if(m_components, [&name](const auto& transComp) {
+	auto find = ranges::find_if(components, std::forward<Predicate>(pred));
+	return (find != components.end()) ? &(*find) : nullptr;
+}
+
+TransformComponent* UIComponent::FindTransformComponent(const std::string& name) noexcept
+{
+	return FindTransformComponentIf(m_components, [&name](const auto& transComp) {
 		return transComp.component->Name == name;
 		});
-
-	if (find == m_components.end()) return nullptr;
-	return &(*find);
 }
 
 TransformComponent* UIComponent::FindTransformComponent(const UIComponent* component) noexcept
 {
-	auto find = ranges::find_if(m_components, [component](const auto& transComp) {
+	return FindTransformComponentIf(m_components, [component](const auto& transComp) {
 		return transComp.component.get() == component;
 		});
-
-	if (find == m_components.end()) return nullptr;
-	return &(*find);
 }
 
 

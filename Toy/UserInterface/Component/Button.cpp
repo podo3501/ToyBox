@@ -50,9 +50,11 @@ bool Button::SetImage(const string& name, const UILayout& layout,
 	Name = name;
 	SetLayout(layout);
 
-	AddComponentAndEnable(ButtonState::Normal, move(normal), true);
+	AddComponentAndEnable(ButtonState::Normal, move(normal), true);	//Normal이 기본이고 다른 컴포넌트는 비활성시킨다.
 	AddComponentAndEnable(ButtonState::Hover, move(hover), false);
 	AddComponentAndEnable(ButtonState::Pressed, move(pressed), false);
+
+	SetAttachmentEnabled(false);
 
 	return true;
 }
@@ -96,7 +98,7 @@ void Button::AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>
 {
 	component->SetEnable(enable);
 	m_images.emplace(btnState, component.get());
-	AddComponent(move(component), {});
+	AttachComponent(move(component), {});
 }
 
 //m_images값은 Button 밑에 달려있는 component인데 읽거나 복사 했을 경우 이 값은 존재하지 않는다. 그럴경우 다시 연결해 준다.

@@ -14,7 +14,7 @@ class ComponentPopup
 	};
 
 public:
-	ComponentPopup(IRenderer* renderer);
+	ComponentPopup(IRenderer* renderer, const string& mainWndName) noexcept;
 	~ComponentPopup();
 	bool IsComponent() const noexcept;
 	unique_ptr<UIComponent> GetComponent() noexcept;
@@ -22,16 +22,18 @@ public:
 	void Render();
 	bool IsActive() const noexcept;
 	const ImVec2& GetPosition() const noexcept { return m_position; }
+	bool LoadImageGrid(unique_ptr<UIComponent>&& imgGrid);
+	bool LoadComponent(unique_ptr<UIComponent>&& imgGrid);
 
 private:
 	void Reset() noexcept;
 	void DrawMakeComponent();
-	bool LoadImageGrid(unique_ptr<UIComponent>&& imgGrid);
 	bool MakeImageGrid1();
 	bool MakeImageGrid3();
 	bool MakeImageGrid9();
 
 	IRenderer* m_renderer;
+	string m_name;
 	unique_ptr<UIComponent> m_component;
 	ImTextureID m_textureID{};
 	optional<MakeComponent> m_currentAction;

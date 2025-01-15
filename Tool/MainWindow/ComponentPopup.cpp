@@ -10,10 +10,9 @@
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/UIUtility.h"
 
-static constexpr const char* PopupName = "PopupMenu";
-
-ComponentPopup::ComponentPopup(IRenderer* renderer) :
-	m_renderer{ renderer }
+ComponentPopup::ComponentPopup(IRenderer* renderer, const string& mainWndName) noexcept :
+	m_renderer{ renderer },
+	m_name{ "PopupMenu_" + mainWndName }
 {}
 
 ComponentPopup::~ComponentPopup()
@@ -88,7 +87,7 @@ void ComponentPopup::Render()
 	}
 
 	// 마우스 오른쪽 버튼 클릭 시 팝업 메뉴 띄우기
-	if (!ImGui::BeginPopupContextWindow(PopupName))
+	if (!ImGui::BeginPopupContextWindow(m_name.c_str()))
 	{
 		m_isActive = false;
 		return;
@@ -98,7 +97,7 @@ void ComponentPopup::Render()
 	if (ImGui::MenuItem("Image Grid 1")) m_currentAction = MakeComponent::ImageGrid1;
 	if (ImGui::MenuItem("Image Grid 3")) m_currentAction = MakeComponent::ImageGrid3;
 	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = MakeComponent::ImageGrid9;
-	if (ImGui::MenuItem("Close")) {}
+	//if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();
 }
@@ -118,6 +117,18 @@ bool ComponentPopup::LoadImageGrid(unique_ptr<UIComponent>&& imgGrid)
 	ReturnIfFalse(m_renderer->LoadComponent(m_component.get()));
 	m_draw = true;
 
+	return true;
+}
+
+//검게 나오는 문제는 좌표 문제이다.
+bool ComponentPopup::LoadComponent(unique_ptr<UIComponent>&& imgGrid)
+{
+	ReturnIfNullptr(imgGrid);
+
+	m_component = move(imgGrid);
+	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
+	m_draw = true;
+	
 	return true;
 }
 

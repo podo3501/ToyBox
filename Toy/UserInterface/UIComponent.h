@@ -21,7 +21,9 @@ protected:
 
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
-	bool IsDirty() const noexcept { return m_isDirty; }
+
+	inline bool IsDirty() const noexcept { return m_isDirty; }
+	inline void SetAttachmentEnabled(bool enableAttachment) noexcept { m_attachment = enableAttachment; }
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
 
 public:
@@ -44,7 +46,8 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept;
 	virtual void SerializeIO(JsonOperation& operation);
 
-	void AddComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept;
+	bool AttachComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept;
+	optional<unique_ptr<UIComponent>> DetachComponent() noexcept;
 	
 	XMINT2 GetPosition() const noexcept;
 	bool GetRelativePosition(XMINT2& outRelativePos) const noexcept;
@@ -53,7 +56,6 @@ public:
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
 
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
-	inline void SetEnable(bool enable) { m_enable = enable; }
 
 	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); MarkDirty(); }
 	inline const XMUINT2& GetSize() const noexcept { return m_layout.GetSize(); }
@@ -67,6 +69,9 @@ public:
 	template<typename T>
 	bool GetComponent(const string& name, T** outComponent) const noexcept;
 
+	inline void SetEnable(bool enable) { m_enable = enable; }
+	inline bool EnableAttachment() const noexcept { return m_attachment; }
+
 public:
 	Property<string> Name{};
 	
@@ -74,6 +79,7 @@ private:
 	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
+	optional<unique_ptr<UIComponent>> DetachComponent(const string& name) noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	UIComponent* GetRoot() noexcept;
 	void MarkDirty() noexcept;
@@ -83,6 +89,7 @@ private:
 	vector<TransformComponent> m_components;
 	bool m_enable{ true };
 	bool m_isDirty{ true };
+	bool m_attachment{ true };
 };
 
 #include "UIComponent.hpp"

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "MainWindow.h"
 #include "../Utility.h"
+#include "../Dialog.h"
 #include "ComponentPopup.h"
 #include "SelectedComponent/ComponentSelector.h"
 #include "../Toy/Config.h"
@@ -9,6 +10,8 @@
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/UIComponentHelper.h"
 #include "../Toy/InputManager.h"
+
+int MainWindow::m_mainWindowIndex = 0;
 
 MainWindow::~MainWindow()
 {
@@ -19,12 +22,11 @@ MainWindow::~MainWindow()
 
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
+	m_name{ "Main Window " + to_string(m_mainWindowIndex++) },
 	m_panel{ make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution())) },
-	m_selector{ make_unique<ComponentSelector>(renderer, m_panel.get()) },
-	m_popup{ make_unique<ComponentPopup>(renderer) }
+	m_popup{ make_unique<ComponentPopup>(renderer, m_name) },
+	m_selector{ make_unique<ComponentSelector>(renderer, m_panel.get()) }
 {
-	static int idx{ 0 };
-	m_name = "Main Window " + to_string(idx++);
 	m_renderer->AddImguiComponent(this);
 }
 
@@ -91,18 +93,54 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker
 	}
 }
 
-bool MainWindow::CheckAddComponent(const InputManager& inputManager) noexcept
+bool MainWindow::CheckAttachComponent(const InputManager& inputManager) noexcept
 {
-	if (!m_popup->IsComponent())  return false;
+	if (!m_popup->IsComponent()) return false;
 	if (!IsInputAction(inputManager, Keyboard::LeftShift, MouseButton::Left)) return false;
-
-	const XMINT2& pos = inputManager.GetMouse().GetOffsetPosition();
 	UIComponent* selectComponent = m_selector->GetComponent();
 	if (!selectComponent) return false;
+	
+	const XMINT2& pos = inputManager.GetMouse().GetOffsetPosition();
 
-	AddComponentFromScreenPos(selectComponent, m_popup->GetComponent(), pos);
+	if (!selectComponent->EnableAttachment())
+	{
+		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "This component cannot be attached or detached.");
+		return true;
+	}
 
-	return true;	//Add를 하면 true를 내보낸다.
+	if(!AddComponentFromScreenPos(selectComponent, m_popup->GetComponent(), pos))
+	{
+		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Attachment failed for this component.");
+		return true;
+	}
+
+	return true;
+}
+
+bool MainWindow::CheckDetachComponent(const InputManager& inputManager) noexcept
+{
+	if (m_popup->IsComponent()) return false;
+	if (!IsInputAction(inputManager, Keyboard::D, KeyState::Pressed)) return false;
+	UIComponent* selectComponent = m_selector->GetComponent();
+	if (!selectComponent) return false;
+	
+	auto detachComponent = selectComponent->DetachComponent();
+	if (!detachComponent.has_value())
+	{
+		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Detachment failed for this component.");
+		return true;
+	}
+
+	//if(!m_popup->LoadImageGrid())
+	if(!m_popup->LoadComponent(move(detachComponent.value())))
+	{
+		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to load the resource.");
+		return true;
+	}
+
+	m_selector->SetComponent(nullptr);
+
+	return true;
 }
 
 void MainWindow::Update(const DX::StepTimer* timer, const InputManager& inputManager)
@@ -115,14 +153,32 @@ void MainWindow::Update(const DX::StepTimer* timer, const InputManager& inputMan
 	mouseTracker.PushOffset(offset);
 
 	CheckChangeWindow(m_window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
-	bool isAdd = CheckAddComponent(inputManager);
 	
+	bool isAdd = CheckAttachComponent(inputManager);
 	if(!isAdd) 
 		m_selector->Update(inputManager);
 
 	m_panel->ProcessUpdate({}, inputManager);
+	CheckDetachComponent(inputManager);
 	m_popup->Excute();
 	mouseTracker.PopOffset();
+}
+
+void MainWindow::IgnoreMouseClick() 
+{
+	const ImVec2& rectMin = GetWindowStartPosition(m_window);
+	const ImVec2& rectMax = rectMin + m_size;
+	if (!ImGui::IsMouseHoveringRect(rectMin, rectMax)) return;
+	
+	ImGui::GetIO().MouseDown[0] = false;
+}
+
+void MainWindow::SetupWindowAppearing() noexcept
+{
+	if (!ImGui::IsWindowAppearing()) return;
+	
+	m_window = const_cast<ImGuiWindow*>(GetImGuiWindow());
+	m_selector->SetMainWindow(m_window);
 }
 
 void MainWindow::Render(ImGuiIO* io)
@@ -136,26 +192,18 @@ void MainWindow::Render(ImGuiIO* io)
 	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
 
-	if (ImGui::IsWindowAppearing())
-	{
-		m_window = const_cast<ImGuiWindow*>(GetImGuiWindow());
-		m_selector->SetMainWindow(m_window);
-	}
-
-	if (m_window && IsWindowFocus(m_window))
-	{
-		const ImVec2& rectMin = GetWindowStartPosition(m_window);
-		const ImVec2& rectMax = rectMin + m_size;
-		if (ImGui::IsMouseHoveringRect(rectMin, rectMax))
-		{
-			ImGui::GetIO().MouseDown[0] = false;
-			Tool::MouseCursor::Render();
-		}
-	}
+	SetupWindowAppearing();
 
 	ImGui::Image(m_textureID, m_size);
 
-	m_popup->Render();
+	if (m_window && IsWindowFocus(m_window))
+	{
+		IgnoreMouseClick();
+		Tool::MouseCursor::Render();
+	}
+	
+	if (!Tool::Dialog::IsOpenDialog())
+		m_popup->Render();
 	m_selector->Render();
 
 	ImGui::End();

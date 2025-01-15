@@ -11,8 +11,7 @@ bool AddComponentFromScreenPos(
 	const XMINT2& comPos = addable->GetPosition();
 	XMINT2 relativePos = pos - comPos;
 
-	addable->AddComponent(move(component), relativePos);
-	return true;
+	return addable->AttachComponent(move(component), relativePos);
 }
 
 Rectangle GetRectangle(const UIComponent* component) noexcept

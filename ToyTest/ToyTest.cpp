@@ -1,68 +1,12 @@
 #include "pch.h"
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
-#include "TestHelper.h"
 #include "../Toy/GameMainLoop.h"
 #include "../Toy/WindowProcedure.h"
 #include "../Toy/Window.h"
-#include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/Component/ImageGrid9.h"
-#include "../Toy/UserInterface/Component/Panel.h"
-#include "../Toy/UserInterface/UIComponentHelper.h"
 
 namespace BasicClient
 {
-	unique_ptr<UIComponent> CreateTestImageGrid9(IRenderer* renderer, const string& name, const XMUINT2& size)
-	{
-		UILayout layout(size, Origin::LeftTop);
-		ImageSource source{
-			L"UI/Blue/button_square_header_large_square_screws.png", {
-				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-				{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-				{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
-			}
-		};
-		unique_ptr<ImageGrid9> img9 = make_unique<ImageGrid9>();
-		img9->SetImage(name, layout, source);
-
-		return move(img9);
-	}
-
-	TEST_F(ToyTestFixture, GetComponents)
-	{
-		unique_ptr<UIComponent> img9 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 220, 190 });
-		m_panel->AddComponent(move(img9), { 80, 60 });
-
-		vector<UIComponent*> componentList1;
-		m_panel->GetComponents({ 0, 0 }, componentList1);
-		EXPECT_EQ(componentList1.size(), 1);
-
-		vector<UIComponent*> componentList2;
-		m_panel->GetComponents({ 100, 100 }, componentList2);
-		EXPECT_EQ(componentList2.size(), 4);
-
-		unique_ptr<UIComponent> img9_2 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 221, 191 });
-		m_panel->AddComponent(move(img9_2), { 88, 66 });
-
-		vector<UIComponent*> componentList3;
-		m_panel->GetComponents({ 180, 160 }, componentList3);
-	}
-
-	TEST_F(ToyTestFixture, GetPosition)
-	{
-		unique_ptr<UIComponent> img9 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 220, 190 });
-		unique_ptr<UIComponent> panel = make_unique<Panel>();
-		panel->SetLayout({ { 400, 300 }, Origin::Center });
-		panel->AddComponent(move(img9), { 40, 30 });
-		m_panel->AddComponent(move(panel), { 400, 300 });
-		m_panel->RefreshPosition();
-
-		UIComponent* component = m_panel->GetComponent("ImageGrid9_1_1");
-		XMINT2 pos = component->GetPosition();
-		EXPECT_EQ(pos, XMINT2(270, 216));
-		EXPECT_EQ(GetRectangle(component), Rectangle(270, 216, 160, 128));
-	}
-
 	//여러번 실행해서 오동작이 나는지 확인한다.
 	TEST(MainLoop, MultipleAppExcute)
 	{
