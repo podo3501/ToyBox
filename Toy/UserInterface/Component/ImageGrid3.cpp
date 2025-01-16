@@ -53,10 +53,10 @@ bool ImageGrid3::SetImage(const string& name, const UILayout& layout, const Imag
     for(auto idx : views::iota(0u, source.list.size()))
     {
         auto grid1 = CreateImageGrid1(name, idx, source, posSizes[idx].size);
+        grid1->SetAttachmentState(AttachmentState::Attach);
         AttachComponent(move(grid1), posSizes[idx].pos);
     }
-
-    SetAttachmentEnabled(false);
+    SetAttachmentState(AttachmentState::Detach);
 
 	return true;
 }

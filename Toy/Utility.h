@@ -176,3 +176,8 @@ inline bool Contains(const Rectangle& rect, const XMINT2& pos) noexcept
 {
 	return rect.Contains(static_cast<long>(pos.x), static_cast<long>(pos.y));
 }
+
+inline XMUINT2 Union(const XMUINT2& a, const XMUINT2& b) noexcept
+{
+	return XMUINT2(max(a.x, b.x), max(a.y, b.y));
+}

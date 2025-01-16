@@ -5,6 +5,7 @@
 #include "../InputManager.h"
 #include "TransformComponent.h"
 #include "JsonOperation.h"
+#include "UIComponentHelper.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -166,7 +167,9 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 
 bool UIComponent::AttachComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept
 {
-	if (!m_attachment) return false;
+	if (m_attachmentState != AttachmentState::Attach &&
+		m_attachmentState != AttachmentState::All)
+		return false;
 
 	component->SetParent(this);
 	auto transComponent = TransformComponent(move(component), GetSize(), relativePos);
@@ -176,27 +179,31 @@ bool UIComponent::AttachComponent(unique_ptr<UIComponent>&& component, const XMI
 	return true;
 }
 
-optional<unique_ptr<UIComponent>> UIComponent::DetachComponent(const string& name) noexcept
+optional<unique_ptr<UIComponent>> UIComponent::DetachComponent(UIComponent* detachComponent) noexcept
 {
-	if (!m_attachment) return nullopt;
-
-	auto find = ranges::find_if(m_components, [&name](auto& transComponent) {
-		return (transComponent.component->Name == name);
+	auto find = ranges::find_if(m_components, [detachComponent](auto& transComponent) {
+		return (transComponent.component.get() == detachComponent);
 		});
 	if (find == m_components.end()) return nullopt;
 
 	unique_ptr<UIComponent> detachedComponent = move(find->component);
 	m_components.erase(find);
 	
+	detachedComponent->m_parent = nullptr;
+	detachedComponent->MarkDirty();
+	detachedComponent->RefreshPosition();
+
 	return detachedComponent;
 }
 
 optional<unique_ptr<UIComponent>> UIComponent::DetachComponent() noexcept
 {
-	if (!m_attachment) return nullopt;
+	if (m_attachmentState != AttachmentState::Detach &&
+		m_attachmentState != AttachmentState::All)
+		return nullopt;
 	if (!m_parent) return nullopt;
 
-	return move(m_parent->DetachComponent(Name.Get()));
+	return move(m_parent->DetachComponent(this));
 }
 
 void UIComponent::SerializeIO(JsonOperation& operation)
@@ -219,6 +226,27 @@ void UIComponent::MarkDirty() noexcept
 	ranges::for_each(m_components, [](auto& transComponent) {
 		transComponent.component->MarkDirty();
 		});
+}
+
+XMUINT2 UIComponent::GetTotalChildSize() const noexcept
+{
+	const Rectangle& totalRectangle = GetTotalChildSize(this);
+	return { 
+		static_cast<uint32_t>(totalRectangle.width), 
+		static_cast<uint32_t>(totalRectangle.height) };
+}
+
+Rectangle UIComponent::GetTotalChildSize(const UIComponent* component) const noexcept
+{
+	if (component == nullptr) return {};
+
+	Rectangle rect = GetRectangle(component);
+
+	//단순한 크기가 아니라 위치값이 들어가는 사각형의 크기가 필요하다.
+	for (const auto& transCom : component->m_components)
+		rect = Rectangle::Union(rect, GetTotalChildSize(transCom.component.get()));
+
+	return rect;
 }
 
 bool UIComponent::GetRelativePosition(XMINT2& outRelativePos) const noexcept

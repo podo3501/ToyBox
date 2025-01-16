@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "ComponentPopup.h"
+#include "FloatingComponent.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -10,18 +10,19 @@
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/UIUtility.h"
 
-ComponentPopup::ComponentPopup(IRenderer* renderer, const string& mainWndName) noexcept :
+FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
 	m_name{ "PopupMenu_" + mainWndName }
 {}
 
-ComponentPopup::~ComponentPopup()
+FloatingComponent::~FloatingComponent()
 {
 	Reset();
 }
 
-void ComponentPopup::Reset() noexcept
+void FloatingComponent::Reset() noexcept
 {
+	m_drawTextureSize = {};
 	m_draw = false;
 	m_currentAction.reset();
 	m_renderer->RemoveRenderTexture(m_textureID);
@@ -29,18 +30,18 @@ void ComponentPopup::Reset() noexcept
 	m_textureID = 0;
 }
 
-bool ComponentPopup::IsComponent() const noexcept
+bool FloatingComponent::IsComponent() const noexcept
 {
 	return m_component != nullptr;
 }
 
-unique_ptr<UIComponent> ComponentPopup::GetComponent() noexcept
+unique_ptr<UIComponent> FloatingComponent::GetComponent() noexcept
 {
 	Reset();
 	return move(m_component);
 }
 
-bool ComponentPopup::Excute()
+bool FloatingComponent::Excute()
 {
 	if (!m_currentAction.has_value()) return true;
 
@@ -57,10 +58,8 @@ bool ComponentPopup::Excute()
 	return true;
 }
 
-void ComponentPopup::DrawMakeComponent()
+void FloatingComponent::DrawMakeComponent()
 {
-	const auto size = XMUINT2ToImVec2(m_component->GetSize());
-	ImVec2 halfSize{ size.x / 2.f, size.y / 2.f };
 	// 텍스처를 사각형 형태로 그리기
 	m_position = ImGui::GetMousePos();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -71,14 +70,14 @@ void ComponentPopup::DrawMakeComponent()
 	drawList->AddImage(
 		m_textureID,
 		{ m_position.x, m_position.y },                      // 시작 좌표
-		{ m_position.x + size.x, m_position.y + size.y },    // 종료 좌표
+		{ m_position.x + m_drawTextureSize.x, m_position.y + m_drawTextureSize.y },    // 종료 좌표
 		ImVec2(0, 0),
 		ImVec2(1, 1),
 		colorU32
 	);
 }
 
-void ComponentPopup::Render()
+void FloatingComponent::Render()
 {
 	if (m_draw)
 	{
@@ -102,45 +101,46 @@ void ComponentPopup::Render()
 	ImGui::EndPopup();
 }
 
-bool ComponentPopup::IsActive() const noexcept
+bool FloatingComponent::IsActive() const noexcept
 {
 	return m_isActive;
 }
 
-bool ComponentPopup::LoadImageGrid(unique_ptr<UIComponent>&& imgGrid)
+bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size)
 {
-	ReturnIfNullptr(imgGrid);
+	ReturnIfNullptr(component);
 
-	m_component = move(imgGrid);
-	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
+	ImTextureID texID{};
+	ReturnIfFalse(m_renderer->CreateRenderTexture(size, component.get(), texID));
+	ReturnIfFalse(m_renderer->LoadComponent(component.get()));
 
-	ReturnIfFalse(m_renderer->LoadComponent(m_component.get()));
+	m_textureID = texID;
+	m_component = move(component);
+	m_drawTextureSize = size;
 	m_draw = true;
 
 	return true;
 }
 
-//검게 나오는 문제는 좌표 문제이다.
-bool ComponentPopup::LoadComponent(unique_ptr<UIComponent>&& imgGrid)
+bool FloatingComponent::LoadComponent(unique_ptr<UIComponent>&& component)
 {
-	ReturnIfNullptr(imgGrid);
+	return LoadComponentInternal(move(component), component->GetSize());
+}
 
-	m_component = move(imgGrid);
-	ReturnIfFalse(m_renderer->CreateRenderTexture(m_component->GetSize(), m_component.get(), m_textureID));
-	m_draw = true;
-	
-	return true;
+bool FloatingComponent::DetachToFloating(unique_ptr<UIComponent>&& detachComponent)
+{
+	return LoadComponentInternal(move(detachComponent), detachComponent->GetTotalChildSize());
 }
 
 
-bool ComponentPopup::MakeImageGrid1()
+bool FloatingComponent::MakeImageGrid1()
 {
 	UILayout layout({ 64, 64 }, Origin::LeftTop);
 	ImageSource source{ L"UI/SampleTexture/ToolComponentPopup.png", { { 2, 52, 64, 64 } } };
-	return LoadImageGrid(CreateImageGrid<ImageGrid1>("untitled_imageGrid1", layout, source));
+	return LoadComponent(CreateImageGrid<ImageGrid1>("untitled_imageGrid1", layout, source));
 }
 
-bool ComponentPopup::MakeImageGrid3()
+bool FloatingComponent::MakeImageGrid3()
 {
 	UILayout layout({ 48, 48 }, Origin::LeftTop);
 	ImageSource source{
@@ -148,10 +148,10 @@ bool ComponentPopup::MakeImageGrid3()
 			{ 2, 2, 23, 48 }, { 25, 2, 2, 48 }, { 27, 2, 23, 48 }
 		}
 	};
-	return LoadImageGrid(CreateImageGrid<ImageGrid3>("untitled_imageGrid3", layout, source));
+	return LoadComponent(CreateImageGrid<ImageGrid3>("untitled_imageGrid3", layout, source));
 }
 
-bool ComponentPopup::MakeImageGrid9()
+bool FloatingComponent::MakeImageGrid9()
 {
 	UILayout layout({ 170, 120 }, Origin::LeftTop);
 	ImageSource source{
@@ -161,5 +161,5 @@ bool ComponentPopup::MakeImageGrid9()
 			{ 2, 90, 30, 26 }, { 32, 90, 4, 26 }, { 36, 90, 30, 26 }
 		}
 	};
-	return LoadImageGrid(CreateImageGrid<ImageGrid9>("untitled_imageGrid9", layout, source));
+	return LoadComponent(CreateImageGrid<ImageGrid9>("untitled_imageGrid9", layout, source));
 }

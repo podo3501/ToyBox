@@ -23,6 +23,7 @@ TransformComponent::TransformComponent(
 
 TransformComponent::TransformComponent(TransformComponent&& o) noexcept :
 	component{ move(o.component) },
+	absolutePosition{ move(o.absolutePosition) },
 	relativePosition{ move(o.relativePosition) },
 	ratio{ move(o.ratio) }
 {}
@@ -33,6 +34,7 @@ TransformComponent& TransformComponent::operator=(TransformComponent&& o) noexce
 	if (this == &o) return *this;
 	
 	component = move(o.component);
+	absolutePosition = move(o.absolutePosition);
 	relativePosition = move(o.relativePosition);
 	ratio = move(o.ratio);
 

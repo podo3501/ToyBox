@@ -3,10 +3,10 @@
 #include "../Include/IComponent.h"
 #include "UILayout.h"
 #include "Property.h"
+#include "UIType.h"
 
 class JsonOperation;
 class TransformComponent;
-enum class Origin;
 
 class UIComponent : public IComponent
 {
@@ -23,7 +23,6 @@ protected:
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 
 	inline bool IsDirty() const noexcept { return m_isDirty; }
-	inline void SetAttachmentEnabled(bool enableAttachment) noexcept { m_attachment = enableAttachment; }
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
 
 public:
@@ -59,6 +58,7 @@ public:
 
 	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); MarkDirty(); }
 	inline const XMUINT2& GetSize() const noexcept { return m_layout.GetSize(); }
+	XMUINT2 GetTotalChildSize() const noexcept;
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const UILayout& GetLayout() const noexcept { return m_layout; }
@@ -70,7 +70,8 @@ public:
 	bool GetComponent(const string& name, T** outComponent) const noexcept;
 
 	inline void SetEnable(bool enable) { m_enable = enable; }
-	inline bool EnableAttachment() const noexcept { return m_attachment; }
+	inline AttachmentState EnableAttachment() const noexcept { return m_attachmentState; }
+	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }
 
 public:
 	Property<string> Name{};
@@ -79,17 +80,18 @@ private:
 	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
-	optional<unique_ptr<UIComponent>> DetachComponent(const string& name) noexcept;
+	optional<unique_ptr<UIComponent>> DetachComponent(UIComponent* detachComponent) noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	UIComponent* GetRoot() noexcept;
 	void MarkDirty() noexcept;
+	Rectangle GetTotalChildSize(const UIComponent* component) const noexcept;
 
 	UILayout m_layout;
 	UIComponent* m_parent{ nullptr };
 	vector<TransformComponent> m_components;
 	bool m_enable{ true };
 	bool m_isDirty{ true };
-	bool m_attachment{ true };
+	AttachmentState m_attachmentState{ AttachmentState::All };
 };
 
 #include "UIComponent.hpp"

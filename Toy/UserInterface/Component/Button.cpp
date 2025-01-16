@@ -54,8 +54,6 @@ bool Button::SetImage(const string& name, const UILayout& layout,
 	AddComponentAndEnable(ButtonState::Hover, move(hover), false);
 	AddComponentAndEnable(ButtonState::Pressed, move(pressed), false);
 
-	SetAttachmentEnabled(false);
-
 	return true;
 }
 

@@ -4,7 +4,8 @@ struct IRenderer;
 class UIComponent;
 class MouseTracker;
 
-class ComponentPopup
+//팝업 메뉴와 floatingComponent 두개의 역할이 있다 나눌 필요가 있을듯
+class FloatingComponent
 {
 	enum class MakeComponent
 	{
@@ -14,19 +15,20 @@ class ComponentPopup
 	};
 
 public:
-	ComponentPopup(IRenderer* renderer, const string& mainWndName) noexcept;
-	~ComponentPopup();
+	FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept;
+	~FloatingComponent();
 	bool IsComponent() const noexcept;
 	unique_ptr<UIComponent> GetComponent() noexcept;
 	bool Excute();
 	void Render();
 	bool IsActive() const noexcept;
 	const ImVec2& GetPosition() const noexcept { return m_position; }
-	bool LoadImageGrid(unique_ptr<UIComponent>&& imgGrid);
-	bool LoadComponent(unique_ptr<UIComponent>&& imgGrid);
+	bool DetachToFloating(unique_ptr<UIComponent>&& detachComponent);
 
 private:
 	void Reset() noexcept;
+	bool LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size);
+	bool LoadComponent(unique_ptr<UIComponent>&& component);
 	void DrawMakeComponent();
 	bool MakeImageGrid1();
 	bool MakeImageGrid3();
@@ -37,6 +39,7 @@ private:
 	unique_ptr<UIComponent> m_component;
 	ImTextureID m_textureID{};
 	optional<MakeComponent> m_currentAction;
+	XMUINT2 m_drawTextureSize{};
 	bool m_draw{ false };
 	bool m_isActive{ false };
 	ImVec2 m_position{};

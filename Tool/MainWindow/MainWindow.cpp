@@ -2,7 +2,7 @@
 #include "MainWindow.h"
 #include "../Utility.h"
 #include "../Dialog.h"
-#include "ComponentPopup.h"
+#include "FloatingComponent.h"
 #include "SelectedComponent/ComponentSelector.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -24,7 +24,7 @@ MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
 	m_name{ "Main Window " + to_string(m_mainWindowIndex++) },
 	m_panel{ make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution())) },
-	m_popup{ make_unique<ComponentPopup>(renderer, m_name) },
+	m_floater{ make_unique<FloatingComponent>(renderer, m_name) },
 	m_selector{ make_unique<ComponentSelector>(renderer, m_panel.get()) }
 {
 	m_renderer->AddImguiComponent(this);
@@ -95,20 +95,21 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker
 
 bool MainWindow::CheckAttachComponent(const InputManager& inputManager) noexcept
 {
-	if (!m_popup->IsComponent()) return false;
+	if (!m_floater->IsComponent()) return false;
 	if (!IsInputAction(inputManager, Keyboard::LeftShift, MouseButton::Left)) return false;
 	UIComponent* selectComponent = m_selector->GetComponent();
 	if (!selectComponent) return false;
 	
 	const XMINT2& pos = inputManager.GetMouse().GetOffsetPosition();
 
-	if (!selectComponent->EnableAttachment())
+	if (selectComponent->EnableAttachment() != AttachmentState::Attach &&
+		selectComponent->EnableAttachment() != AttachmentState::All )
 	{
-		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "This component cannot be attached or detached.");
+		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "This component cannot be attached.");
 		return true;
 	}
 
-	if(!AddComponentFromScreenPos(selectComponent, m_popup->GetComponent(), pos))
+	if(!AddComponentFromScreenPos(selectComponent, m_floater->GetComponent(), pos))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Attachment failed for this component.");
 		return true;
@@ -119,7 +120,7 @@ bool MainWindow::CheckAttachComponent(const InputManager& inputManager) noexcept
 
 bool MainWindow::CheckDetachComponent(const InputManager& inputManager) noexcept
 {
-	if (m_popup->IsComponent()) return false;
+	if (m_floater->IsComponent()) return false;
 	if (!IsInputAction(inputManager, Keyboard::D, KeyState::Pressed)) return false;
 	UIComponent* selectComponent = m_selector->GetComponent();
 	if (!selectComponent) return false;
@@ -131,8 +132,8 @@ bool MainWindow::CheckDetachComponent(const InputManager& inputManager) noexcept
 		return true;
 	}
 
-	//if(!m_popup->LoadImageGrid())
-	if(!m_popup->LoadComponent(move(detachComponent.value())))
+	//DetachµÈ Component¸¦ RenderTexture
+	if(!m_floater->DetachToFloating(move(detachComponent.value())))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to load the resource.");
 		return true;
@@ -160,7 +161,7 @@ void MainWindow::Update(const DX::StepTimer* timer, const InputManager& inputMan
 
 	m_panel->ProcessUpdate({}, inputManager);
 	CheckDetachComponent(inputManager);
-	m_popup->Excute();
+	m_floater->Excute();
 	mouseTracker.PopOffset();
 }
 
@@ -203,7 +204,7 @@ void MainWindow::Render(ImGuiIO* io)
 	}
 	
 	if (!Tool::Dialog::IsOpenDialog())
-		m_popup->Render();
+		m_floater->Render();
 	m_selector->Render();
 
 	ImGui::End();

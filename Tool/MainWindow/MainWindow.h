@@ -9,7 +9,7 @@ namespace DX
 class UIComponent;
 class InputManager;
 class MouseTracker;
-class ComponentPopup;
+class FloatingComponent;
 class ComponentSelector;
 
 class MainWindow : public IImguiComponent
@@ -41,7 +41,7 @@ private:
     string m_name{};
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<UIComponent> m_panel;
-    unique_ptr<ComponentPopup> m_popup;
+    unique_ptr<FloatingComponent> m_floater;
     unique_ptr<ComponentSelector> m_selector;
 
     ImTextureID m_textureID{};

@@ -46,6 +46,16 @@ constexpr auto EnumToStringMap<ButtonState>()->std::array<const char*, EnumSize<
 		{ "Count" }
 	} };
 }
+///////////////////////////////////////////////////////////////
+
+//attachment할때 상태에 따라서 attach detach 할수 있는지 확인하는 값
+enum class AttachmentState : int
+{
+	All,
+	Attach, 
+	Detach,
+	Disable
+};
 
 ///////////////////////////////////////////////////////////////
 

@@ -39,7 +39,7 @@
     <ClCompile Include="MainWindow\MainWindow.cpp">
       <Filter>MainWindow</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\ComponentPopup.cpp">
+    <ClCompile Include="MainWindow\FloatingComponent.cpp">
       <Filter>MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow\EditUtility.cpp">
@@ -91,7 +91,7 @@
     <ClInclude Include="MainWindow\MainWindow.h">
       <Filter>MainWindow</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow\ComponentPopup.h">
+    <ClInclude Include="MainWindow\FloatingComponent.h">
       <Filter>MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\EditUtility.h">
