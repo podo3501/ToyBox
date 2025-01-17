@@ -23,7 +23,9 @@ EditWindow::~EditWindow()
 EditWindow::EditWindow(UIComponent* component) noexcept:
 	m_component{ component },
     m_dragState{ OnDrag::Normal }
-{}
+{
+    StringToChar(m_component->GetName(), m_nameBuffer);
+}
 
 static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
     const Rectangle& rect, long padding) noexcept
@@ -141,10 +143,49 @@ void EditWindow::Update(const InputManager& inputManager, bool mainWndFocus)
     UpdateComponent(inputManager);
 }
 
+static void ShowEditNameResult(chrono::steady_clock::time_point startTime, bool result, bool &visible) noexcept
+{
+    if (!visible) return;
+    
+    auto currentTime = chrono::steady_clock::now();
+    auto elapsedTime = chrono::duration_cast<chrono::seconds>(currentTime - startTime).count();
+
+    if (elapsedTime >= 2)
+    {
+        visible = false;
+        return;
+    }
+    
+    auto [color, message] = result
+        ? std::make_tuple(ToColor(Colors::Yellow), "Name has been successfully changed.")
+        : std::make_tuple(ToColor(Colors::Red), "The name is not unique.");
+
+    ImGui::TextColored(color, "%s", message);
+}
+
+void EditWindow::EditName(const string& nameLabel) noexcept
+{
+    static bool resultVisible = false;
+    static chrono::steady_clock::time_point startTime{};
+    static bool result{ false };
+
+    ImGui::InputText(nameLabel.c_str(), m_nameBuffer, IM_ARRAYSIZE(m_nameBuffer));
+    if (ImGui::IsItemDeactivatedAfterEdit())
+    {
+        result = m_component->Rename(m_nameBuffer);
+        if (!result)
+            StringToChar(m_component->GetName(), m_nameBuffer);
+
+        startTime = std::chrono::steady_clock::now();
+        resultVisible = true;
+    }
+
+    ShowEditNameResult(startTime, result, resultVisible);
+}
+
 void EditWindow::RenderCommon(bool& modify)
 {
-    // Component 이름 수정
-    EditText("Name", m_component->Name);
+    EditName("Name");
 
     XMINT2 relativePosition{};
     bool isExist = m_component->GetRelativePosition(relativePosition);

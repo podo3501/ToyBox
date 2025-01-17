@@ -3,7 +3,6 @@
 #include "ImageGrid1.h"
 #include "../../Utility.h"
 #include "../UIUtility.h"
-#include "../UIType.h"
 #include "../JsonOperation.h"
 #include "ImageGridHelper.hpp"
 
@@ -46,7 +45,7 @@ bool ImageGrid3::SetImage(const string& name, const UILayout& layout, const Imag
 {
     ReturnIfFalse(ValidateInput(name, source));
 
-    Name = name;
+    SetName(name);
 	SetLayout(layout);
 
     vector<PositionSize> posSizes = StretchSize(StretchType::Width, layout.GetSize(), source.list);

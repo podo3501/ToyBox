@@ -45,9 +45,6 @@
     <ClCompile Include="MainWindow\EditUtility.cpp">
       <Filter>MainWindow</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentSelector.cpp">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClCompile>
@@ -65,6 +62,12 @@
     </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\ComponentSelector.cpp">
+      <Filter>MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\ComponentController.cpp">
+      <Filter>MainWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +100,6 @@
     <ClInclude Include="MainWindow\EditUtility.h">
       <Filter>MainWindow</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentSelector.h">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClInclude>
@@ -117,6 +117,12 @@
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\ComponentSelector.h">
+      <Filter>MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\ComponentController.h">
+      <Filter>MainWindow</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -148,11 +148,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="MainWindow\ComponentController.cpp" />
+    <ClCompile Include="MainWindow\ComponentSelector.cpp" />
     <ClCompile Include="MainWindow\EditUtility.cpp" />
     <ClCompile Include="MainWindow\MainWindow.cpp" />
     <ClCompile Include="MainWindow\FloatingComponent.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.cpp" />
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentSelector.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\EditWindow.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ExtractTexture.cpp" />
@@ -178,11 +179,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="MainWindow\ComponentController.h" />
+    <ClInclude Include="MainWindow\ComponentSelector.h" />
     <ClInclude Include="MainWindow\EditUtility.h" />
     <ClInclude Include="MainWindow\MainWindow.h" />
     <ClInclude Include="MainWindow\FloatingComponent.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.h" />
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentSelector.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h" />
     <ClInclude Include="MainWindow\SelectedComponent\EditWindow.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ExtractTexture.h" />

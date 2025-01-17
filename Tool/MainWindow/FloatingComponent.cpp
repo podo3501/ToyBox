@@ -4,7 +4,6 @@
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Utility.h"
-#include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"

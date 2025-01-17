@@ -5,7 +5,6 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
-#include "../Toy/UserInterface/UIType.h"
 #include "../Toy/Utility.h"
 #include "../../EditUtility.h"
 #include "../SourceExtractor.h"

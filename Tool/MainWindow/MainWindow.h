@@ -9,8 +9,7 @@ namespace DX
 class UIComponent;
 class InputManager;
 class MouseTracker;
-class FloatingComponent;
-class ComponentSelector;
+class ComponentController;
 
 class MainWindow : public IImguiComponent
 {
@@ -32,8 +31,6 @@ public:
 
 private:
     void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker& mouseTracker);
-    bool CheckAttachComponent(const InputManager& inputManager) noexcept;
-    bool CheckDetachComponent(const InputManager& inputManager) noexcept;
     void IgnoreMouseClick();
     void SetupWindowAppearing() noexcept;
 
@@ -41,8 +38,7 @@ private:
     string m_name{};
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<UIComponent> m_panel;
-    unique_ptr<FloatingComponent> m_floater;
-    unique_ptr<ComponentSelector> m_selector;
+    unique_ptr<ComponentController> m_controller;
 
     ImTextureID m_textureID{};
     bool m_isOpen{ false };

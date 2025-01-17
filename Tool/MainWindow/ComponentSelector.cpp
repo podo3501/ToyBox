@@ -1,16 +1,18 @@
 #include "pch.h"
 #include "ComponentSelector.h"
-#include "ComponentTooltip.h"
-#include "ComponentEdit/EditImageGrid.h"
+#include "SelectedComponent/ComponentTooltip.h"
+#include "SelectedComponent/ComponentEdit/EditImageGrid.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIComponent.h"
-#include "../../Utility.h"
+#include "../Dialog.h"
+#include "../Utility.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/UIComponentHelper.h"
+#include "FloatingComponent.h"
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
@@ -138,3 +140,33 @@ void ComponentSelector::RepeatedSelection(const vector<UIComponent*>& componentL
 	SetComponent(componentList[idx]);
 }
 
+bool AttachSelectedComponent(ComponentSelector* selector, FloatingComponent* floater,
+	const XMINT2& position) noexcept
+{
+	UIComponent* selectComponent = selector->GetComponent();
+	if (!selectComponent) return false;
+
+	if (!AddComponentFromScreenPos(selectComponent, floater, position))
+	{
+		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Attachment failed for this component.");
+		return false;
+	}
+
+	return true;
+}
+
+optional<unique_ptr<UIComponent>> DetachSelectedComponent(ComponentSelector* selector) noexcept
+{
+	UIComponent* selectComponent = selector->GetComponent();
+	if (!selectComponent) return nullopt;
+
+	auto detachComponent = selectComponent->DetachComponent();
+	if (!detachComponent.has_value())
+	{
+		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Detachment failed for this component.");
+		return nullopt;
+	}
+
+	selector->SetComponent(nullptr);
+	return detachComponent;
+}

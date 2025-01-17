@@ -3,7 +3,6 @@
 #include "ImageGrid3.h"
 #include "../../Utility.h"
 #include "../UIUtility.h"
-#include "../UIType.h"
 #include "ImageGridHelper.hpp"
 
 ImageGrid9::~ImageGrid9() = default;
@@ -55,7 +54,7 @@ bool ImageGrid9::SetImage(const string& name, const UILayout& layout, const Imag
 {
 	ReturnIfFalse(ValidateInput(name, source));
 
-	Name = name;
+	SetName(name);
 	SetLayout(layout);
 
 	auto srcHList = ExtractSourceRects(source);

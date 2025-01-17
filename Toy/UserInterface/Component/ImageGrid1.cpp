@@ -3,7 +3,6 @@
 #include "../../../Include/IRenderer.h"
 #include "../../Utility.h"
 #include "../../Config.h"
-#include "../UIType.h"
 #include "../JsonOperation.h"
 
 ImageGrid1::~ImageGrid1() = default;
@@ -66,7 +65,7 @@ bool ImageGrid1::SetImage(const string& name, const UILayout& layout, const Imag
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 1) return false;
 
-	Name = name;
+	SetName(name);
 	SetLayout(layout);
 
 	Filename = source.filename;

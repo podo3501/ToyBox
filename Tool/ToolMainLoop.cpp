@@ -5,7 +5,6 @@
 #include "ToolSystem.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/Component/Dialog.h"
 #include "../Toy/InputManager.h"
 

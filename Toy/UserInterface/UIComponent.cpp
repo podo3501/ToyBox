@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "UIComponent.h"
-#include "UIType.h"
 #include "../Utility.h"
 #include "../InputManager.h"
 #include "TransformComponent.h"
@@ -13,14 +12,14 @@ UIComponent::UIComponent() :
 {}
 
 UIComponent::UIComponent(const string& name, const XMUINT2& size) :
-	Name{ name },
+	m_name{ name },
 	m_layout{ size, Origin::LeftTop }
 {}
 
 //상속받은 곳에서만 복사생성자를 호출할 수 있다.
 UIComponent::UIComponent(const UIComponent& other)
 {
-	Name = other.Name;
+	m_name = other.m_name;
 	m_layout = other.m_layout;
 	ranges::transform(other.m_components, back_inserter(m_components), [this](const auto& transCom) {
 		auto component = transCom.component->Clone();
@@ -39,8 +38,8 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetType() != o.GetType()) return false;
 
-	ReturnIfFalse(tie(Name, m_layout, m_components) == 
-		tie(o.Name, o.m_layout, o.m_components));
+	ReturnIfFalse(tie(m_name, m_layout, m_components) == 
+		tie(o.m_name, o.m_layout, o.m_components));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
 
 	return true;
@@ -51,13 +50,13 @@ bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs)
 	if (lhs == nullptr && rhs == nullptr) return true;
 	if (lhs == nullptr || rhs == nullptr) return false;
 
-	if (lhs->Name != rhs->Name) return false;
+	if (lhs->m_name != rhs->m_name) return false;
 
 	return true;
 }
 
 UIComponent::UIComponent(UIComponent&& o) noexcept :
-	Name{ move(o.Name) },
+	m_name{ move(o.m_name) },
 	m_layout{ move(o.m_layout) },
 	m_components{ move(o.m_components) }
 {}
@@ -65,7 +64,7 @@ UIComponent::UIComponent(UIComponent&& o) noexcept :
 unique_ptr<UIComponent> UIComponent::Clone() const 
 { 
 	auto clone = CreateClone();
-	clone->Name = clone->Name.Get() + "_clone";
+	clone->m_name = clone->m_name + "_clone";
 	return clone;
 }
 
@@ -165,6 +164,15 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 	return true;
 }
 
+bool UIComponent::IsAttachable() const noexcept
+{
+	if (m_attachmentState == AttachmentState::Attach ||
+		m_attachmentState == AttachmentState::All)
+		return true;
+
+	return false;
+}
+
 bool UIComponent::AttachComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept
 {
 	if (m_attachmentState != AttachmentState::Attach &&
@@ -206,9 +214,19 @@ optional<unique_ptr<UIComponent>> UIComponent::DetachComponent() noexcept
 	return move(m_parent->DetachComponent(this));
 }
 
+bool UIComponent::Rename(const string& name) noexcept
+{
+	UIComponent* findComponent = GetRoot()->GetComponent(name);
+	if (findComponent)
+		return false;
+
+	SetName(name);
+	return true;
+}
+
 void UIComponent::SerializeIO(JsonOperation& operation)
 {
-	operation.Process("Name", Name);
+	operation.Process("Name", m_name);
 	operation.Process("Layout", m_layout);
 	operation.Process("Components", m_components);
 	
@@ -309,7 +327,7 @@ void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList
 
 UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 {
-	if (Name == name)
+	if (m_name == name)
 		return const_cast<UIComponent*>(this);
 
 	for (const auto& transComponent : m_components)
@@ -341,7 +359,7 @@ TransformComponent* FindTransformComponentIf(auto& components, Predicate&& pred)
 TransformComponent* UIComponent::FindTransformComponent(const std::string& name) noexcept
 {
 	return FindTransformComponentIf(m_components, [&name](const auto& transComp) {
-		return transComp.component->Name == name;
+		return transComp.component->GetName() == name;
 		});
 }
 

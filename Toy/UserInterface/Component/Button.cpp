@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Button.h"
-#include "../UIType.h"
 #include "../../Utility.h"
 #include "../../InputManager.h"
 #include "../JsonOperation.h"
@@ -29,7 +28,7 @@ bool Button::operator==(const UIComponent& o) const noexcept
 
 	return std::all_of(m_images.begin(), m_images.end(), [rhs](const auto& pair) {
 		auto state = pair.first;
-		return pair.second->Name == rhs->m_images.at(state)->Name;
+		return pair.second->GetName() == rhs->m_images.at(state)->GetName();
 		});
 }
 
@@ -47,7 +46,7 @@ bool Button::SetImage(const string& name, const UILayout& layout,
 	unique_ptr<UIComponent>&& hover,
 	unique_ptr<UIComponent>&& pressed)
 {
-	Name = name;
+	SetName(name);
 	SetLayout(layout);
 
 	AddComponentAndEnable(ButtonState::Normal, move(normal), true);	//Normal이 기본이고 다른 컴포넌트는 비활성시킨다.

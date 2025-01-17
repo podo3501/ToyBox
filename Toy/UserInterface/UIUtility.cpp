@@ -2,19 +2,20 @@
 #include "UIUtility.h"
 #include "UIType.h"
 
-bool operator==(const DirectX::XMFLOAT4& a, const DirectX::XMFLOAT4& b) {
+static inline bool operator==(const DirectX::XMFLOAT4& a, const DirectX::XMFLOAT4& b) noexcept
+{
 	return (a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w);
+}
+
+static inline bool IsZero(const XMFLOAT4& color) noexcept
+{
+	return color.x == 0.0f && color.y == 0.0f && color.z == 0.0f && color.w == 0.0f;
 }
 
 TextData::TextData() noexcept :
 	fontStyle(L"English"), color{}
 {
 	XMStoreFloat4(&color, Colors::Black);
-}
-
-bool IsZero(const XMFLOAT4& color) 
-{
-	return color.x == 0.0f && color.y == 0.0f && color.z == 0.0f && color.w == 0.0f;
 }
 
 TextData::TextData(const wstring& _fontStyle, const XMFLOAT4& _color, const wstring& _text) noexcept :

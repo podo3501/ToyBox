@@ -32,8 +32,10 @@ private:
 	void ResizeComponentOnClick(const InputManager& inputManager) noexcept;
 	void UpdateDragState(OnDrag dragState, const MouseTracker& mouseTracker, XMINT2& outStartPos) noexcept;
 	void ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept;
+	void EditName(const string& nameLabel) noexcept;
 
 	UIComponent* m_component;
+	char m_nameBuffer[128] = "";
 	bool m_visible{ true };
 	OnDrag m_dragState;
 };

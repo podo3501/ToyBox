@@ -22,6 +22,7 @@ protected:
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 
+	inline void SetName(const string& name) noexcept { m_name = name; }
 	inline bool IsDirty() const noexcept { return m_isDirty; }
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
 
@@ -63,6 +64,8 @@ public:
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const UILayout& GetLayout() const noexcept { return m_layout; }
 
+	inline const string& GetName() const noexcept { return m_name; }
+	bool Rename(const string& name) noexcept;
 	UIComponent* GetComponent(const string& name) const noexcept;
 	vector<UIComponent*> GetComponents() const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
@@ -70,11 +73,8 @@ public:
 	bool GetComponent(const string& name, T** outComponent) const noexcept;
 
 	inline void SetEnable(bool enable) { m_enable = enable; }
-	inline AttachmentState EnableAttachment() const noexcept { return m_attachmentState; }
-	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }
-
-public:
-	Property<string> Name{};
+	bool IsAttachable() const noexcept;
+	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }	
 	
 private:
 	bool RefreshPosition(const XMINT2& position) noexcept;
@@ -86,6 +86,7 @@ private:
 	void MarkDirty() noexcept;
 	Rectangle GetTotalChildSize(const UIComponent* component) const noexcept;
 
+	string m_name;
 	UILayout m_layout;
 	UIComponent* m_parent{ nullptr };
 	vector<TransformComponent> m_components;

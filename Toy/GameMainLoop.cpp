@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "GameMainLoop.h"
 #include "../Include/IRenderer.h"
-#include "UserInterface/UIType.h"
 #include "Utility.h"
 #include "Config.h"
 #include "UserInterface/Component/TextArea.h"

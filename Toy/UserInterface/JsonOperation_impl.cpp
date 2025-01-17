@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "JsonOperation.h"
-#include "UIType.h"
 #include "Component/Panel.h"
 #include "Component/ImageGrid1.h"
 #include "Component/ImageGrid3.h"

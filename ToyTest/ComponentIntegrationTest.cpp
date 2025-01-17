@@ -11,7 +11,7 @@
 
 namespace ComponentTest
 {
-	unique_ptr<UIComponent> CreateTestImageGrid9(IRenderer* renderer, const string& name, const XMUINT2& size)
+	static unique_ptr<UIComponent> CreateTestImageGrid9(IRenderer* renderer, const string& name, const XMUINT2& size)
 	{
 		UILayout layout(size, Origin::LeftTop);
 		ImageSource source{
@@ -89,5 +89,17 @@ namespace ComponentTest
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
 		EXPECT_EQ(GetRectangle(component), Rectangle(270, 216, 160, 128));
+	}
+
+	TEST_F(IntegrationTest, Rename)
+	{
+		unique_ptr<UIComponent> img9 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 220, 190 });
+		m_panel->AttachComponent(move(img9), { 80, 60 });
+
+		UIComponent* component = m_panel->GetComponent("ImageGrid9_1_1");
+		EXPECT_FALSE(component->Rename("ImageGrid9"));
+
+		unique_ptr<UIComponent> newImg9 = CreateTestImageGrid9(m_renderer.get(), "ImageGrid9", { 220, 190 });
+		m_panel->AttachComponent(move(img9), { 80, 60 });
 	}
 }

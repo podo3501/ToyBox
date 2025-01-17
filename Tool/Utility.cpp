@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Utility.h"
+#include "MainWindow/FloatingComponent.h"
+#include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/Utility.h"
 
 ImGuiMouseCursor_ Tool::MouseCursor::m_mouseCursor = ImGuiMouseCursor_Arrow;
@@ -62,4 +64,14 @@ void DrawRectangle(const vector<Rectangle>& rects, const ImGuiWindow* window)
 	ranges::for_each(rects, [window](const auto& rect) {
 		DrawRectangle(rect, window);
 		});
+}
+
+bool AddComponentFromScreenPos(UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept
+{
+	if (!addable->IsAttachable()) return false;
+
+	const XMINT2& comPos = addable->GetPosition();
+	XMINT2 relativePos = pos - comPos;
+
+	return addable->AttachComponent(floater->GetComponent(), relativePos);
 }

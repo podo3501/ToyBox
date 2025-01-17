@@ -34,3 +34,9 @@ private:
 	UIComponent* m_component;
 };
 
+/////////////////////////////////////////////////////////////////
+
+class FloatingComponent;
+bool AttachSelectedComponent(ComponentSelector* selector, FloatingComponent* floater,
+	const XMINT2& position) noexcept;
+optional<unique_ptr<UIComponent>> DetachSelectedComponent(ComponentSelector* selector) noexcept;
