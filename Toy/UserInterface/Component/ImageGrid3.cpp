@@ -18,40 +18,28 @@ unique_ptr<UIComponent> ImageGrid3::CreateClone() const
     return unique_ptr<ImageGrid3>(new ImageGrid3(*this));
 }
 
-static bool ValidateInput(const string& name, const ImageSource& source)
+static unique_ptr<ImageGrid1> CreateImageGrid1(size_t idx, const ImageSource& source, const XMUINT2& size)
 {
-    if (name.empty()) return false;
-    if (source.filename.empty()) return false;
-    if (source.list.size() != 3) return false;
-
-    return true;
-}
-
-static unique_ptr<ImageGrid1> CreateImageGrid1(const string& baseName, size_t idx, 
-    const ImageSource& source, const XMUINT2& size)
-{
-    const auto& grid1name = baseName + "_" + to_string(idx);
     UILayout grid1layout(size, Origin::LeftTop);
-
     ImageSource imgSource{ source.filename, { source.list[idx] } };
 
     auto grid1 = make_unique<ImageGrid1>();
-    grid1->SetImage(grid1name, grid1layout, imgSource);
+    grid1->SetImage(grid1layout, imgSource);
 
     return grid1;
 }
 
-bool ImageGrid3::SetImage(const string& name, const UILayout& layout, const ImageSource& source)
+bool ImageGrid3::SetImage(const UILayout& layout, const ImageSource& source) noexcept
 {
-    ReturnIfFalse(ValidateInput(name, source));
+    if (source.filename.empty()) return false;
+    if (source.list.size() != 3) return false;
 
-    SetName(name);
 	SetLayout(layout);
 
     vector<PositionSize> posSizes = StretchSize(StretchType::Width, layout.GetSize(), source.list);
     for(auto idx : views::iota(0u, source.list.size()))
     {
-        auto grid1 = CreateImageGrid1(name, idx, source, posSizes[idx].size);
+        auto grid1 = CreateImageGrid1(idx, source, posSizes[idx].size);
         grid1->SetAttachmentState(AttachmentState::Attach);
         AttachComponent(move(grid1), posSizes[idx].pos);
     }

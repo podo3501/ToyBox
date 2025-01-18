@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
 	m_name{ "Main Window " + to_string(m_mainWindowIndex++) },
-	m_panel{ make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution())) },
+	m_panel{ make_unique<Panel>("Main", 	UILayout(RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop)) },
 	m_controller{ make_unique<ComponentController>(renderer, m_panel.get(), m_name) }
 {
 	m_renderer->AddImguiComponent(this);

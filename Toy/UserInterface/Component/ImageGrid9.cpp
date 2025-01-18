@@ -18,26 +18,14 @@ unique_ptr<UIComponent> ImageGrid9::CreateClone() const
 	return unique_ptr<ImageGrid9>(new ImageGrid9(*this));
 }
 
-static bool ValidateInput(const string& name, const ImageSource& source)
-{
-	if (name.empty()) return false;
-	if (source.filename.empty()) return false;
-	if (source.list.size() != 9) return false;
-
-	return true;
-}
-
 static inline vector<Rectangle> ExtractSourceRects(const ImageSource& source)
 {
 	return { source.list[0], source.list[3], source.list[6] };
 }
 
-static unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, size_t idx,
-	const ImageSource& source, const XMUINT2& size)
+static unique_ptr<ImageGrid3> CreateImageGrid3(size_t idx, const ImageSource& source, const XMUINT2& size)
 {
-	const auto& grid3name = name + "_" + to_string(idx);
 	UILayout grid3layout(size, Origin::LeftTop);
-
 	ImageSource imgSource
 	{
 		source.filename,
@@ -45,23 +33,23 @@ static unique_ptr<ImageGrid3> CreateImageGrid3(const string& name, size_t idx,
 	};
 
 	auto grid3 = make_unique<ImageGrid3>();
-	grid3->SetImage(grid3name, grid3layout, imgSource);
+	grid3->SetImage(grid3layout, imgSource);
 
 	return grid3;
 }
 
-bool ImageGrid9::SetImage(const string& name, const UILayout& layout, const ImageSource& source)
+bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noexcept
 {
-	ReturnIfFalse(ValidateInput(name, source));
+	if (source.filename.empty()) return false;
+	if (source.list.size() != 9) return false;
 
-	SetName(name);
 	SetLayout(layout);
 
 	auto srcHList = ExtractSourceRects(source);
 	auto posRects = StretchSize(StretchType::Height, layout.GetSize(), srcHList);
 	for (size_t idx = 0; idx < srcHList.size(); ++idx)
 	{
-		auto grid3 = CreateImageGrid3(name, idx, source, posRects[idx].size);
+		auto grid3 = CreateImageGrid3(idx, source, posRects[idx].size);
 		grid3->SetAttachmentState(AttachmentState::Disable);
 		AttachComponent(move(grid3), posRects[idx].pos);
 	}

@@ -26,7 +26,7 @@
                         "Hangle": "UI/Font/MaleunGothicS16.spritefont"
                     },
                     "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
-                    "Name": "TextArea_clone",
+                    "Name": "TextArea_0_clone",
                     "Layout": {
                         "Size": {
                             "x": 320,

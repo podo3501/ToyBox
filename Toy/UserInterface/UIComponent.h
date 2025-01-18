@@ -12,6 +12,7 @@ class UIComponent : public IComponent
 {
 protected:
 	UIComponent();	//이 클래스는 단독으로 만들 수 없다. 상속 받은 클래스만이 생성 가능
+	UIComponent(const string& name, const UILayout& layout) noexcept;
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
@@ -22,13 +23,11 @@ protected:
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 
-	inline void SetName(const string& name) noexcept { m_name = name; }
 	inline bool IsDirty() const noexcept { return m_isDirty; }
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
 
 public:
 	virtual ~UIComponent();
-	UIComponent(const string& name, const XMUINT2& size);
 	UIComponent& operator=(const UIComponent&) = delete;	//상속 받은 클래스도 대입생성자 기본적으로 삭제됨.
 	UIComponent(UIComponent&& o) noexcept;
 	unique_ptr<UIComponent> Clone() const;
@@ -46,7 +45,7 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept;
 	virtual void SerializeIO(JsonOperation& operation);
 
-	bool AttachComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept;
+	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
 	optional<unique_ptr<UIComponent>> DetachComponent() noexcept;
 	
 	XMINT2 GetPosition() const noexcept;
@@ -72,11 +71,15 @@ public:
 	template<typename T>
 	bool GetComponent(const string& name, T** outComponent) const noexcept;
 
-	inline void SetEnable(bool enable) { m_enable = enable; }
-	bool IsAttachable() const noexcept;
+	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
+	inline bool IsAttachable() const noexcept;
 	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }	
 	
 private:
+	bool IsUniqueName(const string& name) noexcept;
+	void GenerateUniqueName(UIComponent* component) noexcept;
+	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
+	inline bool IsDetachable() const noexcept;
 	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
@@ -94,5 +97,12 @@ private:
 	bool m_isDirty{ true };
 	AttachmentState m_attachmentState{ AttachmentState::All };
 };
+
+//inline
+bool UIComponent::IsInAttachmentState(AttachmentState state) const noexcept {
+	return m_attachmentState == state || m_attachmentState == AttachmentState::All;
+}
+bool UIComponent::IsAttachable() const noexcept { return IsInAttachmentState(AttachmentState::Attach); }
+bool UIComponent::IsDetachable() const noexcept { return IsInAttachmentState(AttachmentState::Detach); }
 
 #include "UIComponent.hpp"

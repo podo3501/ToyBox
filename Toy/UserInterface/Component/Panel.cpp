@@ -12,8 +12,8 @@ Panel::Panel(const Panel& other) :
     m_area = other.m_area;
 }
 
-Panel::Panel(const string& name, const XMUINT2& size) :
-    UIComponent(name, size)
+Panel::Panel(const string& name, const UILayout& layout) noexcept :
+    UIComponent(name, layout)
 {}
 
 unique_ptr<UIComponent> Panel::CreateClone() const

@@ -73,5 +73,13 @@ bool AddComponentFromScreenPos(UIComponent* addable, FloatingComponent* floater,
 	const XMINT2& comPos = addable->GetPosition();
 	XMINT2 relativePos = pos - comPos;
 
-	return addable->AttachComponent(floater->GetComponent(), relativePos);
+	unique_ptr<UIComponent> failed = addable->AttachComponent(floater->GetComponent(), relativePos);
+	if (failed) //제대로 붙지 않았다면 인자로 보낸 Component가 리턴값으로 돌아온다.
+	{
+		floater->SetComponent(move(failed));
+		return false;
+	}
+	
+	floater->Clear(); //마지막으로 클리어 해 줘서 완전히 떼 낸다.
+	return true;
 }

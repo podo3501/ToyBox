@@ -13,7 +13,7 @@ public:
 
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 
-	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);
+	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
 
 	bool SetFilename(const wstring& filename) noexcept;
 	bool GetFilename(wstring& outFilename) const noexcept;

@@ -102,12 +102,8 @@ bool TextArea::SetDatas(IGetValue* getValue)
 	return true;
 }
 
-void TextArea::SetFont(const string& name,
-	const wstring& text,
-	const UILayout& layout, 
-	const map<wstring, wstring>& fontFileList)
+void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept
 {
-	SetName(name);
 	m_text = text;
 	SetLayout(layout);
 	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {

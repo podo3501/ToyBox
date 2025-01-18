@@ -15,10 +15,10 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool LoadResources(ILoadData* load);
-	bool SetImage(const string& name, const UILayout& layout,
+	bool SetImage(const UILayout& layout,
 		unique_ptr<UIComponent>&& normal,
 		unique_ptr<UIComponent>&& hover,
-		unique_ptr<UIComponent>&& pressed);
+		unique_ptr<UIComponent>&& pressed) noexcept;
 
 protected:
 	Button(const Button& o);
@@ -26,7 +26,7 @@ protected:
 	virtual bool ImplementInput(const InputManager& inputManager) noexcept override;
 	
 private:
-	void AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable);
+	void AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable) noexcept;
 	void EnableButtonImage(ButtonState btnState);
 	void ReloadDatas() noexcept;
 

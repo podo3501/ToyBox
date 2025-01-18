@@ -36,7 +36,8 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 
 bool GameMainLoop::InitializeDerived()
 {
-    m_gamePanel = make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution()));
+    UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
+    m_gamePanel = make_unique<Panel>("Main", layout);
     m_renderer->AddRenderComponent(m_gamePanel.get());
 
     return true;
@@ -51,15 +52,15 @@ bool GameMainLoop::LoadResources()
     ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 169, 35, 22, 48}, { 191, 35, 4, 48 }, { 195, 35, 22, 48 } } };
 
     std::unique_ptr<Button> button = std::make_unique<Button>();
-    button->SetImage("Button", loButton,
-        CreateImageGrid<ImageGrid3>("Button_normal", loImgGrid, normal),
-        CreateImageGrid<ImageGrid3>("Button_hover", loImgGrid, hover),
-        CreateImageGrid<ImageGrid3>("Button_pressed", loImgGrid, pressed));
+    button->SetImage(loButton,
+        CreateImageGrid<ImageGrid3>(loImgGrid, normal),
+        CreateImageGrid<ImageGrid3>(loImgGrid, hover),
+        CreateImageGrid<ImageGrid3>(loImgGrid, pressed));
     std::unique_ptr<Button> button2 = std::make_unique<Button>();
-    button2->SetImage("Button", loButton,
-        CreateImageGrid<ImageGrid3>("Button_normal", loImgGrid, normal),
-        CreateImageGrid<ImageGrid3>("Button_hover", loImgGrid, hover),
-        CreateImageGrid<ImageGrid3>("Button_pressed", loImgGrid, pressed));
+    button2->SetImage(loButton,
+        CreateImageGrid<ImageGrid3>(loImgGrid, normal),
+        CreateImageGrid<ImageGrid3>(loImgGrid, hover),
+        CreateImageGrid<ImageGrid3>(loImgGrid, pressed));
 
     m_gamePanel->AttachComponent(move(button), { 400, 300 });
     m_gamePanel->AttachComponent(move(button2), { 400, 240 });
@@ -71,10 +72,10 @@ bool GameMainLoop::LoadResources()
     ImageSource pressed2{ { L"UI/Texture/Test_01.png" }, { { 70, 0, 32, 32} } };
 
     std::unique_ptr<Button> closeButton = std::make_unique<Button>();
-    closeButton->SetImage("Button", loButton2,
-        CreateImageGrid<ImageGrid1>("Button_normal", loImgGrid2, normal2),
-        CreateImageGrid<ImageGrid1>("Button_hover", loImgGrid2, hover2),
-        CreateImageGrid<ImageGrid1>("Button_pressed", loImgGrid2, pressed2));
+    closeButton->SetImage(loButton2,
+        CreateImageGrid<ImageGrid1>(loImgGrid2, normal2),
+        CreateImageGrid<ImageGrid1>(loImgGrid2, hover2),
+        CreateImageGrid<ImageGrid1>(loImgGrid2, pressed2));
 
     m_gamePanel->AttachComponent(move(closeButton), { 160, 120 });
 
@@ -84,7 +85,7 @@ bool GameMainLoop::LoadResources()
     fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
     unique_ptr<TextArea> textArea = make_unique<TextArea>();
     wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
-    textArea->SetFont("TextArea", text, layout, fontFileList);
+    textArea->SetFont(text, layout, fontFileList);
 
     m_gamePanel->AttachComponent(move(textArea), { 160, 420 });
 
@@ -98,7 +99,7 @@ bool GameMainLoop::LoadResources()
     };
 
     unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
-    imgGrid9->SetImage("ImgGrid9", layout, img9Source);
+    imgGrid9->SetImage(layout, img9Source);
     m_gamePanel->AttachComponent(move(imgGrid9), { 400, 300 });
 
     m_renderer->LoadComponent(m_gamePanel.get());

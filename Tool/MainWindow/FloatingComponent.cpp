@@ -16,10 +16,10 @@ FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndN
 
 FloatingComponent::~FloatingComponent()
 {
-	Reset();
+	Clear();
 }
 
-void FloatingComponent::Reset() noexcept
+void FloatingComponent::Clear() noexcept
 {
 	m_drawTextureSize = {};
 	m_draw = false;
@@ -36,8 +36,12 @@ bool FloatingComponent::IsComponent() const noexcept
 
 unique_ptr<UIComponent> FloatingComponent::GetComponent() noexcept
 {
-	Reset();
 	return move(m_component);
+}
+
+void FloatingComponent::SetComponent(unique_ptr<UIComponent> component) noexcept
+{
+	m_component = move(component);
 }
 
 bool FloatingComponent::Excute()
@@ -136,7 +140,7 @@ bool FloatingComponent::MakeImageGrid1()
 {
 	UILayout layout({ 64, 64 }, Origin::LeftTop);
 	ImageSource source{ L"UI/SampleTexture/ToolComponentPopup.png", { { 2, 52, 64, 64 } } };
-	return LoadComponent(CreateImageGrid<ImageGrid1>("untitled_imageGrid1", layout, source));
+	return LoadComponent(CreateImageGrid<ImageGrid1>(layout, source));
 }
 
 bool FloatingComponent::MakeImageGrid3()
@@ -147,7 +151,7 @@ bool FloatingComponent::MakeImageGrid3()
 			{ 2, 2, 23, 48 }, { 25, 2, 2, 48 }, { 27, 2, 23, 48 }
 		}
 	};
-	return LoadComponent(CreateImageGrid<ImageGrid3>("untitled_imageGrid3", layout, source));
+	return LoadComponent(CreateImageGrid<ImageGrid3>(layout, source));
 }
 
 bool FloatingComponent::MakeImageGrid9()
@@ -160,5 +164,5 @@ bool FloatingComponent::MakeImageGrid9()
 			{ 2, 90, 30, 26 }, { 32, 90, 4, 26 }, { 36, 90, 30, 26 }
 		}
 	};
-	return LoadComponent(CreateImageGrid<ImageGrid9>("untitled_imageGrid9", layout, source));
+	return LoadComponent(CreateImageGrid<ImageGrid9>(layout, source));
 }

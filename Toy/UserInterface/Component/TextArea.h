@@ -15,13 +15,9 @@ public:
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* getValue) override;
-
-	void SetFont(const string& name,
-		const wstring& text,
-		const UILayout& layout,
-		const map<wstring, wstring>& fontFileList);
-
 	virtual void SerializeIO(JsonOperation& operation) override;
+
+	void SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept;
 
 protected:
 	TextArea(const TextArea& o);

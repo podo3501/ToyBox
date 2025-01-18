@@ -26,7 +26,8 @@ void ToyTestFixture::SetUp()
 	InitializeConfig(L"ToyTest/TestResources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
-	m_panel = make_unique<Panel>("Main", RectangleToXMUINT2(GetRectResolution()));
+	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
+	m_panel = make_unique<Panel>("Main", layout);
 	m_renderer->AddRenderComponent(m_panel.get());
 }
 

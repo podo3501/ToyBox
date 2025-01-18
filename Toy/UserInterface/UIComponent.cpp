@@ -11,9 +11,9 @@ UIComponent::UIComponent() :
 	m_layout{ XMUINT2{}, Origin::LeftTop }
 {}
 
-UIComponent::UIComponent(const string& name, const XMUINT2& size) :
+UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
 	m_name{ name },
-	m_layout{ size, Origin::LeftTop }
+	m_layout{ layout }
 {}
 
 //상속받은 곳에서만 복사생성자를 호출할 수 있다.
@@ -164,27 +164,33 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 	return true;
 }
 
-bool UIComponent::IsAttachable() const noexcept
+void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 {
-	if (m_attachmentState == AttachmentState::Attach ||
-		m_attachmentState == AttachmentState::All)
-		return true;
+	int n = 0;
+	string baseName = std::regex_replace(addable->GetType(), std::regex(R"(class|\s)"), "") + "_";
+	string curName{};
+	do {
+		curName = baseName + to_string(n++);
+	} while (!IsUniqueName(curName) ||
+		!addable->IsUniqueName(curName));
+	addable->Rename(curName);
 
-	return false;
+	ranges::for_each(addable->m_components, [this](auto& transCom) {
+		GenerateUniqueName(transCom.component.get());
+		});
 }
 
-bool UIComponent::AttachComponent(unique_ptr<UIComponent>&& component, const XMINT2& relativePos) noexcept
+unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept
 {
-	if (m_attachmentState != AttachmentState::Attach &&
-		m_attachmentState != AttachmentState::All)
-		return false;
+	if (!IsAttachable()) return component;
 
+	GenerateUniqueName(component.get());
 	component->SetParent(this);
 	auto transComponent = TransformComponent(move(component), GetSize(), relativePos);
 	m_components.emplace_back(move(transComponent));
 	MarkDirty();
 
-	return true;
+	return nullptr;
 }
 
 optional<unique_ptr<UIComponent>> UIComponent::DetachComponent(UIComponent* detachComponent) noexcept
@@ -206,21 +212,25 @@ optional<unique_ptr<UIComponent>> UIComponent::DetachComponent(UIComponent* deta
 
 optional<unique_ptr<UIComponent>> UIComponent::DetachComponent() noexcept
 {
-	if (m_attachmentState != AttachmentState::Detach &&
-		m_attachmentState != AttachmentState::All)
-		return nullopt;
+	if (!IsDetachable()) return nullopt;
 	if (!m_parent) return nullopt;
 
 	return move(m_parent->DetachComponent(this));
 }
 
-bool UIComponent::Rename(const string& name) noexcept
+bool UIComponent::IsUniqueName(const string& name) noexcept
 {
 	UIComponent* findComponent = GetRoot()->GetComponent(name);
-	if (findComponent)
-		return false;
+	if (findComponent) return false;
 
-	SetName(name);
+	return true;
+}
+
+bool UIComponent::Rename(const string& name) noexcept
+{
+	ReturnIfFalse(IsUniqueName(name));
+	m_name = name;
+
 	return true;
 }
 

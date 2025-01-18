@@ -15,7 +15,7 @@ public:
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool SetImage(const string& name, const UILayout& layout, const ImageSource& source);
+	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
 
 protected:
 	ImageGrid1(const ImageGrid1& other);

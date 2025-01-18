@@ -19,14 +19,15 @@ public:
 	~FloatingComponent();
 	bool IsComponent() const noexcept;
 	unique_ptr<UIComponent> GetComponent() noexcept;
+	void SetComponent(unique_ptr<UIComponent> componen) noexcept;
 	bool Excute();
 	void Render();
 	bool IsActive() const noexcept;
 	const ImVec2& GetPosition() const noexcept { return m_position; }
 	bool DetachToFloating(unique_ptr<UIComponent>&& detachComponent);
+	void Clear() noexcept;
 
 private:
-	void Reset() noexcept;
 	bool LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size);
 	bool LoadComponent(unique_ptr<UIComponent>&& component);
 	void DrawMakeComponent();

@@ -41,12 +41,11 @@ bool Button::LoadResources(ILoadData* load)
 	return true;
 }
 
-bool Button::SetImage(const string& name, const UILayout& layout,
+bool Button::SetImage(const UILayout& layout,
 	unique_ptr<UIComponent>&& normal,
 	unique_ptr<UIComponent>&& hover,
-	unique_ptr<UIComponent>&& pressed)
+	unique_ptr<UIComponent>&& pressed) noexcept
 {
-	SetName(name);
 	SetLayout(layout);
 
 	AddComponentAndEnable(ButtonState::Normal, move(normal), true);	//Normal이 기본이고 다른 컴포넌트는 비활성시킨다.
@@ -91,7 +90,7 @@ void Button::ChangeSize(const XMUINT2& size) noexcept
 	UIComponent::ChangeSize(size);
 }
 
-void Button::AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable)
+void Button::AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable) noexcept
 {
 	component->SetEnable(enable);
 	m_images.emplace(btnState, component.get());

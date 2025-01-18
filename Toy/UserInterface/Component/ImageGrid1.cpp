@@ -59,13 +59,11 @@ void ImageGrid1::ImplementRender(IRender* render) const
 	render->Render(m_index, destination, &source);
 }
 
-bool ImageGrid1::SetImage(const string& name, const UILayout& layout, const ImageSource& source)
+bool ImageGrid1::SetImage(const UILayout& layout, const ImageSource& source) noexcept
 {
-	if (name.empty()) return false;
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 1) return false;
 
-	SetName(name);
 	SetLayout(layout);
 
 	Filename = source.filename;

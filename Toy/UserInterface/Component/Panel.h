@@ -8,7 +8,7 @@ class Panel : public UIComponent
 public:
     Panel();
     ~Panel();
-    Panel(const string& name, const XMUINT2& size);
+    Panel(const string& name, const UILayout& layout) noexcept;
     //virtual unique_ptr<UIComponent> Clone() const override;
     //virtual const Rectangle& GetArea() const noexcept;
 
