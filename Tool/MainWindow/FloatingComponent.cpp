@@ -3,11 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
-#include "../Utility.h"
-#include "../Toy/UserInterface/Component/ImageGrid1.h"
-#include "../Toy/UserInterface/Component/ImageGrid3.h"
-#include "../Toy/UserInterface/Component/ImageGrid9.h"
-#include "../Toy/UserInterface/UIUtility.h"
+#include "../Toy/UserInterface/Component/SampleComponent.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
@@ -49,16 +45,16 @@ bool FloatingComponent::Excute()
 	if (!m_currentAction.has_value()) return true;
 
 	auto result{ true };
+	using enum MakeComponent;
 	switch (m_currentAction.value())
 	{
-	case MakeComponent::ImageGrid1: result = MakeImageGrid1(); break;
-	case MakeComponent::ImageGrid3: result = MakeImageGrid3(); break;
-	case MakeComponent::ImageGrid9: result = MakeImageGrid9(); break;
+	case ImageGrid1: result = LoadComponent(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop })); break;
+	case ImageGrid3: result = LoadComponent(CreateSampleImageGrid3({ { 48, 48 }, Origin::LeftTop })); break;
+	case ImageGrid9: result = LoadComponent(CreateSampleImageGrid9({ { 170, 120 }, Origin::LeftTop })); break;
 	}
-
 	m_currentAction.reset(); // 상태 초기화
 
-	return true;
+	return result;
 }
 
 void FloatingComponent::DrawMakeComponent()
@@ -96,10 +92,12 @@ void FloatingComponent::Render()
 	}
 	
 	m_isActive = true;
-	if (ImGui::MenuItem("Image Grid 1")) m_currentAction = MakeComponent::ImageGrid1;
-	if (ImGui::MenuItem("Image Grid 3")) m_currentAction = MakeComponent::ImageGrid3;
-	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = MakeComponent::ImageGrid9;
-	//if (ImGui::MenuItem("Close")) {}
+
+	using enum MakeComponent;
+	if (ImGui::MenuItem("Image Grid 1")) m_currentAction = ImageGrid1;
+	if (ImGui::MenuItem("Image Grid 3")) m_currentAction = ImageGrid3;
+	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = ImageGrid9;
+	if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();
 }
@@ -130,39 +128,7 @@ bool FloatingComponent::LoadComponent(unique_ptr<UIComponent>&& component)
 	return LoadComponentInternal(move(component), component->GetSize());
 }
 
-bool FloatingComponent::DetachToFloating(unique_ptr<UIComponent>&& detachComponent)
+bool FloatingComponent::ComponentToFloating(unique_ptr<UIComponent>&& component)
 {
-	return LoadComponentInternal(move(detachComponent), detachComponent->GetTotalChildSize());
-}
-
-
-bool FloatingComponent::MakeImageGrid1()
-{
-	UILayout layout({ 64, 64 }, Origin::LeftTop);
-	ImageSource source{ L"UI/SampleTexture/ToolComponentPopup.png", { { 2, 52, 64, 64 } } };
-	return LoadComponent(CreateImageGrid<ImageGrid1>(layout, source));
-}
-
-bool FloatingComponent::MakeImageGrid3()
-{
-	UILayout layout({ 48, 48 }, Origin::LeftTop);
-	ImageSource source{
-		L"UI/SampleTexture/ToolComponentPopup.png", {
-			{ 2, 2, 23, 48 }, { 25, 2, 2, 48 }, { 27, 2, 23, 48 }
-		}
-	};
-	return LoadComponent(CreateImageGrid<ImageGrid3>(layout, source));
-}
-
-bool FloatingComponent::MakeImageGrid9()
-{
-	UILayout layout({ 170, 120 }, Origin::LeftTop);
-	ImageSource source{
-		L"UI/SampleTexture/ToolComponentPopup.png", {
-			{ 2, 52, 30, 36 }, { 32, 52, 4, 36 }, { 36, 52, 30, 36 },
-			{ 2, 88, 30, 2 }, { 32, 88, 4, 2 }, { 36, 88, 30, 2 },
-			{ 2, 90, 30, 26 }, { 32, 90, 4, 26 }, { 36, 90, 30, 26 }
-		}
-	};
-	return LoadComponent(CreateImageGrid<ImageGrid9>(layout, source));
+	return LoadComponentInternal(move(component), component->GetTotalChildSize());
 }

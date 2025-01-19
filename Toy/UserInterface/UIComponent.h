@@ -73,13 +73,13 @@ public:
 
 	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
 	inline bool IsAttachable() const noexcept;
+	inline bool IsDetachable() const noexcept;
 	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }	
 	
 private:
 	bool IsUniqueName(const string& name) noexcept;
 	void GenerateUniqueName(UIComponent* component) noexcept;
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
-	inline bool IsDetachable() const noexcept;
 	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
@@ -92,10 +92,10 @@ private:
 	string m_name;
 	UILayout m_layout;
 	UIComponent* m_parent{ nullptr };
-	vector<TransformComponent> m_components;
 	bool m_enable{ true };
 	bool m_isDirty{ true };
 	AttachmentState m_attachmentState{ AttachmentState::All };
+	vector<TransformComponent> m_components;
 };
 
 //inline

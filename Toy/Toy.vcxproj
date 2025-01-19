@@ -217,6 +217,7 @@
     <ClInclude Include="UserInterface\Component\ImageGrid9.h" />
     <ClInclude Include="UserInterface\Component\ImageGridHelper.hpp" />
     <ClInclude Include="UserInterface\Component\Panel.h" />
+    <ClInclude Include="UserInterface\Component\SampleComponent.h" />
     <ClInclude Include="UserInterface\Component\TextArea.h" />
     <ClInclude Include="UserInterface\EnumUtility.h" />
     <ClInclude Include="UserInterface\JsonHelper.h" />
@@ -248,6 +249,7 @@
     <ClCompile Include="UserInterface\Component\ImageGrid3.cpp" />
     <ClCompile Include="UserInterface\Component\ImageGrid9.cpp" />
     <ClCompile Include="UserInterface\Component\Panel.cpp" />
+    <ClCompile Include="UserInterface\Component\SampleComponent.cpp" />
     <ClCompile Include="UserInterface\Component\TextArea.cpp" />
     <ClCompile Include="UserInterface\EnumUtility.cpp" />
     <ClCompile Include="UserInterface\JsonHelper.cpp" />
@@ -293,6 +295,7 @@
   <ItemGroup>
     <None Include="..\Resources\Tool\Config.json" />
     <None Include="..\Resources\Tool\OpenRecentFiles.json" />
+    <None Include="..\Resources\UI\Texture\ExtractTexture.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

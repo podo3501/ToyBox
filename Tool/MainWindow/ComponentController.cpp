@@ -44,7 +44,7 @@ bool ComponentController::CheckDetachComponent(const InputManager& inputManager)
 		return true;
 
 	//DetachµÈ Component¸¦ RenderTexture
-	if (!m_floater->DetachToFloating(move(detachComponent.value())))
+	if (!m_floater->ComponentToFloating(move(detachComponent.value())))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to load the resource.");
 		return true;
@@ -63,10 +63,34 @@ bool ComponentController::CheckDeleteComponent(const InputManager& inputManager)
 	return true;
 }
 
+bool ComponentController::CheckCloneComponent(const InputManager& inputManager) noexcept
+{
+	if (m_floater->IsComponent()) return false;
+	if (!IsInputAction(inputManager, Keyboard::B, KeyState::Pressed)) return false;
+	UIComponent* component = m_selector->GetComponent();
+	if (!component) return false;
+
+	if(!component->IsDetachable())
+	{
+		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Cannot be cloned. Could it be a component that cannot be detached?");
+		return true;
+	}
+
+	auto clone = component->Clone();
+	if (!m_floater->ComponentToFloating(move(clone)))
+	{
+		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to load the resource.");
+		return true;
+	}
+
+	return true;
+}
+
 bool ComponentController::Update(const InputManager& inputManager) noexcept
 {
 	CheckDetachComponent(inputManager);
 	CheckDeleteComponent(inputManager);
+	CheckCloneComponent(inputManager); 
 	if (!CheckAttachComponent(inputManager))
 		m_selector->Update(inputManager);
 

@@ -33,3 +33,5 @@ private:
 	map<ButtonState, UIComponent*> m_images;
 	ButtonState m_state;
 };
+
+unique_ptr<Button> CreateButton(const UILayout& layout, vector<unique_ptr<UIComponent>> imgGridList);

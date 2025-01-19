@@ -143,9 +143,9 @@ void JsonOperation::Process(const string& key, Origin& data) noexcept
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-double RoundToSixA(double value)
+static double RoundToSixA(double value) noexcept
 {
-    return std::round(value * 1e6) / 1e6;
+    return round(value * 1e6) / 1e6;
 }
 
 void JsonOperation::Process(const string & key, Vector2& data) noexcept
@@ -163,7 +163,7 @@ void JsonOperation::Process(const string & key, Vector2& data) noexcept
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-string RemoveNullWToSA(const wstring& data) noexcept
+static string RemoveNullWToSA(const wstring& data) noexcept
 {
     return RemoveNullTerminator(WStringToString(data));
 }

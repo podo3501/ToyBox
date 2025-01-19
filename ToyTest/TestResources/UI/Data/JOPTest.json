@@ -1,7 +1,7 @@
 {
     "Component": {
         "Type": "class Panel",
-        "Name": "Main_clone",
+        "Name": "Main",
         "Layout": {
             "Size": {
                 "x": 800,
@@ -26,16 +26,20 @@
                         "Hangle": "UI/Font/MaleunGothicS16.spritefont"
                     },
                     "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
-                    "Name": "TextArea_0_clone",
+                    "Name": "TextArea_0",
                     "Layout": {
                         "Size": {
                             "x": 320,
                             "y": 120
                         },
                         "Origin": "Center"
-                    }
+                    },
+                    "Enable": true,
+                    "AttachmentState": 0
                 }
             }
-        ]
+        ],
+        "Enable": true,
+        "AttachmentState": 0
     }
 }

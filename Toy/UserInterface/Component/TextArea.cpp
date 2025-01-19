@@ -133,3 +133,12 @@ void TextArea::SerializeIO(JsonOperation& operation)
 	operation.Process("Text", m_text);
 	UIComponent::SerializeIO(operation);
 }
+
+unique_ptr<TextArea> CreateTextArea(const UILayout& layout,
+	const wstring& text, map<wstring, wstring>& fontFileList)
+{
+	unique_ptr<TextArea> textArea = make_unique<TextArea>();
+	textArea->SetFont(text, layout, fontFileList);
+
+	return textArea;
+}

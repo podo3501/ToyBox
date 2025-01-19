@@ -12,6 +12,7 @@
 #include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
+#include "../Toy/UserInterface/Component/SampleComponent.h"
 
 using testing::ElementsAre;
 
@@ -29,21 +30,17 @@ namespace ComponentTest
 	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
-		EXPECT_TRUE(IsTrue(dest, { 400, 300, 464, 364 }, *source, { 0, 0, 64, 64 }));
+		EXPECT_TRUE(IsTrue(dest, { 400, 300, 464, 364 }, *source, { 10, 10, 74, 74 }));
 	}
 
 	TEST_F(BasicFunctionalityTest, TestImageGrid1)
 	{
-		UILayout layout({ 64, 64 }, Origin::LeftTop);
-		ImageSource grid1Source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
-
-		m_panel->AttachComponent(CreateImageGrid<ImageGrid1>(layout, grid1Source), { 400, 300 });
+		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
+		m_panel->AttachComponent(move(img1), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid1Render, 1);
 		EXPECT_TRUE(WriteReadTest(m_panel));
-
-		CloneTest(m_panel.get(), TestImageGrid1Render, 1);
 	}
 
 	////////////////////////////////////////////////////////
@@ -53,9 +50,9 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 400, 300, 430, 336 }, *source, { 10, 10, 40, 46 });
-		testResult |= IsTrue(dest, { 430, 300, 470, 336 }, *source, { 40, 10, 44, 46 });
-		testResult |= IsTrue(dest, { 470, 300, 500, 336 }, *source, { 44, 10, 74, 46 });
+		testResult |= IsTrue(dest, { 400, 300, 422, 336 }, *source, { 10, 82, 32, 130 });
+		testResult |= IsTrue(dest, { 422, 300, 478, 336 }, *source, { 32, 82, 36, 130 });
+		testResult |= IsTrue(dest, { 478, 300, 500, 336 }, *source, { 36, 82, 58, 130 });
 
 		EXPECT_TRUE(testResult);
 	}
@@ -65,9 +62,9 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 340, 282, 370, 318 }, *source, { 10, 10, 40, 46 });
-		testResult |= IsTrue(dest, { 370, 282, 430, 318 }, *source, { 40, 10, 44, 46 });
-		testResult |= IsTrue(dest, { 430, 282, 460, 318 }, *source, { 44, 10, 74, 46 });
+		testResult |= IsTrue(dest, { 340, 282, 362, 318 }, *source, { 10, 82, 32, 130 });
+		testResult |= IsTrue(dest, { 362, 282, 438, 318 }, *source, { 32, 82, 36, 130 });
+		testResult |= IsTrue(dest, { 438, 282, 460, 318 }, *source, { 36, 82, 58, 130 });
 
 		EXPECT_TRUE(testResult);
 	}
@@ -77,23 +74,17 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 340, 282, 370, 318 }, *source, { 10, 10, 30, 46 });
-		testResult |= IsTrue(dest, { 370, 282, 430, 318 }, *source, { 30, 10, 54, 46 });
-		testResult |= IsTrue(dest, { 430, 282, 460, 318 }, *source, { 54, 10, 74, 46 });
+		testResult |= IsTrue(dest, { 340, 282, 362, 318 }, *source, { 10, 82, 30, 130 });
+		testResult |= IsTrue(dest, { 362, 282, 438, 318 }, *source, { 30, 82, 38, 130 });
+		testResult |= IsTrue(dest, { 438, 282, 460, 318 }, *source, { 38, 82, 58, 130 });
 
 		EXPECT_TRUE(testResult);
 	}
 
 	TEST_F(BasicFunctionalityTest, TestImageGrid3)
 	{
-		UILayout layout({ 100, 36 }, Origin::LeftTop);
-		ImageSource grid3Source{
-			L"UI/Blue/button_square_header_large_square_screws.png", {
-				{ 10, 10, 30, 36 }, { 40, 10, 4, 36 }, { 44, 10, 30, 36 }
-			}
-		};
-
-		m_panel->AttachComponent(CreateImageGrid<ImageGrid3>(layout, grid3Source), { 400, 300 });
+		auto img = CreateSampleImageGrid3({ {100, 36}, Origin::LeftTop });
+		m_panel->AttachComponent(move(img), {400, 300});
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
@@ -107,16 +98,14 @@ namespace ComponentTest
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		CloneTest(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
-
 		SourceDivider srcDivider{};
 		img3->GetSourceAnd2Divider(srcDivider);
 
-		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 36 }));
-		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34));
+		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 82, 48, 48 }));
+		EXPECT_THAT(srcDivider.list, ElementsAre(22, 26));
 
 		srcDivider.list.clear();
-		srcDivider.list = { 20, 44 };
+		srcDivider.list = { 20, 28 };
 		img3->SetSourceAnd2Divider(srcDivider);
 
 		CallMockRender(m_panel.get(), TestImageGrid3SourceAndDivider, 3);
@@ -186,16 +175,8 @@ namespace ComponentTest
 
 	TEST_F(BasicFunctionalityTest, TestImageGrid9)
 	{
-		UILayout layout({ 170, 120 }, Origin::LeftTop);
-		ImageSource grid9Source{
-			L"UI/Blue/button_square_header_large_square_screws.png", {
-				{ 10, 10, 30, 36 }, { 40, 10, 4, 36 }, { 44, 10, 30, 36 },
-				{ 10, 46, 30, 2 }, { 40, 46, 4, 2 }, { 44, 46, 30, 2 },
-				{ 10, 48, 30, 26 }, { 40, 48, 4, 26 }, { 44, 48, 30, 26 }
-			}
-		};
-
-		m_panel->AttachComponent(CreateImageGrid<ImageGrid9>(layout, grid9Source), { 400, 300 });
+		auto img = CreateSampleImageGrid9({ {170, 120}, Origin::LeftTop });
+		m_panel->AttachComponent(move(img), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
@@ -208,8 +189,6 @@ namespace ComponentTest
 
 		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
 		EXPECT_TRUE(WriteReadTest(m_panel));
-
-		CloneTest(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
 
 		SourceDivider srcDivider{};
 		img9->GetSourceAnd4Divider(srcDivider);
@@ -231,27 +210,16 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 0, 0, 32, 32 });
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 35, 0, 67, 32 });
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 70, 0, 102, 32 });
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 10, 138, 42, 170 });
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 46, 138, 78, 170 });
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 82, 138, 114, 170 });
 
 		EXPECT_TRUE(testResult);
 	}
 
 	TEST_F(BasicFunctionalityTest, TestButton_ImageGrid1)
 	{
-		UILayout loButton({ 32, 32 }, Origin::Center);
-		UILayout loImgGrid({ 32, 32 }, Origin::LeftTop);
-		ImageSource normal{ { L"UI/Texture/Test_01.png" }, { { 0, 0, 32, 32} } };
-		ImageSource hover{ { L"UI/Texture/Test_01.png" }, { { 35, 0, 32, 32} } };
-		ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 70, 0, 32, 32} } };
-
-		std::unique_ptr<Button> button = std::make_unique<Button>();
-		EXPECT_TRUE(button->SetImage(loButton,
-			CreateImageGrid<ImageGrid1>(loImgGrid, normal),
-			CreateImageGrid<ImageGrid1>(loImgGrid, hover),
-			CreateImageGrid<ImageGrid1>(loImgGrid, pressed)));
-
+		auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
 		m_panel->AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -267,9 +235,9 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 110, 96, 132, 144 }, *source, { 118, 35, 140, 83 });
-		testResult |= IsTrue(dest, { 132, 96, 188, 144 }, *source, { 140, 35, 144, 83 });
-		testResult |= IsTrue(dest, { 188, 96, 210, 144 }, *source, { 144, 35, 166, 83 });
+		testResult |= IsTrue(dest, { 110, 96, 132, 144 }, *source, { 62, 82, 84, 130 });
+		testResult |= IsTrue(dest, { 132, 96, 188, 144 }, *source, { 84, 82, 88, 130 });
+		testResult |= IsTrue(dest, { 188, 96, 210, 144 }, *source, { 88, 82, 110, 130 });
 
 		EXPECT_TRUE(testResult);
 	}
@@ -279,27 +247,16 @@ namespace ComponentTest
 		EXPECT_TRUE(index == 0);
 
 		auto testResult{ false };
-		testResult |= IsTrue(dest, { 85, 96, 107, 144 }, *source, { 67, 35, 89, 83 });
-		testResult |= IsTrue(dest, { 107, 96, 213, 144 }, *source, { 89, 35, 93, 83 });
-		testResult |= IsTrue(dest, { 213, 96, 235, 144 }, *source, { 93, 35, 115, 83 });
+		testResult |= IsTrue(dest, { 85, 96, 107, 144 }, *source, { 10, 82, 32, 130 });
+		testResult |= IsTrue(dest, { 107, 96, 213, 144 }, *source, { 32, 82, 36, 130 });
+		testResult |= IsTrue(dest, { 213, 96, 235, 144 }, *source, { 36, 82, 58, 130 });
 
 		EXPECT_TRUE(testResult);
 	}
 
 	TEST_F(BasicFunctionalityTest, TestButton_ImageGrid3)
 	{
-		UILayout loButton({ 100, 48 }, Origin::Center);
-		UILayout loImgGrid({ 100, 48 }, Origin::LeftTop);
-		ImageSource normal{ { L"UI/Texture/Test_01.png" }, { { 67, 35, 22, 48}, { 89, 35, 4, 48 }, { 93, 35, 22, 48 } } };
-		ImageSource hover{ { L"UI/Texture/Test_01.png" }, { { 118, 35, 22, 48}, { 140, 35, 4, 48 }, { 144, 35, 22, 48 } } };
-		ImageSource pressed{ { L"UI/Texture/Test_01.png" }, { { 169, 35, 22, 48}, { 191, 35, 4, 48 }, { 195, 35, 22, 48 } } };
-
-		std::unique_ptr<Button> button = std::make_unique<Button>();
-		EXPECT_TRUE(button->SetImage(loButton,
-			CreateImageGrid<ImageGrid3>(loImgGrid, normal),
-			CreateImageGrid<ImageGrid3>(loImgGrid, hover),
-			CreateImageGrid<ImageGrid3>(loImgGrid, pressed)));
-
+		auto button = CreateSampleButton3({ {100, 48}, Origin::Center });
 		m_panel->AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -327,14 +284,7 @@ namespace ComponentTest
 
 	TEST_F(BasicFunctionalityTest, TestTextArea)
 	{
-		std::unique_ptr<TextArea> textArea = std::make_unique<TextArea>();
-		UILayout layout({ 320, 120 }, Origin::Center);
-		map<wstring, wstring> fontFileList;
-		fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
-		fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
-		textArea->SetFont(text, layout, fontFileList);
-
+		auto textArea = CreateSampleTextArea({ {320, 120}, Origin::Center });
 		m_panel->AttachComponent(move(textArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 

@@ -24,16 +24,13 @@ public:
 	void Render();
 	bool IsActive() const noexcept;
 	const ImVec2& GetPosition() const noexcept { return m_position; }
-	bool DetachToFloating(unique_ptr<UIComponent>&& detachComponent);
+	bool ComponentToFloating(unique_ptr<UIComponent>&& component);
 	void Clear() noexcept;
 
 private:
 	bool LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size);
 	bool LoadComponent(unique_ptr<UIComponent>&& component);
 	void DrawMakeComponent();
-	bool MakeImageGrid1();
-	bool MakeImageGrid3();
-	bool MakeImageGrid9();
 
 	IRenderer* m_renderer;
 	string m_name;

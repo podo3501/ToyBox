@@ -21,6 +21,9 @@ UIComponent::UIComponent(const UIComponent& other)
 {
 	m_name = other.m_name;
 	m_layout = other.m_layout;
+	m_enable = other.m_enable;
+	m_attachmentState = other.m_attachmentState;
+
 	ranges::transform(other.m_components, back_inserter(m_components), [this](const auto& transCom) {
 		auto component = transCom.component->Clone();
 		component->SetParent(this);
@@ -29,7 +32,6 @@ UIComponent::UIComponent(const UIComponent& other)
 			transCom.GetRelativePosition(), 
 			transCom.GetRatio()));
 		});
-	m_enable = other.m_enable;
 }
 
 string UIComponent::GetType() const { return string(typeid(*this).name()); }
@@ -38,8 +40,8 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetType() != o.GetType()) return false;
 
-	ReturnIfFalse(tie(m_name, m_layout, m_components) == 
-		tie(o.m_name, o.m_layout, o.m_components));
+	ReturnIfFalse(tie(m_name, m_layout, m_enable, m_attachmentState, m_components) ==
+		tie(o.m_name, o.m_layout, o.m_enable, o.m_attachmentState, o.m_components));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
 
 	return true;
@@ -49,7 +51,6 @@ bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs)
 {
 	if (lhs == nullptr && rhs == nullptr) return true;
 	if (lhs == nullptr || rhs == nullptr) return false;
-
 	if (lhs->m_name != rhs->m_name) return false;
 
 	return true;
@@ -63,9 +64,7 @@ UIComponent::UIComponent(UIComponent&& o) noexcept :
 
 unique_ptr<UIComponent> UIComponent::Clone() const 
 { 
-	auto clone = CreateClone();
-	clone->m_name = clone->m_name + "_clone";
-	return clone;
+	return CreateClone();
 }
 
 bool UIComponent::LoadResources(ILoadData* load)
@@ -166,18 +165,21 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 
 void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 {
+	//붙는 쪽도 붙여지는 쪽도 유니크 이름이어야 한다.
+	auto isNotUnique = [this, addable](const string& name) {
+		return !(IsUniqueName(name) && addable->IsUniqueName(name));
+		};
+
 	int n = 0;
 	string baseName = std::regex_replace(addable->GetType(), std::regex(R"(class|\s)"), "") + "_";
 	string curName{};
 	do {
 		curName = baseName + to_string(n++);
-	} while (!IsUniqueName(curName) ||
-		!addable->IsUniqueName(curName));
+	} while (isNotUnique(curName));
 	addable->Rename(curName);
 
-	ranges::for_each(addable->m_components, [this](auto& transCom) {
+	for (auto& transCom : addable->m_components)
 		GenerateUniqueName(transCom.component.get());
-		});
 }
 
 unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept
@@ -239,6 +241,8 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 	operation.Process("Name", m_name);
 	operation.Process("Layout", m_layout);
 	operation.Process("Components", m_components);
+	operation.Process("Enable", m_enable);
+	operation.Process("AttachmentState", m_attachmentState);
 	
 	if (operation.IsWrite()) return;
 	ranges::for_each(m_components, [this](auto& transComponent) {
@@ -269,8 +273,6 @@ Rectangle UIComponent::GetTotalChildSize(const UIComponent* component) const noe
 	if (component == nullptr) return {};
 
 	Rectangle rect = GetRectangle(component);
-
-	//단순한 크기가 아니라 위치값이 들어가는 사각형의 크기가 필요하다.
 	for (const auto& transCom : component->m_components)
 		rect = Rectangle::Union(rect, GetTotalChildSize(transCom.component.get()));
 

@@ -1,37 +1,17 @@
 #include "pch.h"
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
-#include "TestHelper.h"
-#include "../Toy/UserInterface/UIType.h"
+#include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIComponentHelper.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/Component/SampleComponent.h"
 
 namespace ComponentTest
 {
-	static unique_ptr<UIComponent> CreateTestImageGrid9(IRenderer* renderer, const XMUINT2& size)
-	{
-		UILayout layout(size, Origin::LeftTop);
-		ImageSource source{
-			L"UI/Blue/button_square_header_large_square_screws.png", {
-				{ 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-				{ 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-				{ 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
-			}
-		};
-		return CreateImageGrid<ImageGrid9>(layout, source);
-	}
-
-	static unique_ptr<UIComponent> CreateTestImageGrid1(IRenderer* renderer, const XMUINT2& size)
-	{
-		UILayout layout({ 64, 64 }, Origin::LeftTop);
-		ImageSource grid1Source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
-
-		return CreateImageGrid<ImageGrid1>(layout, grid1Source);
-	}
-
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
 		UILayout layout({ 64, 64 }, Origin::LeftTop);
@@ -50,7 +30,7 @@ namespace ComponentTest
 
 	TEST_F(IntegrationTest, AttachDetachTest)
 	{
-		unique_ptr<UIComponent> img9 = CreateTestImageGrid9(m_renderer.get(), { 220, 190 });
+		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		m_panel->AttachComponent(move(img9), { 80, 60 });
 
 		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "ImageGrid9_0"), false);	//9방향 이미지에는 attach 불가
@@ -58,6 +38,23 @@ namespace ComponentTest
 
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid1_0"), false);
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid1_9"), true); //위에서 ImgGrid1를 attach 했다.
+	}
+
+	template <typename T>
+	bool VerifyClone(unique_ptr<T> original) 
+	{
+		if (!original) return false;
+		auto clone = original->Clone();
+
+		return CompareUniquePtr(original, clone);
+	}
+
+	TEST_F(IntegrationTest, Clone)
+	{
+		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid1({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid3({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop })));
 	}
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
@@ -69,13 +66,13 @@ namespace ComponentTest
 
 	TEST_F(IntegrationTest, GetComponents)
 	{
-		unique_ptr<UIComponent> img9_0 = CreateTestImageGrid9(m_renderer.get(), { 220, 190 });
+		unique_ptr<UIComponent> img9_0 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		m_panel->AttachComponent(move(img9_0), { 80, 60 });
 
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), {0, 0}) == 1);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 100, 100 }) == 4);
 
-		unique_ptr<UIComponent> img9_1 = CreateTestImageGrid9(m_renderer.get(), { 221, 191 });
+		unique_ptr<UIComponent> img9_1 = CreateSampleImageGrid9({ { 221, 191 }, Origin::LeftTop });
 		m_panel->AttachComponent(move(img9_1), { 88, 66 });
 
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 180, 160 }) == 7);
@@ -83,7 +80,7 @@ namespace ComponentTest
 
 	TEST_F(IntegrationTest, GetPosition)
 	{
-		unique_ptr<UIComponent> img9 = CreateTestImageGrid9(m_renderer.get(), { 220, 190 });
+		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		unique_ptr<UIComponent> panel = make_unique<Panel>();
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		panel->AttachComponent(move(img9), { 40, 30 });
@@ -98,14 +95,14 @@ namespace ComponentTest
 
 	TEST_F(IntegrationTest, Rename)
 	{
-		unique_ptr<UIComponent> img9 = CreateTestImageGrid9(m_renderer.get(), { 220, 190 });
+		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		m_panel->AttachComponent(move(img9), { 80, 60 });
 
 		UIComponent* component = m_panel->GetComponent("ImageGrid1_0");
-		EXPECT_FALSE(component->Rename("ImageGrid9_0"));
+		EXPECT_FALSE(component->Rename("ImageGrid9_0")); //같은 이름이 있으면 rename이 되지 않는다.
 
-		unique_ptr<UIComponent> newImg9 = CreateTestImageGrid9(m_renderer.get(), { 220, 190 });
-		auto failed = m_panel->AttachComponent(move(newImg9), { 80, 60 });
+		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
+		auto failed = m_panel->AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
 	}
 }

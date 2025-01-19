@@ -115,3 +115,14 @@ void Button::SerializeIO(JsonOperation& operation)
 	if (operation.IsWrite()) return;
 	ReloadDatas();
 }
+
+unique_ptr<Button> CreateButton(const UILayout& layout, vector<unique_ptr<UIComponent>> imgGridList)
+{
+	if (imgGridList.size() != 3) return nullptr;
+
+	unique_ptr<Button> button = make_unique<Button>();
+	auto result = button->SetImage(layout, move(imgGridList[0]), move(imgGridList[1]), move(imgGridList[2]));
+	if (!result) return nullptr;
+
+	return button;
+}

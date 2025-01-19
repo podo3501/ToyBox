@@ -20,6 +20,12 @@
     <Filter Include="UserInterface\Component">
       <UniqueIdentifier>{7a324915-d1e7-41df-90b3-c02402ae2760}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\UI">
+      <UniqueIdentifier>{a4ac7f4d-e263-4d15-98c8-4bccb666a2d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\UI\Texture">
+      <UniqueIdentifier>{b1d2175f-6b69-4762-814c-776f15e91fe9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -98,6 +104,9 @@
     <ClInclude Include="UserInterface\UIComponentHelper.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Component\SampleComponent.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -161,6 +170,9 @@
     <ClCompile Include="UserInterface\UIComponentHelper.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\Component\SampleComponent.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -181,6 +193,9 @@
     </None>
     <None Include="..\Resources\Tool\Config.json">
       <Filter>Resources\Tool</Filter>
+    </None>
+    <None Include="..\Resources\UI\Texture\ExtractTexture.json">
+      <Filter>Resources\UI\Texture</Filter>
     </None>
   </ItemGroup>
 </Project>

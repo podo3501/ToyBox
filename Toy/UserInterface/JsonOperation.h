@@ -1,11 +1,11 @@
 #pragma once
 
-template<typename T> requires std::is_default_constructible_v<T>&& std::is_copy_assignable_v<T>
+template<typename T> requires is_default_constructible_v<T>&& is_copy_assignable_v<T>
 class Property;
 class UIComponent;
 class Scene;
 enum class Origin;
-enum class ButtonState;
+enum class AttachmentState;
 
 namespace Tool
 {
@@ -16,11 +16,11 @@ template <typename T>
 class JsonNavigator {
 public:
 	// 초기 JSON 객체 설정 (unique_ptr로 관리)
-	explicit JsonNavigator(std::unique_ptr<T> root)
-		: root(std::move(root)), current(this->root.get()) {}
+	explicit JsonNavigator(unique_ptr<T> root)
+		: root(move(root)), current(this->root.get()) {}
 
 	// 특정 키로 내려가기 (키가 없으면 생성)
-	bool GotoKey(const std::string& key, bool createArray = false)
+	bool GotoKey(const string& key, bool createArray = false)
 	{
 		if (!current || key.empty()) return false;
 
@@ -77,34 +77,35 @@ public:
 	}
 
 private:
-	std::unique_ptr<T> root;         // 루트 객체
+	unique_ptr<T> root;         // 루트 객체
 	T* current;                      // 현재 탐색 중인 객체
 	std::stack<T*> parentStack;      // 부모 객체 추적을 위한 스택
 };
 
 // STL 컨테이너인지 확인하는 메타함수
 template <typename T>
-struct is_stl_container : std::false_type {};
+struct is_stl_container : false_type {};
 
 // STL 컨테이너 특수화
 template <typename... Args>
-struct is_stl_container<std::vector<Args...>> : std::true_type {};
+struct is_stl_container<vector<Args...>> : true_type {};
 
 template <typename... Args>
-struct is_stl_container<std::list<Args...>> : std::true_type {};
+struct is_stl_container<list<Args...>> : true_type {};
 
 template <typename... Args>
-struct is_stl_container<std::deque<Args...>> : std::true_type {};
+struct is_stl_container<deque<Args...>> : true_type {};
 
 template<typename T>
-concept IsClassType = std::is_class_v<T>;
+concept IsClassType = is_class_v<T>;
 
-template<typename T>
+template<typename T>	//기본 타입 및 enum 타입
 concept IsBasicType =
-std::is_arithmetic_v<T> ||
-std::is_same_v<T, std::string> ||
-std::is_same_v<T, size_t> ||
-std::is_same_v<T, Tool::ResolutionType>;
+is_arithmetic_v<T> ||
+is_same_v<T, string> ||
+is_same_v<T, size_t> ||
+is_same_v<T, AttachmentState> ||
+is_same_v<T, Tool::ResolutionType>;
 
 template<typename T>
 concept IsBasicContainer =
@@ -159,7 +160,7 @@ public:
 	void Process(const string& key, XMINT2& data) noexcept;
 	void Process(const string& key, XMUINT2& data) noexcept;
 	void Process(const string& key, Rectangle& data) noexcept;
-	void Process(const string& key, Origin& data) noexcept;
+	void Process(const string& key, Origin& data) noexcept; //기본 템플릿에 넣어도 되나, 저장할때 string으로 저장하면 보기가 좋다.
 	void Process(const string& key, Vector2& data) noexcept;
 	void Process(const string& key, unique_ptr<UIComponent>& data);
 	void Process(const string& key, wstring& data) noexcept;

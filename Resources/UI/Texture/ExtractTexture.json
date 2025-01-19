@@ -12,49 +12,138 @@
         "Components": [
             {
                 "RelativePosition": {
-                    "x": 352,
-                    "y": 246
+                    "x": 312,
+                    "y": 373
                 },
                 "Ratio": {
-                    "x": 0.34375,
-                    "y": 0.320313
+                    "x": 0.304688,
+                    "y": 0.485677
                 },
                 "Component": {
-                    "Type": "class ImageGrid1",
-                    "Name": "untitled_imageGrid1",
+                    "Type": "class ImageGrid3",
+                    "Name": "ImageGrid3_3",
                     "Layout": {
                         "Size": {
-                            "x": 64,
-                            "y": 64
+                            "x": 70,
+                            "y": 48
                         },
                         "Origin": "LeftTop"
                     },
-                    "Index": 0,
-                    "Filename": "UI/SampleTexture/ToolComponentPopup.png",
-                    "Source": {
-                        "x": 2,
-                        "y": 52,
-                        "width": 64,
-                        "height": 64
-                    }
+                    "Components": [
+                        {
+                            "RelativePosition": {
+                                "x": 0,
+                                "y": 0
+                            },
+                            "Ratio": {
+                                "x": 0.0,
+                                "y": 0.0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "ImageGrid1_3",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 22,
+                                        "y": 48
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Enable": true,
+                                "AttachmentState": 1,
+                                "Index": 0,
+                                "Filename": "UI/SampleTexture/Sample_0.png",
+                                "Source": {
+                                    "x": 10,
+                                    "y": 82,
+                                    "width": 22,
+                                    "height": 48
+                                }
+                            }
+                        },
+                        {
+                            "RelativePosition": {
+                                "x": 22,
+                                "y": 0
+                            },
+                            "Ratio": {
+                                "x": 0.314286,
+                                "y": 0.0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "ImageGrid1_12",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 26,
+                                        "y": 48
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Enable": true,
+                                "AttachmentState": 1,
+                                "Index": 0,
+                                "Filename": "UI/SampleTexture/Sample_0.png",
+                                "Source": {
+                                    "x": 32,
+                                    "y": 82,
+                                    "width": 4,
+                                    "height": 48
+                                }
+                            }
+                        },
+                        {
+                            "RelativePosition": {
+                                "x": 48,
+                                "y": 0
+                            },
+                            "Ratio": {
+                                "x": 0.685714,
+                                "y": 0.0
+                            },
+                            "Component": {
+                                "Type": "class ImageGrid1",
+                                "Name": "ImageGrid1_13",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 22,
+                                        "y": 48
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Enable": true,
+                                "AttachmentState": 1,
+                                "Index": 0,
+                                "Filename": "UI/SampleTexture/Sample_0.png",
+                                "Source": {
+                                    "x": 36,
+                                    "y": 82,
+                                    "width": 22,
+                                    "height": 48
+                                }
+                            }
+                        }
+                    ],
+                    "Enable": true,
+                    "AttachmentState": 2
                 }
             },
             {
                 "RelativePosition": {
-                    "x": 557,
-                    "y": 350
+                    "x": 407,
+                    "y": 65
                 },
                 "Ratio": {
-                    "x": 0.543945,
-                    "y": 0.455729
+                    "x": 0.397461,
+                    "y": 0.084635
                 },
                 "Component": {
                     "Type": "class ImageGrid9",
-                    "Name": "untitled_imageGrid9",
+                    "Name": "ImageGrid9_1",
                     "Layout": {
                         "Size": {
-                            "x": 240,
-                            "y": 189
+                            "x": 361,
+                            "y": 224
                         },
                         "Origin": "LeftTop"
                     },
@@ -70,10 +159,10 @@
                             },
                             "Component": {
                                 "Type": "class ImageGrid3",
-                                "Name": "untitled_imageGrid9_0",
+                                "Name": "ImageGrid3_4",
                                 "Layout": {
                                     "Size": {
-                                        "x": 240,
+                                        "x": 361,
                                         "y": 36
                                     },
                                     "Origin": "LeftTop"
@@ -90,7 +179,7 @@
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_0_0",
+                                            "Name": "ImageGrid1_8",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
@@ -98,11 +187,13 @@
                                                 },
                                                 "Origin": "LeftTop"
                                             },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 2,
-                                                "y": 52,
+                                                "x": 10,
+                                                "y": 10,
                                                 "width": 30,
                                                 "height": 36
                                             }
@@ -114,24 +205,26 @@
                                             "y": 0
                                         },
                                         "Ratio": {
-                                            "x": 0.125,
+                                            "x": 0.083102,
                                             "y": 0.0
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_0_1",
+                                            "Name": "ImageGrid1_1",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 180,
+                                                    "x": 301,
                                                     "y": 36
                                                 },
                                                 "Origin": "LeftTop"
                                             },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 32,
-                                                "y": 52,
+                                                "x": 40,
+                                                "y": 10,
                                                 "width": 4,
                                                 "height": 36
                                             }
@@ -139,16 +232,16 @@
                                     },
                                     {
                                         "RelativePosition": {
-                                            "x": 210,
+                                            "x": 331,
                                             "y": 0
                                         },
                                         "Ratio": {
-                                            "x": 0.875,
+                                            "x": 0.916898,
                                             "y": 0.0
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_0_2",
+                                            "Name": "ImageGrid1_0",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
@@ -156,17 +249,21 @@
                                                 },
                                                 "Origin": "LeftTop"
                                             },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 36,
-                                                "y": 52,
+                                                "x": 44,
+                                                "y": 10,
                                                 "width": 30,
                                                 "height": 36
                                             }
                                         }
                                     }
-                                ]
+                                ],
+                                "Enable": true,
+                                "AttachmentState": 3
                             }
                         },
                         {
@@ -176,15 +273,15 @@
                             },
                             "Ratio": {
                                 "x": 0.0,
-                                "y": 0.190476
+                                "y": 0.160714
                             },
                             "Component": {
                                 "Type": "class ImageGrid3",
-                                "Name": "untitled_imageGrid9_1",
+                                "Name": "ImageGrid3_0",
                                 "Layout": {
                                     "Size": {
-                                        "x": 240,
-                                        "y": 127
+                                        "x": 361,
+                                        "y": 162
                                     },
                                     "Origin": "LeftTop"
                                 },
@@ -200,19 +297,21 @@
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_1_0",
+                                            "Name": "ImageGrid1_2",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
-                                                    "y": 127
+                                                    "y": 162
                                                 },
                                                 "Origin": "LeftTop"
                                             },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 2,
-                                                "y": 88,
+                                                "x": 10,
+                                                "y": 46,
                                                 "width": 30,
                                                 "height": 2
                                             }
@@ -224,55 +323,26 @@
                                             "y": 0
                                         },
                                         "Ratio": {
-                                            "x": 0.125,
+                                            "x": 0.083102,
                                             "y": 0.0
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_1_1",
+                                            "Name": "ImageGrid1_10",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 180,
-                                                    "y": 127
+                                                    "x": 301,
+                                                    "y": 162
                                                 },
                                                 "Origin": "LeftTop"
                                             },
-                                            "Components": [
-                                                {
-                                                    "RelativePosition": {
-                                                        "x": 27,
-                                                        "y": 17
-                                                    },
-                                                    "Ratio": {
-                                                        "x": 0.154545,
-                                                        "y": 0.137931
-                                                    },
-                                                    "Component": {
-                                                        "Type": "class ImageGrid1",
-                                                        "Name": "untitled_imageGrid1",
-                                                        "Layout": {
-                                                            "Size": {
-                                                                "x": 64,
-                                                                "y": 64
-                                                            },
-                                                            "Origin": "LeftTop"
-                                                        },
-                                                        "Index": 0,
-                                                        "Filename": "UI/SampleTexture/ToolComponentPopup.png",
-                                                        "Source": {
-                                                            "x": 2,
-                                                            "y": 52,
-                                                            "width": 64,
-                                                            "height": 64
-                                                        }
-                                                    }
-                                                }
-                                            ],
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 32,
-                                                "y": 88,
+                                                "x": 40,
+                                                "y": 46,
                                                 "width": 4,
                                                 "height": 2
                                             }
@@ -280,51 +350,55 @@
                                     },
                                     {
                                         "RelativePosition": {
-                                            "x": 210,
+                                            "x": 331,
                                             "y": 0
                                         },
                                         "Ratio": {
-                                            "x": 0.875,
+                                            "x": 0.916898,
                                             "y": 0.0
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_1_2",
+                                            "Name": "ImageGrid1_11",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
-                                                    "y": 127
+                                                    "y": 162
                                                 },
                                                 "Origin": "LeftTop"
                                             },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 36,
-                                                "y": 88,
+                                                "x": 44,
+                                                "y": 46,
                                                 "width": 30,
                                                 "height": 2
                                             }
                                         }
                                     }
-                                ]
+                                ],
+                                "Enable": true,
+                                "AttachmentState": 3
                             }
                         },
                         {
                             "RelativePosition": {
                                 "x": 0,
-                                "y": 163
+                                "y": 198
                             },
                             "Ratio": {
                                 "x": 0.0,
-                                "y": 0.862434
+                                "y": 0.883929
                             },
                             "Component": {
                                 "Type": "class ImageGrid3",
-                                "Name": "untitled_imageGrid9_2",
+                                "Name": "ImageGrid3_2",
                                 "Layout": {
                                     "Size": {
-                                        "x": 240,
+                                        "x": 361,
                                         "y": 26
                                     },
                                     "Origin": "LeftTop"
@@ -341,7 +415,7 @@
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_2_0",
+                                            "Name": "ImageGrid1_4",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
@@ -349,11 +423,13 @@
                                                 },
                                                 "Origin": "LeftTop"
                                             },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 2,
-                                                "y": 90,
+                                                "x": 10,
+                                                "y": 48,
                                                 "width": 30,
                                                 "height": 26
                                             }
@@ -365,24 +441,26 @@
                                             "y": 0
                                         },
                                         "Ratio": {
-                                            "x": 0.125,
+                                            "x": 0.083102,
                                             "y": 0.0
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_2_1",
+                                            "Name": "ImageGrid1_9",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 180,
+                                                    "x": 301,
                                                     "y": 26
                                                 },
                                                 "Origin": "LeftTop"
                                             },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 32,
-                                                "y": 90,
+                                                "x": 40,
+                                                "y": 48,
                                                 "width": 4,
                                                 "height": 26
                                             }
@@ -390,16 +468,16 @@
                                     },
                                     {
                                         "RelativePosition": {
-                                            "x": 210,
+                                            "x": 331,
                                             "y": 0
                                         },
                                         "Ratio": {
-                                            "x": 0.875,
+                                            "x": 0.916898,
                                             "y": 0.0
                                         },
                                         "Component": {
                                             "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid9_2_2",
+                                            "Name": "ImageGrid1_5",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
@@ -407,163 +485,61 @@
                                                 },
                                                 "Origin": "LeftTop"
                                             },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
                                             "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 36,
-                                                "y": 90,
+                                                "x": 44,
+                                                "y": 48,
                                                 "width": 30,
                                                 "height": 26
                                             }
                                         }
                                     }
-                                ]
+                                ],
+                                "Enable": true,
+                                "AttachmentState": 3
                             }
                         }
-                    ]
+                    ],
+                    "Enable": true,
+                    "AttachmentState": 2
                 }
             },
             {
                 "RelativePosition": {
-                    "x": 508,
-                    "y": 147
+                    "x": 485,
+                    "y": 360
                 },
                 "Ratio": {
-                    "x": 0.496094,
-                    "y": 0.191406
+                    "x": 0.473633,
+                    "y": 0.46875
                 },
                 "Component": {
-                    "Type": "class ImageGrid3",
-                    "Name": "untitled_imageGrid3",
+                    "Type": "class ImageGrid1",
+                    "Name": "ImageGrid1_7",
                     "Layout": {
                         "Size": {
-                            "x": 367,
-                            "y": 114
+                            "x": 398,
+                            "y": 295
                         },
                         "Origin": "LeftTop"
                     },
-                    "Components": [
-                        {
-                            "RelativePosition": {
-                                "x": 0,
-                                "y": 0
-                            },
-                            "Ratio": {
-                                "x": 0.0,
-                                "y": 0.0
-                            },
-                            "Component": {
-                                "Type": "class ImageGrid1",
-                                "Name": "untitled_imageGrid3_0",
-                                "Layout": {
-                                    "Size": {
-                                        "x": 23,
-                                        "y": 114
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Index": 0,
-                                "Filename": "UI/SampleTexture/ToolComponentPopup.png",
-                                "Source": {
-                                    "x": 2,
-                                    "y": 2,
-                                    "width": 23,
-                                    "height": 48
-                                }
-                            }
-                        },
-                        {
-                            "RelativePosition": {
-                                "x": 23,
-                                "y": 0
-                            },
-                            "Ratio": {
-                                "x": 0.06267,
-                                "y": 0.0
-                            },
-                            "Component": {
-                                "Type": "class ImageGrid1",
-                                "Name": "untitled_imageGrid3_1",
-                                "Layout": {
-                                    "Size": {
-                                        "x": 321,
-                                        "y": 114
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Components": [
-                                    {
-                                        "RelativePosition": {
-                                            "x": 16,
-                                            "y": 21
-                                        },
-                                        "Ratio": {
-                                            "x": 0.052198,
-                                            "y": 0.191011
-                                        },
-                                        "Component": {
-                                            "Type": "class ImageGrid1",
-                                            "Name": "untitled_imageGrid1",
-                                            "Layout": {
-                                                "Size": {
-                                                    "x": 64,
-                                                    "y": 64
-                                                },
-                                                "Origin": "LeftTop"
-                                            },
-                                            "Index": 0,
-                                            "Filename": "UI/SampleTexture/ToolComponentPopup.png",
-                                            "Source": {
-                                                "x": 2,
-                                                "y": 52,
-                                                "width": 64,
-                                                "height": 64
-                                            }
-                                        }
-                                    }
-                                ],
-                                "Index": 0,
-                                "Filename": "UI/SampleTexture/ToolComponentPopup.png",
-                                "Source": {
-                                    "x": 25,
-                                    "y": 2,
-                                    "width": 2,
-                                    "height": 48
-                                }
-                            }
-                        },
-                        {
-                            "RelativePosition": {
-                                "x": 344,
-                                "y": 0
-                            },
-                            "Ratio": {
-                                "x": 0.93733,
-                                "y": 0.0
-                            },
-                            "Component": {
-                                "Type": "class ImageGrid1",
-                                "Name": "untitled_imageGrid3_2",
-                                "Layout": {
-                                    "Size": {
-                                        "x": 23,
-                                        "y": 114
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Index": 0,
-                                "Filename": "UI/SampleTexture/ToolComponentPopup.png",
-                                "Source": {
-                                    "x": 27,
-                                    "y": 2,
-                                    "width": 23,
-                                    "height": 48
-                                }
-                            }
-                        }
-                    ]
+                    "Enable": true,
+                    "AttachmentState": 0,
+                    "Index": 0,
+                    "Filename": "UI/SampleTexture/Sample_0.png",
+                    "Source": {
+                        "x": 10,
+                        "y": 10,
+                        "width": 64,
+                        "height": 64
+                    }
                 }
             }
-        ]
+        ],
+        "Enable": true,
+        "AttachmentState": 0
     }
 }

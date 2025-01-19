@@ -32,3 +32,6 @@ private:
 	map<wstring, size_t> m_font;
 	vector<TextData> m_lines;
 };
+
+unique_ptr<TextArea> CreateTextArea(const UILayout& layout, 
+	const wstring& text, map<wstring, wstring>& fontFileList);

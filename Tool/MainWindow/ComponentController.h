@@ -22,6 +22,7 @@ private:
 	bool CheckAttachComponent(const InputManager& inputManager) noexcept;
 	bool CheckDetachComponent(const InputManager& inputManager) noexcept;
 	bool CheckDeleteComponent(const InputManager& inputManager) noexcept;
+	bool CheckCloneComponent(const InputManager& inputManager) noexcept;
 
 	unique_ptr<FloatingComponent> m_floater;
 	unique_ptr<ComponentSelector> m_selector;
