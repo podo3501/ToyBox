@@ -96,6 +96,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,6 +125,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,6 +157,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -185,6 +191,8 @@
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <GuardEHContMetadata>true</GuardEHContMetadata>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -210,6 +218,9 @@
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="MainLoop.h" />
+    <ClInclude Include="UserInterface\Command\Command.h" />
+    <ClInclude Include="UserInterface\Command\CommandList.h" />
+    <ClInclude Include="UserInterface\Command\CommandRegistry.h" />
     <ClInclude Include="UserInterface\Component\Button.h" />
     <ClInclude Include="UserInterface\Component\Dialog.h" />
     <ClInclude Include="UserInterface\Component\ImageGrid1.h" />
@@ -243,6 +254,8 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
+    <ClCompile Include="UserInterface\Command\CommandList.cpp" />
+    <ClCompile Include="UserInterface\Command\CommandRegistry.cpp" />
     <ClCompile Include="UserInterface\Component\Button.cpp" />
     <ClCompile Include="UserInterface\Component\Dialog.cpp" />
     <ClCompile Include="UserInterface\Component\ImageGrid1.cpp" />

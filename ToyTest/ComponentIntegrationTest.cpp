@@ -9,15 +9,13 @@
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
 
 namespace ComponentTest
 {
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
-		UILayout layout({ 64, 64 }, Origin::LeftTop);
-		ImageSource grid1Source{ L"UI/Blue/button_square_header_large_square_screws.png", { { 0, 0, 64, 64 } } };
-
-		auto imgGrid1 = CreateImageGrid<ImageGrid1>(layout, grid1Source);
+		auto imgGrid1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
 		UIComponent* component = panel->GetComponent(componentName);
 		return component->AttachComponent(std::move(imgGrid1), { 10, 10 }) ? false : true;
 	}
@@ -55,6 +53,8 @@ namespace ComponentTest
 		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid3({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(CreateSampleButton1({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(CreateSampleButton3({ { 220, 190 }, Origin::LeftTop })));
 	}
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
@@ -104,5 +104,30 @@ namespace ComponentTest
 		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		auto failed = m_panel->AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
+	}
+
+	TEST_F(IntegrationTest, Undo)
+	{
+		auto component = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		auto img1 = component.get();
+		m_panel->AttachComponent(move(component), { 80, 60 });
+
+		CommandList cmdList;
+		cmdList.RelativePosition(img1, { 90, 70 });
+		cmdList.RelativePosition(img1, { 100, 80 }); //RelativePosition은 명령이 하나로 합쳐짐
+
+		XMINT2 relativePos{};
+		img1->GetRelativePosition(relativePos);
+		EXPECT_EQ(relativePos, XMINT2(100, 80));
+
+		cmdList.Undo();
+		img1->GetRelativePosition(relativePos);
+		EXPECT_EQ(relativePos, XMINT2(80, 60));
+		cmdList.Undo();	//Undo 할게 없을때 아무 반응 안함
+
+		cmdList.Redo();
+		img1->GetRelativePosition(relativePos);
+		EXPECT_EQ(relativePos, XMINT2(100, 80));
+		cmdList.Redo(); //Redo 할게 없을때 아무 반응 안함
 	}
 }

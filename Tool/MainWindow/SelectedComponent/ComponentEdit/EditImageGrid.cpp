@@ -5,6 +5,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/Utility.h"
 #include "../../EditUtility.h"
 #include "../SourceExtractor.h"
@@ -21,8 +22,8 @@ static unique_ptr<TextureWindow> CreateTextureWindow( IRenderer* renderer, const
 //////////////////////////////////////////////////////
 
 EditImageGrid::~EditImageGrid() = default;
-EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer) noexcept :
-    EditWindow{ component },
+EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, CommandList* cmdList) noexcept :
+    EditWindow{ component, cmdList },
     m_renderer{ renderer }
 {}
 
@@ -55,8 +56,8 @@ void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UICompon
 //////////////////////////////////////////////////////
 
 EditImageGrid1::~EditImageGrid1() = default;
-EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer) noexcept :
-    EditImageGrid{ imgGrid1, renderer },
+EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer, CommandList* cmdList) noexcept :
+    EditImageGrid{ imgGrid1, renderer, cmdList },
     m_imageGrid1{ imgGrid1 }
 {}
 
@@ -74,8 +75,8 @@ void EditImageGrid1::RenderComponentEdit(bool& posModify)
 ////////////////////////////////////////////////
 
 EditImageGrid3::~EditImageGrid3() = default;
-EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer) noexcept :
-    EditImageGrid{ imgGrid3, renderer },
+EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer, CommandList* cmdList) noexcept :
+    EditImageGrid{ imgGrid3, renderer, cmdList },
     m_imageGrid3{ imgGrid3 }
 {}
 
@@ -102,8 +103,8 @@ void EditImageGrid3::RenderComponentEdit(bool& modify)
 ////////////////////////////////////////////////
 
 EditImageGrid9::~EditImageGrid9() = default;
-EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer) noexcept :
-    EditImageGrid{ imgGrid9, renderer },
+EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer, CommandList* cmdList) noexcept :
+    EditImageGrid{ imgGrid9, renderer, cmdList },
     m_imageGrid9{ imgGrid9 }
 {}
 

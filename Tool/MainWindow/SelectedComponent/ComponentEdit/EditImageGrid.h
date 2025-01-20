@@ -13,7 +13,7 @@ public:
 	virtual void RenderComponent(bool& posModify) override;
 
 protected:
-	EditImageGrid(UIComponent* component, IRenderer* renderer) noexcept;
+	EditImageGrid(UIComponent* component, IRenderer* renderer, CommandList* cmdList) noexcept;
 	virtual void RenderComponentEdit(bool& posModify) {};
 
 	void RenderExtractTextureButton(const wstring& filename, UIComponent* component);
@@ -30,7 +30,7 @@ class EditImageGrid1 : public EditImageGrid
 public:
 	~EditImageGrid1();
 	EditImageGrid1() = delete;
-	EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer) noexcept;
+	EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer, CommandList* cmdList) noexcept;
 
 protected:
 	virtual void RenderComponentEdit(bool& posModify) override;
@@ -45,7 +45,7 @@ class EditImageGrid3 : public EditImageGrid
 public:
 	~EditImageGrid3();
 	EditImageGrid3() = delete;
-	EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer) noexcept;
+	EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer, CommandList* cmdList) noexcept;
 
 protected:
 	virtual void RenderComponentEdit(bool& posModify) override;
@@ -60,7 +60,7 @@ class EditImageGrid9 : public EditImageGrid
 public:
 	~EditImageGrid9();
 	EditImageGrid9() = delete;
-	EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer) noexcept;
+	EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer, CommandList* cmdList) noexcept;
 
 protected:
 	virtual void RenderComponentEdit(bool& modify) override;

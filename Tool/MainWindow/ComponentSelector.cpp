@@ -4,7 +4,6 @@
 #include "SelectedComponent/ComponentEdit/EditImageGrid.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/UIComponent.h"
 #include "../Dialog.h"
 #include "../Utility.h"
 #include "../Toy/UserInterface/Component/Panel.h"
@@ -12,11 +11,12 @@
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/UIComponentHelper.h"
-#include "FloatingComponent.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
 
 ComponentSelector::~ComponentSelector() = default;
-ComponentSelector::ComponentSelector(IRenderer* renderer, UIComponent* panel) :
+ComponentSelector::ComponentSelector(IRenderer* renderer, CommandList* cmdList, UIComponent* panel) :
 	m_renderer{ renderer },
+	m_cmdList{ cmdList },
 	m_mainWnd{ nullptr },
 	m_tooltip{ make_unique<ComponentTooltip>(panel) },
 	m_editWindow{ nullptr },
@@ -37,15 +37,15 @@ unique_ptr<EditWindow> CreateEdit(UIComponent* component, Args&&... args)
 }
 
 //이게 점점 커지면 include도 많이 생기고 해서 static factory클래스로 만들어야 할 것 같다.
-static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, IRenderer* renderer)
+static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, IRenderer* renderer, CommandList* cmdList)
 {
 	if (!component) return nullptr;
 
 	const string& type = component->GetType();
-	if (type == "class Panel") return CreateEdit<EditPanel, Panel*>(component);
-	if (type == "class ImageGrid1") return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer);
-	if (type == "class ImageGrid3") return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer);
-	if (type == "class ImageGrid9") return CreateEdit<EditImageGrid9, ImageGrid9*>(component, renderer);
+	if (type == "class Panel") return CreateEdit<EditPanel, Panel*>(component, cmdList);
+	if (type == "class ImageGrid1") return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer, cmdList);
+	if (type == "class ImageGrid3") return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer, cmdList);
+	if (type == "class ImageGrid9") return CreateEdit<EditImageGrid9, ImageGrid9*>(component, renderer, cmdList);
 
 	return nullptr;
 }
@@ -59,7 +59,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 		return;
 	}
 
-	m_editWindow = CreateEditWindow(component, m_renderer);
+	m_editWindow = CreateEditWindow(component, m_renderer, m_cmdList);
 
 	m_component = component;
 	m_tooltip->SetComponent(component);

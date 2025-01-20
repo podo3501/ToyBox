@@ -68,8 +68,8 @@ public:
 	UIComponent* GetComponent(const string& name) const noexcept;
 	vector<UIComponent*> GetComponents() const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
-	template<typename T>
-	bool GetComponent(const string& name, T** outComponent) const noexcept;
+	template<typename T>//hppø° ¿÷¿Ω.
+	void GetComponent(const string& name, T** outComponent) const noexcept;
 
 	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
 	inline bool IsAttachable() const noexcept;

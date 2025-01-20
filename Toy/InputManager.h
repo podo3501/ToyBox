@@ -115,3 +115,14 @@ inline bool IsInputAction(const InputManager& manager, Keyboard::Keys key, Mouse
     return IsInputAction(manager, key, KeyState::Held) && 
         IsInputAction(manager, mouseButton, KeyState::Pressed);
 }
+
+inline bool IsInputAction(const InputManager& manager, Keyboard::Keys firstKey, Keyboard::Keys secondKey) noexcept
+{
+    bool firstKeyHeld = IsInputAction(manager, firstKey, KeyState::Held);
+    bool secondKeyPressed = IsInputAction(manager, secondKey, KeyState::Pressed);
+    
+    return firstKeyHeld && secondKeyPressed; 
+    //눌리고 있을때 너무 빨리 이벤트가 들어간다. 그래서 시간 지연을 줄 생각이었는데 눌렀을때와 눌리고 있
+    //을때 두개의 시간간격이 없어서 한번씩 누르기가 어렵게 된다. 일단은 하나씩 하는 걸로 하고 추후에 이
+    //부분을 개선해서 계속 키를 눌렀을때 간격과, 눌렀을 때 눌리고 있을때 이 사이의 간격을 지정하게끔 구현하자.
+}

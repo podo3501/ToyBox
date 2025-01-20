@@ -225,9 +225,7 @@ namespace ComponentTest
 
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120);	//hover
 		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
-		//EXPECT_TRUE(WriteReadTest(m_panel));
-
-		//CloneTest(m_panel.get(), TestButton_ImageGrid1Render, 1);	//normal
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	static void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source)

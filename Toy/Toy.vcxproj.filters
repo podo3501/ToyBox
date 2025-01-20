@@ -26,6 +26,9 @@
     <Filter Include="Resources\UI\Texture">
       <UniqueIdentifier>{b1d2175f-6b69-4762-814c-776f15e91fe9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserInterface\Command">
+      <UniqueIdentifier>{8095bd22-dd9e-443e-ac7d-edbdc3d9bae5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -107,6 +110,15 @@
     <ClInclude Include="UserInterface\Component\SampleComponent.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Command\Command.h">
+      <Filter>UserInterface\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Command\CommandList.h">
+      <Filter>UserInterface\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Command\CommandRegistry.h">
+      <Filter>UserInterface\Command</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -172,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="UserInterface\Component\SampleComponent.cpp">
       <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Command\CommandList.cpp">
+      <Filter>UserInterface\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Command\CommandRegistry.cpp">
+      <Filter>UserInterface\Command</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

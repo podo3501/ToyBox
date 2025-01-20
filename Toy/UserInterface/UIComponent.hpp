@@ -9,10 +9,8 @@ T ComponentCast(UIComponent* component)
 }
 
 template<typename T>
-bool UIComponent::GetComponent(const string& name, T** outComponent) const noexcept
+void UIComponent::GetComponent(const string& name, T** outComponent) const noexcept
 {
 	UIComponent* component = GetComponent(name);
 	*outComponent = ComponentCast<T*>(component);
-
-	return false;
 }

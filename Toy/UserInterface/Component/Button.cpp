@@ -104,13 +104,12 @@ void Button::ReloadDatas() noexcept
 	m_images.emplace(ButtonState::Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
 	m_images.emplace(ButtonState::Hover, componentList[1]);
 	m_images.emplace(ButtonState::Pressed, componentList[2]);
-
-	EnableButtonImage(m_state);
 }
 
 void Button::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
+	operation.Process("State", m_state);
 
 	if (operation.IsWrite()) return;
 	ReloadDatas();

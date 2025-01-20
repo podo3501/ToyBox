@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+class CommandList;
 class UIComponent;
 class InputManager;
 class MouseTracker;
@@ -13,7 +14,7 @@ class EditWindow
 {
 public:
 	EditWindow() = delete;
-	EditWindow(UIComponent* component) noexcept;
+	EditWindow(UIComponent* component, CommandList* cmdList) noexcept;
 	virtual ~EditWindow();
 	
 	void Update(const InputManager& inputManager, bool mainWndFocus);
@@ -35,6 +36,7 @@ private:
 	void EditName(const string& nameLabel) noexcept;
 
 	UIComponent* m_component;
+	CommandList* m_cmdList;
 	char m_nameBuffer[128] = "";
 	bool m_visible{ true };
 	OnDrag m_dragState;
@@ -46,7 +48,7 @@ class EditPanel : public EditWindow
 public:
 	~EditPanel();
 	EditPanel() = delete;
-	EditPanel(Panel* panel) noexcept;
+	EditPanel(Panel* panel, CommandList* cmdList) noexcept;
 	//virtual void SetComponent(UIComponent* component);
 	//virtual void Render();
 

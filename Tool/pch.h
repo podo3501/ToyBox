@@ -79,6 +79,7 @@
 #include <memory>
 #include <queue>
 #include <ranges>
+#include <regex>
 #include <sstream>
 #include <stack>
 #include <stdexcept>

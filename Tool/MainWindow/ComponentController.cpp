@@ -3,15 +3,17 @@
 #include "../Include/IRenderer.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
-#include "../Dialog.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/InputManager.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Dialog.h"
 
 ComponentController::~ComponentController() = default;
 ComponentController::ComponentController(IRenderer* renderer,
 	UIComponent* panel, const string& mainWndNam) noexcept :
+	m_cmdList{ make_unique<CommandList>() },
 	m_floater{ make_unique<FloatingComponent>(renderer, mainWndNam) },
-	m_selector{ make_unique<ComponentSelector>(renderer, panel) }
+	m_selector{ make_unique<ComponentSelector>(renderer, m_cmdList.get(), panel) }
 {}
 
 void ComponentController::SetPanel(UIComponent* panel) noexcept
@@ -63,6 +65,22 @@ bool ComponentController::CheckDeleteComponent(const InputManager& inputManager)
 	return true;
 }
 
+bool ComponentController::CheckUndoComponent(const InputManager& inputManager) noexcept
+{
+	if (m_floater->IsComponent()) return false;
+	if (!IsInputAction(inputManager, Keyboard::LeftControl, Keyboard::Z)) return false;
+
+	return m_cmdList->Undo();
+}
+
+bool ComponentController::CheckRedoComponent(const InputManager& inputManager) noexcept
+{
+	if (m_floater->IsComponent()) return false;
+	if (!IsInputAction(inputManager, Keyboard::LeftControl, Keyboard::Y)) return false;
+
+	return m_cmdList->Redo();
+}
+
 bool ComponentController::CheckCloneComponent(const InputManager& inputManager) noexcept
 {
 	if (m_floater->IsComponent()) return false;
@@ -90,10 +108,12 @@ bool ComponentController::Update(const InputManager& inputManager) noexcept
 {
 	CheckDetachComponent(inputManager);
 	CheckDeleteComponent(inputManager);
-	CheckCloneComponent(inputManager); 
-	if (!CheckAttachComponent(inputManager))
-		m_selector->Update(inputManager);
-
+	CheckCloneComponent(inputManager);
+	CheckUndoComponent(inputManager);
+	CheckRedoComponent(inputManager);
+	if (!CheckAttachComponent(inputManager)) //Attach 할때 select 되는경우가 있어서
+		m_selector->Update(inputManager);	
+	
 	m_floater->Excute();
 
 	return true;

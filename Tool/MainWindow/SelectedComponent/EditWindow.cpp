@@ -4,6 +4,7 @@
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/UIComponentHelper.h"
 #include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
 #include "../EditUtility.h"
 #include "../Toy/InputManager.h"
 #include "../../Utility.h"
@@ -20,8 +21,9 @@ enum class OnDrag
 EditWindow::~EditWindow()
 {}
 
-EditWindow::EditWindow(UIComponent* component) noexcept:
+EditWindow::EditWindow(UIComponent* component, CommandList* cmdList) noexcept:
 	m_component{ component },
+    m_cmdList{ cmdList },
     m_dragState{ OnDrag::Normal }
 {
     StringToChar(m_component->GetName(), m_nameBuffer);
@@ -195,7 +197,8 @@ void EditWindow::RenderCommon(bool& modify)
         modify |= EditInteger("Y", relativePosition.y);
 
         if (modify)
-            m_component->SetRelativePosition(relativePosition);
+            //m_component->SetRelativePosition(relativePosition);
+            m_cmdList->RelativePosition(m_component, relativePosition);
     }
 
     const auto& layout = m_component->GetLayout();
@@ -241,7 +244,7 @@ bool EditWindow::EditSize(const XMUINT2& size)
 //////////////////////////////////////////////////////////
 
 EditPanel::~EditPanel() = default;
-EditPanel::EditPanel(Panel* panel) noexcept :
-    EditWindow{ panel }
+EditPanel::EditPanel(Panel* panel, CommandList* cmdList) noexcept :
+    EditWindow{ panel, cmdList }
 {
 }

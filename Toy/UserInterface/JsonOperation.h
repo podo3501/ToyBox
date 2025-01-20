@@ -6,6 +6,7 @@ class UIComponent;
 class Scene;
 enum class Origin;
 enum class AttachmentState;
+enum class ButtonState;
 
 namespace Tool
 {
@@ -105,6 +106,7 @@ is_arithmetic_v<T> ||
 is_same_v<T, string> ||
 is_same_v<T, size_t> ||
 is_same_v<T, AttachmentState> ||
+is_same_v < T, ButtonState> ||
 is_same_v<T, Tool::ResolutionType>;
 
 template<typename T>

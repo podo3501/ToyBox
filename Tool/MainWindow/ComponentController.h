@@ -5,6 +5,7 @@ class UIComponent;
 class InputManager;
 class FloatingComponent;
 class ComponentSelector;
+class CommandList;
 
 class ComponentController
 {
@@ -23,7 +24,10 @@ private:
 	bool CheckDetachComponent(const InputManager& inputManager) noexcept;
 	bool CheckDeleteComponent(const InputManager& inputManager) noexcept;
 	bool CheckCloneComponent(const InputManager& inputManager) noexcept;
+	bool CheckUndoComponent(const InputManager& inputManager) noexcept;
+	bool CheckRedoComponent(const InputManager& inputManager) noexcept;
 
+	unique_ptr<CommandList> m_cmdList;
 	unique_ptr<FloatingComponent> m_floater;
 	unique_ptr<ComponentSelector> m_selector;
 };

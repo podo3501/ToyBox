@@ -38,34 +38,20 @@ bool GameMainLoop::InitializeDerived()
     return true;
 }
 
+static inline void AttachComponentToPanel(UIComponent* panel, 
+    unique_ptr<UIComponent> component, const XMINT2& position)
+{
+    if (panel && component)
+        panel->AttachComponent(move(component), position);
+}
+
 bool GameMainLoop::LoadResources()
 {
-    unique_ptr<UIComponent> button = CreateSampleButton3({ { 180, 48 }, Origin::Center });
-    unique_ptr<UIComponent> button2 = CreateSampleButton3({ { 180, 48 }, Origin::Center });
-
-    m_gamePanel->AttachComponent(move(button), { 400, 300 });
-    m_gamePanel->AttachComponent(move(button2), { 400, 240 });
-
-    unique_ptr<UIComponent> closeButton = CreateSampleButton1({ { 32, 32 }, Origin::Center });
-    m_gamePanel->AttachComponent(move(closeButton), { 160, 120 });
-
-    unique_ptr<UIComponent> textArea = CreateSampleTextArea({ { 250, 120 }, Origin::Center });
-    m_gamePanel->AttachComponent(move(textArea), { 160, 420 });
-
-    //UILayout layout({ 210, 150 }, Origin::LeftTop);
-    //ImageSource img9Source{
-    //    L"UI/Blue/button_square_header_large_square_screws.png", {
-    //        { 0, 0, 30, 36 }, { 30, 0, 4, 36 }, { 34, 0, 30, 36 },
-    //        { 0, 36, 30, 2 }, { 30, 36, 4, 2 }, { 34, 36, 30, 2 },
-    //        { 0, 38, 30, 26 }, { 30, 38, 4, 26 }, { 34, 38, 30, 26 }
-    //    }
-    //};
-
-    //unique_ptr<ImageGrid9> imgGrid9 = make_unique<ImageGrid9>();
-    //imgGrid9->SetImage(layout, img9Source);
-
-    unique_ptr<UIComponent> imgGrid9 = CreateSampleImageGrid9({ { 210, 150 }, Origin::LeftTop });
-    m_gamePanel->AttachComponent(move(imgGrid9), { 400, 300 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton3({ {180, 48}, Origin::Center }), { 400, 300 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton3({ {180, 48}, Origin::Center }), { 400, 240 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton1({ {32, 32}, Origin::Center }), { 160, 120 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleTextArea({ {250, 120}, Origin::Center }), { 160, 420 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageGrid9({ {210, 150}, Origin::LeftTop }), { 400, 300 });
 
     m_renderer->LoadComponent(m_gamePanel.get());
 

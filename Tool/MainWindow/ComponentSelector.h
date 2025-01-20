@@ -5,12 +5,13 @@ class InputManager;
 class UIComponent;
 class ComponentTooltip;
 class EditWindow;
+class CommandList;
 
 class ComponentSelector
 {
 public:
 	~ComponentSelector();
-	ComponentSelector(IRenderer* renderer, UIComponent* panel);
+	ComponentSelector(IRenderer* renderer, CommandList* cmdList, UIComponent* panel);
 
 	void SetPanel(UIComponent* panel) noexcept;
 	void Update(const InputManager& inputManager) noexcept;
@@ -26,6 +27,7 @@ private:
 	bool UpdateEditWindow(const InputManager& inputManager) noexcept;
 
 	IRenderer* m_renderer;
+	CommandList* m_cmdList;
 	ImGuiWindow* m_mainWnd;
 	unique_ptr<ComponentTooltip> m_tooltip;
 	unique_ptr<EditWindow> m_editWindow;
