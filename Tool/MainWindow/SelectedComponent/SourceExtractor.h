@@ -6,6 +6,7 @@ class InputManager;
 class ImageGrid1;
 class ImageGrid3;
 class ImageGrid9;
+class CommandList;
 
 class SourceExtractor
 {
@@ -21,7 +22,7 @@ public:
     inline void SetWindow(ImGuiWindow* texWnd) noexcept { m_window = texWnd; }
 
 protected:
-    SourceExtractor(IRenderer* renderer, const wstring& filename) noexcept;
+    SourceExtractor(IRenderer* renderer, const wstring& filename, CommandList* cmdList) noexcept;
     Rectangle FindAreaFromMousePosition(const InputManager& inputManager) noexcept;
 
     virtual void UpdateProcess(const InputManager& inputManager) {};
@@ -30,12 +31,14 @@ protected:
     inline const wstring& GetFilename() const noexcept { return m_filename; }
     inline IRenderer* GetRenderer() const noexcept { return m_renderer; }
     inline ImGuiWindow* GetWindow() const noexcept { return m_window; }
+    inline CommandList* GetCommandList() const noexcept { return m_cmdList; }
 
 private:
     Rectangle FindRectangleContainingPoint(const XMINT2& pos) noexcept;
 
     IRenderer* m_renderer;
     wstring m_filename;
+    CommandList* m_cmdList;
     ImGuiWindow* m_window;
 
     vector<Rectangle> m_areaList;
@@ -47,7 +50,7 @@ class ImageGrid1Extractor : public SourceExtractor
 public:
     ~ImageGrid1Extractor();
     ImageGrid1Extractor() = delete;
-    ImageGrid1Extractor(IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1) noexcept;
+    ImageGrid1Extractor(IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1, CommandList* cmdList) noexcept;
 
 protected:
     virtual void UpdateProcess(const InputManager& inputManager) override;
@@ -63,7 +66,7 @@ class ImageGrid3Extractor : public SourceExtractor
 public:
     ~ImageGrid3Extractor();
     ImageGrid3Extractor() = delete;
-    ImageGrid3Extractor(IRenderer* renderer, const wstring& filename, ImageGrid3* imgGrid3) noexcept;
+    ImageGrid3Extractor(IRenderer* renderer, const wstring& filename, ImageGrid3* imgGrid3, CommandList* cmdList) noexcept;
 
 protected:
     virtual void UpdateProcess(const InputManager& inputManager) override;
@@ -79,7 +82,7 @@ class ImageGrid9Extractor : public SourceExtractor
 public:
     ~ImageGrid9Extractor();
     ImageGrid9Extractor() = delete;
-    ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9) noexcept;
+    ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9, CommandList* cmdList) noexcept;
 
 protected:
     virtual void UpdateProcess(const InputManager& inputManager) override;
@@ -90,4 +93,5 @@ private:
     vector<Rectangle> m_hoveredAreas;
 };
 
-unique_ptr<SourceExtractor> CreateSourceExtractor(IRenderer* renderer, const wstring& filename, UIComponent* component);
+unique_ptr<SourceExtractor> CreateSourceExtractor(IRenderer* renderer,
+    const wstring& filename, UIComponent* component, CommandList* cmdList);

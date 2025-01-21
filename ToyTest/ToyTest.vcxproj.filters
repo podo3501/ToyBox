@@ -14,6 +14,9 @@
     <ClCompile Include="ComponentBasicFunctionalityTest.cpp" />
     <ClCompile Include="JsonSerializeTest.cpp" />
     <ClCompile Include="ComponentIntegrationTest.cpp" />
+    <ClCompile Include="ComponentUndoTest.cpp">
+      <Filter>TestResources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />

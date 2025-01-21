@@ -5,6 +5,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/InputManager.h"
 #include "../../Utility.h"
 #include "../Toy/Config.h"
@@ -20,9 +21,10 @@ static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 }
 
 SourceExtractor::~SourceExtractor() = default;
-SourceExtractor::SourceExtractor(IRenderer* renderer, const wstring& filename) noexcept :
+SourceExtractor::SourceExtractor(IRenderer* renderer, const wstring& filename, CommandList* cmdList) noexcept :
     m_renderer{ renderer },
     m_filename{ filename },
+    m_cmdList{ cmdList },
     m_window{ nullptr }
 {}
 
@@ -73,8 +75,8 @@ void SourceExtractor::Render() const
 ////////////////////////////////////////////////////////////
 
 ImageGrid1Extractor::~ImageGrid1Extractor() = default;
-ImageGrid1Extractor::ImageGrid1Extractor( IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1) noexcept :
-    SourceExtractor(renderer, filename),
+ImageGrid1Extractor::ImageGrid1Extractor( IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1, CommandList* cmdList) noexcept :
+    SourceExtractor(renderer, filename, cmdList),
     m_component{ imgGrid1 }
 {}
 
@@ -84,13 +86,13 @@ void ImageGrid1Extractor::UpdateProcess(const InputManager& inputManager)
     if(IsInputAction(inputManager, MouseButton::Left, KeyState::Pressed))
     {
         if (m_hoveredArea != Rectangle{})
-            m_component->Source = m_hoveredArea;
+            GetCommandList()->Source(m_component, m_hoveredArea);
     }
 }
 
 void ImageGrid1Extractor::RenderProcess() const
 {
-    DrawRectangle(m_component->Source, GetWindow());
+    DrawRectangle(m_component->GetSource(), GetWindow());
     DrawRectangle(m_hoveredArea, GetWindow());
 }
 
@@ -133,8 +135,8 @@ static vector<Rectangle> GenerateSourceAreas(const Rectangle& area, bool is9Grid
 }
 
 ImageGrid3Extractor::~ImageGrid3Extractor() = default;
-ImageGrid3Extractor::ImageGrid3Extractor(IRenderer* renderer, const wstring& filename, ImageGrid3* imgGrid3) noexcept :
-    SourceExtractor(renderer, filename),
+ImageGrid3Extractor::ImageGrid3Extractor(IRenderer* renderer, const wstring& filename, ImageGrid3* imgGrid3, CommandList* cmdList) noexcept :
+    SourceExtractor(renderer, filename, cmdList),
     m_component{ imgGrid3 }
 {}
 
@@ -153,8 +155,8 @@ void ImageGrid3Extractor::RenderProcess() const
 ////////////////////////////////////////////////////////////
 
 ImageGrid9Extractor::~ImageGrid9Extractor() = default;
-ImageGrid9Extractor::ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9) noexcept :
-    SourceExtractor(renderer, filename),
+ImageGrid9Extractor::ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9, CommandList* cmdList) noexcept :
+    SourceExtractor(renderer, filename, cmdList),
     m_component{ imgGrid9 }
 {}
 
@@ -172,18 +174,18 @@ void ImageGrid9Extractor::RenderProcess() const
 
 ////////////////////////////////////////////////////////////
 
-unique_ptr<SourceExtractor> CreateSourceExtractor(
-    IRenderer* renderer, const wstring& filename, UIComponent* component)
+unique_ptr<SourceExtractor> CreateSourceExtractor(IRenderer* renderer,
+    const wstring& filename, UIComponent* component, CommandList* cmdList)
 {
     if (!component) return nullptr;
     
-    const string& type = component->GetType();
-    if (type == "class ImageGrid1") 
-        return make_unique<ImageGrid1Extractor>(renderer, filename, ComponentCast<ImageGrid1*>(component));
-    if (type == "class ImageGrid3")
-        return make_unique<ImageGrid3Extractor>(renderer, filename, ComponentCast<ImageGrid3*>(component));
-    if (type == "class ImageGrid9")
-        return make_unique<ImageGrid9Extractor>(renderer, filename, ComponentCast<ImageGrid9*>(component));
+    ComponentID id = component->GetTypeID();
+    if (id == ComponentID::ImageGrid1) 
+        return make_unique<ImageGrid1Extractor>(renderer, filename, ComponentCast<ImageGrid1*>(component), cmdList);
+    if (id == ComponentID::ImageGrid3)
+        return make_unique<ImageGrid3Extractor>(renderer, filename, ComponentCast<ImageGrid3*>(component), cmdList);
+    if (id == ComponentID::ImageGrid9)
+        return make_unique<ImageGrid9Extractor>(renderer, filename, ComponentCast<ImageGrid9*>(component), cmdList);
 
     return nullptr;
 }

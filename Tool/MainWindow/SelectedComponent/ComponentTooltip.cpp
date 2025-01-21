@@ -34,7 +34,7 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 	for (int idx{ 0 }; UIComponent * curComponent : views::reverse(componentList))
 	{
 		// 툴팁 위치와 크기 계산
-		const std::string& tooltipContext = curComponent->GetType();
+		const std::string& tooltipContext = EnumToString(curComponent->GetTypeID());
 		const ImVec2& tooltipPos = ImVec2(mousePos.x + tooltipOffsetX, mousePos.y + tooltipOffsetY);
 		const ImVec2& textSize = ImGui::CalcTextSize(tooltipContext.c_str());
 		const ImVec2& tooltipSize = ImVec2(textSize.x + padding.x * 2, textSize.y + padding.y * 2);
@@ -42,7 +42,7 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 		bool isSelected = (curComponent == m_component);
 		const string& windowId = "tooltip_" + std::to_string(idx++);
 		ShowTooltipComponent(isSelected, tooltipPos, tooltipSize, windowId, tooltipContext);
-		tooltipOffsetY += ImGui::CalcTextSize(curComponent->GetType().c_str()).y + padding.y * 2 + tooltipGap;
+		tooltipOffsetY += ImGui::CalcTextSize(tooltipContext.c_str()).y + padding.y * 2 + tooltipGap;
 	}
 }
 

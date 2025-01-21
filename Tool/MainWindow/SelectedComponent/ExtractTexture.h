@@ -7,6 +7,8 @@ struct ILoadData;
 class ExtractTexture : public UIComponent
 {
 public:
+    static ComponentID GetTypeStatic() { return ComponentID::Unknown; }
+    virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
     virtual bool LoadResources(ILoadData* load);
     void SetImage(const wstring& filename) { m_filename = filename; }
 

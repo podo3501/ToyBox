@@ -41,11 +41,11 @@ static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, IRenderer
 {
 	if (!component) return nullptr;
 
-	const string& type = component->GetType();
-	if (type == "class Panel") return CreateEdit<EditPanel, Panel*>(component, cmdList);
-	if (type == "class ImageGrid1") return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer, cmdList);
-	if (type == "class ImageGrid3") return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer, cmdList);
-	if (type == "class ImageGrid9") return CreateEdit<EditImageGrid9, ImageGrid9*>(component, renderer, cmdList);
+	ComponentID id = component->GetTypeID();
+	if (id == ComponentID::Panel) return CreateEdit<EditPanel, Panel*>(component, cmdList);
+	if (id == ComponentID::ImageGrid1) return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer, cmdList);
+	if (id == ComponentID::ImageGrid3) return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer, cmdList);
+	if (id == ComponentID::ImageGrid9) return CreateEdit<EditImageGrid9, ImageGrid9*>(component, renderer, cmdList);
 
 	return nullptr;
 }

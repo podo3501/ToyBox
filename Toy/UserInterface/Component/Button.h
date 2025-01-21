@@ -10,6 +10,8 @@ public:
 	~Button();
 	Button();
 
+	static ComponentID GetTypeStatic() { return ComponentID::Button; }
+	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& other) const noexcept override;
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;

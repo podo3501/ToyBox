@@ -31,7 +31,10 @@ public:
 	UIComponent& operator=(const UIComponent&) = delete;	//상속 받은 클래스도 대입생성자 기본적으로 삭제됨.
 	UIComponent(UIComponent&& o) noexcept;
 	unique_ptr<UIComponent> Clone() const;
-	string GetType() const;
+
+	static ComponentID GetTypeStatic() { return ComponentID::Unknown; }
+	virtual ComponentID GetTypeID() const noexcept = 0;
+	//string GetType() const;
 
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
 	virtual bool LoadResources(ILoadData* load) override;
@@ -49,7 +52,7 @@ public:
 	optional<unique_ptr<UIComponent>> DetachComponent() noexcept;
 	
 	XMINT2 GetPosition() const noexcept;
-	bool GetRelativePosition(XMINT2& outRelativePos) const noexcept;
+	optional<XMINT2> GetRelativePosition() const noexcept;
 	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
 	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }

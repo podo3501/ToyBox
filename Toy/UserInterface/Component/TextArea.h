@@ -12,6 +12,8 @@ public:
 	~TextArea();
 	TextArea();
 
+	static ComponentID GetTypeStatic() { return ComponentID::TextArea; }
+	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue* getValue) override;

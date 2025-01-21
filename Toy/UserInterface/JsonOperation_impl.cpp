@@ -18,18 +18,22 @@ void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
     m_write->GetCurrent().update(jsOp.GetWrite());
 }
 
+using FactoryFunc = unique_ptr<UIComponent>(*)();   //constexpr을 쓰기 때문에 function(동적할당)을 쓸 수없다.
+constexpr FactoryFunc ComponentFactory[] = //enum의 값과 일치가 되어야 한다. 아니면 if로 해야 한다.
+{
+    []() -> unique_ptr<UIComponent> { return make_unique<Panel>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<ImageGrid1>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<ImageGrid3>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<ImageGrid9>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<Button>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<TextArea>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<Dialog>(); },
+};
+
 unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typeName)
 {
-    unique_ptr<UIComponent> comp{ nullptr };
-    if (typeName == "class Panel") comp = make_unique<Panel>();
-    if (typeName == "class ImageGrid1") comp = make_unique<ImageGrid1>();
-    if (typeName == "class ImageGrid3") comp = make_unique<ImageGrid3>();
-    if (typeName == "class ImageGrid9") comp = make_unique<ImageGrid9>();
-    if (typeName == "class Button") comp = make_unique<Button>();
-    if (typeName == "class Dialog") comp = make_unique<Dialog>();
-    if (typeName == "class TextArea") comp = make_unique<TextArea>();
-    if (comp == nullptr) 
-        return nullptr;
+    int componentID = EtoV(StringToEnum<ComponentID>(typeName));
+    unique_ptr<UIComponent> comp = ComponentFactory[componentID]();
 
     comp->SerializeIO(*this);
     return comp;
@@ -43,7 +47,7 @@ void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data)
             return;
 
         m_write->GotoKey(key);
-        const string& type = data->GetType();
+        const string& type = EnumToString<ComponentID>(data->GetTypeID());
         Process("Type", const_cast<string&>(type));
         UpdateJson(data);
         m_write->GoBack();

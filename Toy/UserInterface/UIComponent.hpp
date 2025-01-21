@@ -1,11 +1,15 @@
-template<typename T>
-T ComponentCast(UIComponent* component)
+template <typename TargetType>
+TargetType ComponentCast(UIComponent* component) 
 {
-	using NonPointerType = typename std::remove_pointer<T>::type;
+    if (!component) return nullptr;
+    ComponentID typeId = component->GetTypeID();
+    if (typeId == ComponentID::Unknown) return nullptr;
 
-	//assert로 하는 이유는 dynamic cast를 안 쓰고 싶어서. 타입이 다를 경우에는 debug일때는 여기서 걸리고 release는 타입변환후 미정의 행동
-	assert(component->GetType() == string(typeid(NonPointerType).name()));
-	return static_cast<T>(component);
+    using NonPointerTargetType = typename std::remove_pointer<TargetType>::type; //Target타입이 Button* 이렇게 포인터로 넘어오기 때문에 *를 떼어냄
+    if (typeId == NonPointerTargetType::GetTypeStatic())
+        return static_cast<TargetType>(component);
+
+    return nullptr;
 }
 
 template<typename T>

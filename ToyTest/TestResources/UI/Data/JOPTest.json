@@ -1,6 +1,6 @@
 {
     "Component": {
-        "Type": "class Panel",
+        "Type": "Panel",
         "Name": "Main",
         "Layout": {
             "Size": {
@@ -20,7 +20,7 @@
                     "y": 0.5
                 },
                 "Component": {
-                    "Type": "class TextArea",
+                    "Type": "TextArea",
                     "FontFileList": {
                         "English": "UI/Font/CourierNewBoldS18.spritefont",
                         "Hangle": "UI/Font/MaleunGothicS16.spritefont"

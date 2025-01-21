@@ -29,4 +29,8 @@ namespace ComponentTest
 
 	class IntegrationTest : public ToyTestFixture
 	{};
+
+	class UndoRedoTest : public ToyTestFixture
+	{
+	};
 }

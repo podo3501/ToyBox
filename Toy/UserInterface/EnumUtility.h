@@ -27,3 +27,9 @@ EnumType StringToEnum(const string& str)
 
 	return static_cast<EnumType>(iter);
 }
+
+template <typename EnumType>
+constexpr auto EtoV(EnumType enumerator) noexcept	//EnumToValue 이름이 길어서 줄인다.
+{
+	return static_cast<std::underlying_type_t<EnumType>>(enumerator);
+}

@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="ComponentBasicFunctionalityTest.cpp" />
     <ClCompile Include="ComponentIntegrationTest.cpp" />
+    <ClCompile Include="ComponentUndoTest.cpp" />
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="JsonSerializeTest.cpp" />

@@ -34,11 +34,11 @@ UIComponent::UIComponent(const UIComponent& other)
 		});
 }
 
-string UIComponent::GetType() const { return string(typeid(*this).name()); }
+//string UIComponent::GetType() const { return string(typeid(*this).name()); }
 
 bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
-	if (GetType() != o.GetType()) return false;
+	if (GetTypeID() != o.GetTypeID()) return false;
 
 	ReturnIfFalse(tie(m_name, m_layout, m_enable, m_attachmentState, m_components) ==
 		tie(o.m_name, o.m_layout, o.m_enable, o.m_attachmentState, o.m_components));
@@ -171,7 +171,7 @@ void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 		};
 
 	int n = 0;
-	string baseName = std::regex_replace(addable->GetType(), std::regex(R"(class|\s)"), "") + "_";
+	string baseName = EnumToString(addable->GetTypeID()) + "_";
 	string curName{};
 	do {
 		curName = baseName + to_string(n++);
@@ -279,14 +279,12 @@ Rectangle UIComponent::GetTotalChildSize(const UIComponent* component) const noe
 	return rect;
 }
 
-bool UIComponent::GetRelativePosition(XMINT2& outRelativePos) const noexcept
+optional<XMINT2> UIComponent::GetRelativePosition() const noexcept
 {
-	if (!m_parent) return false;
+	if (!m_parent) return nullopt;
 	
 	auto transformComponent = m_parent->FindTransformComponent(this);
-	outRelativePos = transformComponent->GetRelativePosition();
-
-	return true;
+	return transformComponent->GetRelativePosition();
 }
 
 bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept

@@ -1,6 +1,37 @@
 #pragma once
 #include "EnumUtility.h"
 
+enum class ComponentID : int
+{
+	Panel,
+	ImageGrid1,
+	ImageGrid3,
+	ImageGrid9,
+	Button,
+	TextArea,
+	Dialog,
+	Unknown
+};
+
+template<>
+constexpr size_t EnumSize<ComponentID>() { return 8; }
+
+template<>
+constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<ComponentID>()> {
+	return { {
+		{ "Panel" },
+		{ "ImageGrid1" },
+		{ "ImageGrid3" },
+		{ "ImageGrid9" },
+		{ "Button" },
+		{ "TextArea" },
+		{ "Dialog" },
+		{ "Unknown" }
+	} };
+}
+
+///////////////////////////////////////////////////////////////
+
 enum class Origin : int
 {
 	Init = 0,
@@ -10,10 +41,10 @@ enum class Origin : int
 };
 
 template<>
-constexpr std::size_t EnumSize<Origin>() { return 4; }
+constexpr size_t EnumSize<Origin>() { return 4; }
 
 template<>
-constexpr auto EnumToStringMap<Origin>() -> std::array<const char*, EnumSize<Origin>()> {
+constexpr auto EnumToStringMap<Origin>() -> array<const char*, EnumSize<Origin>()> {
 	return { {
 		{ "Init" },
 		{ "Center" },
@@ -34,10 +65,10 @@ enum class ButtonState : int
 };
 
 template<>
-constexpr std::size_t EnumSize<ButtonState>() { return 5; }
+constexpr size_t EnumSize<ButtonState>() { return 5; }
 
 template<>
-constexpr auto EnumToStringMap<ButtonState>()->std::array<const char*, EnumSize<ButtonState>()> {
+constexpr auto EnumToStringMap<ButtonState>()->array<const char*, EnumSize<ButtonState>()> {
 	return { {
 		{ "Init" },
 		{ "Normal" },

@@ -10,10 +10,11 @@
 #include "../../EditUtility.h"
 #include "../SourceExtractor.h"
 
-static unique_ptr<TextureWindow> CreateTextureWindow( IRenderer* renderer, const wstring& filename, UIComponent* component)
+static unique_ptr<TextureWindow> CreateTextureWindow(IRenderer* renderer, 
+    const wstring& filename, UIComponent* component, CommandList* cmdList)
 {
     unique_ptr<TextureWindow> textureWindow = make_unique<TextureWindow>(renderer,
-        CreateSourceExtractor(renderer, filename, component));
+        CreateSourceExtractor(renderer, filename, component, cmdList));
     textureWindow->Create(filename);
 
     return textureWindow;
@@ -47,7 +48,7 @@ void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UICompon
     if (ImGui::Button("Extract Textrue Area"))
     {
         if (!m_textureWindow)
-            m_textureWindow = CreateTextureWindow(m_renderer, filename, component);
+            m_textureWindow = CreateTextureWindow(m_renderer, filename, component, GetCommandList());
         else
             m_textureWindow->Open();
     }
@@ -65,7 +66,13 @@ void EditImageGrid1::RenderComponentEdit(bool& posModify)
 {
     if (EditFilename("Filename", m_imageGrid1->Filename))
         GetRenderer()->LoadComponent(m_imageGrid1);
-    posModify |= EditRectangle("Source", m_imageGrid1->Source);
+
+    Rectangle source = m_imageGrid1->GetSource();
+    if (EditRectangle("Source", source))
+    {
+        GetCommandList()->Source(m_imageGrid1, source);
+        posModify |= true;
+    }
 
     ImGui::Spacing();
     

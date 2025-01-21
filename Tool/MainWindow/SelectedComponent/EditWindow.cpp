@@ -112,7 +112,7 @@ void EditWindow::ResizeComponent(const XMINT2& startPos, const Mouse::State& mou
 
     if (size != modifySize)
     {
-        m_component->ChangeSize(modifySize);
+        m_cmdList->Size(m_component, modifySize);
         m_component->RefreshPosition();
     }
 }
@@ -174,31 +174,42 @@ void EditWindow::EditName(const string& nameLabel) noexcept
     ImGui::InputText(nameLabel.c_str(), m_nameBuffer, IM_ARRAYSIZE(m_nameBuffer));
     if (ImGui::IsItemDeactivatedAfterEdit())
     {
-        result = m_component->Rename(m_nameBuffer);
-        if (!result)
-            StringToChar(m_component->GetName(), m_nameBuffer);
-
+        result = m_cmdList->Rename(m_component, m_nameBuffer);
         startTime = std::chrono::steady_clock::now();
         resultVisible = true;
     }
+    StringToChar(m_component->GetName(), m_nameBuffer); //바꾸는데 실패하면 이전 이름으로 돌림. 그리고 Undo 했을때 이름이 바뀌면 업데이트 된다.
 
     ShowEditNameResult(startTime, result, resultVisible);
+}
+
+bool EditWindow::EditSize(const XMUINT2& size)
+{
+    XMUINT2 newSize = size;
+
+    bool changed{ false };
+
+    changed |= EditInteger("Width", newSize.x);
+    changed |= EditInteger("Height", newSize.y);
+
+    if (changed)
+        m_cmdList->Size(m_component, newSize);
+
+    return changed;
 }
 
 void EditWindow::RenderCommon(bool& modify)
 {
     EditName("Name");
 
-    XMINT2 relativePosition{};
-    bool isExist = m_component->GetRelativePosition(relativePosition);
-    if(isExist)
+    auto relativePosition = m_component->GetRelativePosition();
+    if(relativePosition.has_value())
     {
-        modify |= EditInteger("X", relativePosition.x);
-        modify |= EditInteger("Y", relativePosition.y);
+        modify |= EditInteger("X", relativePosition->x);
+        modify |= EditInteger("Y", relativePosition->y);
 
         if (modify)
-            //m_component->SetRelativePosition(relativePosition);
-            m_cmdList->RelativePosition(m_component, relativePosition);
+            m_cmdList->RelativePosition(m_component, *relativePosition);
     }
 
     const auto& layout = m_component->GetLayout();
@@ -224,21 +235,6 @@ void EditWindow::Render(const ImGuiWindow* mainWindow)
         m_component->RefreshPosition();
 
     ImGui::End();
-}
-
-bool EditWindow::EditSize(const XMUINT2& size)
-{
-    XMUINT2 newSize = size;
-
-    bool changed{ false };
-
-    changed |= EditInteger("Width", newSize.x);
-    changed |= EditInteger("Height", newSize.y);
-
-    if (changed)
-        m_component->ChangeSize(newSize);
-
-    return changed;
 }
 
 //////////////////////////////////////////////////////////
