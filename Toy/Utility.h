@@ -181,3 +181,13 @@ inline XMUINT2 Union(const XMUINT2& a, const XMUINT2& b) noexcept
 {
 	return XMUINT2(max(a.x, b.x), max(a.y, b.y));
 }
+
+inline RECT RectangleToRect(const Rectangle& rect) noexcept
+{
+	RECT rct;
+	rct.left = rect.x;
+	rct.top = rect.y;
+	rct.right = rect.x + rect.width;
+	rct.bottom = rect.y + rect.height;
+	return rct;
+}

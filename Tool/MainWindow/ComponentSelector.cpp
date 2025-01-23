@@ -140,13 +140,13 @@ void ComponentSelector::RepeatedSelection(const vector<UIComponent*>& componentL
 	SetComponent(componentList[idx]);
 }
 
-bool AttachSelectedComponent(ComponentSelector* selector, FloatingComponent* floater,
+bool AttachSelectedComponent(CommandList* cmdList, ComponentSelector* selector, FloatingComponent* floater,
 	const XMINT2& position) noexcept
 {
 	UIComponent* selectComponent = selector->GetComponent();
 	if (!selectComponent) return false;
 
-	if (!AddComponentFromScreenPos(selectComponent, floater, position))
+	if (!AddComponentFromScreenPos(cmdList, selectComponent, floater, position))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Attachment failed for this component.");
 		return false;

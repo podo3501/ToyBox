@@ -19,20 +19,20 @@ public:
 
 	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
 
+	inline void SetSource(const Rectangle& source) noexcept { m_source = source; }
+	inline const Rectangle& GetSource() const noexcept { return m_source; }
+	inline void SetFilename(const wstring& filename) noexcept { m_filename = filename; }
+	inline optional<wstring> GetFilename() const noexcept { return m_filename; }
+
 protected:
 	ImageGrid1(const ImageGrid1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementUpdate(const XMINT2& position) noexcept override;
 	virtual void ImplementRender(IRender* render) const override;
 
-public:
-	Property<wstring> Filename{};
-	Property<Rectangle> Source{};
-
-	void SetSource(const Rectangle& source) noexcept { Source = source; }
-	const Rectangle& GetSource() const noexcept { return Source.Get(); }
-
 private:
 	size_t m_index{ 0 };
+	wstring m_filename;
+	Rectangle m_source{};
 	XMINT2 m_position{};
 };

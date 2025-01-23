@@ -98,9 +98,7 @@ namespace ComponentTest
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		SourceDivider srcDivider{};
-		img3->GetSourceAnd2Divider(srcDivider);
-
+		SourceDivider srcDivider{ *img3->GetSourceAnd2Divider() };
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 82, 48, 48 }));
 		EXPECT_THAT(srcDivider.list, ElementsAre(22, 26));
 
@@ -190,9 +188,7 @@ namespace ComponentTest
 		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		SourceDivider srcDivider{};
-		img9->GetSourceAnd4Divider(srcDivider);
-
+		SourceDivider srcDivider{ *img9->GetSourceAnd4Divider() };
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 64 }));
 		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34, 36, 38));
 

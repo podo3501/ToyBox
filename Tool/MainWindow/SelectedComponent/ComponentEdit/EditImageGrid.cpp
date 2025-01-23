@@ -64,19 +64,20 @@ EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer, Comman
 
 void EditImageGrid1::RenderComponentEdit(bool& posModify)
 {
-    if (EditFilename("Filename", m_imageGrid1->Filename))
-        GetRenderer()->LoadComponent(m_imageGrid1);
+    wstring filename{ *m_imageGrid1->GetFilename() };
+    if (EditFilename("Filename", filename))
+        GetCommandList()->SetFilename(m_imageGrid1, GetRenderer(), filename);
 
     Rectangle source = m_imageGrid1->GetSource();
     if (EditRectangle("Source", source))
     {
-        GetCommandList()->Source(m_imageGrid1, source);
+        GetCommandList()->SetSource(m_imageGrid1, source);
         posModify |= true;
     }
 
     ImGui::Spacing();
     
-    RenderExtractTextureButton(m_imageGrid1->Filename, m_imageGrid1);
+    RenderExtractTextureButton(*m_imageGrid1->GetFilename(), m_imageGrid1);
 }
 
 ////////////////////////////////////////////////
@@ -89,18 +90,13 @@ EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer, Comman
 
 void EditImageGrid3::RenderComponentEdit(bool& modify)
 {
-    wstring filename{};
-    assert(m_imageGrid3->GetFilename(filename));
+    wstring filename{ *m_imageGrid3->GetFilename() };
     if (EditFilename("Filename", filename))
-    {
-        assert(m_imageGrid3->SetFilename(filename));
-        GetRenderer()->LoadComponent(m_imageGrid3);
-    }
+        GetCommandList()->SetFilename(m_imageGrid3, GetRenderer(), filename);
     
-    SourceDivider srcDivider{};
-    assert(m_imageGrid3->GetSourceAnd2Divider(srcDivider));
+    SourceDivider srcDivider{ *m_imageGrid3->GetSourceAnd2Divider() };
     if (EditSourceAndDivider("Source", "Deviders", srcDivider))
-        assert(m_imageGrid3->SetSourceAnd2Divider(srcDivider));
+        GetCommandList()->SetSourceAndDivider(m_imageGrid3, srcDivider);
 
     ImGui::Spacing();
 
@@ -117,18 +113,13 @@ EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer, Comman
 
 void EditImageGrid9::RenderComponentEdit(bool& modify)
 {
-    wstring filename{};
-    assert(m_imageGrid9->GetFilename(filename));
+    wstring filename{ *m_imageGrid9->GetFilename() };
     if (EditFilename("Filename", filename))
-    {
-        assert(m_imageGrid9->SetFilename(filename));
-        GetRenderer()->LoadComponent(m_imageGrid9);
-    }
-
-    SourceDivider srcDivider{};
-    assert(m_imageGrid9->GetSourceAnd4Divider(srcDivider));
+        GetCommandList()->SetFilename(m_imageGrid9, GetRenderer(), filename);
+    
+    SourceDivider srcDivider{ *m_imageGrid9->GetSourceAnd4Divider() };
     if (EditSourceAndDivider("Source", "Deviders", srcDivider))
-        assert(m_imageGrid9->SetSourceAnd4Divider(srcDivider));
+        GetCommandList()->SetSourceAndDivider(m_imageGrid9, srcDivider);
 
     ImGui::Spacing();
 

@@ -19,10 +19,10 @@ public:
 	Rectangle GetFirstComponentSource() const noexcept;
 
 	bool SetFilename(const wstring& filename) noexcept;
-	bool GetFilename(wstring& outFilename) const noexcept;
+	optional<wstring> GetFilename() const noexcept;
 
 	bool SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept;
-	bool GetSourceAnd2Divider(SourceDivider& outSrcDivider) const noexcept;
+	optional<SourceDivider> GetSourceAnd2Divider() const noexcept;
 
 	bool SetSources(const vector<Rectangle>& sources) noexcept;
 	vector<Rectangle> GetSources() const noexcept;

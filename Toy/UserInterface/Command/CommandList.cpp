@@ -2,7 +2,9 @@
 #include "CommandList.h"
 #include "Command.h"
 #include "CommandRegistry.h"
+#include "../UIComponent.h"
 #include "../../Utility.h"
+#include "../UIType.h"
 
 CommandList::~CommandList() = default;
 CommandList::CommandList() = default;
@@ -29,43 +31,59 @@ bool CommandList::Redo() noexcept
 	return true;
 }
 
-bool CommandList::TryMergeCommand(unique_ptr<Command>& cmd) noexcept
+unique_ptr<Command> CommandList::TryMergeCommand(unique_ptr<Command> cmd) noexcept
 {
-	if (!cmd->IsMerge()) return false;
-	if (m_commandList.empty()) return false;
+	if (m_commandList.empty()) return cmd;
 
 	auto& preCmd = m_commandList.back();
-	if (preCmd->GetTypeID() != cmd->GetTypeID()) return false;
-	
-	preCmd->Merge(move(cmd));
-	return true;
+	return preCmd->Merge(move(cmd));
 }
 
-template <typename CommandType, typename... ParamTypes>
-bool CommandList::ApplyCommand(UIComponent* component, ParamTypes&&... params)
+void CommandList::AddOrMergeCommand(unique_ptr<Command> command) noexcept
 {
-	unique_ptr<Command> command = make_unique<CommandType>(component, forward<ParamTypes>(params)...);
-	ReturnIfFalse(command->Execute());
-
 	if (m_index < static_cast<int>(m_commandList.size()) - 1)
 		m_commandList.resize(m_index + 1);
 
-	if (TryMergeCommand(command)) return true;
+	//Merge를 시도하고 실패하면 command는 다시 돌려준다. 
+	// 아니면 IsMerge를 불러줘야 하는데 최대한 public 함수를 안 내놓는게 좋은 코딩법이다.
+	command = TryMergeCommand(move(command));
+	if (!command) return;
 
 	m_commandList.emplace_back(move(command));
 	m_index++;
+}
 
+template <typename CommandType, typename... ParamTypes>
+bool CommandList::ApplyCommand(ParamTypes&&... params)
+{
+	unique_ptr<Command> command = make_unique<CommandType>(forward<ParamTypes>(params)...);
+	ReturnIfFalse(command->Execute());
+
+	AddOrMergeCommand(move(command));
 	return true;
 }
 
-bool CommandList::RelativePosition(UIComponent* component, const XMINT2& relativePos)
+unique_ptr<UIComponent> CommandList::AttachComponent(UIComponent* panel, unique_ptr<UIComponent> component, const XMINT2& relativePos)
 {
-	return ApplyCommand<RelativePositionCommand>(component, relativePos);
+	unique_ptr<Command> command = make_unique<AttachComponentCommand>(panel, move(component), relativePos);
+	if (!command->Execute())
+	{
+		auto attachComponentCommand = static_cast<AttachComponentCommand*>(command.get());
+		return attachComponentCommand->GetFailureResult();
+	}
+
+	AddOrMergeCommand(move(command));
+	return nullptr;
 }
 
-bool CommandList::Size(UIComponent* component, const XMUINT2& size)
+bool CommandList::SetRelativePosition(UIComponent* component, const XMINT2& relativePos)
 {
-	return ApplyCommand<SizeCommand>(component, size);
+	return ApplyCommand<SetRelativePositionCommand>(component, relativePos);
+}
+
+bool CommandList::SetSize(UIComponent* component, const XMUINT2& size)
+{
+	return ApplyCommand<SetSizeCommand>(component, size);
 }
 
 bool CommandList::Rename(UIComponent* component, const string& name)
@@ -73,7 +91,17 @@ bool CommandList::Rename(UIComponent* component, const string& name)
 	return ApplyCommand<RenameCommand>(component, name);
 }
 
-bool CommandList::Source(UIComponent* imgGrid1, const Rectangle& source)
+bool CommandList::SetSource(ImageGrid1* imgGrid1, const Rectangle& source)
 {
-	return ApplyCommand<SourceCommand>(imgGrid1, source);
+	return ApplyCommand<SetSourceCommand>(imgGrid1, source);
+}
+
+bool CommandList::SetFilename(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename)
+{
+	return ApplyCommand<SetFilenameCommand>(imgGridVariant, renderer, filename);
+}
+
+bool CommandList::SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider)
+{
+	return ApplyCommand<SetSourceAndDividerCommand>(imgGridVariant, srcDivider);
 }

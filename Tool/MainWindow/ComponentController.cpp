@@ -31,7 +31,7 @@ bool ComponentController::CheckAttachComponent(const InputManager& inputManager)
 	if (!m_floater->IsComponent()) return false;
 	if (!IsInputAction(inputManager, Keyboard::LeftShift, MouseButton::Left)) return false;
 
-	AttachSelectedComponent(m_selector.get(), m_floater.get(), inputManager.GetMouse().GetOffsetPosition());
+	AttachSelectedComponent(m_cmdList.get(), m_selector.get(), m_floater.get(), inputManager.GetMouse().GetOffsetPosition());
 
 	return true;
 }

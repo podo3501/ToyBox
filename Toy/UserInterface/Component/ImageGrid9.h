@@ -18,10 +18,10 @@ public:
 	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
 
 	bool SetFilename(const wstring& filename) noexcept;
-	bool GetFilename(wstring& outFilename) const noexcept;
+	optional<wstring> GetFilename() const noexcept;
 
 	bool SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept;
-	bool GetSourceAnd4Divider(SourceDivider& outSrcDivider) const noexcept;
+	optional<SourceDivider> GetSourceAnd4Divider() const noexcept;
 
 	bool SetSources(const vector<Rectangle>& sources) noexcept;
 	vector<Rectangle> GetSources() const noexcept;

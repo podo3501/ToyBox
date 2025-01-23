@@ -86,7 +86,7 @@ void ImageGrid1Extractor::UpdateProcess(const InputManager& inputManager)
     if(IsInputAction(inputManager, MouseButton::Left, KeyState::Pressed))
     {
         if (m_hoveredArea != Rectangle{})
-            GetCommandList()->Source(m_component, m_hoveredArea);
+            GetCommandList()->SetSource(m_component, m_hoveredArea);
     }
 }
 

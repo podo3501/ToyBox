@@ -1,82 +1,161 @@
 #pragma once
 #include "Command.h"
+#include "../UIType.h"
 
 class UIComponent;
 
-class RelativePositionCommand : public Command
+template <typename T>
+class CommandRecord
 {
 public:
-	RelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept;
+	CommandRecord(const T& curr) noexcept : current{ curr } {}
+	CommandRecord(T&& curr) noexcept : current(move(curr)) {}
 
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::RelativePosition; }
-	virtual bool Execute() override;
-	virtual bool Redo() override;
-	virtual bool Undo() override;
-	virtual bool IsMerge() noexcept { return true; }
-	virtual void Merge(unique_ptr<Command>) noexcept override;
-
-private:
-	UIComponent* m_component;
-	XMINT2 m_position{};
-	XMINT2 m_beforePosition{};
+	T current{};
+	T previous{};
 };
 
-//////////////////////////////////////////////////////////////////
-
-class SizeCommand : public Command
+class AttachComponentCommand : public Command
 {
 public:
-	SizeCommand(UIComponent* component, const XMUINT2& size) noexcept;
+	AttachComponentCommand(UIComponent* panel, unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
 
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::Size; }
 	virtual bool Execute() override;
-	virtual bool Redo() override;
 	virtual bool Undo() override;
-	virtual bool IsMerge() noexcept { return true; }
-	virtual void Merge(unique_ptr<Command>) noexcept override;
+	virtual bool Redo() override;
+
+	unique_ptr<UIComponent> GetFailureResult() noexcept;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::AttachComponent; }
+	virtual bool IsMerge(Command*) noexcept { return false; }
 
 private:
-	UIComponent* m_component;
-	XMUINT2 m_size{};
-	XMUINT2 m_beforeSize{};
+	UIComponent* m_panel;
+	unique_ptr<UIComponent> m_attach;
+	XMINT2 m_pos{};
+	UIComponent* m_detach;
+	unique_ptr<UIComponent> m_failureResult;
 };
 
-//////////////////////////////////////////////////////////////////
+class SetRelativePositionCommand : public Command
+{
+public:
+	SetRelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetRelativePosition; }
+	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+
+private:
+	CommandRecord<XMINT2> m_record;
+};
+
+class SetSizeCommand : public Command
+{
+public:
+	SetSizeCommand(UIComponent* component, const XMUINT2& size) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSize; }
+	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+
+private:
+	CommandRecord<XMUINT2> m_record;
+};
 
 class RenameCommand : public Command
 {
 public:
 	RenameCommand(UIComponent* component, const string& name) noexcept;
 
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::Rename; }
 	virtual bool Execute() override;
-	virtual bool Redo() override;
 	virtual bool Undo() override;
-	virtual bool IsMerge() noexcept { return false; }
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::Rename; }
+	virtual bool IsMerge(Command*) noexcept { return false; }
 
 private:
-	UIComponent* m_component;
-	string m_name;
-	string m_beforeName;
+	CommandRecord<string> m_record;
 };
 
 //////////////////////////////////////////////////////////////////
 
 class ImageGrid1;
-class SourceCommand : public Command
+class ImageGrid3;
+class ImageGrid9;
+class SetSourceCommand : public Command
 {
 public:
-	SourceCommand(UIComponent* component, const Rectangle& source) noexcept;
+	SetSourceCommand(ImageGrid1* component, const Rectangle& source) noexcept;
 
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::Source; }
 	virtual bool Execute() override;
-	virtual bool Redo() override;
 	virtual bool Undo() override;
-	virtual bool IsMerge() noexcept { return true; }
-	virtual void Merge(unique_ptr<Command>) noexcept override;
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSource; }
+	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
 
 private:
 	ImageGrid1* m_imgGrid1;
-	Rectangle m_source{};
-	Rectangle m_beforeSource{};
+	CommandRecord<Rectangle> m_record;
+};
+
+struct IRenderer;
+class SetFilenameCommand : public Command
+{
+	using ImageGridVariant = variant<ImageGrid1*, ImageGrid3*, ImageGrid9*>;
+
+public:
+	SetFilenameCommand(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetFilename; }
+	virtual bool IsMerge(Command*) noexcept { return false; }
+
+private:
+	wstring GetFilename() const noexcept;
+	bool SetFilename(const wstring& filename);
+
+	ImageGridVariant m_imgGridVariant;
+	IRenderer* m_renderer;
+	CommandRecord<wstring> m_record;
+};
+
+class SetSourceAndDividerCommand : public Command
+{
+	using ImageGrid39Variant = variant<ImageGrid3*, ImageGrid9*>;
+
+public:
+	SetSourceAndDividerCommand(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSourceAndDivider; }
+	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+
+private:
+	optional<SourceDivider> GetSourceAndDivider() const noexcept;
+	bool SetSourceAndDivider(const SourceDivider& srcDivider) noexcept;
+
+	ImageGrid39Variant m_imgGridVariant;
+	CommandRecord<SourceDivider> m_record;
 };

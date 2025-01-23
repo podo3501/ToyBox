@@ -12,8 +12,8 @@ ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	UIComponent{ o }
 {
 	m_index = o.m_index;
-	Filename = o.Filename;
-	Source = o.Source;
+	m_filename = o.m_filename;
+	m_source = o.m_source;
 }
 
 unique_ptr<UIComponent> ImageGrid1::CreateClone() const
@@ -26,7 +26,7 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const ImageGrid1* o = static_cast<const ImageGrid1*>(&rhs);
 
-	auto result = tie(m_index, Filename, Source) == tie(o->m_index, o->Filename, o->Source);
+	auto result = tie(m_index, m_filename, m_source) == tie(o->m_index, o->m_filename, o->m_source);
 	assert(result);
 
 	return result;
@@ -34,10 +34,7 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 
 bool ImageGrid1::LoadResources(ILoadData* load)
 {
-	if (!Filename.IsDirty()) return true;
-	
-	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(Filename), nullptr, m_index, nullptr));
-	Filename.ClearDirty();
+	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, nullptr));
 
 	return true;
 }
@@ -55,7 +52,7 @@ void ImageGrid1::ImplementRender(IRender* render) const
 	const auto& size = GetSize();
 	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
 
-	RECT source(Rectangle(Source.Get()));
+	RECT source = RectangleToRect(m_source);
 	render->Render(m_index, destination, &source);
 }
 
@@ -66,8 +63,8 @@ bool ImageGrid1::SetImage(const UILayout& layout, const ImageSource& source) noe
 
 	SetLayout(layout);
 
-	Filename = source.filename;
-	Source = source.list.at(0);
+	m_filename = source.filename;
+	m_source = source.list.at(0);
 
 	return true;
 }
@@ -76,6 +73,6 @@ void ImageGrid1::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
 	operation.Process("Index", m_index);
-	operation.Process("Filename", Filename);
-	operation.Process("Source", Source);
+	operation.Process("Filename", m_filename);
+	operation.Process("Source", m_source);
 }

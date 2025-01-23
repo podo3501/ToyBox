@@ -82,12 +82,12 @@ void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 	ApplySize(size);
 }
 
-bool ImageGrid9::GetFilename(wstring& outFilename) const noexcept
+optional<wstring> ImageGrid9::GetFilename() const noexcept
 {
 	ImageGrid3* img3 = GetFirstImageGrid<ImageGrid3*>(this);
-	if (!img3) return false;
+	if (!img3) return nullopt;
 
-	return img3->GetFilename(outFilename);
+	return img3->GetFilename();
 }
 
 bool ImageGrid9::SetFilename(const wstring& filename) noexcept
@@ -100,10 +100,10 @@ bool ImageGrid9::SetFilename(const wstring& filename) noexcept
 		});
 }
 
-bool ImageGrid9::GetSourceAnd4Divider(SourceDivider& outSrcDivider) const noexcept
+optional<SourceDivider> ImageGrid9::GetSourceAnd4Divider() const noexcept
 {
 	vector<ImageGrid3*> components;
-	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
+	if(!GetImageGridComponents<ImageGrid3*>(this, components)) return nullopt;
 
 	const Rectangle& firstMergedSource = components[0]->GetMergedSource();
 
@@ -111,21 +111,22 @@ bool ImageGrid9::GetSourceAnd4Divider(SourceDivider& outSrcDivider) const noexce
 	for (auto imgGrid3 : components)
 		mergedSource = Rectangle::Union(mergedSource, imgGrid3->GetMergedSource());
 
-	outSrcDivider.rect = mergedSource;
+	SourceDivider srcDivider{};
+	srcDivider.rect = mergedSource;
 
 	//x값으로 2개 Divider를 담는다.
-	SourceDivider firstComponent;
-	components[0]->GetSourceAnd2Divider(firstComponent);
-	outSrcDivider.list = firstComponent.list;
+	auto firstComponent = components[0]->GetSourceAnd2Divider();
+	if (!firstComponent.has_value()) return nullopt;
+	srcDivider.list = firstComponent->list;
 
 	//y값으로 2개 Divider를 담는다.
 	const Rectangle& topSource = firstMergedSource;
-	outSrcDivider.list.insert(outSrcDivider.list.end(), {
+	srcDivider.list.insert(srcDivider.list.end(), {
 		topSource.y + topSource.height - mergedSource.y,
 		components[2]->GetMergedSource().y - mergedSource.y
 		});
 
-	return true;
+	return srcDivider;
 }
 
 bool ImageGrid9::SetSources(const vector<Rectangle>& sources) noexcept

@@ -54,6 +54,7 @@ namespace Tool
 }
 
 class UIComponent;
+class CommandList;
 class FloatingComponent;
 
 inline ImVec4 ToColor(const DirectX::XMVECTORF32& color) noexcept
@@ -61,4 +62,4 @@ inline ImVec4 ToColor(const DirectX::XMVECTORF32& color) noexcept
 	return ImVec4(color.f[0], color.f[1], color.f[2], color.f[3]);
 }
 
-bool AddComponentFromScreenPos( UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept;
+bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept;

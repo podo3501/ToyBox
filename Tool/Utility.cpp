@@ -2,6 +2,7 @@
 #include "Utility.h"
 #include "MainWindow/FloatingComponent.h"
 #include "../Toy/UserInterface/UIComponent.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/Utility.h"
 
 ImGuiMouseCursor_ Tool::MouseCursor::m_mouseCursor = ImGuiMouseCursor_Arrow;
@@ -66,14 +67,13 @@ void DrawRectangle(const vector<Rectangle>& rects, const ImGuiWindow* window)
 		});
 }
 
-bool AddComponentFromScreenPos(UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept
+bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept
 {
 	if (!addable->IsAttachable()) return false;
 
 	const XMINT2& comPos = addable->GetPosition();
 	XMINT2 relativePos = pos - comPos;
-
-	unique_ptr<UIComponent> failed = addable->AttachComponent(floater->GetComponent(), relativePos);
+	unique_ptr<UIComponent> failed = cmdList->AttachComponent(addable, floater->GetComponent(), relativePos);
 	if (failed) //제대로 붙지 않았다면 인자로 보낸 Component가 리턴값으로 돌아온다.
 	{
 		floater->SetComponent(move(failed));

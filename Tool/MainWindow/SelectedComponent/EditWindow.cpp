@@ -112,7 +112,7 @@ void EditWindow::ResizeComponent(const XMINT2& startPos, const Mouse::State& mou
 
     if (size != modifySize)
     {
-        m_cmdList->Size(m_component, modifySize);
+        m_cmdList->SetSize(m_component, modifySize);
         m_component->RefreshPosition();
     }
 }
@@ -193,7 +193,7 @@ bool EditWindow::EditSize(const XMUINT2& size)
     changed |= EditInteger("Height", newSize.y);
 
     if (changed)
-        m_cmdList->Size(m_component, newSize);
+        m_cmdList->SetSize(m_component, newSize);
 
     return changed;
 }
@@ -209,7 +209,7 @@ void EditWindow::RenderCommon(bool& modify)
         modify |= EditInteger("Y", relativePosition->y);
 
         if (modify)
-            m_cmdList->RelativePosition(m_component, *relativePosition);
+            m_cmdList->SetRelativePosition(m_component, *relativePosition);
     }
 
     const auto& layout = m_component->GetLayout();

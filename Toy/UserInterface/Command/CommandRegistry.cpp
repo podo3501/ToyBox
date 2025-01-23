@@ -3,94 +3,220 @@
 #include "../../Utility.h"
 #include "../UIComponent.h"
 #include "../Component/ImageGrid1.h"
+#include "../Component/ImageGrid3.h"
+#include "../Component/ImageGrid9.h"
+#include "../Include/IRenderer.h"
 
-RelativePositionCommand::RelativePositionCommand(UIComponent * component, const XMINT2 & relativePos) noexcept :
-	m_component{ component }, m_position{ relativePos }
+AttachComponentCommand::AttachComponentCommand(UIComponent* panel,
+	unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept :
+	Command{ nullptr }, 
+	m_panel{ panel }, 
+	m_attach{ move(component) },
+	m_pos{ relativePos },
+	m_detach{ nullptr } 
 {}
 
-bool RelativePositionCommand::Execute()
+bool AttachComponentCommand::Execute()
 {
-	auto beforePos = m_component->GetRelativePosition();
-	ReturnIfFalse(beforePos.has_value());
-	m_beforePosition = *beforePos;
-	ReturnIfFalse(m_component->SetRelativePosition(m_position));
-
-	return true;
+	m_detach = m_attach.get();
+	m_failureResult = m_panel->AttachComponent(move(m_attach), m_pos);
+	return m_failureResult == nullptr;
 }
 
-bool RelativePositionCommand::Undo()
+bool AttachComponentCommand::Undo()
 {
-	ReturnIfFalse(m_component->SetRelativePosition(m_beforePosition));
-	return true;
+	if (auto detachComponent = m_detach->DetachComponent(); detachComponent)
+	{
+		m_attach = move(*detachComponent);
+		return true;
+	}
+	return false;
 }
 
-bool RelativePositionCommand::Redo()
+bool AttachComponentCommand::Redo()
 {
-	ReturnIfFalse(m_component->SetRelativePosition(m_position));
-	return true;
+	m_failureResult = m_panel->AttachComponent(move(m_attach), m_pos);
+	return m_failureResult == nullptr;
 }
 
-void RelativePositionCommand::Merge(unique_ptr<Command> command) noexcept
+unique_ptr<UIComponent> AttachComponentCommand::GetFailureResult() noexcept
 {
-	auto curCommnad = static_cast<RelativePositionCommand*>(command.get());
-	m_position = curCommnad->m_position;
+	return move(m_failureResult);
 }
 
 //////////////////////////////////////////////////////////////////
 
-SizeCommand::SizeCommand(UIComponent* component, const XMUINT2& size) noexcept :
-	m_component{ component }, m_size{ size }
+SetRelativePositionCommand::SetRelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept :
+	Command{ component }, m_record{ relativePos }
 {}
 
-bool SizeCommand::Execute()
+bool SetRelativePositionCommand::Execute()
 {
-	m_beforeSize = m_component->GetSize();
-	m_component->ChangeSize(m_size);
+	auto prevPos = GetComponent()->GetRelativePosition();
+	ReturnIfFalse(prevPos.has_value());
+	m_record.previous = *prevPos;
+	ReturnIfFalse(GetComponent()->SetRelativePosition(m_record.current));
+
 	return true;
 }
 
-bool SizeCommand::Undo() { m_component->ChangeSize(m_beforeSize); return true; }
-bool SizeCommand::Redo() { m_component->ChangeSize(m_size);	return true; }
+bool SetRelativePositionCommand::Undo() { return GetComponent()->SetRelativePosition(m_record.previous); }
+bool SetRelativePositionCommand::Redo() { return GetComponent()->SetRelativePosition(m_record.current); }
 
-void SizeCommand::Merge(unique_ptr<Command> command) noexcept
+void SetRelativePositionCommand::PostMerge(unique_ptr<Command> other) noexcept
 {
-	auto curCommnad = static_cast<SizeCommand*>(command.get());
-	m_size = curCommnad->m_size;
+	auto otherCmd = static_cast<SetRelativePositionCommand*>(other.get());
+	m_record.current = otherCmd->m_record.current;
+}
+
+//////////////////////////////////////////////////////////////////
+
+SetSizeCommand::SetSizeCommand(UIComponent* component, const XMUINT2& size) noexcept :
+	Command{ component }, m_record{ size }
+{}
+
+bool SetSizeCommand::Execute()
+{
+	m_record.previous = GetComponent()->GetSize();
+	GetComponent()->ChangeSize(m_record.current);
+	return true;
+}
+
+bool SetSizeCommand::Undo() { GetComponent()->ChangeSize(m_record.previous); return true; }
+bool SetSizeCommand::Redo() { GetComponent()->ChangeSize(m_record.current);	return true; }
+
+void SetSizeCommand::PostMerge(unique_ptr<Command> other) noexcept
+{
+	auto otherCmd = static_cast<SetSizeCommand*>(other.get());
+	m_record.current = otherCmd->m_record.current;
 }
 
 //////////////////////////////////////////////////////////////////
 
 RenameCommand::RenameCommand(UIComponent* component, const string& name) noexcept :
-	m_component{ component }, m_name{ name }
+	Command{ component }, m_record{ name }
 {}
 
 bool RenameCommand::Execute()
 {
-	m_beforeName = m_component->GetName();
-	return m_component->Rename(m_name);
+	m_record.previous = GetComponent()->GetName();
+	return GetComponent()->Rename(m_record.current);
 }
 
-bool RenameCommand::Undo() { return m_component->Rename(m_beforeName); }
-bool RenameCommand::Redo() { return m_component->Rename(m_name); }
+bool RenameCommand::Undo() { return GetComponent()->Rename(m_record.previous); }
+bool RenameCommand::Redo() { return GetComponent()->Rename(m_record.current); }
 
 //////////////////////////////////////////////////////////////////
 
-SourceCommand::SourceCommand(UIComponent* component, const Rectangle& source) noexcept :
-	m_imgGrid1{ ComponentCast<ImageGrid1*>(component) }, m_source{ source }
+SetSourceCommand::SetSourceCommand(ImageGrid1* imageGrid1, const Rectangle& source) noexcept :
+	Command{ imageGrid1 },
+	m_imgGrid1{ imageGrid1 },
+	m_record{ source }
 {}
 
-bool SourceCommand::Execute()
+bool SetSourceCommand::Execute()
 {
-	m_beforeSource = m_imgGrid1->GetSource();
-	m_imgGrid1->SetSource(m_source);
+	m_record.previous = m_imgGrid1->GetSource();
+	m_imgGrid1->SetSource(m_record.current);
 	return true;
 }
 
-bool SourceCommand::Undo() { m_imgGrid1->SetSource(m_beforeSource); return true; }
-bool SourceCommand::Redo() { m_imgGrid1->SetSource(m_source); return true; }
+bool SetSourceCommand::Undo() { m_imgGrid1->SetSource(m_record.previous); return true; }
+bool SetSourceCommand::Redo() { m_imgGrid1->SetSource(m_record.current); return true; }
 
-void SourceCommand::Merge(unique_ptr<Command> command) noexcept
+void SetSourceCommand::PostMerge(unique_ptr<Command> other) noexcept
 {
-	auto curCommnad = static_cast<SourceCommand*>(command.get());
-	m_source = curCommnad->m_source;
+	auto otherCmd = static_cast<SetSourceCommand*>(other.get());
+	m_record.current = otherCmd->m_record.current;
+}
+
+//////////////////////////////////////////////////////////////////
+
+SetFilenameCommand::SetFilenameCommand(const ImageGridVariant& imgGridVariant, 
+	IRenderer* renderer, const wstring& filename) noexcept :
+	//variant안에 값들은 UIComponent에서 상속 받은 것이라서 visit로 값을 하나 빼와서 캐스팅 한다.
+	//get<UIComponent*>는 되지 않았다. 컴파일 타임에는 모르기 때문에 ImageGrid1* 이렇게 넣어야만 가져올 수 있다.
+	Command{ visit([](auto* imgGrid) -> UIComponent* { return imgGrid; }, imgGridVariant) },
+	m_imgGridVariant{ imgGridVariant },
+	m_renderer{ renderer },
+	m_record{ filename }
+{}
+
+wstring SetFilenameCommand::GetFilename() const noexcept
+{
+	return visit([](auto* imgGrid) -> wstring {
+		if (imgGrid && imgGrid->GetFilename().has_value())
+			return *imgGrid->GetFilename();
+		return L"";
+		}, m_imgGridVariant);
+}
+
+bool SetFilenameCommand::SetFilename(const wstring& filename)
+{
+	return visit([this, filename](auto* imgGrid) -> bool {
+		if (imgGrid)
+		{
+			imgGrid->SetFilename(filename);
+			return m_renderer->LoadComponent(imgGrid);
+		}
+		return false;
+		}, m_imgGridVariant);
+}
+
+bool SetFilenameCommand::Execute()
+{
+	m_record.previous = GetFilename();
+	return SetFilename(m_record.current);
+}
+
+bool SetFilenameCommand::Undo() { return SetFilename(m_record.previous); }
+bool SetFilenameCommand::Redo() { return SetFilename(m_record.current); }
+
+//////////////////////////////////////////////////////////////////
+
+SetSourceAndDividerCommand::SetSourceAndDividerCommand(const ImageGrid39Variant& imgGridVariant,
+	const SourceDivider& srcDivider) noexcept :
+	Command{ visit([](auto* imgGrid) -> UIComponent* { return imgGrid; }, imgGridVariant) },
+	m_imgGridVariant{ imgGridVariant },
+	m_record{ srcDivider }
+{}
+
+optional<SourceDivider> SetSourceAndDividerCommand::GetSourceAndDivider() const noexcept
+{
+	if (auto imgGrid3 = get_if<ImageGrid3*>(&m_imgGridVariant); imgGrid3 && *imgGrid3)
+		return (*imgGrid3)->GetSourceAnd2Divider();
+
+	if (auto imgGrid9 = get_if<ImageGrid9*>(&m_imgGridVariant); imgGrid9 && *imgGrid9)
+		return (*imgGrid9)->GetSourceAnd4Divider();
+
+	return nullopt;
+}
+
+bool SetSourceAndDividerCommand::SetSourceAndDivider(const SourceDivider& srcDivider) noexcept
+{
+	if (auto imgGrid3 = get_if<ImageGrid3*>(&m_imgGridVariant); imgGrid3 && *imgGrid3)
+		return (*imgGrid3)->SetSourceAnd2Divider(srcDivider);
+
+	if (auto imgGrid9 = get_if<ImageGrid9*>(&m_imgGridVariant); imgGrid9 && *imgGrid9)
+		return (*imgGrid9)->SetSourceAnd4Divider(srcDivider);
+
+	return false;
+}
+
+bool SetSourceAndDividerCommand::Execute()
+{
+	auto srcDivider = GetSourceAndDivider();
+	if (!srcDivider.has_value()) return false;
+
+	m_record.previous = *srcDivider;
+	return SetSourceAndDivider(m_record.current);
+}
+
+bool SetSourceAndDividerCommand::Undo() { return SetSourceAndDivider(m_record.previous); }
+bool SetSourceAndDividerCommand::Redo() { return SetSourceAndDivider(m_record.current); }
+
+void SetSourceAndDividerCommand::PostMerge(unique_ptr<Command> other) noexcept
+{
+	auto otherCmd = static_cast<SetSourceAndDividerCommand*>(other.get());
+	m_record.current = otherCmd->m_record.current;
 }

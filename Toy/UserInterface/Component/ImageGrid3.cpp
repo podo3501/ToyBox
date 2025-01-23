@@ -53,7 +53,7 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
     vector<Rectangle> srcList;
     ranges::transform(components, back_inserter(srcList), [](auto component) {
         ImageGrid1* image = ComponentCast<ImageGrid1*>(component);
-        return image->Source;
+        return image->GetSource();
         });
     return srcList;
 }
@@ -77,16 +77,15 @@ Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
     ImageGrid1* img1 = GetFirstImageGrid<ImageGrid1*>(this);
     if(!img1) return {};
 
-    return img1->Source;
+    return img1->GetSource();
 }
 
-bool ImageGrid3::GetFilename(wstring& outFilename) const noexcept
+optional<wstring> ImageGrid3::GetFilename() const noexcept
 {
     ImageGrid1* img1 = GetFirstImageGrid<ImageGrid1*>(this);
-    if (!img1) return false;
+    if (!img1) return nullopt;
 
-    outFilename = img1->Filename.Get();
-    return true;
+    return img1->GetFilename();
 }
 
 bool ImageGrid3::SetFilename(const wstring& filename) noexcept
@@ -95,24 +94,25 @@ bool ImageGrid3::SetFilename(const wstring& filename) noexcept
     ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
 
     for (auto imgGrid1 : components)
-        imgGrid1->Filename = filename;
+        imgGrid1->SetFilename(filename);
 
     return true;
 }
 
-bool ImageGrid3::GetSourceAnd2Divider(SourceDivider& outSrcDivider) const noexcept
+optional<SourceDivider> ImageGrid3::GetSourceAnd2Divider() const noexcept
 {
     vector<ImageGrid1*> components;
-    ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
+    if(!GetImageGridComponents<ImageGrid1*>(this, components)) return nullopt;
 
     Rectangle mergedSource = GetMergedSource();
 
-    outSrcDivider.rect = mergedSource;
-    const Rectangle& leftSource = components[0]->Source.Get();
-    outSrcDivider.list.push_back(leftSource.x + leftSource.width - mergedSource.x);   //x값 2개와 사각형 하나면 source 사각형 3개를 만들 수 있다.
-    outSrcDivider.list.push_back(components[2]->Source.Get().x - mergedSource.x);
+    SourceDivider srcDivider{};
+    srcDivider.rect = mergedSource;
+    const Rectangle& leftSource = components[0]->GetSource();
+    srcDivider.list.push_back(leftSource.x + leftSource.width - mergedSource.x);   //x값 2개와 사각형 하나면 source 사각형 3개를 만들 수 있다.
+    srcDivider.list.push_back(components[2]->GetSource().x - mergedSource.x);
 
-    return true;
+    return srcDivider;
 }
 
 bool ImageGrid3::SetSources(const vector<Rectangle>& sources) noexcept
@@ -121,7 +121,7 @@ bool ImageGrid3::SetSources(const vector<Rectangle>& sources) noexcept
     ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
 
     ranges::for_each(components, [&sources, index = 0](auto component) mutable {
-        component->Source = sources[index++];
+        component->SetSource(sources[index++]);
         });
 
     return true;
@@ -140,7 +140,7 @@ vector<Rectangle> ImageGrid3::GetSources() const noexcept
     if (!GetImageGridComponents<ImageGrid1*>(this, components)) return {};
 
     for (auto imgGrid1 : components)
-        areas.push_back(imgGrid1->Source);
+        areas.push_back(imgGrid1->GetSource());
 
     return areas;
 }
