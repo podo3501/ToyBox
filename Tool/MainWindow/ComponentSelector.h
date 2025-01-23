@@ -41,4 +41,5 @@ private:
 class FloatingComponent;
 bool AttachSelectedComponent(CommandList* cmdList, ComponentSelector* selector, 
 	FloatingComponent* floater, const XMINT2& position) noexcept;
-optional<unique_ptr<UIComponent>> DetachSelectedComponent(ComponentSelector* selector) noexcept;
+unique_ptr<UIComponent> DetachSelectedComponent(CommandList* cmdList, 
+	ComponentSelector* selector) noexcept;

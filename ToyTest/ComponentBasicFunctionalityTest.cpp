@@ -304,7 +304,7 @@ namespace ComponentTest
 		m_panel->GetComponents({ 240, 140 }, outList);
 		EXPECT_EQ(outList.size(), 3);
 
-		Panel* ptrPanel = ComponentCast<Panel*>(m_panel->GetComponent("Panel_2"));
+		Panel* ptrPanel = ComponentCast<Panel*>(m_panel->GetComponent("Panel_0"));
 		ptrPanel->ChangeOrigin(Origin::LeftTop);
 
 		outList.clear();

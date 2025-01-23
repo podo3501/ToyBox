@@ -18,7 +18,7 @@ public:
 class AttachComponentCommand : public Command
 {
 public:
-	AttachComponentCommand(UIComponent* panel, unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
+	AttachComponentCommand(UIComponent* addable, unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
 
 	virtual bool Execute() override;
 	virtual bool Undo() override;
@@ -31,11 +31,34 @@ protected:
 	virtual bool IsMerge(Command*) noexcept { return false; }
 
 private:
-	UIComponent* m_panel;
+	UIComponent* m_addable;
 	unique_ptr<UIComponent> m_attach;
 	XMINT2 m_pos{};
 	UIComponent* m_detach;
 	unique_ptr<UIComponent> m_failureResult;
+};
+
+class DetachComponentCommand : public Command
+{
+public:
+	DetachComponentCommand(UIComponent* detach) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+	pair<unique_ptr<UIComponent>, UIComponent*> GetResult() noexcept;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::DetachComponent; }
+	virtual bool IsMerge(Command*) noexcept { return false; }
+
+private:
+	UIComponent* m_detach;
+	XMINT2 m_position{};
+	unique_ptr<UIComponent> m_component;
+	UIComponent* m_addable;
+	pair<unique_ptr<UIComponent>, UIComponent*> m_result;
 };
 
 class SetRelativePositionCommand : public Command

@@ -24,8 +24,9 @@ protected:
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 
 	inline bool IsDirty() const noexcept { return m_isDirty; }
+	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
-
+	
 public:
 	virtual ~UIComponent();
 	UIComponent& operator=(const UIComponent&) = delete;	//상속 받은 클래스도 대입생성자 기본적으로 삭제됨.
@@ -49,7 +50,7 @@ public:
 	virtual void SerializeIO(JsonOperation& operation);
 
 	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
-	optional<unique_ptr<UIComponent>> DetachComponent() noexcept;
+	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
 	
 	XMINT2 GetPosition() const noexcept;
 	optional<XMINT2> GetRelativePosition() const noexcept;
@@ -57,10 +58,8 @@ public:
 	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
 
-	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
-
 	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); MarkDirty(); }
-	inline const XMUINT2& GetSize() const noexcept { return m_layout.GetSize(); }
+	
 	XMUINT2 GetTotalChildSize() const noexcept;
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
@@ -80,13 +79,13 @@ public:
 	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }	
 	
 private:
-	bool IsUniqueName(const string& name) noexcept;
+	bool IsUniqueName(const string& name, UIComponent* self) noexcept;
 	void GenerateUniqueName(UIComponent* component) noexcept;
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
 	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
-	optional<unique_ptr<UIComponent>> DetachComponent(UIComponent* detachComponent) noexcept;
+	unique_ptr<UIComponent> DetachComponent(UIComponent* detachComponent) noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	UIComponent* GetRoot() noexcept;
 	void MarkDirty() noexcept;

@@ -2,13 +2,15 @@
 #include "EditWindow.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/UIComponent.h"
-#include "../Toy/UserInterface/UIComponentHelper.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../EditUtility.h"
 #include "../Toy/InputManager.h"
 #include "../../Utility.h"
 #include "../Toy/Utility.h"
+
+using namespace UIComponentEx;
 
 enum class OnDrag
 {
@@ -96,7 +98,7 @@ void EditWindow::ResizeComponent(const XMINT2& startPos, const Mouse::State& mou
     const int deltaX = mouseState.x - startPos.x;
     const int deltaY = mouseState.y - startPos.y;
 
-    const XMUINT2& size = m_component->GetSize();
+    const XMUINT2& size = GetSize(m_component);
     XMUINT2 modifySize{ size };
 
     switch (m_dragState)

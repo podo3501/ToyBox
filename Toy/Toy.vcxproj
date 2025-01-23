@@ -234,7 +234,7 @@
     <ClInclude Include="UserInterface\TransformComponent.h" />
     <ClInclude Include="UserInterface\UIComponent.h" />
     <ClInclude Include="UserInterface\UIComponent.hpp" />
-    <ClInclude Include="UserInterface\UIComponentHelper.h" />
+    <ClInclude Include="UserInterface\UIComponentEx.h" />
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
@@ -266,7 +266,7 @@
     <ClCompile Include="UserInterface\TransformComponent.cpp" />
     <ClCompile Include="UserInterface\UIComponent.cpp" />
     <ClCompile Include="UserInterface\JsonOperation_impl.cpp" />
-    <ClCompile Include="UserInterface\UIComponentHelper.cpp" />
+    <ClCompile Include="UserInterface\UIComponentEx.cpp" />
     <ClCompile Include="UserInterface\UIType.cpp" />
     <ClCompile Include="WindowProcedure.cpp" />
     <ClCompile Include="UserInterface\UILayout.cpp" />

@@ -5,6 +5,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 
 namespace ComponentTest
 {
@@ -17,7 +18,15 @@ namespace ComponentTest
 		return (component->*getter)();
 	}
 
-	static bool UndoRedoAttach(CommandList& cmdList, bool undo) noexcept
+	template <typename ReturnType, typename ComponentType>
+	static ReturnType UndoRedo(CommandList& cmdList, ComponentType* component,
+		ReturnType(*getter)(const UIComponent*) noexcept, bool undo) noexcept
+	{
+		undo ? cmdList.Undo() : cmdList.Redo();
+		return (*getter)(component);
+	}
+
+	static bool UndoRedo(CommandList& cmdList, bool undo) noexcept
 	{
 		return undo ? cmdList.Undo() : cmdList.Redo();
 	}
@@ -29,8 +38,8 @@ namespace ComponentTest
 
 		CommandList cmdList;
 		cmdList.AttachComponent(m_panel.get(), move(component), { 80, 60 });
-		EXPECT_EQ(UndoRedoAttach(cmdList, true), true);
-		EXPECT_EQ(UndoRedoAttach(cmdList, false), true);
+		EXPECT_EQ(UndoRedo(cmdList, true), true);
+		EXPECT_EQ(UndoRedo(cmdList, false), true);
 		
 		cmdList.SetRelativePosition(img1, { 90, 70 });
 		cmdList.SetRelativePosition(img1, { 100, 80 }); //RelativePosition은 명령이 하나로 합쳐짐
@@ -41,14 +50,25 @@ namespace ComponentTest
 		cmdList.SetSize(img1, { 54, 54 });
 		cmdList.SetSize(img1, { 74, 74 }); //Size은 명령이 하나로 합쳐짐
 
-		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetSize, true), XMUINT2(64, 64));
-		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetSize, false), XMUINT2(74, 74));
+		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponentEx::GetSize, true), XMUINT2(64, 64));
+		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponentEx::GetSize, false), XMUINT2(74, 74));
 
 		cmdList.Rename(img1, "Image1");
 		cmdList.Rename(img1, "Rename");
 
 		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetName, true), "Image1");
 		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetName, false), "Rename");
+
+		auto component2 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		auto detach = component2.get();
+
+		cmdList.AttachComponent(m_panel.get(), move(component2), { 80, 60 });
+		string preName = detach->GetName();
+		cmdList.DetachComponent(detach);
+		EXPECT_EQ(UndoRedo(cmdList, true), true);
+		string curName = detach->GetName();
+		EXPECT_EQ(preName, curName);
+		EXPECT_EQ(UndoRedo(cmdList, true), true);
 	}
 
 	TEST_F(UndoRedoTest, ImageGrid1)

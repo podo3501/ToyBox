@@ -41,12 +41,12 @@ bool ComponentController::CheckDetachComponent(const InputManager& inputManager)
 	if (m_floater->IsComponent()) return false;
 	if (!IsInputAction(inputManager, Keyboard::D, KeyState::Pressed)) return false;
 
-	auto detachComponent = DetachSelectedComponent(m_selector.get());
-	if (!detachComponent.has_value())
+	auto detachComponent = DetachSelectedComponent(m_cmdList.get(), m_selector.get());
+	if (!detachComponent)
 		return true;
 
 	//DetachµÈ Component¸¦ RenderTexture
-	if (!m_floater->ComponentToFloating(move(detachComponent.value())))
+	if (!m_floater->ComponentToFloating(move(detachComponent)))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to load the resource.");
 		return true;
@@ -60,7 +60,7 @@ bool ComponentController::CheckDeleteComponent(const InputManager& inputManager)
 	if (m_floater->IsComponent()) return false;
 	if (!IsInputAction(inputManager, Keyboard::Delete, KeyState::Pressed)) return false;
 
-	DetachSelectedComponent(m_selector.get());
+	DetachSelectedComponent(m_cmdList.get(), m_selector.get());
 
 	return true;
 }

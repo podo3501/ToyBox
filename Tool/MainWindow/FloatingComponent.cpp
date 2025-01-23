@@ -4,6 +4,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
@@ -125,7 +126,7 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 
 bool FloatingComponent::LoadComponent(unique_ptr<UIComponent>&& component)
 {
-	return LoadComponentInternal(move(component), component->GetSize());
+	return LoadComponentInternal(move(component), UIComponentEx::GetSize(component.get()));
 }
 
 bool FloatingComponent::ComponentToFloating(unique_ptr<UIComponent>&& component)
