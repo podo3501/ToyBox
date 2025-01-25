@@ -13,7 +13,7 @@ TargetType ComponentCast(UIComponent* component)
 }
 
 template<typename T>
-void UIComponent::GetComponent(const string& name, T** outComponent) const noexcept
+void UIComponent::GetComponent(const string& name, T** outComponent) noexcept
 {
 	UIComponent* component = GetComponent(name);
 	*outComponent = ComponentCast<T*>(component);

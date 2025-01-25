@@ -3,6 +3,9 @@
 #include "../../Utility.h"
 #include "../../InputManager.h"
 #include "../JsonOperation.h"
+#include "../UIComponentEx.h"
+
+using namespace UIComponentEx;
 
 Button::~Button() = default;
 Button::Button() :
@@ -28,7 +31,7 @@ bool Button::operator==(const UIComponent& o) const noexcept
 
 	return std::all_of(m_images.begin(), m_images.end(), [rhs](const auto& pair) {
 		auto state = pair.first;
-		return pair.second->GetName() == rhs->m_images.at(state)->GetName();
+		return GetName(pair.second) == GetName(rhs->m_images.at(state));
 		});
 }
 

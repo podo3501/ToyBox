@@ -13,13 +13,13 @@ namespace ComponentTest
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
 		auto imgGrid1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-		UIComponent* component = panel->GetComponent(componentName);
+		UIComponent* component = GetComponent(panel, componentName);
 		return component->AttachComponent(std::move(imgGrid1), { 10, 10 }) ? false : true;
 	}
 
 	static bool DetachComponentHelper(UIComponent* panel, const string& componentName) noexcept 
 	{
-		UIComponent* component = panel->GetComponent(componentName);
+		UIComponent* component = GetComponent(panel, componentName);
 		auto [detach, parent] = component->DetachComponent();
 		return detach != nullptr;
 	}
@@ -85,7 +85,7 @@ namespace ComponentTest
 		m_panel->AttachComponent(move(panel), { 400, 300 });
 		m_panel->RefreshPosition();
 
-		UIComponent* component = m_panel->GetComponent("ImageGrid1_4");
+		UIComponent* component = GetComponent(m_panel.get(), "ImageGrid1_4");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
 		EXPECT_EQ(GetRectangle(component), Rectangle(270, 216, 160, 128));
@@ -96,8 +96,8 @@ namespace ComponentTest
 		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		m_panel->AttachComponent(move(img9), { 80, 60 });
 
-		UIComponent* component = m_panel->GetComponent("ImageGrid1_0");
-		EXPECT_FALSE(component->Rename("ImageGrid9_0")); //같은 이름이 있으면 rename이 되지 않는다.
+		UIComponent* component = GetComponent(m_panel.get(), "ImageGrid1_0");
+		EXPECT_FALSE(Rename(component, "ImageGrid9_0")); //같은 이름이 있으면 rename이 되지 않는다.
 
 		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		auto failed = m_panel->AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.

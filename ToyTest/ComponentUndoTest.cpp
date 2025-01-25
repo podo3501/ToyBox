@@ -44,8 +44,8 @@ namespace ComponentTest
 		cmdList.SetRelativePosition(img1, { 90, 70 });
 		cmdList.SetRelativePosition(img1, { 100, 80 }); //RelativePosition은 명령이 하나로 합쳐짐
 
-		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetRelativePosition, true), XMINT2(80, 60));
-		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetRelativePosition, false), XMINT2(100, 80));
+		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponentEx::GetRelativePosition, true), XMINT2(80, 60));
+		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponentEx::GetRelativePosition, false), XMINT2(100, 80));
 
 		cmdList.SetSize(img1, { 54, 54 });
 		cmdList.SetSize(img1, { 74, 74 }); //Size은 명령이 하나로 합쳐짐
@@ -56,17 +56,17 @@ namespace ComponentTest
 		cmdList.Rename(img1, "Image1");
 		cmdList.Rename(img1, "Rename");
 
-		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetName, true), "Image1");
-		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetName, false), "Rename");
+		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponentEx::GetName, true), "Image1");
+		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponentEx::GetName, false), "Rename");
 
 		auto component2 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
 		auto detach = component2.get();
 
 		cmdList.AttachComponent(m_panel.get(), move(component2), { 80, 60 });
-		string preName = detach->GetName();
+		string preName = UIComponentEx::GetName(detach);
 		cmdList.DetachComponent(detach);
 		EXPECT_EQ(UndoRedo(cmdList, true), true);
-		string curName = detach->GetName();
+		string curName = UIComponentEx::GetName(detach);
 		EXPECT_EQ(preName, curName);
 		EXPECT_EQ(UndoRedo(cmdList, true), true);
 	}

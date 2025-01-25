@@ -1,7 +1,6 @@
 {
     "Component": {
         "Type": "Panel",
-        "Name": "Main",
         "Layout": {
             "Size": {
                 "x": 800,
@@ -9,36 +8,41 @@
             },
             "Origin": "LeftTop"
         },
-        "Components": [
-            {
-                "RelativePosition": {
-                    "x": 400,
-                    "y": 300
-                },
-                "Ratio": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "Component": {
-                    "Type": "TextArea",
-                    "FontFileList": {
-                        "English": "UI/Font/CourierNewBoldS18.spritefont",
-                        "Hangle": "UI/Font/MaleunGothicS16.spritefont"
+        "TransformContainer": {
+            "Name": "Main",
+            "Components": [
+                {
+                    "RelativePosition": {
+                        "x": 400,
+                        "y": 300
                     },
-                    "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
-                    "Name": "TextArea_0",
-                    "Layout": {
-                        "Size": {
-                            "x": 320,
-                            "y": 120
+                    "Ratio": {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    "Component": {
+                        "Type": "TextArea",
+                        "FontFileList": {
+                            "English": "UI/Font/CourierNewBoldS18.spritefont",
+                            "Hangle": "UI/Font/MaleunGothicS16.spritefont"
                         },
-                        "Origin": "Center"
-                    },
-                    "Enable": true,
-                    "AttachmentState": 0
+                        "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
+                        "Layout": {
+                            "Size": {
+                                "x": 320,
+                                "y": 120
+                            },
+                            "Origin": "Center"
+                        },
+                        "TransformContainer": {
+                            "Name": "TextArea_0"
+                        },
+                        "Enable": true,
+                        "AttachmentState": 0
+                    }
                 }
-            }
-        ],
+            ]
+        },
         "Enable": true,
         "AttachmentState": 0
     }
