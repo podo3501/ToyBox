@@ -13,9 +13,6 @@
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
-
-using namespace UIComponentEx;
 
 using testing::ElementsAre;
 
@@ -92,7 +89,8 @@ namespace ComponentTest
 
 		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
 
-		ImageGrid3* img3 = static_cast<ImageGrid3*>(GetComponent(m_panel.get(), "ImageGrid3_0"));
+		ImageGrid3* img3 = nullptr;
+		m_panel->GetComponent("ImageGrid3_0", &img3);
 		img3->ChangeOrigin(Origin::Center);
 		img3->ChangeSize({ 120, 36 });
 		img3->RefreshPosition();
@@ -181,7 +179,8 @@ namespace ComponentTest
 
 		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
 
-		ImageGrid9* img9 = static_cast<ImageGrid9*>(GetComponent(m_panel.get(), "ImageGrid9_0"));
+		ImageGrid9* img9 = nullptr;
+		m_panel->GetComponent("ImageGrid9_0", &img9);
 		img9->ChangeOrigin(Origin::Center);
 		img9->ChangeSize({ 180, 150 });
 		img9->RefreshPosition();
@@ -258,7 +257,8 @@ namespace ComponentTest
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Hover
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
 
-		Button* btn = static_cast<Button*>(GetComponent(m_panel.get(), "Button_0"));
+		Button* btn = nullptr;
+		m_panel->GetComponent("Button_0", &btn);
 		btn->ChangeSize({ 150, 48 });
 		TestUpdate(m_window->GetHandle(), m_panel.get(), 0, 0);	//Normal
 
@@ -304,7 +304,7 @@ namespace ComponentTest
 		m_panel->GetComponents({ 240, 140 }, outList);
 		EXPECT_EQ(outList.size(), 3);
 
-		Panel* ptrPanel = ComponentCast<Panel*>(GetComponent(m_panel.get(), "Panel_0"));
+		Panel* ptrPanel = ComponentCast<Panel*>(m_panel->GetComponent("Panel_0"));
 		ptrPanel->ChangeOrigin(Origin::LeftTop);
 
 		outList.clear();

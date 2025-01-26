@@ -28,7 +28,7 @@ EditWindow::EditWindow(UIComponent* component, CommandList* cmdList) noexcept:
     m_cmdList{ cmdList },
     m_dragState{ OnDrag::Normal }
 {
-    StringToChar(GetName(m_component), m_nameBuffer);
+    StringToChar(m_component->GetName(), m_nameBuffer);
 }
 
 static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
@@ -180,7 +180,7 @@ void EditWindow::EditName(const string& nameLabel) noexcept
         startTime = std::chrono::steady_clock::now();
         resultVisible = true;
     }
-    StringToChar(GetName(m_component), m_nameBuffer); //바꾸는데 실패하면 이전 이름으로 돌림. 그리고 Undo 했을때 이름이 바뀌면 업데이트 된다.
+    StringToChar(m_component->GetName(), m_nameBuffer); //바꾸는데 실패하면 이전 이름으로 돌림. 그리고 Undo 했을때 이름이 바뀌면 업데이트 된다.
 
     ShowEditNameResult(startTime, result, resultVisible);
 }
@@ -204,7 +204,7 @@ void EditWindow::RenderCommon(bool& modify)
 {
     EditName("Name");
 
-    auto relativePosition = GetRelativePosition(m_component);
+    auto relativePosition = m_component->GetRelativePosition();
     if(relativePosition.has_value())
     {
         modify |= EditInteger("X", relativePosition->x);

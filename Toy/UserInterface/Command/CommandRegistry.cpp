@@ -7,8 +7,6 @@
 #include "../Component/ImageGrid9.h"
 #include "../Include/IRenderer.h"
 
-using namespace UIComponentEx;
-
 AttachComponentCommand::AttachComponentCommand(UIComponent* addable,
 	unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept :
 	Command{ nullptr }, 
@@ -58,7 +56,7 @@ DetachComponentCommand::DetachComponentCommand(UIComponent* detach) noexcept :
 
 bool DetachComponentCommand::Execute()
 {
-	auto pos = GetRelativePosition(m_detach);
+	auto pos = m_detach->GetRelativePosition();
 	if (!pos.has_value()) return false;
 
 	auto [component, addable] = m_detach->DetachComponent();
@@ -107,16 +105,16 @@ SetRelativePositionCommand::SetRelativePositionCommand(UIComponent* component, c
 
 bool SetRelativePositionCommand::Execute()
 {
-	auto prevPos = GetRelativePosition(GetComponent());
+	auto prevPos = GetComponent()->GetRelativePosition();
 	ReturnIfFalse(prevPos.has_value());
 	m_record.previous = *prevPos;
-	ReturnIfFalse(SetRelativePosition(GetComponent(), m_record.current));
+	ReturnIfFalse(GetComponent()->SetRelativePosition(m_record.current));
 
 	return true;
 }
 
-bool SetRelativePositionCommand::Undo() { return SetRelativePosition(GetComponent(), m_record.previous); }
-bool SetRelativePositionCommand::Redo() { return SetRelativePosition(GetComponent(), m_record.current); }
+bool SetRelativePositionCommand::Undo() { return GetComponent()->SetRelativePosition(m_record.previous); }
+bool SetRelativePositionCommand::Redo() { return GetComponent()->SetRelativePosition(m_record.current); }
 
 void SetRelativePositionCommand::PostMerge(unique_ptr<Command> other) noexcept
 {
@@ -154,12 +152,12 @@ RenameCommand::RenameCommand(UIComponent* component, const string& name) noexcep
 
 bool RenameCommand::Execute()
 {
-	m_record.previous = UIComponentEx::GetName(GetComponent());
-	return Rename(GetComponent(), m_record.current);
+	m_record.previous = GetComponent()->GetName();
+	return GetComponent()->Rename(m_record.current);
 }
 
-bool RenameCommand::Undo() { return Rename(GetComponent(), m_record.previous); }
-bool RenameCommand::Redo() { return Rename(GetComponent(), m_record.current); }
+bool RenameCommand::Undo() { return GetComponent()->Rename(m_record.previous); }
+bool RenameCommand::Redo() { return GetComponent()->Rename(m_record.current); }
 
 //////////////////////////////////////////////////////////////////
 

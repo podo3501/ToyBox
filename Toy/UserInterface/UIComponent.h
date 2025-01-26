@@ -7,69 +7,6 @@
 
 class JsonOperation;
 class TransformComponent;
-class TransformContainer;
-
-class UIComponent;
-class TransformContainer
-{
-public:
-	TransformContainer();
-	TransformContainer(UIComponent* component, const string& name);
-	TransformContainer(TransformContainer&& o) noexcept;
-	TransformContainer& operator=(const TransformContainer& other);
-	TransformContainer& operator=(TransformContainer&& o) noexcept;
-	bool operator==(const TransformContainer& o) const noexcept;
-
-	bool LoadResources(ILoadData* load);
-	bool SetDatas(IGetValue* value);
-	bool Update(const InputManager& inputManager, const UILayout& layout, const XMINT2& position);
-	void PushChildComponents(UIComponent* component, queue<UIComponent*>& outQueue);
-	void AdjustChildPosition(const XMUINT2& size);
-	bool ChangeChildPosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
-	vector<TransformComponent>& GetComponents() noexcept { return m_components; }
-	void SetParents(TransformContainer* parent) noexcept;
-	void AttachChildComponent(
-		unique_ptr<UIComponent> component, const XMUINT2& size, const XMINT2& relativePos) noexcept;
-	unique_ptr<UIComponent> DetachChildComponent(UIComponent* detach) noexcept;
-	void SerializeIO(JsonOperation& operation);
-	Rectangle GetTotalChildSize(const UIComponent* component) const noexcept;
-	vector<UIComponent*> GetComponents() const noexcept;
-
-	void ForEachComponent(const function<void(TransformComponent&)>& action) noexcept;
-	bool AllOfComponent(const function<bool(TransformComponent&)>& action) noexcept;
-	UIComponent* FindIfComponent(const function<UIComponent* (TransformComponent&)>& action) noexcept;
-	TransformComponent* FindIfTransformComponent(
-		const function<bool(const TransformComponent&)>& action) noexcept;
-
-	inline const string& GetName() const noexcept { return m_name; }
-	TransformContainer* GetComponent(const string& name) noexcept;
-	inline void SetParent(TransformContainer* transformContainer) noexcept { m_parent = transformContainer; }
-	inline TransformContainer* GetParent() const noexcept { return m_parent; }
-	inline UIComponent* GetComponent() const noexcept { return m_component; }
-	inline void SetComponent(UIComponent* component) noexcept { m_component = component; }
-	bool Rename(const string& name) noexcept;
-	optional<XMINT2> GetRelativePosition() const noexcept;
-	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
-	void MarkDirty() noexcept;
-	bool GetDirty() const noexcept { return m_isDirty; }
-	void SetDirty(bool dirty) noexcept { m_isDirty = dirty; }
-	XMINT2 GetParentPosition() const noexcept;
-	TransformContainer* GetRoot() noexcept;
-	bool IsUniqueName(const string& name, UIComponent* self) noexcept;
-
-private:
-	bool EqualComponent(const TransformContainer* lhs, const TransformContainer* rhs) const noexcept;
-	bool IsUniqueName(const string& name, TransformContainer* self) noexcept;
-	TransformComponent* FindIfTransformComponent(const string& name) noexcept;
-	TransformComponent* FindIfTransformComponent(const UIComponent* component) noexcept;
-
-public:
-	string m_name;
-	bool m_isDirty{ true };
-	UIComponent* m_component{ nullptr };
-	TransformContainer* m_parent{ nullptr };
-	vector<TransformComponent> m_components;
-};
 
 class UIComponent : public IComponent
 {
@@ -86,9 +23,9 @@ protected:
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 
-	inline bool IsDirty() const noexcept { return m_transformContainer.GetDirty(); }
+	inline bool IsDirty() const noexcept { return m_isDirty; }
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
-	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); m_transformContainer.MarkDirty(); }
+	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
 	
 public:
 	virtual ~UIComponent();
@@ -116,54 +53,51 @@ public:
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
 	
 	XMINT2 GetPosition() const noexcept;
-	//optional<XMINT2> GetRelativePosition() const noexcept;
-	//bool SetRelativePosition(const XMINT2& relativePos) noexcept;
+	optional<XMINT2> GetRelativePosition() const noexcept;
+	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
 	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
-	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); m_transformContainer.MarkDirty(); }
+	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
 
-	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); m_transformContainer.MarkDirty(); }
+	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); MarkDirty(); }
 	
 	XMUINT2 GetTotalChildSize() const noexcept;
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const UILayout& GetLayout() const noexcept { return m_layout; }
 
-	/*inline const string& GetName() const noexcept { return m_name; }*/
-	//bool Rename(const string& name) noexcept;
-	//UIComponent* GetComponent(const string& name) noexcept;
+	inline const string& GetName() const noexcept { return m_name; }
+	bool Rename(const string& name) noexcept;
+	UIComponent* GetComponent(const string& name) const noexcept;
 	vector<UIComponent*> GetComponents() const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
 	template<typename T>//hppø° ¿÷¿Ω.
-	void GetComponent(const string& name, T** outComponent) noexcept;
+	void GetComponent(const string& name, T** outComponent) const noexcept;
 
 	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
 	inline bool IsAttachable() const noexcept;
 	inline bool IsDetachable() const noexcept;
 	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }	
-	inline const TransformContainer& GetTransformContainer() const noexcept { return m_transformContainer; }
-	inline TransformContainer& GetTransformContainer() noexcept { return m_transformContainer; }
 	
 private:
-	//bool IsUniqueName(const string& name, UIComponent* self) noexcept;
+	bool IsUniqueName(const string& name, UIComponent* self) noexcept;
 	void GenerateUniqueName(UIComponent* component) noexcept;
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
 	bool RefreshPosition(const XMINT2& position) noexcept;
-	TransformComponent* FindIfTransformComponent(const string& name) noexcept;
-	TransformComponent* FindIfTransformComponent(const UIComponent* component) noexcept;
+	TransformComponent* FindTransformComponent(const string& name) noexcept;
+	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
 	unique_ptr<UIComponent> DetachComponent(UIComponent* detachComponent) noexcept;
-	//UIComponent* GetRoot() noexcept;
-	//void MarkDirty() noexcept;
+	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
+	UIComponent* GetRoot() noexcept;
+	void MarkDirty() noexcept;
+	Rectangle GetTotalChildSize(const UIComponent* component) const noexcept;
 
-	friend class TransformContainer;
-
-	//string m_name;
+	string m_name;
 	UILayout m_layout;
-	//UIComponent* m_parent{ nullptr };
+	UIComponent* m_parent{ nullptr };
 	bool m_enable{ true };
-	///*bool m_isDirty{ true };*/
+	bool m_isDirty{ true };
 	AttachmentState m_attachmentState{ AttachmentState::All };
-	//vector<TransformComponent> m_componentss;
-	TransformContainer m_transformContainer;
+	vector<TransformComponent> m_components;
 };
 
 //inline
