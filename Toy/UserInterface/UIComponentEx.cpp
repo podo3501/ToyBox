@@ -3,11 +3,11 @@
 #include "UIComponent.h"
 #include "../Utility.h"
 
+static inline const TransformContainer& GetTransformContainer(const UIComponent* component) noexcept { return component->GetTransformContainer(); }
+static inline TransformContainer& GetTransformContainer(UIComponent* component) noexcept { return component->GetTransformContainer(); }
+
 namespace UIComponentEx
 {
-	static inline const TransformContainer& GetTransformContainer(const UIComponent* component) noexcept { return component->GetTransformContainer(); }
-	static inline TransformContainer& GetTransformContainer(UIComponent* component) noexcept { return component->GetTransformContainer(); }
-
 	Rectangle GetRectangle(const UIComponent* component) noexcept
 	{
 		const XMINT2& curPosition = GetTransformContainer(component).GetPosition();
@@ -51,10 +51,10 @@ namespace UIComponentEx
 		return GetTransformContainer(component).ChangeOrigin(origin);
 	}
 
-	void SetSize(UIComponent* component, const XMUINT2& size) noexcept
-	{
-		return GetTransformContainer(component).SetSize(size);
-	}
+	//void SetSize(UIComponent* component, const XMUINT2& size) noexcept
+	//{
+	//	return GetTransformContainer(component).SetSize(size);
+	//}
 	
 	void SetLayout(UIComponent* component, const UILayout& layout) noexcept
 	{
@@ -74,5 +74,16 @@ namespace UIComponentEx
 	XMUINT2 GetTotalChildSize(UIComponent* component) noexcept
 	{
 		return GetTransformContainer(component).GetTotalChildSize();
+	}
+}
+
+namespace UIComponentLayout
+{
+	void SetSize(UIComponent* component, const XMUINT2& size) noexcept
+	{
+		TransformContainer& transformContainer = GetTransformContainer(component);
+		UILayout& layout = transformContainer.GetLayout();
+		layout.Set(size);
+		transformContainer.MarkDirty();
 	}
 }

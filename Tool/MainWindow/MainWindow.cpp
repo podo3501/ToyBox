@@ -29,7 +29,7 @@ MainWindow::MainWindow(IRenderer* renderer) :
 
 bool MainWindow::CreateScene(const XMUINT2& size)
 {
-	UIComponentEx::SetSize(m_panel.get(), size);
+	UIComponentLayout::SetSize(m_panel.get(), size);
 	ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_panel.get(), m_textureID));
 	m_size = XMUINT2ToImVec2(size);
 	m_isOpen = true;

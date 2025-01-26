@@ -31,7 +31,7 @@ bool Button::operator==(const UIComponent& o) const noexcept
 
 	return std::all_of(m_images.begin(), m_images.end(), [rhs](const auto& pair) {
 		auto state = pair.first;
-		return GetName(pair.second) == GetName(rhs->m_images.at(state));
+		return UIComponentEx::GetName(pair.second) == UIComponentEx::GetName(rhs->m_images.at(state));
 		});
 }
 

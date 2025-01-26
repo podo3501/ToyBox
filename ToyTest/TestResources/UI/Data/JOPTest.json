@@ -1,6 +1,7 @@
 {
     "Component": {
         "Type": "Panel",
+        "Name": "Main",
         "Enable": true,
         "AttachmentState": 0,
         "TransformContainer": {
@@ -29,6 +30,7 @@
                             "Hangle": "UI/Font/MaleunGothicS16.spritefont"
                         },
                         "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
+                        "Name": "",
                         "Enable": true,
                         "AttachmentState": 0,
                         "TransformContainer": {

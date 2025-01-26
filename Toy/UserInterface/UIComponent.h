@@ -60,9 +60,19 @@ private:
 	bool RefreshPosition(const XMINT2& position) noexcept;
 	unique_ptr<UIComponent> DetachComponent(UIComponent* detachComponent) noexcept;
 
+public:
+	void ForEachChild(std::function<void(UIComponent*)> func) noexcept;
+	const string& GetName() const noexcept { return m_name; }
+	UIComponent* FindRoot();
+
+private:
 	bool m_enable{ true };
 	AttachmentState m_attachmentState{ AttachmentState::All };
 	TransformContainer m_transformContainer;
+
+	string m_name;
+	UIComponent* m_parent{ nullptr };
+	vector<UIComponent*> m_children;
 };
 
 //inline
@@ -73,3 +83,5 @@ bool UIComponent::IsAttachable() const noexcept { return IsInAttachmentState(Att
 bool UIComponent::IsDetachable() const noexcept { return IsInAttachmentState(AttachmentState::Detach); }
 
 #include "UIComponent.hpp"
+
+UIComponent* GetComponentNew(UIComponent* component, const string& targetName);

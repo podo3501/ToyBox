@@ -11,12 +11,14 @@ UIComponent::UIComponent() :
 {}
 
 UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
+	m_name{ name },
 	m_transformContainer{ this, name, layout }
 {}
 
 //상속받은 곳에서만 복사생성자를 호출할 수 있다.
 UIComponent::UIComponent(const UIComponent& other)
 {
+	m_name = other.m_name;
 	m_enable = other.m_enable;
 	m_attachmentState = other.m_attachmentState;
 	m_transformContainer = other.m_transformContainer;
@@ -29,13 +31,14 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetTypeID() != o.GetTypeID()) return false;
 
-	ReturnIfFalse(tie(m_enable, m_attachmentState, m_transformContainer) ==
-		tie(o.m_enable, o.m_attachmentState, o.m_transformContainer));
+	ReturnIfFalse(tie(m_name, m_enable, m_attachmentState, m_transformContainer) ==
+		tie(o.m_name, o.m_enable, o.m_attachmentState, o.m_transformContainer));
 
 	return true;
 }
 
 UIComponent::UIComponent(UIComponent&& o) noexcept :
+	m_name{ move(o.m_name) },
 	m_enable{ move(o.m_enable) },
 	m_attachmentState{ move(o.m_attachmentState) },
 	m_transformContainer{ move(o.m_transformContainer) }
@@ -110,6 +113,9 @@ unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> com
 {
 	if (!IsAttachable()) return component;
 
+	component->m_parent = this;
+	m_children.push_back(component.get());
+
 	m_transformContainer.GenerateUniqueName(&component->GetTransformContainer());
 	component->m_transformContainer.SetParent(&m_transformContainer);
 	m_transformContainer.AttachChildComponent(move(component), m_transformContainer.m_layout.GetSize(), relativePos);
@@ -127,6 +133,9 @@ unique_ptr<UIComponent> UIComponent::DetachComponent(UIComponent* detachComponen
 	detached->m_transformContainer.MarkDirty();
 	detached->RefreshPosition();
 
+	detached->m_parent = nullptr;
+	erase(m_children, detached.get());
+
 	return detached;
 }
 
@@ -141,9 +150,45 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexc
 
 void UIComponent::SerializeIO(JsonOperation& operation)
 {
+	operation.Process("Name", m_name);
 	operation.Process("Enable", m_enable);
 	operation.Process("AttachmentState", m_attachmentState);
 	operation.Process("TransformContainer", m_transformContainer);
 }
 
+UIComponent* UIComponent::FindRoot()
+{
+	if (!m_parent)
+		return this;
 
+	return m_parent->FindRoot();
+}
+
+void UIComponent::ForEachChild(std::function<void(UIComponent*)> func) noexcept
+{
+	func(this);
+
+	for (UIComponent* child : m_children) {
+		if (child) {
+			child->ForEachChild(func);
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////
+
+UIComponent* GetComponentNew(UIComponent* component, const string& targetName)
+{
+	// 루트를 찾기
+	UIComponent* root = component->FindRoot();
+	UIComponent* foundComponent = nullptr;
+
+	// Traverse를 사용하여 트리 구조에서 이름을 찾기
+	root->ForEachChild([&foundComponent, &targetName](UIComponent* comp) {
+		if (comp->GetName() == targetName) {
+			foundComponent = comp;
+		}
+		});
+
+	return foundComponent;
+}
