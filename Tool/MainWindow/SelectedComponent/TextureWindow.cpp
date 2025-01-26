@@ -6,6 +6,7 @@
 #include "../../Utility.h"
 #include "SourceExtractor.h"
 #include "../Toy/InputManager.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 
 TextureWindow::~TextureWindow()
 {
@@ -25,7 +26,7 @@ bool TextureWindow::Create(const wstring& filename)
     m_extractTexture->SetImage(filename);
     ReturnIfFalse(m_renderer->LoadComponent(m_extractTexture.get()));
 
-    XMUINT2 size = m_extractTexture->GetSize();
+    XMUINT2 size = UIComponentEx::GetSize(m_extractTexture.get());
     ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_extractTexture.get(), m_textureID));
 
     m_size = XMUINT2ToImVec2(size);

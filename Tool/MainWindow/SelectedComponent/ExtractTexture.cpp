@@ -2,6 +2,7 @@
 #include "ExtractTexture.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Config.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 
 bool ExtractTexture::LoadResources(ILoadData* load)
 {
@@ -13,7 +14,7 @@ bool ExtractTexture::LoadResources(ILoadData* load)
 
 void ExtractTexture::ImplementRender(IRender* render) const
 {
-    const auto& size = GetSize();
+    const auto& size = UIComponentEx::GetSize(this);
     RECT source(0, 0, size.x, size.y);
     RECT destination(source);
 

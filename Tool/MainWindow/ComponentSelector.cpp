@@ -10,8 +10,10 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
-#include "../Toy/UserInterface/UIComponentHelper.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
+
+using namespace UIComponentEx;
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, CommandList* cmdList, UIComponent* panel) :
@@ -155,18 +157,18 @@ bool AttachSelectedComponent(CommandList* cmdList, ComponentSelector* selector, 
 	return true;
 }
 
-optional<unique_ptr<UIComponent>> DetachSelectedComponent(ComponentSelector* selector) noexcept
+unique_ptr<UIComponent> DetachSelectedComponent(CommandList* cmdList, ComponentSelector* selector) noexcept
 {
 	UIComponent* selectComponent = selector->GetComponent();
-	if (!selectComponent) return nullopt;
+	if (!selectComponent) return nullptr;
 
-	auto detachComponent = selectComponent->DetachComponent();
-	if (!detachComponent.has_value())
+	auto [detach, parent] = cmdList->DetachComponent(selectComponent);
+	if (!detach)
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Detachment failed for this component.");
-		return nullopt;
+		return nullptr;
 	}
 
 	selector->SetComponent(nullptr);
-	return detachComponent;
+	return move(detach);
 }

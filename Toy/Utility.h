@@ -14,6 +14,8 @@
 //    int LineNumber = -1;
 //};
 
+#define Assert(expression, message) assert(expression && message)
+
 #ifndef ReturnIfFalse
 #define ReturnIfFalse(x)                       \
 {                                                             \
