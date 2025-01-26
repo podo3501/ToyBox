@@ -8,7 +8,7 @@ bool ExtractTexture::LoadResources(ILoadData* load)
 {
     XMUINT2 size{};
     auto result = load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, &size);
-    UIComponentLayout::SetSize(this, size);
+    SetSize(size);
     return result;
 }
 

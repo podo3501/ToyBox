@@ -45,7 +45,7 @@ bool ImageGrid1::LoadResources(ILoadData* load)
 bool ImageGrid1::ImplementUpdate(const XMINT2& position) noexcept
 {
 	if(IsDirty())
-		m_position = GetTransformContainer().GetPositionByLayout(position);
+		m_position = GetPositionByLayout(position);
 
 	return true;
 }
@@ -64,7 +64,7 @@ bool ImageGrid1::SetImage(const UILayout& layout, const ImageSource& source) noe
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 1) return false;
 
-	GetTransformContainer().SetLayout(layout);
+	SetLayout(layout);
 
 	m_filename = source.filename;
 	m_source = source.list.at(0);

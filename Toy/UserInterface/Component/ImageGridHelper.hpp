@@ -3,7 +3,7 @@
 template<typename ChildImageGrid, typename ImageGrid>
 ChildImageGrid GetFirstImageGrid(ImageGrid imageGrid) noexcept
 {
-	vector<UIComponent*> components = imageGrid->GetTransformContainer().GetComponents();
+	vector<UIComponent*> components = imageGrid->GetComponents();
 	if (components.empty()) return nullptr;
 
 	return ComponentCast<ChildImageGrid>(components[0]);
@@ -12,7 +12,7 @@ ChildImageGrid GetFirstImageGrid(ImageGrid imageGrid) noexcept
 template<typename ChildImageGrid, typename ImageGrid>
 bool GetImageGridComponents(ImageGrid imageGrid, vector<ChildImageGrid>& outComponents) noexcept
 {
-    vector<UIComponent*> components = imageGrid->GetTransformContainer().GetComponents();
+    vector<UIComponent*> components = imageGrid->GetComponents();
     if (components.size() != 3) return false;
 
     outComponents.clear();

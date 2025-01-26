@@ -49,7 +49,7 @@ bool Button::SetImage(const UILayout& layout,
 	unique_ptr<UIComponent>&& hover,
 	unique_ptr<UIComponent>&& pressed) noexcept
 {
-	GetTransformContainer().SetLayout(layout);
+	SetLayout(layout);
 
 	AddComponentAndEnable(ButtonState::Normal, move(normal), true);	//Normal이 기본이고 다른 컴포넌트는 비활성시킨다.
 	AddComponentAndEnable(ButtonState::Hover, move(hover), false);
@@ -67,7 +67,7 @@ void Button::EnableButtonImage(ButtonState btnState)
 bool Button::ImplementInput(const InputManager& inputManager) noexcept
 {
 	const auto& tracker = inputManager.GetMouse();
-	bool isArea = GetTransformContainer().IsArea(tracker.GetOffsetPosition());
+	bool isArea = IsArea(tracker.GetOffsetPosition());
 
 	if (!isArea)
 		m_state = ButtonState::Normal;
@@ -87,7 +87,7 @@ bool Button::ImplementInput(const InputManager& inputManager) noexcept
 
 void Button::ChangeSize(const XMUINT2& size) noexcept
 {
-	const vector<UIComponent*> components = GetTransformContainer().GetComponents();
+	const vector<UIComponent*> components = GetComponents();
 	for (const auto& component : components)
 		component->ChangeSize(size);
 	UIComponent::ChangeSize(size);
@@ -103,7 +103,7 @@ void Button::AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>
 //m_images값은 Button 밑에 달려있는 component인데 읽거나 복사 했을 경우 이 값은 존재하지 않는다. 그럴경우 다시 연결해 준다.
 void Button::ReloadDatas() noexcept
 {
-	vector<UIComponent*> componentList = GetTransformContainer().GetComponents();
+	vector<UIComponent*> componentList = GetComponents();
 	m_images.emplace(ButtonState::Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
 	m_images.emplace(ButtonState::Hover, componentList[1]);
 	m_images.emplace(ButtonState::Pressed, componentList[2]);

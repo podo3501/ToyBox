@@ -119,9 +119,6 @@
     <ClInclude Include="UserInterface\Command\CommandRegistry.h">
       <Filter>UserInterface\Command</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\TransformContainer.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -193,9 +190,6 @@
     </ClCompile>
     <ClCompile Include="UserInterface\Command\CommandRegistry.cpp">
       <Filter>UserInterface\Command</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\TransformContainer.cpp">
-      <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -75,7 +75,7 @@ void ComponentSelector::SelectComponent(const InputManager& inputManager) noexce
 	static vector<UIComponent*> preComponentList{ nullptr };
 	vector<UIComponent*> componentList;
 	const XMINT2& pos = mouseTracker.GetOffsetPosition();
-	GetComponents(m_panel, pos, componentList);
+	m_panel->GetComponents(pos, componentList);
 	if (componentList.empty()) return;
 
 	if (preComponentList == componentList)

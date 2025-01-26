@@ -43,7 +43,7 @@ bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noe
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 9) return false;
 
-	GetTransformContainer().SetLayout(layout);
+	SetLayout(layout);
 
 	auto srcHList = ExtractSourceRects(source);
 	auto posRects = StretchSize(StretchType::Height, layout.GetSize(), srcHList);
@@ -70,16 +70,16 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
 
 void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 {
-	const vector<UIComponent*> components = GetTransformContainer().GetComponents();
+	const vector<UIComponent*> components = GetComponents();
 	vector<Rectangle> list = GetSourceList(components);
 	vector<PositionSize> posRects = StretchSize(StretchType::Height, size, list);
 
 	for (int idx{ 0 }; idx < components.size(); ++idx)
 	{
-		GetTransformContainer().ChangePosition(idx, size, posRects[idx].pos);
+		ChangePosition(idx, size, posRects[idx].pos);
 		components[idx]->ChangeSize(posRects[idx].size);
 	}
-	GetTransformContainer().ApplySize(size);
+	ApplySize(size);
 }
 
 optional<wstring> ImageGrid9::GetFilename() const noexcept

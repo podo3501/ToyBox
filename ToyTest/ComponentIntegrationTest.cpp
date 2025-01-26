@@ -58,7 +58,7 @@ namespace ComponentTest
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
 	{
 		std::vector<UIComponent*> components;
-		GetComponents(panel, position, components);
+		panel->GetComponents(position, components);
 		return components.size();
 	}
 
@@ -80,13 +80,13 @@ namespace ComponentTest
 	{
 		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		unique_ptr<UIComponent> panel = make_unique<Panel>();
-		SetLayout(panel.get(), { { 400, 300 }, Origin::Center });
+		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		panel->AttachComponent(move(img9), { 40, 30 });
 		m_panel->AttachComponent(move(panel), { 400, 300 });
 		m_panel->RefreshPosition();
 
 		UIComponent* component = GetComponent(m_panel.get(), "ImageGrid1_4");
-		XMINT2 pos = GetPosition(component);
+		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
 		EXPECT_EQ(GetRectangle(component), Rectangle(270, 216, 160, 128));
 	}

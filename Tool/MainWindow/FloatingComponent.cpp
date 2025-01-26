@@ -6,7 +6,6 @@
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponentEx.h"
 
-using namespace UIComponentEx;
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
 	m_name{ "PopupMenu_" + mainWndName }
@@ -127,10 +126,10 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 
 bool FloatingComponent::LoadComponent(unique_ptr<UIComponent>&& component)
 {
-	return LoadComponentInternal(move(component), GetSize(component.get()));
+	return LoadComponentInternal(move(component), UIComponentEx::GetSize(component.get()));
 }
 
 bool FloatingComponent::ComponentToFloating(unique_ptr<UIComponent>&& component)
 {
-	return LoadComponentInternal(move(component), GetTotalChildSize(component.get()));
+	return LoadComponentInternal(move(component), component->GetTotalChildSize());
 }

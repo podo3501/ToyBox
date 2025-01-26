@@ -72,11 +72,6 @@ void TransformComponent::AdjustPosition(const XMUINT2& size) noexcept
 		static_cast<int32_t>(static_cast<float>(size.y) * ratio.y) };
 }
 
-TransformContainer& TransformComponent::GetTransformContainer() const noexcept
-{
-	return component->GetTransformContainer();
-}
-
 void TransformComponent::SerializeIO(JsonOperation& operation)
 {
 	operation.Process("RelativePosition", relativePosition);
