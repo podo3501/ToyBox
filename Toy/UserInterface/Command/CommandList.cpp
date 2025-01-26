@@ -14,13 +14,7 @@ bool CommandList::Undo() noexcept
 	if (m_index < 0) return true;
 
 	auto& cmd = m_commandList[m_index];
-	auto result = cmd->Undo();
-	
-	if (!result)
-	{
-		Assert(false, "Undo함수는 실행하는 것을 돌리는 것이기 때문에 실패해서는 안된다.");
-		return result;
-	}
+	ReturnIfFalse(cmd->Undo());
 
 	m_index--;
 	return true;
@@ -31,13 +25,7 @@ bool CommandList::Redo() noexcept
 	if (m_index + 1 >= static_cast<int>(m_commandList.size())) return true;
 
 	auto& cmd = m_commandList[m_index + 1];
-	auto result = cmd->Redo();
-
-	if (!result)
-	{
-		Assert(false, "Redo함수는 실행했던 것을 다시 실행하는 것이기 때문에 실패해서는 안된다.");
-		return result;
-	}
+	ReturnIfFalse(cmd->Redo());
 
 	m_index++;
 	return true;
@@ -75,31 +63,17 @@ bool CommandList::ApplyCommand(ParamTypes&&... params)
 	return true;
 }
 
-unique_ptr<UIComponent> CommandList::AttachComponent(UIComponent* addable, 
-	unique_ptr<UIComponent> component, const XMINT2& relativePos)
+unique_ptr<UIComponent> CommandList::AttachComponent(UIComponent* panel, unique_ptr<UIComponent> component, const XMINT2& relativePos)
 {
-	unique_ptr<Command> command = make_unique<AttachComponentCommand>(addable, move(component), relativePos);
+	unique_ptr<Command> command = make_unique<AttachComponentCommand>(panel, move(component), relativePos);
 	if (!command->Execute())
 	{
-		auto attachCmd = static_cast<AttachComponentCommand*>(command.get());
-		return attachCmd->GetFailureResult();
+		auto attachComponentCommand = static_cast<AttachComponentCommand*>(command.get());
+		return attachComponentCommand->GetFailureResult();
 	}
 
 	AddOrMergeCommand(move(command));
 	return nullptr;
-}
-
-pair<unique_ptr<UIComponent>, UIComponent*> CommandList::DetachComponent(UIComponent* detach)
-{
-	unique_ptr<Command> command = make_unique<DetachComponentCommand>(detach);
-	command->Execute();
-	
-	auto detachCmd = static_cast<DetachComponentCommand*>(command.get());
-	auto [detached, parent] = detachCmd->GetResult();
-	if (detached)
-		AddOrMergeCommand(move(command));
-
-	return { move(detached), parent };
 }
 
 bool CommandList::SetRelativePosition(UIComponent* component, const XMINT2& relativePos)

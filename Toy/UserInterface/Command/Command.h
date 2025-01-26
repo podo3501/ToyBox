@@ -5,7 +5,6 @@ class UIComponent;
 enum class CommandID : int
 {
 	AttachComponent,
-	DetachComponent,
 	SetRelativePosition,
 	SetSize,
 	Rename,

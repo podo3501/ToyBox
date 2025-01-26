@@ -5,9 +5,6 @@
 #include "../../Config.h"
 #include "../UIUtility.h"
 #include "../JsonOperation.h"
-#include "../UIComponentEx.h"
-
-using namespace UIComponentEx;
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -58,7 +55,7 @@ bool TextArea::SetDatas(IGetValue* getValue)
 	TextProperty textProperty;
 	ReturnIfFalse(Parser(m_text, textProperty));
 
-	Rectangle usableArea = XMUINT2ToRectangle(GetSize(this));
+	Rectangle usableArea = XMUINT2ToRectangle(GetSize());
 	Vector2 startPos{};
 	float lineSpacing = 0.0f;
 	long maxHeight = 0;

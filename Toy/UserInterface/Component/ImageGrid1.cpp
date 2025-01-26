@@ -4,9 +4,6 @@
 #include "../../Utility.h"
 #include "../../Config.h"
 #include "../JsonOperation.h"
-#include "../UIComponentEx.h"
-
-using namespace UIComponentEx;
 
 ImageGrid1::~ImageGrid1() = default;
 ImageGrid1::ImageGrid1() = default;
@@ -52,7 +49,7 @@ bool ImageGrid1::ImplementUpdate(const XMINT2& position) noexcept
 
 void ImageGrid1::ImplementRender(IRender* render) const
 {
-	const auto& size = GetSize(this);
+	const auto& size = GetSize();
 	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
 
 	RECT source = RectangleToRect(m_source);

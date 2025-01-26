@@ -6,7 +6,6 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/Component/Panel.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/InputManager.h"
 
 int MainWindow::m_mainWindowIndex = 0;
@@ -42,7 +41,7 @@ bool MainWindow::CreateScene(const wstring& filename)
 	ReturnIfFalse(JsonFile::ReadComponent(filename, m_panel));
 	ReturnIfFalse(m_renderer->LoadComponent(m_panel.get()));
 
-	const auto& panelSize = UIComponentEx::GetSize(m_panel.get());
+	const auto& panelSize = m_panel->GetSize();
 	ReturnIfFalse(m_renderer->CreateRenderTexture(panelSize, m_panel.get(), m_textureID));
 	m_size = XMUINT2ToImVec2(panelSize);
 	m_isOpen = true;

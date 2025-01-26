@@ -104,7 +104,7 @@
     <ClInclude Include="UserInterface\Component\TextArea.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponentEx.h">
+    <ClInclude Include="UserInterface\UIComponentHelper.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\Component\SampleComponent.h">
@@ -179,7 +179,7 @@
     <ClCompile Include="UserInterface\Component\TextArea.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponentEx.cpp">
+    <ClCompile Include="UserInterface\UIComponentHelper.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Component\SampleComponent.cpp">

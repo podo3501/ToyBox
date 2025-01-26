@@ -4,9 +4,7 @@
 #include "../InputManager.h"
 #include "TransformComponent.h"
 #include "JsonOperation.h"
-#include "UIComponentEx.h"
-
-using namespace UIComponentEx;
+#include "UIComponentHelper.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -169,7 +167,7 @@ void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 {
 	//붙는 쪽도 붙여지는 쪽도 유니크 이름이어야 한다.
 	auto isNotUnique = [this, addable](const string& name) {
-		return !(IsUniqueName(name, addable) && addable->IsUniqueName(name, addable));
+		return !(IsUniqueName(name) && addable->IsUniqueName(name));
 		};
 
 	int n = 0;
@@ -190,19 +188,19 @@ unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> com
 
 	GenerateUniqueName(component.get());
 	component->SetParent(this);
-	auto transComponent = TransformComponent(move(component), m_layout.GetSize(), relativePos);
+	auto transComponent = TransformComponent(move(component), GetSize(), relativePos);
 	m_components.emplace_back(move(transComponent));
 	MarkDirty();
 
 	return nullptr;
 }
 
-unique_ptr<UIComponent> UIComponent::DetachComponent(UIComponent* detachComponent) noexcept
+optional<unique_ptr<UIComponent>> UIComponent::DetachComponent(UIComponent* detachComponent) noexcept
 {
 	auto find = ranges::find_if(m_components, [detachComponent](auto& transComponent) {
 		return (transComponent.component.get() == detachComponent);
 		});
-	if (find == m_components.end()) return nullptr;
+	if (find == m_components.end()) return nullopt;
 
 	unique_ptr<UIComponent> detachedComponent = move(find->component);
 	m_components.erase(find);
@@ -214,28 +212,25 @@ unique_ptr<UIComponent> UIComponent::DetachComponent(UIComponent* detachComponen
 	return detachedComponent;
 }
 
-pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexcept
+optional<unique_ptr<UIComponent>> UIComponent::DetachComponent() noexcept
 {
-	if (!IsDetachable()) return {};
-	if (!m_parent) return {};
+	if (!IsDetachable()) return nullopt;
+	if (!m_parent) return nullopt;
 
-	UIComponent* parent = m_parent; //DetachComponent를 하면 parent가 nullptr로 셋팅된다.
-	return { move(m_parent->DetachComponent(this)), parent };
+	return move(m_parent->DetachComponent(this));
 }
 
-bool UIComponent::IsUniqueName(const string& name, UIComponent* self) noexcept
+bool UIComponent::IsUniqueName(const string& name) noexcept
 {
 	UIComponent* findComponent = GetRoot()->GetComponent(name);
-	if (findComponent && findComponent != self) return false;
+	if (findComponent) return false;
 
 	return true;
 }
 
 bool UIComponent::Rename(const string& name) noexcept
 {
-	if (m_name == name) return true;
-
-	ReturnIfFalse(IsUniqueName(name, this));
+	ReturnIfFalse(IsUniqueName(name));
 	m_name = name;
 
 	return true;
@@ -297,7 +292,7 @@ bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
 	if (!m_parent) return false;
 
 	auto transformComponent = m_parent->FindTransformComponent(this);
-	transformComponent->SetRelativePosition(GetSize(m_parent), relativePos);
+	transformComponent->SetRelativePosition(m_parent->GetSize(), relativePos);
 	m_parent->MarkDirty();
 
 	return true;

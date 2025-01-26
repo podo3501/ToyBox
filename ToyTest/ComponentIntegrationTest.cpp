@@ -2,11 +2,9 @@
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
+#include "../Toy/UserInterface/UIComponentHelper.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
-
-using namespace UIComponentEx;
 
 namespace ComponentTest
 {
@@ -20,8 +18,7 @@ namespace ComponentTest
 	static bool DetachComponentHelper(UIComponent* panel, const string& componentName) noexcept 
 	{
 		UIComponent* component = panel->GetComponent(componentName);
-		auto [detach, parent] = component->DetachComponent();
-		return detach != nullptr;
+		return (component->DetachComponent()).has_value();
 	}
 
 	TEST_F(IntegrationTest, AttachDetachTest)
@@ -85,7 +82,7 @@ namespace ComponentTest
 		m_panel->AttachComponent(move(panel), { 400, 300 });
 		m_panel->RefreshPosition();
 
-		UIComponent* component = m_panel->GetComponent("ImageGrid1_4");
+		UIComponent* component = m_panel->GetComponent("ImageGrid1_1");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
 		EXPECT_EQ(GetRectangle(component), Rectangle(270, 216, 160, 128));

@@ -20,8 +20,8 @@ public:
 	bool Undo() noexcept;
 	bool Redo() noexcept;
 
-	unique_ptr<UIComponent> AttachComponent(UIComponent* addable, unique_ptr<UIComponent> component, const XMINT2& relativePos);
-	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* detach);
+	unique_ptr<UIComponent> AttachComponent(UIComponent* panel, 
+		unique_ptr<UIComponent> component, const XMINT2& relativePos);
 	bool SetRelativePosition(UIComponent* component, const XMINT2& relativePos);
 	bool SetSize(UIComponent* component, const XMUINT2& size);
 	bool Rename(UIComponent* component, const string& name);
