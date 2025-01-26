@@ -34,7 +34,7 @@ bool ImageGrid3::SetImage(const UILayout& layout, const ImageSource& source) noe
     if (source.filename.empty()) return false;
     if (source.list.size() != 3) return false;
 
-	SetLayout(layout);
+    GetTransformContainer().SetLayout(layout);
 
     vector<PositionSize> posSizes = StretchSize(StretchType::Width, layout.GetSize(), source.list);
     for(auto idx : views::iota(0u, source.list.size()))
@@ -60,16 +60,16 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
 
 void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
 {
-    const vector<UIComponent*> components = GetComponents();
+    const vector<UIComponent*> components = GetTransformContainer().GetComponents();
     vector<Rectangle> list = GetSourceList(components);
     vector<PositionSize> posSizes = StretchSize(StretchType::Width, size, list);
 
     for (auto idx : views::iota(0u, components.size()))
     {
-        ChangePosition(idx, size, posSizes[idx].pos);
+        GetTransformContainer().ChangePosition(idx, size, posSizes[idx].pos);
         components[idx]->ChangeSize(posSizes[idx].size);
     }
-    ApplySize(size);
+    GetTransformContainer().ApplySize(size);
 }
 
 Rectangle ImageGrid3::GetFirstComponentSource() const noexcept

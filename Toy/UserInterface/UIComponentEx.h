@@ -12,7 +12,11 @@ namespace UIComponentEx
 	optional<XMINT2> GetRelativePosition(const UIComponent* component) noexcept;
 	bool SetRelativePosition(UIComponent* component, const XMINT2& relativePos) noexcept;
 	UIComponent* GetComponent(UIComponent* component, const string& name) noexcept;
-	inline const XMUINT2& GetSize(const UIComponent* component) noexcept {
-		return component->GetLayout().GetSize();
-	}
+	const XMUINT2& GetSize(const UIComponent* component) noexcept;
+	void ChangeOrigin(UIComponent* component, Origin origin) noexcept;
+	void SetSize(UIComponent* component, const XMUINT2& size) noexcept;
+	void SetLayout(UIComponent* component, const UILayout& layout) noexcept;
+	void GetComponents(UIComponent* component, const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
+	XMINT2 GetPosition(UIComponent* component) noexcept;
+	XMUINT2 GetTotalChildSize(UIComponent* component) noexcept;
 }

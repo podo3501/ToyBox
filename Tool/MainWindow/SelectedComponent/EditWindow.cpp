@@ -214,8 +214,7 @@ void EditWindow::RenderCommon(bool& modify)
             m_cmdList->SetRelativePosition(m_component, *relativePosition);
     }
 
-    const auto& layout = m_component->GetLayout();
-    modify |= EditSize(layout.GetSize());
+    modify |= EditSize(GetSize(m_component));
 
     ImGui::Separator();
     ImGui::Spacing();

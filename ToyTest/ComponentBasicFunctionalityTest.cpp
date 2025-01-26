@@ -93,7 +93,8 @@ namespace ComponentTest
 		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
 
 		ImageGrid3* img3 = static_cast<ImageGrid3*>(GetComponent(m_panel.get(), "ImageGrid3_0"));
-		img3->ChangeOrigin(Origin::Center);
+		
+		ChangeOrigin(img3, Origin::Center);
 		img3->ChangeSize({ 120, 36 });
 		img3->RefreshPosition();
 
@@ -182,7 +183,7 @@ namespace ComponentTest
 		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
 
 		ImageGrid9* img9 = static_cast<ImageGrid9*>(GetComponent(m_panel.get(), "ImageGrid9_0"));
-		img9->ChangeOrigin(Origin::Center);
+		ChangeOrigin(img9, Origin::Center);
 		img9->ChangeSize({ 180, 150 });
 		img9->RefreshPosition();
 
@@ -301,14 +302,14 @@ namespace ComponentTest
 		m_panel->AttachComponent(move(panel1), { 400, 300 });
 
 		vector<UIComponent*> outList;
-		m_panel->GetComponents({ 240, 140 }, outList);
+		GetComponents(m_panel.get(), { 240, 140 }, outList);
 		EXPECT_EQ(outList.size(), 3);
 
 		Panel* ptrPanel = ComponentCast<Panel*>(GetComponent(m_panel.get(), "Panel_0"));
-		ptrPanel->ChangeOrigin(Origin::LeftTop);
+		ChangeOrigin(ptrPanel, Origin::LeftTop);
 
 		outList.clear();
-		m_panel->GetComponents({ 239, 140 }, outList);
+		GetComponents(m_panel.get(), { 239, 140 }, outList);
 		EXPECT_EQ(outList.size(), 2);
 
 		//사이즈가 바뀌었을때 값이 어떻게 바뀌는지 테스트

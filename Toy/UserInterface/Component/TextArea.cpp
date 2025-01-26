@@ -108,7 +108,7 @@ bool TextArea::SetDatas(IGetValue* getValue)
 void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept
 {
 	m_text = text;
-	SetLayout(layout);
+	GetTransformContainer().SetLayout(layout);
 	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
 		return make_pair(filename.first, filename.second);
 		});
@@ -117,7 +117,7 @@ void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<ws
 bool TextArea::ImplementUpdate(const XMINT2& position) noexcept
 {
 	if (IsDirty())
-		m_posByResolution = XMINT2ToVector2(GetPositionByLayout(position));
+		m_posByResolution = XMINT2ToVector2(GetTransformContainer().GetPositionByLayout(position));
 
 	return true;
 }

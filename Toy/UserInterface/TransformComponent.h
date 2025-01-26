@@ -3,6 +3,7 @@
 class UILayout;
 class UIComponent;
 class JsonOperation;
+class TransformContainer;
 
 class TransformComponent
 {
@@ -22,7 +23,8 @@ public:
 	const Vector2& GetRatio() const noexcept { return ratio; }
 	void AdjustPosition(const XMUINT2& size) noexcept;
 	void SerializeIO(JsonOperation& operation);
-
+	TransformContainer& GetTransformContainer() const noexcept;
+	
 	unique_ptr<UIComponent> component;
 	XMINT2 absolutePosition{};
 

@@ -2,8 +2,11 @@
 #include "ComponentTooltip.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/Utility.h"
 #include "../../Utility.h"
+
+using namespace UIComponentEx;
 
 ComponentTooltip::~ComponentTooltip() = default;
 ComponentTooltip::ComponentTooltip(UIComponent* panel) :
@@ -21,7 +24,7 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 	const ImVec2& windowMousePos = GetMousePosition(window);
 
 	std::vector<UIComponent*> componentList;
-	m_panel->GetComponents(ImVec2ToXMINT2(windowMousePos), componentList);
+	GetComponents(m_panel, ImVec2ToXMINT2(windowMousePos), componentList);
 	if (componentList.empty()) return;
 
 	const ImVec2& padding = ImGui::GetStyle().WindowPadding;

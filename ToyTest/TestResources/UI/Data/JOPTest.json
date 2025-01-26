@@ -1,15 +1,17 @@
 {
     "Component": {
         "Type": "Panel",
-        "Layout": {
-            "Size": {
-                "x": 800,
-                "y": 600
-            },
-            "Origin": "LeftTop"
-        },
+        "Enable": true,
+        "AttachmentState": 0,
         "TransformContainer": {
             "Name": "Main",
+            "Layout": {
+                "Size": {
+                    "x": 800,
+                    "y": 600
+                },
+                "Origin": "LeftTop"
+            },
             "Components": [
                 {
                     "RelativePosition": {
@@ -27,23 +29,21 @@
                             "Hangle": "UI/Font/MaleunGothicS16.spritefont"
                         },
                         "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
-                        "Layout": {
-                            "Size": {
-                                "x": 320,
-                                "y": 120
-                            },
-                            "Origin": "Center"
-                        },
-                        "TransformContainer": {
-                            "Name": "TextArea_0"
-                        },
                         "Enable": true,
-                        "AttachmentState": 0
+                        "AttachmentState": 0,
+                        "TransformContainer": {
+                            "Name": "TextArea_0",
+                            "Layout": {
+                                "Size": {
+                                    "x": 320,
+                                    "y": 120
+                                },
+                                "Origin": "Center"
+                            }
+                        }
                     }
                 }
             ]
-        },
-        "Enable": true,
-        "AttachmentState": 0
+        }
     }
 }
