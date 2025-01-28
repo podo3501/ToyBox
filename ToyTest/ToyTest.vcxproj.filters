@@ -17,6 +17,7 @@
     <ClCompile Include="ComponentUndoTest.cpp">
       <Filter>TestResources</Filter>
     </ClCompile>
+    <ClCompile Include="PracticeTest_Pattern.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />

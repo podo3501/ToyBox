@@ -34,6 +34,8 @@ namespace ComponentTest
 
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid1_0"), false);
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid1_9"), true); //위에서 ImgGrid1를 attach 했다.
+
+		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid9_0"), true); //위에서 ImgGrid1를 attach 했다.
 	}
 
 	template <typename T>

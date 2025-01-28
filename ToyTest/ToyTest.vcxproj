@@ -136,6 +136,7 @@
     <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="JsonSerializeTest.cpp" />
     <ClCompile Include="PracticeTest.cpp" />
+    <ClCompile Include="PracticeTest_Pattern.cpp" />
     <ClCompile Include="TestHelper.cpp" />
     <ClCompile Include="ToolTest.cpp" />
     <ClCompile Include="ToyTest.cpp" />

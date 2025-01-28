@@ -9,17 +9,25 @@
             },
             "Origin": "LeftTop"
         },
-        "Components": [
+        "Transform": [
             {
-                "RelativePosition": {
-                    "x": 400,
-                    "y": 300
-                },
-                "Ratio": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "Component": {
+                "35": {
+                    "RelativePosition": {
+                        "x": 400,
+                        "y": 300
+                    },
+                    "Ratio": {
+                        "x": 0.5,
+                        "y": 0.5
+                    }
+                }
+            }
+        ],
+        "Enable": true,
+        "AttachmentState": 0,
+        "Children": [
+            {
+                "Child": {
                     "Type": "TextArea",
                     "FontFileList": {
                         "English": "UI/Font/CourierNewBoldS18.spritefont",
@@ -35,11 +43,10 @@
                         "Origin": "Center"
                     },
                     "Enable": true,
-                    "AttachmentState": 0
+                    "AttachmentState": 0,
+                    "Children": []
                 }
             }
-        ],
-        "Enable": true,
-        "AttachmentState": 0
+        ]
     }
 }

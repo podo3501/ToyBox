@@ -60,3 +60,31 @@ void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data)
             });
     }
 }
+
+void JsonOperation::Process(const string& key, vector<unique_ptr<UIComponent>>& datas)
+{
+    if (IsWrite())
+    {
+        ProcessWriteKey(key, [&datas](auto& currentJson) {
+            for (auto& comp : datas)
+            {
+                JsonOperation jsOp{};
+                jsOp.Process("Child", comp);
+                currentJson.push_back(jsOp.GetWrite());
+            }
+            });
+    }
+    else
+    {
+        datas.clear();
+        ProcessReadKey(key, [&datas, this](const auto& currentJson) {
+            for (const auto& compJson : currentJson)
+            {
+                unique_ptr<UIComponent> component = nullptr;
+                JsonOperation jsOp{ compJson };
+                jsOp.Process("Child", component);
+                datas.emplace_back(move(component));
+            }
+            });
+    }
+}

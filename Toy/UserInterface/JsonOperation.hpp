@@ -65,6 +65,7 @@ void JsonOperation::Process(const string& key, unique_ptr<T>& data)
 	}
 }
 
+//배열 형식을 가지고 있기 때문에 push_back으로 값을 넣어야 한다.
 template <typename ProcessFunc>
 void JsonOperation::ProcessWriteKey(const string& key, ProcessFunc processFunc)
 {

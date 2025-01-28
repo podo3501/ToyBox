@@ -3,6 +3,7 @@
 #include "../Config.h"
 #include "../Utility.h"
 #include "UIType.h"
+#include "TransformComponent.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -188,6 +189,45 @@ void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noex
         };
 
     ProcessImpl(key, writeFunc, readFunc);
+}
+
+void JsonOperation::Process(const string& key, map<int, TransformComponent>& datas) noexcept
+{
+    if (IsWrite())
+    {
+        if (datas.empty())
+            return;
+
+        ProcessWriteKey(key, [&datas](auto& currentJson) {
+            for (auto& [k, v] : datas)
+            {
+                JsonOperation jsOp{};
+                v.SerializeIO(jsOp);
+                
+                JsonOperation map{}; //새로운 operation에 데이터를 넣은뒤에 push_back으로 넣어준다.
+                auto& writeJson = map.GetWrite();
+                writeJson[to_string(k)] = jsOp.GetWrite();
+
+                currentJson.push_back(map.GetWrite());
+            }
+            });
+    }
+    else
+    {
+        datas.clear();
+        ProcessReadKey(key, [&datas, this](const auto& currentJson) {
+            for (const auto& j : currentJson) //그냥 디버깅 창을 유심히 보자.
+            {
+                for (const auto& [k, v] : j.items()) //배열값에서 다시 map 값으로 가져온다.
+                {
+                    TransformComponent data{};
+                    JsonOperation jsOp{ v };
+                    data.SerializeIO(jsOp);
+                    datas.insert(make_pair(stoi(k), data));
+                }
+            }
+            });
+    }
 }
 
 void JsonOperation::Process(const string& key, deque<wstring>& data) noexcept

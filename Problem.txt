@@ -152,3 +152,11 @@ msvc는 특별한 설정을 하지 않으면 /std:c++가 설정돼있든 말든 
 XMINT2를 == 할려고 하는데 안되어서 자세히 보니 __cplusplus 값이 1997년 11월 짜리로 돼 있음. c++20으로 
 바꾸어도 바뀌지 않음. __cplusplus의 값을 바꾸려면 컴파일러 옵션에 /Zc:__cplusplus를 추가하고
 /std:c++ 설정(14든 17이든 20이든)을 해 줘야 함. 
+
+이 문제의 발단은 TransformComponent안에 UIComponent를 넣었던 것이 문제다. vector가 
+TransformComponent에 걸리면 loop를 돌릴때 깔끔하게 안 돌아간다. Component용, Transform용 
+loop를 2개 만들면 되는 차원을 넘어서서 재귀코드 자체가 성립하지 않게 된다. 왜냐하면 Transform에서는
+Component를 알수 있지만 반대는 되지 않는다. 따라서 재귀함수 호출이 Transform으로 해야 하는데 
+그러면 Component에서 해야 할 일이 잘 안될 수도 있고, Transform 클래스와 Component 클래스는 
+서로가 friend 로 엮여야 하기 때문이다. 이것은 리팩토링이 되지 않는 클래스가 될 것이다.
+Composite패턴은 결국 Iterator패턴을 쓸수 밖에 없다. 그렇지 않으면 리팩토링이 되지 않는다.

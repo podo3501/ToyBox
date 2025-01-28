@@ -4,6 +4,7 @@ template<typename T> requires is_default_constructible_v<T>&& is_copy_assignable
 class Property;
 class UIComponent;
 class Scene;
+class TransformComponent;
 enum class Origin;
 enum class AttachmentState;
 enum class ButtonState;
@@ -123,6 +124,10 @@ template<typename T>
 concept IsClass =
 !IsBasicType<T> &&
 !is_stl_container<T>::value &&
+!requires {                     // Map과 같은 연관 컨테이너 제외
+	typename T::key_type;
+	typename T::mapped_type;
+} &&
 IsClassType<T>;
 
 //Json이 stl에 어떤 것을 지원하는지 검색하고 지원이 된다면 stl 컨테이너 특수화에 추가해서 
@@ -165,8 +170,10 @@ public:
 	void Process(const string& key, Origin& data) noexcept; //기본 템플릿에 넣어도 되나, 저장할때 string으로 저장하면 보기가 좋다.
 	void Process(const string& key, Vector2& data) noexcept;
 	void Process(const string& key, unique_ptr<UIComponent>& data);
+	void Process(const string& key, vector<unique_ptr<UIComponent>>& datas);
 	void Process(const string& key, wstring& data) noexcept;
 	void Process(const string& key, map<wstring, wstring>& data) noexcept;
+	void Process(const string& key, map<int, TransformComponent>& datas) noexcept;
 	void Process(const string& key, deque<wstring>& data) noexcept;
 
 private:

@@ -6,6 +6,12 @@
 #include "JsonOperation.h"
 #include "UIComponentEx.h"
 
+static int GenerateTransformID() noexcept
+{
+	static int idx{ 0 };
+	return idx++;
+}
+
 using namespace UIComponentEx;
 
 UIComponent::~UIComponent() = default;
@@ -25,15 +31,14 @@ UIComponent::UIComponent(const UIComponent& other)
 	m_layout = other.m_layout;
 	m_enable = other.m_enable;
 	m_attachmentState = other.m_attachmentState;
+	m_transformID = other.m_transformID;
+	m_components = other.m_components;
 
-	ranges::transform(other.m_components, back_inserter(m_components), [this](const auto& transCom) {
-		auto component = transCom.component->Clone();
+	ranges::transform(other.m_children, back_inserter(m_children), [this](const auto& child) {
+		auto component = child->Clone();
 		component->SetParent(this);
-		return move(TransformComponent(
-			move(component), 
-			transCom.GetRelativePosition(), 
-			transCom.GetRatio()));
-		});
+		return move(component);
+	});
 }
 
 //string UIComponent::GetType() const { return string(typeid(*this).name()); }
@@ -45,6 +50,9 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 	ReturnIfFalse(tie(m_name, m_layout, m_enable, m_attachmentState, m_components) ==
 		tie(o.m_name, o.m_layout, o.m_enable, o.m_attachmentState, o.m_components));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
+	ReturnIfFalse(m_children.size() == o.m_children.size());
+	ReturnIfFalse(ranges::equal(m_children, o.m_children, [](const auto& lhs, const auto& rhs) {
+		return CompareUniquePtr(lhs, rhs); }));
 
 	return true;
 }
@@ -61,7 +69,9 @@ bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs)
 UIComponent::UIComponent(UIComponent&& o) noexcept :
 	m_name{ move(o.m_name) },
 	m_layout{ move(o.m_layout) },
-	m_components{ move(o.m_components) }
+	m_transformID{ move(o.m_transformID) },
+	m_components{ move(o.m_components) },
+	m_children{ move(o.m_children) }
 {}
 
 unique_ptr<UIComponent> UIComponent::Clone() const 
@@ -71,15 +81,15 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 
 bool UIComponent::LoadResources(ILoadData* load)
 {
-	return ranges::all_of(m_components, [load](const auto& transComp) {
-		return transComp.component->LoadResources(load);
+	return ranges::all_of(m_children, [load](const auto& child) {
+		return child->LoadResources(load);
 		});
 }
 
 bool UIComponent::SetDatas(IGetValue* value)
 {
-	return ranges::all_of(m_components, [value](const auto& transCom) {
-		return transCom.component->SetDatas(value);
+	return ranges::all_of(m_children, [value](const auto& child) {
+		return child->SetDatas(value);
 		});
 }
 
@@ -90,16 +100,24 @@ bool UIComponent::RefreshPosition() noexcept
 	return component->RefreshPosition({});
 }
 
+TransformComponent* UIComponent::GetTransform(UIComponent* component)
+{
+	auto find = m_components.find(component->m_transformID);
+	if (find == m_components.end())
+		return nullptr;
+
+	return &find->second;
+}
+
 bool UIComponent::RefreshPosition(const XMINT2& position) noexcept
 {
 	if (!m_enable) return true;
 
 	ReturnIfFalse(ImplementUpdate(position));
 
-	auto result = ranges::all_of(m_components, [this, &position](auto& transCom) {
-		const auto& curPosition = transCom.GetPosition(m_isDirty, m_layout, position);
-		auto updateResult = transCom.component->RefreshPosition(curPosition);
-		return updateResult;
+	auto result = ranges::all_of(m_children, [this, &position](auto& child) {
+		const auto& curPosition = GetTransform(child.get())->GetPosition(m_isDirty, m_layout, position);
+		return child->RefreshPosition(curPosition);
 		});
 	m_isDirty = false;
 
@@ -113,11 +131,11 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, const InputManager& inpu
 	ReturnIfFalse(ImplementUpdate(position));
 	ReturnIfFalse(ImplementInput(inputManager));
 
-	auto result = ranges::all_of(m_components, [this, &position, &inputManager](auto& transCom) {
-		const auto& curPosition = transCom.GetPosition(m_isDirty, m_layout, position);
+	auto result = ranges::all_of(m_children, [this, &position, &inputManager](auto& child) {
+		const auto& curPosition = GetTransform(child.get())->GetPosition(m_isDirty, m_layout, position);
 		MouseTracker& curMouse = const_cast<InputManager&>(inputManager).GetMouse();
 		curMouse.PushOffset(curPosition);
-		auto updateResult = transCom.component->ProcessUpdate(curPosition, inputManager);
+		auto updateResult = child->ProcessUpdate(curPosition, inputManager);
 		curMouse.PopOffset();
 		return updateResult;
 		});
@@ -129,28 +147,28 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, const InputManager& inpu
 void UIComponent::ProcessRender(IRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
-	queue<UIComponent*> q;
-	q.push(this);
+	queue<UIComponent*> queue;
+	queue.push(this);
 
-	while (!q.empty())
+	while (!queue.empty())
 	{
-		UIComponent* current = q.front();
-		q.pop();
+		UIComponent* current = queue.front();
+		queue.pop();
 		
 		if (!current->m_enable) continue;
 
 		current->ImplementRender(render);
 
-		for (const auto& child : current->m_components)
-			q.push(child.component.get());  
+		for (const auto& child : current->m_children)
+			queue.push(child.get());
 	}
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
 void UIComponent::ChangeSize(const XMUINT2& size) noexcept 
 { 
-	ranges::for_each(m_components, [&size](auto& transCom) {
-		transCom.AdjustPosition(size);
+	ranges::for_each(m_children, [this, &size](auto& child) {
+		GetTransform(child.get())->AdjustPosition(size);
 		});
 
 	ApplySize(size);
@@ -158,8 +176,9 @@ void UIComponent::ChangeSize(const XMUINT2& size) noexcept
 
 bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
-	if (index >= m_components.size()) return false;
-	m_components[index].SetRelativePosition(size, relativePos);
+	if (index >= m_children.size()) return false;
+	
+	GetTransform(m_children[index].get())->SetRelativePosition(size, relativePos);
 	MarkDirty();
 
 	return true;
@@ -180,8 +199,8 @@ void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 	} while (isNotUnique(curName));
 	addable->Rename(curName);
 
-	for (auto& transCom : addable->m_components)
-		GenerateUniqueName(transCom.component.get());
+	for (auto& child : addable->m_children)
+		GenerateUniqueName(child.get());
 }
 
 unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept
@@ -190,8 +209,13 @@ unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> com
 
 	GenerateUniqueName(component.get());
 	component->SetParent(this);
-	auto transComponent = TransformComponent(move(component), m_layout.GetSize(), relativePos);
-	m_components.emplace_back(move(transComponent));
+	auto componentPtr = component.get();
+	m_children.emplace_back(move(component));
+
+	auto transComponent = TransformComponent(m_layout.GetSize(), relativePos);
+	int transformID = GenerateTransformID();
+	componentPtr->m_transformID = transformID;
+	m_components.insert(make_pair(transformID, move(transComponent)));
 	MarkDirty();
 
 	return nullptr;
@@ -199,13 +223,13 @@ unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> com
 
 unique_ptr<UIComponent> UIComponent::DetachComponent(UIComponent* detachComponent) noexcept
 {
-	auto find = ranges::find_if(m_components, [detachComponent](auto& transComponent) {
-		return (transComponent.component.get() == detachComponent);
+	auto find = ranges::find_if(m_children, [detachComponent](auto& child) {
+		return (child.get() == detachComponent);
 		});
-	if (find == m_components.end()) return nullptr;
+	if (find == m_children.end()) return nullptr;
 
-	unique_ptr<UIComponent> detachedComponent = move(find->component);
-	m_components.erase(find);
+	unique_ptr<UIComponent> detachedComponent = move(*find);
+	m_children.erase(find);
 	
 	detachedComponent->m_parent = nullptr;
 	detachedComponent->MarkDirty();
@@ -245,13 +269,14 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 {
 	operation.Process("Name", m_name);
 	operation.Process("Layout", m_layout);
-	operation.Process("Components", m_components);
+	operation.Process("Transform", m_components);
 	operation.Process("Enable", m_enable);
 	operation.Process("AttachmentState", m_attachmentState);
+	operation.Process("Children", m_children);
 	
 	if (operation.IsWrite()) return;
-	ranges::for_each(m_components, [this](auto& transComponent) {
-		transComponent.component->SetParent(this);
+	ranges::for_each(m_children, [this](auto& child) {
+		child->SetParent(this);
 		});
 }
 
@@ -260,8 +285,8 @@ void UIComponent::MarkDirty() noexcept
 	if (m_isDirty) return;
 	
 	m_isDirty = true;
-	ranges::for_each(m_components, [](auto& transComponent) {
-		transComponent.component->MarkDirty();
+	ranges::for_each(m_children, [](auto& child) {
+		child->MarkDirty();
 		});
 }
 
@@ -278,8 +303,8 @@ Rectangle UIComponent::GetTotalChildSize(const UIComponent* component) const noe
 	if (component == nullptr) return {};
 
 	Rectangle rect = GetRectangle(component);
-	for (const auto& transCom : component->m_components)
-		rect = Rectangle::Union(rect, GetTotalChildSize(transCom.component.get()));
+	for (const auto& child : component->m_children)
+		rect = Rectangle::Union(rect, GetTotalChildSize(child.get()));
 
 	return rect;
 }
@@ -334,9 +359,9 @@ void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList
 	if (IsArea(pos))
 		outList.push_back(this);
 
-	ranges::for_each(m_components, [this, &pos, &outList](auto& transCom) {
-		const auto& curPosition = pos - m_layout.GetPosition(transCom.GetRelativePosition());
-		transCom.component->GetComponents(curPosition, outList);
+	ranges::for_each(m_children, [this, &pos, &outList](auto& child) {
+		const auto& curPosition = pos - m_layout.GetPosition(GetTransform(child.get())->GetRelativePosition());
+		child->GetComponents(curPosition, outList);
 		});
 }
 
@@ -345,9 +370,9 @@ UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 	if (m_name == name)
 		return const_cast<UIComponent*>(this);
 
-	for (const auto& transComponent : m_components)
+	for (const auto& child : m_children)
 	{
-		UIComponent* find = transComponent.component->GetComponent(name);
+		UIComponent* find = child->GetComponent(name);
 		if (find) return find;
 	}
 	
@@ -357,32 +382,35 @@ UIComponent* UIComponent::GetComponent(const string& name) const noexcept
 vector<UIComponent*> UIComponent::GetComponents() const noexcept
 {
 	vector<UIComponent*> componentList;
-	ranges::transform(m_components, back_inserter(componentList), [](const auto& transCom) {
-		return transCom.component.get();
+	ranges::transform(m_children, back_inserter(componentList), [](const auto& child) {
+		return child.get();
 		});
 
 	return componentList;
 }
 
-template<typename Predicate>
-TransformComponent* FindTransformComponentIf(auto& components, Predicate&& pred) noexcept
-{
-	auto find = ranges::find_if(components, std::forward<Predicate>(pred));
-	return (find != components.end()) ? &(*find) : nullptr;
-}
+//template<typename Predicate>
+//TransformComponent* FindTransformComponentIf(auto& components, Predicate&& pred) noexcept
+//{
+//	auto find = ranges::find_if(components, std::forward<Predicate>(pred));
+//	return (find != components.end()) ? &(*find) : nullptr;
+//}
 
-TransformComponent* UIComponent::FindTransformComponent(const std::string& name) noexcept
-{
-	return FindTransformComponentIf(m_components, [&name](const auto& transComp) {
-		return transComp.component->GetName() == name;
-		});
-}
+//TransformComponent* UIComponent::FindTransformComponent(const std::string& name) noexcept
+//{
+//	return FindTransformComponentIf(m_children, [&name](const auto& child) {
+//		return child->GetName() == name;
+//		});
+//}
 
 TransformComponent* UIComponent::FindTransformComponent(const UIComponent* component) noexcept
 {
-	return FindTransformComponentIf(m_components, [component](const auto& transComp) {
-		return transComp.component.get() == component;
+	auto find = ranges::find_if(m_children, [component](const auto& child) {
+		return child.get() == component;
 		});
+	if (find == m_children.end()) return nullptr;
+
+	return GetTransform((*find).get());
 }
 
 

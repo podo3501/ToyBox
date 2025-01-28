@@ -4,6 +4,7 @@
 #include "UILayout.h"
 #include "Property.h"
 #include "UIType.h"
+#include "TransformComponent.h"
 
 class JsonOperation;
 class TransformComponent;
@@ -83,7 +84,8 @@ private:
 	void GenerateUniqueName(UIComponent* component) noexcept;
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
 	bool RefreshPosition(const XMINT2& position) noexcept;
-	TransformComponent* FindTransformComponent(const string& name) noexcept;
+	TransformComponent* GetTransform(UIComponent* component);
+	//TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
 	unique_ptr<UIComponent> DetachComponent(UIComponent* detachComponent) noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
@@ -96,8 +98,14 @@ private:
 	UIComponent* m_parent{ nullptr };
 	bool m_enable{ true };
 	bool m_isDirty{ true };
+	//일단은 이동정보를 컴포넌트 갯수만큼 만드는데 나중에는 이 이동정보를 따로 분리하고 이 이동
+	//정보를 인덱스로 찾는 방식으로 한다. 그러면 이동에 관련된 함수를 따로 관리 할수 있다.
 	AttachmentState m_attachmentState{ AttachmentState::All };
-	vector<TransformComponent> m_components;
+	int m_transformID{ -1 };
+	map<int, TransformComponent> m_components;
+	//TransformComponent m_transform;
+
+	vector<unique_ptr<UIComponent>> m_children;
 };
 
 //inline
