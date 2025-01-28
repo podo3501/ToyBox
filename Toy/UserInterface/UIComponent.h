@@ -23,6 +23,8 @@ protected:
 
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
+	vector<UIComponent*> GetComponents() const noexcept;
+	UIComponent* GetChildComponent(size_t index) const noexcept;
 
 	inline bool IsDirty() const noexcept { return m_isDirty; }
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
@@ -68,11 +70,7 @@ public:
 
 	inline const string& GetName() const noexcept { return m_name; }
 	bool Rename(const string& name) noexcept;
-	UIComponent* GetComponent(const string& name) const noexcept;
-	vector<UIComponent*> GetComponents() const noexcept;
 	void GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept;
-	template<typename T>//hppø° ¿÷¿Ω.
-	void GetComponent(const string& name, T** outComponent) const noexcept;
 
 	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
 	inline bool IsAttachable() const noexcept;
@@ -85,7 +83,6 @@ private:
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
 	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent* GetTransform(UIComponent* component);
-	//TransformComponent* FindTransformComponent(const string& name) noexcept;
 	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
 	unique_ptr<UIComponent> DetachComponent(UIComponent* detachComponent) noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
@@ -93,6 +90,7 @@ private:
 	void MarkDirty() noexcept;
 	Rectangle GetTotalChildSize(const UIComponent* component) const noexcept;
 
+	int m_id{ -1 };
 	string m_name;
 	UILayout m_layout;
 	UIComponent* m_parent{ nullptr };
@@ -104,8 +102,14 @@ private:
 	int m_transformID{ -1 };
 	map<int, TransformComponent> m_components;
 	//TransformComponent m_transform;
-
+	
 	vector<unique_ptr<UIComponent>> m_children;
+
+	//////////////////////////////////////////////////
+
+	void ForEachChild(std::function<void(UIComponent*)> func) noexcept;
+
+	friend class UIComponentEx;
 };
 
 //inline

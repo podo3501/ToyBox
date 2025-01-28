@@ -13,8 +13,6 @@
 #include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 
-using namespace UIComponentEx;
-
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, CommandList* cmdList, UIComponent* panel) :
 	m_renderer{ renderer },

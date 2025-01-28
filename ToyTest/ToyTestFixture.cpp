@@ -28,6 +28,7 @@ void ToyTestFixture::SetUp()
 
 	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
 	m_panel = make_unique<Panel>("Main", layout);
+	//m_transformContainer = make_unique<UITransformContainer>();
 	m_renderer->AddRenderComponent(m_panel.get());
 }
 

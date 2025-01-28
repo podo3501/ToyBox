@@ -7,8 +7,6 @@
 #include "../JsonOperation.h"
 #include "../UIComponentEx.h"
 
-using namespace UIComponentEx;
-
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
 

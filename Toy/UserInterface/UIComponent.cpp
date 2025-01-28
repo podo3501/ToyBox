@@ -12,14 +12,20 @@ static int GenerateTransformID() noexcept
 	return idx++;
 }
 
-using namespace UIComponentEx;
+static int GenerateComponentID() noexcept
+{
+	static int idx{ 0 };
+	return idx++;
+}
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
+	m_id{ GenerateComponentID() },
 	m_layout{ XMUINT2{}, Origin::LeftTop }
 {}
 
 UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
+	m_id{ GenerateComponentID() },
 	m_name{ name },
 	m_layout{ layout }
 {}
@@ -27,6 +33,7 @@ UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
 //상속받은 곳에서만 복사생성자를 호출할 수 있다.
 UIComponent::UIComponent(const UIComponent& other)
 {
+	m_id = GenerateComponentID();
 	m_name = other.m_name;
 	m_layout = other.m_layout;
 	m_enable = other.m_enable;
@@ -67,6 +74,7 @@ bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs)
 }
 
 UIComponent::UIComponent(UIComponent&& o) noexcept :
+	m_id{ move(o.m_id) },
 	m_name{ move(o.m_name) },
 	m_layout{ move(o.m_layout) },
 	m_transformID{ move(o.m_transformID) },
@@ -184,6 +192,14 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 	return true;
 }
 
+bool UIComponent::IsUniqueName(const string& name, UIComponent* self) noexcept
+{
+	UIComponent* findComponent = UIComponentEx::GetComponent(this, name);
+	if (findComponent && findComponent != self) return false;
+
+	return true;
+}
+
 void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 {
 	//붙는 쪽도 붙여지는 쪽도 유니크 이름이어야 한다.
@@ -245,14 +261,6 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexc
 
 	UIComponent* parent = m_parent; //DetachComponent를 하면 parent가 nullptr로 셋팅된다.
 	return { move(m_parent->DetachComponent(this)), parent };
-}
-
-bool UIComponent::IsUniqueName(const string& name, UIComponent* self) noexcept
-{
-	UIComponent* findComponent = GetRoot()->GetComponent(name);
-	if (findComponent && findComponent != self) return false;
-
-	return true;
 }
 
 bool UIComponent::Rename(const string& name) noexcept
@@ -365,18 +373,10 @@ void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList
 		});
 }
 
-UIComponent* UIComponent::GetComponent(const string& name) const noexcept
+UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
 {
-	if (m_name == name)
-		return const_cast<UIComponent*>(this);
-
-	for (const auto& child : m_children)
-	{
-		UIComponent* find = child->GetComponent(name);
-		if (find) return find;
-	}
-	
-	return nullptr;
+	if (index >= m_children.size()) return nullptr;
+	return m_children[index].get();
 }
 
 vector<UIComponent*> UIComponent::GetComponents() const noexcept
@@ -389,20 +389,6 @@ vector<UIComponent*> UIComponent::GetComponents() const noexcept
 	return componentList;
 }
 
-//template<typename Predicate>
-//TransformComponent* FindTransformComponentIf(auto& components, Predicate&& pred) noexcept
-//{
-//	auto find = ranges::find_if(components, std::forward<Predicate>(pred));
-//	return (find != components.end()) ? &(*find) : nullptr;
-//}
-
-//TransformComponent* UIComponent::FindTransformComponent(const std::string& name) noexcept
-//{
-//	return FindTransformComponentIf(m_children, [&name](const auto& child) {
-//		return child->GetName() == name;
-//		});
-//}
-
 TransformComponent* UIComponent::FindTransformComponent(const UIComponent* component) noexcept
 {
 	auto find = ranges::find_if(m_children, [component](const auto& child) {
@@ -411,6 +397,19 @@ TransformComponent* UIComponent::FindTransformComponent(const UIComponent* compo
 	if (find == m_children.end()) return nullptr;
 
 	return GetTransform((*find).get());
+}
+
+////////////////////////////////////////////////////////
+
+void UIComponent::ForEachChild(std::function<void(UIComponent*)> func) noexcept
+{
+	func(this);
+
+	for (auto& child : m_children) 
+	{
+		if (child)
+			child->ForEachChild(func);
+	}
 }
 
 

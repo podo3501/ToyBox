@@ -126,7 +126,7 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 
 bool FloatingComponent::LoadComponent(unique_ptr<UIComponent>&& component)
 {
-	return LoadComponentInternal(move(component), UIComponentEx::GetSize(component.get()));
+	return LoadComponentInternal(move(component), GetSize(component.get()));
 }
 
 bool FloatingComponent::ComponentToFloating(unique_ptr<UIComponent>&& component)

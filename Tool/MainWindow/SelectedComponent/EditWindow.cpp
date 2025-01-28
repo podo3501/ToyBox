@@ -10,8 +10,6 @@
 #include "../../Utility.h"
 #include "../Toy/Utility.h"
 
-using namespace UIComponentEx;
-
 enum class OnDrag
 {
     Normal,

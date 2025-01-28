@@ -12,9 +12,9 @@ TargetType ComponentCast(UIComponent* component)
     return nullptr;
 }
 
-template<typename T>
-void UIComponent::GetComponent(const string& name, T** outComponent) const noexcept
-{
-	UIComponent* component = GetComponent(name);
-	*outComponent = ComponentCast<T*>(component);
-}
+//template<typename T>
+//void UIComponent::GetComponent(const string& name, T** outComponent) const noexcept
+//{
+//	UIComponent* component = UIComponentEx::GetComponent(name);
+//	*outComponent = ComponentCast<T*>(component);
+//}

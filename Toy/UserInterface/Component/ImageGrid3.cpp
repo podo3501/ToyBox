@@ -74,7 +74,7 @@ void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
 
 Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
 {
-    ImageGrid1* img1 = GetFirstImageGrid<ImageGrid1*>(this);
+    ImageGrid1* img1 = ComponentCast<ImageGrid1*>(GetChildComponent(0));
     if(!img1) return {};
 
     return img1->GetSource();
@@ -82,7 +82,7 @@ Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
 
 optional<wstring> ImageGrid3::GetFilename() const noexcept
 {
-    ImageGrid1* img1 = GetFirstImageGrid<ImageGrid1*>(this);
+    ImageGrid1* img1 = ComponentCast<ImageGrid1*>(GetChildComponent(0));
     if (!img1) return nullopt;
 
     return img1->GetFilename();
@@ -91,7 +91,7 @@ optional<wstring> ImageGrid3::GetFilename() const noexcept
 bool ImageGrid3::SetFilename(const wstring& filename) noexcept
 {
     vector<ImageGrid1*> components;
-    ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
+    ReturnIfFalse(GetImageGridComponents(GetComponents(), components));
 
     for (auto imgGrid1 : components)
         imgGrid1->SetFilename(filename);
@@ -102,7 +102,7 @@ bool ImageGrid3::SetFilename(const wstring& filename) noexcept
 optional<SourceDivider> ImageGrid3::GetSourceAnd2Divider() const noexcept
 {
     vector<ImageGrid1*> components;
-    if(!GetImageGridComponents<ImageGrid1*>(this, components)) return nullopt;
+    if(!GetImageGridComponents(GetComponents(), components)) return nullopt;
 
     Rectangle mergedSource = GetMergedSource();
 
@@ -118,7 +118,7 @@ optional<SourceDivider> ImageGrid3::GetSourceAnd2Divider() const noexcept
 bool ImageGrid3::SetSources(const vector<Rectangle>& sources) noexcept
 {
     vector<ImageGrid1*> components;
-    ReturnIfFalse(GetImageGridComponents<ImageGrid1*>(this, components));
+    ReturnIfFalse(GetImageGridComponents(GetComponents(), components));
 
     ranges::for_each(components, [&sources, index = 0](auto component) mutable {
         component->SetSource(sources[index++]);
@@ -137,7 +137,7 @@ vector<Rectangle> ImageGrid3::GetSources() const noexcept
     vector<Rectangle> areas;
 
     vector<ImageGrid1*> components;
-    if (!GetImageGridComponents<ImageGrid1*>(this, components)) return {};
+    if (!GetImageGridComponents(GetComponents(), components)) return {};
 
     for (auto imgGrid1 : components)
         areas.push_back(imgGrid1->GetSource());

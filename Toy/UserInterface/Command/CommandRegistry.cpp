@@ -130,7 +130,7 @@ SetSizeCommand::SetSizeCommand(UIComponent* component, const XMUINT2& size) noex
 
 bool SetSizeCommand::Execute()
 {
-	m_record.previous = UIComponentEx::GetSize(GetComponent());
+	m_record.previous = GetSize(GetComponent());
 	GetComponent()->ChangeSize(m_record.current);
 	return true;
 }

@@ -84,7 +84,7 @@ void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 
 optional<wstring> ImageGrid9::GetFilename() const noexcept
 {
-	ImageGrid3* img3 = GetFirstImageGrid<ImageGrid3*>(this);
+	ImageGrid3* img3 = ComponentCast<ImageGrid3*>(GetChildComponent(0));
 	if (!img3) return nullopt;
 
 	return img3->GetFilename();
@@ -93,7 +93,7 @@ optional<wstring> ImageGrid9::GetFilename() const noexcept
 bool ImageGrid9::SetFilename(const wstring& filename) noexcept
 {
 	vector<ImageGrid3*> components;
-	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
+	ReturnIfFalse(GetImageGridComponents(GetComponents(), components));
 
 	return ranges::all_of(components, [&filename](auto imgGrid3) {
 		return imgGrid3->SetFilename(filename);
@@ -103,7 +103,7 @@ bool ImageGrid9::SetFilename(const wstring& filename) noexcept
 optional<SourceDivider> ImageGrid9::GetSourceAnd4Divider() const noexcept
 {
 	vector<ImageGrid3*> components;
-	if(!GetImageGridComponents<ImageGrid3*>(this, components)) return nullopt;
+	if(!GetImageGridComponents(GetComponents(), components)) return nullopt;
 
 	const Rectangle& firstMergedSource = components[0]->GetMergedSource();
 
@@ -132,7 +132,7 @@ optional<SourceDivider> ImageGrid9::GetSourceAnd4Divider() const noexcept
 bool ImageGrid9::SetSources(const vector<Rectangle>& sources) noexcept
 {
 	vector<ImageGrid3*> components;
-	ReturnIfFalse(GetImageGridComponents<ImageGrid3*>(this, components));
+	ReturnIfFalse(GetImageGridComponents(GetComponents(), components));
 
 	return ranges::all_of(components, [&sources, index = 0](auto component) mutable {
 		vector<Rectangle> rowRects{ sources.begin() + index, sources.begin() + index + 3 }; index += 3;
@@ -156,7 +156,7 @@ bool ImageGrid9::SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept
 vector<Rectangle> ImageGrid9::GetSources() const noexcept
 {
 	vector<ImageGrid3*> components;
-	if (!GetImageGridComponents<ImageGrid3*>(this, components)) return {};
+	if (!GetImageGridComponents(GetComponents(), components)) return {};
 
 	vector<Rectangle> areas;
 	for (auto imgGrid3 : components)

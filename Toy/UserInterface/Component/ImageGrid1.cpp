@@ -6,8 +6,6 @@
 #include "../JsonOperation.h"
 #include "../UIComponentEx.h"
 
-using namespace UIComponentEx;
-
 ImageGrid1::~ImageGrid1() = default;
 ImageGrid1::ImageGrid1() = default;
 
@@ -49,6 +47,8 @@ bool ImageGrid1::ImplementUpdate(const XMINT2& position) noexcept
 
 	return true;
 }
+
+
 
 void ImageGrid1::ImplementRender(IRender* render) const
 {
