@@ -6,26 +6,12 @@
 #include "JsonOperation.h"
 #include "UIComponentEx.h"
 
-static int GenerateTransformID() noexcept
-{
-	static int idx{ 0 };
-	return idx++;
-}
-
-static int GenerateComponentID() noexcept
-{
-	static int idx{ 0 };
-	return idx++;
-}
-
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
-	m_id{ GenerateComponentID() },
 	m_layout{ XMUINT2{}, Origin::LeftTop }
 {}
 
 UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
-	m_id{ GenerateComponentID() },
 	m_name{ name },
 	m_layout{ layout }
 {}
@@ -33,29 +19,25 @@ UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
 //상속받은 곳에서만 복사생성자를 호출할 수 있다.
 UIComponent::UIComponent(const UIComponent& other)
 {
-	m_id = GenerateComponentID();
 	m_name = other.m_name;
 	m_layout = other.m_layout;
 	m_enable = other.m_enable;
 	m_attachmentState = other.m_attachmentState;
-	m_transformID = other.m_transformID;
-	m_components = other.m_components;
+	m_transform = other.m_transform;
 
-	ranges::transform(other.m_children, back_inserter(m_children), [this](const auto& child) {
+	ranges::transform(other.m_children, back_inserter(m_children), [this, &other](const auto& child) {
 		auto component = child->Clone();
 		component->SetParent(this);
 		return move(component);
 	});
 }
 
-//string UIComponent::GetType() const { return string(typeid(*this).name()); }
-
 bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetTypeID() != o.GetTypeID()) return false;
 
-	ReturnIfFalse(tie(m_name, m_layout, m_enable, m_attachmentState, m_components) ==
-		tie(o.m_name, o.m_layout, o.m_enable, o.m_attachmentState, o.m_components));
+	ReturnIfFalse(tie(m_name, m_layout, m_enable, m_attachmentState, m_transform) ==
+		tie(o.m_name, o.m_layout, o.m_enable, m_attachmentState, o.m_transform));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
 	ReturnIfFalse(m_children.size() == o.m_children.size());
 	ReturnIfFalse(ranges::equal(m_children, o.m_children, [](const auto& lhs, const auto& rhs) {
@@ -74,11 +56,9 @@ bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs)
 }
 
 UIComponent::UIComponent(UIComponent&& o) noexcept :
-	m_id{ move(o.m_id) },
 	m_name{ move(o.m_name) },
 	m_layout{ move(o.m_layout) },
-	m_transformID{ move(o.m_transformID) },
-	m_components{ move(o.m_components) },
+	m_transform{ move(o.m_transform) },
 	m_children{ move(o.m_children) }
 {}
 
@@ -108,13 +88,9 @@ bool UIComponent::RefreshPosition() noexcept
 	return component->RefreshPosition({});
 }
 
-TransformComponent* UIComponent::GetTransform(UIComponent* component)
+TransformComponent& UIComponent::GetTransform(UIComponent* component)
 {
-	auto find = m_components.find(component->m_transformID);
-	if (find == m_components.end())
-		return nullptr;
-
-	return &find->second;
+	return component->m_transform;
 }
 
 bool UIComponent::RefreshPosition(const XMINT2& position) noexcept
@@ -124,7 +100,7 @@ bool UIComponent::RefreshPosition(const XMINT2& position) noexcept
 	ReturnIfFalse(ImplementUpdate(position));
 
 	auto result = ranges::all_of(m_children, [this, &position](auto& child) {
-		const auto& curPosition = GetTransform(child.get())->GetPosition(m_isDirty, m_layout, position);
+		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
 		return child->RefreshPosition(curPosition);
 		});
 	m_isDirty = false;
@@ -140,7 +116,7 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, const InputManager& inpu
 	ReturnIfFalse(ImplementInput(inputManager));
 
 	auto result = ranges::all_of(m_children, [this, &position, &inputManager](auto& child) {
-		const auto& curPosition = GetTransform(child.get())->GetPosition(m_isDirty, m_layout, position);
+		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
 		MouseTracker& curMouse = const_cast<InputManager&>(inputManager).GetMouse();
 		curMouse.PushOffset(curPosition);
 		auto updateResult = child->ProcessUpdate(curPosition, inputManager);
@@ -176,7 +152,7 @@ void UIComponent::ProcessRender(IRender* render)
 void UIComponent::ChangeSize(const XMUINT2& size) noexcept 
 { 
 	ranges::for_each(m_children, [this, &size](auto& child) {
-		GetTransform(child.get())->AdjustPosition(size);
+		GetTransform(child.get()).AdjustPosition(size);
 		});
 
 	ApplySize(size);
@@ -186,7 +162,7 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 {
 	if (index >= m_children.size()) return false;
 	
-	GetTransform(m_children[index].get())->SetRelativePosition(size, relativePos);
+	GetTransform(m_children[index].get()).SetRelativePosition(size, relativePos);
 	MarkDirty();
 
 	return true;
@@ -225,13 +201,8 @@ unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> com
 
 	GenerateUniqueName(component.get());
 	component->SetParent(this);
-	auto componentPtr = component.get();
+	component->m_transform.SetRelativePosition(m_layout.GetSize(), relativePos); //부모 사이즈와 나의 위치를 비교해야 상대적인 위치값을 구할 수 있다.
 	m_children.emplace_back(move(component));
-
-	auto transComponent = TransformComponent(m_layout.GetSize(), relativePos);
-	int transformID = GenerateTransformID();
-	componentPtr->m_transformID = transformID;
-	m_components.insert(make_pair(transformID, move(transComponent)));
 	MarkDirty();
 
 	return nullptr;
@@ -277,7 +248,7 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 {
 	operation.Process("Name", m_name);
 	operation.Process("Layout", m_layout);
-	operation.Process("Transform", m_components);
+	operation.Process("Transform", m_transform);
 	operation.Process("Enable", m_enable);
 	operation.Process("AttachmentState", m_attachmentState);
 	operation.Process("Children", m_children);
@@ -310,42 +281,31 @@ Rectangle UIComponent::GetTotalChildSize(const UIComponent* component) const noe
 {
 	if (component == nullptr) return {};
 
-	Rectangle rect = GetRectangle(component);
-	for (const auto& child : component->m_children)
-		rect = Rectangle::Union(rect, GetTotalChildSize(child.get()));
+	Rectangle rect{ GetRectangle(component) }; //초기값을 지정하지 않으면 0, 0 부터 시작하는 큰 사각형이 union된다.
+	component->ForEachChildConst([&rect](const UIComponent* child) {
+		const auto& curRect = GetRectangle(child);
+		rect = Rectangle::Union(rect, curRect);
+		});
 
 	return rect;
 }
 
 optional<XMINT2> UIComponent::GetRelativePosition() const noexcept
 {
-	if (!m_parent) return nullopt;
-	
-	auto transformComponent = m_parent->FindTransformComponent(this);
-	return transformComponent->GetRelativePosition();
+	return m_transform.GetRelativePosition();
 }
 
 bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
 {
 	if (!m_parent) return false;
-
-	auto transformComponent = m_parent->FindTransformComponent(this);
-	transformComponent->SetRelativePosition(GetSize(m_parent), relativePos);
+	m_transform.SetRelativePosition(GetSize(m_parent), relativePos);
 	m_parent->MarkDirty();
-
 	return true;
 }
 
 XMINT2 UIComponent::GetPosition() const noexcept
 {
-	XMINT2 parentPosition{ 0, 0 };
-	if (m_parent)
-	{
-		auto transformComponent = m_parent->FindTransformComponent(this);
-		parentPosition = transformComponent->absolutePosition;
-	}
-
-	return GetPositionByLayout(parentPosition);
+	return GetPositionByLayout(m_transform.absolutePosition);
 }
 
 XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept
@@ -368,7 +328,7 @@ void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList
 		outList.push_back(this);
 
 	ranges::for_each(m_children, [this, &pos, &outList](auto& child) {
-		const auto& curPosition = pos - m_layout.GetPosition(GetTransform(child.get())->GetRelativePosition());
+		const auto& curPosition = pos - m_layout.GetPosition(GetTransform(child.get()).GetRelativePosition());
 		child->GetComponents(curPosition, outList);
 		});
 }
@@ -389,26 +349,25 @@ vector<UIComponent*> UIComponent::GetComponents() const noexcept
 	return componentList;
 }
 
-TransformComponent* UIComponent::FindTransformComponent(const UIComponent* component) noexcept
-{
-	auto find = ranges::find_if(m_children, [component](const auto& child) {
-		return child.get() == component;
-		});
-	if (find == m_children.end()) return nullptr;
-
-	return GetTransform((*find).get());
-}
-
 ////////////////////////////////////////////////////////
 
-void UIComponent::ForEachChild(std::function<void(UIComponent*)> func) noexcept
+void UIComponent::ForEachChild(function<void(UIComponent*)> func) noexcept
 {
 	func(this);
-
 	for (auto& child : m_children) 
 	{
 		if (child)
 			child->ForEachChild(func);
+	}
+}
+
+void UIComponent::ForEachChildConst(function<void(const UIComponent*)> func) const noexcept
+{
+	func(this);
+	for (const auto& child : m_children)
+	{
+		if (child)
+			child->ForEachChildConst(func);
 	}
 }
 

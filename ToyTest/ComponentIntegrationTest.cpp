@@ -24,7 +24,7 @@ namespace ComponentTest
 
 	TEST_F(IntegrationTest, AttachDetachTest)
 	{
-		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
+		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 200, 100 }, Origin::LeftTop });
 		m_panel->AttachComponent(move(img9), { 80, 60 });
 
 		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "ImageGrid9_0"), false);	//9방향 이미지에는 attach 불가
@@ -34,6 +34,15 @@ namespace ComponentTest
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid1_9"), true); //위에서 ImgGrid1를 attach 했다.
 
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid9_0"), true); //위에서 ImgGrid1를 attach 했다.
+
+		auto img1 = CreateSampleImageGrid1({ { 200, 100 }, Origin::LeftTop });
+		auto img2 = CreateSampleImageGrid1({ { 110, 60 }, Origin::LeftTop });
+		auto img1Ptr = img1.get();
+		img1->AttachComponent(move(img2), { 100, 50 });	//중점에 attach 한다.
+		m_panel->AttachComponent(move(img1), { 100, 100 });
+		m_panel->RefreshPosition();
+
+		EXPECT_EQ(img1Ptr->GetTotalChildSize(), XMUINT2(210, 110));
 	}
 
 	template <typename T>

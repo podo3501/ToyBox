@@ -66,6 +66,7 @@
 --Clone 툴에서 구현
 --컴포넌트가 2개 있을때 둘다 움직이면 버그 발생. 이름으로 찾아서 해야 할 듯?
 --이름이 유니크하게 만들어지는 부분 버그 수정
+@absoluteposition이 이상 2개 이미지 툴에서 attach 해 놓고 디버깅 해 보자
 Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 MarkDirty UIComponent에서 정리
 툴 위젯 쓰기 편하게 바꾸기.
@@ -77,11 +78,3 @@ MarkDirty UIComponent에서 정리
 인풋매니저가 어쩔수없는 싱글톤이라면 함수인자에서 빼버리는게 낫지 않은가
 키보드 이벤트를 연결한다.
 클릭했을때 사운드가 나게 한다.
-
-namespace UIHelpers {
-    Size GetSize(const UIComponent* component) {
-        if (!component) return {0, 0}; // 예외 처리
-        UILayout* layout = component->GetUILayout();
-        return layout ? layout->GetSize() : Size{0, 0};
-    }
-}

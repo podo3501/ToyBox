@@ -82,32 +82,27 @@ private:
 	void GenerateUniqueName(UIComponent* component) noexcept;
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
 	bool RefreshPosition(const XMINT2& position) noexcept;
-	TransformComponent* GetTransform(UIComponent* component);
-	TransformComponent* FindTransformComponent(const UIComponent* component) noexcept;
+	TransformComponent& GetTransform(UIComponent* component);
 	unique_ptr<UIComponent> DetachComponent(UIComponent* detachComponent) noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	UIComponent* GetRoot() noexcept;
 	void MarkDirty() noexcept;
 	Rectangle GetTotalChildSize(const UIComponent* component) const noexcept;
 
-	int m_id{ -1 };
 	string m_name;
 	UILayout m_layout;
 	UIComponent* m_parent{ nullptr };
 	bool m_enable{ true };
 	bool m_isDirty{ true };
-	//일단은 이동정보를 컴포넌트 갯수만큼 만드는데 나중에는 이 이동정보를 따로 분리하고 이 이동
-	//정보를 인덱스로 찾는 방식으로 한다. 그러면 이동에 관련된 함수를 따로 관리 할수 있다.
 	AttachmentState m_attachmentState{ AttachmentState::All };
-	int m_transformID{ -1 };
-	map<int, TransformComponent> m_components;
-	//TransformComponent m_transform;
-	
+
+	TransformComponent m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
 	vector<unique_ptr<UIComponent>> m_children;
 
 	//////////////////////////////////////////////////
 
-	void ForEachChild(std::function<void(UIComponent*)> func) noexcept;
+	void ForEachChild(function<void(UIComponent*)> func) noexcept;
+	void ForEachChildConst(function<void(const UIComponent*)> func) const noexcept;
 
 	friend class UIComponentEx;
 };

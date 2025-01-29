@@ -9,20 +9,16 @@
             },
             "Origin": "LeftTop"
         },
-        "Transform": [
-            {
-                "35": {
-                    "RelativePosition": {
-                        "x": 400,
-                        "y": 300
-                    },
-                    "Ratio": {
-                        "x": 0.5,
-                        "y": 0.5
-                    }
-                }
+        "Transform": {
+            "RelativePosition": {
+                "x": 0,
+                "y": 0
+            },
+            "Ratio": {
+                "x": 0.0,
+                "y": 0.0
             }
-        ],
+        },
         "Enable": true,
         "AttachmentState": 0,
         "Children": [
@@ -41,6 +37,16 @@
                             "y": 120
                         },
                         "Origin": "Center"
+                    },
+                    "Transform": {
+                        "RelativePosition": {
+                            "x": 400,
+                            "y": 300
+                        },
+                        "Ratio": {
+                            "x": 0.5,
+                            "y": 0.5
+                        }
                     },
                     "Enable": true,
                     "AttachmentState": 0,
