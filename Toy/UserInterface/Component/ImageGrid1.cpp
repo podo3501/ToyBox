@@ -48,8 +48,6 @@ bool ImageGrid1::ImplementUpdate(const XMINT2& position) noexcept
 	return true;
 }
 
-
-
 void ImageGrid1::ImplementRender(IRender* render) const
 {
 	const auto& size = GetSize(this);

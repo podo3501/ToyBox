@@ -66,7 +66,7 @@ bool DetachComponentCommand::Execute()
 	m_component = move(component); //원본은 저장하고 클론은 밖으로 
 	m_addable = addable;
 
-	m_result = { m_component->Clone(), addable };
+	m_result = { Clone(m_component.get()), addable };
 
 	return true;
 }
@@ -86,7 +86,7 @@ bool DetachComponentCommand::Redo()
 
 	m_component = move(component);
 
-	m_result = { m_component->Clone(), addable };
+	m_result = { Clone(m_component.get()), addable };
 
 	return m_result.first != nullptr;
 }

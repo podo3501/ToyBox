@@ -16,7 +16,6 @@ namespace Tool
 }
 
 class MenuBar;
-class InputManager;
 
 class ToolSystem : public IImguiComponent
 {
@@ -24,7 +23,7 @@ public:
     ~ToolSystem();
     ToolSystem(IRenderer* renderer);
 
-    void Update(const DX::StepTimer* timer, const InputManager& inputManager);
+    void Update(const DX::StepTimer* timer);
 
     //IImguiComponent
     //virtual void Update() override;

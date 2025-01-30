@@ -74,13 +74,13 @@ void MainWindow::ChangeWindowSize(const ImVec2& size)
 	m_size = size;
 }
 
-void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker& mouseTracker)
+void MainWindow::CheckChangeWindow(const ImGuiWindow* window)
 {
 	static ImVec2 startSize{};
-	if (IsInputAction(mouseTracker, MouseButton::Left, KeyState::Pressed))
+	if (IsInputAction(MouseButton::Left, KeyState::Pressed))
 		startSize = window->Size;
 
-	if (!IsInputAction(mouseTracker, MouseButton::Left, KeyState::Released))
+	if (!IsInputAction(MouseButton::Left, KeyState::Released))
 		return;
 	
 	if(startSize != window->Size && !window->Collapsed)
@@ -90,21 +90,15 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window, const MouseTracker
 	}
 }
 
-void MainWindow::Update(const DX::StepTimer* timer, const InputManager& inputManager)
+void MainWindow::Update(const DX::StepTimer* timer)
 {
 	//if (!IsWindowFocus(m_window)) return;
 	if (!m_window) return;
 
-	const ImVec2& offset = GetWindowStartPosition(m_window);
-	auto& mouseTracker = const_cast<InputManager&>(inputManager).GetMouse();
-	mouseTracker.PushOffset(offset);
+	CheckChangeWindow(m_window); //창이 변했을때 RenderTexture를 다시 만들어준다.
 
-	CheckChangeWindow(m_window, mouseTracker); //창이 변했을때 RenderTexture를 다시 만들어준다.
-
-	m_controller->Update(inputManager);
-	m_panel->ProcessUpdate({}, inputManager);
-	
-	mouseTracker.PopOffset();
+	m_controller->Update();
+	m_panel->ProcessUpdate({});
 }
 
 void MainWindow::IgnoreMouseClick() 

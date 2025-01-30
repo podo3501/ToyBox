@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "ComponentTooltip.h"
-#include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/Utility.h"
 #include "../../Utility.h"
@@ -18,7 +17,7 @@ void ComponentTooltip::SetComponent(UIComponent* component) noexcept
 
 void ComponentTooltip::Render(const ImGuiWindow* window)
 {
-	const ImVec2& windowMousePos = GetMousePosition(window);
+	const ImVec2& windowMousePos = GetWindowIGMousePos(window);
 
 	std::vector<UIComponent*> componentList;
 	m_panel->GetComponents(ImVec2ToXMINT2(windowMousePos), componentList);

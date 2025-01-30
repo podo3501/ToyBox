@@ -61,17 +61,18 @@ void Button::EnableButtonImage(ButtonState btnState)
 		image->SetEnable(state == btnState);
 }
 
-bool Button::ImplementInput(const InputManager& inputManager) noexcept
+bool Button::ImplementUpdate(const XMINT2& absolutePosition) noexcept
 {
-	const auto& tracker = inputManager.GetMouse();
-	bool isArea = IsArea(tracker.GetOffsetPosition());
+	const auto& mouseTracker = InputManager::GetMouse();
+	const XMINT2& relativeMousePos = mouseTracker.GetPosition() - absolutePosition;
+	bool isArea = IsArea(relativeMousePos);
 
 	if (!isArea)
 		m_state = ButtonState::Normal;
 	else
 	{
-		if (IsInputAction(tracker, MouseButton::Left, KeyState::Pressed) ||
-			m_state == ButtonState::Pressed && IsInputAction(tracker, MouseButton::Left, KeyState::Held))
+		if (IsInputAction(MouseButton::Left, KeyState::Pressed) ||
+			m_state == ButtonState::Pressed && IsInputAction(MouseButton::Left, KeyState::Held))
 			m_state = ButtonState::Pressed;
 		else
 			m_state = ButtonState::Hover;

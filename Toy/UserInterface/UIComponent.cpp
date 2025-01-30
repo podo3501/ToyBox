@@ -81,19 +81,12 @@ bool UIComponent::SetDatas(IGetValue* value)
 		});
 }
 
-bool UIComponent::RefreshPosition() noexcept
-{
-	UIComponent* component = GetRoot();
-
-	return component->RefreshPosition({});
-}
-
 TransformComponent& UIComponent::GetTransform(UIComponent* component)
 {
 	return component->m_transform;
 }
 
-bool UIComponent::RefreshPosition(const XMINT2& position) noexcept
+bool UIComponent::ProcessUpdate(const XMINT2& position) noexcept
 {
 	if (!m_enable) return true;
 
@@ -101,51 +94,21 @@ bool UIComponent::RefreshPosition(const XMINT2& position) noexcept
 
 	auto result = ranges::all_of(m_children, [this, &position](auto& child) {
 		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
-		return child->RefreshPosition(curPosition);
+		return child->ProcessUpdate(curPosition);
 		});
 	m_isDirty = false;
 
 	return result;
 }
 
-bool UIComponent::ProcessUpdate(const XMINT2& position, const InputManager& inputManager) noexcept
-{
-	if (!m_enable) return true;
-
-	ReturnIfFalse(ImplementUpdate(position));
-	ReturnIfFalse(ImplementInput(inputManager));
-
-	auto result = ranges::all_of(m_children, [this, &position, &inputManager](auto& child) {
-		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
-		MouseTracker& curMouse = const_cast<InputManager&>(inputManager).GetMouse();
-		curMouse.PushOffset(curPosition);
-		auto updateResult = child->ProcessUpdate(curPosition, inputManager);
-		curMouse.PopOffset();
-		return updateResult;
-		});
-	m_isDirty = false;
-
-	return result;
-}
 
 void UIComponent::ProcessRender(IRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
-	queue<UIComponent*> queue;
-	queue.push(this);
-
-	while (!queue.empty())
-	{
-		UIComponent* current = queue.front();
-		queue.pop();
-		
-		if (!current->m_enable) continue;
-
-		current->ImplementRender(render);
-
-		for (const auto& child : current->m_children)
-			queue.push(child.get());
-	}
+	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
+	ForEachChildBFS([render](UIComponent* component) {
+		component->ImplementRender(render);
+		});
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
@@ -219,8 +182,9 @@ unique_ptr<UIComponent> UIComponent::DetachComponent(UIComponent* detachComponen
 	m_children.erase(find);
 	
 	detachedComponent->m_parent = nullptr;
+	detachedComponent->m_transform.Clear();
 	detachedComponent->MarkDirty();
-	detachedComponent->RefreshPosition();
+	detachedComponent->ProcessUpdate({});
 
 	return detachedComponent;
 }
@@ -324,12 +288,10 @@ UIComponent* UIComponent::GetRoot() noexcept
 
 void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
 {
-	if (IsArea(pos))
-		outList.push_back(this);
-
-	ranges::for_each(m_children, [this, &pos, &outList](auto& child) {
-		const auto& curPosition = pos - m_layout.GetPosition(GetTransform(child.get()).GetRelativePosition());
-		child->GetComponents(curPosition, outList);
+	ForEachChildBFS([&](UIComponent* component) {
+		const auto& curPosition = pos - GetTransform(component).absolutePosition;
+		if (component->IsArea(curPosition)) 
+			outList.push_back(component);
 		});
 }
 
@@ -351,6 +313,11 @@ vector<UIComponent*> UIComponent::GetComponents() const noexcept
 
 ////////////////////////////////////////////////////////
 
+XMINT2 UIComponent::GetAbsolutePosition() const noexcept //나중에 update에 인자로 들어가는 값이기 때문에 삭제될 함수이다.
+{
+	return m_transform.absolutePosition;
+}
+
 void UIComponent::ForEachChild(function<void(UIComponent*)> func) noexcept
 {
 	func(this);
@@ -368,6 +335,28 @@ void UIComponent::ForEachChildConst(function<void(const UIComponent*)> func) con
 	{
 		if (child)
 			child->ForEachChildConst(func);
+	}
+}
+
+void UIComponent::ForEachChildBFS(std::function<void(UIComponent*)> func) noexcept
+{
+	queue<UIComponent*> queue;
+	queue.push(this);
+
+	while (!queue.empty())
+	{
+		UIComponent* current = queue.front();
+		queue.pop();
+
+		if (!current->m_enable) continue;
+
+		func(current);
+
+		for (const auto& child : current->m_children)
+		{
+			if (child)
+				queue.push(child.get());
+		}
 	}
 }
 

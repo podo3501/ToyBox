@@ -29,6 +29,7 @@ void CallMockRender(IComponent* component, function<void(size_t, const RECT&, co
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke(testRenderFunc));
+	component->ProcessUpdate({});
 	component->ProcessRender(&mockRender);
 }
 
@@ -36,16 +37,15 @@ void CallMockRender(IComponent* component, function<void(size_t, const wstring&,
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
+	component->ProcessUpdate({});
 	component->ProcessRender(&mockRender);
 }
 
-void TestUpdate(HWND hwnd, UIComponent* component, int mouseX, int mouseY)
+void TestUpdate(UIComponent* component, int mouseX, int mouseY)
 {
-	InputManager inputManager(hwnd);
-	Mouse::State mouseState{};
-	mouseState.x = mouseX;
-	mouseState.y = mouseY;
-	inputManager.Update(mouseState);
-
-	component->ProcessUpdate({}, inputManager);
+	auto& mouseTracker = const_cast<MouseTracker&>(InputManager::GetMouse());
+	auto state = mouseTracker.GetLastState();
+	state.x = mouseX;
+	state.y = mouseY;
+	mouseTracker.Update(state);
 }

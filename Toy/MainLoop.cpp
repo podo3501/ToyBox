@@ -8,12 +8,15 @@
 #include "WindowProcedure.h"
 #include "InputManager.h"
 
-MainLoop::~MainLoop() = default;
+MainLoop::~MainLoop()
+{}
+
 MainLoop::MainLoop(Window* window, IRenderer* renderer) :
     m_window{ window },
-    m_renderer{ renderer },
-    m_inputManager(m_window->GetHandle())
-{}
+    m_renderer{ renderer }
+{
+    InputManager::Initialize(m_window->GetHandle());
+}
 
 bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
 {
@@ -71,11 +74,12 @@ int MainLoop::Run()
 void MainLoop::Tick()
 {
     auto timer = m_timer.get();
-    m_inputManager.Update();
+
+    InputManager::Update();
 
     m_timer->Tick([&, this]()
         {
-            Update(timer, m_inputManager);
+            Update(timer);
         });
    
     // Don't try to render anything before the first Update.

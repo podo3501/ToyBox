@@ -21,8 +21,7 @@ namespace ComponentTest
 {
 	static void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
 	{
-		unique_ptr<UIComponent> clonePanel = component->Clone();
-		clonePanel->RefreshPosition();
+		unique_ptr<UIComponent> clonePanel = Clone(component);
 
 		CallMockRender(clonePanel.get(), renderFunc, times);
 		EXPECT_TRUE(WriteReadTest(clonePanel));
@@ -94,7 +93,6 @@ namespace ComponentTest
 		ImageGrid3* img3 = GetCastComponent<ImageGrid3*>(m_panel.get(), "ImageGrid3_0");
 		img3->ChangeOrigin(Origin::Center);
 		img3->ChangeSize({ 120, 36 });
-		img3->RefreshPosition();
 
 		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -183,7 +181,6 @@ namespace ComponentTest
 		ImageGrid9* img9 = GetCastComponent<ImageGrid9*>(m_panel.get(), "ImageGrid9_0");
 		img9->ChangeOrigin(Origin::Center);
 		img9->ChangeSize({ 180, 150 });
-		img9->RefreshPosition();
 
 		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -219,7 +216,7 @@ namespace ComponentTest
 		m_panel->AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(m_window->GetHandle(), m_panel.get(), 144, 120);	//hover
+		TestUpdate(m_panel.get(), 144, 120);	//hover
 		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
@@ -254,12 +251,12 @@ namespace ComponentTest
 		m_panel->AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(m_window->GetHandle(), m_panel.get(), 110, 96);	//Hover
+		TestUpdate(m_panel.get(), 110, 96);	//Hover
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
 
 		Button* btn = GetCastComponent<Button*>(m_panel.get(), "Button_0");
 		btn->ChangeSize({ 150, 48 });
-		TestUpdate(m_window->GetHandle(), m_panel.get(), 0, 0);	//Normal
+		TestUpdate(m_panel.get(), 0, 0);	//Normal
 
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -284,9 +281,7 @@ namespace ComponentTest
 		CallMockRender(m_panel.get(), TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		unique_ptr<UIComponent> clonePanel = m_panel->Clone();
-		clonePanel->RefreshPosition();
-
+		unique_ptr<UIComponent> clonePanel = Clone(m_panel.get());
 		CallMockRender(clonePanel.get(), TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(clonePanel));
 	}
@@ -298,6 +293,7 @@ namespace ComponentTest
 
 		panel1->AttachComponent(move(panel2), { 40, 40 });
 		m_panel->AttachComponent(move(panel1), { 400, 300 });
+		m_panel->ProcessUpdate({});
 
 		vector<UIComponent*> outList;
 		m_panel->GetComponents({ 240, 140 }, outList);

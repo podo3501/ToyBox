@@ -3,14 +3,17 @@
 #include "../Include/IRenderer.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Dialog.h"
+#include "../Utility.h"
 
 ComponentController::~ComponentController() = default;
 ComponentController::ComponentController(IRenderer* renderer,
 	UIComponent* panel, const string& mainWndNam) noexcept :
+	m_mainWnd{ nullptr },
 	m_cmdList{ make_unique<CommandList>() },
 	m_floater{ make_unique<FloatingComponent>(renderer, mainWndNam) },
 	m_selector{ make_unique<ComponentSelector>(renderer, m_cmdList.get(), panel) }
@@ -23,23 +26,26 @@ void ComponentController::SetPanel(UIComponent* panel) noexcept
 
 void ComponentController::SetMainWindow(ImGuiWindow* mainWnd) noexcept
 {
+	m_mainWnd = mainWnd;
 	m_selector->SetMainWindow(mainWnd);
 }
 
-bool ComponentController::CheckAttachComponent(const InputManager& inputManager) noexcept
+bool ComponentController::CheckAttachComponent() noexcept
 {
+	if (!m_mainWnd) return false;
 	if (!m_floater->IsComponent()) return false;
-	if (!IsInputAction(inputManager, Keyboard::LeftShift, MouseButton::Left)) return false;
+	if (!IsInputAction(Keyboard::LeftShift, MouseButton::Left)) return false;
 
-	AttachSelectedComponent(m_cmdList.get(), m_selector.get(), m_floater.get(), inputManager.GetMouse().GetOffsetPosition());
+	XMINT2 mousePosition = GetWindowMousePos(m_mainWnd);
+	AttachSelectedComponent(m_cmdList.get(), m_selector.get(), m_floater.get(), mousePosition);
 
 	return true;
 }
 
-bool ComponentController::CheckDetachComponent(const InputManager& inputManager) noexcept
+bool ComponentController::CheckDetachComponent() noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(inputManager, Keyboard::D, KeyState::Pressed)) return false;
+	if (!IsInputAction(Keyboard::D, KeyState::Pressed)) return false;
 
 	auto detachComponent = DetachSelectedComponent(m_cmdList.get(), m_selector.get());
 	if (!detachComponent)
@@ -55,36 +61,36 @@ bool ComponentController::CheckDetachComponent(const InputManager& inputManager)
 	return true;
 }
 
-bool ComponentController::CheckDeleteComponent(const InputManager& inputManager) noexcept
+bool ComponentController::CheckDeleteComponent() noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(inputManager, Keyboard::Delete, KeyState::Pressed)) return false;
+	if (!IsInputAction(Keyboard::Delete, KeyState::Pressed)) return false;
 
 	DetachSelectedComponent(m_cmdList.get(), m_selector.get());
 
 	return true;
 }
 
-bool ComponentController::CheckUndoComponent(const InputManager& inputManager) noexcept
+bool ComponentController::CheckUndoComponent() noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(inputManager, Keyboard::LeftControl, Keyboard::Z)) return false;
+	if (!IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
 
 	return m_cmdList->Undo();
 }
 
-bool ComponentController::CheckRedoComponent(const InputManager& inputManager) noexcept
+bool ComponentController::CheckRedoComponent() noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(inputManager, Keyboard::LeftControl, Keyboard::Y)) return false;
+	if (!IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
 
 	return m_cmdList->Redo();
 }
 
-bool ComponentController::CheckCloneComponent(const InputManager& inputManager) noexcept
+bool ComponentController::CheckCloneComponent() noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(inputManager, Keyboard::B, KeyState::Pressed)) return false;
+	if (!IsInputAction(Keyboard::B, KeyState::Pressed)) return false;
 	UIComponent* component = m_selector->GetComponent();
 	if (!component) return false;
 
@@ -94,7 +100,7 @@ bool ComponentController::CheckCloneComponent(const InputManager& inputManager) 
 		return true;
 	}
 
-	auto clone = component->Clone();
+	auto clone = Clone(component);
 	if (!m_floater->ComponentToFloating(move(clone)))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to load the resource.");
@@ -104,15 +110,15 @@ bool ComponentController::CheckCloneComponent(const InputManager& inputManager) 
 	return true;
 }
 
-bool ComponentController::Update(const InputManager& inputManager) noexcept
+bool ComponentController::Update() noexcept
 {
-	CheckDetachComponent(inputManager);
-	CheckDeleteComponent(inputManager);
-	CheckCloneComponent(inputManager);
-	CheckUndoComponent(inputManager);
-	CheckRedoComponent(inputManager);
-	if (!CheckAttachComponent(inputManager)) //Attach 할때 select 되는경우가 있어서
-		m_selector->Update(inputManager);	
+	CheckDetachComponent();
+	CheckDeleteComponent();
+	CheckCloneComponent();
+	CheckUndoComponent();
+	CheckRedoComponent();
+	if (!CheckAttachComponent()) //Attach 할때 select 되는경우가 있어서
+		m_selector->Update();	
 	
 	m_floater->Excute();
 

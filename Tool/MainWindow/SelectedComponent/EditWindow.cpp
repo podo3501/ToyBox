@@ -21,8 +21,9 @@ enum class OnDrag
 EditWindow::~EditWindow()
 {}
 
-EditWindow::EditWindow(UIComponent* component, CommandList* cmdList) noexcept:
+EditWindow::EditWindow(UIComponent* component, ImGuiWindow* mainWnd, CommandList* cmdList) noexcept:
 	m_component{ component },
+    m_mainWnd{ mainWnd },
     m_cmdList{ cmdList },
     m_dragState{ OnDrag::Normal }
 {
@@ -42,11 +43,9 @@ static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
     };
 }
 
-static OnDrag IsMouseOverResizeZone(const MouseTracker& mouseTracker, const UIComponent* component) noexcept
+static OnDrag IsMouseOverResizeZone(const XMINT2& pos, const UIComponent* component) noexcept
 {
-    const auto& pos = mouseTracker.GetOffsetPosition();
     auto zones = GenerateResizeZone(GetRectangle(component), 8);
-
     for (const auto& zone : zones)
     {
         if (Contains(zone.first, pos))
@@ -74,17 +73,17 @@ bool EditWindow::IsUpdateSizeOnDrag() const noexcept
     return (m_dragState != OnDrag::Normal);
 }
 
-void EditWindow::UpdateDragState(OnDrag dragState, const MouseTracker& mouseTracker, XMINT2& outStartPos) noexcept
+void EditWindow::UpdateDragState(OnDrag dragState, XMINT2& outStartPos) noexcept
 {
-    const auto& mouseState = mouseTracker.GetLastState();
+    const auto& mouseState = InputManager::GetMouse().GetLastState();
 
-    if (IsInputAction(mouseTracker, MouseButton::Left, KeyState::Pressed) && dragState != OnDrag::Normal)
+    if (IsInputAction(MouseButton::Left, KeyState::Pressed) && dragState != OnDrag::Normal)
     {
         m_dragState = dragState;
         outStartPos = { mouseState.x, mouseState.y };
     }
 
-    if (IsInputAction(mouseTracker, MouseButton::Left, KeyState::Released))
+    if (IsInputAction(MouseButton::Left, KeyState::Released))
     {
         m_dragState = OnDrag::Normal;
         outStartPos = {};
@@ -111,38 +110,35 @@ void EditWindow::ResizeComponent(const XMINT2& startPos, const Mouse::State& mou
     }
 
     if (size != modifySize)
-    {
         m_cmdList->SetSize(m_component, modifySize);
-        m_component->RefreshPosition();
-    }
 }
 
-void EditWindow::ResizeComponentOnClick(const InputManager& inputManager) noexcept
+void EditWindow::ResizeComponentOnClick() noexcept
 {
     if (!m_component) return;
 
-    const auto& mouseTracker = inputManager.GetMouse();
-    const auto& mouseState = mouseTracker.GetLastState();
-
-    OnDrag dragState = IsMouseOverResizeZone(mouseTracker, m_component);
+    const XMINT2& mousePos = GetWindowMousePos(m_mainWnd);
+    OnDrag dragState = IsMouseOverResizeZone(mousePos, m_component);
     Tool::MouseCursor::SetType(GetCursorImage(dragState));
 
     static XMINT2 startPos{};
-    UpdateDragState(dragState, mouseTracker, startPos);
+    UpdateDragState(dragState, startPos);
 
     if (IsUpdateSizeOnDrag())
     {
+        const auto& mouseTracker = InputManager::GetMouse();
+        const auto& mouseState = mouseTracker.GetLastState();
         ResizeComponent(startPos, mouseState);
         startPos = { mouseState.x, mouseState.y };
     }
 }
 
-void EditWindow::Update(const InputManager& inputManager, bool mainWndFocus)
+void EditWindow::Update(bool mainWndFocus)
 {
     if (mainWndFocus)
-        ResizeComponentOnClick(inputManager);
+        ResizeComponentOnClick();
 
-    UpdateComponent(inputManager);
+    UpdateComponent();
 }
 
 static void ShowEditNameResult(chrono::steady_clock::time_point startTime, bool result, bool &visible) noexcept
@@ -198,13 +194,14 @@ bool EditWindow::EditSize(const XMUINT2& size)
     return changed;
 }
 
-void EditWindow::RenderCommon(bool& modify)
+void EditWindow::RenderCommon()
 {
     EditName("Name");
 
     auto relativePosition = m_component->GetRelativePosition();
     if(relativePosition.has_value())
     {
+        bool modify{ false };
         modify |= EditInteger("X", relativePosition->x);
         modify |= EditInteger("Y", relativePosition->y);
 
@@ -213,7 +210,7 @@ void EditWindow::RenderCommon(bool& modify)
     }
 
     const auto& layout = m_component->GetLayout();
-    modify |= EditSize(layout.GetSize());
+    EditSize(layout.GetSize());
 
     ImGui::Separator();
     ImGui::Spacing();
@@ -226,13 +223,8 @@ void EditWindow::Render(const ImGuiWindow* mainWindow)
     string wndName = string("Component Window - ") + string(mainWindow->Name);
     ImGui::Begin(wndName.c_str(), &m_visible, ImGuiWindowFlags_NoFocusOnAppearing);
     
-    bool modify{ false };
-
-    RenderCommon(modify);
-    RenderComponent(modify);
-
-    if (modify)
-        m_component->RefreshPosition();
+    RenderCommon();
+    RenderComponent();
 
     ImGui::End();
 }
@@ -240,7 +232,7 @@ void EditWindow::Render(const ImGuiWindow* mainWindow)
 //////////////////////////////////////////////////////////
 
 EditPanel::~EditPanel() = default;
-EditPanel::EditPanel(Panel* panel, CommandList* cmdList) noexcept :
-    EditWindow{ panel, cmdList }
+EditPanel::EditPanel(Panel* panel, ImGuiWindow* window, CommandList* cmdList) noexcept :
+    EditWindow{ panel, window, cmdList }
 {
 }

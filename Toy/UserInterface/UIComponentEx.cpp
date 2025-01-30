@@ -2,6 +2,12 @@
 #include "UIComponentEx.h"
 #include "../Utility.h"
 
+unique_ptr<UIComponent> UIComponentEx::Clone(const UIComponent* component)
+{
+	unique_ptr<UIComponent> clone = component->Clone();
+	return clone;
+}
+
 Rectangle UIComponentEx::GetRectangle(const UIComponent* component) noexcept
 {
 	const XMINT2& curPosition = component->GetPosition();

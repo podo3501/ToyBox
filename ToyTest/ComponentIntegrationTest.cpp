@@ -40,16 +40,18 @@ namespace ComponentTest
 		auto img1Ptr = img1.get();
 		img1->AttachComponent(move(img2), { 100, 50 });	//중점에 attach 한다.
 		m_panel->AttachComponent(move(img1), { 100, 100 });
-		m_panel->RefreshPosition();
+		m_panel->ProcessUpdate({});
 
 		EXPECT_EQ(img1Ptr->GetTotalChildSize(), XMUINT2(210, 110));
+		auto [detached, parent] = img1Ptr->DetachComponent();
+		EXPECT_EQ(detached->GetTotalChildSize(), XMUINT2(210, 110));
 	}
 
 	template <typename T>
 	bool VerifyClone(unique_ptr<T> original) 
 	{
 		if (!original) return false;
-		auto clone = original->Clone();
+		auto clone = Clone(original.get());
 
 		return CompareUniquePtr(original, clone);
 	}
@@ -75,13 +77,13 @@ namespace ComponentTest
 	{
 		unique_ptr<UIComponent> img9_0 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		m_panel->AttachComponent(move(img9_0), { 80, 60 });
-
+		m_panel->ProcessUpdate({});
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), {0, 0}) == 1);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 100, 100 }) == 4);
 
 		unique_ptr<UIComponent> img9_1 = CreateSampleImageGrid9({ { 221, 191 }, Origin::LeftTop });
 		m_panel->AttachComponent(move(img9_1), { 88, 66 });
-
+		m_panel->ProcessUpdate({});
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 180, 160 }) == 7);
 	}
 
@@ -92,7 +94,7 @@ namespace ComponentTest
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		panel->AttachComponent(move(img9), { 40, 30 });
 		m_panel->AttachComponent(move(panel), { 400, 300 });
-		m_panel->RefreshPosition();
+		m_panel->ProcessUpdate({});
 
 		UIComponent* component = GetComponent(m_panel.get(), "ImageGrid1_4");
 		XMINT2 pos = component->GetPosition();

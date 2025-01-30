@@ -7,7 +7,6 @@
 #include "TransformComponent.h"
 
 class JsonOperation;
-class TransformComponent;
 
 class UIComponent : public IComponent
 {
@@ -18,13 +17,13 @@ protected:
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
 	virtual bool ImplementUpdate(const XMINT2&) noexcept { return true; }
-	virtual bool ImplementInput(const InputManager&) noexcept { return true; }
 	virtual void ImplementRender(IRender*) const {};
 
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	vector<UIComponent*> GetComponents() const noexcept;
 	UIComponent* GetChildComponent(size_t index) const noexcept;
+	XMINT2 GetAbsolutePosition() const noexcept; //나중에 update에 인자로 들어가는 값이기 때문에 삭제될 함수이다.
 
 	inline bool IsDirty() const noexcept { return m_isDirty; }
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
@@ -34,8 +33,8 @@ public:
 	virtual ~UIComponent();
 	UIComponent& operator=(const UIComponent&) = delete;	//상속 받은 클래스도 대입생성자 기본적으로 삭제됨.
 	UIComponent(UIComponent&& o) noexcept;
-	unique_ptr<UIComponent> Clone() const;
 
+public:
 	static ComponentID GetTypeStatic() { return ComponentID::Unknown; }
 	virtual ComponentID GetTypeID() const noexcept = 0;
 	//string GetType() const;
@@ -43,8 +42,7 @@ public:
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue*) override;
-	virtual bool RefreshPosition() noexcept;
-	virtual bool ProcessUpdate(const XMINT2& position, const InputManager& inputManager) noexcept override final;
+	virtual bool ProcessUpdate(const XMINT2& position) noexcept override final;
 	virtual void ProcessRender(IRender* render) override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
@@ -81,7 +79,6 @@ private:
 	bool IsUniqueName(const string& name, UIComponent* self) noexcept;
 	void GenerateUniqueName(UIComponent* component) noexcept;
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
-	bool RefreshPosition(const XMINT2& position) noexcept;
 	TransformComponent& GetTransform(UIComponent* component);
 	unique_ptr<UIComponent> DetachComponent(UIComponent* detachComponent) noexcept;
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
@@ -101,8 +98,10 @@ private:
 
 	//////////////////////////////////////////////////
 
+	unique_ptr<UIComponent> Clone() const;
 	void ForEachChild(function<void(UIComponent*)> func) noexcept;
 	void ForEachChildConst(function<void(const UIComponent*)> func) const noexcept;
+	void ForEachChildBFS(std::function<void(UIComponent*)> func) noexcept;
 
 	friend class UIComponentEx;
 };

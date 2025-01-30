@@ -1,7 +1,6 @@
 #pragma once
 
 struct IRenderer;
-class InputManager;
 class UIComponent;
 class ComponentTooltip;
 class EditWindow;
@@ -14,7 +13,7 @@ public:
 	ComponentSelector(IRenderer* renderer, CommandList* cmdList, UIComponent* panel);
 
 	void SetPanel(UIComponent* panel) noexcept;
-	void Update(const InputManager& inputManager) noexcept;
+	void Update() noexcept;
 	void Render();
 	void SetMainWindow(ImGuiWindow* mainWnd) noexcept { m_mainWnd = mainWnd; }
 	UIComponent* GetComponent() { return m_component; }
@@ -22,9 +21,9 @@ public:
 
 private:
 	void RepeatedSelection(const vector<UIComponent*>& componentList) noexcept;
-	void SelectComponent(const InputManager& inputManager) noexcept;
-	bool HandleEscapeKey(const InputManager& inputManager) noexcept;
-	bool UpdateEditWindow(const InputManager& inputManager) noexcept;
+	void SelectComponent() noexcept;
+	bool HandleEscapeKey() noexcept;
+	bool UpdateEditWindow() noexcept;
 
 	IRenderer* m_renderer;
 	CommandList* m_cmdList;

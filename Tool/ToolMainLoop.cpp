@@ -6,7 +6,6 @@
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Component/Dialog.h"
-#include "../Toy/InputManager.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -50,14 +49,14 @@ bool ToolMainLoop::SetDatas(IGetValue* getValue)
     return true;
 }
 
-void ToolMainLoop::Update(const DX::StepTimer* timer, const InputManager& inputManager)
+void ToolMainLoop::Update(const DX::StepTimer* timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_toolSystem->Update(timer, inputManager);
+    m_toolSystem->Update(timer);
 
     PIXEndEvent();
 }

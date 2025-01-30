@@ -6,7 +6,8 @@ inline float GetFrameHeight()
 }
 
 ImVec2 GetWindowStartPosition(const ImGuiWindow* window) noexcept;
-ImVec2 GetMousePosition(const ImGuiWindow* window) noexcept;
+ImVec2 GetWindowIGMousePos(const ImGuiWindow* window) noexcept;
+XMINT2 GetWindowMousePos(const ImGuiWindow* window) noexcept;
 bool IsWindowFocus(const ImGuiWindow* window) noexcept;
 void DrawRectangle(const Rectangle& rect, const ImGuiWindow* window);
 void DrawRectangle(const vector<Rectangle>& rects, const ImGuiWindow* window);

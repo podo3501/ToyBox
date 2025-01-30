@@ -26,6 +26,13 @@ bool TransformComponent::operator==(const TransformComponent& o) const noexcept
 	return true;
 }
 
+void TransformComponent::Clear() noexcept
+{
+	absolutePosition = {};
+	relativePosition = {};
+	ratio = {};
+}
+
 const XMINT2& TransformComponent::GetPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept
 {
 	if (!IsDirty) return absolutePosition;

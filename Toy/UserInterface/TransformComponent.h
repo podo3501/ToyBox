@@ -12,6 +12,7 @@ public:
 	TransformComponent(const XMUINT2& size, const XMINT2& relativePos);
 	bool operator==(const TransformComponent& o) const noexcept;
 
+	void Clear() noexcept;
 	const XMINT2& GetPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept;
 	const XMINT2& GetRelativePosition() const noexcept { return relativePosition; }
 	void SetRelativePosition(const XMUINT2& size, const XMINT2& relativePos) noexcept;

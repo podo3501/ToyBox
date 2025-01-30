@@ -16,7 +16,7 @@ protected:
 	virtual bool InitializeDerived() override;
 	virtual bool LoadResources() override;
 	virtual bool SetDatas(IGetValue*) override { return true; }
-	virtual void Update(const DX::StepTimer* timer, const InputManager& inputManager) override;
+	virtual void Update(const DX::StepTimer* timer) override;
 
 private:
 	Window* m_window;

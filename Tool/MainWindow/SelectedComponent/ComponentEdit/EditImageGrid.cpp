@@ -23,24 +23,24 @@ static unique_ptr<TextureWindow> CreateTextureWindow(IRenderer* renderer,
 //////////////////////////////////////////////////////
 
 EditImageGrid::~EditImageGrid() = default;
-EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, CommandList* cmdList) noexcept :
-    EditWindow{ component, cmdList },
+EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, ImGuiWindow* mainWnd, CommandList* cmdList) noexcept :
+    EditWindow{ component, mainWnd, cmdList },
     m_renderer{ renderer }
 {}
 
-void EditImageGrid::UpdateComponent(const InputManager& inputManager)
+void EditImageGrid::UpdateComponent()
 {
     if (!m_textureWindow || !m_textureWindow->IsOpen()) return;
 
-    m_textureWindow->Update(inputManager);
+    m_textureWindow->Update();
 }
 
-void EditImageGrid::RenderComponent(bool& posModify)
+void EditImageGrid::RenderComponent()
 {
     if (m_textureWindow)
         m_textureWindow->Render();
 
-    RenderComponentEdit(posModify);
+    RenderComponentEdit();
 }
 
 void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UIComponent* component)
@@ -57,12 +57,12 @@ void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UICompon
 //////////////////////////////////////////////////////
 
 EditImageGrid1::~EditImageGrid1() = default;
-EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer, CommandList* cmdList) noexcept :
-    EditImageGrid{ imgGrid1, renderer, cmdList },
+EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer, ImGuiWindow* mainWnd, CommandList* cmdList) noexcept :
+    EditImageGrid{ imgGrid1, renderer, mainWnd, cmdList },
     m_imageGrid1{ imgGrid1 }
 {}
 
-void EditImageGrid1::RenderComponentEdit(bool& posModify)
+void EditImageGrid1::RenderComponentEdit()
 {
     wstring filename{ *m_imageGrid1->GetFilename() };
     if (EditFilename("Filename", filename))
@@ -70,10 +70,7 @@ void EditImageGrid1::RenderComponentEdit(bool& posModify)
 
     Rectangle source = m_imageGrid1->GetSource();
     if (EditRectangle("Source", source))
-    {
         GetCommandList()->SetSource(m_imageGrid1, source);
-        posModify |= true;
-    }
 
     ImGui::Spacing();
     
@@ -83,12 +80,12 @@ void EditImageGrid1::RenderComponentEdit(bool& posModify)
 ////////////////////////////////////////////////
 
 EditImageGrid3::~EditImageGrid3() = default;
-EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer, CommandList* cmdList) noexcept :
-    EditImageGrid{ imgGrid3, renderer, cmdList },
+EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer, ImGuiWindow* mainWnd, CommandList* cmdList) noexcept :
+    EditImageGrid{ imgGrid3, renderer, mainWnd, cmdList },
     m_imageGrid3{ imgGrid3 }
 {}
 
-void EditImageGrid3::RenderComponentEdit(bool& modify)
+void EditImageGrid3::RenderComponentEdit()
 {
     wstring filename{ *m_imageGrid3->GetFilename() };
     if (EditFilename("Filename", filename))
@@ -106,12 +103,12 @@ void EditImageGrid3::RenderComponentEdit(bool& modify)
 ////////////////////////////////////////////////
 
 EditImageGrid9::~EditImageGrid9() = default;
-EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer, CommandList* cmdList) noexcept :
-    EditImageGrid{ imgGrid9, renderer, cmdList },
+EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer, ImGuiWindow* mainWnd, CommandList* cmdList) noexcept :
+    EditImageGrid{ imgGrid9, renderer, mainWnd, cmdList },
     m_imageGrid9{ imgGrid9 }
 {}
 
-void EditImageGrid9::RenderComponentEdit(bool& modify)
+void EditImageGrid9::RenderComponentEdit()
 {
     wstring filename{ *m_imageGrid9->GetFilename() };
     if (EditFilename("Filename", filename))

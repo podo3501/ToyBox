@@ -58,14 +58,14 @@ bool GameMainLoop::LoadResources()
     return true;
 }
 
-void GameMainLoop::Update(const DX::StepTimer* timer, const InputManager& inputManager)
+void GameMainLoop::Update(const DX::StepTimer* timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_gamePanel->ProcessUpdate({}, inputManager);
+    m_gamePanel->ProcessUpdate({});
 
     PIXEndEvent();
 }

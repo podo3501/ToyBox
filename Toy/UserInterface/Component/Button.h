@@ -2,7 +2,6 @@
 #include "../UIComponent.h"
 
 enum class ButtonState;
-class InputManager;
 
 class Button : public UIComponent
 {
@@ -25,7 +24,7 @@ public:
 protected:
 	Button(const Button& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementInput(const InputManager& inputManager) noexcept override;
+	virtual bool ImplementUpdate(const XMINT2& absolutePosition) noexcept override;
 	
 private:
 	void AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable) noexcept;

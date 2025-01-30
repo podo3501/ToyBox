@@ -37,15 +37,16 @@ unique_ptr<EditWindow> CreateEdit(UIComponent* component, Args&&... args)
 }
 
 //이게 점점 커지면 include도 많이 생기고 해서 static factory클래스로 만들어야 할 것 같다.
-static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, IRenderer* renderer, CommandList* cmdList)
+static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, 
+	IRenderer* renderer, ImGuiWindow* mainWnd, CommandList* cmdList)
 {
 	if (!component) return nullptr;
 
 	ComponentID id = component->GetTypeID();
-	if (id == ComponentID::Panel) return CreateEdit<EditPanel, Panel*>(component, cmdList);
-	if (id == ComponentID::ImageGrid1) return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer, cmdList);
-	if (id == ComponentID::ImageGrid3) return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer, cmdList);
-	if (id == ComponentID::ImageGrid9) return CreateEdit<EditImageGrid9, ImageGrid9*>(component, renderer, cmdList);
+	if (id == ComponentID::Panel) return CreateEdit<EditPanel, Panel*>(component, mainWnd, cmdList);
+	if (id == ComponentID::ImageGrid1) return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer, mainWnd, cmdList);
+	if (id == ComponentID::ImageGrid3) return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer, mainWnd, cmdList);
+	if (id == ComponentID::ImageGrid9) return CreateEdit<EditImageGrid9, ImageGrid9*>(component, renderer, mainWnd, cmdList);
 
 	return nullptr;
 }
@@ -59,20 +60,20 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 		return;
 	}
 
-	m_editWindow = CreateEditWindow(component, m_renderer, m_cmdList);
+	m_editWindow = CreateEditWindow(component, m_renderer, m_mainWnd, m_cmdList);
 
 	m_component = component;
 	m_tooltip->SetComponent(component);
 }
 
-void ComponentSelector::SelectComponent(const InputManager& inputManager) noexcept
+void ComponentSelector::SelectComponent() noexcept
 {
-	const auto& mouseTracker = inputManager.GetMouse();
-	if (!IsInputAction(mouseTracker, MouseButton::Left, KeyState::Pressed)) return;
+	if (!m_mainWnd) return;
+	if (!IsInputAction(MouseButton::Left, KeyState::Pressed)) return;
 
 	static vector<UIComponent*> preComponentList{ nullptr };
 	vector<UIComponent*> componentList;
-	const XMINT2& pos = mouseTracker.GetOffsetPosition();
+	const XMINT2& pos = GetWindowMousePos(m_mainWnd);
 	m_panel->GetComponents(pos, componentList);
 	if (componentList.empty()) return;
 
@@ -85,31 +86,31 @@ void ComponentSelector::SelectComponent(const InputManager& inputManager) noexce
 	}
 }
 
-void ComponentSelector::Update(const InputManager& inputManager) noexcept
+void ComponentSelector::Update() noexcept
 {
-	if (HandleEscapeKey(inputManager)) return;
-	if (UpdateEditWindow(inputManager)) return;
+	if (HandleEscapeKey()) return;
+	if (UpdateEditWindow()) return;
 
 	if (IsWindowFocus(m_mainWnd))
-		SelectComponent(inputManager);
+		SelectComponent();
 }
 
-bool ComponentSelector::HandleEscapeKey(const InputManager& inputManager) noexcept
+bool ComponentSelector::HandleEscapeKey() noexcept
 {
-	if (!IsInputAction(inputManager, Keyboard::Escape, KeyState::Pressed)) return false;
+	if (!IsInputAction(Keyboard::Escape, KeyState::Pressed)) return false;
 	
 	SetComponent(nullptr);
 	return true;
 }
 
-bool ComponentSelector::UpdateEditWindow(const InputManager& inputManager) noexcept
+bool ComponentSelector::UpdateEditWindow() noexcept
 {
 	if (!m_editWindow || !m_editWindow->IsVisible()) {
 		SetComponent(nullptr);
 		return false;
 	}
 
-	m_editWindow->Update(inputManager, IsWindowFocus(m_mainWnd));
+	m_editWindow->Update(IsWindowFocus(m_mainWnd));
 
 	return m_editWindow->IsUpdateSizeOnDrag();
 }

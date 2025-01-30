@@ -2,7 +2,6 @@
 
 struct IRenderer;
 class UIComponent;
-class InputManager;
 class FloatingComponent;
 class ComponentSelector;
 class CommandList;
@@ -16,17 +15,18 @@ public:
 
 	void SetPanel(UIComponent* panel) noexcept;
 	void SetMainWindow(ImGuiWindow* mainWnd) noexcept;
-	bool Update(const InputManager& inputManager) noexcept;
+	bool Update() noexcept;
 	void Render();
 
 private:
-	bool CheckAttachComponent(const InputManager& inputManager) noexcept;
-	bool CheckDetachComponent(const InputManager& inputManager) noexcept;
-	bool CheckDeleteComponent(const InputManager& inputManager) noexcept;
-	bool CheckCloneComponent(const InputManager& inputManager) noexcept;
-	bool CheckUndoComponent(const InputManager& inputManager) noexcept;
-	bool CheckRedoComponent(const InputManager& inputManager) noexcept;
+	bool CheckAttachComponent() noexcept;
+	bool CheckDetachComponent() noexcept;
+	bool CheckDeleteComponent() noexcept;
+	bool CheckCloneComponent() noexcept;
+	bool CheckUndoComponent() noexcept;
+	bool CheckRedoComponent() noexcept;
 
+	ImGuiWindow* m_mainWnd;
 	unique_ptr<CommandList> m_cmdList;
 	unique_ptr<FloatingComponent> m_floater;
 	unique_ptr<ComponentSelector> m_selector;

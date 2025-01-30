@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "ToolSystem.h"
 #include "GuiWidget.h"
-#include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
 #include "MainWindow/MainWindow.h"
@@ -43,13 +42,13 @@ MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
     return it->get();
 }
 
-void ToolSystem::Update(const DX::StepTimer* timer, const InputManager& inputManager)
+void ToolSystem::Update(const DX::StepTimer* timer)
 {
     m_menuBar->Update();
 
     erase_if(m_mainWindows, [](auto& wnd) { return !wnd->IsOpen(); });
-    ranges::for_each(m_mainWindows, [timer, &inputManager](const auto& wnd) {
-        wnd->Update(timer, inputManager);
+    ranges::for_each(m_mainWindows, [timer](const auto& wnd) {
+        wnd->Update(timer);
         });
 }
 

@@ -7,7 +7,6 @@ namespace DX
 }
 
 class UIComponent;
-class InputManager;
 class MouseTracker;
 class ComponentController;
 
@@ -23,14 +22,14 @@ public:
     bool CreateScene(const wstring& filename);
     bool SaveScene(const wstring& filename);
     wstring GetSaveFilename() const noexcept;
-    void Update(const DX::StepTimer* timer, const InputManager& inputManager);
+    void Update(const DX::StepTimer* timer);
     void ChangeWindowSize(const ImVec2& size);
 
     inline bool IsOpen() const noexcept { return m_isOpen; }
     inline const ImGuiWindow* GetImGuiWindow() const noexcept;
 
 private:
-    void CheckChangeWindow(const ImGuiWindow* window, const MouseTracker& mouseTracker);
+    void CheckChangeWindow(const ImGuiWindow* window);
     void IgnoreMouseClick();
     void SetupWindowAppearing() noexcept;
 

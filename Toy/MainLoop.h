@@ -1,5 +1,4 @@
 #pragma once
-#include "InputManager.h"
 
 class Window;
 class MouseTracker;
@@ -11,8 +10,6 @@ namespace DX
 {
     class StepTimer;
 }
-
-class InputManager;
 
 class MainLoop
 {
@@ -28,7 +25,7 @@ protected:
     virtual bool InitializeDerived() = 0;
     virtual bool LoadResources() = 0;
     virtual bool SetDatas(IGetValue* getValue) = 0;
-    virtual void Update(const DX::StepTimer* timer, const InputManager& inputManager) = 0;
+    virtual void Update(const DX::StepTimer* timer) = 0;
 
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -46,5 +43,4 @@ private:
     Window* m_window;
     IRenderer* m_renderer;
     unique_ptr<DX::StepTimer> m_timer;
-    InputManager m_inputManager;
 };

@@ -1,7 +1,6 @@
 #pragma once
 
 class UIComponent;
-class InputManager;
 
 class ComponentTooltip
 {

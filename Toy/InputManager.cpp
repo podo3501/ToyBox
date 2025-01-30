@@ -1,27 +1,31 @@
 #include "pch.h"
 #include "InputManager.h"
 
-bool InputManager::m_instantiated = false;
-
-InputManager::~InputManager()
+XMINT2 MouseTracker::GetPosition() const noexcept
 {
-    m_instantiated = false;
+    return { GetLastState().x, GetLastState().y };
 }
 
-InputManager::InputManager(HWND hwnd)
+bool __cdecl KeyboardTracker::IsKeyHeld(Keyboard::Keys key) const noexcept
 {
-    assert(!m_instantiated);
+    return GetLastState().IsKeyDown(key);
+}
+
+///////////////////////////////////////////////////////
+
+KeyboardTracker InputManager::m_keyboardTracker;
+Keyboard InputManager::m_keyboard;
+
+MouseTracker InputManager::m_mouseTracker;
+Mouse InputManager::m_mouse;
+
+void InputManager::Initialize(HWND hwnd)
+{
     m_mouse.SetWindow(hwnd);
-    m_instantiated = true;
 }
 
-void InputManager::Update()
+void InputManager::Update() noexcept
 {
     m_keyboardTracker.Update(m_keyboard.GetState());
     m_mouseTracker.Update(m_mouse.GetState());
-}
-
-void InputManager::Update(const Mouse::State& state)
-{
-    m_mouseTracker.Update(state);
 }

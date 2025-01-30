@@ -1,5 +1,16 @@
 #pragma once
-#include"HelperClass.h"
+
+class MouseTracker : public Mouse::ButtonStateTracker
+{
+public:
+    XMINT2 GetPosition() const noexcept;
+};
+
+class KeyboardTracker : public Keyboard::KeyboardStateTracker
+{
+public:
+    bool __cdecl IsKeyHeld(Keyboard::Keys key) const noexcept;
+};
 
 enum class MouseButton
 {
@@ -21,28 +32,24 @@ namespace DirectX
     class Keyboard::KeyboardStateTracker;
 }
 
+//이 클래스는 정적 클래스라 소멸자가 호출되지 않는다. 그래서 TDD에서는 여러개의 테스트를 할때 이 클래스는
+// 소멸되지 않고 프로그램이 종료될때 한번 소멸된다. 명시적으로 소멸하는 방법이 있으나, unique_ptr을
+//사용하는 방법인데 cache에 영향이 있을 수 있어서 이 클래스에는 포인터를 사용하고 싶지 않았다.
 class InputManager
 {
 public:
-    InputManager() = delete;
-    InputManager(HWND hwnd);
-    ~InputManager();
-
-    void Update();
-    void Update(const Mouse::State& state);
-
-    inline const KeyboardTracker& GetKeyboard() const noexcept { return m_keyboardTracker; }
-    inline const MouseTracker& GetMouse() const noexcept { return m_mouseTracker; }
-    inline MouseTracker& GetMouse() noexcept { return m_mouseTracker; }
+    static void Initialize(HWND hwnd);
+    static void Update() noexcept;
+    
+    static inline const KeyboardTracker& GetKeyboard() noexcept { return m_keyboardTracker; }
+    static inline const MouseTracker& GetMouse() noexcept { return m_mouseTracker; }
 
 private:
-    KeyboardTracker m_keyboardTracker;
-    Keyboard m_keyboard;
+    static KeyboardTracker m_keyboardTracker;
+    static Keyboard m_keyboard;
 
-    MouseTracker m_mouseTracker;
-    Mouse m_mouse;
-
-    static bool m_instantiated; //이 클래스는 Keyboard, Mouse가 싱글턴이기 때문에 오직 하나만 만들어져야 한다.
+    static MouseTracker m_mouseTracker;
+    static Mouse m_mouse;
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -79,15 +86,10 @@ inline Mouse::ButtonStateTracker::ButtonState GetMouseKeyState(KeyState keyState
     return static_cast<Mouse::ButtonStateTracker::ButtonState>(keyState);
 }
 
-inline bool IsInputAction(const MouseTracker& mouseTracker, MouseButton mouseButton, KeyState keyState) noexcept
+inline bool IsInputAction(MouseButton mouseButton, KeyState keyState) noexcept
 {
+    const auto& mouseTracker = InputManager::GetMouse();
     return IsMouseButtonState(mouseTracker, mouseButton, GetMouseKeyState(keyState));
-}
-
-inline bool IsInputAction(const InputManager& inputManager, MouseButton mouseButton, KeyState keyState) noexcept
-{
-    const auto& mouse = inputManager.GetMouse();
-    return IsInputAction(mouse, mouseButton, keyState);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -103,23 +105,22 @@ constexpr ActionFunc KeyActions[] =
     [](const KeyboardTracker& keyboard, Keyboard::Keys key) { return keyboard.IsKeyPressed(key); }
 };
 
-inline bool IsInputAction(const InputManager& manager, Keyboard::Keys key, KeyState keyState) noexcept
+inline bool IsInputAction(Keyboard::Keys key, KeyState keyState) noexcept
 {
-    const auto& keyboard = manager.GetKeyboard();
+    const auto& keyboard = InputManager::GetKeyboard();
     return KeyActions[static_cast<size_t>(keyState)](keyboard, key);
 }
 
-inline bool IsInputAction(const InputManager& manager, Keyboard::Keys key, MouseButton mouseButton) noexcept
+inline bool IsInputAction(Keyboard::Keys key, MouseButton mouseButton) noexcept
 {
     //앞 키는 hold 하고 뒤에는 pressed를 해야 한다. 둘다 pressed를 하면 동시에 눌러야 하기 때문에 키가 안 먹힌다.
-    return IsInputAction(manager, key, KeyState::Held) && 
-        IsInputAction(manager, mouseButton, KeyState::Pressed);
+    return IsInputAction(key, KeyState::Held) && IsInputAction(mouseButton, KeyState::Pressed);
 }
 
-inline bool IsInputAction(const InputManager& manager, Keyboard::Keys firstKey, Keyboard::Keys secondKey) noexcept
+inline bool IsInputAction(Keyboard::Keys firstKey, Keyboard::Keys secondKey) noexcept
 {
-    bool firstKeyHeld = IsInputAction(manager, firstKey, KeyState::Held);
-    bool secondKeyPressed = IsInputAction(manager, secondKey, KeyState::Pressed);
+    bool firstKeyHeld = IsInputAction(firstKey, KeyState::Held);
+    bool secondKeyPressed = IsInputAction(secondKey, KeyState::Pressed);
     
     return firstKeyHeld && secondKeyPressed; 
     //눌리고 있을때 너무 빨리 이벤트가 들어간다. 그래서 시간 지연을 줄 생각이었는데 눌렀을때와 눌리고 있

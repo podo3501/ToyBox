@@ -4,6 +4,7 @@
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "Utility.h"
@@ -25,10 +26,9 @@ void ToyTestFixture::SetUp()
 	const auto& outputSize = m_window->GetOutputSize();
 	InitializeConfig(L"ToyTest/TestResources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
-
+	InputManager::Initialize(hwnd);
 	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
 	m_panel = make_unique<Panel>("Main", layout);
-	//m_transformContainer = make_unique<UITransformContainer>();
 	m_renderer->AddRenderComponent(m_panel.get());
 }
 
