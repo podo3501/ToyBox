@@ -72,9 +72,8 @@ void ComponentSelector::SelectComponent() noexcept
 	if (!IsInputAction(MouseButton::Left, KeyState::Pressed)) return;
 
 	static vector<UIComponent*> preComponentList{ nullptr };
-	vector<UIComponent*> componentList;
 	const XMINT2& pos = GetWindowMousePos(m_mainWnd);
-	m_panel->GetComponents(pos, componentList);
+	vector<UIComponent*> componentList = UIEx(m_panel).GetComponents(pos);
 	if (componentList.empty()) return;
 
 	if (preComponentList == componentList)
@@ -121,7 +120,7 @@ void ComponentSelector::Render()
 		m_tooltip->Render(m_mainWnd);
 
 	if (m_component)
-		DrawRectangle(GetRectangle(m_component), m_mainWnd);
+		DrawRectangle(m_component->GetRectangle(), m_mainWnd);
 
 	if (m_editWindow)
 		m_editWindow->Render(m_mainWnd);

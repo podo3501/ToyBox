@@ -1,31 +1,24 @@
 #pragma once
-#include "UIComponent.h"
 
 class UIComponent;
 
+//UIComponent클래스에서 public에 관한 것들만 여기에서 정의한다. 
+// protected 안에 함수가 다중책임일 지라도 여기에 옮기지 않는다. 캡슐화가 깨지는게 더 문제이기 때문이다.
 class UIComponentEx
 {
 public:
-	static unique_ptr<UIComponent> Clone(const UIComponent* component);
+	UIComponentEx(UIComponent* component) noexcept;
 
-	static Rectangle GetRectangle(const UIComponent* component) noexcept;
-	static const XMUINT2& GetSize(const UIComponent* component) noexcept;
-	static UIComponent* GetComponent(UIComponent* component, const string& name) noexcept;
+	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
+	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
+
+	UIComponent* GetComponent(const string& name) noexcept;
+	vector<UIComponent*> GetComponents(const XMINT2& pos) noexcept;
+	XMUINT2 GetTotalChildSize() noexcept;
+
 private:
+	unique_ptr<UIComponent> DetachChild(UIComponent* parent, UIComponent* detach) noexcept;
+	Rectangle GetTotalChildSize(const UIComponent* component) noexcept;
 
+	UIComponent* m_component;
 };
-
-template<typename T>
-T GetCastComponent(UIComponent* component, const string& name) noexcept
-{
-	UIComponent* find = UIComponentEx::GetComponent(component, name);
-	return ComponentCast<T>(find);
-}
-
-//인클루드 하면 UIComponentEx::함수이름 이렇게 호출해야 하는데 BIND_STATIC_FUNC해 주면 그냥 함수 이름만 호출해도 된다.
-#define BIND_STATIC_FUNC(func) inline auto func = bind_front(UIComponentEx::func);
-
-BIND_STATIC_FUNC(Clone);
-BIND_STATIC_FUNC(GetRectangle);
-BIND_STATIC_FUNC(GetSize);
-BIND_STATIC_FUNC(GetComponent);

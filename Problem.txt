@@ -153,10 +153,18 @@ XMINT2를 == 할려고 하는데 안되어서 자세히 보니 __cplusplus 값�
 바꾸어도 바뀌지 않음. __cplusplus의 값을 바꾸려면 컴파일러 옵션에 /Zc:__cplusplus를 추가하고
 /std:c++ 설정(14든 17이든 20이든)을 해 줘야 함. 
 
-이 문제의 발단은 TransformComponent안에 UIComponent를 넣었던 것이 문제다. vector가 
-TransformComponent에 걸리면 loop를 돌릴때 깔끔하게 안 돌아간다. Component용, Transform용 
+이 문제의 발단은 UITransform안에 UIComponent를 넣었던 것이 문제다. vector가 
+UITransform에 걸리면 loop를 돌릴때 깔끔하게 안 돌아간다. Component용, Transform용 
 loop를 2개 만들면 되는 차원을 넘어서서 재귀코드 자체가 성립하지 않게 된다. 왜냐하면 Transform에서는
 Component를 알수 있지만 반대는 되지 않는다. 따라서 재귀함수 호출이 Transform으로 해야 하는데 
 그러면 Component에서 해야 할 일이 잘 안될 수도 있고, Transform 클래스와 Component 클래스는 
 서로가 friend 로 엮여야 하기 때문이다. 이것은 리팩토링이 되지 않는 클래스가 될 것이다.
 Composite패턴은 결국 Iterator패턴을 쓸수 밖에 없다. 그렇지 않으면 리팩토링이 되지 않는다.
+
+컴포지트 패턴은 클래스가 단일 책임과 다중책임이라는 2가지의 책임을 동시에 가지고 있는 부분이라 
+속성 하나를 만들면 Component에서 속성을 가져오는 함수와 Component 집단에서 가지고오는 함수가 필연적
+으로 2개가 생기게 된다. 그래서 속성이 몇개 안 생기더라도 함수는 엄청 많이 생기고 서로서로가 꼬여서 알수
+없게 되는게 문제였다. 즉. 단일책임과 다중책임을 분리시키는게 문제인데, 이것을 분리시키는 방법으로는 
+딱히 불리는 패턴은 없는데 확장 클래스를 만들어서 Component를 생성자 인자로 넣고 확장 클래스를 friend
+로 만들어 이쪽에서 다중적인 일을 처리하는 클래스를 만들면 될 것 같다. 기존의 Component는 단일책임만
+맡게 만들어서 둘을 분리하면 어떨까.

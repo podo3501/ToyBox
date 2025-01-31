@@ -50,8 +50,8 @@ namespace ComponentTest
 		cmdList.SetSize(img1, { 54, 54 });
 		cmdList.SetSize(img1, { 74, 74 }); //Size은 명령이 하나로 합쳐짐
 
-		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponentEx::GetSize, true), XMUINT2(64, 64));
-		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponentEx::GetSize, false), XMUINT2(74, 74));
+		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetSize, true), XMUINT2(64, 64));
+		EXPECT_EQ(UndoRedo(cmdList, img1, &UIComponent::GetSize, false), XMUINT2(74, 74));
 
 		cmdList.Rename(img1, "Image1");
 		cmdList.Rename(img1, "Rename");
@@ -75,7 +75,7 @@ namespace ComponentTest
 	{
 		auto component = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
 		auto img1 = ComponentCast<ImageGrid1*>(component.get());
-		m_panel->AttachComponent(move(component), { 80, 60 });
+		UIEx(m_panel).AttachComponent(move(component), { 80, 60 });
 
 		CommandList cmdList;
 		cmdList.SetSource(img1, { 20, 20, 74, 74 });
@@ -94,7 +94,7 @@ namespace ComponentTest
 	{
 		auto component = CreateSampleImageGrid3({ { 48, 48 }, Origin::LeftTop });
 		auto img3 = ComponentCast<ImageGrid3*>(component.get());
-		m_panel->AttachComponent(move(component), { 80, 60 });
+		UIEx(m_panel).AttachComponent(move(component), { 80, 60 });
 
 		CommandList cmdList;
 		EXPECT_TRUE(cmdList.SetFilename(img3, m_renderer.get(), L"UI/Texture/option.png"));
@@ -113,7 +113,7 @@ namespace ComponentTest
 	{
 		auto component = CreateSampleImageGrid9({ { 170, 120 }, Origin::LeftTop });
 		auto img9 = ComponentCast<ImageGrid9*>(component.get());
-		m_panel->AttachComponent(move(component), { 80, 60 });
+		UIEx(m_panel).AttachComponent(move(component), { 80, 60 });
 
 		CommandList cmdList;
 		EXPECT_TRUE(cmdList.SetFilename(img9, m_renderer.get(), L"UI/Texture/option.png"));

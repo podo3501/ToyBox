@@ -11,21 +11,21 @@ namespace ComponentTest
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
 		auto imgGrid1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-		UIComponent* component = GetComponent(panel, componentName);
-		return component->AttachComponent(std::move(imgGrid1), { 10, 10 }) ? false : true;
+		UIComponent* component = UIEx(panel).GetComponent(componentName);
+		return UIEx(component).AttachComponent(move(imgGrid1), { 10, 10 }) ? false : true;
 	}
 
 	static bool DetachComponentHelper(UIComponent* panel, const string& componentName) noexcept 
 	{
-		UIComponent* component = GetComponent(panel, componentName);
-		auto [detach, parent] = component->DetachComponent();
+		UIComponent* component = UIEx(panel).GetComponent(componentName);
+		auto [detach, parent] = UIEx(component).DetachComponent();
 		return detach != nullptr;
 	}
 
 	TEST_F(IntegrationTest, AttachDetachTest)
 	{
 		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 200, 100 }, Origin::LeftTop });
-		m_panel->AttachComponent(move(img9), { 80, 60 });
+		UIEx(m_panel).AttachComponent(move(img9), { 80, 60 });
 
 		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "ImageGrid9_0"), false);	//9방향 이미지에는 attach 불가
 		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "ImageGrid1_0"), true);
@@ -38,20 +38,20 @@ namespace ComponentTest
 		auto img1 = CreateSampleImageGrid1({ { 200, 100 }, Origin::LeftTop });
 		auto img2 = CreateSampleImageGrid1({ { 110, 60 }, Origin::LeftTop });
 		auto img1Ptr = img1.get();
-		img1->AttachComponent(move(img2), { 100, 50 });	//중점에 attach 한다.
-		m_panel->AttachComponent(move(img1), { 100, 100 });
+		UIEx(img1).AttachComponent(move(img2), { 100, 50 });	//중점에 attach 한다.
+		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 		m_panel->ProcessUpdate({});
 
-		EXPECT_EQ(img1Ptr->GetTotalChildSize(), XMUINT2(210, 110));
-		auto [detached, parent] = img1Ptr->DetachComponent();
-		EXPECT_EQ(detached->GetTotalChildSize(), XMUINT2(210, 110));
+		EXPECT_EQ(UIEx(img1Ptr).GetTotalChildSize(), XMUINT2(210, 110));
+		auto [detached, parent] = UIEx(img1Ptr).DetachComponent();
+		EXPECT_EQ(UIEx(detached).GetTotalChildSize(), XMUINT2(210, 110));
 	}
 
 	template <typename T>
 	bool VerifyClone(unique_ptr<T> original) 
 	{
 		if (!original) return false;
-		auto clone = Clone(original.get());
+		auto clone = original->Clone();
 
 		return CompareUniquePtr(original, clone);
 	}
@@ -68,21 +68,20 @@ namespace ComponentTest
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
 	{
-		std::vector<UIComponent*> components;
-		panel->GetComponents(position, components);
+		vector<UIComponent*> components = UIEx(panel).GetComponents(position);
 		return components.size();
 	}
 
 	TEST_F(IntegrationTest, GetComponents)
 	{
 		unique_ptr<UIComponent> img9_0 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
-		m_panel->AttachComponent(move(img9_0), { 80, 60 });
+		UIEx(m_panel).AttachComponent(move(img9_0), { 80, 60 });
 		m_panel->ProcessUpdate({});
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), {0, 0}) == 1);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 100, 100 }) == 4);
 
 		unique_ptr<UIComponent> img9_1 = CreateSampleImageGrid9({ { 221, 191 }, Origin::LeftTop });
-		m_panel->AttachComponent(move(img9_1), { 88, 66 });
+		UIEx(m_panel).AttachComponent(move(img9_1), { 88, 66 });
 		m_panel->ProcessUpdate({});
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 180, 160 }) == 7);
 	}
@@ -92,26 +91,26 @@ namespace ComponentTest
 		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		unique_ptr<UIComponent> panel = make_unique<Panel>();
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
-		panel->AttachComponent(move(img9), { 40, 30 });
-		m_panel->AttachComponent(move(panel), { 400, 300 });
+		UIEx(panel).AttachComponent(move(img9), { 40, 30 });
+		UIEx(m_panel).AttachComponent(move(panel), { 400, 300 });
 		m_panel->ProcessUpdate({});
 
-		UIComponent* component = GetComponent(m_panel.get(), "ImageGrid1_4");
+		UIComponent* component = UIEx(m_panel).GetComponent("ImageGrid1_4");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
-		EXPECT_EQ(GetRectangle(component), Rectangle(270, 216, 160, 128));
+		EXPECT_EQ(component->GetRectangle(), Rectangle(270, 216, 160, 128));
 	}
 
 	TEST_F(IntegrationTest, Rename)
 	{
 		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
-		m_panel->AttachComponent(move(img9), { 80, 60 });
+		UIEx(m_panel).AttachComponent(move(img9), { 80, 60 });
 
-		UIComponent* component = GetComponent(m_panel.get(), "ImageGrid1_0");
+		UIComponent* component = UIEx(m_panel).GetComponent("ImageGrid1_0");
 		EXPECT_FALSE(component->Rename("ImageGrid9_0")); //같은 이름이 있으면 rename이 되지 않는다.
 
 		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
-		auto failed = m_panel->AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
+		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
 	}
 }

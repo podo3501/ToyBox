@@ -56,7 +56,7 @@ bool TextArea::SetDatas(IGetValue* getValue)
 	TextProperty textProperty;
 	ReturnIfFalse(Parser(m_text, textProperty));
 
-	Rectangle usableArea = XMUINT2ToRectangle(GetSize(this));
+	Rectangle usableArea = XMUINT2ToRectangle(GetSize());
 	Vector2 startPos{};
 	float lineSpacing = 0.0f;
 	long maxHeight = 0;

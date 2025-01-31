@@ -45,7 +45,7 @@ static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
 
 static OnDrag IsMouseOverResizeZone(const XMINT2& pos, const UIComponent* component) noexcept
 {
-    auto zones = GenerateResizeZone(GetRectangle(component), 8);
+    auto zones = GenerateResizeZone(component->GetRectangle(), 8);
     for (const auto& zone : zones)
     {
         if (Contains(zone.first, pos))
@@ -95,7 +95,7 @@ void EditWindow::ResizeComponent(const XMINT2& startPos, const Mouse::State& mou
     const int deltaX = mouseState.x - startPos.x;
     const int deltaY = mouseState.y - startPos.y;
 
-    const XMUINT2& size = GetSize(m_component);
+    const XMUINT2& size = m_component->GetSize();
     XMUINT2 modifySize{ size };
 
     switch (m_dragState)
@@ -209,8 +209,7 @@ void EditWindow::RenderCommon()
             m_cmdList->SetRelativePosition(m_component, *relativePosition);
     }
 
-    const auto& layout = m_component->GetLayout();
-    EditSize(layout.GetSize());
+    EditSize(m_component->GetSize());
 
     ImGui::Separator();
     ImGui::Spacing();

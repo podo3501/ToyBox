@@ -21,7 +21,7 @@ namespace ComponentTest
 {
 	static void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
 	{
-		unique_ptr<UIComponent> clonePanel = Clone(component);
+		unique_ptr<UIComponent> clonePanel = component->Clone();
 
 		CallMockRender(clonePanel.get(), renderFunc, times);
 		EXPECT_TRUE(WriteReadTest(clonePanel));
@@ -36,8 +36,7 @@ namespace ComponentTest
 	TEST_F(BasicFunctionalityTest, TestImageGrid1)
 	{
 		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
-		//UITransform* transform = m_transformContainer->Create({ 400, 300 });
-		m_panel->AttachComponent(move(img1), { 400, 300 });
+		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid1Render, 1);
@@ -85,12 +84,12 @@ namespace ComponentTest
 	TEST_F(BasicFunctionalityTest, TestImageGrid3)
 	{
 		auto img = CreateSampleImageGrid3({ {100, 36}, Origin::LeftTop });
-		m_panel->AttachComponent(move(img), {400, 300});
+		UIEx(m_panel).AttachComponent(move(img), {400, 300});
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
 
-		ImageGrid3* img3 = GetCastComponent<ImageGrid3*>(m_panel.get(), "ImageGrid3_0");
+		ImageGrid3* img3 = m_panel->GetComponent<ImageGrid3*>("ImageGrid3_0");
 		img3->ChangeOrigin(Origin::Center);
 		img3->ChangeSize({ 120, 36 });
 
@@ -173,12 +172,12 @@ namespace ComponentTest
 	TEST_F(BasicFunctionalityTest, TestImageGrid9)
 	{
 		auto img = CreateSampleImageGrid9({ {170, 120}, Origin::LeftTop });
-		m_panel->AttachComponent(move(img), { 400, 300 });
+		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
 
-		ImageGrid9* img9 = GetCastComponent<ImageGrid9*>(m_panel.get(), "ImageGrid9_0");
+		ImageGrid9* img9 = m_panel->GetComponent<ImageGrid9*>("ImageGrid9_0");
 		img9->ChangeOrigin(Origin::Center);
 		img9->ChangeSize({ 180, 150 });
 
@@ -213,7 +212,7 @@ namespace ComponentTest
 	TEST_F(BasicFunctionalityTest, TestButton_ImageGrid1)
 	{
 		auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
-		m_panel->AttachComponent(move(button), { 160, 120 });
+		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		TestUpdate(m_panel.get(), 144, 120);	//hover
@@ -248,13 +247,13 @@ namespace ComponentTest
 	TEST_F(BasicFunctionalityTest, TestButton_ImageGrid3)
 	{
 		auto button = CreateSampleButton3({ {100, 48}, Origin::Center });
-		m_panel->AttachComponent(move(button), { 160, 120 });
+		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		TestUpdate(m_panel.get(), 110, 96);	//Hover
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
 
-		Button* btn = GetCastComponent<Button*>(m_panel.get(), "Button_0");
+		Button* btn = m_panel->GetComponent<Button*>("Button_0");
 		btn->ChangeSize({ 150, 48 });
 		TestUpdate(m_panel.get(), 0, 0);	//Normal
 
@@ -275,13 +274,13 @@ namespace ComponentTest
 	TEST_F(BasicFunctionalityTest, TestTextArea)
 	{
 		auto textArea = CreateSampleTextArea({ {320, 120}, Origin::Center });
-		m_panel->AttachComponent(move(textArea), { 400, 300 });
+		UIEx(m_panel).AttachComponent(move(textArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(m_panel.get(), TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		unique_ptr<UIComponent> clonePanel = Clone(m_panel.get());
+		unique_ptr<UIComponent> clonePanel = m_panel->Clone();
 		CallMockRender(clonePanel.get(), TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(clonePanel));
 	}
@@ -291,19 +290,18 @@ namespace ComponentTest
 		std::unique_ptr<Panel> panel1 = std::make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
 		std::unique_ptr<Panel> panel2 = make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center));
 
-		panel1->AttachComponent(move(panel2), { 40, 40 });
-		m_panel->AttachComponent(move(panel1), { 400, 300 });
+		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
+		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
 		m_panel->ProcessUpdate({});
 
-		vector<UIComponent*> outList;
-		m_panel->GetComponents({ 240, 140 }, outList);
+		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
-		Panel* ptrPanel = GetCastComponent<Panel*>(m_panel.get(), "Panel_0");
+		Panel* ptrPanel = m_panel->GetComponent<Panel*>("Panel_0");
 		ptrPanel->ChangeOrigin(Origin::LeftTop);
 
 		outList.clear();
-		m_panel->GetComponents({ 239, 140 }, outList);
+		outList = UIEx(m_panel).GetComponents({239, 140});
 		EXPECT_EQ(outList.size(), 2);
 
 		//사이즈가 바뀌었을때 값이 어떻게 바뀌는지 테스트

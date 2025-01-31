@@ -57,7 +57,7 @@
     <ClInclude Include="UserInterface\UIComponent.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\TransformComponent.h">
+    <ClInclude Include="UserInterface\UITransform.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\JsonOperation.h">
@@ -140,7 +140,7 @@
     <ClCompile Include="UserInterface\UIType.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\TransformComponent.cpp">
+    <ClCompile Include="UserInterface\UITransform.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\JsonOperation.cpp">

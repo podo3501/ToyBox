@@ -4,6 +4,7 @@
 #include "../../Utility.h"
 #include "../UIUtility.h"
 #include "ImageGridHelper.hpp"
+#include "../UIComponentEx.h"
 
 ImageGrid9::~ImageGrid9() = default;
 ImageGrid9::ImageGrid9() = default;
@@ -51,7 +52,7 @@ bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noe
 	{
 		auto grid3 = CreateImageGrid3(idx, source, posRects[idx].size);
 		grid3->SetAttachmentState(AttachmentState::Disable);
-		AttachComponent(move(grid3), posRects[idx].pos);
+		UIEx(this).AttachComponent(move(grid3), posRects[idx].pos);
 	}
 	SetAttachmentState(AttachmentState::Detach);
 
@@ -70,7 +71,7 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
 
 void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 {
-	const vector<UIComponent*> components = GetComponents();
+	const vector<UIComponent*> components = GetChildComponents();
 	vector<Rectangle> list = GetSourceList(components);
 	vector<PositionSize> posRects = StretchSize(StretchType::Height, size, list);
 
@@ -93,7 +94,7 @@ optional<wstring> ImageGrid9::GetFilename() const noexcept
 bool ImageGrid9::SetFilename(const wstring& filename) noexcept
 {
 	vector<ImageGrid3*> components;
-	ReturnIfFalse(GetImageGridComponents(GetComponents(), components));
+	ReturnIfFalse(GetImageGridComponents(GetChildComponents(), components));
 
 	return ranges::all_of(components, [&filename](auto imgGrid3) {
 		return imgGrid3->SetFilename(filename);
@@ -103,7 +104,7 @@ bool ImageGrid9::SetFilename(const wstring& filename) noexcept
 optional<SourceDivider> ImageGrid9::GetSourceAnd4Divider() const noexcept
 {
 	vector<ImageGrid3*> components;
-	if(!GetImageGridComponents(GetComponents(), components)) return nullopt;
+	if(!GetImageGridComponents(GetChildComponents(), components)) return nullopt;
 
 	const Rectangle& firstMergedSource = components[0]->GetMergedSource();
 
@@ -132,7 +133,7 @@ optional<SourceDivider> ImageGrid9::GetSourceAnd4Divider() const noexcept
 bool ImageGrid9::SetSources(const vector<Rectangle>& sources) noexcept
 {
 	vector<ImageGrid3*> components;
-	ReturnIfFalse(GetImageGridComponents(GetComponents(), components));
+	ReturnIfFalse(GetImageGridComponents(GetChildComponents(), components));
 
 	return ranges::all_of(components, [&sources, index = 0](auto component) mutable {
 		vector<Rectangle> rowRects{ sources.begin() + index, sources.begin() + index + 3 }; index += 3;
@@ -156,7 +157,7 @@ bool ImageGrid9::SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept
 vector<Rectangle> ImageGrid9::GetSources() const noexcept
 {
 	vector<ImageGrid3*> components;
-	if (!GetImageGridComponents(GetComponents(), components)) return {};
+	if (!GetImageGridComponents(GetChildComponents(), components)) return {};
 
 	vector<Rectangle> areas;
 	for (auto imgGrid3 : components)

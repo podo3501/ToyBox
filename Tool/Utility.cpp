@@ -79,8 +79,6 @@ void DrawRectangle(const vector<Rectangle>& rects, const ImGuiWindow* window)
 
 bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept
 {
-	if (!addable->IsAttachable()) return false;
-
 	const XMINT2& comPos = addable->GetPosition();
 	XMINT2 relativePos = pos - comPos;
 	unique_ptr<UIComponent> failed = cmdList->AttachComponent(addable, floater->GetComponent(), relativePos);

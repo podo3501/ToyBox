@@ -3,6 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "Utility.h"
 #include "Config.h"
+#include "UserInterface/UIComponentEx.h"
 #include "UserInterface/Component/Panel.h"
 #include "UserInterface/Component/SampleComponent.h"
 
@@ -42,7 +43,7 @@ static inline void AttachComponentToPanel(UIComponent* panel,
     unique_ptr<UIComponent> component, const XMINT2& position)
 {
     if (panel && component)
-        panel->AttachComponent(move(component), position);
+        UIEx(panel).AttachComponent(move(component), position);
 }
 
 bool GameMainLoop::LoadResources()

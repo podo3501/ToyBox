@@ -18,7 +18,7 @@ public:
 class AttachComponentCommand : public Command
 {
 public:
-	AttachComponentCommand(UIComponent* addable, unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
+	AttachComponentCommand(UIComponent* parent, unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
 
 	virtual bool Execute() override;
 	virtual bool Undo() override;
@@ -31,7 +31,7 @@ protected:
 	virtual bool IsMerge(Command*) noexcept { return false; }
 
 private:
-	UIComponent* m_addable;
+	UIComponent* m_parent;
 	unique_ptr<UIComponent> m_attach;
 	XMINT2 m_pos{};
 	UIComponent* m_detach;
@@ -57,7 +57,7 @@ private:
 	UIComponent* m_detach;
 	XMINT2 m_position{};
 	unique_ptr<UIComponent> m_component;
-	UIComponent* m_addable;
+	UIComponent* m_parent;
 	pair<unique_ptr<UIComponent>, UIComponent*> m_result;
 };
 

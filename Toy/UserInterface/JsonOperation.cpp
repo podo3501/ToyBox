@@ -3,7 +3,7 @@
 #include "../Config.h"
 #include "../Utility.h"
 #include "UIType.h"
-#include "TransformComponent.h"
+#include "UITransform.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -191,7 +191,7 @@ void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noex
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-void JsonOperation::Process(const string& key, map<int, TransformComponent>& datas) noexcept
+void JsonOperation::Process(const string& key, map<int, UITransform>& datas) noexcept
 {
     if (IsWrite())
     {
@@ -220,7 +220,7 @@ void JsonOperation::Process(const string& key, map<int, TransformComponent>& dat
             {
                 for (const auto& [k, v] : j.items()) //배열값에서 다시 map 값으로 가져온다.
                 {
-                    TransformComponent data{};
+                    UITransform data{};
                     JsonOperation jsOp{ v };
                     data.SerializeIO(jsOp);
                     datas.insert(make_pair(stoi(k), data));

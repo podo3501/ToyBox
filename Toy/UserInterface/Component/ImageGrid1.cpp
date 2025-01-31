@@ -50,7 +50,7 @@ bool ImageGrid1::ImplementUpdate(const XMINT2& position) noexcept
 
 void ImageGrid1::ImplementRender(IRender* render) const
 {
-	const auto& size = GetSize(this);
+	const auto& size = GetSize();
 	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
 
 	RECT source = RectangleToRect(m_source);

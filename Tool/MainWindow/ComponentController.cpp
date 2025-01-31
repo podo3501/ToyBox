@@ -94,13 +94,13 @@ bool ComponentController::CheckCloneComponent() noexcept
 	UIComponent* component = m_selector->GetComponent();
 	if (!component) return false;
 
-	if(!component->IsDetachable())
+	auto clone = component->Clone();
+	if(!clone)
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Cannot be cloned. Could it be a component that cannot be detached?");
 		return true;
 	}
-
-	auto clone = Clone(component);
+	
 	if (!m_floater->ComponentToFloating(move(clone)))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to load the resource.");

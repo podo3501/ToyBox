@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ComponentTooltip.h"
 #include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/Utility.h"
 #include "../../Utility.h"
 
@@ -19,8 +20,7 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 {
 	const ImVec2& windowMousePos = GetWindowIGMousePos(window);
 
-	std::vector<UIComponent*> componentList;
-	m_panel->GetComponents(ImVec2ToXMINT2(windowMousePos), componentList);
+	vector<UIComponent*> componentList = UIEx(m_panel).GetComponents(ImVec2ToXMINT2(windowMousePos));
 	if (componentList.empty()) return;
 
 	const ImVec2& padding = ImGui::GetStyle().WindowPadding;

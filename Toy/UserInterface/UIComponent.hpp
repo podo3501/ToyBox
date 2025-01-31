@@ -12,6 +12,13 @@ TargetType ComponentCast(UIComponent* component)
     return nullptr;
 }
 
+template<typename T>
+T UIComponent::GetComponent(const string& name) noexcept
+{
+    UIComponent* find = GetUIComponentEx().GetComponent(name);
+    return ComponentCast<T>(find);
+}
+
 //template<typename T>
 //void UIComponent::GetComponent(const string& name, T** outComponent) const noexcept
 //{

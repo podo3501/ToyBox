@@ -4,7 +4,7 @@ template<typename T> requires is_default_constructible_v<T>&& is_copy_assignable
 class Property;
 class UIComponent;
 class Scene;
-class TransformComponent;
+class UITransform;
 enum class Origin;
 enum class AttachmentState;
 enum class ButtonState;
@@ -173,7 +173,7 @@ public:
 	void Process(const string& key, vector<unique_ptr<UIComponent>>& datas);
 	void Process(const string& key, wstring& data) noexcept;
 	void Process(const string& key, map<wstring, wstring>& data) noexcept;
-	void Process(const string& key, map<int, TransformComponent>& datas) noexcept;
+	void Process(const string& key, map<int, UITransform>& datas) noexcept;
 	void Process(const string& key, deque<wstring>& data) noexcept;
 
 private:

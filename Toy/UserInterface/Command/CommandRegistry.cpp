@@ -7,10 +7,10 @@
 #include "../Component/ImageGrid9.h"
 #include "../Include/IRenderer.h"
 
-AttachComponentCommand::AttachComponentCommand(UIComponent* addable,
+AttachComponentCommand::AttachComponentCommand(UIComponent* parent,
 	unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept :
 	Command{ nullptr }, 
-	m_addable{ addable },
+	m_parent{ parent },
 	m_attach{ move(component) },
 	m_pos{ relativePos },
 	m_detach{ nullptr } 
@@ -19,13 +19,13 @@ AttachComponentCommand::AttachComponentCommand(UIComponent* addable,
 bool AttachComponentCommand::Execute()
 {
 	m_detach = m_attach.get();
-	m_failureResult = m_addable->AttachComponent(move(m_attach), m_pos);
+	m_failureResult = UIEx(m_parent).AttachComponent(move(m_attach), m_pos);
 	return m_failureResult == nullptr;
 }
 
 bool AttachComponentCommand::Undo()
 {
-	if (auto [detach, parent] = m_detach->DetachComponent(); detach)
+	if (auto [detach, parent] = UIEx(m_detach).DetachComponent(); detach)
 	{
 		m_attach = move(detach);
 		return true;
@@ -35,7 +35,7 @@ bool AttachComponentCommand::Undo()
 
 bool AttachComponentCommand::Redo()
 {
-	m_failureResult = m_addable->AttachComponent(move(m_attach), m_pos);
+	m_failureResult = UIEx(m_parent).AttachComponent(move(m_attach), m_pos);
 	return m_failureResult == nullptr;
 }
 
@@ -50,7 +50,7 @@ DetachComponentCommand::DetachComponentCommand(UIComponent* detach) noexcept :
 	Command{ nullptr },
 	m_detach{ detach },
 	m_component{ nullptr },
-	m_addable{ nullptr },
+	m_parent{ nullptr },
 	m_result{}
 {}
 
@@ -59,42 +59,44 @@ bool DetachComponentCommand::Execute()
 	auto pos = m_detach->GetRelativePosition();
 	if (!pos.has_value()) return false;
 
-	auto [component, addable] = m_detach->DetachComponent();
+	auto [component, parent] = UIEx(m_detach).DetachComponent();
 	if (!component) return false;
 
 	m_position = *pos;
 	m_component = move(component); //원본은 저장하고 클론은 밖으로 
-	m_addable = addable;
+	m_parent = parent;
 
-	m_result = { Clone(m_component.get()), addable };
+	m_result = { m_component->Clone(), parent };
 
 	return true;
 }
+
 bool DetachComponentCommand::Undo()
 {
 	UIComponent* detach = m_component.get();
-	auto resultComponent = m_addable->AttachComponent(move(m_component), m_position);
+	auto resultComponent = UIEx(m_parent).AttachComponent(move(m_component), m_position);
 	if (resultComponent) return false;
 
 	m_detach = detach;
 	return true;
 }
+
 bool DetachComponentCommand::Redo()
 {
-	auto [component, addable] = m_detach->DetachComponent();
+	auto [component, parent] = UIEx(m_detach).DetachComponent();
 	if (!component) return false;
 
 	m_component = move(component);
 
-	m_result = { Clone(m_component.get()), addable };
+	m_result = { m_component->Clone(), parent };
 
 	return m_result.first != nullptr;
 }
 
 pair<unique_ptr<UIComponent>, UIComponent*> DetachComponentCommand::GetResult() noexcept
 {
-	auto& [detach, addable] = m_result;
-	return { move(detach), addable };
+	auto& [detach, parent] = m_result;
+	return { move(detach), parent };
 }
 
 //////////////////////////////////////////////////////////////////
@@ -130,7 +132,7 @@ SetSizeCommand::SetSizeCommand(UIComponent* component, const XMUINT2& size) noex
 
 bool SetSizeCommand::Execute()
 {
-	m_record.previous = GetSize(GetComponent());
+	m_record.previous = GetComponent()->GetSize();
 	GetComponent()->ChangeSize(m_record.current);
 	return true;
 }

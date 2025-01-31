@@ -2,7 +2,6 @@
 #include "UIComponent.h"
 #include "../Utility.h"
 #include "../InputManager.h"
-#include "TransformComponent.h"
 #include "JsonOperation.h"
 #include "UIComponentEx.h"
 
@@ -26,10 +25,19 @@ UIComponent::UIComponent(const UIComponent& other)
 	m_transform = other.m_transform;
 
 	ranges::transform(other.m_children, back_inserter(m_children), [this, &other](const auto& child) {
-		auto component = child->Clone();
+		auto component = child->CreateClone();
 		component->SetParent(this);
 		return move(component);
 	});
+}
+
+bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept
+{
+	if (lhs == nullptr && rhs == nullptr) return true;
+	if (lhs == nullptr || rhs == nullptr) return false;
+	if (lhs->m_name != rhs->m_name) return false;
+
+	return true;
 }
 
 bool UIComponent::operator==(const UIComponent& o) const noexcept
@@ -46,15 +54,6 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 	return true;
 }
 
-bool UIComponent::EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept
-{
-	if (lhs == nullptr && rhs == nullptr) return true;
-	if (lhs == nullptr || rhs == nullptr) return false;
-	if (lhs->m_name != rhs->m_name) return false;
-
-	return true;
-}
-
 UIComponent::UIComponent(UIComponent&& o) noexcept :
 	m_name{ move(o.m_name) },
 	m_layout{ move(o.m_layout) },
@@ -64,6 +63,8 @@ UIComponent::UIComponent(UIComponent&& o) noexcept :
 
 unique_ptr<UIComponent> UIComponent::Clone() const 
 { 
+	if (!IsDetachable()) return nullptr; //Detach가 안되는 것은 컴포넌트의 부속이기 때문에 클론해도 쓸데가 없다.
+
 	return CreateClone();
 }
 
@@ -81,7 +82,7 @@ bool UIComponent::SetDatas(IGetValue* value)
 		});
 }
 
-TransformComponent& UIComponent::GetTransform(UIComponent* component)
+UITransform& UIComponent::GetTransform(UIComponent* component)
 {
 	return component->m_transform;
 }
@@ -101,7 +102,6 @@ bool UIComponent::ProcessUpdate(const XMINT2& position) noexcept
 	return result;
 }
 
-
 void UIComponent::ProcessRender(IRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
@@ -112,13 +112,29 @@ void UIComponent::ProcessRender(IRender* render)
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
-void UIComponent::ChangeSize(const XMUINT2& size) noexcept 
-{ 
+void UIComponent::ChangeSize(const XMUINT2& size) noexcept
+{
 	ranges::for_each(m_children, [this, &size](auto& child) {
 		GetTransform(child.get()).AdjustPosition(size);
 		});
 
 	ApplySize(size);
+}
+
+UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
+{
+	if (index >= m_children.size()) return nullptr;
+	return m_children[index].get();
+}
+
+vector<UIComponent*> UIComponent::GetChildComponents() const noexcept
+{
+	vector<UIComponent*> componentList;
+	ranges::transform(m_children, back_inserter(componentList), [](const auto& child) {
+		return child.get();
+		});
+
+	return componentList;
 }
 
 bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept
@@ -133,7 +149,7 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 
 bool UIComponent::IsUniqueName(const string& name, UIComponent* self) noexcept
 {
-	UIComponent* findComponent = UIComponentEx::GetComponent(this, name);
+	UIComponent* findComponent = GetUIComponentEx().GetComponent(name);
 	if (findComponent && findComponent != self) return false;
 
 	return true;
@@ -156,46 +172,6 @@ void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 
 	for (auto& child : addable->m_children)
 		GenerateUniqueName(child.get());
-}
-
-unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept
-{
-	if (!IsAttachable()) return component;
-
-	GenerateUniqueName(component.get());
-	component->SetParent(this);
-	component->m_transform.SetRelativePosition(m_layout.GetSize(), relativePos); //부모 사이즈와 나의 위치를 비교해야 상대적인 위치값을 구할 수 있다.
-	m_children.emplace_back(move(component));
-	MarkDirty();
-
-	return nullptr;
-}
-
-unique_ptr<UIComponent> UIComponent::DetachComponent(UIComponent* detachComponent) noexcept
-{
-	auto find = ranges::find_if(m_children, [detachComponent](auto& child) {
-		return (child.get() == detachComponent);
-		});
-	if (find == m_children.end()) return nullptr;
-
-	unique_ptr<UIComponent> detachedComponent = move(*find);
-	m_children.erase(find);
-	
-	detachedComponent->m_parent = nullptr;
-	detachedComponent->m_transform.Clear();
-	detachedComponent->MarkDirty();
-	detachedComponent->ProcessUpdate({});
-
-	return detachedComponent;
-}
-
-pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexcept
-{
-	if (!IsDetachable()) return {};
-	if (!m_parent) return {};
-
-	UIComponent* parent = m_parent; //DetachComponent를 하면 parent가 nullptr로 셋팅된다.
-	return { move(m_parent->DetachComponent(this)), parent };
 }
 
 bool UIComponent::Rename(const string& name) noexcept
@@ -225,33 +201,9 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 
 void UIComponent::MarkDirty() noexcept
 {
-	if (m_isDirty) return;
-	
-	m_isDirty = true;
-	ranges::for_each(m_children, [](auto& child) {
-		child->MarkDirty();
+	ForEachChild([](UIComponent* component) {
+		component->m_isDirty = true;
 		});
-}
-
-XMUINT2 UIComponent::GetTotalChildSize() const noexcept
-{
-	const Rectangle& totalRectangle = GetTotalChildSize(this);
-	return { 
-		static_cast<uint32_t>(totalRectangle.width), 
-		static_cast<uint32_t>(totalRectangle.height) };
-}
-
-Rectangle UIComponent::GetTotalChildSize(const UIComponent* component) const noexcept
-{
-	if (component == nullptr) return {};
-
-	Rectangle rect{ GetRectangle(component) }; //초기값을 지정하지 않으면 0, 0 부터 시작하는 큰 사각형이 union된다.
-	component->ForEachChildConst([&rect](const UIComponent* child) {
-		const auto& curRect = GetRectangle(child);
-		rect = Rectangle::Union(rect, curRect);
-		});
-
-	return rect;
 }
 
 optional<XMINT2> UIComponent::GetRelativePosition() const noexcept
@@ -262,14 +214,26 @@ optional<XMINT2> UIComponent::GetRelativePosition() const noexcept
 bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
 {
 	if (!m_parent) return false;
-	m_transform.SetRelativePosition(GetSize(m_parent), relativePos);
+	m_transform.SetRelativePosition(m_parent->GetSize(), relativePos);
 	m_parent->MarkDirty();
 	return true;
 }
 
+Rectangle UIComponent::GetRectangle() const noexcept
+{
+	const XMINT2& curPosition = GetPosition();
+	const XMUINT2& curSize = GetSize();
+	return Rectangle(curPosition.x, curPosition.y, curSize.x, curSize.y);
+}
+
+const XMUINT2& UIComponent::GetSize() const noexcept
+{
+	return m_layout.GetSize();
+}
+
 XMINT2 UIComponent::GetPosition() const noexcept
 {
-	return GetPositionByLayout(m_transform.absolutePosition);
+	return GetPositionByLayout(m_transform.GetAbsolutePosition());
 }
 
 XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept
@@ -284,38 +248,6 @@ UIComponent* UIComponent::GetRoot() noexcept
 		current = current->m_parent;
 	
 	return current;
-}
-
-void UIComponent::GetComponents(const XMINT2& pos, vector<UIComponent*>& outList) noexcept
-{
-	ForEachChildBFS([&](UIComponent* component) {
-		const auto& curPosition = pos - GetTransform(component).absolutePosition;
-		if (component->IsArea(curPosition)) 
-			outList.push_back(component);
-		});
-}
-
-UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
-{
-	if (index >= m_children.size()) return nullptr;
-	return m_children[index].get();
-}
-
-vector<UIComponent*> UIComponent::GetComponents() const noexcept
-{
-	vector<UIComponent*> componentList;
-	ranges::transform(m_children, back_inserter(componentList), [](const auto& child) {
-		return child.get();
-		});
-
-	return componentList;
-}
-
-////////////////////////////////////////////////////////
-
-XMINT2 UIComponent::GetAbsolutePosition() const noexcept //나중에 update에 인자로 들어가는 값이기 때문에 삭제될 함수이다.
-{
-	return m_transform.absolutePosition;
 }
 
 void UIComponent::ForEachChild(function<void(UIComponent*)> func) noexcept
@@ -359,6 +291,5 @@ void UIComponent::ForEachChildBFS(std::function<void(UIComponent*)> func) noexce
 		}
 	}
 }
-
 
 
