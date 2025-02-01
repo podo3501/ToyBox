@@ -6,7 +6,6 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/Component/Panel.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/InputManager.h"
 
 int MainWindow::m_mainWindowIndex = 0;
@@ -94,6 +93,7 @@ void MainWindow::Update(const DX::StepTimer* timer)
 {
 	//if (!IsWindowFocus(m_window)) return;
 	if (!m_window) return;
+	SetMouseStartOffset(m_window);
 
 	CheckChangeWindow(m_window); //창이 변했을때 RenderTexture를 다시 만들어준다.
 

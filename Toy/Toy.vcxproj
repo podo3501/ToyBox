@@ -216,6 +216,7 @@
     <ClInclude Include="UserInterface\Command\Command.h" />
     <ClInclude Include="UserInterface\Command\CommandList.h" />
     <ClInclude Include="UserInterface\Command\CommandRegistry.h" />
+    <ClInclude Include="UserInterface\Command\CommandType.h" />
     <ClInclude Include="UserInterface\Component\Button.h" />
     <ClInclude Include="UserInterface\Component\Dialog.h" />
     <ClInclude Include="UserInterface\Component\ImageGrid1.h" />

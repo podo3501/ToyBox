@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "UIComponentEx.h"
 #include "../Utility.h"
 #include "UIComponent.h"
 

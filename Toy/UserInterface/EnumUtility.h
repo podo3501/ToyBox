@@ -28,6 +28,20 @@ EnumType StringToEnum(const string& str)
 	return static_cast<EnumType>(iter);
 }
 
+template<typename EnumType>
+vector<string> EnumToList()
+{
+	constexpr auto list = EnumToStringMap<EnumType>();
+
+	std::vector<std::string> result;
+	result.reserve(EnumSize<EnumType>());
+
+	for (const auto& enumStr : list)
+		result.emplace_back(enumStr);
+
+	return result;
+}
+
 template <typename EnumType>
 constexpr auto EtoV(EnumType enumerator) noexcept	//EnumToValue 이름이 길어서 줄인다.
 {

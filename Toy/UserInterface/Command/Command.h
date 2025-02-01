@@ -10,6 +10,7 @@ enum class CommandID : int
 	SetSize,
 	Rename,
 	SetSource,
+	SetSource39,
 	SetFilename,
 	SetSourceAndDivider,
 	Unknown

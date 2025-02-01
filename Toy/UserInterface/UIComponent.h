@@ -102,7 +102,7 @@ private:
 	vector<unique_ptr<UIComponent>> m_children;
 
 	friend class UIComponentEx;
-	optional<UIComponentEx> m_componentEx; //포인터가 아닌데도 바로 초기화 하지 않는다.
+	optional<UIComponentEx> m_componentEx; //optional로 선언하면 포인터가 아닌데도 바로 초기화 하지 않는다.
 };
 
 inline UIComponentEx& UIEx(UIComponent* component) { return component->GetUIComponentEx(); }

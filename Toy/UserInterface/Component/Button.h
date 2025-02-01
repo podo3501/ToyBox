@@ -21,6 +21,8 @@ public:
 		unique_ptr<UIComponent>&& hover,
 		unique_ptr<UIComponent>&& pressed) noexcept;
 
+	inline ButtonState GetState() const noexcept { return m_state; }
+
 protected:
 	Button(const Button& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;

@@ -4,8 +4,6 @@
 #include "TestHelper.h"
 #include "Utility.h"
 #include "../Toy/Window.h"
-#include "../Toy/UserInterface/UIUtility.h"
-#include "../Toy/UserInterface/UIType.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
@@ -13,7 +11,6 @@
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 
 using testing::ElementsAre;
 

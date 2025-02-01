@@ -5,7 +5,6 @@
 #include "../UIUtility.h"
 #include "../JsonOperation.h"
 #include "ImageGridHelper.hpp"
-#include "../UIComponentEx.h"
 
 ImageGrid3::~ImageGrid3() = default;
 ImageGrid3::ImageGrid3() = default;

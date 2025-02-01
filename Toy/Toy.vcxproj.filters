@@ -118,6 +118,9 @@
     <ClInclude Include="UserInterface\Command\CommandRegistry.h">
       <Filter>UserInterface\Command</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Command\CommandType.h">
+      <Filter>UserInterface\Command</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

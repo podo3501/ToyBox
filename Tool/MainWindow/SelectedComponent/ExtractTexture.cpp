@@ -2,7 +2,6 @@
 #include "ExtractTexture.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 
 bool ExtractTexture::LoadResources(ILoadData* load)
 {

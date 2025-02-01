@@ -69,6 +69,9 @@
     <ClCompile Include="MainWindow\ComponentController.cpp">
       <Filter>MainWindow</Filter>
     </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.cpp">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -123,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="MainWindow\ComponentController.h">
       <Filter>MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.h">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

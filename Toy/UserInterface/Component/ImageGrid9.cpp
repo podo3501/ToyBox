@@ -4,7 +4,6 @@
 #include "../../Utility.h"
 #include "../UIUtility.h"
 #include "ImageGridHelper.hpp"
-#include "../UIComponentEx.h"
 
 ImageGrid9::~ImageGrid9() = default;
 ImageGrid9::ImageGrid9() = default;

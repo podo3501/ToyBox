@@ -1,18 +1,13 @@
 #pragma once
+#include "CommandType.h"
 
 struct IRenderer;
 class Command;
 class UIComponent;
-class ImageGrid1;
-class ImageGrid3;
-class ImageGrid9;
 struct SourceDivider;
 
 class CommandList
 {
-	using ImageGridVariant = variant<ImageGrid1*, ImageGrid3*, ImageGrid9*>;
-	using ImageGrid39Variant = variant<ImageGrid3*, ImageGrid9*>;
-
 public:
 	~CommandList();
 	CommandList();
@@ -26,6 +21,7 @@ public:
 	bool SetSize(UIComponent* component, const XMUINT2& size);
 	bool Rename(UIComponent* component, const string& name);
 	bool SetSource(ImageGrid1* imgGrid1, const Rectangle& source);
+	bool SetSources(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources);
 	bool SetFilename(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename);
 	bool SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider);
 

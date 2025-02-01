@@ -2,7 +2,6 @@
 #include "EditWindow.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/UIComponent.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../EditUtility.h"
@@ -21,9 +20,8 @@ enum class OnDrag
 EditWindow::~EditWindow()
 {}
 
-EditWindow::EditWindow(UIComponent* component, ImGuiWindow* mainWnd, CommandList* cmdList) noexcept:
+EditWindow::EditWindow(UIComponent* component, CommandList* cmdList) noexcept:
 	m_component{ component },
-    m_mainWnd{ mainWnd },
     m_cmdList{ cmdList },
     m_dragState{ OnDrag::Normal }
 {
@@ -117,7 +115,7 @@ void EditWindow::ResizeComponentOnClick() noexcept
 {
     if (!m_component) return;
 
-    const XMINT2& mousePos = GetWindowMousePos(m_mainWnd);
+    const XMINT2& mousePos = InputManager::GetMouse().GetPosition();
     OnDrag dragState = IsMouseOverResizeZone(mousePos, m_component);
     Tool::MouseCursor::SetType(GetCursorImage(dragState));
 
@@ -231,7 +229,7 @@ void EditWindow::Render(const ImGuiWindow* mainWindow)
 //////////////////////////////////////////////////////////
 
 EditPanel::~EditPanel() = default;
-EditPanel::EditPanel(Panel* panel, ImGuiWindow* window, CommandList* cmdList) noexcept :
-    EditWindow{ panel, window, cmdList }
+EditPanel::EditPanel(Panel* panel, CommandList* cmdList) noexcept :
+    EditWindow{ panel, cmdList }
 {
 }

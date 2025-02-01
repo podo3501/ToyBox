@@ -5,7 +5,6 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 
 namespace ComponentTest
 {
@@ -107,6 +106,15 @@ namespace ComponentTest
 
 		EXPECT_EQ(UndoRedo(cmdList, img3, &ImageGrid3::GetSourceAnd2Divider, true), SourceDivider({ 10, 82, 48, 48 }, { 22, 26 }));
 		EXPECT_EQ(UndoRedo(cmdList, img3, &ImageGrid3::GetSourceAnd2Divider, false), SourceDivider({ 30, 97, 54, 52 }, { 35, 41 }));
+
+		UndoRedo(cmdList, img3, &ImageGrid3::GetSourceAnd2Divider, true);
+		cmdList.SetSources(img3, { { 10, 82, 10, 48 }, { 20, 82, 28, 48 }, { 48, 82, 10, 48 } });
+		cmdList.SetSources(img3, { { 10, 82, 15, 48 }, { 25, 82, 18, 48 }, { 43, 82, 15, 48 } });
+		
+		vector<Rectangle> undoSources{ { 10, 82, 22, 48 }, { 32, 82, 4, 48 }, { 36, 82, 22, 48 } };
+		EXPECT_EQ(UndoRedo(cmdList, img3, &ImageGrid3::GetSources, true), undoSources);
+		vector<Rectangle> redoSources{ { 10, 82, 15, 48 }, { 25, 82, 18, 48 }, { 43, 82, 15, 48 } };
+		EXPECT_EQ(UndoRedo(cmdList, img3, &ImageGrid3::GetSources, false), redoSources);
 	}
 
 	TEST_F(UndoRedoTest, ImageGrid9)

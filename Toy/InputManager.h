@@ -43,6 +43,7 @@ public:
     
     static inline const KeyboardTracker& GetKeyboard() noexcept { return m_keyboardTracker; }
     static inline const MouseTracker& GetMouse() noexcept { return m_mouseTracker; }
+    static inline void SetMouseStartOffset(const XMINT2& offset) noexcept { m_startOffset = offset; }
 
 private:
     static KeyboardTracker m_keyboardTracker;
@@ -50,6 +51,7 @@ private:
 
     static MouseTracker m_mouseTracker;
     static Mouse m_mouse;
+    static optional<XMINT2> m_startOffset;
 };
 
 /////////////////////////////////////////////////////////////////////////

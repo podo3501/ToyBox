@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "ComponentTooltip.h"
 #include "../Toy/UserInterface/Component/Panel.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/Utility.h"
 #include "../../Utility.h"
 

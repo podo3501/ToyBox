@@ -3,7 +3,6 @@
 #include "../Utility.h"
 #include "../InputManager.h"
 #include "JsonOperation.h"
-#include "UIComponentEx.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :

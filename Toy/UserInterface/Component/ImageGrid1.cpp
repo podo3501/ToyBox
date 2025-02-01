@@ -4,7 +4,6 @@
 #include "../../Utility.h"
 #include "../../Config.h"
 #include "../JsonOperation.h"
-#include "../UIComponentEx.h"
 
 ImageGrid1::~ImageGrid1() = default;
 ImageGrid1::ImageGrid1() = default;

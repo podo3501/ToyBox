@@ -57,24 +57,20 @@ constexpr auto EnumToStringMap<Origin>() -> array<const char*, EnumSize<Origin>(
 
 enum class ButtonState : int
 {
-	Init = 0,
-	Normal = 1,
-	Hover = 2,
-	Pressed = 3,
-	Count,
+	Normal,
+	Hover,
+	Pressed
 };
 
 template<>
-constexpr size_t EnumSize<ButtonState>() { return 5; }
+constexpr size_t EnumSize<ButtonState>() { return 3; }
 
 template<>
 constexpr auto EnumToStringMap<ButtonState>()->array<const char*, EnumSize<ButtonState>()> {
 	return { {
-		{ "Init" },
 		{ "Normal" },
 		{ "Hover" },
-		{ "Pressed" },
-		{ "Count" }
+		{ "Pressed" }
 	} };
 }
 ///////////////////////////////////////////////////////////////

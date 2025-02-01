@@ -11,7 +11,8 @@ class FloatingComponent
 	{
 		ImageGrid1,
 		ImageGrid3,
-		ImageGrid9
+		ImageGrid9,
+		Button1
 	};
 
 public:

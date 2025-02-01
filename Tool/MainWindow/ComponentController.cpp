@@ -3,7 +3,6 @@
 #include "../Include/IRenderer.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
@@ -36,7 +35,7 @@ bool ComponentController::CheckAttachComponent() noexcept
 	if (!m_floater->IsComponent()) return false;
 	if (!IsInputAction(Keyboard::LeftShift, MouseButton::Left)) return false;
 
-	XMINT2 mousePosition = GetWindowMousePos(m_mainWnd);
+	const XMINT2& mousePosition = InputManager::GetMouse().GetPosition();
 	AttachSelectedComponent(m_cmdList.get(), m_selector.get(), m_floater.get(), mousePosition);
 
 	return true;

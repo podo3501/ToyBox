@@ -1,5 +1,6 @@
 #pragma once
 #include "Command.h"
+#include "CommandType.h"
 #include "../UIType.h"
 
 class UIComponent;
@@ -114,9 +115,6 @@ private:
 
 //////////////////////////////////////////////////////////////////
 
-class ImageGrid1;
-class ImageGrid3;
-class ImageGrid9;
 class SetSourceCommand : public Command
 {
 public:
@@ -135,11 +133,30 @@ private:
 	CommandRecord<Rectangle> m_record;
 };
 
+class SetSource39Command : public Command
+{
+public:
+	SetSource39Command(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSource39; }
+	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+
+private:
+	optional<vector<Rectangle>> GetSources() noexcept;
+	bool SetSources(const vector<Rectangle>& sources) noexcept;
+
+	ImageGrid39Variant m_imgGridVariant;
+	CommandRecord<vector<Rectangle>> m_record;
+};
+
 struct IRenderer;
 class SetFilenameCommand : public Command
 {
-	using ImageGridVariant = variant<ImageGrid1*, ImageGrid3*, ImageGrid9*>;
-
 public:
 	SetFilenameCommand(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename) noexcept;
 
@@ -162,8 +179,6 @@ private:
 
 class SetSourceAndDividerCommand : public Command
 {
-	using ImageGrid39Variant = variant<ImageGrid3*, ImageGrid9*>;
-
 public:
 	SetSourceAndDividerCommand(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider) noexcept;
 

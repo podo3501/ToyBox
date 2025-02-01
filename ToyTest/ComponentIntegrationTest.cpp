@@ -2,7 +2,6 @@
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 

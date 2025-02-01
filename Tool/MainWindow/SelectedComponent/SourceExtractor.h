@@ -22,7 +22,7 @@ public:
 
 protected:
     SourceExtractor(IRenderer* renderer, const wstring& filename, CommandList* cmdList) noexcept;
-    Rectangle FindAreaFromMousePosition() noexcept;
+    Rectangle FindRectangleFromMousePosition() const noexcept;
 
     virtual void UpdateProcess() {};
     virtual void RenderProcess() const {};
@@ -33,8 +33,6 @@ protected:
     inline CommandList* GetCommandList() const noexcept { return m_cmdList; }
 
 private:
-    Rectangle FindRectangleContainingPoint(const XMINT2& pos) noexcept;
-
     IRenderer* m_renderer;
     wstring m_filename;
     CommandList* m_cmdList;

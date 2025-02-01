@@ -13,7 +13,7 @@ class EditWindow
 {
 public:
 	EditWindow() = delete;
-	EditWindow(UIComponent* component, ImGuiWindow* mainWnd, CommandList* cmdList) noexcept;
+	EditWindow(UIComponent* component, CommandList* cmdList) noexcept;
 	virtual ~EditWindow();
 	
 	void Update(bool mainWndFocus);
@@ -36,7 +36,6 @@ private:
 	void EditName(const string& nameLabel) noexcept;
 
 	UIComponent* m_component;
-	ImGuiWindow* m_mainWnd;
 	CommandList* m_cmdList;
 	char m_nameBuffer[128] = "";
 	bool m_visible{ true };
@@ -49,7 +48,7 @@ class EditPanel : public EditWindow
 public:
 	~EditPanel();
 	EditPanel() = delete;
-	EditPanel(Panel* panel, ImGuiWindow* window, CommandList* cmdList) noexcept;
+	EditPanel(Panel* panel, CommandList* cmdList) noexcept;
 	//virtual void SetComponent(UIComponent* component);
 	//virtual void Render();
 

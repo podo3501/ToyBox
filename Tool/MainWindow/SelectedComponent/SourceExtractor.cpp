@@ -28,8 +28,9 @@ SourceExtractor::SourceExtractor(IRenderer* renderer, const wstring& filename, C
     m_window{ nullptr }
 {}
 
-Rectangle SourceExtractor::FindRectangleContainingPoint(const XMINT2& pos) noexcept
+Rectangle SourceExtractor::FindRectangleFromMousePosition() const noexcept
 {
+    const XMINT2& pos = InputManager::GetMouse().GetPosition();
     auto it = ranges::find_if(m_areaList, [&pos](const Rectangle& rect) {
         return Contains(rect, pos);
         });
@@ -39,12 +40,6 @@ Rectangle SourceExtractor::FindRectangleContainingPoint(const XMINT2& pos) noexc
     }
 
     return {};
-}
-
-Rectangle SourceExtractor::FindAreaFromMousePosition() noexcept
-{
-    const XMINT2& pos = GetWindowMousePos(m_window);
-    return FindRectangleContainingPoint(pos);
 }
 
 bool SourceExtractor::Initialize()
@@ -81,7 +76,7 @@ ImageGrid1Extractor::ImageGrid1Extractor( IRenderer* renderer, const wstring& fi
 
 void ImageGrid1Extractor::UpdateProcess()
 {
-    m_hoveredArea = FindAreaFromMousePosition();
+    m_hoveredArea = FindRectangleFromMousePosition();
     if(IsInputAction(MouseButton::Left, KeyState::Pressed))
     {
         if (m_hoveredArea != Rectangle{})
@@ -113,12 +108,12 @@ static void DivideLengthByThree(const Rectangle& area, vector<int>* outWidth, ve
 }
 
 template<typename ImageGrid>
-static void SetSourcesOnMouseClick(ImageGrid imageGrid3or9, const vector<Rectangle>& hoveredAreas)
+static bool SetSourcesOnMouseClick(CommandList* cmdList, ImageGrid imageGrid3or9, const vector<Rectangle>& hoveredAreas)
 {
-    if (!IsInputAction(MouseButton::Left, KeyState::Pressed)) return;
-    if (hoveredAreas.empty()) return;
+    if (!IsInputAction(MouseButton::Left, KeyState::Pressed)) return true;
+    if (hoveredAreas.empty()) return false;
 
-    imageGrid3or9->SetSources(hoveredAreas);
+    return cmdList->SetSources(imageGrid3or9, hoveredAreas);
 }
 
 static vector<Rectangle> GenerateSourceAreas(const Rectangle& area, bool is9Grid)
@@ -138,8 +133,8 @@ ImageGrid3Extractor::ImageGrid3Extractor(IRenderer* renderer, const wstring& fil
 
 void ImageGrid3Extractor::UpdateProcess()
 {
-    m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePosition(), false);
-    SetSourcesOnMouseClick(m_component, m_hoveredAreas);
+    m_hoveredAreas = GenerateSourceAreas(FindRectangleFromMousePosition(), false);
+    SetSourcesOnMouseClick(GetCommandList(), m_component, m_hoveredAreas);
 }
 
 void ImageGrid3Extractor::RenderProcess() const
@@ -158,8 +153,8 @@ ImageGrid9Extractor::ImageGrid9Extractor(IRenderer* renderer, const wstring& fil
 
 void ImageGrid9Extractor::UpdateProcess()
 {
-    m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePosition(), true);
-    SetSourcesOnMouseClick(m_component, m_hoveredAreas);
+    m_hoveredAreas = GenerateSourceAreas(FindRectangleFromMousePosition(), true);
+    SetSourcesOnMouseClick(GetCommandList(), m_component, m_hoveredAreas);
 }
 
 void ImageGrid9Extractor::RenderProcess() const

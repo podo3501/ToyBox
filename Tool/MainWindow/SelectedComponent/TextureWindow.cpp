@@ -5,7 +5,7 @@
 #include "../Toy/Utility.h"
 #include "../../Utility.h"
 #include "SourceExtractor.h"
-#include "../Toy/UserInterface/UIComponentEx.h"
+#include "../Toy/InputManager.h"
 
 TextureWindow::~TextureWindow()
 {
@@ -38,6 +38,7 @@ bool TextureWindow::Create(const wstring& filename)
 void TextureWindow::Update()
 {
     if (!m_window) return;
+    SetMouseStartOffset(m_window);
 
     m_sourceExtractor->Update();
 }

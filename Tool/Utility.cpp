@@ -19,13 +19,10 @@ ImVec2 GetWindowIGMousePos(const ImGuiWindow* window) noexcept
 	return mousePos - GetWindowStartPosition(window);
 }
 
-XMINT2 GetWindowMousePos(const ImGuiWindow* window) noexcept
+void SetMouseStartOffset(const ImGuiWindow* window) noexcept
 {
 	const ImVec2& offset = GetWindowStartPosition(window);
-	auto& mouseTracker = const_cast<MouseTracker&>(InputManager::GetMouse());
-
-	const auto& state = mouseTracker.GetLastState();
-	return { state.x - static_cast<int>(offset.x), state.y - static_cast<int>(offset.y) };
+	InputManager::SetMouseStartOffset({ static_cast<int>(offset.x), static_cast<int>(offset.y) });
 }
 
 bool IsWindowFocus(const ImGuiWindow* window) noexcept

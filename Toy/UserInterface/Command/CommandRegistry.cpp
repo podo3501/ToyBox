@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CommandRegistry.h"
 #include "../../Utility.h"
-#include "../UIComponentEx.h"
 #include "../Component/ImageGrid1.h"
 #include "../Component/ImageGrid3.h"
 #include "../Component/ImageGrid9.h"
@@ -163,6 +162,15 @@ bool RenameCommand::Redo() { return GetComponent()->Rename(m_record.current); }
 
 //////////////////////////////////////////////////////////////////
 
+namespace {
+	//variant안에 값들은 UIComponent에서 상속 받은 것이라서 visit로 값을 하나 빼와서 캐스팅 한다.
+	//get<UIComponent*>는 되지 않았다. 컴파일 타임에는 모르기 때문에 ImageGrid1* 이렇게 넣어야만 가져올 수 있다.
+	template<typename Child>
+	UIComponent* ExtractUIComponent(const Child& imgGridVariant) noexcept {
+		return std::visit([](auto* imgGrid) -> UIComponent* { return imgGrid; }, imgGridVariant);
+	}
+}
+
 SetSourceCommand::SetSourceCommand(ImageGrid1* imageGrid1, const Rectangle& source) noexcept :
 	Command{ imageGrid1 },
 	m_imgGrid1{ imageGrid1 },
@@ -185,13 +193,59 @@ void SetSourceCommand::PostMerge(unique_ptr<Command> other) noexcept
 	m_record.current = otherCmd->m_record.current;
 }
 
-//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////	
+
+SetSource39Command::SetSource39Command(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources) noexcept :
+	Command{ ExtractUIComponent(imgGridVariant) },
+	m_imgGridVariant{ imgGridVariant },
+	m_record{ sources }
+{}
+
+optional<vector<Rectangle>> SetSource39Command::GetSources() noexcept
+{
+	if (auto imgGrid3 = get_if<ImageGrid3*>(&m_imgGridVariant); imgGrid3 && *imgGrid3)
+		return (*imgGrid3)->GetSources();
+
+	if (auto imgGrid9 = get_if<ImageGrid9*>(&m_imgGridVariant); imgGrid9 && *imgGrid9)
+		return (*imgGrid9)->GetSources();
+
+	return nullopt;
+}
+
+bool SetSource39Command::SetSources(const vector<Rectangle>& sources) noexcept
+{
+	if (auto imgGrid3 = get_if<ImageGrid3*>(&m_imgGridVariant); imgGrid3 && *imgGrid3)
+		return (*imgGrid3)->SetSources(sources);
+
+	if (auto imgGrid9 = get_if<ImageGrid9*>(&m_imgGridVariant); imgGrid9 && *imgGrid9)
+		return (*imgGrid9)->SetSources(sources);
+
+	return false;
+}
+
+bool SetSource39Command::Execute()
+{
+	auto sources = GetSources();
+	ReturnIfFalse(sources);
+
+	m_record.previous = *sources;
+	return SetSources(m_record.current);
+}
+
+bool SetSource39Command::Undo() { return SetSources(m_record.previous); }
+bool SetSource39Command::Redo() { return SetSources(m_record.current); }
+
+void SetSource39Command::PostMerge(unique_ptr<Command> other) noexcept
+{
+	auto otherCmd = static_cast<SetSource39Command*>(other.get());
+	m_record.current = otherCmd->m_record.current;
+}
+
+//////////////////////////////////////////////////////////////////	
 
 SetFilenameCommand::SetFilenameCommand(const ImageGridVariant& imgGridVariant, 
 	IRenderer* renderer, const wstring& filename) noexcept :
-	//variant안에 값들은 UIComponent에서 상속 받은 것이라서 visit로 값을 하나 빼와서 캐스팅 한다.
-	//get<UIComponent*>는 되지 않았다. 컴파일 타임에는 모르기 때문에 ImageGrid1* 이렇게 넣어야만 가져올 수 있다.
-	Command{ visit([](auto* imgGrid) -> UIComponent* { return imgGrid; }, imgGridVariant) },
+	Command{ ExtractUIComponent(imgGridVariant) },
 	m_imgGridVariant{ imgGridVariant },
 	m_renderer{ renderer },
 	m_record{ filename }
@@ -231,7 +285,7 @@ bool SetFilenameCommand::Redo() { return SetFilename(m_record.current); }
 
 SetSourceAndDividerCommand::SetSourceAndDividerCommand(const ImageGrid39Variant& imgGridVariant,
 	const SourceDivider& srcDivider) noexcept :
-	Command{ visit([](auto* imgGrid) -> UIComponent* { return imgGrid; }, imgGridVariant) },
+	Command{ ExtractUIComponent(imgGridVariant) },
 	m_imgGridVariant{ imgGridVariant },
 	m_record{ srcDivider }
 {}
@@ -261,7 +315,7 @@ bool SetSourceAndDividerCommand::SetSourceAndDivider(const SourceDivider& srcDiv
 bool SetSourceAndDividerCommand::Execute()
 {
 	auto srcDivider = GetSourceAndDivider();
-	if (!srcDivider.has_value()) return false;
+	ReturnIfFalse(srcDivider);
 
 	m_record.previous = *srcDivider;
 	return SetSourceAndDivider(m_record.current);
