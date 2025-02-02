@@ -52,6 +52,7 @@ bool FloatingComponent::Excute()
 	case ImageGrid3: result = LoadComponent(CreateSampleImageGrid3({ { 48, 48 }, Origin::LeftTop })); break;
 	case ImageGrid9: result = LoadComponent(CreateSampleImageGrid9({ { 170, 120 }, Origin::LeftTop })); break;
 	case Button1: result = LoadComponent(CreateSampleButton1({ { 32, 32 }, Origin::LeftTop })); break;
+	case Button3: result = LoadComponent(CreateSampleButton3({ { 100, 48 }, Origin::LeftTop })); break;
 	}
 	m_currentAction.reset(); // 상태 초기화
 
@@ -99,14 +100,10 @@ void FloatingComponent::Render()
 	if (ImGui::MenuItem("Image Grid 3")) m_currentAction = ImageGrid3;
 	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = ImageGrid9;
 	if (ImGui::MenuItem("Button 1")) m_currentAction = Button1;
+	if (ImGui::MenuItem("Button 3")) m_currentAction = Button3;
 	if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();
-}
-
-bool FloatingComponent::IsActive() const noexcept
-{
-	return m_isActive;
 }
 
 bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size)

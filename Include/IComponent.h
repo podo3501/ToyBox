@@ -11,6 +11,6 @@ public:
 
 	virtual bool LoadResources(ILoadData* load) = 0;
 	virtual bool SetDatas(IGetValue*) = 0;
-	virtual bool ProcessUpdate(const XMINT2& position) noexcept = 0;
+	virtual bool ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept = 0;
 	virtual void ProcessRender(IRender* render) = 0;
 };

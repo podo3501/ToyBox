@@ -109,8 +109,15 @@ bool ComponentController::CheckCloneComponent() noexcept
 	return true;
 }
 
+void ComponentController::SetActive(bool active) noexcept
+{
+	m_active = active;
+}
+
 bool ComponentController::Update() noexcept
 {
+	if (!m_active) return true;
+
 	CheckDetachComponent();
 	CheckDeleteComponent();
 	CheckCloneComponent();
@@ -126,6 +133,8 @@ bool ComponentController::Update() noexcept
 
 void ComponentController::Render()
 {
+	if (!m_active) return;
+
 	if (!Tool::Dialog::IsOpenDialog())
 		m_floater->Render();
 	m_selector->Render();

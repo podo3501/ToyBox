@@ -111,7 +111,7 @@ void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<ws
 		});
 }
 
-bool TextArea::ImplementUpdate(const XMINT2& position) noexcept
+bool TextArea::ImplementUpdatePosition(const XMINT2& position) noexcept
 {
 	if (IsDirty())
 		m_posByResolution = XMINT2ToVector2(GetPositionByLayout(position));

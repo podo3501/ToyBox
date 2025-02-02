@@ -39,7 +39,7 @@ namespace ComponentTest
 		auto img1Ptr = img1.get();
 		UIEx(img1).AttachComponent(move(img2), { 100, 50 });	//중점에 attach 한다.
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
-		m_panel->ProcessUpdate({});
+		m_panel->ProcessUpdate({}, true);
 
 		EXPECT_EQ(UIEx(img1Ptr).GetTotalChildSize(), XMUINT2(210, 110));
 		auto [detached, parent] = UIEx(img1Ptr).DetachComponent();
@@ -75,13 +75,13 @@ namespace ComponentTest
 	{
 		unique_ptr<UIComponent> img9_0 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		UIEx(m_panel).AttachComponent(move(img9_0), { 80, 60 });
-		m_panel->ProcessUpdate({});
+		m_panel->ProcessUpdate({}, true);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), {0, 0}) == 1);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 100, 100 }) == 4);
 
 		unique_ptr<UIComponent> img9_1 = CreateSampleImageGrid9({ { 221, 191 }, Origin::LeftTop });
 		UIEx(m_panel).AttachComponent(move(img9_1), { 88, 66 });
-		m_panel->ProcessUpdate({});
+		m_panel->ProcessUpdate({}, true);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 180, 160 }) == 7);
 	}
 
@@ -92,7 +92,7 @@ namespace ComponentTest
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		UIEx(panel).AttachComponent(move(img9), { 40, 30 });
 		UIEx(m_panel).AttachComponent(move(panel), { 400, 300 });
-		m_panel->ProcessUpdate({});
+		m_panel->ProcessUpdate({}, true);
 
 		UIComponent* component = UIEx(m_panel).GetComponent("ImageGrid1_4");
 		XMINT2 pos = component->GetPosition();

@@ -180,7 +180,7 @@ bool Renderer::LoadComponent(IComponent* component)
     uploadResourcesFinished.wait();
     
     //로드 하고 나서 필요한 셋팅 및 위치계산을 해 준다.
-    if (!component->SetDatas(load) || !component->ProcessUpdate({}))
+    if (!component->SetDatas(load) || !component->ProcessUpdate({}, true))
         return false;
 
     return true;

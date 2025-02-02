@@ -39,7 +39,7 @@ bool ImageGrid1::LoadResources(ILoadData* load)
 	return true;
 }
 
-bool ImageGrid1::ImplementUpdate(const XMINT2& position) noexcept
+bool ImageGrid1::ImplementUpdatePosition(const XMINT2& position) noexcept
 {
 	if(IsDirty())
 		m_position = GetPositionByLayout(position);

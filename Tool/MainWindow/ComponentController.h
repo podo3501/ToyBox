@@ -17,6 +17,7 @@ public:
 	void SetMainWindow(ImGuiWindow* mainWnd) noexcept;
 	bool Update() noexcept;
 	void Render();
+	void SetActive(bool active) noexcept;
 
 private:
 	bool CheckAttachComponent() noexcept;
@@ -30,4 +31,5 @@ private:
 	unique_ptr<CommandList> m_cmdList;
 	unique_ptr<FloatingComponent> m_floater;
 	unique_ptr<ComponentSelector> m_selector;
+	bool m_active{ true };
 };

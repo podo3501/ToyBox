@@ -33,7 +33,7 @@ unique_ptr<UIComponent> UIComponentEx::DetachChild(UIComponent* parent, UICompon
 	detached->m_parent = nullptr;
 	detached->m_transform.Clear();
 	detached->MarkDirty();
-	detached->ProcessUpdate({});
+	detached->ProcessUpdate({}, false);
 
 	return detached;
 }

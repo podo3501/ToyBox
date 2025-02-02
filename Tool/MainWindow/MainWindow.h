@@ -29,6 +29,7 @@ public:
     inline const ImGuiWindow* GetImGuiWindow() const noexcept;
 
 private:
+    void CheckActiveUpdate() noexcept;
     void CheckChangeWindow(const ImGuiWindow* window);
     void IgnoreMouseClick();
     void SetupWindowAppearing() noexcept;
@@ -41,6 +42,7 @@ private:
 
     ImTextureID m_textureID{};
     bool m_isOpen{ false };
+    bool m_isActiveUpdate{ false };
     ImVec2 m_size{ 800.f, 600.f };
 
     static int m_mainWindowIndex;

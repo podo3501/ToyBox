@@ -12,7 +12,8 @@ class FloatingComponent
 		ImageGrid1,
 		ImageGrid3,
 		ImageGrid9,
-		Button1
+		Button1,
+		Button3
 	};
 
 public:
@@ -23,7 +24,7 @@ public:
 	void SetComponent(unique_ptr<UIComponent> componen) noexcept;
 	bool Excute();
 	void Render();
-	bool IsActive() const noexcept;
+	bool IsActive() const noexcept { return m_isActive; }
 	const ImVec2& GetPosition() const noexcept { return m_position; }
 	bool ComponentToFloating(unique_ptr<UIComponent>&& component);
 	void Clear() noexcept;

@@ -33,16 +33,13 @@ bool SelectComboItem(const string& label, const vector<string>& items, string& s
 
     ImGui::EndCombo();
 
-    if (prev == select) return false;
-    return true;
+    return prev != select;
 }
 
 void EditButton::RenderComponent()
 {
     string state = EnumToString<ButtonState>(m_button->GetState());
     if (SelectComboItem("State", EnumToList<ButtonState>(), state))
-    {
-        int a = 1;
-    }
+        m_button->SetState(StringToEnum<ButtonState>(state));
 }
 

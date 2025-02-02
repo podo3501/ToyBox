@@ -21,20 +21,20 @@ public:
 		unique_ptr<UIComponent>&& hover,
 		unique_ptr<UIComponent>&& pressed) noexcept;
 
-	inline ButtonState GetState() const noexcept { return m_state; }
+	inline ButtonState GetState() const noexcept { return *m_state; }
+	void SetState(ButtonState state) noexcept;
 
 protected:
 	Button(const Button& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementUpdate(const XMINT2& absolutePosition) noexcept override;
+	virtual bool ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept override;
 	
 private:
 	void AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable) noexcept;
-	void EnableButtonImage(ButtonState btnState);
 	void ReloadDatas() noexcept;
 
 	map<ButtonState, UIComponent*> m_images;
-	ButtonState m_state;
+	optional<ButtonState> m_state;
 };
 
 unique_ptr<Button> CreateButton(const UILayout& layout, vector<unique_ptr<UIComponent>> imgGridList);

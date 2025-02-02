@@ -24,7 +24,7 @@ public:
 protected:
 	TextArea(const TextArea& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementUpdate(const XMINT2& position) noexcept override;
+	virtual bool ImplementUpdatePosition(const XMINT2& position) noexcept override;
 	virtual void ImplementRender(IRender* render) const override;
 
 private:

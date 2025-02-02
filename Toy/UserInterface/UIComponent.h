@@ -17,7 +17,8 @@ protected:
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
-	virtual bool ImplementUpdate(const XMINT2&) noexcept { return true; }
+	virtual bool ImplementUpdatePosition(const XMINT2&) noexcept { return true; }
+	virtual bool ImplementActiveUpdate(const XMINT2&) noexcept { return true; }
 	virtual void ImplementRender(IRender*) const {};
 
 	//상속되어지는 함수는 구현한다.
@@ -43,7 +44,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
 	virtual bool LoadResources(ILoadData* load) override;
 	virtual bool SetDatas(IGetValue*) override;
-	virtual bool ProcessUpdate(const XMINT2& position) noexcept override final;
+	virtual bool ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept override final;
 	virtual void ProcessRender(IRender* render) override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)

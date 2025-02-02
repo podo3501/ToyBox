@@ -66,15 +66,6 @@ static unique_ptr<UIComponent> CreateSampleButton(const UILayout& layout,
 	return CreateButton(layout, move(imageGridList));
 }
 
-unique_ptr<UIComponent> CreateSampleButton3(const UILayout& layout)
-{
-	vector<vector<Rectangle>> sources{
-		{ {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} },
-		{ {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} },
-		{ {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } };
-	return CreateSampleButton<ImageGrid3>(layout, sources, L"UI/SampleTexture/Sample_0.png");
-}
-
 unique_ptr<UIComponent> CreateSampleButton1(const UILayout& layout)
 {
 	vector<vector<Rectangle>> sources{
@@ -82,4 +73,13 @@ unique_ptr<UIComponent> CreateSampleButton1(const UILayout& layout)
 		{ {46, 138, 32, 32} },
 		{ {82, 138, 32, 32} } };
 	return CreateSampleButton<ImageGrid1>(layout, sources, L"UI/SampleTexture/Sample_0.png");
+}
+
+unique_ptr<UIComponent> CreateSampleButton3(const UILayout& layout)
+{
+	vector<vector<Rectangle>> sources{
+		{ {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} },
+		{ {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} },
+		{ {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } };
+	return CreateSampleButton<ImageGrid3>(layout, sources, L"UI/SampleTexture/Sample_0.png");
 }

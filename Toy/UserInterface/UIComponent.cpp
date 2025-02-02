@@ -86,15 +86,17 @@ UITransform& UIComponent::GetTransform(UIComponent* component)
 	return component->m_transform;
 }
 
-bool UIComponent::ProcessUpdate(const XMINT2& position) noexcept
+bool UIComponent::ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept
 {
 	if (!m_enable) return true;
 
-	ReturnIfFalse(ImplementUpdate(position));
+	ReturnIfFalse(ImplementUpdatePosition(position));
+	if(activeUpdate) //툴에서는 마우스가 올라가서 상태변화가 생기면, 작업이 안된다.
+		ReturnIfFalse(ImplementActiveUpdate(position));
 
-	auto result = ranges::all_of(m_children, [this, &position](auto& child) {
+	auto result = ranges::all_of(m_children, [this, &position, activeUpdate](auto& child) {
 		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
-		return child->ProcessUpdate(curPosition);
+		return child->ProcessUpdate(curPosition, activeUpdate);
 		});
 	m_isDirty = false;
 

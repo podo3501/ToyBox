@@ -289,7 +289,7 @@ namespace ComponentTest
 
 		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
 		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
-		m_panel->ProcessUpdate({});
+		m_panel->ProcessUpdate({}, true);
 
 		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);

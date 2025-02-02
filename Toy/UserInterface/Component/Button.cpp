@@ -4,9 +4,11 @@
 #include "../../InputManager.h"
 #include "../JsonOperation.h"
 
+using enum ButtonState;
+
 Button::~Button() = default;
 Button::Button() :
-	m_state{ ButtonState::Normal }
+	m_state{ nullopt }
 {}
 
 Button::Button(const Button& o) :
@@ -55,30 +57,41 @@ bool Button::SetImage(const UILayout& layout,
 	return true;
 }
 
-void Button::EnableButtonImage(ButtonState btnState)
+void Button::SetState(ButtonState state) noexcept
 {
-	for (auto& [state, image] : m_images)
-		image->SetEnable(state == btnState);
+	if (m_state == state) return;
+		
+	for (auto& [imgState, image] : m_images)
+		image->SetEnable(imgState == state);
+
+	m_state = state;
 }
 
-bool Button::ImplementUpdate(const XMINT2& absolutePosition) noexcept
+bool Button::ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept
 {
+	if (!m_state) //로딩했을때 처음에는 값이 없기 때문에 값을 Normal로 정해준다.
+	{
+		SetState(Normal);
+		return true;
+	}
+
 	const auto& mouseTracker = InputManager::GetMouse();
 	const XMINT2& relativeMousePos = mouseTracker.GetPosition() - absolutePosition;
 	bool isArea = IsArea(relativeMousePos);
 
+	ButtonState state{ *m_state };
 	if (!isArea)
-		m_state = ButtonState::Normal;
+		state = Normal;
 	else
 	{
 		if (IsInputAction(MouseButton::Left, KeyState::Pressed) ||
-			m_state == ButtonState::Pressed && IsInputAction(MouseButton::Left, KeyState::Held))
-			m_state = ButtonState::Pressed;
+			state == Pressed && IsInputAction(MouseButton::Left, KeyState::Held))
+			state = Pressed;
 		else
-			m_state = ButtonState::Hover;
+			state = Hover;
 	}
 
-	EnableButtonImage(m_state);
+	SetState(state);
 
 	return true;
 }
@@ -109,7 +122,6 @@ void Button::ReloadDatas() noexcept
 void Button::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
-	operation.Process("State", m_state);
 
 	if (operation.IsWrite()) return;
 	ReloadDatas();

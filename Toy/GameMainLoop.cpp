@@ -65,7 +65,7 @@ void GameMainLoop::Update(const DX::StepTimer* timer)
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_gamePanel->ProcessUpdate({});
+    m_gamePanel->ProcessUpdate({}, true);
 
     PIXEndEvent();
 }

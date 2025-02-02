@@ -73,6 +73,14 @@ void MainWindow::ChangeWindowSize(const ImVec2& size)
 	m_size = size;
 }
 
+void MainWindow::CheckActiveUpdate() noexcept
+{
+	if (!IsInputAction(Keyboard::F5, KeyState::Pressed)) return;
+	
+	m_isActiveUpdate = !m_isActiveUpdate;
+	m_controller->SetActive(!m_isActiveUpdate);
+}
+
 void MainWindow::CheckChangeWindow(const ImGuiWindow* window)
 {
 	static ImVec2 startSize{};
@@ -94,11 +102,12 @@ void MainWindow::Update(const DX::StepTimer* timer)
 	//if (!IsWindowFocus(m_window)) return;
 	if (!m_window) return;
 	SetMouseStartOffset(m_window);
-
 	CheckChangeWindow(m_window); //창이 변했을때 RenderTexture를 다시 만들어준다.
 
+	CheckActiveUpdate();
+		
 	m_controller->Update();
-	m_panel->ProcessUpdate({});
+	m_panel->ProcessUpdate({}, m_isActiveUpdate);
 }
 
 void MainWindow::IgnoreMouseClick() 
@@ -140,6 +149,13 @@ void MainWindow::Render(ImGuiIO* io)
 	}
 	
 	m_controller->Render();
+
+	//상태 표시줄(임시)
+	ImGui::SetCursorPos({ 0, GetFrameHeight() });
+	if (m_isActiveUpdate) ImGui::Text("Status update has been activated.");
+
+	ImGui::SetCursorPos(ImVec2(0, ImGui::GetWindowHeight() - ImGui::GetFontSize()));
+	ImGui::Text("Right Mouse Button: Floating Menu     Shift + Left Mouse Button: Attach     D: Detach     B: Clone     Del: Delete     F5: Update State");
 
 	ImGui::End();
 }
