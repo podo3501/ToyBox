@@ -270,7 +270,8 @@ namespace ComponentTest
 
 	TEST_F(BasicFunctionalityTest, TestTextArea)
 	{
-		auto textArea = CreateSampleTextArea({ {320, 120}, Origin::Center });
+		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
+		auto textArea = CreateSampleTextArea({ {320, 120}, Origin::Center }, text);
 		UIEx(m_panel).AttachComponent(move(textArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 

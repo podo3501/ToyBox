@@ -47,16 +47,21 @@ inline constexpr bool IsFontStyle(const wstring& fontStyle) noexcept
 
 inline constexpr bool IsColor(const wstring& color) noexcept
 {
-	if (color == L"Red" || color == L"Blue") return true;
+	if (color == L"Red" || color == L"Blue" || color == L"White" || color == L"Black") return true;
 	return false;
 }
 
 XMFLOAT4 GetColor(const wstring& color) noexcept
 {
-	XMVECTORF32 vColor = Colors::Black;
-	if (color == L"Red") vColor = Colors::Red;
-	if (color == L"Black") vColor = Colors::Black;
-	if (color == L"Blue") vColor = Colors::Blue;
+	static const unordered_map<wstring, XMVECTORF32> colorMap = {
+		{L"White", Colors::White},
+		{L"Red", Colors::Red},
+		{L"Black", Colors::Black},
+		{L"Blue", Colors::Blue}
+	};
+
+	auto it = colorMap.find(color);
+	XMVECTORF32 vColor = (it != colorMap.end()) ? it->second : Colors::Black;
 
 	XMFLOAT4 fColor;
 	XMStoreFloat4(&fColor, vColor);

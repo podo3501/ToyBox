@@ -1,18 +1,14 @@
 #include "pch.h"
 #include "ComponentSelector.h"
 #include "SelectedComponent/ComponentTooltip.h"
-#include "SelectedComponent/ComponentEdit/EditImageGrid.h"
-#include "SelectedComponent/ComponentEdit/EditButton.h"
+#include "SelectedComponent/EditWindow.h"
+#include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
 #include "../Dialog.h"
 #include "../Utility.h"
-#include "../Toy/UserInterface/Component/Panel.h"
-#include "../Toy/UserInterface/Component/ImageGrid1.h"
-#include "../Toy/UserInterface/Component/ImageGrid3.h"
-#include "../Toy/UserInterface/Component/ImageGrid9.h"
-#include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
+#include "EditWindowFactory.h"
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, CommandList* cmdList, UIComponent* panel) :
@@ -23,33 +19,14 @@ ComponentSelector::ComponentSelector(IRenderer* renderer, CommandList* cmdList, 
 	m_editWindow{ nullptr },
 	m_panel{ panel },
 	m_component{ nullptr }
-{}
+{
+	EditWindowFactory::RegisterFactories();
+}
 
 void ComponentSelector::SetPanel(UIComponent* panel) noexcept
 {
 	m_panel = panel;
 	m_tooltip->SetPanel(panel);
-}
-
-template <typename EditType, typename ComponentType, typename... Args>
-unique_ptr<EditWindow> CreateEdit(UIComponent* component, Args&&... args) 
-{
-	return make_unique<EditType>(ComponentCast<ComponentType>(component), forward<Args>(args)...);
-}
-
-//이게 점점 커지면 include도 많이 생기고 해서 static factory클래스로 만들어야 할 것 같다.
-static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, 
-	IRenderer* renderer, CommandList* cmdList)
-{
-	if (!component) return nullptr;
-
-	ComponentID id = component->GetTypeID();
-	if (id == ComponentID::Panel) return CreateEdit<EditPanel, Panel*>(component, cmdList);
-	if (id == ComponentID::ImageGrid1) return CreateEdit<EditImageGrid1, ImageGrid1*>(component, renderer, cmdList);
-	if (id == ComponentID::ImageGrid3) return CreateEdit<EditImageGrid3, ImageGrid3*>(component, renderer, cmdList);
-	if (id == ComponentID::ImageGrid9) return CreateEdit<EditImageGrid9, ImageGrid9*>(component, renderer, cmdList);
-	if (id == ComponentID::Button) return CreateEdit<EditButton, Button*>(component, renderer, cmdList);
-	return nullptr;
 }
 
 void ComponentSelector::SetComponent(UIComponent* component) noexcept
@@ -61,7 +38,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 		return;
 	}
 
-	m_editWindow = CreateEditWindow(component, m_renderer, m_cmdList);
+	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_renderer, m_cmdList);
 
 	m_component = component;
 	m_tooltip->SetComponent(component);

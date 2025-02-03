@@ -14,9 +14,6 @@
     <ClCompile Include="ComponentBasicFunctionalityTest.cpp" />
     <ClCompile Include="JsonSerializeTest.cpp" />
     <ClCompile Include="ComponentIntegrationTest.cpp" />
-    <ClCompile Include="ComponentUndoTest.cpp">
-      <Filter>TestResources</Filter>
-    </ClCompile>
     <ClCompile Include="PracticeTest_Pattern.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -29,25 +26,22 @@
     <ClInclude Include="TestHelper.h" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="TestResources">
-      <UniqueIdentifier>{d64897cb-d02e-49e1-b496-104f65474e45}</UniqueIdentifier>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{e8227c53-de4b-46e8-9bc0-fc4e2cffa886}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TestResources\UI">
-      <UniqueIdentifier>{2e12f1c1-31e1-414a-b230-b9b47221f62a}</UniqueIdentifier>
+    <Filter Include="Resources\Test">
+      <UniqueIdentifier>{ada32c62-fb7c-44b8-a2b1-d2111482cacd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TestResources\UI\Data">
-      <UniqueIdentifier>{29b2907e-e49d-4d53-92bd-639879902646}</UniqueIdentifier>
+    <Filter Include="Resources\Test\Data">
+      <UniqueIdentifier>{0f7f180e-4b95-4726-8d63-07cc408c7dd1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="TestResources\UI\Data\JOPTest.json">
-      <Filter>TestResources\UI\Data</Filter>
+    <None Include="..\Resources\Test\Data\JOPTest.json">
+      <Filter>Resources\Test\Data</Filter>
     </None>
-    <None Include="TestResources\UI\Data\JOPTest2.json">
-      <Filter>TestResources\UI\Data</Filter>
-    </None>
-    <None Include="TestResources\UI\Data\JsonSerializeTest.json">
-      <Filter>TestResources\UI\Data</Filter>
+    <None Include="..\Resources\Test\Data\JsonSerializeTest.json">
+      <Filter>Resources\Test\Data</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -35,12 +35,11 @@ unique_ptr<UIComponent> CreateSampleImageGrid9(const UILayout& layout)
 	return CreateImageGrid<ImageGrid9>(layout, source);
 }
 
-unique_ptr<UIComponent> CreateSampleTextArea(const UILayout& layout)
+unique_ptr<UIComponent> CreateSampleTextArea(const UILayout& layout, const wstring& text)
 {
 	map<wstring, wstring> fontFileList;
 	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
 	fontFileList.insert(make_pair(L"English", L"UI/Font/CourierNewBoldS18.spritefont"));
-	wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
 
 	return CreateTextArea(layout, text, fontFileList);
 }

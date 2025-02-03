@@ -131,7 +131,6 @@
   <ItemGroup>
     <ClCompile Include="ComponentBasicFunctionalityTest.cpp" />
     <ClCompile Include="ComponentIntegrationTest.cpp" />
-    <ClCompile Include="ComponentUndoTest.cpp" />
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
     <ClCompile Include="JsonSerializeTest.cpp" />
@@ -165,9 +164,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="TestResources\UI\Data\JOPTest.json" />
-    <None Include="TestResources\UI\Data\JOPTest2.json" />
-    <None Include="TestResources\UI\Data\JsonSerializeTest.json" />
+    <None Include="..\Resources\Test\Data\JOPTest.json" />
+    <None Include="..\Resources\Test\Data\JsonSerializeTest.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

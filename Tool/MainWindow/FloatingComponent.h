@@ -13,7 +13,8 @@ class FloatingComponent
 		ImageGrid3,
 		ImageGrid9,
 		Button1,
-		Button3
+		Button3,
+		Text
 	};
 
 public:

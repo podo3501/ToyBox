@@ -33,6 +33,7 @@ private:
     void CheckChangeWindow(const ImGuiWindow* window);
     void IgnoreMouseClick();
     void SetupWindowAppearing() noexcept;
+    void ShowStatusBar();
 
     IRenderer* m_renderer;
     string m_name{};

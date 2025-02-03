@@ -36,3 +36,5 @@ void EditText(const string& label, const wstring& text);
 bool EditFilename(const string& label, wstring& filename);
 bool EditFilename(const string& label, Property<wstring>& filename);
 bool EditSourceAndDivider(const string& sourceLabel, const string& deviderLabel, SourceDivider& rectDivider);
+
+bool SelectComboItem(const string& label, const vector<string>& items, string& select);

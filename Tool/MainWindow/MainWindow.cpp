@@ -127,6 +127,20 @@ void MainWindow::SetupWindowAppearing() noexcept
 	m_controller->SetMainWindow(m_window);
 }
 
+void MainWindow::ShowStatusBar() //상태 표시줄(임시)
+{
+	if (m_isActiveUpdate)
+	{
+		ImGui::SetCursorPos({ 0, GetFrameHeight() });
+		ImGui::Text("Status update has been activated.");
+	}
+	else
+	{
+		ImGui::SetCursorPos(ImVec2(0, ImGui::GetWindowHeight() - ImGui::GetFontSize()));
+		ImGui::Text("Right Mouse Button: Floating Menu     Shift + Left Mouse Button: Attach     D: Detach     B: Clone     Del: Delete     F5: Update State");
+	}
+}
+
 void MainWindow::Render(ImGuiIO* io)
 {
 	if (!m_isOpen)
@@ -150,12 +164,7 @@ void MainWindow::Render(ImGuiIO* io)
 	
 	m_controller->Render();
 
-	//상태 표시줄(임시)
-	ImGui::SetCursorPos({ 0, GetFrameHeight() });
-	if (m_isActiveUpdate) ImGui::Text("Status update has been activated.");
-
-	ImGui::SetCursorPos(ImVec2(0, ImGui::GetWindowHeight() - ImGui::GetFontSize()));
-	ImGui::Text("Right Mouse Button: Floating Menu     Shift + Left Mouse Button: Attach     D: Detach     B: Clone     Del: Delete     F5: Update State");
+	ShowStatusBar();
 
 	ImGui::End();
 }

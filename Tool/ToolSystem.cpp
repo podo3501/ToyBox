@@ -58,29 +58,4 @@ void ToolSystem::Render(ImGuiIO* io)
     m_menuBar->Render();
 
     return;
-
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-    ImGui::Begin("App Window", &m_visible, ImGuiWindowFlags_AlwaysAutoResize);
-    ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
-
-    static bool bPicking{ false };
-    ImVec2 curWindowPos = ImGui::GetWindowPos();
-    ImVec2 startPos{ curWindowPos.x + 0.f, curWindowPos.y + 0.f + ImGui::GetFrameHeight() };
-    if (/*io->MouseDown[0] && */io->MouseReleased[0])
-    {
-        Vector2 mousePos{ io->MousePos.x, io->MousePos.y };
-
-        Vector2 realMousePos{};
-        realMousePos.x = mousePos.x - startPos.x;
-        realMousePos.y = mousePos.y - startPos.y;
-
-        //클릭했을때 픽킹이 되었는지 확인
-        //if (m_component->IsPicking(realMousePos))
-        //    m_guiWidget->SetVisible(true);
-    }
-
-    ImGui::Image(m_textureID, { static_cast<float>(m_size.x), static_cast<float>(m_size.y) });
-    //ImGui::Image(m_textureID, { static_cast<float>(800), static_cast<float>(600) });
-    ImGui::End();
-    return;
 }

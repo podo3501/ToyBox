@@ -72,6 +72,12 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
+    <ClCompile Include="MainWindow\EditWindowFactory.cpp">
+      <Filter>MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditTextArea.cpp">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -128,6 +134,12 @@
       <Filter>MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.h">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\EditWindowFactory.h">
+      <Filter>MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditTextArea.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
   </ItemGroup>

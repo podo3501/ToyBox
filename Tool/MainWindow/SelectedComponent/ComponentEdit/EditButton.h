@@ -7,10 +7,9 @@ class EditButton : public EditWindow
 public:
 	~EditButton();
 	EditButton() = delete;
-	EditButton(Button* button, IRenderer* renderer, CommandList* cmdList) noexcept;
+	EditButton(Button* button, CommandList* cmdList) noexcept;
 
 protected:
-	virtual void UpdateComponent() override;
 	virtual void RenderComponent() override;
 
 private:

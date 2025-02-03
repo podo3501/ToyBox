@@ -24,7 +24,7 @@ void ToyTestFixture::SetUp()
 	RECT rc{0, 0, 800, 600};
 	EXPECT_TRUE(m_window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
 	const auto& outputSize = m_window->GetOutputSize();
-	InitializeConfig(L"ToyTest/TestResources/", outputSize);
+	InitializeConfig(L"Resources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 	InputManager::Initialize(hwnd);
 	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };

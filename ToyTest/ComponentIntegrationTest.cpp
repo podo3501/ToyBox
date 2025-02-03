@@ -60,7 +60,7 @@ namespace ComponentTest
 		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid1({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid3({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop }, L"L< Hangle >테스트 입니다!< / Hangle>")));
 		EXPECT_TRUE(VerifyClone(CreateSampleButton1({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleButton3({ { 220, 190 }, Origin::LeftTop })));
 	}

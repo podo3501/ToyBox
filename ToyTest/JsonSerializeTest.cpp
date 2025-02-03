@@ -71,10 +71,10 @@ namespace JsonSerializeTest
 	TEST_F(ToyTestFixture, TestClassContainer)	
 	{
 		UserComponent wData(true);
-		JsonFile::Write(wData, L"UI/Data/JsonSerializeTest.json");
+		JsonFile::Write(wData, L"Test/Data/JsonSerializeTest.json");
 
 		UserComponent rData(false);
-		JsonFile::Read(L"UI/Data/JsonSerializeTest.json", rData);
+		JsonFile::Read(L"Test/Data/JsonSerializeTest.json", rData);
 
 		EXPECT_TRUE(wData == rData);
 	}

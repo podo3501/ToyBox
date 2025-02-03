@@ -8,12 +8,12 @@
 
 using json = nlohmann::json;
 
-bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"UI/Data/WriteReadTest.json")
+bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"Test/Data/WriteReadTest.json")
 {
-	JsonFile::WriteComponent(write, L"UI/Data/JOPTest.json");
+	JsonFile::WriteComponent(write, L"Test/Data/JOPTest.json");
 
 	unique_ptr<UIComponent> read;
-	JsonFile::ReadComponent(L"UI/Data/JOPTest.json", read);
+	JsonFile::ReadComponent(L"Test/Data/JOPTest.json", read);
 
 	EXPECT_TRUE(*write == *read);
 
