@@ -4,6 +4,7 @@
 #include "../Component/ImageGrid1.h"
 #include "../Component/ImageGrid3.h"
 #include "../Component/ImageGrid9.h"
+#include "../Component/TextArea.h"
 #include "../Include/IRenderer.h"
 
 AttachComponentCommand::AttachComponentCommand(UIComponent* parent,
@@ -329,3 +330,20 @@ void SetSourceAndDividerCommand::PostMerge(unique_ptr<Command> other) noexcept
 	auto otherCmd = static_cast<SetSourceAndDividerCommand*>(other.get());
 	m_record.current = otherCmd->m_record.current;
 }
+
+//////////////////////////////////////////////////////////////////
+
+SetTextCommand::SetTextCommand(TextArea* textArea, const wstring& text) noexcept :
+	Command{ textArea },
+	m_textArea{ textArea },
+	m_record{ text }
+{}
+
+bool SetTextCommand::Execute()
+{
+	m_record.previous = m_textArea->GetText();
+	return m_textArea->SetText(m_record.current);
+}
+
+bool SetTextCommand::Undo() { return m_textArea->SetText(m_record.previous); }
+bool SetTextCommand::Redo() { return m_textArea->SetText(m_record.current); }

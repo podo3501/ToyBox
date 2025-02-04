@@ -4,9 +4,9 @@
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
-#include "../EditUtility.h"
+#include "../../EditUtility.h"
 #include "../Toy/InputManager.h"
-#include "../../Utility.h"
+#include "../../../Utility.h"
 #include "../Toy/Utility.h"
 
 enum class OnDrag

@@ -19,6 +19,8 @@ public:
 	virtual bool SetDatas(IGetValue* getValue) override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
+	bool SetText(const wstring& text);
+	inline const wstring& GetText() const noexcept { return m_text; }
 	void SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept;
 
 protected:
@@ -28,6 +30,9 @@ protected:
 	virtual void ImplementRender(IRender* render) const override;
 
 private:
+	bool ArrangeText(const wstring& text);
+
+	IGetValue* m_getValue;
 	Vector2 m_posByResolution{};
 	wstring m_text{};
 	map<wstring, wstring> m_fontFileList;

@@ -1,5 +1,5 @@
 template <typename TargetType>
-TargetType ComponentCast(UIComponent* component) 
+TargetType ComponentCast(UIComponent* component)
 {
     if (!component) return nullptr;
     ComponentID typeId = component->GetTypeID();

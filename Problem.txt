@@ -89,6 +89,14 @@ MakeSpriteFont "맑은 고딕" MaleunGothicS16.spritefont /FontSize:16 /Characte
  그냥 옵션 없이 실행하면 한글 폰트임에도 영어와 기호 옵션만 나온다.
  /FastPack을 안하면 실행이 끝날때까지 4시간 정도 걸린다.
 
+ 한글 spritefont 만들어서 한글 출력하기
+한글 입력 하는 방법 찾고 있었음. 깃헙에서 검색해서 괜찮은거 붙일예정
+https://github.com/search?q=hangul+ime&type=repositories
+MakeSpriteFont "굴림 보통" hangle.spritefont /FontSize:32 /CharacterRegion:0xAC00-0xD7A3
+MakeSpriteFont.exe MyFont.ttf MyFont.spritefont /CharacterRegion:0xAC00-0xD7A3 /CharacterRegion:0x0020-0x007E
+MakeSpriteFont "맑은 고딕" MaleunGothicS16.spritefont /FontSize:16 /CharacterRegion:0xAC00-0xD7A3 /CharacterRegion:0x0020-0x007E
+ /FastPack
+
  DirectXTK12와 imgui를 붙일때 주의점은 example에서 보면 ImGui_ImplDX12_Init 이 함수를 호출할때 
  DXGI_FORMAT_R8G8B8A8_UNORM 으로 호출하는데 기본 DirectXTK12설정은 DXGI_FORMAT_B8G8R8A8_UNORM
  로 되어 있다. 설정을 자신의 백버퍼에 맞게 맞추어 줘야 한다. 버퍼가 2개인데 3개로 설정해도 돌아가긴 한다.

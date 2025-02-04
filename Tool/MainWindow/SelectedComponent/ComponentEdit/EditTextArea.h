@@ -1,5 +1,5 @@
 #pragma once
-#include "../EditWindow.h"
+#include "EditWindow.h"
 
 class TextArea;
 class EditTextArea : public EditWindow

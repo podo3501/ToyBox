@@ -3,6 +3,7 @@
 #include "../../Utility.h"
 #include "../../InputManager.h"
 #include "../JsonOperation.h"
+#include "ImageGrid1.h"
 
 using enum ButtonState;
 
@@ -54,6 +55,8 @@ bool Button::SetImage(const UILayout& layout,
 	AddComponentAndEnable(ButtonState::Hover, move(hover), false);
 	AddComponentAndEnable(ButtonState::Pressed, move(pressed), false);
 
+	SetAttachmentState(AttachmentState::Detach);
+
 	return true;
 }
 
@@ -69,7 +72,7 @@ void Button::SetState(ButtonState state) noexcept
 
 bool Button::ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept
 {
-	if (!m_state) //로딩했을때 처음에는 값이 없기 때문에 값을 Normal로 정해준다.
+	if (!m_state)
 	{
 		SetState(Normal);
 		return true;
@@ -77,22 +80,16 @@ bool Button::ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept
 
 	const auto& mouseTracker = InputManager::GetMouse();
 	const XMINT2& relativeMousePos = mouseTracker.GetPosition() - absolutePosition;
-	bool isArea = IsArea(relativeMousePos);
-
-	ButtonState state{ *m_state };
-	if (!isArea)
-		state = Normal;
-	else
+	if (!IsArea(relativeMousePos))
 	{
-		if (IsInputAction(MouseButton::Left, KeyState::Pressed) ||
-			state == Pressed && IsInputAction(MouseButton::Left, KeyState::Held))
-			state = Pressed;
-		else
-			state = Hover;
+		SetState(Normal);
+		return true;
 	}
 
-	SetState(state);
+	bool isPressed = IsInputAction(MouseButton::Left, KeyState::Pressed);
+	bool isHeld = IsInputAction(MouseButton::Left, KeyState::Held);
 
+	SetState((isPressed || (*m_state == Pressed && isHeld)) ? Pressed : Hover);
 	return true;
 }
 
@@ -105,8 +102,13 @@ void Button::ChangeSize(const XMUINT2& size) noexcept
 
 void Button::AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable) noexcept
 {
-	component->SetEnable(enable);
-	m_images.emplace(btnState, component.get());
+	UIComponent* rawComponent = component.get();
+	rawComponent->SetEnable(enable);
+
+	auto grid1 = ComponentCast<ImageGrid1*>(rawComponent);
+	rawComponent->SetAttachmentState(grid1 ? AttachmentState::Attach : AttachmentState::Disable);
+
+	m_images.emplace(btnState, rawComponent);
 	UIEx(this).AttachComponent(move(component), {});
 }
 

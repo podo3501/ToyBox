@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ComponentSelector.h"
+#include "SelectedComponent/ComponentEdit/EditWindow.h"
 #include "SelectedComponent/ComponentTooltip.h"
-#include "SelectedComponent/EditWindow.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"

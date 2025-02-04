@@ -13,6 +13,7 @@ enum class CommandID : int
 	SetSource39,
 	SetFilename,
 	SetSourceAndDivider,
+	SetText,
 	Unknown
 };
 

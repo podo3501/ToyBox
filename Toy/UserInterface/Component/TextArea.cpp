@@ -12,12 +12,14 @@ using ordered_json = nlohmann::ordered_json;
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
 TextArea::~TextArea() = default;
-TextArea::TextArea()
+TextArea::TextArea() :
+	m_getValue{ nullptr }
 {}
 
 TextArea::TextArea(const TextArea& other) :
 	UIComponent{ other }
 {
+	m_getValue = other.m_getValue;
 	m_posByResolution = other.m_posByResolution;
 	m_text = other.m_text;
 	m_fontFileList = other.m_fontFileList;
@@ -50,56 +52,62 @@ bool TextArea::LoadResources(ILoadData* load)
 	return true;
 }
 
-bool TextArea::SetDatas(IGetValue* getValue)
+bool TextArea::ArrangeText(const wstring& text)
 {
 	TextProperty textProperty;
-	ReturnIfFalse(Parser(m_text, textProperty));
+	ReturnIfFalse(Parser(text, textProperty));
 
+	m_lines.clear();
 	Rectangle usableArea = XMUINT2ToRectangle(GetSize());
 	Vector2 startPos{};
 	float lineSpacing = 0.0f;
 	long maxHeight = 0;
 
 	vector<TextData> textList = textProperty.GetTextList();
-	auto w = textList.begin();
-	while (w != textList.end())
+	for (auto& word : textList)
 	{
-		auto& word = *w;
 		const auto& fontIdx = m_font[word.fontStyle];
-		const Rectangle& wordRect = getValue->MeasureText(fontIdx, word.text, startPos);
-		lineSpacing = max(lineSpacing, getValue->GetLineSpacing(fontIdx));
+		const Rectangle& wordRect = m_getValue->MeasureText(fontIdx, word.text, startPos);
+		lineSpacing = max(lineSpacing, m_getValue->GetLineSpacing(fontIdx));
 		maxHeight = max(maxHeight, wordRect.height);
 
 		if (word.text == L"br")
 		{
-			startPos.x = 0.0f;
-			startPos.y += lineSpacing;
-			w++;
+			startPos = { 0.0f, startPos.y + lineSpacing };
 			continue;
 		}
+
+		if (usableArea.height < wordRect.y + wordRect.height)
+			break; // 강제 종료
+
+		if (usableArea.width < wordRect.x + wordRect.width)
+			startPos = { 0.0f, startPos.y + lineSpacing };
 
 		if (usableArea.Contains(wordRect))
 		{
 			word.position = startPos;
 			m_lines.push_back(word);
 			startPos.x = static_cast<float>(wordRect.x + wordRect.width);
-			w++;
-			continue;
-		}
-
-		//글자 쓰는 영역을 벗어나서 더 밑으로 글자가 찍혀야 하는 경우는 글자가 있어도 강제 종료
-		if (usableArea.height < wordRect.y + wordRect.height)
-			break;
-
-		//글자 쓰는 영역을 벗어나서 더 오른쪽으로 글자가 찍혀야 하는 경우 다음 줄로 개행	
-		if (usableArea.width < wordRect.x + wordRect.width)
-		{
-			startPos.x = 0.0f;
-			startPos.y += lineSpacing;
 		}
 	}
 
 	return true;
+}
+
+bool TextArea::SetText(const wstring& text)
+{
+	if(!ArrangeText(text)) return false;
+		
+	m_text = text;
+
+	return true;
+}
+
+bool TextArea::SetDatas(IGetValue* getValue)
+{
+	m_getValue = getValue;
+
+	return ArrangeText(m_text);
 }
 
 void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept
@@ -114,7 +122,10 @@ void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<ws
 bool TextArea::ImplementUpdatePosition(const XMINT2& position) noexcept
 {
 	if (IsDirty())
+	{
+		ArrangeText(m_text);
 		m_posByResolution = XMINT2ToVector2(GetPositionByLayout(position));
+	}
 
 	return true;
 }

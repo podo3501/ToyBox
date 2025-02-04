@@ -1,5 +1,5 @@
 #pragma once
-#include "../EditWindow.h"
+#include "EditWindow.h"
 
 class Button;
 class EditButton : public EditWindow

@@ -4,6 +4,7 @@
 struct IRenderer;
 class Command;
 class UIComponent;
+class TextArea;
 struct SourceDivider;
 
 class CommandList
@@ -24,6 +25,7 @@ public:
 	bool SetSources(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources);
 	bool SetFilename(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename);
 	bool SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider);
+	bool SetText(TextArea* textArea, const wstring& text);
 
 private:
 	unique_ptr<Command> TryMergeCommand(unique_ptr<Command> cmd) noexcept;

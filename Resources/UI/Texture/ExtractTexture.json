@@ -28,66 +28,32 @@
                     "Name": "Button_0",
                     "Layout": {
                         "Size": {
-                            "x": 631,
-                            "y": 454
+                            "x": 216,
+                            "y": 48
                         },
                         "Origin": "LeftTop"
                     },
                     "Transform": {
                         "RelativePosition": {
-                            "x": 7,
-                            "y": 11
+                            "x": 340,
+                            "y": 231
                         },
                         "Ratio": {
-                            "x": 0.006836,
-                            "y": 0.014323
+                            "x": 0.332031,
+                            "y": 0.300781
                         }
                     },
                     "Enable": true,
-                    "AttachmentState": 0,
+                    "AttachmentState": 2,
                     "Children": [
                         {
                             "Child": {
-                                "Type": "ImageGrid1",
-                                "Name": "ImageGrid1_1",
+                                "Type": "ImageGrid3",
+                                "Name": "ImageGrid3_0",
                                 "Layout": {
                                     "Size": {
-                                        "x": 631,
-                                        "y": 454
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Transform": {
-                                    "RelativePosition": {
-                                        "x": 0,
-                                        "y": 0
-                                    },
-                                    "Ratio": {
-                                        "x": 0.0,
-                                        "y": 0.0
-                                    }
-                                },
-                                "Enable": false,
-                                "AttachmentState": 0,
-                                "Children": [],
-                                "Index": 0,
-                                "Filename": "UI/SampleTexture/Sample_0.png",
-                                "Source": {
-                                    "x": 46,
-                                    "y": 138,
-                                    "width": 32,
-                                    "height": 32
-                                }
-                            }
-                        },
-                        {
-                            "Child": {
-                                "Type": "ImageGrid1",
-                                "Name": "ImageGrid1_2",
-                                "Layout": {
-                                    "Size": {
-                                        "x": 631,
-                                        "y": 454
+                                        "x": 216,
+                                        "y": 48
                                     },
                                     "Origin": "LeftTop"
                                 },
@@ -102,26 +68,153 @@
                                     }
                                 },
                                 "Enable": true,
-                                "AttachmentState": 0,
-                                "Children": [],
-                                "Index": 0,
-                                "Filename": "UI/SampleTexture/Sample_0.png",
-                                "Source": {
-                                    "x": 82,
-                                    "y": 138,
-                                    "width": 32,
-                                    "height": 32
-                                }
+                                "AttachmentState": 3,
+                                "Children": [
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_0",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 22,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 10,
+                                                "y": 82,
+                                                "width": 22,
+                                                "height": 48
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_1",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 172,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 22,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.101852,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [
+                                                {
+                                                    "Child": {
+                                                        "Type": "TextArea",
+                                                        "FontFileList": {
+                                                            "English": "UI/Font/CourierNewBoldS18.spritefont",
+                                                            "Hangle": "UI/Font/MaleunGothicS16.spritefont"
+                                                        },
+                                                        "Text": "<English><White>Test text.</White></English>",
+                                                        "Name": "TextArea_0",
+                                                        "Layout": {
+                                                            "Size": {
+                                                                "x": 110,
+                                                                "y": 30
+                                                            },
+                                                            "Origin": "LeftTop"
+                                                        },
+                                                        "Transform": {
+                                                            "RelativePosition": {
+                                                                "x": 15,
+                                                                "y": 13
+                                                            },
+                                                            "Ratio": {
+                                                                "x": 0.087209,
+                                                                "y": 0.270833
+                                                            }
+                                                        },
+                                                        "Enable": true,
+                                                        "AttachmentState": 0,
+                                                        "Children": []
+                                                    }
+                                                }
+                                            ],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 32,
+                                                "y": 82,
+                                                "width": 4,
+                                                "height": 48
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_2",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 22,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 194,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.898148,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 36,
+                                                "y": 82,
+                                                "width": 22,
+                                                "height": 48
+                                            }
+                                        }
+                                    }
+                                ]
                             }
                         },
                         {
                             "Child": {
-                                "Type": "ImageGrid1",
-                                "Name": "ImageGrid1_0",
+                                "Type": "ImageGrid3",
+                                "Name": "ImageGrid3_1",
                                 "Layout": {
                                     "Size": {
-                                        "x": 631,
-                                        "y": 454
+                                        "x": 216,
+                                        "y": 48
                                     },
                                     "Origin": "LeftTop"
                                 },
@@ -136,19 +229,274 @@
                                     }
                                 },
                                 "Enable": false,
-                                "AttachmentState": 0,
-                                "Children": [],
-                                "Index": 0,
-                                "Filename": "UI/SampleTexture/Sample_0.png",
-                                "Source": {
-                                    "x": 10,
-                                    "y": 138,
-                                    "width": 32,
-                                    "height": 32
-                                }
+                                "AttachmentState": 3,
+                                "Children": [
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_3",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 22,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 62,
+                                                "y": 82,
+                                                "width": 22,
+                                                "height": 48
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_4",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 172,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 22,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.101852,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 84,
+                                                "y": 82,
+                                                "width": 4,
+                                                "height": 48
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_5",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 22,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 194,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.898148,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 88,
+                                                "y": 82,
+                                                "width": 22,
+                                                "height": 48
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Child": {
+                                "Type": "ImageGrid3",
+                                "Name": "ImageGrid3_2",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 216,
+                                        "y": 48
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Transform": {
+                                    "RelativePosition": {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    "Ratio": {
+                                        "x": 0.0,
+                                        "y": 0.0
+                                    }
+                                },
+                                "Enable": false,
+                                "AttachmentState": 3,
+                                "Children": [
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_6",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 22,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 114,
+                                                "y": 82,
+                                                "width": 22,
+                                                "height": 48
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_7",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 172,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 22,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.101852,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 136,
+                                                "y": 82,
+                                                "width": 4,
+                                                "height": 48
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_8",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 22,
+                                                    "y": 48
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 194,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.898148,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Enable": true,
+                                            "AttachmentState": 1,
+                                            "Children": [],
+                                            "Index": 0,
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 140,
+                                                "y": 82,
+                                                "width": 22,
+                                                "height": 48
+                                            }
+                                        }
+                                    }
+                                ]
                             }
                         }
                     ]
+                }
+            },
+            {
+                "Child": {
+                    "Type": "TextArea",
+                    "FontFileList": {
+                        "English": "UI/Font/CourierNewBoldS18.spritefont",
+                        "Hangle": "UI/Font/MaleunGothicS16.spritefont"
+                    },
+                    "Text": "<English><White>Test text.</White></English>",
+                    "Name": "TextArea_1",
+                    "Layout": {
+                        "Size": {
+                            "x": 88,
+                            "y": 30
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "Transform": {
+                        "RelativePosition": {
+                            "x": 382,
+                            "y": 309
+                        },
+                        "Ratio": {
+                            "x": 0.373047,
+                            "y": 0.402344
+                        }
+                    },
+                    "Enable": true,
+                    "AttachmentState": 0,
+                    "Children": []
                 }
             }
         ]

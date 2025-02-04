@@ -137,3 +137,8 @@ bool CommandList::SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, 
 {
 	return ApplyCommand<SetSourceAndDividerCommand>(imgGridVariant, srcDivider);
 }
+
+bool CommandList::SetText(TextArea* textArea, const wstring& text)
+{
+	return ApplyCommand<SetTextCommand>(textArea, text);
+}

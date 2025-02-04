@@ -114,18 +114,24 @@ void ComponentController::SetActive(bool active) noexcept
 	m_active = active;
 }
 
+bool ComponentController::ExecuteShortcutKeyCommands() noexcept
+{
+	if (!IsWindowFocus(m_mainWnd)) return false;
+
+	return CheckDetachComponent() ||
+		CheckDeleteComponent() ||
+		CheckCloneComponent() ||
+		CheckUndoComponent() ||
+		CheckRedoComponent() ||
+		CheckAttachComponent();
+}
+
 bool ComponentController::Update() noexcept
 {
 	if (!m_active) return true;
 
-	CheckDetachComponent();
-	CheckDeleteComponent();
-	CheckCloneComponent();
-	CheckUndoComponent();
-	CheckRedoComponent();
-	if (!CheckAttachComponent()) //Attach 할때 select 되는경우가 있어서
+	if(!ExecuteShortcutKeyCommands())
 		m_selector->Update();	
-	
 	m_floater->Excute();
 
 	return true;

@@ -68,60 +68,79 @@ XMFLOAT4 GetColor(const wstring& color) noexcept
 	return fColor;
 }
 
+bool ProcessTag(const wstring& tag, stack<wstring>& tagStack, wstring& fontStyle, XMFLOAT4& color)
+{
+	if (tag.empty()) return false;
+
+	if (tag[0] == '/') // 닫는 태그
+	{
+		wstring closingTag = tag.substr(1);
+		if (tagStack.empty() || tagStack.top() != closingTag)
+			return false; // 태그 불일치
+
+		tagStack.pop();
+		if (IsFontStyle(closingTag)) fontStyle.clear();
+		if (IsColor(closingTag)) color = {};
+	}
+	else if (tag == L"br") // 줄바꿈 태그
+	{
+		return true; // 줄바꿈을 별도로 처리
+	}
+	else // 여는 태그
+	{
+		tagStack.push(tag);
+		if (IsFontStyle(tag)) fontStyle = tag;
+		if (IsColor(tag)) color = GetColor(tag);
+	}
+
+	return true;
+}
+
 bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept
 {
 	stack<wstring> tagStack;
-	wstring fontStyle{};
-	XMFLOAT4 color{};
+	wstring fontStyle;
+	XMFLOAT4 color;
 
 	auto c = context.begin();
 	while (c != context.end())
 	{
-		//tag처리
-		if (*c == '<') {
+		if (*c == '<') // 태그 시작
+		{
 			auto tagStart = c + 1;
 			auto tagEnd = find(c, context.end(), '>');
-			wstring tag = move(wstring(tagStart, tagEnd));
-			if (tag[0] == '/')
-			{
-				tag.erase(0, 1);
-				if (tagStack.top() != tag)
-					return false;
-				if (IsFontStyle(tag)) fontStyle.clear();
-				if (IsColor(tag)) color = {};
-				tagStack.pop();
-			}
-			else if (tag == L"br")	//줄바꿈. L"br"로 저장하고 나중에 줄바꿈 처리한다.
-			{
+			if (tagEnd == context.end()) return false; // 잘못된 태그
+
+			wstring tag(tagStart, tagEnd);
+			c = tagEnd + 1; // 태그 끝 다음 문자로 이동
+
+			if (!ProcessTag(tag, tagStack, fontStyle, color))
+				return false; // 태그 처리 실패 시 종료
+
+			if (tag == L"br")
 				outTextProperty.Set(fontStyle, color, tag);
-			}
-			else
-			{
-				tagStack.push(tag);
-				if (IsFontStyle(tag)) fontStyle = tag;
-				if (IsColor(tag)) color = GetColor(tag);
-			}
-			c = tagEnd + 1;
-			continue;	//tag가 연속적으로 나올 수 있기 때문에 처음으로 돌아간다.
+
+			continue; // 태그 처리 후 다음 루프로 이동
 		}
 
+		// 일반 텍스트 처리
 		size_t start = distance(context.begin(), c);
 		size_t end = context.find_first_of(L" <", start);
 
-		size_t dist = end - start;
-		outTextProperty.Set(fontStyle, color, context.substr(start, dist));
-		c += dist;
+		if (end == wstring::npos) // <태크를 못 찾으면 이상한 것
+			return false;
 
-		if ((*c) == ' ')	//공백은 화면에 출력해야 한다.
+		outTextProperty.Set(fontStyle, color, context.substr(start, end - start));
+		c = context.begin() + end; // 커서 위치 업데이트
+
+		if (*c == ' ') // 공백 처리
 		{
 			outTextProperty.AddText(L" ");
-			c++;
+			++c;
 		}
 	}
 
-	if (!tagStack.empty()) return false;
-
-	return true;
+	return tagStack.empty(); // 태그가 남아 있으면 false
 }
 
 //양 끝단을 빼고 중간길이를 구한다음 총 4점을 리턴한다.

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "SampleComponent.h"
 #include "../UILayout.h"
 #include "ImageGrid1.h"

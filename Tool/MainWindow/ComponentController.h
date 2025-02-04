@@ -20,6 +20,7 @@ public:
 	void SetActive(bool active) noexcept;
 
 private:
+	bool ExecuteShortcutKeyCommands() noexcept;
 	bool CheckAttachComponent() noexcept;
 	bool CheckDetachComponent() noexcept;
 	bool CheckDeleteComponent() noexcept;

@@ -197,3 +197,22 @@ private:
 	ImageGrid39Variant m_imgGridVariant;
 	CommandRecord<SourceDivider> m_record;
 };
+
+class TextArea;
+class SetTextCommand : public Command
+{
+public:
+	SetTextCommand(TextArea* textArea, const wstring& text) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetText; }
+	virtual bool IsMerge(Command*) noexcept { return false; }
+
+private:
+	CommandRecord<wstring> m_record;
+	TextArea* m_textArea;
+};
