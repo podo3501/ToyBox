@@ -17,6 +17,8 @@ public:
 	XMUINT2 GetTotalChildSize() noexcept;
 
 private:
+	UIComponent* GetRoot(UIComponent* component) const noexcept;
+	UIComponent* GetRegionRoot(UIComponent* component) const noexcept;
 	unique_ptr<UIComponent> DetachChild(UIComponent* parent, UIComponent* detach) noexcept;
 	Rectangle GetTotalChildSize(const UIComponent* component) noexcept;
 

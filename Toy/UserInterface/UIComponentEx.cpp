@@ -47,14 +47,34 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	return { move(DetachChild(parent, m_component)), parent };
 }
 
+UIComponent* UIComponentEx::GetRoot(UIComponent* component) const noexcept
+{
+	UIComponent* current = component;
+	while (current->m_parent != nullptr)
+		current = current->m_parent;
+
+	return current;
+}
+
+UIComponent* UIComponentEx::GetRegionRoot(UIComponent* component) const noexcept
+{
+	UIComponent* current = component;
+	while (current->GetRegion() == false && current->m_parent != nullptr)
+		current = current->m_parent;
+
+	return current;
+}
+
 UIComponent* UIComponentEx::GetComponent(const string& name) noexcept
 {
-	UIComponent* root = m_component->GetRoot();
+	UIComponent* root = GetRegionRoot(m_component);
 	UIComponent* foundComponent = nullptr;
 
-	root->ForEachChild([&foundComponent, &name](UIComponent* child) {
+	root->ForEachChildBool([&foundComponent, &name, root](UIComponent* child) {
 		if (child->GetName() == name)
 			foundComponent = child;
+		if (root != child && child->GetRegion()) return false;
+		return true;
 		});
 
 	return foundComponent;

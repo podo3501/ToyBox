@@ -13,7 +13,7 @@ int MainWindow::m_mainWindowIndex = 0;
 MainWindow::~MainWindow()
 {
 	m_renderer->RemoveRenderTexture(m_textureID);
-	m_renderer->RemoveRenderComponent(m_panel.get());
+	m_renderer->RemoveRenderComponent(m_panel.get());// 아마 이 줄이 필요 없을꺼 같은데.
 	m_renderer->RemoveImguiComponent(this);
 }
 
@@ -23,6 +23,9 @@ MainWindow::MainWindow(IRenderer* renderer) :
 	m_panel{ make_unique<Panel>("Main", 	UILayout(RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop)) },
 	m_controller{ make_unique<ComponentController>(renderer, m_panel.get(), m_name) }
 {
+	//AddRenderComponent가 없는것은 main 화면에서 보여주는게 아니라 TextureRendering해서 보여주는거기
+	// 때문에 Render에 연결시키지 않는다.
+	m_panel->SetRegion(true);
 	m_renderer->AddImguiComponent(this);
 }
 

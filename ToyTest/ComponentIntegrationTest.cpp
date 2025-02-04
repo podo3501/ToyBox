@@ -71,6 +71,24 @@ namespace ComponentTest
 		return components.size();
 	}
 
+	TEST_F(IntegrationTest, GetComponent)
+	{
+		unique_ptr<UIComponent> img2 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		unique_ptr<UIComponent> img1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		auto img2Ptr = img2.get();
+		auto img1Ptr = img1.get();
+		UIEx(img1).AttachComponent(move(img2), { 100, 100 });
+		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
+
+		img1Ptr->Rename("image1"); img1Ptr->SetRegion(true);
+		img2Ptr->Rename("image2");
+		
+		EXPECT_TRUE(UIEx(m_panel).GetComponent("image1"));
+		EXPECT_FALSE(UIEx(m_panel).GetComponent("image2"));
+		EXPECT_TRUE(UIEx(img1Ptr).GetComponent("image2"));
+		EXPECT_FALSE(UIEx(img1Ptr).GetComponent("Main"));
+	}
+
 	TEST_F(IntegrationTest, GetComponents)
 	{
 		unique_ptr<UIComponent> img9_0 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });

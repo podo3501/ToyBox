@@ -68,6 +68,8 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	inline const string& GetName() const noexcept { return m_name; }
 	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
 	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }
+	inline void SetRegion(bool region) noexcept { m_region = region; }
+	inline bool GetRegion() const noexcept { return m_region; }
 
 	inline UIComponentEx& GetUIComponentEx() noexcept
 	{
@@ -84,12 +86,12 @@ private:
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
-	UIComponent* GetRoot() noexcept;
 	void MarkDirty() noexcept;
 
 	void ForEachChild(function<void(UIComponent*)> func) noexcept;
+	void ForEachChildBool(function<bool(UIComponent*)> func) noexcept;
 	void ForEachChildConst(function<void(const UIComponent*)> func) const noexcept;
-	void ForEachChildBFS(std::function<void(UIComponent*)> func) noexcept;
+	void ForEachChildBFS(function<void(UIComponent*)> func) noexcept;
 
 	string m_name;
 	UILayout m_layout;
@@ -97,6 +99,7 @@ private:
 
 	bool m_enable{ true };
 	bool m_isDirty{ true };
+	bool m_region{ false }; //이 노드 이후는 앞 노드들과 이름이 중복되어도 상관없다. UI에서 네임스페이스 역할을 해 준다.
 	AttachmentState m_attachmentState{ AttachmentState::All };
 	
 	UIComponent* m_parent{ nullptr };

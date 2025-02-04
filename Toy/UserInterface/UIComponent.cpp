@@ -156,6 +156,24 @@ bool UIComponent::IsUniqueName(const string& name, UIComponent* self) noexcept
 	return true;
 }
 
+//기존 이름에 _숫자 가 붙어있으면 이름에 _를 리턴 아니면 타입이름에_를 붙여서 리턴
+static string GetBaseName(const string& name, ComponentID id)
+{
+	if (name.empty())
+		return EnumToString(id) + "_";
+	
+	size_t pos = name.rfind('_');
+	if (pos == string::npos)
+		return name + "_";
+
+	string baseName = name.substr(0, pos + 1);
+	string afterUnderline = name.substr(pos + 1);
+	if (ranges::all_of(afterUnderline, ::isdigit)) //_xx xx가 전부 숫자라면
+		return baseName;
+
+	return name + "_";
+}
+
 void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 {
 	//붙는 쪽도 붙여지는 쪽도 유니크 이름이어야 한다.
@@ -164,7 +182,7 @@ void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 		};
 
 	int n = 0;
-	string baseName = EnumToString(addable->GetTypeID()) + "_";
+	auto baseName = GetBaseName(addable->m_name, addable->GetTypeID());
 	string curName{};
 	do {
 		curName = baseName + to_string(n++);
@@ -242,15 +260,6 @@ XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept
 	return position + m_layout.GetPosition();
 }
 
-UIComponent* UIComponent::GetRoot() noexcept
-{
-	UIComponent* current = this;
-	while (current->m_parent != nullptr)
-		current = current->m_parent;
-	
-	return current;
-}
-
 void UIComponent::ForEachChild(function<void(UIComponent*)> func) noexcept
 {
 	func(this);
@@ -258,6 +267,18 @@ void UIComponent::ForEachChild(function<void(UIComponent*)> func) noexcept
 	{
 		if (child)
 			child->ForEachChild(func);
+	}
+}
+
+void UIComponent::ForEachChildBool(function<bool(UIComponent*)> func) noexcept
+{
+	if (!func(this))
+		return;
+
+	for (auto& child : m_children)
+	{
+		if (child)
+			child->ForEachChildBool(func);
 	}
 }
 

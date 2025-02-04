@@ -295,7 +295,7 @@ namespace ComponentTest
 		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
-		Panel* ptrPanel = m_panel->GetComponent<Panel*>("Panel_0");
+		Panel* ptrPanel = m_panel->GetComponent<Panel*>("Panel2_0");
 		ptrPanel->ChangeOrigin(Origin::LeftTop);
 
 		outList.clear();

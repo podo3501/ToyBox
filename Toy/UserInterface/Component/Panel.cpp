@@ -2,6 +2,7 @@
 #include "Panel.h"
 #include "../../Utility.h"
 #include "../JsonOperation.h"
+#include "../Include/IRenderer.h"
 
 Panel::Panel() {};
 Panel::~Panel() = default;
@@ -43,4 +44,13 @@ void Panel::SerializeIO(JsonOperation& operation)
 {
     //operation->Process("Area", m_area);
     UIComponent::SerializeIO(operation);
+}
+
+unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer)
+{
+    unique_ptr<UIComponent> panel = make_unique<Panel>(name, layout);
+    panel->SetRegion(true);
+    renderer->AddRenderComponent(panel.get());
+
+    return panel;
 }

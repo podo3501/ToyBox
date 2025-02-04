@@ -28,8 +28,7 @@ void ToyTestFixture::SetUp()
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 	InputManager::Initialize(hwnd);
 	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
-	m_panel = make_unique<Panel>("Main", layout);
-	m_renderer->AddRenderComponent(m_panel.get());
+	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
 }
 
 void ToyTestFixture::TearDown()

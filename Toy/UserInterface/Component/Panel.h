@@ -1,6 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
+struct IRenderer;
 class JsonOperation;
 
 class Panel : public UIComponent
@@ -26,3 +27,5 @@ protected:
 private:
     Rectangle m_area{};
 };
+
+unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer);
