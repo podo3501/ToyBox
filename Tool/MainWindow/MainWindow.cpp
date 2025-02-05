@@ -25,7 +25,7 @@ MainWindow::MainWindow(IRenderer* renderer) :
 {
 	//AddRenderComponent가 없는것은 main 화면에서 보여주는게 아니라 TextureRendering해서 보여주는거기
 	// 때문에 Render에 연결시키지 않는다.
-	m_panel->SetRegion(true);
+	m_panel->SetBRegion(true);
 	m_renderer->AddImguiComponent(this);
 }
 

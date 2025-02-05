@@ -58,9 +58,23 @@ UIComponent* UIComponentEx::GetRoot(UIComponent* component) const noexcept
 
 UIComponent* UIComponentEx::GetRegionRoot(UIComponent* component) const noexcept
 {
+	//UIComponent* current = component;
+	//if (current->m_parent == nullptr)
+	//	return current;
+
+	//do
+	//{
+	//	if (!current->m_parent) break;
+	//	current = current->m_parent;
+	//} while (!current->GetRegion());
+
 	UIComponent* current = component;
-	while (current->GetRegion() == false && current->m_parent != nullptr)
+	while (!current->GetBRegion())
+	{
+		if (!current->m_parent) break;
 		current = current->m_parent;
+	}
+		
 
 	return current;
 }
@@ -70,10 +84,10 @@ UIComponent* UIComponentEx::GetComponent(const string& name) noexcept
 	UIComponent* root = GetRegionRoot(m_component);
 	UIComponent* foundComponent = nullptr;
 
-	root->ForEachChildBool([&foundComponent, &name, root](UIComponent* child) {
-		if (child->GetName() == name)
-			foundComponent = child;
-		if (root != child && child->GetRegion()) return false;
+	root->ForEachChildBool([&foundComponent, &name, root](UIComponent* component) {
+		if (root != component && component->GetBRegion()) return false;
+		if (component->GetName() == name)
+			foundComponent = component;
 		return true;
 		});
 

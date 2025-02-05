@@ -148,6 +148,22 @@ void SetSizeCommand::PostMerge(unique_ptr<Command> other) noexcept
 
 //////////////////////////////////////////////////////////////////
 
+SetRegionCommand::SetRegionCommand(UIComponent* component, bool region) noexcept :
+	Command{ component }, m_record{ region }
+{}
+
+bool SetRegionCommand::Execute()
+{
+	m_record.previous = GetComponent()->GetBRegion();
+	GetComponent()->SetBRegion(m_record.current);
+	return true;
+}
+
+bool SetRegionCommand::Undo() { GetComponent()->SetBRegion(m_record.previous); return true; }
+bool SetRegionCommand::Redo() { GetComponent()->SetBRegion(m_record.current); return true; }
+
+//////////////////////////////////////////////////////////////////
+
 RenameCommand::RenameCommand(UIComponent* component, const string& name) noexcept :
 	Command{ component }, m_record{ name }
 {}

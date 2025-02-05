@@ -8,6 +8,7 @@ enum class CommandID : int
 	DetachComponent,
 	SetRelativePosition,
 	SetSize,
+	SetRegion,
 	Rename,
 	SetSource,
 	SetSource39,

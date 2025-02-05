@@ -68,8 +68,10 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	inline const string& GetName() const noexcept { return m_name; }
 	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
 	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }
-	inline void SetRegion(bool region) noexcept { m_region = region; }
-	inline bool GetRegion() const noexcept { return m_region; }
+	inline void SetBRegion(bool region) noexcept { m_bRegion = region; }
+	inline bool GetBRegion() const noexcept { return m_bRegion; }
+	inline void SetRegion(const string& region) noexcept { m_region = region; }
+	inline const string& GetRegion() const noexcept { return m_region; }
 
 	inline UIComponentEx& GetUIComponentEx() noexcept
 	{
@@ -99,7 +101,8 @@ private:
 
 	bool m_enable{ true };
 	bool m_isDirty{ true };
-	bool m_region{ false }; //이 노드 이후는 앞 노드들과 이름이 중복되어도 상관없다. UI에서 네임스페이스 역할을 해 준다.
+	bool m_bRegion{ false }; //이 노드 이후는 앞 노드들과 이름이 중복되어도 상관없다. UI에서 네임스페이스 역할을 해 준다.
+	string m_region; //UI에서 네임스페이스 역할을 한다. GetRegionComponent로 찾을 수 있다.
 	AttachmentState m_attachmentState{ AttachmentState::All };
 	
 	UIComponent* m_parent{ nullptr };

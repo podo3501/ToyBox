@@ -29,8 +29,11 @@ bool EditInteger(const string& label, T& value)
 
 struct SourceDivider;
 
+bool EditPosition(XMINT2& position);
+bool EditSize(XMUINT2& size);
 bool EditRectangle(const string& label, Rectangle& rect);
 bool EditRectangle(const string& label, Property<Rectangle>& rect);
+bool EditCheckbox(const string& label, bool& check);
 bool EditText(const string& label, Property<string>& text);
 void EditText(const string& label, const wstring& text);
 bool EditFilename(const string& label, wstring& filename);

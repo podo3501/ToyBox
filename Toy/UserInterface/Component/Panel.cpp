@@ -49,7 +49,7 @@ void Panel::SerializeIO(JsonOperation& operation)
 unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer)
 {
     unique_ptr<UIComponent> panel = make_unique<Panel>(name, layout);
-    panel->SetRegion(true);
+    panel->SetBRegion(true);
     renderer->AddRenderComponent(panel.get());
 
     return panel;

@@ -20,6 +20,8 @@ UIComponent::UIComponent(const UIComponent& other)
 	m_name = other.m_name;
 	m_layout = other.m_layout;
 	m_enable = other.m_enable;
+	m_bRegion = other.m_bRegion;
+	m_region = other.m_region;
 	m_attachmentState = other.m_attachmentState;
 	m_transform = other.m_transform;
 
@@ -43,8 +45,8 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetTypeID() != o.GetTypeID()) return false;
 
-	ReturnIfFalse(tie(m_name, m_layout, m_enable, m_attachmentState, m_transform) ==
-		tie(o.m_name, o.m_layout, o.m_enable, m_attachmentState, o.m_transform));
+	ReturnIfFalse(tie(m_name, m_layout, m_enable, m_bRegion, m_region, m_attachmentState, m_transform) ==
+		tie(o.m_name, o.m_layout, o.m_enable, o.m_bRegion, o.m_region, m_attachmentState, o.m_transform));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
 	ReturnIfFalse(m_children.size() == o.m_children.size());
 	ReturnIfFalse(ranges::equal(m_children, o.m_children, [](const auto& lhs, const auto& rhs) {
@@ -56,6 +58,8 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 UIComponent::UIComponent(UIComponent&& o) noexcept :
 	m_name{ move(o.m_name) },
 	m_layout{ move(o.m_layout) },
+	m_bRegion{ move(o.m_bRegion) },
+	m_region{ move(o.m_region) },
 	m_transform{ move(o.m_transform) },
 	m_children{ move(o.m_children) }
 {}
@@ -150,7 +154,13 @@ bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& r
 
 bool UIComponent::IsUniqueName(const string& name, UIComponent* self) noexcept
 {
-	UIComponent* findComponent = GetUIComponentEx().GetComponent(name);
+	//자신이 RegionEntry이면 소속은 더 위에 Region에 있기 때문에 위에서 검사하도록 한다.
+	bool isRegionEntry = (self->GetBRegion() && self->m_parent);
+	auto& componentEx = isRegionEntry ? GetUIComponentEx() : self->GetUIComponentEx();
+	//auto& componentEx = self->GetRegion() ? GetUIComponentEx() : self->GetUIComponentEx();
+	//auto& componentEx = GetUIComponentEx();
+	UIComponent* findComponent = componentEx.GetComponent(name);
+	
 	if (findComponent && findComponent != self) return false;
 
 	return true;
@@ -181,12 +191,17 @@ void UIComponent::GenerateUniqueName(UIComponent* addable) noexcept
 		return !(IsUniqueName(name, addable) && addable->IsUniqueName(name, addable));
 		};
 
+	const string& addableName = addable->m_name;
+	if (!addableName.empty() && !isNotUnique(addableName)) //현재 이름이 유니크 하면 바꾸지 않는다.
+		return; 
+
 	int n = 0;
-	auto baseName = GetBaseName(addable->m_name, addable->GetTypeID());
+	auto baseName = GetBaseName(addableName, addable->GetTypeID());
 	string curName{};
 	do {
 		curName = baseName + to_string(n++);
 	} while (isNotUnique(curName));
+
 	addable->Rename(curName);
 
 	for (auto& child : addable->m_children)
@@ -209,6 +224,8 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 	operation.Process("Layout", m_layout);
 	operation.Process("Transform", m_transform);
 	operation.Process("Enable", m_enable);
+	operation.Process("BRegion", m_bRegion);
+	operation.Process("Region", m_region);
 	operation.Process("AttachmentState", m_attachmentState);
 	operation.Process("Children", m_children);
 	

@@ -4,16 +4,41 @@
 #include "../Dialog.h"
 #include "../Toy/UserInterface/UIType.h"
 
+template<typename T>
+static bool EditIntegerFields(vector<pair<const char*, T&>> fields)
+{
+    bool modify = false;
+    for (auto& [label, value] : fields)
+        modify |= EditInteger(label, value);
+
+    return modify;
+}
+
+bool EditPosition(XMINT2& position)
+{
+    return EditIntegerFields<int32_t>({
+        {"X", position.x},
+        {"Y", position.y}
+        });
+}
+
+bool EditSize(XMUINT2& size)
+{
+    return EditIntegerFields<uint32_t>({
+        {"Width", size.x},
+        {"Height", size.y}
+        });
+}
+
 bool EditRectangle(const string& label, Rectangle& rect)
 {
     ImGui::Text("%s", label.c_str());
     ImGui::PushID(label.c_str());
 
-    bool modify{ false };
-    modify |= EditInteger("X", rect.x);
-    modify |= EditInteger("Y", rect.y);
-    modify |= EditInteger("Width", rect.width);
-    modify |= EditInteger("Height", rect.height);
+    bool modify = EditIntegerFields<long>({
+        {"X", rect.x}, {"Y", rect.y},
+        {"Width", rect.width}, {"Height", rect.height}
+        });
 
     ImGui::PopID();
 
@@ -31,6 +56,11 @@ bool EditRectangle(const string& label, Property<Rectangle>& rect)
     }
 
     return false;
+}
+
+bool EditCheckbox(const string& label, bool& check)
+{
+    return ImGui::Checkbox(label.c_str(), &check);
 }
 
 bool EditText(const string& label, Property<string>& text)
@@ -97,10 +127,10 @@ bool EditFilename(const string& label, Property<wstring>& filename)
     return false;
 }
 
-static constexpr array<string_view, 4> DividerLabel = { "Left", "Right", "Top", "Botton" };
-
 static bool EditList(const string& listLabel, vector<int>& list)
 {
+    static constexpr array<string_view, 4> DividerLabel = { "Left", "Right", "Top", "Botton" };
+
     ImGui::Text("%s", listLabel.c_str());
     ImGui::PushID(listLabel.c_str());
 

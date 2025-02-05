@@ -177,21 +177,6 @@ void EditWindow::EditName(const string& nameLabel) noexcept
     ShowEditNameResult(startTime, result, resultVisible);
 }
 
-bool EditWindow::EditSize(const XMUINT2& size)
-{
-    XMUINT2 newSize = size;
-
-    bool changed{ false };
-
-    changed |= EditInteger("Width", newSize.x);
-    changed |= EditInteger("Height", newSize.y);
-
-    if (changed)
-        m_cmdList->SetSize(m_component, newSize);
-
-    return changed;
-}
-
 void EditWindow::RenderCommon()
 {
     EditName("Name");
@@ -199,15 +184,17 @@ void EditWindow::RenderCommon()
     auto relativePosition = m_component->GetRelativePosition();
     if(relativePosition.has_value())
     {
-        bool modify{ false };
-        modify |= EditInteger("X", relativePosition->x);
-        modify |= EditInteger("Y", relativePosition->y);
-
-        if (modify)
+        if(EditPosition(*relativePosition))
             m_cmdList->SetRelativePosition(m_component, *relativePosition);
     }
 
-    EditSize(m_component->GetSize());
+    XMUINT2 size{ m_component->GetSize() };
+    if (EditSize(size))
+        m_cmdList->SetSize(m_component, size);
+
+    bool region = m_component->GetBRegion();
+    if (EditCheckbox("Region", region))
+        m_cmdList->SetRegion(m_component, region);
 
     ImGui::Separator();
     ImGui::Spacing();

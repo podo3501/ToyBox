@@ -96,6 +96,23 @@ private:
 	CommandRecord<XMUINT2> m_record;
 };
 
+class SetRegionCommand : public Command
+{
+public:
+	SetRegionCommand(UIComponent* component, bool region) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetRegion; }
+	virtual bool IsMerge(Command*) noexcept { return false; }
+
+private:
+	CommandRecord<bool> m_record;
+};
+
 class RenameCommand : public Command
 {
 public:

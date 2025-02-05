@@ -25,7 +25,6 @@ protected:
 	virtual void UpdateComponent() {};
 	virtual void RenderComponent() {};
 
-	bool EditSize(const XMUINT2& size);
 	inline CommandList* GetCommandList() const noexcept { return m_cmdList; }
 
 private:

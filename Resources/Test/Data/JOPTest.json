@@ -20,6 +20,7 @@
             }
         },
         "Enable": true,
+        "Region": true,
         "AttachmentState": 0,
         "Children": [
             {
@@ -49,6 +50,7 @@
                         }
                     },
                     "Enable": true,
+                    "Region": false,
                     "AttachmentState": 0,
                     "Children": []
                 }
