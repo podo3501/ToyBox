@@ -20,7 +20,7 @@
             }
         },
         "Enable": true,
-        "Region": true,
+        "Region": "MainRegionEntry",
         "AttachmentState": 0,
         "Children": [
             {
@@ -50,7 +50,7 @@
                         }
                     },
                     "Enable": true,
-                    "Region": false,
+                    "Region": "",
                     "AttachmentState": 0,
                     "Children": []
                 }

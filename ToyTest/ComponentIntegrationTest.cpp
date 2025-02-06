@@ -80,8 +80,9 @@ namespace ComponentTest
 		UIEx(img1).AttachComponent(move(img2), { 100, 100 });
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 
-		img1Ptr->Rename("image1"); img1Ptr->SetBRegion(true);
+		img1Ptr->Rename("image1"); 
 		img2Ptr->Rename("image2");
+		img1Ptr->RenameRegion("Region1");
 		
 		EXPECT_FALSE(UIEx(m_panel).GetComponent("image1")); //Img1이 다른 Region이라서 찾을 수 없다.
 		EXPECT_FALSE(UIEx(m_panel).GetComponent("image2"));
@@ -89,6 +90,16 @@ namespace ComponentTest
 		EXPECT_TRUE(UIEx(img1Ptr).GetComponent("image2"));
 		EXPECT_FALSE(UIEx(img2Ptr).GetComponent("Main"));
 		EXPECT_TRUE(UIEx(img2Ptr).GetComponent("image1"));
+
+		img2Ptr->RenameRegion("Region2");
+
+		EXPECT_FALSE(UIEx(img1Ptr).GetComponent("image2"));
+		EXPECT_FALSE(UIEx(img2Ptr).GetComponent("image1"));
+
+		EXPECT_EQ(UIEx(m_panel).GetRegionComponent("Region1"), img1Ptr);
+		EXPECT_FALSE(UIEx(m_panel).GetRegionComponent("Region2"));
+		EXPECT_EQ(UIEx(img1Ptr).GetRegionComponent("Region2"), img2Ptr);
+		EXPECT_FALSE(UIEx(img2Ptr).GetRegionComponent("Region1"));
 	}
 
 	TEST_F(IntegrationTest, GetComponents)
@@ -131,40 +142,38 @@ namespace ComponentTest
 		auto img1Ptr = img1.get();
 		auto img2Ptr = img2.get();
 
+		img1Ptr->RenameRegion("Region_0"); //먼저 Region값을 넣어주면 이름이 같아도 되고 나중에 Region을 넣으면 
+		img2Ptr->RenameRegion("Region_0"); //Attach 할때 unique 이름으로 만들어 준다.
+
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 		UIEx(m_panel).AttachComponent(move(img2), { 100, 100 });
 
-		img1Ptr->SetBRegion(true);
-		img2Ptr->SetBRegion(true);
-
-		//Region은 true 이지만 자신은 위에 Region에 속한다.
-		//자신이 다른 Region에 속하면 Region::Region 이런 것들을 구현해야 한다. 대신에 단계적으로만 접근이 가능하고
-		//직접 접근해야 한다면 Region을 무시하고 찾는 방법을 써야 한다. 그러려면 그 컴포넌트는 이름이 유니크 해야 한다.
+		EXPECT_EQ(img2Ptr->GetRegion(), "Region_1"); //이름이 바뀌었다.
 		EXPECT_EQ(img1Ptr->GetName(), "ImageGrid1_0");
-		EXPECT_EQ(img2Ptr->GetName(), "ImageGrid1_1");
+		EXPECT_EQ(img2Ptr->GetName(), "ImageGrid1_0");
 
-		//unique_ptr<UIComponent> img3 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-		//img3->Rename("UnChanging Name");
-		//auto img4 = img3->Clone();
+		unique_ptr<UIComponent> img3 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		img3->Rename("UnChanging Name");
+		auto img4 = img3->Clone();
 
-		//auto img3Ptr = img3.get();
-		//auto img4Ptr = img4.get();
+		auto img3Ptr = img3.get();
+		auto img4Ptr = img4.get();
 
-		//UIEx(img1Ptr).AttachComponent(move(img3), { 100, 100 });
-		//UIEx(img2Ptr).AttachComponent(move(img4), { 100, 100 });
+		UIEx(img1Ptr).AttachComponent(move(img3), { 100, 100 });
+		UIEx(img2Ptr).AttachComponent(move(img4), { 100, 100 });
 
-		//EXPECT_EQ(img3Ptr->GetName(), "UnChanging Name");
-		//EXPECT_EQ(img4Ptr->GetName(), "UnChanging Name");
+		EXPECT_EQ(img3Ptr->GetName(), "UnChanging Name");
+		EXPECT_EQ(img4Ptr->GetName(), "UnChanging Name");
 
-		//unique_ptr<UIComponent> imgDummy = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-		//auto imgDummyPtr = imgDummy.get();
-		//UIEx(m_panel).AttachComponent(move(imgDummy), { 100, 100 });
-		//EXPECT_TRUE(imgDummyPtr->Rename("UnChanging Name"));
+		unique_ptr<UIComponent> imgDummy = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		auto imgDummyPtr = imgDummy.get();
+		UIEx(m_panel).AttachComponent(move(imgDummy), { 100, 100 });
+		EXPECT_TRUE(imgDummyPtr->Rename("UnChanging Name"));
 
-		//auto img5 = img1Ptr->Clone();
-		//auto img5Ptr = img5.get();
-		//UIEx(m_panel).AttachComponent(move(img5), { 100, 100 });
-		//EXPECT_TRUE(UIEx(img5Ptr).GetComponent("UnChanging Name"));
+		auto img5 = img1Ptr->Clone();
+		auto img5Ptr = img5.get();
+		UIEx(m_panel).AttachComponent(move(img5), { 100, 100 });
+		EXPECT_TRUE(UIEx(img5Ptr).GetComponent("UnChanging Name"));
 	}
 
 	TEST_F(IntegrationTest, Rename)

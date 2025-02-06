@@ -63,37 +63,30 @@ bool EditCheckbox(const string& label, bool& check)
     return ImGui::Checkbox(label.c_str(), &check);
 }
 
-bool EditText(const string& label, Property<string>& text)
+bool EditText(const string& label, string& text)
 {
-    char editBuffer[256] = "";
-    StringToChar(text, editBuffer);
-    if (ImGui::InputText(label.c_str(), editBuffer, IM_ARRAYSIZE(editBuffer)))
+    char textBuffer[128] = "";
+    StringToChar(text, textBuffer);
+    ImGui::InputText(label.c_str(), textBuffer, IM_ARRAYSIZE(textBuffer));
+    if (ImGui::IsItemDeactivatedAfterEdit())
     {
-        text = editBuffer;
+        text = textBuffer;
         return true;
     }
 
     return false;
 }
 
-bool EditText(const string& label, Property<wstring>& text)
+bool EditText(const string& label, wstring& text)
 {
-    char editBuffer[256] = "";
-    WStringToChar(text, editBuffer);
-    if (ImGui::InputText(label.c_str(), editBuffer, IM_ARRAYSIZE(editBuffer)))
+    string strText = WStringToString(text);
+    if (EditText(label, strText))
     {
-        text = CharToWString(editBuffer);
+        text = StringToWString(strText);
         return true;
     }
 
     return false;
-}
-
-void EditText(const string& label, const wstring& text)
-{
-    char editBuffer[256] = "";
-    WStringToChar(text, editBuffer);
-    ImGui::InputText(label.c_str(), editBuffer, IM_ARRAYSIZE(editBuffer));
 }
 
 bool EditFilename(const string& label, wstring& filename)

@@ -6,10 +6,11 @@
 #include "UIType.h"
 #include "UITransform.h"
 #include "UIComponentEx.h"
+#include "UIContainer.h"
 
 class JsonOperation;
 
-class UIComponent : public IComponent
+class UIComponent : public IComponent, private UIContainer<UIComponent>
 {
 protected:
 	UIComponent();	//이 클래스는 단독으로 만들 수 없다. 상속 받은 클래스만이 생성 가능
@@ -34,7 +35,6 @@ protected:
 public:
 	virtual ~UIComponent();
 	UIComponent& operator=(const UIComponent&) = delete;	//상속 받은 클래스도 대입생성자 기본적으로 삭제됨.
-	UIComponent(UIComponent&& o) noexcept;
 
 public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	static ComponentID GetTypeStatic() { return ComponentID::Unknown; }
@@ -68,9 +68,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	inline const string& GetName() const noexcept { return m_name; }
 	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
 	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }
-	inline void SetBRegion(bool region) noexcept { m_bRegion = region; }
-	inline bool GetBRegion() const noexcept { return m_bRegion; }
-	inline void SetRegion(const string& region) noexcept { m_region = region; }
+	bool RenameRegion(const string& region) noexcept;
 	inline const string& GetRegion() const noexcept { return m_region; }
 
 	inline UIComponentEx& GetUIComponentEx() noexcept
@@ -83,17 +81,10 @@ private:
 	inline bool IsAttachable() const noexcept;
 	inline bool IsDetachable() const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
-	bool IsUniqueName(const string& name, UIComponent* self) noexcept;
-	void GenerateUniqueName(UIComponent* component) noexcept;
 	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	void MarkDirty() noexcept;
-
-	void ForEachChild(function<void(UIComponent*)> func) noexcept;
-	void ForEachChildBool(function<bool(UIComponent*)> func) noexcept;
-	void ForEachChildConst(function<void(const UIComponent*)> func) const noexcept;
-	void ForEachChildBFS(function<void(UIComponent*)> func) noexcept;
 
 	string m_name;
 	UILayout m_layout;
@@ -101,14 +92,12 @@ private:
 
 	bool m_enable{ true };
 	bool m_isDirty{ true };
-	bool m_bRegion{ false }; //이 노드 이후는 앞 노드들과 이름이 중복되어도 상관없다. UI에서 네임스페이스 역할을 해 준다.
 	string m_region; //UI에서 네임스페이스 역할을 한다. GetRegionComponent로 찾을 수 있다.
 	AttachmentState m_attachmentState{ AttachmentState::All };
-	
-	UIComponent* m_parent{ nullptr };
-	vector<unique_ptr<UIComponent>> m_children;
 
 	friend class UIComponentEx;
+	friend class UIContainer;
+
 	optional<UIComponentEx> m_componentEx; //optional로 선언하면 포인터가 아닌데도 바로 초기화 하지 않는다.
 };
 

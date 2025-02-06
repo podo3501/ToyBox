@@ -121,6 +121,9 @@
     <ClInclude Include="UserInterface\Command\CommandType.h">
       <Filter>UserInterface\Command</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIContainer.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="UserInterface\Command\CommandRegistry.cpp">
       <Filter>UserInterface\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIContainer.cpp">
+      <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

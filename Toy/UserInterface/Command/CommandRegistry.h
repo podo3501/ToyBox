@@ -96,10 +96,10 @@ private:
 	CommandRecord<XMUINT2> m_record;
 };
 
-class SetRegionCommand : public Command
+class RenameRegionCommand : public Command
 {
 public:
-	SetRegionCommand(UIComponent* component, bool region) noexcept;
+	RenameRegionCommand(UIComponent* component, const string& region) noexcept;
 
 	virtual bool Execute() override;
 	virtual bool Undo() override;
@@ -110,7 +110,7 @@ protected:
 	virtual bool IsMerge(Command*) noexcept { return false; }
 
 private:
-	CommandRecord<bool> m_record;
+	CommandRecord<string> m_record;
 };
 
 class RenameCommand : public Command

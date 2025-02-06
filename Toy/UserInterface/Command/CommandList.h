@@ -20,7 +20,7 @@ public:
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* detach);
 	bool SetRelativePosition(UIComponent* component, const XMINT2& relativePos);
 	bool SetSize(UIComponent* component, const XMUINT2& size);
-	bool SetRegion(UIComponent* component, bool region);
+	bool RenameRegion(UIComponent* component, const string& region);
 	bool Rename(UIComponent* component, const string& name);
 	bool SetSource(ImageGrid1* imgGrid1, const Rectangle& source);
 	bool SetSources(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources);

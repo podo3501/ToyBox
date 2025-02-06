@@ -192,9 +192,9 @@ void EditWindow::RenderCommon()
     if (EditSize(size))
         m_cmdList->SetSize(m_component, size);
 
-    bool region = m_component->GetBRegion();
-    if (EditCheckbox("Region", region))
-        m_cmdList->SetRegion(m_component, region);
+    string region = m_component->GetRegion();
+    if (EditText("Region", region))
+        m_cmdList->RenameRegion(m_component, region);
 
     ImGui::Separator();
     ImGui::Spacing();

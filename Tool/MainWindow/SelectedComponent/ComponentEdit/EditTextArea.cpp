@@ -3,6 +3,7 @@
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/Utility.h"
+#include "../../EditUtility.h"
 
 EditTextArea::~EditTextArea() = default;
 EditTextArea::EditTextArea(TextArea* textArea, CommandList* cmdList) noexcept :
@@ -12,9 +13,7 @@ EditTextArea::EditTextArea(TextArea* textArea, CommandList* cmdList) noexcept :
 
 void EditTextArea::RenderComponent()
 {
-	char textBuffer[128] = "";
-	WStringToChar(m_textArea->GetText(), textBuffer);
-	ImGui::InputText("Text", textBuffer, IM_ARRAYSIZE(textBuffer));
-	if (ImGui::IsItemDeactivatedAfterEdit())
-		GetCommandList()->SetText(m_textArea, StringToWString(textBuffer));
+	wstring text = m_textArea->GetText();
+	if(EditText("Text", text))
+		GetCommandList()->SetText(m_textArea, text);
 }

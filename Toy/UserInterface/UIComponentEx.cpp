@@ -12,6 +12,7 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	if (!m_component->IsAttachable()) return child;
 
 	m_component->GenerateUniqueName(child.get());
+	m_component->GenerateUniqueRegionName(child.get());
 	child->SetParent(m_component);
 	child->m_transform.SetRelativePosition(m_component->m_layout.GetSize(), relativePos); //부모 사이즈와 나의 위치를 비교해야 상대적인 위치값을 구할 수 있다.
 	m_component->m_children.emplace_back(move(child));
@@ -47,47 +48,48 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	return { move(DetachChild(parent, m_component)), parent };
 }
 
-UIComponent* UIComponentEx::GetRoot(UIComponent* component) const noexcept
-{
-	UIComponent* current = component;
-	while (current->m_parent != nullptr)
-		current = current->m_parent;
-
-	return current;
-}
-
-UIComponent* UIComponentEx::GetRegionRoot(UIComponent* component) const noexcept
-{
-	//UIComponent* current = component;
-	//if (current->m_parent == nullptr)
-	//	return current;
-
-	//do
-	//{
-	//	if (!current->m_parent) break;
-	//	current = current->m_parent;
-	//} while (!current->GetRegion());
-
-	UIComponent* current = component;
-	while (!current->GetBRegion())
-	{
-		if (!current->m_parent) break;
-		current = current->m_parent;
-	}
-		
-
-	return current;
-}
-
 UIComponent* UIComponentEx::GetComponent(const string& name) noexcept
 {
-	UIComponent* root = GetRegionRoot(m_component);
+	UIComponent* root = m_component->GetRegionRoot();
+	if (!root) root = m_component->GetRoot(); //Region이 없을 경우 root가 region root가 되고 ""가 region name이다.
+	const string& region = root->GetRegion();
 	UIComponent* foundComponent = nullptr;
 
-	root->ForEachChildBool([&foundComponent, &name, root](UIComponent* component) {
-		if (root != component && component->GetBRegion()) return false;
+	root->ForEachChildBool([this, &foundComponent, &name, &region](UIComponent* component) {
+		const string& curRegion = component->GetRegion();
+		if (!curRegion.empty() && region != curRegion) return false; //Region 루트가 아닌 새로운 region이 나왔을때 
+
 		if (component->GetName() == name)
+		{
 			foundComponent = component;
+			return false;
+		}
+
+		return true;
+		});
+
+	return foundComponent;
+}
+
+UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcept
+{
+	UIComponent* root = m_component->GetRegionRoot();
+	if (!root) root = m_component->GetRoot();
+	const string& rootRegion = root->GetRegion();
+	UIComponent* foundComponent = nullptr;
+
+	root->ForEachChildBool([&foundComponent, &rootRegion, &findRegion](UIComponent* component) {
+		const string& curRegion = component->GetRegion();
+		if (curRegion.empty()) return true;
+
+		if (curRegion == findRegion)
+		{
+			foundComponent = component;
+			return false;
+		}
+
+		if (rootRegion != curRegion) return false; //Region 루트가 아닌 새로운 region이 나왔을때
+
 		return true;
 		});
 

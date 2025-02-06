@@ -112,9 +112,9 @@ bool CommandList::SetSize(UIComponent* component, const XMUINT2& size)
 	return ApplyCommand<SetSizeCommand>(component, size);
 }
 
-bool CommandList::SetRegion(UIComponent* component, bool region)
+bool CommandList::RenameRegion(UIComponent* component, const string& region)
 {
-	return ApplyCommand<SetRegionCommand>(component, region);
+	return ApplyCommand<RenameRegionCommand>(component, region);
 }
 
 bool CommandList::Rename(UIComponent* component, const string& name)
