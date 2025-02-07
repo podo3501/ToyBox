@@ -1,14 +1,14 @@
 #include "pch.h"
-#include "UIContainer.h"
+#include "UIHierarchy.h"
 #include "UIComponent.h"
 #include "UIComponentEx.h"
 
-UIComponent* UIContainer<UIComponent>::GetThis() noexcept
+UIComponent* UIHierarchy<UIComponent>::GetThis() noexcept
 {
 	return static_cast<UIComponent*>(this);
 }
 
-UIComponent* UIContainer<UIComponent>::GetRoot() noexcept
+UIComponent* UIHierarchy<UIComponent>::GetRoot() noexcept
 {
 	UIComponent* current = GetThis();
 	while (current->m_parent != nullptr)
@@ -17,7 +17,7 @@ UIComponent* UIContainer<UIComponent>::GetRoot() noexcept
 	return current;
 }
 
-UIComponent* UIContainer<UIComponent>::GetRegionRoot() noexcept
+UIComponent* UIHierarchy<UIComponent>::GetRegionRoot() noexcept
 {
 	UIComponent* current = GetThis();
 	while (current->GetRegion().empty())
@@ -32,13 +32,13 @@ UIComponent* UIContainer<UIComponent>::GetRegionRoot() noexcept
 	return current;
 }
 
-UIComponent* UIContainer<UIComponent>::GetParentRegionRoot() noexcept
+UIComponent* UIHierarchy<UIComponent>::GetParentRegionRoot() noexcept
 {
 	if (m_parent == nullptr) return GetThis();
 	return m_parent->GetRegionRoot();
 }
 
-void UIContainer<UIComponent>::ForEachChild(function<void(UIComponent*)> func) noexcept
+void UIHierarchy<UIComponent>::ForEachChild(function<void(UIComponent*)> func) noexcept
 {
 	func(GetThis());
 	for (auto& child : m_children)
@@ -48,7 +48,7 @@ void UIContainer<UIComponent>::ForEachChild(function<void(UIComponent*)> func) n
 	}
 }
 
-void UIContainer<UIComponent>::ForEachChildBool(function<bool(UIComponent*)> func) noexcept
+void UIHierarchy<UIComponent>::ForEachChildBool(function<bool(UIComponent*)> func) noexcept
 {
 	if (!func(GetThis()))
 		return;
@@ -60,7 +60,7 @@ void UIContainer<UIComponent>::ForEachChildBool(function<bool(UIComponent*)> fun
 	}
 }
 
-void UIContainer<UIComponent>::ForEachChildConst(function<void(const UIComponent*)> func) const noexcept
+void UIHierarchy<UIComponent>::ForEachChildConst(function<void(const UIComponent*)> func) const noexcept
 {
 	func(static_cast<const UIComponent*>(this));
 	for (const auto& child : m_children)
@@ -70,7 +70,7 @@ void UIContainer<UIComponent>::ForEachChildConst(function<void(const UIComponent
 	}
 }
 
-void UIContainer<UIComponent>::ForEachChildBFS(std::function<void(UIComponent*)> func) noexcept
+void UIHierarchy<UIComponent>::ForEachChildBFS(std::function<void(UIComponent*)> func) noexcept
 {
 	queue<UIComponent*> queue;
 	queue.push(GetThis());
@@ -93,7 +93,7 @@ void UIContainer<UIComponent>::ForEachChildBFS(std::function<void(UIComponent*)>
 }
 
 //부모 region에서 같은 이름이 있는지 확인한다.
-bool UIContainer<UIComponent>::IsUniqueRegion(const string& name) noexcept
+bool UIHierarchy<UIComponent>::IsUniqueRegion(const string& name) noexcept
 {
 	UIComponent* regionRoot = GetParentRegionRoot();
 	if (!regionRoot) return false;
@@ -116,7 +116,7 @@ static pair<string, int> GetBaseName(const string& name, const string& base = "U
 	return { baseName, index };
 }
 
-bool UIContainer<UIComponent>::IsUniqueName(const string& name, UIComponent* self) noexcept
+bool UIHierarchy<UIComponent>::IsUniqueName(const string& name, UIComponent* self) noexcept
 {
 	//붙는 Component에도 region이 있을수 있기 때문에 먼저 이 Component에 맞는 부모 regionRoot를 찾는다.
 	auto& uiComponentEx = self->GetRegionRoot() ? self->GetUIComponentEx() : GetThis()->GetUIComponentEx();
@@ -126,7 +126,7 @@ bool UIContainer<UIComponent>::IsUniqueName(const string& name, UIComponent* sel
 	return true;
 }
 
-bool UIContainer<UIComponent>::IsUniqueRegionName(const string& name, UIComponent* self) noexcept
+bool UIHierarchy<UIComponent>::IsUniqueRegionName(const string& name, UIComponent* self) noexcept
 {
 	//부모가 없거나 부모가 있어도 부모의 region 루트가 없는경우. 한단계 올라가서 RegionRoot에서 이름값을 찾아봐야 한다.
 	auto& uiComponentEx = (self->m_parent && self->m_parent->GetRegionRoot()) ? self->GetUIComponentEx() : GetThis()->GetUIComponentEx();
@@ -136,7 +136,7 @@ bool UIContainer<UIComponent>::IsUniqueRegionName(const string& name, UIComponen
 	return true;
 }
 
-string UIContainer<UIComponent>::CreateNewName(UIComponent* attaching) noexcept
+string UIHierarchy<UIComponent>::CreateNewName(UIComponent* attaching) noexcept
 {
 	const string& name = attaching->m_name;
 	if (!name.empty() && IsUniqueName(name, attaching)) return name;
@@ -150,7 +150,7 @@ string UIContainer<UIComponent>::CreateNewName(UIComponent* attaching) noexcept
 	return newName;
 }
 
-string UIContainer<UIComponent>::CreateNewRegionName(UIComponent* attaching) noexcept
+string UIHierarchy<UIComponent>::CreateNewRegionName(UIComponent* attaching) noexcept
 {
 	const string& name = attaching->m_region;
 	if (name.empty()) return name;
@@ -180,7 +180,7 @@ static string CreateUniqueName(const map<string, UIComponent*>& names, const str
 	return newName;
 }
 
-void UIContainer<UIComponent>::GenerateUniqueName(UIComponent* attachingBlock) noexcept
+void UIHierarchy<UIComponent>::GenerateUniqueName(UIComponent* attachingBlock) noexcept
 {
 	map<string, UIComponent*> newNames;
 
@@ -194,7 +194,7 @@ void UIContainer<UIComponent>::GenerateUniqueName(UIComponent* attachingBlock) n
 		uniqueName.second->m_name = uniqueName.first;
 }
 
-void UIContainer<UIComponent>::GenerateUniqueRegionName(UIComponent* attachingBlock) noexcept
+void UIHierarchy<UIComponent>::GenerateUniqueRegionName(UIComponent* attachingBlock) noexcept
 {
 	map<string, UIComponent*> newNames;
 

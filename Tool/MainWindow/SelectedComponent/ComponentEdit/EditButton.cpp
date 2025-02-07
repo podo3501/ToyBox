@@ -14,8 +14,8 @@ EditButton::EditButton(Button* button, CommandList* cmdList) noexcept :
 
 void EditButton::RenderComponent()
 {
-    string state = EnumToString<ButtonState>(m_button->GetState());
-    if (SelectComboItem("State", EnumToList<ButtonState>(), state))
-        m_button->SetState(StringToEnum<ButtonState>(state));
+    //string state = EnumToString<ButtonState>(m_button->GetState());
+    //if (SelectComboItem("State", EnumToList<ButtonState>(), state))
+    //    m_button->SetState(StringToEnum<ButtonState>(state));
 }
 

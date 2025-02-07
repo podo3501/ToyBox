@@ -10,11 +10,13 @@ enum class ComponentID : int
 	Button,
 	TextArea,
 	Dialog,
+	ListArea,
+	Container,
 	Unknown
 };
 
 template<>
-constexpr size_t EnumSize<ComponentID>() { return 8; }
+constexpr size_t EnumSize<ComponentID>() { return 10; }
 
 template<>
 constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<ComponentID>()> {
@@ -26,6 +28,8 @@ constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<Com
 		{ "Button" },
 		{ "TextArea" },
 		{ "Dialog" },
+		{ "ListArea" },
+		{ "Container" },
 		{ "Unknown" }
 	} };
 }

@@ -9,6 +9,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 
@@ -24,13 +25,81 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(clonePanel));
 	}
 
+	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 10, 138, 42, 170 });
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 46, 138, 78, 170 });
+		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 82, 138, 114, 170 });
+
+		EXPECT_TRUE(testResult);
+	}
+
+	TEST_F(BasicFunctionalityTest, Button_ImageGrid1)
+	{
+		auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
+		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		TestUpdate(m_panel.get(), 144, 120);	//hover
+		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
+		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	static void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 110, 96, 132, 144 }, *source, { 62, 82, 84, 130 });
+		testResult |= IsTrue(dest, { 132, 96, 188, 144 }, *source, { 84, 82, 88, 130 });
+		testResult |= IsTrue(dest, { 188, 96, 210, 144 }, *source, { 88, 82, 110, 130 });
+
+		EXPECT_TRUE(testResult);
+	}
+
+	static void TestButton_ImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
+	{
+		EXPECT_TRUE(index == 0);
+
+		auto testResult{ false };
+		testResult |= IsTrue(dest, { 85, 96, 107, 144 }, *source, { 10, 82, 32, 130 });
+		testResult |= IsTrue(dest, { 107, 96, 213, 144 }, *source, { 32, 82, 36, 130 });
+		testResult |= IsTrue(dest, { 213, 96, 235, 144 }, *source, { 36, 82, 58, 130 });
+
+		EXPECT_TRUE(testResult);
+	}
+
+	TEST_F(BasicFunctionalityTest, Button_ImageGrid3)
+	{
+		auto button = CreateSampleButton3({ {100, 48}, Origin::Center });
+		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		TestUpdate(m_panel.get(), 110, 96);	//Hover
+		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
+
+		Button* btn = m_panel->GetComponent<Button*>("Button_0");
+		btn->ChangeSize({ 150, 48 });
+		TestUpdate(m_panel.get(), 0, 0);	//Normal
+
+		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
+		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
+	}
+
+	////////////////////////////////////////////////////////
+
 	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
 		EXPECT_TRUE(IsTrue(dest, { 400, 300, 464, 364 }, *source, { 10, 10, 74, 74 }));
 	}
 
-	TEST_F(BasicFunctionalityTest, TestImageGrid1)
+	TEST_F(BasicFunctionalityTest, ImageGrid1)
 	{
 		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
@@ -78,7 +147,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	TEST_F(BasicFunctionalityTest, TestImageGrid3)
+	TEST_F(BasicFunctionalityTest, ImageGrid3)
 	{
 		auto img = CreateSampleImageGrid3({ {100, 36}, Origin::LeftTop });
 		UIEx(m_panel).AttachComponent(move(img), {400, 300});
@@ -166,7 +235,7 @@ namespace ComponentTest
 		EXPECT_TRUE(testResult);
 	}
 
-	TEST_F(BasicFunctionalityTest, TestImageGrid9)
+	TEST_F(BasicFunctionalityTest, ImageGrid9)
 	{
 		auto img = CreateSampleImageGrid9({ {170, 120}, Origin::LeftTop });
 		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
@@ -192,73 +261,19 @@ namespace ComponentTest
 		CallMockRender(m_panel.get(), TestImageGrid9SourceAndDivider, 9);
 	}
 
-	/////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////
 
-	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
+	TEST_F(BasicFunctionalityTest, ListArea)
 	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 10, 138, 42, 170 });
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 46, 138, 78, 170 });
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 82, 138, 114, 170 });
-
-		EXPECT_TRUE(testResult);
+		//이미지3개를 넣고 컨테이너 컴포넌트를 만들어야 함.
+		ImageSource source{
+		L"UI/SampleTexture/Sample_0.png", { { 10, 178, 48, 48 } } };
+		UILayout layout{ { 120, 100 }, Origin::Center };
+		//컨테이너를 만들고 컨테이너 인자를 리스트 컴포넌트 인자로 넣음.
+		auto listArea = CreateListArea(layout, source);
 	}
 
-	TEST_F(BasicFunctionalityTest, TestButton_ImageGrid1)
-	{
-		auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
-		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-
-		TestUpdate(m_panel.get(), 144, 120);	//hover
-		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
-		EXPECT_TRUE(WriteReadTest(m_panel));
-	}
-
-	static void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
-	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 110, 96, 132, 144 }, *source, { 62, 82, 84, 130 });
-		testResult |= IsTrue(dest, { 132, 96, 188, 144 }, *source, { 84, 82, 88, 130 });
-		testResult |= IsTrue(dest, { 188, 96, 210, 144 }, *source, { 88, 82, 110, 130 });
-
-		EXPECT_TRUE(testResult);
-	}
-
-	static void TestButton_ImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
-	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 85, 96, 107, 144 }, *source, { 10, 82, 32, 130 });
-		testResult |= IsTrue(dest, { 107, 96, 213, 144 }, *source, { 32, 82, 36, 130 });
-		testResult |= IsTrue(dest, { 213, 96, 235, 144 }, *source, { 36, 82, 58, 130 });
-
-		EXPECT_TRUE(testResult);
-	}
-
-	TEST_F(BasicFunctionalityTest, TestButton_ImageGrid3)
-	{
-		auto button = CreateSampleButton3({ {100, 48}, Origin::Center });
-		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-
-		TestUpdate(m_panel.get(), 110, 96);	//Hover
-		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
-
-		Button* btn = m_panel->GetComponent<Button*>("Button_0");
-		btn->ChangeSize({ 150, 48 });
-		TestUpdate(m_panel.get(), 0, 0);	//Normal
-
-		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
-		EXPECT_TRUE(WriteReadTest(m_panel));
-
-		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
-	}
+	////////////////////////////////////////////////////////
 
 	static void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
 	{
@@ -268,7 +283,7 @@ namespace ComponentTest
 		if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(240.f, 296.75f) && DirectX::XMVector4Equal(color, Colors::Blue));
 	}
 
-	TEST_F(BasicFunctionalityTest, TestTextArea)
+	TEST_F(BasicFunctionalityTest, TextArea)
 	{
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
 		auto textArea = CreateSampleTextArea({ {320, 120}, Origin::Center }, text);
@@ -281,28 +296,6 @@ namespace ComponentTest
 		unique_ptr<UIComponent> clonePanel = m_panel->Clone();
 		CallMockRender(clonePanel.get(), TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(clonePanel));
-	}
-
-	TEST_F(BasicFunctionalityTest, TestRecursivePosition)
-	{
-		std::unique_ptr<Panel> panel1 = std::make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
-		std::unique_ptr<Panel> panel2 = make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center));
-
-		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
-		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
-		m_panel->ProcessUpdate({}, true);
-
-		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
-		EXPECT_EQ(outList.size(), 3);
-
-		Panel* ptrPanel = m_panel->GetComponent<Panel*>("Panel2");
-		ptrPanel->ChangeOrigin(Origin::LeftTop);
-
-		outList.clear();
-		outList = UIEx(m_panel).GetComponents({239, 140});
-		EXPECT_EQ(outList.size(), 2);
-
-		//사이즈가 바뀌었을때 값이 어떻게 바뀌는지 테스트
 	}
 }
 

@@ -6,11 +6,11 @@
 #include "UIType.h"
 #include "UITransform.h"
 #include "UIComponentEx.h"
-#include "UIContainer.h"
+#include "UIHierarchy.h"
 
 class JsonOperation;
 
-class UIComponent : public IComponent, private UIContainer<UIComponent>
+class UIComponent : public IComponent, private UIHierarchy<UIComponent>
 {
 protected:
 	UIComponent();	//이 클래스는 단독으로 만들 수 없다. 상속 받은 클래스만이 생성 가능
@@ -96,7 +96,7 @@ private:
 	AttachmentState m_attachmentState{ AttachmentState::All };
 
 	friend class UIComponentEx;
-	friend class UIContainer;
+	friend class UIHierarchy;
 
 	optional<UIComponentEx> m_componentEx; //optional로 선언하면 포인터가 아닌데도 바로 초기화 하지 않는다.
 };

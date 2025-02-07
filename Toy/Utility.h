@@ -82,12 +82,12 @@ bool CompareSeq(const vector<unique_ptr<T>>& lhs, const vector<unique_ptr<T>>& r
 
 //원소가 몇번째에 있는지 확인
 template <typename Container, typename T>
-std::optional<int> FindIndex(const Container& container, const T& target)
+optional<int> FindIndex(const Container& container, const T& target)
 {
-	auto it = std::ranges::find(container, target);
+	auto it = ranges::find(container, target);
 	if (it != container.end())
-		return static_cast<int>(std::distance(container.begin(), it));
-	return std::nullopt;
+		return static_cast<int>(distance(container.begin(), it));
+	return nullopt;
 }
 
 //연관 컨테이너 비교

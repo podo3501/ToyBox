@@ -4,11 +4,11 @@ class UIComponent;
 
 //has로 리팩토링이 안되서 crtp로 리팩토링함.
 template<typename T>
-class UIContainer
+class UIHierarchy
 {
 public:
-	~UIContainer() = default;
-	UIContainer() = default;
+	~UIHierarchy() = default;
+	UIHierarchy() = default;
 
 	UIComponent* GetRoot() noexcept;
 	UIComponent* GetRegionRoot() noexcept;

@@ -1,7 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
-enum class ButtonState;
+class Container;
 
 class Button : public UIComponent
 {
@@ -11,30 +11,19 @@ public:
 
 	static ComponentID GetTypeStatic() { return ComponentID::Button; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
-	virtual bool operator==(const UIComponent& other) const noexcept override;
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool LoadResources(ILoadData* load);
-	bool SetImage(const UILayout& layout,
-		unique_ptr<UIComponent>&& normal,
-		unique_ptr<UIComponent>&& hover,
-		unique_ptr<UIComponent>&& pressed) noexcept;
-
-	inline ButtonState GetState() const noexcept { return *m_state; }
-	void SetState(ButtonState state) noexcept;
+	bool Setup(const UILayout& layout, unique_ptr<UIComponent>&& container) noexcept;
 
 protected:
 	Button(const Button& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept override;
-	
+
 private:
-	void AddComponentAndEnable(ButtonState btnState, unique_ptr<UIComponent>&& component, bool enable) noexcept;
 	void ReloadDatas() noexcept;
 
-	map<ButtonState, UIComponent*> m_images;
-	optional<ButtonState> m_state;
+	UIComponent* m_container;
 };
 
-unique_ptr<Button> CreateButton(const UILayout& layout, vector<unique_ptr<UIComponent>> imgGridList);
+unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<Container>&& container);

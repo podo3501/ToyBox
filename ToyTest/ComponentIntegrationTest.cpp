@@ -176,6 +176,28 @@ namespace ComponentTest
 		EXPECT_TRUE(UIEx(img5Ptr).GetComponent("UnChanging Name"));
 	}
 
+	TEST_F(IntegrationTest, RecursivePosition)
+	{
+		std::unique_ptr<Panel> panel1 = std::make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
+		std::unique_ptr<Panel> panel2 = make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center));
+
+		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
+		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
+		m_panel->ProcessUpdate({}, true);
+
+		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
+		EXPECT_EQ(outList.size(), 3);
+
+		Panel* ptrPanel = m_panel->GetComponent<Panel*>("Panel2");
+		ptrPanel->ChangeOrigin(Origin::LeftTop);
+
+		outList.clear();
+		outList = UIEx(m_panel).GetComponents({ 239, 140 });
+		EXPECT_EQ(outList.size(), 2);
+
+		//사이즈가 바뀌었을때 값이 어떻게 바뀌는지 테스트
+	}
+
 	TEST_F(IntegrationTest, Rename)
 	{
 		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });

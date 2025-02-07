@@ -79,9 +79,6 @@
     <ClInclude Include="UserInterface\Property.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\Component\Button.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\Component\Dialog.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
@@ -121,8 +118,17 @@
     <ClInclude Include="UserInterface\Command\CommandType.h">
       <Filter>UserInterface\Command</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIContainer.h">
+    <ClInclude Include="UserInterface\UIHierarchy.h">
       <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\ListArea.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\Container.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Component\Button.h">
+      <Filter>UserInterface\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +168,6 @@
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="UserInterface\Component\Button.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\Component\Dialog.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
@@ -195,8 +198,17 @@
     <ClCompile Include="UserInterface\Command\CommandRegistry.cpp">
       <Filter>UserInterface\Command</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIContainer.cpp">
+    <ClCompile Include="UserInterface\UIHierarchy.cpp">
       <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\ListArea.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\Container.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\Button.cpp">
+      <Filter>UserInterface\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

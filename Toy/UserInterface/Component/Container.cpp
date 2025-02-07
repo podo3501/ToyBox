@@ -1,0 +1,133 @@
+#include "pch.h"
+#include "Container.h"
+#include "ImageGrid1.h"
+#include "../../InputManager.h"
+#include "../JsonOperation.h"
+#include "../../Utility.h"
+
+using enum ButtonState;
+
+Container::~Container() = default;
+Container::Container() noexcept :
+	m_state{ nullopt }
+{}
+
+Container::Container(const Container& o) :
+	UIComponent{ o },
+	m_state{ o.m_state }
+{
+	ReloadDatas();
+}
+
+void Container::ReloadDatas() noexcept
+{
+	vector<UIComponent*> componentList = GetChildComponents();
+	m_images.emplace(Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
+	m_images.emplace(Hover, componentList[1]);
+	m_images.emplace(Pressed, componentList[2]);
+}
+
+unique_ptr<UIComponent> Container::CreateClone() const
+{
+	return unique_ptr<Container>(new Container(*this));
+}
+
+bool Container::operator==(const UIComponent& o) const noexcept
+{
+	ReturnIfFalse(UIComponent::operator==(o));
+	const Container* rhs = static_cast<const Container*>(&o);
+
+	return std::all_of(m_images.begin(), m_images.end(), [rhs](const auto& pair) {
+		auto state = pair.first;
+		return pair.second->GetName() == rhs->m_images.at(state)->GetName();
+		});
+}
+
+bool Container::LoadResources(ILoadData* load)
+{
+	ReturnIfFalse(ranges::all_of(m_images | views::values, [this, load](const auto& image) {
+		return image->LoadResources(load);
+		}));
+
+	return true;
+}
+
+void Container::ChangeSize(const XMUINT2& size) noexcept
+{
+	for (const auto& component : GetChildComponents())
+		component->ChangeSize(size);
+	UIComponent::ChangeSize(size);
+}
+
+void Container::AttachComponent(ButtonState btnState, unique_ptr<UIComponent>&& component) noexcept
+{
+	auto grid1 = ComponentCast<ImageGrid1*>(component.get());
+	component->SetAttachmentState(grid1 ? AttachmentState::Attach : AttachmentState::Disable);
+
+	m_images.emplace(btnState, component.get());
+	UIEx(this).AttachComponent(move(component), {});
+}
+
+bool Container::Setup(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList) noexcept
+{
+	SetLayout(layout);
+
+	for (auto& imgGrid : imgGridList)
+	{
+		imgGrid.second->SetEnable((imgGrid.first == Normal) ? true : false);
+		AttachComponent(imgGrid.first, move(imgGrid.second));
+	}
+
+	return true;
+}
+
+void Container::SetState(ButtonState state) noexcept
+{
+	if (m_state == state) return;
+
+	for (auto& [imgState, image] : m_images)
+		image->SetEnable(imgState == state);
+
+	m_state = state;
+}
+
+bool Container::ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept
+{
+	if (!m_state)
+	{
+		SetState(Normal);
+		return true;
+	}
+
+	const auto& mouseTracker = InputManager::GetMouse();
+	const XMINT2& relativeMousePos = mouseTracker.GetPosition() - absolutePosition;
+	if (!IsArea(relativeMousePos))
+	{
+		SetState(Normal);
+		return true;
+	}
+
+	bool isPressed = IsInputAction(MouseButton::Left, KeyState::Pressed);
+	bool isHeld = IsInputAction(MouseButton::Left, KeyState::Held);
+
+	SetState((isPressed || (*m_state == Pressed && isHeld)) ? Pressed : Hover);
+	return true;
+}
+
+void Container::SerializeIO(JsonOperation& operation)
+{
+	UIComponent::SerializeIO(operation);
+
+	if (operation.IsWrite()) return;
+	ReloadDatas();
+}
+
+unique_ptr<Container> CreateContainer(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList)
+{
+	if (imgGridList.size() != 3) return nullptr;
+
+	unique_ptr<Container> container = make_unique<Container>();
+	if(!container->Setup(layout, move(imgGridList))) return nullptr;
+
+	return container;
+}
