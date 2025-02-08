@@ -50,10 +50,9 @@ bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noe
 	for (size_t idx = 0; idx < srcHList.size(); ++idx)
 	{
 		auto grid3 = CreateImageGrid3(idx, source, posRects[idx].size);
-		grid3->SetAttachmentState(AttachmentState::Disable);
 		UIEx(this).AttachComponent(move(grid3), posRects[idx].pos);
 	}
-	SetAttachmentState(AttachmentState::Detach);
+	SetAttachmentState(AttachmentState::Disable);
 
 	return true;
 }

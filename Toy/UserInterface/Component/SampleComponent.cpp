@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "TextArea.h"
 #include "Container.h"
+#include "ListArea.h"
 #include "../UIUtility.h"
 
 unique_ptr<UIComponent> CreateSampleImageGrid1(const UILayout& layout)
@@ -82,4 +83,34 @@ unique_ptr<UIComponent> CreateSampleButton3(const UILayout& layout)
 		{ ButtonState::Hover, { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } },
 		{ ButtonState::Pressed, { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } };
 	return CreateSampleButton<ImageGrid3>(layout, sources, L"UI/SampleTexture/Sample_0.png");
+}
+
+template <typename ImageGridType>
+static unique_ptr<UIComponent> CreateSampleListArea(const UILayout& layout,
+	const map<ButtonState, vector<Rectangle>>& sources, const wstring& texturePath)
+{
+
+	UILayout gridLayout({ { layout.GetSize().x, 30 }, layout.GetOrigin() });	//컨테이너 크기는 넓이는 같고, 높이는 30
+
+	map<ButtonState, unique_ptr<UIComponent>> imageGridList;
+	for (const auto& rects : sources)
+	{
+		ImageSource imgSrc = CreateImageSource(texturePath, rects.second);
+		imageGridList.emplace(rects.first, CreateImageGrid<ImageGridType>(layout, imgSrc));
+	}
+	auto container = CreateContainer(layout, move(imageGridList));
+
+	ImageSource imgGrid1Source{ L"UI/SampleTexture/Sample_0.png", { { 10, 178, 48, 48 } } }; //리스트 배경 그림
+	auto imgGrid1 = CreateImageGrid<ImageGrid1>(layout, imgGrid1Source);
+
+	return CreateListArea(layout, move(imgGrid1), move(container));
+}
+
+unique_ptr<UIComponent> CreateSampleListArea1(const UILayout& layout)
+{
+	map<ButtonState, vector<Rectangle>> sources{
+		{ ButtonState::Normal, { {118, 138, 32, 32} } },
+		{ ButtonState::Hover, { {154, 138, 32, 32} } },
+		{ ButtonState::Pressed, { {190, 138, 32, 32} } } };
+	return CreateSampleListArea<ImageGrid1>(layout, sources, L"UI/SampleTexture/Sample_0.png");
 }

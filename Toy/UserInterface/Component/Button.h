@@ -1,8 +1,6 @@
 #pragma once
 #include "../UIComponent.h"
 
-class Container;
-
 class Button : public UIComponent
 {
 public:
@@ -26,4 +24,4 @@ private:
 	UIComponent* m_container;
 };
 
-unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<Container>&& container);
+unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent>&& container);

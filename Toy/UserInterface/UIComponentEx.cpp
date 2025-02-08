@@ -41,10 +41,9 @@ unique_ptr<UIComponent> UIComponentEx::DetachChild(UIComponent* parent, UICompon
 
 pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noexcept
 {
-	if (!m_component->IsDetachable()) return {};
-	if (!m_component->m_parent) return {};
+	UIComponent* parent = m_component->m_parent;
+	if (!parent || !parent->IsDetachable()) return {};
 
-	UIComponent* parent = m_component->m_parent; //DetachComponent를 하면 parent가 nullptr로 셋팅된다.
 	return { move(DetachChild(parent, m_component)), parent };
 }
 

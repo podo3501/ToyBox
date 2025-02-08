@@ -13,6 +13,14 @@ public:
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
 
 	UIComponent* GetComponent(const string& name) noexcept;
+
+	template<typename T>
+	T GetComponent(const string& name) noexcept
+	{
+		UIComponent* find = GetComponent(name);
+		return ComponentCast<T>(find);
+	}
+
 	UIComponent* GetRegionComponent(const string& regionName) noexcept;
 	vector<UIComponent*> GetComponents(const XMINT2& pos) noexcept;
 	XMUINT2 GetTotalChildSize() noexcept;

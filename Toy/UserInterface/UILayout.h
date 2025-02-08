@@ -23,6 +23,7 @@ public:
 
 	const XMUINT2& GetSize() const noexcept { return m_size; }
 	//XMINT2 GetPosition(const Vector2& position = {}) const noexcept;
+	Origin GetOrigin() const noexcept { return m_origin; }
 	XMINT2 GetPosition(const XMINT2& relativePosition = {}) const noexcept;
 
 	bool IsArea(const XMINT2& pos) const noexcept;

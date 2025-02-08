@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Button.h"
 #include "../JsonOperation.h"
-#include "Container.h"
 
 Button::~Button() = default;
 Button::Button() :
@@ -35,11 +34,11 @@ bool Button::Setup(const UILayout& layout, unique_ptr<UIComponent>&& container) 
 {
 	SetLayout(layout);
 
-	container->SetAttachmentState(AttachmentState::Attach);
 	m_container = container.get();
+	m_container->SetAttachmentState(AttachmentState::Disable);
 	UIEx(this).AttachComponent(move(container), {});
 
-	SetAttachmentState(AttachmentState::Detach);
+	SetAttachmentState(AttachmentState::Disable);
 
 	return true;
 }
@@ -52,7 +51,7 @@ void Button::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<Container>&& container)
+unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent>&& container)
 {
 	unique_ptr<Button> button = make_unique<Button>();
 	if(!button->Setup(layout, move(container))) return nullptr;

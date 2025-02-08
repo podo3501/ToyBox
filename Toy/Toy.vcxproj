@@ -236,7 +236,6 @@
     <ClInclude Include="UserInterface\UIHierarchy.h" />
     <ClInclude Include="UserInterface\UITransform.h" />
     <ClInclude Include="UserInterface\UIComponent.h" />
-    <ClInclude Include="UserInterface\UIComponent.hpp" />
     <ClInclude Include="UserInterface\UIComponentEx.h" />
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="pch.h" />

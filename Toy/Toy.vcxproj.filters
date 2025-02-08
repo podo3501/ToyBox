@@ -73,9 +73,6 @@
     <ClInclude Include="UserInterface\JsonOperation.hpp">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent.hpp">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\Property.h">
       <Filter>UserInterface</Filter>
     </ClInclude>

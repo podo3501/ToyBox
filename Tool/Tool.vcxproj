@@ -163,6 +163,7 @@
     <ClCompile Include="MainWindow\MainWindow.cpp" />
     <ClCompile Include="MainWindow\FloatingComponent.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.cpp" />
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditContainer.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditTextArea.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditWindow.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="MainWindow\MainWindow.h" />
     <ClInclude Include="MainWindow\FloatingComponent.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.h" />
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditContainer.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditTextArea.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditWindow.h" />

@@ -47,12 +47,13 @@
 }
 #endif
 
-wstring StringToWString(const string& str);
-string RemoveNullTerminator(const string& str);
-string WStringToString(const wstring& wstr);
-void StringToChar(const string& str, span<char> outstr);
-wstring CharToWString(const span<char> str);
-void WStringToChar(const wstring& wstr, span<char> outstr);
+wstring StringToWString(const string& str) noexcept;
+string RemoveNullTerminator(const string& str) noexcept;
+string WStringToString(const wstring& wstr) noexcept;
+void StringToChar(const string& str, span<char> outstr) noexcept;
+wstring CharToWString(const span<char> str) noexcept;
+void WStringToChar(const wstring& wstr, span<char> outstr) noexcept;
+wstring IntToWString(int value) noexcept;
 
 //스마트 포인터 비교
 template <typename T>

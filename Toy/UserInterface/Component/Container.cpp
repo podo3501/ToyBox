@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Container.h"
-#include "ImageGrid1.h"
 #include "../../InputManager.h"
 #include "../JsonOperation.h"
 #include "../../Utility.h"
@@ -61,9 +60,6 @@ void Container::ChangeSize(const XMUINT2& size) noexcept
 
 void Container::AttachComponent(ButtonState btnState, unique_ptr<UIComponent>&& component) noexcept
 {
-	auto grid1 = ComponentCast<ImageGrid1*>(component.get());
-	component->SetAttachmentState(grid1 ? AttachmentState::Attach : AttachmentState::Disable);
-
 	m_images.emplace(btnState, component.get());
 	UIEx(this).AttachComponent(move(component), {});
 }

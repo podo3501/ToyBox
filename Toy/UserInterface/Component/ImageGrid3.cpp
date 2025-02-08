@@ -40,10 +40,9 @@ bool ImageGrid3::SetImage(const UILayout& layout, const ImageSource& source) noe
     for(auto idx : views::iota(0u, source.list.size()))
     {
         auto grid1 = CreateImageGrid1(idx, source, posSizes[idx].size);
-        grid1->SetAttachmentState(AttachmentState::Attach);
         UIEx(this).AttachComponent(move(grid1), posSizes[idx].pos);
     }
-    SetAttachmentState(AttachmentState::Detach);
+    SetAttachmentState(AttachmentState::Disable);
 
 	return true;
 }

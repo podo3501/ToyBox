@@ -56,8 +56,6 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 
 unique_ptr<UIComponent> UIComponent::Clone() const 
 { 
-	if (!IsDetachable()) return nullptr; //Detach가 안되는 것은 컴포넌트의 부속이기 때문에 클론해도 쓸데가 없다.
-
 	return CreateClone();
 }
 

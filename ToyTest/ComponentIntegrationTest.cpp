@@ -51,7 +51,7 @@ namespace ComponentTest
 	{
 		if (!original) return false;
 		auto clone = original->Clone();
-
+		
 		return CompareUniquePtr(original, clone);
 	}
 
@@ -188,7 +188,7 @@ namespace ComponentTest
 		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
-		Panel* ptrPanel = m_panel->GetComponent<Panel*>("Panel2");
+		Panel* ptrPanel = UIEx(m_panel).GetComponent<Panel*>("Panel2");
 		ptrPanel->ChangeOrigin(Origin::LeftTop);
 
 		outList.clear();

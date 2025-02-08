@@ -12,6 +12,7 @@
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/Utility.h"
 
 using testing::ElementsAre;
 
@@ -81,7 +82,7 @@ namespace ComponentTest
 		TestUpdate(m_panel.get(), 110, 96);	//Hover
 		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
 
-		Button* btn = m_panel->GetComponent<Button*>("Button_0");
+		Button* btn = UIEx(m_panel).GetComponent<Button*>("Button_0");
 		btn->ChangeSize({ 150, 48 });
 		TestUpdate(m_panel.get(), 0, 0);	//Normal
 
@@ -155,7 +156,7 @@ namespace ComponentTest
 
 		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
 
-		ImageGrid3* img3 = m_panel->GetComponent<ImageGrid3*>("ImageGrid3_0");
+		ImageGrid3* img3 = UIEx(m_panel).GetComponent<ImageGrid3*>("ImageGrid3_0");
 		img3->ChangeOrigin(Origin::Center);
 		img3->ChangeSize({ 120, 36 });
 
@@ -243,7 +244,7 @@ namespace ComponentTest
 
 		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
 
-		ImageGrid9* img9 = m_panel->GetComponent<ImageGrid9*>("ImageGrid9_0");
+		ImageGrid9* img9 = UIEx(m_panel).GetComponent<ImageGrid9*>("ImageGrid9_0");
 		img9->ChangeOrigin(Origin::Center);
 		img9->ChangeSize({ 180, 150 });
 
@@ -265,12 +266,23 @@ namespace ComponentTest
 
 	TEST_F(BasicFunctionalityTest, ListArea)
 	{
-		//이미지3개를 넣고 컨테이너 컴포넌트를 만들어야 함.
-		ImageSource source{
-		L"UI/SampleTexture/Sample_0.png", { { 10, 178, 48, 48 } } };
-		UILayout layout{ { 120, 100 }, Origin::Center };
-		//컨테이너를 만들고 컨테이너 인자를 리스트 컴포넌트 인자로 넣음.
-		auto listArea = CreateListArea(layout, source);
+		auto listArea = CreateSampleListArea1({ { 150, 130 }, Origin::Center });
+		auto listAreaPtr = static_cast<ListArea*>(listArea.get());
+		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		auto protoTextArea = CreateSampleTextArea({ { 60, 20 }, Origin::Center }, L"");
+		protoTextArea->Rename("TextArea");
+		auto prototype = listAreaPtr->GetPrototypeContainer();
+		EXPECT_EQ(UIEx(prototype).AttachComponent(move(protoTextArea), { 20, 20 }), nullptr); //attach는 nullptr이 나와야 잘 붙은 것이다.
+	
+		const int& itemCount = 5;
+		for (auto idx : views::iota(0, itemCount))
+		{
+			auto container = listAreaPtr->PrepareContainer();
+			TextArea* textArea = UIEx(container).GetComponent<TextArea*>("TextArea_" + to_string(idx));
+			textArea->SetText(IntToWString(idx));
+		}
 	}
 
 	////////////////////////////////////////////////////////
