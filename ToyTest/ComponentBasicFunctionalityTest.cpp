@@ -267,22 +267,11 @@ namespace ComponentTest
 	TEST_F(BasicFunctionalityTest, ListArea)
 	{
 		auto listArea = CreateSampleListArea1({ { 150, 130 }, Origin::Center });
-		auto listAreaPtr = static_cast<ListArea*>(listArea.get());
+		auto listAreaPtr = ComponentCast<ListArea*>(listArea.get());
 		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		auto protoTextArea = CreateSampleTextArea({ { 60, 20 }, Origin::Center }, L"");
-		protoTextArea->Rename("TextArea");
-		auto prototype = listAreaPtr->GetPrototypeContainer();
-		EXPECT_EQ(UIEx(prototype).AttachComponent(move(protoTextArea), { 20, 20 }), nullptr); //attach는 nullptr이 나와야 잘 붙은 것이다.
-	
-		const int& itemCount = 5;
-		for (auto idx : views::iota(0, itemCount))
-		{
-			auto container = listAreaPtr->PrepareContainer();
-			TextArea* textArea = UIEx(container).GetComponent<TextArea*>("TextArea_" + to_string(idx));
-			textArea->SetText(IntToWString(idx));
-		}
+		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), listAreaPtr));
 	}
 
 	////////////////////////////////////////////////////////

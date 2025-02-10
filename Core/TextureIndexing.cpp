@@ -127,6 +127,8 @@ void TextureIndexing::Render(size_t index, const RECT& dest, const RECT* source)
     m_textures[index]->Draw(m_sprite, m_descHeap, dest, source);
 }
 
+//텍스쳐에 렌더링 된 경우에는 SrvOffset값으로 SrvDescriptor에서 가져오면 텍스춰를 가져올 수 있다.
+
 void TextureIndexing::Reset()
 {
     ranges::for_each(m_textures, [](auto& tex) {

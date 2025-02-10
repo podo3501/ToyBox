@@ -81,4 +81,6 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 키보드 이벤트를 연결한다.
 클릭했을때 사운드가 나게 한다.
 
-@region att 할때 cmd 적용, attach할때 중복되는거 이름 generate 시키기
+@렌더 텍스춰 하는 컴포넌트, 현재 Unknown으로 쓰고있는 컴포넌트는 ImageGrid1으로 교체
+@툴에서 floatingComponent부분에 렌더 텍스춰 수동으로 하는 부분 리팩토링후 컴포넌트 만들고
+@ImGui용과 새로 만들 렌더 택스춰 하는 컴포넌트를 하나로 통일한다. m_srvDescriptor->GetGpuHandle 이게 인덱스 값이다.

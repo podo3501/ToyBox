@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "SampleComponent.h"
+#include "../Include/IRenderer.h"
 #include "../UILayout.h"
 #include "ImageGrid1.h"
 #include "ImageGrid3.h"
@@ -9,6 +10,7 @@
 #include "Container.h"
 #include "ListArea.h"
 #include "../UIUtility.h"
+#include "../../Utility.h"
 
 unique_ptr<UIComponent> CreateSampleImageGrid1(const UILayout& layout)
 {
@@ -89,19 +91,18 @@ template <typename ImageGridType>
 static unique_ptr<UIComponent> CreateSampleListArea(const UILayout& layout,
 	const map<ButtonState, vector<Rectangle>>& sources, const wstring& texturePath)
 {
-
-	UILayout gridLayout({ { layout.GetSize().x, 30 }, layout.GetOrigin() });	//컨테이너 크기는 넓이는 같고, 높이는 30
+	UILayout gridLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
 
 	map<ButtonState, unique_ptr<UIComponent>> imageGridList;
 	for (const auto& rects : sources)
 	{
 		ImageSource imgSrc = CreateImageSource(texturePath, rects.second);
-		imageGridList.emplace(rects.first, CreateImageGrid<ImageGridType>(layout, imgSrc));
+		imageGridList.emplace(rects.first, CreateImageGrid<ImageGridType>(gridLayout, imgSrc));
 	}
-	auto container = CreateContainer(layout, move(imageGridList));
+	auto container = CreateContainer(gridLayout, move(imageGridList));
 
 	ImageSource imgGrid1Source{ L"UI/SampleTexture/Sample_0.png", { { 10, 178, 48, 48 } } }; //리스트 배경 그림
-	auto imgGrid1 = CreateImageGrid<ImageGrid1>(layout, imgGrid1Source);
+	auto imgGrid1 = CreateImageGrid<ImageGrid1>({ layout.GetSize(), Origin::LeftTop }, imgGrid1Source);
 
 	return CreateListArea(layout, move(imgGrid1), move(container));
 }
@@ -112,5 +113,31 @@ unique_ptr<UIComponent> CreateSampleListArea1(const UILayout& layout)
 		{ ButtonState::Normal, { {118, 138, 32, 32} } },
 		{ ButtonState::Hover, { {154, 138, 32, 32} } },
 		{ ButtonState::Pressed, { {190, 138, 32, 32} } } };
-	return CreateSampleListArea<ImageGrid1>(layout, sources, L"UI/SampleTexture/Sample_0.png");
+
+	auto listArea = CreateSampleListArea<ImageGrid1>(layout, sources, L"UI/SampleTexture/Sample_0.png");
+	//auto listAreaPtr = ComponentCast<ListArea*>(listArea.get());
+	//if (!MakeSampleListAreaData(listAreaPtr)) return nullptr;
+	return listArea;
+}
+
+bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
+{
+	//글자가 크기에 안 맞으면 안찍힌다. 
+	auto protoTextArea = CreateSampleTextArea({ { 130, 30 }, Origin::Center }, L"");
+	ReturnIfFalse(renderer->LoadComponent(protoTextArea.get()));
+
+	protoTextArea->Rename("TextArea");
+	auto prototype = listArea->GetPrototypeContainer();
+	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 75, 15 });
+	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
+
+	const int& itemCount = 5;
+	for (auto idx : views::iota(0, itemCount))
+	{
+		auto container = listArea->PrepareContainer();
+		TextArea* textArea = UIEx(container).GetComponent<TextArea*>("TextArea_" + to_string(idx));
+		textArea->SetText(L"<English><Black>Test " + IntToWString(idx*10) + L"</Black></English>");
+	}
+
+	return true;
 }
