@@ -34,7 +34,14 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 
 bool ImageGrid1::LoadResources(ILoadData* load)
 {
-	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, nullptr));
+	XMUINT2 size{};
+	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, &size));
+
+	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다.
+	{
+		SetSize(size);
+		m_source = { 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };
+	}
 
 	return true;
 }
@@ -67,6 +74,11 @@ bool ImageGrid1::SetImage(const UILayout& layout, const ImageSource& source) noe
 	m_source = source.list.at(0);
 
 	return true;
+}
+
+void ImageGrid1::SetFilenameToLoadInfo(const wstring& filename) noexcept
+{
+	m_filename = filename;
 }
 
 void ImageGrid1::SerializeIO(JsonOperation& operation)

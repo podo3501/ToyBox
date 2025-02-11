@@ -12,7 +12,7 @@ enum class ComponentID : int
 	Dialog,
 	ListArea,
 	Container,
-	Unknown
+	Unknown //부모 기본 UIComponent. 이게 문제가 되면 UICompnent가 혼자서 생성되었다는 건데, 생성자가 protected에서 public이 되었을 것이다.
 };
 
 template<>

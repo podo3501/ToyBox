@@ -1,8 +1,7 @@
 #pragma once
 
 struct IRenderer;
-class ExtractTexture;
-class UIComponent;
+class ImageGrid1;
 class SourceExtractor;
 
 class TextureWindow
@@ -21,7 +20,8 @@ private:
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<SourceExtractor> m_sourceExtractor;
-    unique_ptr<ExtractTexture> m_extractTexture;
+    unique_ptr<ImageGrid1> m_sourceTexture;
+
     ImTextureID m_textureID{};
     ImVec2 m_size;
     string m_name;

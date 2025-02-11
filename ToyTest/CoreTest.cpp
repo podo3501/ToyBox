@@ -3,6 +3,9 @@
 #include "../Core/TextureIndexing.h"
 #include "../Core/DeviceResources.h"
 #include "../Core/Utility.h"
+#include "ToyTestFixture.h"
+#include "../Include/IRenderer.h"
+#include "../Toy/UserInterface/Component/Panel.h"
 
 namespace BasicCore
 {
@@ -82,5 +85,13 @@ namespace BasicCore
 		for (int a = 1; a != 2; ++a)
 			subIter.Decrease();
 		EXPECT_EQ(subIter.GetCurrent(), 6);
+	}
+
+	//class TestComponent : public UIComponent
+	//{
+
+	TEST_F(IRendererTest, TextureLoading)
+	{
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 	}
 }

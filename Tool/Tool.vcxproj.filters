@@ -48,9 +48,6 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\ExtractTexture.cpp">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClCompile>
@@ -113,9 +110,6 @@
       <Filter>MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\ExtractTexture.h">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h">

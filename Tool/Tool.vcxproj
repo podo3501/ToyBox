@@ -168,7 +168,6 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditTextArea.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditWindow.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp" />
-    <ClCompile Include="MainWindow\SelectedComponent\ExtractTexture.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp" />
     <ClCompile Include="Menu\FileTab.cpp" />
@@ -203,7 +202,6 @@
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditTextArea.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditWindow.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h" />
-    <ClInclude Include="MainWindow\SelectedComponent\ExtractTexture.h" />
     <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h" />
     <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h" />
     <ClInclude Include="Menu\FileTab.h" />

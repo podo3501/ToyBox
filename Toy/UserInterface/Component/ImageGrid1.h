@@ -18,6 +18,7 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
+	void SetFilenameToLoadInfo(const wstring& filename) noexcept;
 
 	inline void SetSource(const Rectangle& source) noexcept { m_source = source; }
 	inline const Rectangle& GetSource() const noexcept { return m_source; }
