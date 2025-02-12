@@ -20,6 +20,7 @@ public:
 
     //ILoadData
     virtual bool LoadTexture(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize) override;
+    virtual bool CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, ImTextureID* outTextureID) override;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) override;
 
     //IGetValue
@@ -44,6 +45,13 @@ private:
     SpriteBatch* m_sprite{ nullptr };
 	vector<wstring> m_resourceFilenames;
 
-	vector<unique_ptr<Texture>> m_textures;
+    constexpr static int SrvOffsetCount = 100;
+    constexpr static int TextureTypeCount = 2;
+
+	//vector<unique_ptr<Texture>> m_textures;
+    array<unique_ptr<Texture>, SrvOffsetCount> m_textures;
     vector<unique_ptr<CFont>> m_fonts;
+
+    inline int& TextureAt(int srvIdx, int textureType) { return m_textureList[textureType * SrvOffsetCount + srvIdx]; } //2차원 배열이 아닌 1차원 배열을 쓰는 이유는 캐쉬 적중률을 높이기 위해서이다.
+    array<int, SrvOffsetCount* TextureTypeCount> m_textureList;
 };

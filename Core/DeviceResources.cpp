@@ -619,7 +619,7 @@ void DeviceResources::MoveToNextFrame()
 
     // If the next frame is not ready to be rendered yet, wait until it is ready.
     WaitForFenceValue(m_fenceValues[m_backBufferIndex]);
-
+    
     // Set the fence value for the next frame.
     m_fenceValues[m_backBufferIndex] = currentFenceValue + 1;
 }

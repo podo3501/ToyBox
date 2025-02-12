@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "TestHelper.h"
 #include "../Include/IComponent.h"
 #include "../Toy/Config.h"
 #include "../Toy/InputManager.h"
@@ -8,7 +9,7 @@
 
 using json = nlohmann::json;
 
-bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"Test/Data/WriteReadTest.json")
+bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
 {
 	JsonFile::WriteComponent(write, L"Test/Data/JOPTest.json");
 
@@ -49,3 +50,7 @@ void TestUpdate(UIComponent* component, int mouseX, int mouseY)
 	state.y = mouseY;
 	mouseTracker.Update(state);
 }
+
+unique_ptr<UIComponent> TestComponent::CreateClone() const { return nullptr; }
+bool TestComponent::LoadResources(ILoadData* load) { return m_loadTestFunc(load); }
+void TestComponent::SetLoadTestFunction(function<bool(ILoadData*)> func) { m_loadTestFunc = move(func); }

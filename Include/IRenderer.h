@@ -1,5 +1,6 @@
 #pragma once
 
+struct IComponent;
 //로딩할때 사용하는 인터페이스
 struct ILoadData
 {
@@ -7,6 +8,7 @@ public:
     virtual ~ILoadData() {};
 
     virtual bool LoadTexture(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize) = 0;
+    virtual bool CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, ImTextureID* outTextureID) = 0;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) = 0;
 };
 
@@ -44,8 +46,6 @@ public:
     virtual void Render(ImGuiIO* io) = 0;
     //virtual void Update() = 0;
 };
-
-struct IComponent;
 
 struct IRenderer
 {

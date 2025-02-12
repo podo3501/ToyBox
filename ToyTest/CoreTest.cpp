@@ -6,74 +6,11 @@
 #include "ToyTestFixture.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "TestHelper.h"
 
 namespace BasicCore
 {
-	bool LoadTexture(ILoadData* load)
-	{
-		wstring m_filename{ L"Resources/UI/Blue/button_square_header_large_square_screws.png" };
-		size_t m_index{ 0 };
-		XMUINT2 m_size{};
-
-		Rectangle rect = { 0, 0, 31, 35 };
-		EXPECT_TRUE(load->LoadTexture(m_filename, &rect, m_index, &m_size));
-		EXPECT_EQ(m_index, 0);
-
-		EXPECT_TRUE(load->LoadTexture(m_filename, nullptr, m_index, &m_size));
-		EXPECT_EQ(m_index, 1);
-
-		Rectangle rect2 = { 0, 0, 64, 64 };
-		EXPECT_TRUE(load->LoadTexture(m_filename, &rect2, m_index, nullptr));
-		EXPECT_EQ(m_index, 1);
-
-		Rectangle rect3 = { 31, 35, 2, 2 };
-		EXPECT_TRUE(load->LoadTexture(m_filename, &rect3, m_index, &m_size));
-		EXPECT_EQ(m_index, 2);
-		EXPECT_TRUE(m_size.x == 2 && m_size.y == 2);
-
-		EXPECT_TRUE(load->LoadTexture(m_filename, &rect, m_index, &m_size));
-		EXPECT_EQ(m_index, 0);
-
-		return true;
-	}
-
-	TEST_F(CoreTest, TextureLoading)
-	{
-		auto texIndexing = make_unique<TextureIndexing>(m_deviceResources.get(),
-			m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
-
-		EXPECT_TRUE(LoadResources(LoadTexture, texIndexing.get()));
-	}
-
-	bool LoadFont(ILoadData* load)
-	{
-		wstring m_hangleFilename{ L"Resources/UI/Font/HangleS16.spritefont" };
-		wstring m_englishFilename{ L"Resources/UI/Font/CourierNewBoldS18.spritefont" };
-
-		size_t fontIndex1{ 0 };
-		load->LoadFont(m_hangleFilename, fontIndex1);
-		EXPECT_EQ(fontIndex1, 0);
-
-		size_t fontIndex2{ 0 };
-		load->LoadFont(m_hangleFilename, fontIndex2);
-		EXPECT_EQ(fontIndex1, fontIndex2);
-
-		size_t fontIndex3{ 0 };
-		load->LoadFont(m_englishFilename, fontIndex3);
-		EXPECT_NE(fontIndex3, 0);
-		EXPECT_NE(fontIndex3, fontIndex2);
-
-		return true;
-	}
-
-	TEST_F(CoreTest, FontLoading)
-	{
-		auto texIndexing = make_unique<TextureIndexing>(m_deviceResources.get(),
-			m_resourceDescriptors.get(), m_batch.get(), m_spriteBatch.get());
-
-		EXPECT_TRUE(LoadResources(LoadFont, texIndexing.get()));
-	}
-
 	TEST(CoreUtility, CycleIterator)
 	{
 		CycleIterator addIter(1, 7);
@@ -87,11 +24,72 @@ namespace BasicCore
 		EXPECT_EQ(subIter.GetCurrent(), 6);
 	}
 
-	//class TestComponent : public UIComponent
-	//{
-
-	TEST_F(IRendererTest, TextureLoading)
+	//Rectangle 함수인자를 optional로 하면 괜찮을 꺼 같다. ImageGrid1의 m_source도 optional이 돼야 하겠지만.
+	static size_t LoadAndCheckTexture(ILoadData* load, const wstring& filename, const Rectangle& rect, XMUINT2* size)
 	{
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		size_t index{ 0 };
+		EXPECT_TRUE(load->LoadTexture(filename, &rect, index, size));
+		return index;
+	}
+
+	static size_t LoadAndCheckTexture(ILoadData* load, const wstring& filename, Rectangle* rect, XMUINT2* size)
+	{
+		size_t index{ 0 };
+		EXPECT_TRUE(load->LoadTexture(filename, rect, index, size));
+		return index;
+	}
+
+	static size_t LoadAndCheckRenderTexture(ILoadData* load, const XMUINT2& size, IComponent* component)
+	{
+		size_t index{ 0 };
+		EXPECT_TRUE(load->CreateRenderTexture(size, component, index, nullptr));
+		return index;
+	}
+
+	static size_t LoadAndCheckFont(ILoadData* load, const wstring& filename)
+	{
+		size_t fontIdx{ 0 };
+		EXPECT_TRUE(load->LoadFont(filename, fontIdx));
+		return fontIdx;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////
+
+	static bool TexturLoadingTest(ILoadData* load)
+	{
+		wstring filename{ L"Resources/UI/SampleTexture/Sample_0.png" };
+		XMUINT2 size{};
+
+		EXPECT_EQ(LoadAndCheckTexture(load, filename, { 0, 0, 31, 35 }, &size), 0);
+		EXPECT_EQ(LoadAndCheckTexture(load, filename, { 0, 0, 64, 35 }, &size), 1);
+		EXPECT_EQ(LoadAndCheckTexture(load, filename, { 31, 35, 2, 35 }, &size), 2);
+		EXPECT_EQ(LoadAndCheckTexture(load, filename, { 0, 0, 31, 35 }, &size), 0);
+		EXPECT_EQ(LoadAndCheckTexture(load, filename, nullptr, &size), 3);
+
+		//auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
+		//EXPECT_EQ(LoadAndCheckRenderTexture(load, img1->GetSize(), img1.get()), 3);
+
+		return true;
+	}
+
+	static bool LoadFont(ILoadData* load)
+	{
+		wstring hangleFilename{ L"Resources/UI/Font/HangleS16.spritefont" };
+		wstring englishFilename{ L"Resources/UI/Font/CourierNewBoldS18.spritefont" };
+
+		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 0);
+		EXPECT_EQ(LoadAndCheckFont(load, englishFilename), 1);
+
+		return true;
+	}
+	
+	TEST_F(IRendererTest, LoadingTest)
+	{
+		unique_ptr<TestComponent> testComponent = make_unique<TestComponent>();
+		testComponent->SetLoadTestFunction(TexturLoadingTest);
+		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
+
+		testComponent->SetLoadTestFunction(LoadFont);
+		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
 	}
 }

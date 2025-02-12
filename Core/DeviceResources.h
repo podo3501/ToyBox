@@ -31,6 +31,7 @@ namespace DX
         void CreateDeviceResources();
         void CreateWindowSizeDependentResources();
         void SetWindow(HWND window, int width, int height) noexcept;
+        void SetGpuCompletionCallback(function<void()> callback) noexcept;
         bool WindowSizeChanged(int width, int height);
         void HandleDeviceLost();
         void RegisterDeviceNotify(IDeviceNotify* deviceNotify) noexcept { m_deviceNotify = deviceNotify; }

@@ -4,6 +4,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Utility.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
@@ -78,6 +79,12 @@ void FloatingComponent::DrawMakeComponent()
 		ImVec2(1, 1),
 		colorU32
 	);
+
+	//ImGui::SetCursorPos(m_position);
+	//ImGui::Image(m_textureID, XMUINT2ToImVec2(m_drawTextureSize),
+	//	ImVec2(0, 0),
+	//	ImVec2(1, 1),
+	//	tintColor);
 }
 
 void FloatingComponent::Render()

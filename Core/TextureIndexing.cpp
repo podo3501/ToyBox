@@ -2,6 +2,7 @@
 #include "TextureIndexing.h"
 #include "DeviceResources.h"
 #include "Texture.h"
+#include "RenderTexture.h"
 #include "Font.h"
 #include "Utility.h"
 
@@ -15,25 +16,14 @@ TextureIndexing::TextureIndexing(DX::DeviceResources* deviceRes, DescriptorHeap*
 
 bool TextureIndexing::IsExist(const wstring& filename, const Rectangle* rect, size_t& outIndex, XMUINT2* outSize)
 {
-    //같은 파일이 있는지 확인한다.
-    vector<unique_ptr<Texture>>::iterator find = m_textures.end();
-    if (rect == nullptr)     //이미지 전체를 사용한다면
-    {
-        find = ranges::find_if(m_textures, [&filename](const auto& tex) {
-            return (tex->GetFilename() == filename && tex->IsFullSize());
-            });
-    }
-    else
-    {
-        find = ranges::find_if(m_textures, [&filename, rect](const auto& tex) {
-            return (tex->GetFilename() == filename && tex->GetRect() == *rect);
-            });
-    }
+    auto find = ranges::find_if(m_textures, [&filename, rect](const auto& tex) {
+        return tex->GetFilename() == filename && (rect ? tex->GetRect() == *rect : tex->IsFullSize());
+        });
 
     if (find != m_textures.end())
     {
         outIndex = distance(m_textures.begin(), find);
-        if (outSize) (*outSize) = (*find)->GetSize();
+        if (outSize) *outSize = (*find)->GetSize();
         return true;
     }
 
@@ -85,7 +75,7 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
 
     auto findFilename = ranges::find(m_resourceFilenames, filename);
 
-    unique_ptr<Texture> tex = nullptr;
+    unique_ptr<Texture> tex;
     if (findFilename == m_resourceFilenames.end())
     {
         tex = make_unique<Texture>();
@@ -108,16 +98,26 @@ bool TextureIndexing::LoadTexture(const wstring& filename, const Rectangle* rect
     return true;
 }
 
+bool TextureIndexing::CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, ImTextureID* outTextureID)
+{
+    auto device = m_deviceResources->GetD3DDevice();
+    unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>(device, m_descHeap);
+
+    auto format = m_deviceResources->GetBackBufferFormat();
+    //ReturnIfFalse(renderTexture->Create(format, size, m_renderTexOffset->Increase(), component));
+    //outTextureID = renderTexture->GetTextureID();
+
+    return true;
+}
+
 bool TextureIndexing::GetTextureAreaList(const wstring& filename, const UINT32& bgColor, vector<Rectangle>& outList)
 {
     auto find = ranges::find_if(m_textures, [&filename](const auto& tex) {
         return (tex->GetFilename() == filename);
         });
+
     if (find == m_textures.end()) return false;
-
-    ReturnIfFalse((*find)->GetTextureAreaList(m_deviceResources, bgColor, outList));
-
-    return true;
+    return ((*find)->GetTextureAreaList(m_deviceResources, bgColor, outList));
 }
 
 void TextureIndexing::Render(size_t index, const RECT& dest, const RECT* source)
