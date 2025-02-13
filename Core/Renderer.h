@@ -80,7 +80,8 @@ private:
     // Device resources.
     unique_ptr<DX::DeviceResources> m_deviceResources;
     unique_ptr<GraphicsMemory> m_graphicsMemory;
-    unique_ptr<DescriptorHeap> m_srvDescriptors;
+    //unique_ptr<DescriptorHeap> m_srvDescriptors;
+    unique_ptr<DescriptorPile> m_srvDescriptorPile;
     unique_ptr<ResourceUploadBatch> m_batch;
 
     unique_ptr<IImgui> m_imgui;

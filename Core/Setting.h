@@ -6,3 +6,5 @@ enum class SrvOffset : size_t
     RenderTexture = 51,
     Count = 100,
 };
+
+constexpr int SrvCount = 100;

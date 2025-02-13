@@ -77,10 +77,10 @@ bool Renderer::Initialize()
     auto device = m_deviceResources->GetD3DDevice();
     auto format = m_deviceResources->GetBackBufferFormat();
 
-    ReturnIfFalse(m_imgui->Initialize(device, m_srvDescriptors.get(), format, Ev(SrvOffset::Imgui)));
+    ReturnIfFalse(m_imgui->Initialize(device, m_srvDescriptorPile.get(), format, Ev(SrvOffset::Imgui)));
     m_batch = make_unique<ResourceUploadBatch>(device);
     m_texIndexing = make_unique<TextureIndexing>(
-        m_deviceResources.get(), m_srvDescriptors.get(), m_batch.get(), m_spriteBatch.get());
+        m_deviceResources.get(), m_srvDescriptorPile.get(), m_batch.get(), m_spriteBatch.get());
     m_renderTexOffset = make_unique<CycleIterator>(
         static_cast<int>(Ev(SrvOffset::RenderTexture)), 
         static_cast<int>(Ev(SrvOffset::Count)));
@@ -109,7 +109,7 @@ void Renderer::CreateDeviceDependentResources()
     m_graphicsMemory = make_unique<GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_srvDescriptors = make_unique<DescriptorHeap>(device, Ev(SrvOffset::Count));
+    m_srvDescriptorPile = make_unique<DescriptorPile>(device, SrvCount);
 
     ResourceUploadBatch resourceUpload(device);
 
@@ -140,7 +140,7 @@ void Renderer::OnDeviceLost()
     m_imgui->Reset();
     m_texIndexing->Reset();
 
-    m_srvDescriptors.reset();
+    m_srvDescriptorPile.reset();
     m_spriteBatch.reset();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
@@ -197,7 +197,7 @@ void Renderer::Draw()
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
     // TODO: Add your rendering code here.
-    ID3D12DescriptorHeap* heaps[] = { m_srvDescriptors->Heap() };
+    ID3D12DescriptorHeap* heaps[] = { m_srvDescriptorPile->Heap() };
     commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
 
     // Set the viewport and scissor rect.
@@ -322,7 +322,7 @@ void Renderer::RemoveImguiComponent(IImguiComponent* comp) noexcept { m_imgui->R
 bool Renderer::CreateRenderTexture(const XMUINT2& size, IComponent* component, ImTextureID& outTextureID)
 {
     auto device = m_deviceResources->GetD3DDevice();
-    unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>(device, m_srvDescriptors.get());
+    unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>(device, m_srvDescriptorPile.get());
 
     auto format = m_deviceResources->GetBackBufferFormat();
     ReturnIfFalse(renderTexture->Create(format, size, m_renderTexOffset->Increase(), component));
