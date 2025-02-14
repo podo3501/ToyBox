@@ -109,7 +109,7 @@ void Renderer::CreateDeviceDependentResources()
     m_graphicsMemory = make_unique<GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_srvDescriptorPile = make_unique<DescriptorPile>(device, SrvCount);
+    m_srvDescriptorPile = make_unique<DescriptorPile>(device, MAX_DESC);
 
     ResourceUploadBatch resourceUpload(device);
 
@@ -205,9 +205,10 @@ void Renderer::Draw()
     auto const scissorRect = m_deviceResources->GetScissorRect();
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissorRect);
-
-    for (auto& renderTexture : m_renderTextures | views::values )
-        renderTexture->Render(commandList, m_texIndexing.get(), m_spriteBatch.get());
+    
+    m_texIndexing->DrawRenderTextures();
+    //for (auto& renderTexture : m_renderTextures | views::values )
+    //    renderTexture->Render(commandList, m_texIndexing.get(), m_spriteBatch.get());
 
     Clear();
 

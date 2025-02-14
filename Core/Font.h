@@ -4,14 +4,12 @@
 class CFont
 {
 public:
-    CFont();
-    CFont(ID3D12Device* device, DescriptorPile* descPile) noexcept;
     ~CFont();
+    CFont() = delete;
+    CFont(ID3D12Device* device, DescriptorPile* descPile) noexcept;
 
     bool Load(ResourceUploadBatch* upload, const wstring& filename, size_t index);
-    bool Load(ID3D12Device* device, ResourceUploadBatch* upload, const DescriptorHeap* descHeap,
-        const wstring& filename, size_t descHeapIdx);
-
+    void Reset() {};
     inline size_t GetIndex() const noexcept { return *m_index; }
     inline const wstring& GetFilename() const noexcept { return m_filename; }
     inline float GetLineSpacing() const noexcept { return m_font->GetLineSpacing(); }

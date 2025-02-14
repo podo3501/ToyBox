@@ -15,11 +15,11 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool LoadResources(ILoadData* load) override;
 
-	void SetLoadTestFunction(function<bool(ILoadData*)> func);
+	void SetLoadTestFunction(function<void(ILoadData*)> func);
 
 protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 
 private:
-	function<bool(ILoadData*)> m_loadTestFunc;
+	function<void(ILoadData*)> m_loadTestFunc;
 };

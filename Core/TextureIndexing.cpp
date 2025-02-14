@@ -15,126 +15,168 @@ TextureIndexing::TextureIndexing(DX::DeviceResources* deviceRes, DescriptorPile*
     m_sprite{ sprite }
 {}
 
-template <typename Container>
-auto FindResourceByFilename(const Container& list, const wstring& filename)
+static SrvResource* FindResourceByFilename(array<SrvResource, MAX_DESC>& resources, const wstring& filename)
 {
-    auto find = ranges::find_if(list, [&filename](const auto& tex) {
-        return tex != nullptr && tex->GetFilename() == filename;
+    auto find = ranges::find_if(resources, [&filename](const SrvResource& res) {
+        return visit([&filename](const auto& ptr) {
+            return ptr && ptr->GetFilename() == filename;
+            }, res);
         });
 
-    if (find != list.end())
-        return find->get();
+    if (find != resources.end()) {
+        return &(*find);
+    }
 
-    return static_cast<decltype(find->get())>(nullptr); // nullptr을 컨테이너에 들어있는 타입으로 변환
+    return nullptr;
 }
 
 bool TextureIndexing::LoadFont(const wstring& filename, size_t& outIndex)
 {
-    if (auto find = FindResourceByFilename(m_fontList, filename); find)
+    if (auto find = FindResourceByFilename(m_srvResources, filename); find)
     {
-        outIndex = find->GetIndex();
+        CFont* curFont = get<unique_ptr<CFont>>(*find).get();
+        outIndex = curFont->GetIndex();
         return true;
     }
 
     unique_ptr<CFont> font = make_unique<CFont>(m_device, m_descHeapPile);
-    auto offset = m_descHeapPile->Allocate();
+    auto offset = AllocateDescriptor();
     ReturnIfFalse(font->Load(m_upload, filename, offset));
 
     outIndex = font->GetIndex();
-    m_fontList[offset] = move(font);
+    m_srvResources[offset] = move(font);
 
     return true;
 }
 
-void TextureIndexing::DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const
-{
-    m_fontList[index]->DrawString(m_sprite, text, pos, color);
-}
-
-Rectangle TextureIndexing::MeasureText(size_t index, const wstring& text, const Vector2& position)
-{
-    return m_fontList[index]->MeasureText(text, position);
-}
-
-float TextureIndexing::GetLineSpacing(size_t index) const noexcept
-{
-    return m_fontList[index]->GetLineSpacing();
-}
-
-//size_t TextureIndexing::GenerateSrvOffset(TextureType textureType) noexcept
-//{
-//    //비어있는 인덱스를 하나 꺼내 준다.
-//    size_t curIdx = m_descHeapPile->Allocate();
-//    SrvOffsetAt(textureType, curIdx) = curIdx;
-//    return curIdx;
-//}
-
 bool TextureIndexing::LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize)
 {
-    if (auto find = FindResourceByFilename(m_textureList, filename); find)
+    if (auto find = FindResourceByFilename(m_srvResources, filename); find)
     {
-        outIndex = find->GetIndex();
-        if (outSize) *outSize = find->GetSize();
+        Texture* curTex = get<unique_ptr<Texture>>(*find).get();
+        outIndex = curTex->GetIndex();
+        if (outSize) *outSize = curTex->GetSize();
         return true;
     }
 
     auto tex = make_unique<Texture>(m_device, m_descHeapPile);
-    auto offset = m_descHeapPile->Allocate();
+    auto offset = AllocateDescriptor();
     tex->Upload(m_upload, filename, offset);
 
     outIndex = tex->GetIndex();
-    if (outSize) (*outSize) = tex->GetSize();
-    m_textureList[offset] = move(tex);
-
-    //m_renderList[offset].SetRenderFunction([ptr = tex.get()]() {
-    //    RECT dest = {};
-    //    RECT* source = nullptr;
-    //    SpriteBatch* spriteBatch = nullptr;
-    //    ptr->Draw(spriteBatch, dest, source);
-    //    });
+    if (outSize) *outSize = tex->GetSize();
+    m_srvResources[offset] = move(tex);
     
     return true;
 }
 
 bool TextureIndexing::CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, ImTextureID* outTextureID)
 {
-    unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>(m_device, m_descHeapPile);
+    auto renderTex = make_unique<RenderTexture>(m_device, m_descHeapPile);
 
     auto format = m_deviceResources->GetBackBufferFormat();
-    //ReturnIfFalse(renderTexture->Create(format, size, m_renderTexOffset->Increase(), component));
-    //outTextureID = renderTexture->GetTextureID();
+    auto offset = AllocateDescriptor();
+    if (!renderTex->Create(format, size, offset, component))
+    {
+        ReleaseDescriptor(offset);
+        return false;
+    }
+    outIndex = renderTex->GetIndex();
+    if(outTextureID) *outTextureID = renderTex->GetTextureID();
+    m_srvResources[offset] = move(renderTex);
 
     return true;
 }
 
+bool TextureIndexing::ModifyRenderTexture(size_t index, const XMUINT2& size)
+{
+    return GetRenderTex(index)->ModifyRenderTexture(size);
+}
+
+void TextureIndexing::DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const 
+{
+    GetFont(index)->DrawString(m_sprite, text, pos, color);
+}
+
+Rectangle TextureIndexing::MeasureText(size_t index, const wstring& text, const Vector2& position)
+{
+    return GetFont(index)->MeasureText(text, position);
+}
+
+float TextureIndexing::GetLineSpacing(size_t index) const noexcept
+{
+    return GetFont(index)->GetLineSpacing();
+}
+
 optional<vector<Rectangle>> TextureIndexing::GetTextureAreaList(const wstring& filename, const UINT32& bgColor)
 {
-    auto find = FindResourceByFilename(m_textureList, filename);
+    auto find = FindResourceByFilename(m_srvResources, filename);
     if (!find) return nullopt;
 
+    Texture* curTex = get<unique_ptr<Texture>>(*find).get();
     vector<Rectangle> areaList;
-    if(!find->GetTextureAreaList(m_deviceResources, bgColor, areaList)) return nullopt;
+    if (!curTex->GetTextureAreaList(m_deviceResources, bgColor, areaList)) return nullopt;
 
     return areaList;
 }
 
 void TextureIndexing::Render(size_t index, const RECT& dest, const RECT* source)
 {
-    if (m_textureList.empty() || index > m_textureList.size() - 1) return;
-    if (!m_textureList[index]) return;
+    assert(!m_srvResources.empty() && index <= m_srvResources.size() - 1); //assert로 한 이유는 release일때는 조금이라도 동작을 안하게 하기 위해서이다.
+    assert(get_if<unique_ptr<Texture>>(&m_srvResources[index]));
 
-    m_textureList[index]->Draw(m_sprite, dest, source);
+    GetTexture(index)->Draw(m_sprite, dest, source);
+}
+
+void TextureIndexing::DrawRenderTextures()
+{
+    auto views = m_srvResources
+        | views::filter([](const SrvResource& resource) {
+        return holds_alternative<unique_ptr<RenderTexture>>(resource);
+            })
+        | views::transform([](const SrvResource& resource) -> RenderTexture* {
+        return get<unique_ptr<RenderTexture>>(resource).get();
+            });
+
+    auto commandList = m_deviceResources->GetCommandList();
+    for (auto renderTex : views)
+        renderTex->Render(commandList, this, m_sprite);
+}
+
+void TextureIndexing::ReleaseTexture(size_t idx) noexcept
+{
+    m_deviceResources->WaitForGpu();
+    std::visit([](auto& resource) {
+        resource = nullptr;
+        }, m_srvResources[idx]);
+    ReleaseDescriptor(idx);
 }
 
 void TextureIndexing::Reset()
 {
-    ranges::for_each(m_textureList, [](auto& tex) {
-        if(tex)
-            tex->Reset();
+    ranges::for_each(m_srvResources, [](auto& res) {
+        visit([](const auto& ptr) {
+            ptr->Reset();
+            }, res);
         });
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureIndexing::GetSrvHandle()
+void TextureIndexing::ReleaseDescriptor(size_t idx) noexcept
 {
-    return m_descHeapPile->GetGpuHandle(0);
+    assert(idx < MAX_DESC);
+    
+    m_freeDescIndices.push_back(idx);
+}
+
+size_t TextureIndexing::AllocateDescriptor() noexcept
+{
+    if (!m_freeDescIndices.empty()) 
+    {
+        size_t idx = m_freeDescIndices.back();
+        m_freeDescIndices.pop_back();
+        return idx;
+    }
+
+    assert(m_nextDescIdx < MAX_DESC);
+    return m_nextDescIdx++;
 }

@@ -4,22 +4,15 @@
 
 class Texture;
 class CFont;
+class RenderTexture;
 
 namespace DX
 {
     class DeviceResources;
 }
 
-// 가변 인자를 받는 `std::function`을 저장할 구조체
-struct RenderSlot 
-{
-    template <typename... ParamTypes>
-    void SetFunc(ParamTypes&&... params)
-    {
-
-    }
-
-};
+//variant로 한 이유는 얘네들은 합쳐지지 않는데, 나중에 상속으로 해결된다면 상속으로 하는 편이 눈에 더 잘 들어올것 같다.
+using SrvResource = variant<unique_ptr<Texture>, unique_ptr<CFont>, unique_ptr<RenderTexture>>;
 
 class TextureIndexing : public ILoadData, public IGetValue, public IRender
 {
@@ -32,27 +25,30 @@ public:
 
     //ILoadData
     virtual bool LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize) override;
-    virtual bool CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, ImTextureID* outTextureID) override;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) override;
 
     //IGetValue
+    virtual bool CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, ImTextureID* outTextureID) override;
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
     virtual float GetLineSpacing(size_t index) const noexcept override;
     virtual optional<vector<Rectangle>> GetTextureAreaList(const wstring& filename, const UINT32& bgColor) override;
+    virtual void ReleaseTexture(size_t idx) noexcept override;
+    virtual bool ModifyRenderTexture(size_t index, const XMUINT2& size) override;
 
     //IRender
     virtual void Render(size_t index, const RECT& dest, const RECT* source) override;
     virtual void DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const override;
 
+    void DrawRenderTextures();
     void Reset();
-    D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandle();
 
 private:
-    enum class TextureType
-    {
-        Texture,
-        RenderTexture
-    };
+    void ReleaseDescriptor(size_t idx) noexcept;
+    size_t AllocateDescriptor() noexcept;
+
+    inline Texture* GetTexture(size_t index) const { return get<unique_ptr<Texture>>(m_srvResources[index]).get(); }
+    inline CFont* GetFont(size_t index) const { return get<unique_ptr<CFont>>(m_srvResources[index]).get(); }
+    inline RenderTexture* GetRenderTex(size_t index) const { return get<unique_ptr<RenderTexture>>(m_srvResources[index]).get(); }
 
     DX::DeviceResources* m_deviceResources;
     ID3D12Device* m_device;
@@ -60,17 +56,7 @@ private:
     ResourceUploadBatch* m_upload;
     SpriteBatch* m_sprite;
 
-    array<unique_ptr<Texture>, SrvCount> m_textureList;
-    array<unique_ptr<CFont>, SrvCount> m_fontList;
-    array<RenderSlot, SrvCount> m_renderList;
-
-    //constexpr static int TextureTypeCount = 2;
-    //constexpr static int SrvOffsetCount = 100;
-    //array<unique_ptr<Texture>, SrvOffsetCount * TextureTypeCount> m_textures;
-
-    //텍스춰의 타입과 인덱스를 넣으면 지금 비어있는 srvOffset값을 돌려준다.
-    //SrvOffset값을 구간을 지정해서 할 경우에는 텍스춰의 갯수가 많아질 경우 재조정해야 하고, 적을 경우는 공간낭비가 생긴다.
-    //inline optional<size_t>& SrvOffsetAt(TextureType textureType, size_t srvIdx) { return m_srvOffsetTable[static_cast<int>(textureType) * SrvOffsetCount + srvIdx]; } //2차원 배열이 아닌 1차원 배열을 쓰는 이유는 캐쉬 적중률을 높이기 위해서이다.
-    //size_t GenerateSrvOffset(TextureType textureType) noexcept;
-    //array<optional<size_t>, SrvOffsetCount* TextureTypeCount> m_srvOffsetTable;
+    array<SrvResource, MAX_DESC> m_srvResources;
+    vector<size_t> m_freeDescIndices; //해제되고나서 재활용될 인덱스 모음
+    size_t m_nextDescIdx{ 0 };  //새롭게 할당할 인덱스
 };

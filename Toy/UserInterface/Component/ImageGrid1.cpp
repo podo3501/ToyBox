@@ -5,13 +5,22 @@
 #include "../../Config.h"
 #include "../JsonOperation.h"
 
-ImageGrid1::~ImageGrid1() = default;
+ImageGrid1::~ImageGrid1()
+{
+	if (m_resourceInfo)
+	{
+		m_resourceInfo->ReleaseTexture(m_index);
+		m_resourceInfo = nullptr;
+	}
+}
+
 ImageGrid1::ImageGrid1() : 
 	m_resourceInfo{ nullptr }
 {}
 
 ImageGrid1::ImageGrid1(const ImageGrid1& o) :
-	UIComponent{ o }
+	UIComponent{ o },
+	m_resourceInfo{ nullptr }
 {
 	m_index = o.m_index;
 	m_filename = o.m_filename;

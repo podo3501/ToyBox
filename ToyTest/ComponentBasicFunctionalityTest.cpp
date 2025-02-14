@@ -11,6 +11,7 @@
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
+#include "../Toy/UserInterface/Component/DrawTexture.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Toy/Utility.h"
 
@@ -90,6 +91,15 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
+	}
+
+	TEST_F(BasicFunctionalityTest, DrawTexture)
+	{
+		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
+
+		ImTextureID texID{};
+		auto drawTex = make_unique<DrawTexture>();
+		drawTex->CreateTexture(m_renderer->GetValue(), img1->GetSize(), img1.get(), &texID);
 	}
 
 	////////////////////////////////////////////////////////

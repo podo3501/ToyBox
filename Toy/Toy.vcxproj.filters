@@ -127,6 +127,9 @@
     <ClInclude Include="UserInterface\Component\Button.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Component\DrawTexture.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -205,6 +208,9 @@
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Component\Button.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\DrawTexture.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
   </ItemGroup>

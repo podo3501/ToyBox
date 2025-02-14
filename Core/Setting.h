@@ -7,4 +7,4 @@ enum class SrvOffset : size_t
     Count = 100,
 };
 
-constexpr int SrvCount = 100;
+constexpr int MAX_DESC = 100;

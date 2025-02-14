@@ -34,10 +34,10 @@ namespace BasicCore
 		return { index, size };
 	}
 
-	static size_t LoadAndCheckRenderTexture(ILoadData* load, const XMUINT2& size, IComponent* component)
+	static size_t LoadAndCheckRenderTexture(IGetValue* value, const XMUINT2& size, IComponent* component)
 	{
 		size_t index{ 0 };
-		EXPECT_TRUE(load->CreateRenderTexture(size, component, index, nullptr));
+		EXPECT_TRUE(value->CreateRenderTexture(size, component, index, nullptr));
 		return index;
 	}
 
@@ -50,7 +50,7 @@ namespace BasicCore
 
 	///////////////////////////////////////////////////////////////////////////////////
 
-	static bool TexturLoadingTest(ILoadData* load)
+	static void TexturLoadingTest(ILoadData* load)
 	{
 		wstring sample{ L"Resources/UI/SampleTexture/Sample_0.png" };
 		wstring option{ L"Resources/UI/Texture/Option.png" };
@@ -58,23 +58,25 @@ namespace BasicCore
 		EXPECT_THAT(LoadAndCheckTexture(load, sample), Pair(0, XMUINT2{ 512, 512 }));
 		EXPECT_THAT(LoadAndCheckTexture(load, sample), Pair(0, XMUINT2{ 512, 512 }));
 		EXPECT_THAT(LoadAndCheckTexture(load, option), Pair(1, XMUINT2{ 512, 512 }));
-
-		//auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
-		//EXPECT_EQ(LoadAndCheckRenderTexture(load, img1->GetSize(), img1.get()), 3);
-
-		return true;
 	}
 
-	static bool LoadFont(ILoadData* load)
+	static void LoadFont(ILoadData* load)
 	{
 		wstring hangleFilename{ L"Resources/UI/Font/HangleS16.spritefont" };
 		wstring englishFilename{ L"Resources/UI/Font/CourierNewBoldS18.spritefont" };
 
-		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 2);
-		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 2);
-		EXPECT_EQ(LoadAndCheckFont(load, englishFilename), 3);
+		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 3);
+		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 3);
+		EXPECT_EQ(LoadAndCheckFont(load, englishFilename), 4);
+	}
 
-		return true;
+	static void ReloadingTest(ILoadData* load)
+	{
+		wstring sample{ L"Resources/UI/SampleTexture/Sample_0.png" };
+		wstring option{ L"Resources/UI/Texture/Option.png" };
+
+		EXPECT_THAT(LoadAndCheckTexture(load, sample), Pair(1, XMUINT2{ 512, 512 }));
+		EXPECT_THAT(LoadAndCheckTexture(load, option), Pair(0, XMUINT2{ 512, 512 }));
 	}
 	
 	TEST_F(IRendererTest, LoadingTest)
@@ -83,7 +85,17 @@ namespace BasicCore
 		testComponent->SetLoadTestFunction(TexturLoadingTest);
 		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
 
+		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
+		EXPECT_EQ(LoadAndCheckRenderTexture(m_renderer->GetValue(), img1->GetSize(), img1.get()), 2);
+
 		testComponent->SetLoadTestFunction(LoadFont);
+		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
+
+		auto curValue = m_renderer->GetValue();
+		curValue->ReleaseTexture(0);
+		curValue->ReleaseTexture(1);
+
+		testComponent->SetLoadTestFunction(ReloadingTest);
 		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
 	}
 }

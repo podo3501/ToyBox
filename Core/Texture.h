@@ -19,7 +19,7 @@ public:
 
     inline XMUINT2 GetSize() const noexcept { return m_size; }
     inline size_t GetIndex() const noexcept { return *m_index; }
-    inline const std::wstring& GetFilename() const noexcept;
+    inline const wstring& GetFilename() const noexcept { return m_filename; }
     
 private:
     ID3D12Device* m_device;
@@ -27,8 +27,6 @@ private:
     Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
     XMUINT2 m_size{};
     optional<size_t> m_index;
-    std::wstring m_filename{};
+    wstring m_filename{};
 };
-
-const std::wstring& Texture::GetFilename() const noexcept { return m_filename; }
 
