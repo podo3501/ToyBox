@@ -6,50 +6,24 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
-Texture::Texture() noexcept = default;
 Texture::~Texture() = default;
-Texture::Texture(const Texture* tex, const Rectangle* rect) noexcept
-{
-    m_texture = tex->m_texture;
-    m_size = tex->m_size;
-    m_descHeapIdx = tex->m_descHeapIdx;
-    m_filename = tex->m_filename;
+Texture::Texture(ID3D12Device* device, DescriptorPile* descPile) noexcept :
+    m_device{ device },
+    m_descPile{ descPile }
+{}
 
-    SetRectangle(rect);
-}
-
-void Texture::Upload(ID3D12Device* device, DescriptorHeap* descHeap, ResourceUploadBatch* resUpload, 
-    const std::wstring& filename, const Rectangle* rect, std::size_t descHeapIdx)
+void Texture::Upload(ResourceUploadBatch* resUpload, const wstring& filename, size_t index)
 {
     DX::ThrowIfFailed(
-        CreateWICTextureFromFile(device, *resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
-    
-    CreateShaderResourceView(device, m_texture.Get(), descHeap->GetCpuHandle(descHeapIdx));
+        CreateWICTextureFromFile(m_device, *resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
+
+    CreateShaderResourceView(m_device, m_texture.Get(), m_descPile->GetCpuHandle(index));
     m_size = GetTextureSize(m_texture.Get());
-    m_descHeapIdx = descHeapIdx;
     m_filename = filename;
-
-    SetRectangle(rect);
+    m_index = index;
 }
 
-void Texture::SetRectangle(const Rectangle* rect) noexcept
-{
-    Rectangle curRect = { 0, 0, static_cast<long>(m_size.x), static_cast<long>(m_size.y) };
-
-    if (rect == nullptr)
-    {
-        m_fullSize = true;
-        m_rect = curRect;
-    }
-    else
-    {
-        if (curRect == *rect)
-            m_fullSize = true;
-        m_rect = *rect;
-    }
-}
-
-void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, const RECT& dest, const RECT* source)
+void Texture::Draw(SpriteBatch* spriteBatch, const RECT& dest, const RECT* source)
 {
     //텍스춰 크기는 고정으로 함
     //dest는 화면에 보여주는 사각형(크기가 안 맞으면 강제로 늘림)
@@ -58,7 +32,7 @@ void Texture::Draw(SpriteBatch* spriteBatch, const DescriptorHeap* descHeap, con
     //텍스춰가 늘어나면 텍스춰가 여러장일 경우 origin 값으로 설정했을때 조금씩 어긋나는 현상이 벌어진다.
     //origin을 0, 0 로 고정후 위치값을 계산해서 넘겨주는 식으로 해야겠다.
 
-    spriteBatch->Draw(descHeap->GetGpuHandle(m_descHeapIdx), m_size, dest, source, Colors::White, 0.f);
+    spriteBatch->Draw(m_descPile->GetGpuHandle(*m_index), m_size, dest, source, Colors::White, 0.f);
 }
 
 void Texture::Reset() 
@@ -111,7 +85,7 @@ static bool WaitForGpuWork(ID3D12Device* device, ID3D12CommandQueue* commandQueu
         if (eventHandle == nullptr) return false;
 
         fence->SetEventOnCompletion(fenceValue, eventHandle);
-        std::ignore = WaitForSingleObjectEx(eventHandle, INFINITE, FALSE);
+        ignore = WaitForSingleObjectEx(eventHandle, INFINITE, FALSE);
         CloseHandle(eventHandle);
     }
 

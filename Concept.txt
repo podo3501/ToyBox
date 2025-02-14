@@ -70,3 +70,28 @@ UI 이름을 unique하게 만들지 말지 고민하다가 유니크 하게 만�
 컨테이너 컴포넌트의 역할은 마우스가 올라가면 선택된 색깔로 변하고 클릭하면 callback을 날려주고 선택된 
 이미지로 바뀌는 역할 평소 제일 연한, 조금 진한, 진한 으로 바뀜. 밑에 배경 색깔이 달라지는 것임. 컨테이너는 
 콤보박스, 리스트 등에 쓰임
+
+view는 조회전용으로 쓸때가 베스트임. 무언가를 넣기 위해서 먼저 검사하는 부분에 view를 넣게 되면 다른 코드
+에서 insert를 하고 나서 값이 바뀌었음에도 view는 이전 값으로 검사할 수 있음.
+template <typename Container>
+Texture* findTexture(const Container& textureList, const wstring& filename)
+{
+    //filename이 갱신되기 전까지는 view는 갱신되지 않기 때문에 nullptr 제외하는 이 코드는 매번 돌지 않는다.
+    auto validTextures = textureList | std::ranges::views::filter([](const auto& tex) {
+        return tex != nullptr; // nullptr 제외
+        });
+
+    auto find  = ranges::find_if(validTextures, [&filename](const auto& tex) {
+        return tex->GetFilename() == filename;
+        });
+
+    if (find != validTextures.end())
+        return (*find).get();
+
+    return nullptr;
+}
+이 코드에서 filename이 동일한데 textureList가 바뀌었다면, textureList가 바뀐것을 갱신하지 않고 view 처리를 진
+행함. 왜냐하면 filename이 동일하기 때문에 view를 갱신할 이유가 없다고 판단하기 때문. 즉, insert 하기 전에 
+동일하게 이 로직을 통과한다면 결과가 올바르겠지만, 다른 함수에서 textureList를 넣고 나서 여기서 같은 이름으로
+처리하게 된다면 view는 이전 view의 값을 사용하기 때문에 다른 결과가 나온다. 그래서 읽을때  사용하는게
+베스트. 그렇지 않다면 사용자가 잘 생각해야 한다. 그리고 view에서 오류가 나면 찾기가 힘들 것 같다.

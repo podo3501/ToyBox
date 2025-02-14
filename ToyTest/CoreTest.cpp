@@ -9,6 +9,8 @@
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "TestHelper.h"
 
+using ::testing::Pair;
+
 namespace BasicCore
 {
 	TEST(CoreUtility, CycleIterator)
@@ -24,19 +26,12 @@ namespace BasicCore
 		EXPECT_EQ(subIter.GetCurrent(), 6);
 	}
 
-	//Rectangle 함수인자를 optional로 하면 괜찮을 꺼 같다. ImageGrid1의 m_source도 optional이 돼야 하겠지만.
-	static size_t LoadAndCheckTexture(ILoadData* load, const wstring& filename, const Rectangle& rect, XMUINT2* size)
+	static pair<size_t, XMUINT2> LoadAndCheckTexture(ILoadData* load, const wstring& filename)
 	{
 		size_t index{ 0 };
-		EXPECT_TRUE(load->LoadTexture(filename, &rect, index, size));
-		return index;
-	}
-
-	static size_t LoadAndCheckTexture(ILoadData* load, const wstring& filename, Rectangle* rect, XMUINT2* size)
-	{
-		size_t index{ 0 };
-		EXPECT_TRUE(load->LoadTexture(filename, rect, index, size));
-		return index;
+		XMUINT2 size{};
+		EXPECT_TRUE(load->LoadTexture(filename, index, &size));
+		return { index, size };
 	}
 
 	static size_t LoadAndCheckRenderTexture(ILoadData* load, const XMUINT2& size, IComponent* component)
@@ -57,14 +52,12 @@ namespace BasicCore
 
 	static bool TexturLoadingTest(ILoadData* load)
 	{
-		wstring filename{ L"Resources/UI/SampleTexture/Sample_0.png" };
-		XMUINT2 size{};
+		wstring sample{ L"Resources/UI/SampleTexture/Sample_0.png" };
+		wstring option{ L"Resources/UI/Texture/Option.png" };
 
-		EXPECT_EQ(LoadAndCheckTexture(load, filename, { 0, 0, 31, 35 }, &size), 0);
-		EXPECT_EQ(LoadAndCheckTexture(load, filename, { 0, 0, 64, 35 }, &size), 1);
-		EXPECT_EQ(LoadAndCheckTexture(load, filename, { 31, 35, 2, 35 }, &size), 2);
-		EXPECT_EQ(LoadAndCheckTexture(load, filename, { 0, 0, 31, 35 }, &size), 0);
-		EXPECT_EQ(LoadAndCheckTexture(load, filename, nullptr, &size), 3);
+		EXPECT_THAT(LoadAndCheckTexture(load, sample), Pair(0, XMUINT2{ 512, 512 }));
+		EXPECT_THAT(LoadAndCheckTexture(load, sample), Pair(0, XMUINT2{ 512, 512 }));
+		EXPECT_THAT(LoadAndCheckTexture(load, option), Pair(1, XMUINT2{ 512, 512 }));
 
 		//auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
 		//EXPECT_EQ(LoadAndCheckRenderTexture(load, img1->GetSize(), img1.get()), 3);
@@ -77,8 +70,9 @@ namespace BasicCore
 		wstring hangleFilename{ L"Resources/UI/Font/HangleS16.spritefont" };
 		wstring englishFilename{ L"Resources/UI/Font/CourierNewBoldS18.spritefont" };
 
-		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 0);
-		EXPECT_EQ(LoadAndCheckFont(load, englishFilename), 1);
+		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 2);
+		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 2);
+		EXPECT_EQ(LoadAndCheckFont(load, englishFilename), 3);
 
 		return true;
 	}

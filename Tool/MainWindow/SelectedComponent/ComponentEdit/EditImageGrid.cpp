@@ -30,6 +30,12 @@ EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, Comman
 
 void EditImageGrid::UpdateComponent()
 {
+    if (!m_textureWindow && !m_filename.empty())
+    {
+        m_textureWindow = CreateTextureWindow(m_renderer, m_filename, GetComponent(), GetCommandList());
+        m_filename.clear();
+    }
+
     if (!m_textureWindow || !m_textureWindow->IsOpen()) return;
 
     m_textureWindow->Update();
@@ -48,7 +54,7 @@ void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UICompon
     if (ImGui::Button("Extract Textrue Area"))
     {
         if (!m_textureWindow)
-            m_textureWindow = CreateTextureWindow(m_renderer, filename, component, GetCommandList());
+            m_filename = filename;
         else
             m_textureWindow->Open();
     }

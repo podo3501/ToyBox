@@ -4,6 +4,21 @@
 CFont::CFont() = default;
 CFont::~CFont() = default;
 
+CFont::CFont(ID3D12Device* device, DescriptorPile* descPile) noexcept :
+    m_device{ device },
+    m_descPile{ descPile }
+{}
+
+bool CFont::Load(ResourceUploadBatch* upload, const wstring& filename, size_t index)
+{
+    m_font = make_unique<SpriteFont>(m_device, *upload, filename.c_str(),
+        m_descPile->GetCpuHandle(index), m_descPile->GetGpuHandle(index));
+    m_filename = filename;
+    m_index = index;
+
+    return true;
+}
+
 bool CFont::Load(ID3D12Device* device, ResourceUploadBatch* upload, const DescriptorHeap* descHeap,
     const wstring& filename, size_t descHeapIdx)
 {

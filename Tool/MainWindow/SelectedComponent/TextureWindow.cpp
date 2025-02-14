@@ -23,8 +23,11 @@ bool TextureWindow::Create(const wstring& filename)
     m_sourceTexture->SetFilenameToLoadInfo(filename);
     ReturnIfFalse(m_renderer->LoadComponent(m_sourceTexture.get()));
 
+    if (const auto& areaList = m_sourceTexture->GetTextureAreaList(); areaList)
+        m_sourceExtractor->SetTextureAreaList(*areaList);
+
     XMUINT2 size = m_sourceTexture->GetSize();
-    ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_sourceTexture.get(), m_textureID));
+    ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_sourceTexture.get(), m_textureID)); //툴은 그릴때 텍스춰에 찍은다음 그 텍스춰를 Render에서 그린다.
 
     m_size = XMUINT2ToImVec2(size);
     m_name = WStringToString(filename);

@@ -95,3 +95,9 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 2. RenderTexture에서 3개의 리소스를 돌아가며 사용하는데 왜 그렇게 하는걸까.
 3. 이미지에서 구역을 찾아내는 것은 굳이 텍스춰 클래스 말고 함수로 빼도 되는데 왜 굳이 여기에 넣은걸까.
 4. RenderTexture와 Texture는 합쳐지지 못할 존재인가
+
+vector<Rectangle> areaList;
+IGetValue* value = m_renderer->GetValue();
+ReturnIfFalse(value->GetTextureAreaList(GetResourceFullFilename(filename), PackRGBA(255, 255, 255, 0), areaList));
+
+여기서 GetTextureAreaList 이게 멤버함수로 들어가 있는데 함수로 빼고 imageGrid1에서 처리하는 걸로 해야 하지 않을까?

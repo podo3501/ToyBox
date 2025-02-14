@@ -21,6 +21,7 @@ protected:
 
 private:
 	IRenderer* m_renderer;
+	wstring m_filename;
 	unique_ptr<TextureWindow> m_textureWindow;
 };
 

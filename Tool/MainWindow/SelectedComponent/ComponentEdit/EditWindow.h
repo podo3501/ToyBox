@@ -26,6 +26,7 @@ protected:
 	virtual void RenderComponent() {};
 
 	inline CommandList* GetCommandList() const noexcept { return m_cmdList; }
+	inline UIComponent* GetComponent() const noexcept { return m_component; }
 
 private:
 	void RenderCommon();

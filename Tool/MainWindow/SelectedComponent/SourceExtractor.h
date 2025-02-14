@@ -13,12 +13,11 @@ public:
     virtual ~SourceExtractor();
     SourceExtractor() = delete;
 
-    virtual bool Initialize();
-
     void Update();
     void Render() const;
 
     inline void SetWindow(ImGuiWindow* texWnd) noexcept { m_window = texWnd; }
+    inline void SetTextureAreaList(const vector<Rectangle>& areaList) noexcept { m_areaList = areaList; }
 
 protected:
     SourceExtractor(IRenderer* renderer, const wstring& filename, CommandList* cmdList) noexcept;
@@ -39,7 +38,6 @@ private:
     ImGuiWindow* m_window;
 
     vector<Rectangle> m_areaList;
-    bool m_IsInitialize{ false };
 };
 
 class ImageGrid1Extractor : public SourceExtractor

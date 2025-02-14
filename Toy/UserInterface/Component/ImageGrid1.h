@@ -15,8 +15,10 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual bool LoadResources(ILoadData* load) override;
+	virtual bool SetDatas(IGetValue* value) override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
+	optional<vector<Rectangle>> GetTextureAreaList();
 	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
 	void SetFilenameToLoadInfo(const wstring& filename) noexcept;
 
@@ -36,4 +38,5 @@ private:
 	wstring m_filename;
 	Rectangle m_source{};
 	XMINT2 m_position{};
+	IGetValue* m_resourceInfo;
 };

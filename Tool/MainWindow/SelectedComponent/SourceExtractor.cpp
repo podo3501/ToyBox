@@ -42,21 +42,10 @@ Rectangle SourceExtractor::FindRectangleFromMousePosition() const noexcept
     return {};
 }
 
-bool SourceExtractor::Initialize()
-{
-    IGetValue* value = m_renderer->GetValue();
-    ReturnIfFalse(value->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0), m_areaList));
-    m_IsInitialize = true;
-    return true;
-}
-
 void SourceExtractor::Update()
 {
     ImGuiWindow* window = GetWindow();
     if (!IsWindowFocus(window)) return;
-
-    if (!m_IsInitialize)
-        Initialize();
 
     UpdateProcess();
 }

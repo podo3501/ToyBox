@@ -6,7 +6,9 @@
 #include "../JsonOperation.h"
 
 ImageGrid1::~ImageGrid1() = default;
-ImageGrid1::ImageGrid1() = default;
+ImageGrid1::ImageGrid1() : 
+	m_resourceInfo{ nullptr }
+{}
 
 ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	UIComponent{ o }
@@ -35,7 +37,8 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 bool ImageGrid1::LoadResources(ILoadData* load)
 {
 	XMUINT2 size{};
-	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, &size));
+	//ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, &size));
+	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), m_index, &size));
 
 	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다.
 	{
@@ -44,6 +47,26 @@ bool ImageGrid1::LoadResources(ILoadData* load)
 	}
 
 	return true;
+}
+
+bool ImageGrid1::SetDatas(IGetValue* value)
+{
+	m_resourceInfo = value;
+	return true;
+}
+
+static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
+{
+	return (static_cast<UINT32>(a) << 24) |
+		(static_cast<UINT32>(b) << 16) |
+		(static_cast<UINT32>(g) << 8) |
+		(static_cast<UINT32>(r));
+}
+
+//ReturnIfFalse(value->GetTextureAreaList(GetResourceFullFilename(filename), PackRGBA(255, 255, 255, 0), areaList));
+optional<vector<Rectangle>> ImageGrid1::GetTextureAreaList()
+{
+	 return m_resourceInfo->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0));
 }
 
 bool ImageGrid1::ImplementUpdatePosition(const XMINT2& position) noexcept
