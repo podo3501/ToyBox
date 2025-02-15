@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+class DrawTexture;
 class ImageGrid1;
 class SourceExtractor;
 
@@ -19,10 +20,10 @@ public:
 private:
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
+    unique_ptr<DrawTexture> m_drawTex;
     unique_ptr<SourceExtractor> m_sourceExtractor;
     unique_ptr<ImageGrid1> m_sourceTexture;
 
-    ImTextureID m_textureID{};
     ImVec2 m_size;
     string m_name;
     bool m_isOpen{ false };

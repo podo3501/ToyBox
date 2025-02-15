@@ -29,13 +29,14 @@ static SrvResource* FindResourceByFilename(array<SrvResource, MAX_DESC>& resourc
 
     return nullptr;
 }
-
+//LoadFont와 LoadTexture를 통합하고 싶은데 variant로 되어 있으면 코드가 너무 어렵게 된다. 그래서 클래스가 variant에서 상속으로 바꾼후 리팩토링 예정
 bool TextureIndexing::LoadFont(const wstring& filename, size_t& outIndex)
 {
     if (auto find = FindResourceByFilename(m_srvResources, filename); find)
     {
         CFont* curFont = get<unique_ptr<CFont>>(*find).get();
         outIndex = curFont->GetIndex();
+        m_refCount[outIndex]++;
         return true;
     }
 
@@ -55,6 +56,7 @@ bool TextureIndexing::LoadTexture(const wstring& filename, size_t& outIndex, XMU
     {
         Texture* curTex = get<unique_ptr<Texture>>(*find).get();
         outIndex = curTex->GetIndex();
+        m_refCount[outIndex]++;
         if (outSize) *outSize = curTex->GetSize();
         return true;
     }
@@ -70,7 +72,7 @@ bool TextureIndexing::LoadTexture(const wstring& filename, size_t& outIndex, XMU
     return true;
 }
 
-bool TextureIndexing::CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, ImTextureID* outTextureID)
+bool TextureIndexing::CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, UINT64* outGfxMemOffset)
 {
     auto renderTex = make_unique<RenderTexture>(m_device, m_descHeapPile);
 
@@ -82,7 +84,7 @@ bool TextureIndexing::CreateRenderTexture(const XMUINT2& size, IComponent* compo
         return false;
     }
     outIndex = renderTex->GetIndex();
-    if(outTextureID) *outTextureID = renderTex->GetTextureID();
+    if(outGfxMemOffset) *outGfxMemOffset = renderTex->GetGraphicMemoryOffset();
     m_srvResources[offset] = move(renderTex);
 
     return true;
@@ -132,7 +134,8 @@ void TextureIndexing::DrawRenderTextures()
 {
     auto views = m_srvResources
         | views::filter([](const SrvResource& resource) {
-        return holds_alternative<unique_ptr<RenderTexture>>(resource);
+        return holds_alternative<unique_ptr<RenderTexture>>(resource) &&
+            get<unique_ptr<RenderTexture>>(resource).get() != nullptr;
             })
         | views::transform([](const SrvResource& resource) -> RenderTexture* {
         return get<unique_ptr<RenderTexture>>(resource).get();
@@ -145,6 +148,14 @@ void TextureIndexing::DrawRenderTextures()
 
 void TextureIndexing::ReleaseTexture(size_t idx) noexcept
 {
+    if (idx < 0 || idx >= MAX_DESC) return;
+
+    if (m_refCount[idx] > 0 )
+    {
+        m_refCount[idx]--;
+        return;
+    }
+        
     m_deviceResources->WaitForGpu();
     std::visit([](auto& resource) {
         resource = nullptr;

@@ -97,9 +97,8 @@ namespace ComponentTest
 	{
 		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
 
-		ImTextureID texID{};
 		auto drawTex = make_unique<DrawTexture>();
-		drawTex->CreateTexture(m_renderer->GetValue(), img1->GetSize(), img1.get(), &texID);
+		EXPECT_TRUE(drawTex->CreateTexture(m_renderer.get(), img1->GetSize(), img1.get()));
 	}
 
 	////////////////////////////////////////////////////////

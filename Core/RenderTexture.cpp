@@ -130,3 +130,4 @@ ImTextureID RenderTexture::GetTextureID() const noexcept
 { 
     return static_cast<ImTextureID>(m_srvDescriptor->GetGpuHandle(m_offset).ptr);
 }
+

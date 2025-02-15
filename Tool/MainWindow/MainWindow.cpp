@@ -5,6 +5,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/UserInterface/Component/DrawTexture.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/InputManager.h"
 
@@ -12,14 +13,13 @@ int MainWindow::m_mainWindowIndex = 0;
 
 MainWindow::~MainWindow()
 {
-	m_renderer->RemoveRenderTexture(m_textureID);
-	m_renderer->RemoveRenderComponent(m_panel.get());// 아마 이 줄이 필요 없을꺼 같은데.
 	m_renderer->RemoveImguiComponent(this);
 }
 
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
 	m_name{ "Main Window " + to_string(m_mainWindowIndex++) },
+	m_drawTex{ make_unique<DrawTexture>() },
 	m_panel{ make_unique<Panel>("Main", 	UILayout(RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop)) },
 	m_controller{ make_unique<ComponentController>(renderer, m_panel.get(), m_name) }
 {
@@ -32,7 +32,7 @@ MainWindow::MainWindow(IRenderer* renderer) :
 bool MainWindow::CreateScene(const XMUINT2& size)
 {
 	m_panel->SetSize(size);
-	ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_panel.get(), m_textureID));
+	ReturnIfFalse(m_drawTex->CreateTexture(m_renderer, size, m_panel.get()));
 	m_size = XMUINT2ToImVec2(size);
 	m_isOpen = true;
 
@@ -45,7 +45,7 @@ bool MainWindow::CreateScene(const wstring& filename)
 	ReturnIfFalse(m_renderer->LoadComponent(m_panel.get()));
 
 	const auto& panelSize = m_panel->GetSize();
-	ReturnIfFalse(m_renderer->CreateRenderTexture(panelSize, m_panel.get(), m_textureID));
+	ReturnIfFalse(m_drawTex->CreateTexture(m_renderer, panelSize, m_panel.get()));
 	m_size = XMUINT2ToImVec2(panelSize);
 	m_isOpen = true;
 
@@ -71,8 +71,9 @@ wstring MainWindow::GetSaveFilename() const noexcept
 
 void MainWindow::ChangeWindowSize(const ImVec2& size)
 {
-	m_renderer->RemoveRenderTexture(m_textureID);
-	m_renderer->CreateRenderTexture(ImVec2ToXMUINT2(size), m_panel.get(), m_textureID);
+	m_drawTex.reset(); //modify를 쓰면 되지 않나?
+	m_drawTex = make_unique<DrawTexture>();
+	m_drawTex->CreateTexture(m_renderer, ImVec2ToXMUINT2(size), m_panel.get());
 	m_size = size;
 }
 
@@ -157,7 +158,7 @@ void MainWindow::Render(ImGuiIO* io)
 
 	SetupWindowAppearing();
 
-	ImGui::Image(m_textureID, m_size);
+	ImGui::Image(m_drawTex->GetGraphicMemoryOffset(), m_size);
 
 	if (m_window && IsWindowFocus(m_window))
 	{

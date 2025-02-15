@@ -8,6 +8,7 @@ namespace DX
 
 class UIComponent;
 class MouseTracker;
+class DrawTexture;
 class ComponentController;
 
 class MainWindow : public IImguiComponent
@@ -38,10 +39,10 @@ private:
     IRenderer* m_renderer;
     string m_name{};
     ImGuiWindow* m_window{ nullptr };
+    unique_ptr<DrawTexture> m_drawTex;
     unique_ptr<UIComponent> m_panel;
     unique_ptr<ComponentController> m_controller;
 
-    ImTextureID m_textureID{};
     bool m_isOpen{ false };
     bool m_isActiveUpdate{ false };
     ImVec2 m_size{ 800.f, 600.f };

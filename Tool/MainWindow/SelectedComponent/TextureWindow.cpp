@@ -4,15 +4,13 @@
 #include "../../Utility.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Utility.h"
+#include "../Toy/UserInterface/Component/DrawTexture.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 
-TextureWindow::~TextureWindow()
-{
-    m_renderer->RemoveRenderTexture(m_textureID);
-}
-
+TextureWindow::~TextureWindow() = default;
 TextureWindow::TextureWindow(IRenderer* renderer, unique_ptr<SourceExtractor> sourceExtractor) :
     m_renderer{ renderer },
+    m_drawTex{ make_unique<DrawTexture>() },
     m_sourceExtractor{ move(sourceExtractor) },
     m_sourceTexture{ make_unique<ImageGrid1>() },
     m_size{}
@@ -27,7 +25,7 @@ bool TextureWindow::Create(const wstring& filename)
         m_sourceExtractor->SetTextureAreaList(*areaList);
 
     XMUINT2 size = m_sourceTexture->GetSize();
-    ReturnIfFalse(m_renderer->CreateRenderTexture(size, m_sourceTexture.get(), m_textureID)); //툴은 그릴때 텍스춰에 찍은다음 그 텍스춰를 Render에서 그린다.
+    ReturnIfFalse(m_drawTex->CreateTexture(m_renderer, size, m_sourceTexture.get())); //툴은 그릴때 텍스춰에 찍은다음 그 텍스춰를 Render에서 그린다.
 
     m_size = XMUINT2ToImVec2(size);
     m_name = WStringToString(filename);
@@ -60,7 +58,7 @@ void TextureWindow::Render()
         m_sourceExtractor->SetWindow(m_window);
     }
 
-    ImGui::Image(m_textureID, m_size);
+    ImGui::Image(m_drawTex->GetGraphicMemoryOffset(), m_size);
 
     m_sourceExtractor->Render();
 

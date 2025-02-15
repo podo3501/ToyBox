@@ -1,6 +1,8 @@
 #pragma once
 #include "../UIComponent.h"
 
+struct IRenderer;
+
 class DrawTexture : public UIComponent
 {
 public:
@@ -12,15 +14,18 @@ public:
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool CreateTexture(IGetValue* resourceInfo, const XMUINT2& size, UIComponent* component, ImTextureID* texID);
+	bool CreateTexture(IRenderer* renderer, const XMUINT2& size, UIComponent* component);
+	UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 
 protected:
 	DrawTexture(const DrawTexture& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementUpdatePosition(const XMINT2& position) noexcept override;
 	virtual void ImplementRender(IRender* render) const override;
 
 private:
+	void Release() noexcept;
+
 	size_t m_index{ 0 };
+	UINT64 m_gfxOffset{};
 	IGetValue* m_resourceInfo;
 };

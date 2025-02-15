@@ -3,11 +3,13 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
+#include "../Toy/UserInterface/Component/DrawTexture.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Utility.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
+	m_drawTex{ make_unique<DrawTexture>() },
 	m_name{ "PopupMenu_" + mainWndName }
 {}
 
@@ -21,9 +23,7 @@ void FloatingComponent::Clear() noexcept
 	m_drawTextureSize = {};
 	m_draw = false;
 	m_currentAction.reset();
-	m_renderer->RemoveRenderTexture(m_textureID);
-	m_renderer->RemoveRenderComponent(m_component.get());
-	m_textureID = 0;
+	m_renderer->RemoveRenderComponent(m_component.get()); //이걸 왜 하지? 넣은 적이 있나?
 }
 
 bool FloatingComponent::IsComponent() const noexcept
@@ -72,7 +72,7 @@ void FloatingComponent::DrawMakeComponent()
 	ImU32 colorU32 = ImGui::GetColorU32(tintColor);
 
 	drawList->AddImage(
-		m_textureID,
+		m_drawTex->GetGraphicMemoryOffset(),
 		{ m_position.x, m_position.y },                      // 시작 좌표
 		{ m_position.x + m_drawTextureSize.x, m_position.y + m_drawTextureSize.y },    // 종료 좌표
 		ImVec2(0, 0),
@@ -119,12 +119,9 @@ void FloatingComponent::Render()
 bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size)
 {
 	ReturnIfNullptr(component);
-
-	ImTextureID texID{};
-	ReturnIfFalse(m_renderer->CreateRenderTexture(size, component.get(), texID));
+	ReturnIfFalse(m_drawTex->CreateTexture(m_renderer, size, component.get()));
 	ReturnIfFalse(m_renderer->LoadComponent(component.get()));
 
-	m_textureID = texID;
 	m_component = move(component);
 	m_drawTextureSize = size;
 	m_draw = true;

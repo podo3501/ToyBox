@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+class DrawTexture;
 class UIComponent;
 class MouseTracker;
 
@@ -36,11 +37,11 @@ private:
 	void DrawMakeComponent();
 
 	IRenderer* m_renderer;
+	unique_ptr<DrawTexture> m_drawTex;
 	string m_name;
 	unique_ptr<UIComponent> m_component;
-	ImTextureID m_textureID{};
 	optional<MakeComponent> m_currentAction;
-	XMUINT2 m_drawTextureSize{};
+	XMUINT2 m_drawTextureSize{}; //사라져야 할 변수
 	bool m_draw{ false };
 	bool m_isActive{ false };
 	ImVec2 m_position{};

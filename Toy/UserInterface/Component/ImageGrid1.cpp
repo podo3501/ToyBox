@@ -46,7 +46,6 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 bool ImageGrid1::LoadResources(ILoadData* load)
 {
 	XMUINT2 size{};
-	//ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), nullptr, m_index, &size));
 	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), m_index, &size));
 
 	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다.
@@ -72,7 +71,6 @@ static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 		(static_cast<UINT32>(r));
 }
 
-//ReturnIfFalse(value->GetTextureAreaList(GetResourceFullFilename(filename), PackRGBA(255, 255, 255, 0), areaList));
 optional<vector<Rectangle>> ImageGrid1::GetTextureAreaList()
 {
 	 return m_resourceInfo->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0));

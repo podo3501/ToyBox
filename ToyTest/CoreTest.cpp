@@ -93,6 +93,7 @@ namespace BasicCore
 
 		auto curValue = m_renderer->GetValue();
 		curValue->ReleaseTexture(0);
+		curValue->ReleaseTexture(0); //2번 로딩하면 2번 지워줘야 한다.
 		curValue->ReleaseTexture(1);
 
 		testComponent->SetLoadTestFunction(ReloadingTest);

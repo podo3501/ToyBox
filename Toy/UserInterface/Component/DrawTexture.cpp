@@ -4,26 +4,24 @@
 #include "../../Utility.h"
 #include "../JsonOperation.h"
 
-DrawTexture::~DrawTexture()
-{
-	if (m_resourceInfo)
-	{
-		m_resourceInfo->ReleaseTexture(m_index);
-		m_resourceInfo = nullptr;
-	}
-}
-
+DrawTexture::~DrawTexture() { Release(); }
 DrawTexture::DrawTexture() :
 	m_resourceInfo{ nullptr }
-{
-	
-}
+{}
 
 DrawTexture::DrawTexture(const DrawTexture& o) :
 	UIComponent{ o },
 	m_resourceInfo{ nullptr }
 {
 	m_index = o.m_index;
+}
+
+void DrawTexture::Release() noexcept
+{
+	if (!m_resourceInfo) return;
+	
+	m_resourceInfo->ReleaseTexture(m_index);
+	m_resourceInfo = nullptr;
 }
 
 unique_ptr<UIComponent> DrawTexture::CreateClone() const
@@ -42,20 +40,22 @@ bool DrawTexture::operator==(const UIComponent& rhs) const noexcept
 	return result;
 }
 
-bool DrawTexture::CreateTexture(IGetValue* resourceInfo, const XMUINT2& size, UIComponent* component, ImTextureID* texID)
+bool DrawTexture::CreateTexture(IRenderer* renderer, const XMUINT2& size, UIComponent* component)
 {
-	m_resourceInfo = resourceInfo;
-	return true;
-}
+	if (m_gfxOffset && m_resourceInfo)
+		Release();
+		
+	auto resourceInfo = renderer->GetValue();
+	ReturnIfFalse(resourceInfo->CreateRenderTexture(size, component, m_index, &m_gfxOffset));
 
-bool DrawTexture::ImplementUpdatePosition(const XMINT2& position) noexcept
-{
+	m_resourceInfo = resourceInfo;
 	return true;
 }
 
 void DrawTexture::ImplementRender(IRender* render) const
 {
-
+	render;
+	return;
 }
 
 void DrawTexture::SerializeIO(JsonOperation& operation)
