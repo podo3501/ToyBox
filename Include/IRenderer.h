@@ -2,20 +2,20 @@
 
 struct IComponent;
 //로딩할때 사용하는 인터페이스
-struct ILoadData
+struct ITextureLoad
 {
 public:
-    virtual ~ILoadData() {};
+    virtual ~ITextureLoad() {};
 
     virtual bool LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize) = 0;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) = 0;
 };
 
 //데이터를 얻어올때 사용하는 인터페이스
-struct IGetValue
+struct ITextureController
 {
 public:
-    virtual ~IGetValue() {};
+    virtual ~ITextureController() {};
 
     //Text관련
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) = 0;
@@ -29,10 +29,10 @@ public:
 };
 
 //렌더링 할때 사용하는 인터페이스
-struct IRender
+struct ITextureRender
 {
 public:
-    virtual ~IRender() {};
+    virtual ~ITextureRender() {};
 
     virtual void Render(size_t index, const RECT& dest, const RECT* source) = 0;
     virtual void DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const = 0;
@@ -64,12 +64,9 @@ public:
 
     virtual bool LoadComponent(IComponent* component) = 0;
 
-    virtual IGetValue* GetValue() const noexcept = 0;
-    virtual bool CreateRenderTexture(const XMUINT2& size, IComponent* component, ImTextureID& outTextureID) = 0;
-    virtual bool ModifyRenderTexture(ImTextureID id, const XMUINT2& size) = 0;
-    virtual void RemoveRenderTexture(ImTextureID textureID) = 0;
     virtual void Draw() = 0;
-
+    virtual ITextureController* GetTextureController() const noexcept = 0;
+    
     virtual void OnActivated() = 0;
     virtual void OnDeactivated() = 0;
     virtual void OnSuspending() = 0;

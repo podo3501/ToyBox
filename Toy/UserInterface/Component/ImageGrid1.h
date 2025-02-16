@@ -14,8 +14,6 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid1; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
-	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool SetDatas(IGetValue* value) override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	optional<vector<Rectangle>> GetTextureAreaList();
@@ -30,13 +28,15 @@ public:
 protected:
 	ImageGrid1(const ImageGrid1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementLoadResource(ITextureLoad* load) override;
+	virtual bool ImplementSetData(ITextureController* texController) override;
 	virtual bool ImplementUpdatePosition(const XMINT2& position) noexcept override;
-	virtual void ImplementRender(IRender* render) const override;
+	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
-	size_t m_index{ 0 };
+	size_t m_index{ 0 }; //core 상태에 따라서 인덱스는 변할 수 있기 때문에 저장하지 않는다.
 	wstring m_filename;
 	Rectangle m_source{};
 	XMINT2 m_position{};
-	IGetValue* m_resourceInfo;
+	ITextureController* m_texController;
 };

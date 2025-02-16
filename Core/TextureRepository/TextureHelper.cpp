@@ -1,44 +1,9 @@
 #include "pch.h"
-#include "Texture.h"
-#include "DeviceResources.h"
-#include "Utility.h"
+#include "TextureHelper.h"
+#include "../DeviceResources.h"
+#include "../Utility.h"
 
-using namespace DirectX;
 using Microsoft::WRL::ComPtr;
-
-Texture::~Texture() = default;
-Texture::Texture(ID3D12Device* device, DescriptorPile* descPile) noexcept :
-    m_device{ device },
-    m_descPile{ descPile }
-{}
-
-void Texture::Upload(ResourceUploadBatch* resUpload, const wstring& filename, size_t index)
-{
-    DX::ThrowIfFailed(
-        CreateWICTextureFromFile(m_device, *resUpload, filename.c_str(), m_texture.ReleaseAndGetAddressOf()));
-
-    CreateShaderResourceView(m_device, m_texture.Get(), m_descPile->GetCpuHandle(index));
-    m_size = GetTextureSize(m_texture.Get());
-    m_filename = filename;
-    m_index = index;
-}
-
-void Texture::Draw(SpriteBatch* spriteBatch, const RECT& dest, const RECT* source)
-{
-    //텍스춰 크기는 고정으로 함
-    //dest는 화면에 보여주는 사각형(크기가 안 맞으면 강제로 늘림)
-    //source는 텍스춰에서 가져오는 픽셀 사각형
-    //origin은 0, 0으로 고정. 중간으로 했을 경우 늘릴때 위치가 어긋남
-    //텍스춰가 늘어나면 텍스춰가 여러장일 경우 origin 값으로 설정했을때 조금씩 어긋나는 현상이 벌어진다.
-    //origin을 0, 0 로 고정후 위치값을 계산해서 넘겨주는 식으로 해야겠다.
-
-    spriteBatch->Draw(m_descPile->GetGpuHandle(*m_index), m_size, dest, source, Colors::White, 0.f);
-}
-
-void Texture::Reset() 
-{ 
-    m_texture.Reset(); 
-}
 
 static bool CreateReadbackBuffer(ID3D12Device* device, UINT64 totalBytes, ComPtr<ID3D12Resource>& outReadbackBuffer)
 {
@@ -78,7 +43,7 @@ static bool WaitForGpuWork(ID3D12Device* device, ID3D12CommandQueue* commandQueu
 
     ReturnIfFailed(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
     ReturnIfFailed(commandQueue->Signal(fence.Get(), fenceValue));
-    
+
     if (fence->GetCompletedValue() < fenceValue) // GPU 작업 완료 대기
     {
         HANDLE eventHandle = CreateEventEx(nullptr, nullptr, false, EVENT_ALL_ACCESS);
@@ -92,12 +57,12 @@ static bool WaitForGpuWork(ID3D12Device* device, ID3D12CommandQueue* commandQueu
     return true;
 }
 
-static vector<vector<UINT32>> ConvertTo2D(UINT8* data, UINT width, UINT height, UINT rowPitch) 
+static vector<vector<UINT32>> ConvertTo2D(UINT8* data, UINT width, UINT height, UINT rowPitch)
 {
     vector<vector<UINT32>> image(height, std::vector<UINT32>(width));
-    for (UINT y: views::iota(0u, height))
+    for (UINT y : views::iota(0u, height))
     {
-        for (UINT x: views::iota(0u, width))
+        for (UINT x : views::iota(0u, width))
         {
             UINT index = y * rowPitch + x * 4;
             image[y][x] = *reinterpret_cast<UINT32*>(&data[index]);
@@ -106,7 +71,7 @@ static vector<vector<UINT32>> ConvertTo2D(UINT8* data, UINT width, UINT height, 
     return image;
 }
 
-static vector<Rectangle> FindRectangles(const D3D12_SUBRESOURCE_FOOTPRINT& footPrint, 
+static vector<Rectangle> FindRectangles(const D3D12_SUBRESOURCE_FOOTPRINT& footPrint,
     const UINT32& bgColor, UINT8* data)
 {
     int imageHeight = footPrint.Height;
@@ -170,7 +135,7 @@ static vector<Rectangle> FindRectangles(const D3D12_SUBRESOURCE_FOOTPRINT& footP
     return rectangles;
 }
 
-bool Texture::GetTextureAreaList(DX::DeviceResources* deviceRes, const UINT32& bgColor, vector<Rectangle>& outList)
+bool ExtractAreas(DX::DeviceResources* deviceRes, ID3D12Resource* texRes, const UINT32& bgColor, vector<Rectangle>& outList)
 {
     auto device = deviceRes->GetD3DDevice();
     auto commandList = deviceRes->GetCommandList();
@@ -178,7 +143,7 @@ bool Texture::GetTextureAreaList(DX::DeviceResources* deviceRes, const UINT32& b
     auto commandQueue = deviceRes->GetCommandQueue();
 
     // 텍스처 리소스의 설명 가져오기
-    D3D12_RESOURCE_DESC textureDesc = m_texture->GetDesc();
+    D3D12_RESOURCE_DESC textureDesc = texRes->GetDesc();
     D3D12_PLACED_SUBRESOURCE_FOOTPRINT layout{};
     UINT64 totalBytes{ 0 }, rowPitch{ 0 };
 
@@ -190,7 +155,7 @@ bool Texture::GetTextureAreaList(DX::DeviceResources* deviceRes, const UINT32& b
     ReturnIfFailed(commandList->Reset(commandAllocator, nullptr));
 
     // 텍스처를 복사하는 명령어 실행
-    CopyTextureToBuffer(commandList, m_texture.Get(), layout, readbackBuffer);
+    CopyTextureToBuffer(commandList, texRes, layout, readbackBuffer);
 
     // 명령 리스트 종료
     ReturnIfFailed(commandList->Close());
@@ -199,7 +164,7 @@ bool Texture::GetTextureAreaList(DX::DeviceResources* deviceRes, const UINT32& b
 
     // GPU 작업 완료 대기
     ReturnIfFalse(WaitForGpuWork(device, commandQueue));
- 
+
     UINT8* data{ nullptr };
     readbackBuffer->Map(0, nullptr, reinterpret_cast<void**>(&data));
     outList = FindRectangles(layout.Footprint, bgColor, data);

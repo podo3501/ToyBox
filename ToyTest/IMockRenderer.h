@@ -1,7 +1,7 @@
 #pragma once
 #include "../Include/IRenderer.h"
 
-class MockRender : public IRender
+class MockRender : public ITextureRender
 {
 public:
 	virtual ~MockRender() = default;
@@ -11,7 +11,7 @@ public:
 		(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color), (const override));
 };
 
-class MockUpdate : public IGetValue
+class MockUpdate : public ITextureController
 {
 public:
 	virtual ~MockUpdate() = default;

@@ -15,7 +15,7 @@ public:
 protected:
 	virtual bool InitializeDerived() override;
 	virtual bool LoadResources() override;
-	virtual bool SetDatas(IGetValue*) override { return true; }
+	virtual bool PostLoaded(ITextureController*) override { return true; }
 	virtual void Update(const DX::StepTimer* timer) override;
 
 private:

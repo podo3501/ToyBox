@@ -13,13 +13,13 @@ using ordered_json = nlohmann::ordered_json;
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
 TextArea::~TextArea() = default;
 TextArea::TextArea() :
-	m_getValue{ nullptr }
+	m_texController{ nullptr }
 {}
 
 TextArea::TextArea(const TextArea& other) :
 	UIComponent{ other }
 {
-	m_getValue = other.m_getValue;
+	m_texController = other.m_texController;
 	m_posByResolution = other.m_posByResolution;
 	m_text = other.m_text;
 	m_fontFileList = other.m_fontFileList;
@@ -40,7 +40,7 @@ bool TextArea::operator==(const UIComponent& o) const noexcept
 	return tie(m_fontFileList, m_text) == tie(rhs->m_fontFileList, rhs->m_text);
 }
 
-bool TextArea::LoadResources(ILoadData* load)
+bool TextArea::ImplementLoadResource(ITextureLoad* load)
 {
 	for (const auto& file : m_fontFileList)
 	{
@@ -67,8 +67,8 @@ bool TextArea::ArrangeText(const wstring& text)
 	for (auto& word : textList)
 	{
 		const auto& fontIdx = m_font[word.fontStyle];
-		const Rectangle& wordRect = m_getValue->MeasureText(fontIdx, word.text, startPos);
-		lineSpacing = max(lineSpacing, m_getValue->GetLineSpacing(fontIdx));
+		const Rectangle& wordRect = m_texController->MeasureText(fontIdx, word.text, startPos);
+		lineSpacing = max(lineSpacing, m_texController->GetLineSpacing(fontIdx));
 		maxHeight = max(maxHeight, wordRect.height);
 
 		if (word.text == L"br")
@@ -103,9 +103,9 @@ bool TextArea::SetText(const wstring& text)
 	return true;
 }
 
-bool TextArea::SetDatas(IGetValue* getValue)
+bool TextArea::ImplementSetData(ITextureController* texController)
 {
-	m_getValue = getValue;
+	m_texController = texController;
 
 	return ArrangeText(m_text);
 }
@@ -130,7 +130,7 @@ bool TextArea::ImplementUpdatePosition(const XMINT2& position) noexcept
 	return true;
 }
 
-void TextArea::ImplementRender(IRender* render) const
+void TextArea::ImplementRender(ITextureRender* render) const
 {
 	for (const auto& word : m_lines)
 		render->DrawString(m_font.at(word.fontStyle), 

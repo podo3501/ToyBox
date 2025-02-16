@@ -2,6 +2,7 @@
 #include "UIHierarchy.h"
 #include "UIComponent.h"
 #include "UIComponentEx.h"
+#include "../Utility.h"
 
 UIComponent* UIHierarchy<UIComponent>::GetThis() noexcept
 {
@@ -46,6 +47,16 @@ void UIHierarchy<UIComponent>::ForEachChild(function<void(UIComponent*)> func) n
 		if (child)
 			child->ForEachChild(func);
 	}
+}
+
+bool UIHierarchy<UIComponent>::ForEachChildUntilFail(function<bool(UIComponent*)> func) noexcept
+{
+	ReturnIfFalse(func(GetThis()));
+
+	for (auto& child : m_children) 
+		if (child) ReturnIfFalse(child->ForEachChildUntilFail(func));
+
+	return true;
 }
 
 void UIHierarchy<UIComponent>::ForEachChildBool(function<bool(UIComponent*)> func) noexcept

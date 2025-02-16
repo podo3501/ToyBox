@@ -59,17 +59,17 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 	return CreateClone();
 }
 
-bool UIComponent::LoadResources(ILoadData* load)
+bool UIComponent::LoadResources(ITextureLoad* load)
 {
-	return ranges::all_of(m_children, [load](const auto& child) {
-		return child->LoadResources(load);
+	return ForEachChildUntilFail([load](UIComponent* component) {
+		return component->ImplementLoadResource(load);
 		});
 }
 
-bool UIComponent::SetDatas(IGetValue* value)
+bool UIComponent::PostLoaded(ITextureController* texController)
 {
-	return ranges::all_of(m_children, [value](const auto& child) {
-		return child->SetDatas(value);
+	return ForEachChildUntilFail([texController](UIComponent* component) {
+		return component->ImplementSetData(texController);
 		});
 }
 
@@ -95,7 +95,7 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, bool activeUpdate) noexc
 	return result;
 }
 
-void UIComponent::ProcessRender(IRender* render)
+void UIComponent::ProcessRender(ITextureRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.

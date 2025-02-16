@@ -7,20 +7,20 @@
 
 ImageGrid1::~ImageGrid1()
 {
-	if (m_resourceInfo)
+	if (m_texController)
 	{
-		m_resourceInfo->ReleaseTexture(m_index);
-		m_resourceInfo = nullptr;
+		m_texController->ReleaseTexture(m_index);
+		m_texController = nullptr;
 	}
 }
 
 ImageGrid1::ImageGrid1() : 
-	m_resourceInfo{ nullptr }
+	m_texController{ nullptr }
 {}
 
 ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	UIComponent{ o },
-	m_resourceInfo{ nullptr }
+	m_texController{ nullptr }
 {
 	m_index = o.m_index;
 	m_filename = o.m_filename;
@@ -37,13 +37,13 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const ImageGrid1* o = static_cast<const ImageGrid1*>(&rhs);
 
-	auto result = tie(m_index, m_filename, m_source) == tie(o->m_index, o->m_filename, o->m_source);
+	auto result = tie(m_filename, m_source) == tie(o->m_filename, o->m_source);
 	assert(result);
 
 	return result;
 }
 
-bool ImageGrid1::LoadResources(ILoadData* load)
+bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
 {
 	XMUINT2 size{};
 	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), m_index, &size));
@@ -57,9 +57,9 @@ bool ImageGrid1::LoadResources(ILoadData* load)
 	return true;
 }
 
-bool ImageGrid1::SetDatas(IGetValue* value)
+bool ImageGrid1::ImplementSetData(ITextureController* texController)
 {
-	m_resourceInfo = value;
+	m_texController = texController;
 	return true;
 }
 
@@ -73,7 +73,7 @@ static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 
 optional<vector<Rectangle>> ImageGrid1::GetTextureAreaList()
 {
-	 return m_resourceInfo->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0));
+	 return m_texController->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0));
 }
 
 bool ImageGrid1::ImplementUpdatePosition(const XMINT2& position) noexcept
@@ -84,7 +84,7 @@ bool ImageGrid1::ImplementUpdatePosition(const XMINT2& position) noexcept
 	return true;
 }
 
-void ImageGrid1::ImplementRender(IRender* render) const
+void ImageGrid1::ImplementRender(ITextureRender* render) const
 {
 	const auto& size = GetSize();
 	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
@@ -114,7 +114,6 @@ void ImageGrid1::SetFilenameToLoadInfo(const wstring& filename) noexcept
 void ImageGrid1::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
-	operation.Process("Index", m_index);
 	operation.Process("Filename", m_filename);
 	operation.Process("Source", m_source);
 }

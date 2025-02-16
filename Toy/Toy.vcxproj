@@ -220,7 +220,7 @@
     <ClInclude Include="UserInterface\Component\Button.h" />
     <ClInclude Include="UserInterface\Component\Container.h" />
     <ClInclude Include="UserInterface\Component\Dialog.h" />
-    <ClInclude Include="UserInterface\Component\DrawTexture.h" />
+    <ClInclude Include="UserInterface\Component\RenderTexture.h" />
     <ClInclude Include="UserInterface\Component\ImageGrid1.h" />
     <ClInclude Include="UserInterface\Component\ImageGrid3.h" />
     <ClInclude Include="UserInterface\Component\ImageGrid9.h" />
@@ -257,7 +257,7 @@
     <ClCompile Include="UserInterface\Component\Button.cpp" />
     <ClCompile Include="UserInterface\Component\Container.cpp" />
     <ClCompile Include="UserInterface\Component\Dialog.cpp" />
-    <ClCompile Include="UserInterface\Component\DrawTexture.cpp" />
+    <ClCompile Include="UserInterface\Component\RenderTexture.cpp" />
     <ClCompile Include="UserInterface\Component\ImageGrid1.cpp" />
     <ClCompile Include="UserInterface\Component\ImageGrid3.cpp" />
     <ClCompile Include="UserInterface\Component\ImageGrid9.cpp" />

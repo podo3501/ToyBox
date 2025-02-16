@@ -52,5 +52,5 @@ void TestUpdate(UIComponent* component, int mouseX, int mouseY)
 }
 
 unique_ptr<UIComponent> TestComponent::CreateClone() const { return nullptr; }
-bool TestComponent::LoadResources(ILoadData* load) { m_loadTestFunc(load); return true; }
-void TestComponent::SetLoadTestFunction(function<void(ILoadData*)> func) { m_loadTestFunc = move(func); }
+bool TestComponent::ImplementLoadResource(ITextureLoad* load) { return m_loadTestFunc(load); };
+void TestComponent::SetLoadTestFunction(function<bool(ITextureLoad*)> func) { m_loadTestFunc = move(func); }

@@ -100,7 +100,7 @@ void CoreTest::CreateWindowSizeDependentResources()
 	m_spriteBatch->SetViewport(viewport);
 }
 
-bool CoreTest::LoadResources(function<bool(ILoadData*)> funcLoad, ILoadData* load)
+bool CoreTest::LoadResources(function<bool(ITextureLoad*)> funcLoad, ITextureLoad* load)
 {
 	//com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
 #ifdef __MINGW32__

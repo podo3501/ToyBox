@@ -42,14 +42,14 @@ bool Container::operator==(const UIComponent& o) const noexcept
 		});
 }
 
-bool Container::LoadResources(ILoadData* load)
-{
-	ReturnIfFalse(ranges::all_of(m_images | views::values, [this, load](const auto& image) {
-		return image->LoadResources(load);
-		}));
-
-	return true;
-}
+//bool Container::LoadResources(ITextureLoad* load)
+//{
+//	ReturnIfFalse(ranges::all_of(m_images | views::values, [this, load](const auto& image) {
+//		return image->LoadResources(load);
+//		}));
+//
+//	return true;
+//}
 
 void Container::ChangeSize(const XMUINT2& size) noexcept
 {

@@ -13,7 +13,7 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool LoadResources(ILoadData* load);
+	//bool LoadResources(ITextureLoad* load);
 	bool Setup(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList) noexcept;
 
 	inline ButtonState GetState() const noexcept { return *m_state; }

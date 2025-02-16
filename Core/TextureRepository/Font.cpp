@@ -2,19 +2,16 @@
 #include "Font.h"
 
 CFont::~CFont() = default;
-CFont::CFont(ID3D12Device* device, DescriptorPile* descPile) noexcept :
-    m_device{ device },
-    m_descPile{ descPile }
+CFont::CFont(ID3D12Device* device, DescriptorHeap* descHeap) noexcept :
+    TextureResource{ device, descHeap }
 {}
 
-bool CFont::Load(ResourceUploadBatch* upload, const wstring& filename, size_t index)
+void CFont::Load(ResourceUploadBatch* upload, const wstring& filename, size_t index)
 {
     m_font = make_unique<SpriteFont>(m_device, *upload, filename.c_str(),
-        m_descPile->GetCpuHandle(index), m_descPile->GetGpuHandle(index));
-    m_filename = filename;
-    m_index = index;
-
-    return true;
+        m_srvDescriptors->GetCpuHandle(index), m_srvDescriptors->GetGpuHandle(index));
+    SetFilename(filename);
+    SetIndex(index);
 }
 
 inline static Rectangle ConvertRectangle(const RECT& rect) noexcept

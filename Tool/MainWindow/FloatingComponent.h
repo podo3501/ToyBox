@@ -1,7 +1,7 @@
 #pragma once
 
 struct IRenderer;
-class DrawTexture;
+class RenderTexture;
 class UIComponent;
 class MouseTracker;
 
@@ -37,7 +37,7 @@ private:
 	void DrawMakeComponent();
 
 	IRenderer* m_renderer;
-	unique_ptr<DrawTexture> m_drawTex;
+	unique_ptr<RenderTexture> m_renderTex;
 	string m_name;
 	unique_ptr<UIComponent> m_component;
 	optional<MakeComponent> m_currentAction;

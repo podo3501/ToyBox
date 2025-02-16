@@ -80,6 +80,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -98,6 +99,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,6 +118,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,6 +137,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DeviceResources.cpp" />
-    <ClCompile Include="Font.cpp" />
     <ClCompile Include="Imgui.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -153,22 +156,27 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="RenderTexture.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureIndexing.cpp" />
+    <ClCompile Include="TextureRepository\Font.cpp" />
+    <ClCompile Include="TextureRepository\TextureRenderTarget.cpp" />
+    <ClCompile Include="TextureRepository\Texture.cpp" />
+    <ClCompile Include="TextureRepository\TextureHelper.cpp" />
+    <ClCompile Include="TextureRepository\TextureRepository.cpp" />
+    <ClCompile Include="TextureRepository\TextureResource.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h" />
-    <ClInclude Include="Font.h" />
     <ClInclude Include="IDeviceNotify.h" />
     <ClInclude Include="Imgui.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="Setting.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureIndexing.h" />
+    <ClInclude Include="TextureRepository\Font.h" />
+    <ClInclude Include="TextureRepository\TextureRenderTarget.h" />
+    <ClInclude Include="TextureRepository\Texture.h" />
+    <ClInclude Include="TextureRepository\TextureHelper.h" />
+    <ClInclude Include="TextureRepository\TextureRepository.h" />
+    <ClInclude Include="TextureRepository\TextureResource.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>

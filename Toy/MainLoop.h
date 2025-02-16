@@ -4,7 +4,7 @@ class Window;
 class MouseTracker;
 struct IRenderer;
 struct IImguiItem;
-struct IGetValue;
+struct ITextureController;
 
 namespace DX
 {
@@ -24,7 +24,7 @@ public:
 protected:
     virtual bool InitializeDerived() = 0;
     virtual bool LoadResources() = 0;
-    virtual bool SetDatas(IGetValue* getValue) = 0;
+    virtual bool PostLoaded(ITextureController* texController) = 0;
     virtual void Update(const DX::StepTimer* timer) = 0;
 
 private:

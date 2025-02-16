@@ -1,7 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
-struct IGetValue;
+struct ITextureController;
 struct IRenderer;
 class UILayout;
 struct TextData;
@@ -15,8 +15,6 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::TextArea; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
-	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool SetDatas(IGetValue* getValue) override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool SetText(const wstring& text);
@@ -26,17 +24,19 @@ public:
 protected:
 	TextArea(const TextArea& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementLoadResource(ITextureLoad* load) override;
+	virtual bool ImplementSetData(ITextureController* texController) override;
 	virtual bool ImplementUpdatePosition(const XMINT2& position) noexcept override;
-	virtual void ImplementRender(IRender* render) const override;
+	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
 	bool ArrangeText(const wstring& text);
 
-	IGetValue* m_getValue;
+	ITextureController* m_texController;
 	Vector2 m_posByResolution{};
 	wstring m_text{};
 	map<wstring, wstring> m_fontFileList;
-	map<wstring, size_t> m_font;
+	map<wstring, size_t> m_font; //core상태에 따라서 인덱스는 변할수 있기 때문에 저장하지 않는다.
 	vector<TextData> m_lines;
 };
 

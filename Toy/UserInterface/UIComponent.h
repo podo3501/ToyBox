@@ -18,9 +18,11 @@ protected:
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
+	virtual bool ImplementLoadResource(ITextureLoad*) { return true; }
+	virtual bool ImplementSetData(ITextureController*) { return true; }
 	virtual bool ImplementUpdatePosition(const XMINT2&) noexcept { return true; }
 	virtual bool ImplementActiveUpdate(const XMINT2&) noexcept { return true; }
-	virtual void ImplementRender(IRender*) const {};
+	virtual void ImplementRender(ITextureRender*) const {};
 
 	//상속되어지는 함수는 구현한다.
 	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
@@ -42,10 +44,10 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	unique_ptr<UIComponent> Clone() const;
 
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
-	virtual bool LoadResources(ILoadData* load) override;
-	virtual bool SetDatas(IGetValue*) override;
+	virtual bool LoadResources(ITextureLoad* load) override final;
+	virtual bool PostLoaded(ITextureController*) override final;
 	virtual bool ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept override final;
-	virtual void ProcessRender(IRender* render) override final;
+	virtual void ProcessRender(ITextureRender* render) override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;

@@ -1,7 +1,7 @@
 #pragma once
 
 struct IRenderer;
-class DrawTexture;
+class RenderTexture;
 class ImageGrid1;
 class SourceExtractor;
 
@@ -20,7 +20,7 @@ public:
 private:
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
-    unique_ptr<DrawTexture> m_drawTex;
+    unique_ptr<RenderTexture> m_renderTex;
     unique_ptr<SourceExtractor> m_sourceExtractor;
     unique_ptr<ImageGrid1> m_sourceTexture;
 

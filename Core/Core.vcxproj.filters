@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="리소스 파일">
+    <Filter Include="TextureRepository">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
@@ -11,11 +11,25 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureIndexing.cpp" />
-    <ClCompile Include="Font.cpp" />
     <ClCompile Include="Imgui.cpp" />
-    <ClCompile Include="RenderTexture.cpp" />
+    <ClCompile Include="TextureRepository\Font.cpp">
+      <Filter>TextureRepository</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRepository\TextureRenderTarget.cpp">
+      <Filter>TextureRepository</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRepository\Texture.cpp">
+      <Filter>TextureRepository</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRepository\TextureRepository.cpp">
+      <Filter>TextureRepository</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRepository\TextureResource.cpp">
+      <Filter>TextureRepository</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureRepository\TextureHelper.cpp">
+      <Filter>TextureRepository</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h" />
@@ -23,11 +37,25 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="IDeviceNotify.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureIndexing.h" />
-    <ClInclude Include="Font.h" />
     <ClInclude Include="Imgui.h" />
     <ClInclude Include="Setting.h" />
-    <ClInclude Include="RenderTexture.h" />
+    <ClInclude Include="TextureRepository\Font.h">
+      <Filter>TextureRepository</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRepository\TextureRenderTarget.h">
+      <Filter>TextureRepository</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRepository\Texture.h">
+      <Filter>TextureRepository</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRepository\TextureRepository.h">
+      <Filter>TextureRepository</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRepository\TextureResource.h">
+      <Filter>TextureRepository</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureRepository\TextureHelper.h">
+      <Filter>TextureRepository</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

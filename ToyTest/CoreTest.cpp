@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "CoreTestFixture.h"
-#include "../Core/TextureIndexing.h"
-#include "../Core/DeviceResources.h"
 #include "../Core/Utility.h"
 #include "ToyTestFixture.h"
 #include "../Include/IRenderer.h"
@@ -26,7 +24,7 @@ namespace BasicCore
 		EXPECT_EQ(subIter.GetCurrent(), 6);
 	}
 
-	static pair<size_t, XMUINT2> LoadAndCheckTexture(ILoadData* load, const wstring& filename)
+	static pair<size_t, XMUINT2> LoadAndCheckTexture(ITextureLoad* load, const wstring& filename)
 	{
 		size_t index{ 0 };
 		XMUINT2 size{};
@@ -34,14 +32,14 @@ namespace BasicCore
 		return { index, size };
 	}
 
-	static size_t LoadAndCheckRenderTexture(IGetValue* value, const XMUINT2& size, IComponent* component)
+	static size_t LoadAndCheckRenderTexture(ITextureController* texController, const XMUINT2& size, IComponent* component)
 	{
 		size_t index{ 0 };
-		EXPECT_TRUE(value->CreateRenderTexture(size, component, index, nullptr));
+		EXPECT_TRUE(texController->CreateRenderTexture(size, component, index, nullptr));
 		return index;
 	}
 
-	static size_t LoadAndCheckFont(ILoadData* load, const wstring& filename)
+	static size_t LoadAndCheckFont(ITextureLoad* load, const wstring& filename)
 	{
 		size_t fontIdx{ 0 };
 		EXPECT_TRUE(load->LoadFont(filename, fontIdx));
@@ -50,7 +48,7 @@ namespace BasicCore
 
 	///////////////////////////////////////////////////////////////////////////////////
 
-	static void TexturLoadingTest(ILoadData* load)
+	static bool TexturLoadingTest(ITextureLoad* load)
 	{
 		wstring sample{ L"Resources/UI/SampleTexture/Sample_0.png" };
 		wstring option{ L"Resources/UI/Texture/Option.png" };
@@ -58,25 +56,31 @@ namespace BasicCore
 		EXPECT_THAT(LoadAndCheckTexture(load, sample), Pair(0, XMUINT2{ 512, 512 }));
 		EXPECT_THAT(LoadAndCheckTexture(load, sample), Pair(0, XMUINT2{ 512, 512 }));
 		EXPECT_THAT(LoadAndCheckTexture(load, option), Pair(1, XMUINT2{ 512, 512 }));
+
+		return true;
 	}
 
-	static void LoadFont(ILoadData* load)
+	static bool LoadFont(ITextureLoad* load)
 	{
 		wstring hangleFilename{ L"Resources/UI/Font/HangleS16.spritefont" };
 		wstring englishFilename{ L"Resources/UI/Font/CourierNewBoldS18.spritefont" };
 
-		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 3);
-		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 3);
-		EXPECT_EQ(LoadAndCheckFont(load, englishFilename), 4);
+		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 10);
+		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 10);
+		EXPECT_EQ(LoadAndCheckFont(load, englishFilename), 11);
+
+		return true;
 	}
 
-	static void ReloadingTest(ILoadData* load)
+	static bool ReloadingTest(ITextureLoad* load)
 	{
 		wstring sample{ L"Resources/UI/SampleTexture/Sample_0.png" };
 		wstring option{ L"Resources/UI/Texture/Option.png" };
 
 		EXPECT_THAT(LoadAndCheckTexture(load, sample), Pair(1, XMUINT2{ 512, 512 }));
 		EXPECT_THAT(LoadAndCheckTexture(load, option), Pair(0, XMUINT2{ 512, 512 }));
+
+		return true;
 	}
 	
 	TEST_F(IRendererTest, LoadingTest)
@@ -85,16 +89,17 @@ namespace BasicCore
 		testComponent->SetLoadTestFunction(TexturLoadingTest);
 		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
 
+		auto texController = m_renderer->GetTextureController();
 		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
-		EXPECT_EQ(LoadAndCheckRenderTexture(m_renderer->GetValue(), img1->GetSize(), img1.get()), 2);
+		for(auto idx : views::iota(2, 10))
+			EXPECT_EQ(LoadAndCheckRenderTexture(texController, img1->GetSize(), img1.get()), idx);
 
 		testComponent->SetLoadTestFunction(LoadFont);
 		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
 
-		auto curValue = m_renderer->GetValue();
-		curValue->ReleaseTexture(0);
-		curValue->ReleaseTexture(0); //2번 로딩하면 2번 지워줘야 한다.
-		curValue->ReleaseTexture(1);
+		texController->ReleaseTexture(0);
+		texController->ReleaseTexture(0); //2번 로딩하면 2번 지워줘야 한다.
+		texController->ReleaseTexture(1);
 
 		testComponent->SetLoadTestFunction(ReloadingTest);
 		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));

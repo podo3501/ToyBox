@@ -43,7 +43,7 @@ bool ToolMainLoop::LoadResources()
     return true;
 }
 
-bool ToolMainLoop::SetDatas(IGetValue* getValue)
+bool ToolMainLoop::PostLoaded(ITextureController* texController)
 {
     //m_toolSystem = make_unique<ToolSystem>(m_renderer);
     return true;

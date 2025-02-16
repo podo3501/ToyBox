@@ -3,13 +3,13 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/Component/DrawTexture.h"
+#include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Utility.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
-	m_drawTex{ make_unique<DrawTexture>() },
+	m_renderTex{ make_unique<RenderTexture>() },
 	m_name{ "PopupMenu_" + mainWndName }
 {}
 
@@ -72,7 +72,7 @@ void FloatingComponent::DrawMakeComponent()
 	ImU32 colorU32 = ImGui::GetColorU32(tintColor);
 
 	drawList->AddImage(
-		m_drawTex->GetGraphicMemoryOffset(),
+		m_renderTex->GetGraphicMemoryOffset(),
 		{ m_position.x, m_position.y },                      // ½ÃÀÛ ÁÂÇ¥
 		{ m_position.x + m_drawTextureSize.x, m_position.y + m_drawTextureSize.y },    // Á¾·á ÁÂÇ¥
 		ImVec2(0, 0),
@@ -119,7 +119,7 @@ void FloatingComponent::Render()
 bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size)
 {
 	ReturnIfNullptr(component);
-	ReturnIfFalse(m_drawTex->CreateTexture(m_renderer, size, component.get()));
+	ReturnIfFalse(m_renderTex->CreateTexture(m_renderer, size, component.get()));
 	ReturnIfFalse(m_renderer->LoadComponent(component.get()));
 
 	m_component = move(component);

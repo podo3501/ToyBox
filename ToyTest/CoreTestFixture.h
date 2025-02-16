@@ -1,7 +1,7 @@
 #pragma once
 
 class Window;
-struct ILoadData;
+struct ITextureLoad;
 
 namespace DX { class DeviceResources; }
 
@@ -15,7 +15,7 @@ protected:
 	void SetUp() override;
 	void TearDown() override;
 
-	bool LoadResources(function<bool(ILoadData*)> funcLoad, ILoadData* load);
+	bool LoadResources(function<bool(ITextureLoad*)> funcLoad, ITextureLoad* load);
 
 	unique_ptr<Window> m_window;
 	unique_ptr<DX::DeviceResources> m_deviceResources;

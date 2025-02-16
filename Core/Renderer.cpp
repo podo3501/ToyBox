@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "Renderer.h"
-#include "../Include/IComponent.h"
 #include "DeviceResources.h"
-#include "TextureIndexing.h"
-#include "RenderTexture.h"
+#include "../Include/IComponent.h"
+#include "TextureRepository/TextureRepository.h"
+#include "TextureRepository/TextureRenderTarget.h"
 #include "Imgui.h"
 #include "Utility.h"
 #include "Setting.h"
@@ -77,13 +77,10 @@ bool Renderer::Initialize()
     auto device = m_deviceResources->GetD3DDevice();
     auto format = m_deviceResources->GetBackBufferFormat();
 
-    ReturnIfFalse(m_imgui->Initialize(device, m_srvDescriptorPile.get(), format, Ev(SrvOffset::Imgui)));
+    ReturnIfFalse(m_imgui->Initialize(device, m_srvDescriptors.get(), format, Ev(SrvOffset::Imgui)));
     m_batch = make_unique<ResourceUploadBatch>(device);
-    m_texIndexing = make_unique<TextureIndexing>(
-        m_deviceResources.get(), m_srvDescriptorPile.get(), m_batch.get(), m_spriteBatch.get());
-    m_renderTexOffset = make_unique<CycleIterator>(
-        static_cast<int>(Ev(SrvOffset::RenderTexture)), 
-        static_cast<int>(Ev(SrvOffset::Count)));
+    m_texRepository = make_unique<TextureRepository>(
+        m_deviceResources.get(), m_srvDescriptors.get(), m_batch.get(), m_spriteBatch.get());
 
     return true;
 }
@@ -109,7 +106,7 @@ void Renderer::CreateDeviceDependentResources()
     m_graphicsMemory = make_unique<GraphicsMemory>(device);
 
     // TODO: Initialize device dependent objects here (independent of window size).
-    m_srvDescriptorPile = make_unique<DescriptorPile>(device, MAX_DESC);
+    m_srvDescriptors = make_unique<DescriptorPile>(device, MAX_DESC);
 
     ResourceUploadBatch resourceUpload(device);
 
@@ -138,9 +135,9 @@ void Renderer::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
     m_imgui->Reset();
-    m_texIndexing->Reset();
+    m_texRepository->Reset();
 
-    m_srvDescriptorPile.reset();
+    m_srvDescriptors.reset();
     m_spriteBatch.reset();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
@@ -167,7 +164,7 @@ bool Renderer::LoadComponent(IComponent* component)
 #endif
     WICOnceInitialize();
 
-    auto load = m_texIndexing.get();
+    auto load = m_texRepository.get();
 
     m_batch->Begin();
     if (!component->LoadResources(load))
@@ -180,7 +177,7 @@ bool Renderer::LoadComponent(IComponent* component)
     uploadResourcesFinished.wait();
     
     //로드 하고 나서 필요한 셋팅 및 위치계산을 해 준다.
-    if (!component->SetDatas(load) || !component->ProcessUpdate({}, true))
+    if (!component->PostLoaded(load) || !component->ProcessUpdate({}, true))
         return false;
 
     return true;
@@ -197,7 +194,7 @@ void Renderer::Draw()
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
     // TODO: Add your rendering code here.
-    ID3D12DescriptorHeap* heaps[] = { m_srvDescriptorPile->Heap() };
+    ID3D12DescriptorHeap* heaps[] = { m_srvDescriptors->Heap() };
     commandList->SetDescriptorHeaps(static_cast<UINT>(size(heaps)), heaps);
 
     // Set the viewport and scissor rect.
@@ -206,15 +203,13 @@ void Renderer::Draw()
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissorRect);
     
-    m_texIndexing->DrawRenderTextures();
-    //for (auto& renderTexture : m_renderTextures | views::values )
-    //    renderTexture->Render(commandList, m_texIndexing.get(), m_spriteBatch.get());
+    m_texRepository->DrawRenderTextures();
 
     Clear();
 
     m_spriteBatch->Begin(commandList);
 
-    ranges::for_each(m_components, [renderer = m_texIndexing.get()](auto compInfo) {
+    ranges::for_each(m_components, [renderer = m_texRepository.get()](auto compInfo) {
             compInfo->ProcessRender(renderer);
          });
     
@@ -304,7 +299,7 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 }
 #pragma endregion
 
-IGetValue* Renderer::GetValue() const noexcept { return m_texIndexing.get(); }
+ITextureController* Renderer::GetTextureController() const noexcept { return m_texRepository.get(); }
 
 void Renderer::AddRenderComponent(IComponent* component)
 {
@@ -319,32 +314,3 @@ void Renderer::RemoveRenderComponent(IComponent* component)
 
 void Renderer::AddImguiComponent(IImguiComponent* comp) { m_imgui->AddComponent(comp); }
 void Renderer::RemoveImguiComponent(IImguiComponent* comp) noexcept { m_imgui->RemoveComponent(comp); }
-
-bool Renderer::CreateRenderTexture(const XMUINT2& size, IComponent* component, ImTextureID& outTextureID)
-{
-    auto device = m_deviceResources->GetD3DDevice();
-    unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>(device, m_srvDescriptorPile.get());
-
-    auto format = m_deviceResources->GetBackBufferFormat();
-    ReturnIfFalse(renderTexture->Create(format, size, m_renderTexOffset->Increase(), component));
-    outTextureID = renderTexture->GetTextureID();
-
-    m_renderTextures.insert(make_pair(outTextureID, move(renderTexture)));
-
-    return true;
-}
-
-void Renderer::RemoveRenderTexture(ImTextureID textureID)
-{
-    m_deviceResources->WaitForGpu();    //텍스쳐를 Gpu는 쓰고 있을 수 있기 때문에 하는일이 끝나고 지우게끔 동기화 시킨다.
-    m_renderTextures.erase(textureID);
-}
-
-bool Renderer::ModifyRenderTexture(ImTextureID id, const XMUINT2& size)
-{
-    auto find = m_renderTextures.find(id);
-    if (find == m_renderTextures.end()) return false;
-
-    auto& renderTexture = find->second;
-    return renderTexture->ModifyRenderTexture(size);
-}

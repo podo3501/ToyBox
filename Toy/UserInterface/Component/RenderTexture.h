@@ -3,13 +3,13 @@
 
 struct IRenderer;
 
-class DrawTexture : public UIComponent
+class RenderTexture : public UIComponent
 {
 public:
-	~DrawTexture();
-	DrawTexture();
+	~RenderTexture();
+	RenderTexture();
 
-	static ComponentID GetTypeStatic() { return ComponentID::DrawTexture; }
+	static ComponentID GetTypeStatic() { return ComponentID::RenderTexture; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
@@ -18,14 +18,14 @@ public:
 	UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 
 protected:
-	DrawTexture(const DrawTexture& other);
+	RenderTexture(const RenderTexture& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual void ImplementRender(IRender* render) const override;
+	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
 	void Release() noexcept;
 
 	size_t m_index{ 0 };
 	UINT64 m_gfxOffset{};
-	IGetValue* m_resourceInfo;
+	ITextureController* m_texController;
 };

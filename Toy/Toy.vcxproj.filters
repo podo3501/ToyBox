@@ -127,7 +127,7 @@
     <ClInclude Include="UserInterface\Component\Button.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\Component\DrawTexture.h">
+    <ClInclude Include="UserInterface\Component\RenderTexture.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
   </ItemGroup>
@@ -210,7 +210,7 @@
     <ClCompile Include="UserInterface\Component\Button.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\Component\DrawTexture.cpp">
+    <ClCompile Include="UserInterface\Component\RenderTexture.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
   </ItemGroup>

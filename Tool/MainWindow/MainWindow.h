@@ -8,7 +8,7 @@ namespace DX
 
 class UIComponent;
 class MouseTracker;
-class DrawTexture;
+class RenderTexture;
 class ComponentController;
 
 class MainWindow : public IImguiComponent
@@ -39,7 +39,7 @@ private:
     IRenderer* m_renderer;
     string m_name{};
     ImGuiWindow* m_window{ nullptr };
-    unique_ptr<DrawTexture> m_drawTex;
+    unique_ptr<RenderTexture> m_renderTex;
     unique_ptr<UIComponent> m_panel;
     unique_ptr<ComponentController> m_controller;
 

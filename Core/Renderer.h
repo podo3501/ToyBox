@@ -9,8 +9,8 @@
 
 struct IImgui;
 struct IComponent;
-class TextureIndexing;
-class RenderTexture;
+class TextureRepository;
+class TextureRenderTarget;
 class CycleIterator;
 
 namespace DX
@@ -54,13 +54,9 @@ public:
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept override;
 
     virtual bool LoadComponent(IComponent* component) override;
-    //virtual bool LoadComponents() override;
 
-    virtual IGetValue* GetValue() const noexcept override;
-    virtual bool CreateRenderTexture(const XMUINT2& size, IComponent* component, ImTextureID& outTextureID) override;
-    virtual void RemoveRenderTexture(ImTextureID textureID) override;
-    virtual bool ModifyRenderTexture(ImTextureID id, const XMUINT2& size) override;
     virtual void Draw() override;
+    virtual ITextureController* GetTextureController() const noexcept override;
 
     // Messages
     virtual void OnActivated() override;
@@ -80,16 +76,12 @@ private:
     // Device resources.
     unique_ptr<DX::DeviceResources> m_deviceResources;
     unique_ptr<GraphicsMemory> m_graphicsMemory;
-    //unique_ptr<DescriptorHeap> m_srvDescriptors;
-    unique_ptr<DescriptorPile> m_srvDescriptorPile;
+    unique_ptr<DescriptorHeap> m_srvDescriptors;
     unique_ptr<ResourceUploadBatch> m_batch;
 
     unique_ptr<IImgui> m_imgui;
     unique_ptr<SpriteBatch> m_spriteBatch;
-    unique_ptr<TextureIndexing> m_texIndexing;
-
-    unique_ptr<CycleIterator> m_renderTexOffset;
-    map<ImTextureID, unique_ptr<RenderTexture>> m_renderTextures;
+    unique_ptr<TextureRepository> m_texRepository;
 
     vector<IComponent*> m_components;
 };
