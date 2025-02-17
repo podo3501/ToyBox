@@ -28,7 +28,7 @@ namespace BasicCore
 	{
 		size_t index{ 0 };
 		XMUINT2 size{};
-		EXPECT_TRUE(load->LoadTexture(filename, index, &size));
+		EXPECT_TRUE(load->LoadTexture(filename, index, &size, nullptr));
 		return { index, size };
 	}
 

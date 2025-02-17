@@ -30,6 +30,7 @@ public:
     inline const ImGuiWindow* GetImGuiWindow() const noexcept;
 
 private:
+    bool SetupProperty(const XMUINT2& size);
     void CheckActiveUpdate() noexcept;
     void CheckChangeWindow(const ImGuiWindow* window);
     void IgnoreMouseClick();

@@ -25,7 +25,7 @@ protected:
 	TextArea(const TextArea& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementLoadResource(ITextureLoad* load) override;
-	virtual bool ImplementSetData(ITextureController* texController) override;
+	virtual bool ImplementPostLoaded(ITextureController* texController) override;
 	virtual bool ImplementUpdatePosition(const XMINT2& position) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 

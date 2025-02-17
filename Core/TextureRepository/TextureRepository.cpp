@@ -10,7 +10,7 @@ TextureRepository::~TextureRepository() = default;
 TextureRepository::TextureRepository(DX::DeviceResources* deviceRes, DescriptorHeap* descriptorHeap, ResourceUploadBatch* upload, SpriteBatch* sprite) :
     m_deviceResources{ deviceRes },
     m_device{ deviceRes->GetD3DDevice() },
-    m_descHeapHeap{ descriptorHeap },
+    m_descHeap{ descriptorHeap },
     m_upload{ upload }, 
     m_sprite{ sprite }
 {}
@@ -40,7 +40,7 @@ bool TextureRepository::LoadTextureResource(const wstring& filename, size_t& out
         return true;
     }
 
-    auto texRes = make_unique<TexResType>(m_device, m_descHeapHeap);
+    auto texRes = make_unique<TexResType>(m_device, m_descHeap);
     auto index = AllocateDescriptor();
     texRes->Load(m_upload, filename, index);
 
@@ -56,17 +56,18 @@ bool TextureRepository::LoadFont(const wstring& filename, size_t& outIndex)
     return LoadTextureResource<CFont>(filename, outIndex, [](TextureResource*) {});
 }
 
-bool TextureRepository::LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize)
+bool TextureRepository::LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize, UINT64* outGfxMemOffset)
 {
     return LoadTextureResource<Texture>(filename, outIndex, 
-        [outSize](TextureResource* res) {
+        [outSize, outGfxMemOffset](TextureResource* res) {
             if (outSize) *outSize = static_cast<Texture*>(res)->GetSize();
+            if (outGfxMemOffset) *outGfxMemOffset = res->GetGraphicMemoryOffset();
         });
 }
 
 bool TextureRepository::CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, UINT64* outGfxMemOffset)
 {
-    auto renderTex = make_unique<TextureRenderTarget>(m_device, m_descHeapHeap);
+    auto renderTex = make_unique<TextureRenderTarget>(m_deviceResources, m_descHeap);
 
     auto format = m_deviceResources->GetBackBufferFormat();
     auto offset = AllocateDescriptor();

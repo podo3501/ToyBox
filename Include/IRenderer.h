@@ -7,7 +7,7 @@ struct ITextureLoad
 public:
     virtual ~ITextureLoad() {};
 
-    virtual bool LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize) = 0;
+    virtual bool LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize, UINT64* outGfxMemOffset) = 0;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) = 0;
 };
 

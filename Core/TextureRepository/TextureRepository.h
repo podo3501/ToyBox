@@ -6,11 +6,7 @@ class Texture;
 class CFont;
 class RenderTexture;
 class TextureResource;
-
-namespace DX
-{
-    class DeviceResources;
-}
+namespace DX { class DeviceResources; }
 
 class TextureRepository : public ITextureLoad, public ITextureController, public ITextureRender
 {
@@ -22,7 +18,7 @@ public:
     ~TextureRepository();
 
     //ITextureLoad
-    virtual bool LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize) override;
+    virtual bool LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize, UINT64* outGfxMemOffset) override;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) override;
 
     //ITextureController
@@ -48,7 +44,7 @@ private:
 
     DX::DeviceResources* m_deviceResources;
     ID3D12Device* m_device;
-    DescriptorHeap* m_descHeapHeap;
+    DescriptorHeap* m_descHeap;
     ResourceUploadBatch* m_upload;
     SpriteBatch* m_sprite;
 

@@ -24,6 +24,7 @@ public:
 	inline void SetFilename(const wstring& filename) noexcept { m_filename = filename; }
 	inline size_t GetIndex() const noexcept { return *m_index; }
 	inline void SetIndex(size_t index) noexcept { m_index = index; }
+	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_srvDescriptors->GetGpuHandle(GetIndex()).ptr; }
 
 protected:
 	ID3D12Device* m_device;

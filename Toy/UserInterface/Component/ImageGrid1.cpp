@@ -46,9 +46,9 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
 {
 	XMUINT2 size{};
-	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), m_index, &size));
+	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), m_index, &size, &m_gfxOffset));
 
-	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다.
+	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다. ?!? optional index로 해도 되지 않나?
 	{
 		SetSize(size);
 		m_source = { 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };
@@ -57,7 +57,7 @@ bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
 	return true;
 }
 
-bool ImageGrid1::ImplementSetData(ITextureController* texController)
+bool ImageGrid1::ImplementPostLoaded(ITextureController* texController)
 {
 	m_texController = texController;
 	return true;

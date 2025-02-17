@@ -96,9 +96,15 @@ namespace ComponentTest
 	TEST_F(BasicFunctionalityTest, RenderTexture)
 	{
 		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
+		auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, img1.get());
+		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
+		UIEx(m_panel).AttachComponent(move(img1), { 200, 200 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		auto renderTex = make_unique<RenderTexture>();
-		EXPECT_TRUE(renderTex->CreateTexture(m_renderer.get(), img1->GetSize(), img1.get()));
+		//마우스 반응은 100, 100, 50, 50 에서 반응해야 한다.
+
+
+	
 	}
 
 	////////////////////////////////////////////////////////

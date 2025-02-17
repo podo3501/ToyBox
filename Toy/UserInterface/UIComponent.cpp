@@ -69,7 +69,7 @@ bool UIComponent::LoadResources(ITextureLoad* load)
 bool UIComponent::PostLoaded(ITextureController* texController)
 {
 	return ForEachChildUntilFail([texController](UIComponent* component) {
-		return component->ImplementSetData(texController);
+		return component->ImplementPostLoaded(texController);
 		});
 }
 

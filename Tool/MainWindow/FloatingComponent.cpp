@@ -9,7 +9,6 @@
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
-	m_renderTex{ make_unique<RenderTexture>() },
 	m_name{ "PopupMenu_" + mainWndName }
 {}
 
@@ -23,7 +22,7 @@ void FloatingComponent::Clear() noexcept
 	m_drawTextureSize = {};
 	m_draw = false;
 	m_currentAction.reset();
-	m_renderer->RemoveRenderComponent(m_component.get()); //이걸 왜 하지? 넣은 적이 있나?
+	m_renderer->RemoveRenderComponent(m_component.get()); //이걸 왜 하지? 넣은 적이 있나?!?
 }
 
 bool FloatingComponent::IsComponent() const noexcept
@@ -119,8 +118,9 @@ void FloatingComponent::Render()
 bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size)
 {
 	ReturnIfNullptr(component);
-	ReturnIfFalse(m_renderTex->CreateTexture(m_renderer, size, component.get()));
+	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, component.get()));
 	ReturnIfFalse(m_renderer->LoadComponent(component.get()));
+	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
 
 	m_component = move(component);
 	m_drawTextureSize = size;

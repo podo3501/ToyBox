@@ -19,7 +19,7 @@ protected:
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
 	virtual bool ImplementLoadResource(ITextureLoad*) { return true; }
-	virtual bool ImplementSetData(ITextureController*) { return true; }
+	virtual bool ImplementPostLoaded(ITextureController*) { return true; }
 	virtual bool ImplementUpdatePosition(const XMINT2&) noexcept { return true; }
 	virtual bool ImplementActiveUpdate(const XMINT2&) noexcept { return true; }
 	virtual void ImplementRender(ITextureRender*) const {};

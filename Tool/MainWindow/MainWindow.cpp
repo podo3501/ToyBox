@@ -19,7 +19,6 @@ MainWindow::~MainWindow()
 MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer{ renderer },
 	m_name{ "Main Window " + to_string(m_mainWindowIndex++) },
-	m_renderTex{ make_unique<RenderTexture>() },
 	m_panel{ make_unique<Panel>("Main", 	UILayout(RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop)) },
 	m_controller{ make_unique<ComponentController>(renderer, m_panel.get(), m_name) }
 {
@@ -29,14 +28,20 @@ MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer->AddImguiComponent(this);
 }
 
-bool MainWindow::CreateScene(const XMUINT2& size)
+bool MainWindow::SetupProperty(const XMUINT2& size)
 {
-	m_panel->SetSize(size);
-	ReturnIfFalse(m_renderTex->CreateTexture(m_renderer, size, m_panel.get()));
+	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, m_panel.get()));
+	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
 	m_size = XMUINT2ToImVec2(size);
 	m_isOpen = true;
 
 	return true;
+}
+
+bool MainWindow::CreateScene(const XMUINT2& size)
+{
+	m_panel->SetSize(size);
+	return SetupProperty(size);
 }
 
 bool MainWindow::CreateScene(const wstring& filename)
@@ -45,9 +50,7 @@ bool MainWindow::CreateScene(const wstring& filename)
 	ReturnIfFalse(m_renderer->LoadComponent(m_panel.get()));
 
 	const auto& panelSize = m_panel->GetSize();
-	ReturnIfFalse(m_renderTex->CreateTexture(m_renderer, panelSize, m_panel.get()));
-	m_size = XMUINT2ToImVec2(panelSize);
-	m_isOpen = true;
+	ReturnIfFalse(SetupProperty(panelSize));
 
 	m_controller->SetPanel(m_panel.get());
 
@@ -71,9 +74,7 @@ wstring MainWindow::GetSaveFilename() const noexcept
 
 void MainWindow::ChangeWindowSize(const ImVec2& size)
 {
-	m_renderTex.reset(); //modify를 쓰면 되지 않나?!?
-	m_renderTex = make_unique<RenderTexture>();
-	m_renderTex->CreateTexture(m_renderer, ImVec2ToXMUINT2(size), m_panel.get());
+	m_renderTex->ModifyTexture(ImVec2ToXMUINT2(size));
 	m_size = size;
 }
 

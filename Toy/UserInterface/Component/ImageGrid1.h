@@ -24,12 +24,13 @@ public:
 	inline const Rectangle& GetSource() const noexcept { return m_source; }
 	inline void SetFilename(const wstring& filename) noexcept { m_filename = filename; }
 	inline optional<wstring> GetFilename() const noexcept { return m_filename; }
+	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 
 protected:
 	ImageGrid1(const ImageGrid1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementLoadResource(ITextureLoad* load) override;
-	virtual bool ImplementSetData(ITextureController* texController) override;
+	virtual bool ImplementPostLoaded(ITextureController* texController) override;
 	virtual bool ImplementUpdatePosition(const XMINT2& position) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 
@@ -38,5 +39,6 @@ private:
 	wstring m_filename;
 	Rectangle m_source{};
 	XMINT2 m_position{};
+	UINT64 m_gfxOffset{};
 	ITextureController* m_texController;
 };

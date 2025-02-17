@@ -103,7 +103,7 @@ bool TextArea::SetText(const wstring& text)
 	return true;
 }
 
-bool TextArea::ImplementSetData(ITextureController* texController)
+bool TextArea::ImplementPostLoaded(ITextureController* texController)
 {
 	m_texController = texController;
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TextureRenderTarget.h"
+#include "../DeviceResources.h"
 #include "../Include/IComponent.h"
 #include "../Utility.h"
 
@@ -8,11 +9,12 @@ constexpr FLOAT ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 TextureRenderTarget::~TextureRenderTarget()
 {}
 
-TextureRenderTarget::TextureRenderTarget(ID3D12Device* device, DescriptorHeap* srvDescriptor) :
-    TextureResource{ device, srvDescriptor },
+TextureRenderTarget::TextureRenderTarget(DX::DeviceResources* deviceResources, DescriptorHeap* descHeap) :
+    TextureResource{ deviceResources->GetD3DDevice(), descHeap },
+    m_deviceResources{ deviceResources },
     m_component{ nullptr }
 {
-    m_rtvDescriptor = make_unique<DescriptorHeap>(device,
+    m_rtvDescriptor = make_unique<DescriptorHeap>(m_device,
         D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
         D3D12_DESCRIPTOR_HEAP_FLAG_NONE, 1);
 }
@@ -66,6 +68,8 @@ bool TextureRenderTarget::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t off
 
 bool TextureRenderTarget::ModifyRenderTexture(const XMUINT2& size)
 {
+    m_deviceResources->WaitForGpu();
+
     m_resDesc = GetResourceDesc(m_resDesc.Format, size);
     const CD3DX12_HEAP_PROPERTIES TextureRenderTargetHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
     D3D12_CLEAR_VALUE clear = GetClearValue();
