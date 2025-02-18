@@ -19,9 +19,8 @@
                 "y": 0.0
             }
         },
-        "Enable": true,
         "Region": "MainRegionEntry",
-        "AttachmentState": 0,
+        "StateFlag": 27,
         "Children": [
             {
                 "Child": {
@@ -49,9 +48,8 @@
                             "y": 0.5
                         }
                     },
-                    "Enable": true,
                     "Region": "",
-                    "AttachmentState": 0,
+                    "StateFlag": 27,
                     "Children": []
                 }
             }

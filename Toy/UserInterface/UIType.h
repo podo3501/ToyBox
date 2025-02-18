@@ -81,16 +81,27 @@ constexpr auto EnumToStringMap<ButtonState>()->array<const char*, EnumSize<Butto
 }
 ///////////////////////////////////////////////////////////////
 
-//attachment할때 상태에 따라서 attach detach 할수 있는지 확인하는 값
-enum class AttachmentState : int
+// namespac + enum을 쓰는 이유는 함수 인자로 int를 쓰는 것보다 나아서. enum만 쓰면 쟤들 이름이 흔해서 자꾸 이름 충돌된다.
+// enum class는 타입 변환을 계속 해 줘야 해서 귀찮다.
+namespace StateFlag
 {
-	All,
-	Attach, 
-	Detach,
-	Disable
-};
+	enum Type : int //갯수는 32개까지 가능. 
+	{
+		Update = 1 << 0,
+		Render = 1 << 1, //Render라면 RenderTexture 및 Render 두군데 다 그려준다.
+		RenderTexture = 1 << 2, //RenderTexture라면 Texture셋팅일때만 그린다.
+		Attach = 1 << 3,
+		Detach = 1 << 4,
 
-///////////////////////////////////////////////////////////////
+		Active = Update | Render,
+		Default = Active | Attach | Detach, // 기본 옵션(모든 옵션 포함)
+	};
+
+	constexpr StateFlag::Type operator|(StateFlag::Type lhs, StateFlag::Type rhs) { return static_cast<StateFlag::Type>(static_cast<int>(lhs) | static_cast<int>(rhs)); }
+}
+
+
+/////////////////////////////////////////////////////////////// 
 
 struct ImageSource
 {

@@ -42,7 +42,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent>&& bgImage, 
 	
 	m_prototypeContainer = container.get();
 	m_prototypeContainer->Rename("PrototypeContainer");
-	m_prototypeContainer->SetEnable(false); //Prototype를 만드는 컨테이너이기 때문에 업데이트 하지 않는다.
+	m_prototypeContainer->DisableStateFlag(StateFlag::Active); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	UIEx(this).AttachComponent(move(container), {});
 
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 구현해야함
@@ -57,7 +57,7 @@ UIComponent* ListArea::PrepareContainer()
 	auto cloneContainerPtr = cloneContainer.get();
 	UIEx(this).AttachComponent(move(cloneContainer), {});
 
-	cloneContainerPtr->SetEnable(true);
+	cloneContainerPtr->EnableStateFlag(StateFlag::Active);
 	cloneContainerPtr->SetRelativePosition({ 0, y });
 	y += cloneContainerPtr->GetSize().y;
 

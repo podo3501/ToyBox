@@ -111,7 +111,7 @@ void TextureRenderTarget::Render(ID3D12GraphicsCommandList* commandList, ITextur
     commandList->ClearRenderTargetView(rtvHandle, ClearColor, 0, nullptr);
 
     sprite->Begin(commandList);
-    m_component->ProcessRender(renderer);
+    m_component->ProcessRenderTexture(renderer);
     sprite->End();
 }
 

@@ -64,13 +64,18 @@ void Container::AttachComponent(ButtonState btnState, unique_ptr<UIComponent>&& 
 	UIEx(this).AttachComponent(move(component), {});
 }
 
+inline static void SetActiveStateFlag(bool condition, UIComponent* component) noexcept
+{
+	condition ? component->EnableStateFlag(StateFlag::Active) : component->DisableStateFlag(StateFlag::Active);
+}
+
 bool Container::Setup(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList) noexcept
 {
 	SetLayout(layout);
 
 	for (auto& imgGrid : imgGridList)
 	{
-		imgGrid.second->SetEnable((imgGrid.first == Normal) ? true : false);
+		SetActiveStateFlag(imgGrid.first == Normal, imgGrid.second.get());
 		AttachComponent(imgGrid.first, move(imgGrid.second));
 	}
 
@@ -82,7 +87,7 @@ void Container::SetState(ButtonState state) noexcept
 	if (m_state == state) return;
 
 	for (auto& [imgState, image] : m_images)
-		image->SetEnable(imgState == state);
+		SetActiveStateFlag(imgState == state, image);
 
 	m_state = state;
 }

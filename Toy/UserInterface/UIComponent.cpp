@@ -19,9 +19,8 @@ UIComponent::UIComponent(const UIComponent& other)
 {
 	m_name = other.m_name;
 	m_layout = other.m_layout;
-	m_enable = other.m_enable;
 	m_region = other.m_region;
-	m_attachmentState = other.m_attachmentState;
+	m_stateFlag = other.m_stateFlag;
 	m_transform = other.m_transform;
 
 	ranges::transform(other.m_children, back_inserter(m_children), [this, &other](const auto& child) {
@@ -44,8 +43,8 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetTypeID() != o.GetTypeID()) return false;
 
-	ReturnIfFalse(tie(m_name, m_layout, m_enable, m_region, m_attachmentState, m_transform) ==
-		tie(o.m_name, o.m_layout, o.m_enable, o.m_region, m_attachmentState, o.m_transform));
+	ReturnIfFalse(tie(m_name, m_layout, m_region, m_stateFlag, m_transform) ==
+		tie(o.m_name, o.m_layout, o.m_region, o.m_stateFlag, o.m_transform));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
 	ReturnIfFalse(m_children.size() == o.m_children.size());
 	ReturnIfFalse(ranges::equal(m_children, o.m_children, [](const auto& lhs, const auto& rhs) {
@@ -80,7 +79,7 @@ UITransform& UIComponent::GetTransform(UIComponent* component)
 
 bool UIComponent::ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept
 {
-	if (!m_enable) return true;
+	if (!HasStateFlag(StateFlag::Update)) return true;
 
 	ReturnIfFalse(ImplementUpdatePosition(position));
 	if(activeUpdate) //툴에서는 마우스가 올라가서 상태변화가 생기면, 작업이 안된다.
@@ -95,13 +94,34 @@ bool UIComponent::ProcessUpdate(const XMINT2& position, bool activeUpdate) noexc
 	return result;
 }
 
+void UIComponent::ProcessRenderTexture(ITextureRender* render)
+{
+	//StateFlag::Render도 텍스쳐에 그리는 이유는 툴이 텍스쳐에 그리기 때문에. RenderTexture로 설정하면 게임 화면에서 안나온다.
+	//툴이 텍스쳐로 로딩하는 방식이 아니게 된다면 StateFlag::Render가 없어져도 되겠지.
+	ForEachChildBFS(StateFlag::Render | StateFlag::RenderTexture, [render](UIComponent* component) {
+		component->ImplementRender(render);
+		});
+}
+
 void UIComponent::ProcessRender(ITextureRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
-	ForEachChildBFS([render](UIComponent* component) {
+	ForEachChildBFS(StateFlag::Render, [render](UIComponent* component) {
 		component->ImplementRender(render);
 		});
+}
+
+void UIComponent::EnableStateFlag(StateFlag::Type flag) noexcept
+{
+	m_stateFlag |= flag;
+
+	//Render와 RenderTexture는 둘중에 하나만 셋팅되어야 한다.
+	switch (flag)
+	{
+	case StateFlag::Render: DisableStateFlag(StateFlag::RenderTexture); break;
+	case StateFlag::RenderTexture: DisableStateFlag(StateFlag::Render); break;
+	}
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
@@ -112,22 +132,6 @@ void UIComponent::ChangeSize(const XMUINT2& size) noexcept
 		});
 
 	ApplySize(size);
-}
-
-UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
-{
-	if (index >= m_children.size()) return nullptr;
-	return m_children[index].get();
-}
-
-vector<UIComponent*> UIComponent::GetChildComponents() const noexcept
-{
-	vector<UIComponent*> componentList;
-	ranges::transform(m_children, back_inserter(componentList), [](const auto& child) {
-		return child.get();
-		});
-
-	return componentList;
 }
 
 bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept
@@ -165,9 +169,8 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 	operation.Process("Name", m_name);
 	operation.Process("Layout", m_layout);
 	operation.Process("Transform", m_transform);
-	operation.Process("Enable", m_enable);
 	operation.Process("Region", m_region);
-	operation.Process("AttachmentState", m_attachmentState);
+	operation.Process("StateFlag", m_stateFlag);
 	operation.Process("Children", m_children);
 	
 	if (operation.IsWrite()) return;
@@ -216,6 +219,37 @@ XMINT2 UIComponent::GetPosition() const noexcept
 XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept
 {
 	return position + m_layout.GetPosition();
+}
+
+
+UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
+{
+	if (index >= m_children.size()) return nullptr;
+	return m_children[index].get();
+}
+
+vector<UIComponent*> UIComponent::GetChildComponents() const noexcept
+{
+	vector<UIComponent*> componentList;
+	ranges::transform(m_children, back_inserter(componentList), [](const auto& child) {
+		return child.get();
+		});
+
+	return componentList;
+}
+
+UIComponent* UIComponent::GetSiblingComponent(StateFlag::Type flag) const noexcept
+{
+	if (!m_parent) return {};
+	auto components = m_parent->GetChildComponents();
+	
+	auto find = ranges::find_if(components, [flag](auto& component) {
+		return component->HasStateFlag(flag);
+		});
+	if (find == components.end())
+		return nullptr;
+
+	return *find;
 }
 
 

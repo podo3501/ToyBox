@@ -6,8 +6,7 @@ class UIComponent;
 class Scene;
 class UITransform;
 enum class Origin;
-enum class AttachmentState;
-enum class ButtonState;
+enum class ButtonState; //enum은 컨셉에 추가만 하면 된다.
 
 namespace Tool
 {
@@ -106,7 +105,6 @@ concept IsBasicType =
 is_arithmetic_v<T> ||
 is_same_v<T, string> ||
 is_same_v<T, size_t> ||
-is_same_v<T, AttachmentState> ||
 is_same_v < T, ButtonState> ||
 is_same_v<T, Tool::ResolutionType>;
 

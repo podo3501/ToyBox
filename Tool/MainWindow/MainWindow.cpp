@@ -30,7 +30,7 @@ MainWindow::MainWindow(IRenderer* renderer) :
 
 bool MainWindow::SetupProperty(const XMUINT2& size)
 {
-	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, m_panel.get()));
+	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, false, m_panel.get()));
 	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
 	m_size = XMUINT2ToImVec2(size);
 	m_isOpen = true;

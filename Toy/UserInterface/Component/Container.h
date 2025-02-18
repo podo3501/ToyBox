@@ -16,9 +16,6 @@ public:
 	//bool LoadResources(ITextureLoad* load);
 	bool Setup(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList) noexcept;
 
-	inline ButtonState GetState() const noexcept { return *m_state; }
-	void SetState(ButtonState state) noexcept;
-
 protected:
 	Container(const Container& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
@@ -26,6 +23,7 @@ protected:
 
 private:
 	void ReloadDatas() noexcept;
+	void SetState(ButtonState state) noexcept;
 	void AttachComponent(ButtonState btnState, unique_ptr<UIComponent>&& component) noexcept;
 
 	map<ButtonState, UIComponent*> m_images;

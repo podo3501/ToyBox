@@ -19,9 +19,8 @@
                 "y": 0.0
             }
         },
-        "Enable": true,
         "Region": "MainRegionEntry",
-        "AttachmentState": 0,
+        "StateFlag": 27,
         "Children": [
             {
                 "Child": {
@@ -29,24 +28,23 @@
                     "Name": "ImageGrid9_1",
                     "Layout": {
                         "Size": {
-                            "x": 553,
-                            "y": 390
+                            "x": 170,
+                            "y": 120
                         },
                         "Origin": "LeftTop"
                     },
                     "Transform": {
                         "RelativePosition": {
-                            "x": 130,
-                            "y": 63
+                            "x": 119,
+                            "y": 87
                         },
                         "Ratio": {
-                            "x": 0.126953,
-                            "y": 0.082031
+                            "x": 0.116211,
+                            "y": 0.113281
                         }
                     },
-                    "Enable": true,
                     "Region": "",
-                    "AttachmentState": 3,
+                    "StateFlag": 3,
                     "Children": [
                         {
                             "Child": {
@@ -54,7 +52,7 @@
                                 "Name": "ImageGrid3_3",
                                 "Layout": {
                                     "Size": {
-                                        "x": 553,
+                                        "x": 170,
                                         "y": 36
                                     },
                                     "Origin": "LeftTop"
@@ -69,9 +67,8 @@
                                         "y": 0.0
                                     }
                                 },
-                                "Enable": true,
                                 "Region": "",
-                                "AttachmentState": 3,
+                                "StateFlag": 3,
                                 "Children": [
                                     {
                                         "Child": {
@@ -94,16 +91,15 @@
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 10,
-                                                "y": 10,
-                                                "width": 30,
-                                                "height": 36
+                                                "x": 62,
+                                                "y": 82,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     },
@@ -113,7 +109,7 @@
                                             "Name": "ImageGrid1_11",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 493,
+                                                    "x": 110,
                                                     "y": 36
                                                 },
                                                 "Origin": "LeftTop"
@@ -124,20 +120,19 @@
                                                     "y": 0
                                                 },
                                                 "Ratio": {
-                                                    "x": 0.05425,
+                                                    "x": 0.176471,
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 40,
-                                                "y": 10,
-                                                "width": 4,
-                                                "height": 36
+                                                "x": 78,
+                                                "y": 82,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     },
@@ -154,24 +149,23 @@
                                             },
                                             "Transform": {
                                                 "RelativePosition": {
-                                                    "x": 523,
+                                                    "x": 140,
                                                     "y": 0
                                                 },
                                                 "Ratio": {
-                                                    "x": 0.94575,
+                                                    "x": 0.823529,
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 44,
-                                                "y": 10,
-                                                "width": 30,
-                                                "height": 36
+                                                "x": 94,
+                                                "y": 82,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     }
@@ -184,8 +178,8 @@
                                 "Name": "ImageGrid3_4",
                                 "Layout": {
                                     "Size": {
-                                        "x": 553,
-                                        "y": 328
+                                        "x": 170,
+                                        "y": 58
                                     },
                                     "Origin": "LeftTop"
                                 },
@@ -196,12 +190,11 @@
                                     },
                                     "Ratio": {
                                         "x": 0.0,
-                                        "y": 0.092308
+                                        "y": 0.3
                                     }
                                 },
-                                "Enable": true,
                                 "Region": "",
-                                "AttachmentState": 3,
+                                "StateFlag": 3,
                                 "Children": [
                                     {
                                         "Child": {
@@ -210,7 +203,7 @@
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
-                                                    "y": 328
+                                                    "y": 58
                                                 },
                                                 "Origin": "LeftTop"
                                             },
@@ -224,16 +217,15 @@
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 10,
-                                                "y": 46,
-                                                "width": 30,
-                                                "height": 2
+                                                "x": 62,
+                                                "y": 98,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     },
@@ -243,8 +235,8 @@
                                             "Name": "ImageGrid1_14",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 493,
-                                                    "y": 328
+                                                    "x": 110,
+                                                    "y": 58
                                                 },
                                                 "Origin": "LeftTop"
                                             },
@@ -254,13 +246,12 @@
                                                     "y": 0
                                                 },
                                                 "Ratio": {
-                                                    "x": 0.05425,
+                                                    "x": 0.176471,
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [
                                                 {
                                                     "Child": {
@@ -268,24 +259,23 @@
                                                         "Name": "ImageGrid9_0",
                                                         "Layout": {
                                                             "Size": {
-                                                                "x": 180,
-                                                                "y": 137
+                                                                "x": 170,
+                                                                "y": 120
                                                             },
                                                             "Origin": "LeftTop"
                                                         },
                                                         "Transform": {
                                                             "RelativePosition": {
-                                                                "x": 10,
-                                                                "y": 14
+                                                                "x": 19,
+                                                                "y": 5
                                                             },
                                                             "Ratio": {
-                                                                "x": 0.021277,
-                                                                "y": 0.043668
+                                                                "x": 0.172727,
+                                                                "y": 0.086207
                                                             }
                                                         },
-                                                        "Enable": true,
                                                         "Region": "",
-                                                        "AttachmentState": 3,
+                                                        "StateFlag": 3,
                                                         "Children": [
                                                             {
                                                                 "Child": {
@@ -293,8 +283,8 @@
                                                                     "Name": "ImageGrid3_0",
                                                                     "Layout": {
                                                                         "Size": {
-                                                                            "x": 180,
-                                                                            "y": 16
+                                                                            "x": 170,
+                                                                            "y": 36
                                                                         },
                                                                         "Origin": "LeftTop"
                                                                     },
@@ -308,9 +298,8 @@
                                                                             "y": 0.0
                                                                         }
                                                                     },
-                                                                    "Enable": true,
                                                                     "Region": "",
-                                                                    "AttachmentState": 3,
+                                                                    "StateFlag": 3,
                                                                     "Children": [
                                                                         {
                                                                             "Child": {
@@ -318,8 +307,8 @@
                                                                                 "Name": "ImageGrid1_1",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 16,
-                                                                                        "y": 16
+                                                                                        "x": 30,
+                                                                                        "y": 36
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
@@ -333,16 +322,15 @@
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 62,
-                                                                                    "y": 82,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 10,
+                                                                                    "y": 10,
+                                                                                    "width": 30,
+                                                                                    "height": 36
                                                                                 }
                                                                             }
                                                                         },
@@ -352,31 +340,30 @@
                                                                                 "Name": "ImageGrid1_2",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 148,
-                                                                                        "y": 16
+                                                                                        "x": 110,
+                                                                                        "y": 36
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
                                                                                 "Transform": {
                                                                                     "RelativePosition": {
-                                                                                        "x": 16,
+                                                                                        "x": 30,
                                                                                         "y": 0
                                                                                     },
                                                                                     "Ratio": {
-                                                                                        "x": 0.088889,
+                                                                                        "x": 0.176471,
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 78,
-                                                                                    "y": 82,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 40,
+                                                                                    "y": 10,
+                                                                                    "width": 4,
+                                                                                    "height": 36
                                                                                 }
                                                                             }
                                                                         },
@@ -386,31 +373,30 @@
                                                                                 "Name": "ImageGrid1_3",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 16,
-                                                                                        "y": 16
+                                                                                        "x": 30,
+                                                                                        "y": 36
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
                                                                                 "Transform": {
                                                                                     "RelativePosition": {
-                                                                                        "x": 164,
+                                                                                        "x": 140,
                                                                                         "y": 0
                                                                                     },
                                                                                     "Ratio": {
-                                                                                        "x": 0.911111,
+                                                                                        "x": 0.823529,
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 94,
-                                                                                    "y": 82,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 44,
+                                                                                    "y": 10,
+                                                                                    "width": 30,
+                                                                                    "height": 36
                                                                                 }
                                                                             }
                                                                         }
@@ -423,24 +409,23 @@
                                                                     "Name": "ImageGrid3_1",
                                                                     "Layout": {
                                                                         "Size": {
-                                                                            "x": 180,
-                                                                            "y": 105
+                                                                            "x": 170,
+                                                                            "y": 58
                                                                         },
                                                                         "Origin": "LeftTop"
                                                                     },
                                                                     "Transform": {
                                                                         "RelativePosition": {
                                                                             "x": 0,
-                                                                            "y": 16
+                                                                            "y": 36
                                                                         },
                                                                         "Ratio": {
                                                                             "x": 0.0,
-                                                                            "y": 0.116788
+                                                                            "y": 0.3
                                                                         }
                                                                     },
-                                                                    "Enable": true,
                                                                     "Region": "",
-                                                                    "AttachmentState": 3,
+                                                                    "StateFlag": 3,
                                                                     "Children": [
                                                                         {
                                                                             "Child": {
@@ -448,8 +433,8 @@
                                                                                 "Name": "ImageGrid1_4",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 16,
-                                                                                        "y": 105
+                                                                                        "x": 30,
+                                                                                        "y": 58
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
@@ -463,16 +448,15 @@
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 62,
-                                                                                    "y": 98,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 10,
+                                                                                    "y": 46,
+                                                                                    "width": 30,
+                                                                                    "height": 2
                                                                                 }
                                                                             }
                                                                         },
@@ -482,24 +466,23 @@
                                                                                 "Name": "ImageGrid1_5",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 148,
-                                                                                        "y": 105
+                                                                                        "x": 110,
+                                                                                        "y": 58
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
                                                                                 "Transform": {
                                                                                     "RelativePosition": {
-                                                                                        "x": 16,
+                                                                                        "x": 30,
                                                                                         "y": 0
                                                                                     },
                                                                                     "Ratio": {
-                                                                                        "x": 0.088889,
+                                                                                        "x": 0.176471,
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [
                                                                                     {
                                                                                         "Child": {
@@ -514,18 +497,49 @@
                                                                                             },
                                                                                             "Transform": {
                                                                                                 "RelativePosition": {
-                                                                                                    "x": 48,
-                                                                                                    "y": 36
+                                                                                                    "x": 24,
+                                                                                                    "y": 16
                                                                                                 },
                                                                                                 "Ratio": {
-                                                                                                    "x": 0.327273,
-                                                                                                    "y": 0.344828
+                                                                                                    "x": 0.218182,
+                                                                                                    "y": 0.275862
                                                                                                 }
                                                                                             },
-                                                                                            "Enable": true,
                                                                                             "Region": "",
-                                                                                            "AttachmentState": 0,
-                                                                                            "Children": [],
+                                                                                            "StateFlag": 27,
+                                                                                            "Children": [
+                                                                                                {
+                                                                                                    "Child": {
+                                                                                                        "Type": "TextArea",
+                                                                                                        "FontFileList": {
+                                                                                                            "English": "UI/Font/CourierNewBoldS18.spritefont",
+                                                                                                            "Hangle": "UI/Font/MaleunGothicS16.spritefont"
+                                                                                                        },
+                                                                                                        "Text": "<English><White>Test text.</White></English>",
+                                                                                                        "Name": "TextArea_0",
+                                                                                                        "Layout": {
+                                                                                                            "Size": {
+                                                                                                                "x": 200,
+                                                                                                                "y": 30
+                                                                                                            },
+                                                                                                            "Origin": "LeftTop"
+                                                                                                        },
+                                                                                                        "Transform": {
+                                                                                                            "RelativePosition": {
+                                                                                                                "x": 20,
+                                                                                                                "y": 23
+                                                                                                            },
+                                                                                                            "Ratio": {
+                                                                                                                "x": 0.3125,
+                                                                                                                "y": 0.359375
+                                                                                                            }
+                                                                                                        },
+                                                                                                        "Region": "",
+                                                                                                        "StateFlag": 27,
+                                                                                                        "Children": []
+                                                                                                    }
+                                                                                                }
+                                                                                            ],
                                                                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                             "Source": {
                                                                                                 "x": 10,
@@ -538,10 +552,10 @@
                                                                                 ],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 78,
-                                                                                    "y": 98,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 40,
+                                                                                    "y": 46,
+                                                                                    "width": 4,
+                                                                                    "height": 2
                                                                                 }
                                                                             }
                                                                         },
@@ -551,31 +565,30 @@
                                                                                 "Name": "ImageGrid1_6",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 16,
-                                                                                        "y": 105
+                                                                                        "x": 30,
+                                                                                        "y": 58
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
                                                                                 "Transform": {
                                                                                     "RelativePosition": {
-                                                                                        "x": 164,
+                                                                                        "x": 140,
                                                                                         "y": 0
                                                                                     },
                                                                                     "Ratio": {
-                                                                                        "x": 0.911111,
+                                                                                        "x": 0.823529,
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 94,
-                                                                                    "y": 98,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 44,
+                                                                                    "y": 46,
+                                                                                    "width": 30,
+                                                                                    "height": 2
                                                                                 }
                                                                             }
                                                                         }
@@ -588,24 +601,23 @@
                                                                     "Name": "ImageGrid3_2",
                                                                     "Layout": {
                                                                         "Size": {
-                                                                            "x": 180,
-                                                                            "y": 16
+                                                                            "x": 170,
+                                                                            "y": 26
                                                                         },
                                                                         "Origin": "LeftTop"
                                                                     },
                                                                     "Transform": {
                                                                         "RelativePosition": {
                                                                             "x": 0,
-                                                                            "y": 121
+                                                                            "y": 94
                                                                         },
                                                                         "Ratio": {
                                                                             "x": 0.0,
-                                                                            "y": 0.883212
+                                                                            "y": 0.783333
                                                                         }
                                                                     },
-                                                                    "Enable": true,
                                                                     "Region": "",
-                                                                    "AttachmentState": 3,
+                                                                    "StateFlag": 3,
                                                                     "Children": [
                                                                         {
                                                                             "Child": {
@@ -613,8 +625,8 @@
                                                                                 "Name": "ImageGrid1_7",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 16,
-                                                                                        "y": 16
+                                                                                        "x": 30,
+                                                                                        "y": 26
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
@@ -628,16 +640,15 @@
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 62,
-                                                                                    "y": 114,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 10,
+                                                                                    "y": 48,
+                                                                                    "width": 30,
+                                                                                    "height": 26
                                                                                 }
                                                                             }
                                                                         },
@@ -647,31 +658,30 @@
                                                                                 "Name": "ImageGrid1_8",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 148,
-                                                                                        "y": 16
+                                                                                        "x": 110,
+                                                                                        "y": 26
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
                                                                                 "Transform": {
                                                                                     "RelativePosition": {
-                                                                                        "x": 16,
+                                                                                        "x": 30,
                                                                                         "y": 0
                                                                                     },
                                                                                     "Ratio": {
-                                                                                        "x": 0.088889,
+                                                                                        "x": 0.176471,
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 78,
-                                                                                    "y": 114,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 40,
+                                                                                    "y": 48,
+                                                                                    "width": 4,
+                                                                                    "height": 26
                                                                                 }
                                                                             }
                                                                         },
@@ -681,31 +691,30 @@
                                                                                 "Name": "ImageGrid1_9",
                                                                                 "Layout": {
                                                                                     "Size": {
-                                                                                        "x": 16,
-                                                                                        "y": 16
+                                                                                        "x": 30,
+                                                                                        "y": 26
                                                                                     },
                                                                                     "Origin": "LeftTop"
                                                                                 },
                                                                                 "Transform": {
                                                                                     "RelativePosition": {
-                                                                                        "x": 164,
+                                                                                        "x": 140,
                                                                                         "y": 0
                                                                                     },
                                                                                     "Ratio": {
-                                                                                        "x": 0.911111,
+                                                                                        "x": 0.823529,
                                                                                         "y": 0.0
                                                                                     }
                                                                                 },
-                                                                                "Enable": true,
                                                                                 "Region": "",
-                                                                                "AttachmentState": 0,
+                                                                                "StateFlag": 27,
                                                                                 "Children": [],
                                                                                 "Filename": "UI/SampleTexture/Sample_0.png",
                                                                                 "Source": {
-                                                                                    "x": 94,
-                                                                                    "y": 114,
-                                                                                    "width": 16,
-                                                                                    "height": 16
+                                                                                    "x": 44,
+                                                                                    "y": 48,
+                                                                                    "width": 30,
+                                                                                    "height": 26
                                                                                 }
                                                                             }
                                                                         }
@@ -718,10 +727,10 @@
                                             ],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 40,
-                                                "y": 46,
-                                                "width": 4,
-                                                "height": 2
+                                                "x": 78,
+                                                "y": 98,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     },
@@ -732,30 +741,29 @@
                                             "Layout": {
                                                 "Size": {
                                                     "x": 30,
-                                                    "y": 328
+                                                    "y": 58
                                                 },
                                                 "Origin": "LeftTop"
                                             },
                                             "Transform": {
                                                 "RelativePosition": {
-                                                    "x": 523,
+                                                    "x": 140,
                                                     "y": 0
                                                 },
                                                 "Ratio": {
-                                                    "x": 0.94575,
+                                                    "x": 0.823529,
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 44,
-                                                "y": 46,
-                                                "width": 30,
-                                                "height": 2
+                                                "x": 94,
+                                                "y": 98,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     }
@@ -768,7 +776,7 @@
                                 "Name": "ImageGrid3_5",
                                 "Layout": {
                                     "Size": {
-                                        "x": 553,
+                                        "x": 170,
                                         "y": 26
                                     },
                                     "Origin": "LeftTop"
@@ -776,16 +784,15 @@
                                 "Transform": {
                                     "RelativePosition": {
                                         "x": 0,
-                                        "y": 364
+                                        "y": 94
                                     },
                                     "Ratio": {
                                         "x": 0.0,
-                                        "y": 0.933333
+                                        "y": 0.783333
                                     }
                                 },
-                                "Enable": true,
                                 "Region": "",
-                                "AttachmentState": 3,
+                                "StateFlag": 3,
                                 "Children": [
                                     {
                                         "Child": {
@@ -808,16 +815,15 @@
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 10,
-                                                "y": 48,
-                                                "width": 30,
-                                                "height": 26
+                                                "x": 62,
+                                                "y": 114,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     },
@@ -827,7 +833,7 @@
                                             "Name": "ImageGrid1_17",
                                             "Layout": {
                                                 "Size": {
-                                                    "x": 493,
+                                                    "x": 110,
                                                     "y": 26
                                                 },
                                                 "Origin": "LeftTop"
@@ -838,20 +844,19 @@
                                                     "y": 0
                                                 },
                                                 "Ratio": {
-                                                    "x": 0.05425,
+                                                    "x": 0.176471,
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 40,
-                                                "y": 48,
-                                                "width": 4,
-                                                "height": 26
+                                                "x": 78,
+                                                "y": 114,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     },
@@ -868,24 +873,23 @@
                                             },
                                             "Transform": {
                                                 "RelativePosition": {
-                                                    "x": 523,
+                                                    "x": 140,
                                                     "y": 0
                                                 },
                                                 "Ratio": {
-                                                    "x": 0.94575,
+                                                    "x": 0.823529,
                                                     "y": 0.0
                                                 }
                                             },
-                                            "Enable": true,
                                             "Region": "",
-                                            "AttachmentState": 0,
+                                            "StateFlag": 27,
                                             "Children": [],
                                             "Filename": "UI/SampleTexture/Sample_0.png",
                                             "Source": {
-                                                "x": 44,
-                                                "y": 48,
-                                                "width": 30,
-                                                "height": 26
+                                                "x": 94,
+                                                "y": 114,
+                                                "width": 16,
+                                                "height": 16
                                             }
                                         }
                                     }

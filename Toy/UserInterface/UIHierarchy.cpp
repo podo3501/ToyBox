@@ -81,7 +81,7 @@ void UIHierarchy<UIComponent>::ForEachChildConst(function<void(const UIComponent
 	}
 }
 
-void UIHierarchy<UIComponent>::ForEachChildBFS(std::function<void(UIComponent*)> func) noexcept
+void UIHierarchy<UIComponent>::ForEachChildBFS(StateFlag::Type flag, function<void(UIComponent*)> func) noexcept
 {
 	queue<UIComponent*> queue;
 	queue.push(GetThis());
@@ -91,7 +91,8 @@ void UIHierarchy<UIComponent>::ForEachChildBFS(std::function<void(UIComponent*)>
 		UIComponent* current = queue.front();
 		queue.pop();
 
-		if (!current->m_enable) continue;
+		//if (!current->m_enable) continue;
+		if (!current->HasStateFlag(flag)) continue;
 
 		func(current);
 

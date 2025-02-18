@@ -1,6 +1,7 @@
 #pragma once
 
 class UIComponent;
+namespace StateFlag { enum Type : int; }
 
 //has로 리팩토링이 안되서 crtp로 리팩토링함.
 template<typename T>
@@ -19,7 +20,7 @@ public:
 	bool ForEachChildUntilFail(function<bool(UIComponent*)> func) noexcept; //리턴값을 반환하는 재귀(로딩함수같은)
 	void ForEachChildBool(function<bool(UIComponent*)> func) noexcept; //무언가를 찾았으면 bool 반환으로 그만 하라는 함수
 	void ForEachChildConst(function<void(const UIComponent*)> func) const noexcept; //읽기전용
-	void ForEachChildBFS(function<void(UIComponent*)> func) noexcept; //BFS용으로 만듦. 기본은DFS
+	void ForEachChildBFS(StateFlag::Type flag, function<void(UIComponent*)> func) noexcept; //BFS용으로 만듦. 기본은DFS
 
 	//이름 및 Region에 관련된 함수들. 함수가 길어서 여기로 일단 대피시킴
 	bool IsUniqueRegion(const string& name) noexcept;

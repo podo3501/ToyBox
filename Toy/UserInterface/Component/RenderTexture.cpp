@@ -30,7 +30,10 @@ void RenderTexture::Release() noexcept
 void RenderTexture::ReloadDatas() noexcept
 {
 	//같은 라인에서 RenderTexture 옵션이 있는 애가 있을 것이다.
-	//RenderTexture 옵션은 attach detach 속성도 같이 엮어서 | 식으로 해서 여러개의 속성을 동시에 담을 수 있도록 하자.
+	UIComponent* component = this->GetSiblingComponent(StateFlag::RenderTexture);
+	if (!component) return;
+	
+	m_component = component;
 }
 
 unique_ptr<UIComponent> RenderTexture::CreateClone() const
@@ -55,36 +58,40 @@ bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 		Release();
 
 	ReturnIfFalse(texController->CreateRenderTexture(GetSize(), m_component, m_index, &m_gfxOffset));
+	if (m_component->HasStateFlag(StateFlag::RenderTexture))
+	{
+		m_component->ChangeOrigin(Origin::LeftTop);
+	}
 
 	m_texController = texController;
 	return true;
 }
 
-bool RenderTexture::Setup(const UILayout& layout, UIComponent* component)
+bool RenderTexture::Setup(const UILayout& layout, bool renderTextureOnly, UIComponent* component)
 {
 	SetLayout(layout);
-
+	if (renderTextureOnly) component->EnableStateFlag(StateFlag::RenderTexture);
 	m_component = component;
-	//크기 값을 맞추거나 기타등등
-
-	return true;
-}
-
-bool RenderTexture::CreateTexture(IRenderer* renderer, const XMUINT2& size, UIComponent* component)
-{
-	if (m_gfxOffset && m_texController)
-		Release();
-		
-	auto texController = renderer->GetTextureController();
-	ReturnIfFalse(texController->CreateRenderTexture(size, component, m_index, &m_gfxOffset));
-
-	m_texController = texController;
+	
 	return true;
 }
 
 bool RenderTexture::ModifyTexture(const XMUINT2& size)
 {
 	return m_texController->ModifyRenderTexture(m_index, size);
+}
+
+bool RenderTexture::ImplementUpdatePosition(const XMINT2& position) noexcept
+{
+	if (IsDirty())
+	{
+		m_position = GetPositionByLayout(position);
+		m_component->SetRelativePosition(m_position);
+	}
+
+	//여기서 휠을 움직이면 m_component의 위치를 조정한다.
+
+	return true;
 }
 
 void RenderTexture::ImplementRender(ITextureRender* render) const
@@ -101,9 +108,10 @@ void RenderTexture::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, UIComponent* component)
+//RenderStateFlag가 true면 렌더 항목도 RenderTexture에 찍히도록 한다.
+unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, bool renderTextureOnly, UIComponent* component)
 {
 	unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>();
-	if (!renderTexture->Setup(layout, component)) return nullptr;
+	if (!renderTexture->Setup(layout, renderTextureOnly, component)) return nullptr;
 	return renderTexture;
 }

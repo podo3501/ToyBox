@@ -82,7 +82,7 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 클릭했을때 사운드가 나게 한다.
 총 실행되는 시간을 저장해서 표로 만들 방법을 생각한다.
 
-툴 실행해서 버그 있는지 확인 
-DrawTexture에서 Update와 Render구현
-
 ?!?는 고쳐야 하거나 이상하거나 등등
+
+@RenderTexture Component에서 Component부분 찍는거 구현. 
+@휠 움직였을때 동작하는지 구현.

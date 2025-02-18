@@ -35,10 +35,10 @@ bool Button::Setup(const UILayout& layout, unique_ptr<UIComponent>&& container) 
 	SetLayout(layout);
 
 	m_container = container.get();
-	m_container->SetAttachmentState(AttachmentState::Disable);
+	m_container->DisableStateFlag(StateFlag::Attach | StateFlag::Detach);
 	UIEx(this).AttachComponent(move(container), {});
 
-	SetAttachmentState(AttachmentState::Disable);
+	DisableStateFlag(StateFlag::Attach | StateFlag::Detach);
 
 	return true;
 }

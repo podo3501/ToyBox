@@ -29,6 +29,7 @@ protected:
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	vector<UIComponent*> GetChildComponents() const noexcept;
 	UIComponent* GetChildComponent(size_t index) const noexcept;
+	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;
 
 	inline bool IsDirty() const noexcept { return m_isDirty; }
 	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
@@ -47,6 +48,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual bool LoadResources(ITextureLoad* load) override final;
 	virtual bool PostLoaded(ITextureController*) override final;
 	virtual bool ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept override final;
+	virtual void ProcessRenderTexture(ITextureRender* render) override final;
 	virtual void ProcessRender(ITextureRender* render) override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
@@ -68,8 +70,9 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }
-	inline void SetEnable(bool enable) noexcept { m_enable = enable; }
-	inline void SetAttachmentState(AttachmentState state) noexcept { m_attachmentState = state; }
+	void EnableStateFlag(StateFlag::Type flag) noexcept;
+	inline void DisableStateFlag(StateFlag::Type flag) noexcept { m_stateFlag &= ~flag; }
+	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return (m_stateFlag & flag) != 0; }
 	bool RenameRegion(const string& region) noexcept;
 	inline const string& GetRegion() const noexcept { return m_region; }
 
@@ -80,10 +83,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	}
 
 private:
-	inline bool IsAttachable() const noexcept;
-	inline bool IsDetachable() const noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
-	inline bool IsInAttachmentState(AttachmentState state) const noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	void MarkDirty() noexcept;
@@ -92,10 +92,9 @@ private:
 	UILayout m_layout;
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
 
-	bool m_enable{ true };
 	bool m_isDirty{ true };
 	string m_region; //UI에서 네임스페이스 역할을 한다. GetRegionComponent로 찾을 수 있다.
-	AttachmentState m_attachmentState{ AttachmentState::All };
+	int m_stateFlag{ StateFlag::Default };
 
 	friend class UIComponentEx;
 	friend class UIHierarchy;
@@ -110,13 +109,6 @@ inline UIComponentEx& UIEx(const unique_ptr<Component>& component)
 { 
 	return component->GetUIComponentEx(); 
 }
-
-//inline
-bool UIComponent::IsInAttachmentState(AttachmentState state) const noexcept {
-	return m_attachmentState == state || m_attachmentState == AttachmentState::All;
-}
-bool UIComponent::IsAttachable() const noexcept { return IsInAttachmentState(AttachmentState::Attach); }
-bool UIComponent::IsDetachable() const noexcept { return IsInAttachmentState(AttachmentState::Detach); }
 
 //////////////////////////////////////////////////////////////////////////
 

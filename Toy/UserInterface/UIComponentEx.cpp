@@ -9,7 +9,7 @@ UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
-	if (!m_component->IsAttachable()) return child;
+	if (!m_component->HasStateFlag(StateFlag::Attach)) return child;
 
 	m_component->GenerateUniqueName(child.get());
 	m_component->GenerateUniqueRegionName(child.get());
@@ -42,7 +42,7 @@ unique_ptr<UIComponent> UIComponentEx::DetachChild(UIComponent* parent, UICompon
 pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noexcept
 {
 	UIComponent* parent = m_component->m_parent;
-	if (!parent || !parent->IsDetachable()) return {};
+	if (!parent || !parent->HasStateFlag(StateFlag::Detach)) return {};
 
 	return { move(DetachChild(parent, m_component)), parent };
 }
@@ -98,7 +98,7 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 vector<UIComponent*> UIComponentEx::GetComponents(const XMINT2& pos) noexcept
 {
 	vector<UIComponent*> findList;
-	m_component->ForEachChildBFS([&findList, &pos](UIComponent* comp) {
+	m_component->ForEachChildBFS(StateFlag::Render, [&findList, &pos](UIComponent* comp) {
 		const auto& curPosition = pos - comp->m_transform.GetAbsolutePosition();
 		if (comp->IsArea(curPosition))
 			findList.push_back(comp);
