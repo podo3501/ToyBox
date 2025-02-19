@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ListArea.h"
 #include "../JsonOperation.h"
+#include "RenderTexture.h"
 
 ListArea::~ListArea() = default;
 ListArea::ListArea() noexcept :
@@ -36,8 +37,12 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent>&& bgImage, 
 {
 	SetLayout(layout);
 
+	auto renderTex = CreateRenderTexture(layout, true, bgImage.get());
+	m_renderTex = renderTex.get();
+	UIEx(this).AttachComponent(move(renderTex), {});
+
 	m_bgImage = bgImage.get();
-	m_bgImage->Rename("BackGround Image");
+	m_bgImage->Rename("Containers");
 	UIEx(this).AttachComponent(move(bgImage), {});
 	
 	m_prototypeContainer = container.get();
@@ -55,7 +60,7 @@ UIComponent* ListArea::PrepareContainer()
 	static int32_t y = 0;
 	auto cloneContainer = m_prototypeContainer->Clone();
 	auto cloneContainerPtr = cloneContainer.get();
-	UIEx(this).AttachComponent(move(cloneContainer), {});
+	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
 
 	cloneContainerPtr->EnableStateFlag(StateFlag::Active);
 	cloneContainerPtr->SetRelativePosition({ 0, y });

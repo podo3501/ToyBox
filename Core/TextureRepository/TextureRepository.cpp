@@ -60,7 +60,7 @@ bool TextureRepository::LoadTexture(const wstring& filename, size_t& outIndex, X
 {
     return LoadTextureResource<Texture>(filename, outIndex, 
         [outSize, outGfxMemOffset](TextureResource* res) {
-            if (outSize) *outSize = static_cast<Texture*>(res)->GetSize();
+            if (outSize) *outSize = res->GetSize();
             if (outGfxMemOffset) *outGfxMemOffset = res->GetGraphicMemoryOffset();
         });
 }
@@ -118,9 +118,16 @@ optional<vector<Rectangle>> TextureRepository::GetTextureAreaList(const wstring&
 void TextureRepository::Render(size_t index, const RECT& dest, const RECT* source)
 {
     assert(!m_texResources.empty() && index <= m_texResources.size() - 1); //assert로 한 이유는 release일때는 조금이라도 동작을 안하게 하기 위해서이다.
-    assert(m_texResources[index]->GetTypeID() == Texture::GetTypeStatic());
+    assert(m_texResources[index]->GetTypeID() != CFont::GetTypeStatic());
 
-    ToType<Texture*>(m_texResources[index].get())->Draw(m_sprite, dest, source);
+    //텍스춰 크기는 고정으로 함
+    //dest는 화면에 보여주는 사각형(크기가 안 맞으면 강제로 늘림)
+    //source는 텍스춰에서 가져오는 픽셀 사각형
+    //origin은 0, 0으로 고정. 중간으로 했을 경우 늘릴때 위치가 어긋남
+    //텍스춰가 늘어나면 텍스춰가 여러장일 경우 origin 값으로 설정했을때 조금씩 어긋나는 현상이 벌어진다.
+    //origin을 0, 0 로 고정후 위치값을 계산해서 넘겨주는 식으로 해야겠다.
+
+    m_sprite->Draw(m_descHeap->GetGpuHandle(index), m_texResources[index]->GetSize(), dest, source, Colors::White, 0.f);
 }
 
 void TextureRepository::DrawRenderTextures()

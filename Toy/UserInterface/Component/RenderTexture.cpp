@@ -60,7 +60,7 @@ bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 	ReturnIfFalse(texController->CreateRenderTexture(GetSize(), m_component, m_index, &m_gfxOffset));
 	if (m_component->HasStateFlag(StateFlag::RenderTexture))
 	{
-		m_component->ChangeOrigin(Origin::LeftTop);
+		//m_component->ChangeOrigin(Origin::LeftTop);
 	}
 
 	m_texController = texController;
@@ -86,7 +86,8 @@ bool RenderTexture::ImplementUpdatePosition(const XMINT2& position) noexcept
 	if (IsDirty())
 	{
 		m_position = GetPositionByLayout(position);
-		m_component->SetRelativePosition(m_position);
+		auto aa = GetRelativePosition();
+		m_component->SetRelativePosition(*aa);
 	}
 
 	//여기서 휠을 움직이면 m_component의 위치를 조정한다.
@@ -96,7 +97,12 @@ bool RenderTexture::ImplementUpdatePosition(const XMINT2& position) noexcept
 
 void RenderTexture::ImplementRender(ITextureRender* render) const
 {
-	render;
+	const auto& size = GetSize();
+	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
+
+	RECT source{ 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };
+	render->Render(m_index, destination, &source);
+
 	return;
 }
 

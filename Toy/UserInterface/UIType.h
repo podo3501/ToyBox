@@ -82,7 +82,7 @@ constexpr auto EnumToStringMap<ButtonState>()->array<const char*, EnumSize<Butto
 ///////////////////////////////////////////////////////////////
 
 // namespac + enum을 쓰는 이유는 함수 인자로 int를 쓰는 것보다 나아서. enum만 쓰면 쟤들 이름이 흔해서 자꾸 이름 충돌된다.
-// enum class는 타입 변환을 계속 해 줘야 해서 귀찮다.
+// enum class는 오퍼레이터 함수가 많이 생성되고 타입 변환을 계속 해 줘야 해서 귀찮다.
 namespace StateFlag
 {
 	enum Type : int //갯수는 32개까지 가능. 

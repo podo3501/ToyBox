@@ -50,6 +50,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual bool ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept override final;
 	virtual void ProcessRenderTexture(ITextureRender* render) override final;
 	virtual void ProcessRender(ITextureRender* render) override final;
+	virtual XMINT2 GetPosition() const noexcept override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;
@@ -62,7 +63,6 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	bool Rename(const string& name) noexcept;
 	Rectangle GetRectangle() const noexcept;
 	const XMUINT2& GetSize() const noexcept;
-	XMINT2 GetPosition() const noexcept;
 	optional<XMINT2> GetRelativePosition() const noexcept;
 	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }

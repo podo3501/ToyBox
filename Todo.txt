@@ -84,5 +84,5 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 
 ?!?는 고쳐야 하거나 이상하거나 등등
 
-@RenderTexture Component에서 Component부분 찍는거 구현. 
+@ListArea를 Center로 했을때 좌표 어긋나는 버그
 @휠 움직였을때 동작하는지 구현.

@@ -24,6 +24,7 @@ private:
 	void ReloadDatas() noexcept;
 
 	UIComponent* m_bgImage;
+	UIComponent* m_renderTex;
 	UIComponent* m_prototypeContainer;
 };
 

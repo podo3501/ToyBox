@@ -4,7 +4,7 @@
 #include "../Include/IComponent.h"
 #include "../Utility.h"
 
-constexpr FLOAT ClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+constexpr FLOAT ClearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 TextureRenderTarget::~TextureRenderTarget()
 {}
@@ -47,43 +47,33 @@ bool TextureRenderTarget::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t off
 {
     m_component = component;
     SetIndex(offset);
-    //화면을 저장할 Texture를 만든다.
-    m_resDesc = GetResourceDesc(texFormat, size);
-    const CD3DX12_HEAP_PROPERTIES TextureRenderTargetHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
-    D3D12_CLEAR_VALUE clear = GetClearValue();
-
-    ReturnIfFailed(m_device->CreateCommittedResource(
-        &TextureRenderTargetHeapProperties,
-        D3D12_HEAP_FLAG_NONE,
-        &m_resDesc,
-        D3D12_RESOURCE_STATE_RENDER_TARGET,
-        &clear,
-        IID_PPV_ARGS(m_texResource.ReleaseAndGetAddressOf())
-    ));
-
-    CreateRtvAndSrv(m_texResource.Get());
-
-    return true;
+    return CreateTextureResource(texFormat, size);
 }
 
 bool TextureRenderTarget::ModifyRenderTexture(const XMUINT2& size)
 {
     m_deviceResources->WaitForGpu();
+    return CreateTextureResource(m_resDesc.Format, size);
+}
 
-    m_resDesc = GetResourceDesc(m_resDesc.Format, size);
-    const CD3DX12_HEAP_PROPERTIES TextureRenderTargetHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
+bool TextureRenderTarget::CreateTextureResource(DXGI_FORMAT texFormat, const XMUINT2& size)
+{
+    //렌더링할 캔버스(텍스쳐)를 만든다.
+    m_resDesc = GetResourceDesc(texFormat, size);
+    const CD3DX12_HEAP_PROPERTIES heapProperties(D3D12_HEAP_TYPE_DEFAULT);
     D3D12_CLEAR_VALUE clear = GetClearValue();
 
     ReturnIfFailed(m_device->CreateCommittedResource(
-        &TextureRenderTargetHeapProperties,
+        &heapProperties,
         D3D12_HEAP_FLAG_NONE,
         &m_resDesc,
-        D3D12_RESOURCE_STATE_RENDER_TARGET,
+        D3D12_RESOURCE_STATE_GENERIC_READ,
         &clear,
         IID_PPV_ARGS(m_texResource.ReleaseAndGetAddressOf())
     ));
 
     CreateRtvAndSrv(m_texResource.Get());
+    SetSize(size);
 
     return true;
 }
@@ -93,25 +83,32 @@ void TextureRenderTarget::Render(ID3D12GraphicsCommandList* commandList, ITextur
     if (m_component == nullptr)
         return;
 
-    //D3D12_VIEWPORT viewport{};
-    //viewport.Width = static_cast<float>(m_size.x);
-    //viewport.Height = static_cast<float>(m_size.y);
-    //viewport.MaxDepth = 1.0f;
-
+    //속도를 위해서 필요한 부분을 제외한 다른 부분은 잘라낸다.
     //D3D12_RECT scissorRect{};
-    //scissorRect.right = static_cast<long>(m_size.x);
-    //scissorRect.bottom = static_cast<long>(m_size.y);
-
-    //commandList->RSSetViewports(1, &viewport);
+    //scissorRect.left = 0;
+    //scissorRect.top = 0;
+    //scissorRect.right = static_cast<long>(m_resDesc.Width);
+    //scissorRect.bottom = static_cast<long>(m_resDesc.Height);
     //commandList->RSSetScissorRects(1, &scissorRect);
 
-    // 클라이언트 화면을 렌더링할 렌더 타겟 뷰 설정
+    TransitionResource(commandList, m_texResource.Get(),
+        D3D12_RESOURCE_STATE_GENERIC_READ,
+        D3D12_RESOURCE_STATE_RENDER_TARGET);
+
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvDescriptor->GetFirstCpuHandle());
     commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
     commandList->ClearRenderTargetView(rtvHandle, ClearColor, 0, nullptr);
 
-    sprite->Begin(commandList);
+    //찍는것은 위치값을 0, 0로 옮긴다. 100, 100에서 찍는다면 텍스쳐는 좌표가 0, 0부터 시작하는게 고정이기 때문에 낭비가 된다.
+    const auto& pos = m_component->GetPosition(); 
+    XMMATRIX transform = XMMatrixTranslation(-static_cast<float>(pos.x), -static_cast<float>(pos.y), 0.0f);
+
+    sprite->Begin(commandList, SpriteSortMode_Deferred, transform);
     m_component->ProcessRenderTexture(renderer);
     sprite->End();
+
+    TransitionResource(commandList, m_texResource.Get(),
+        D3D12_RESOURCE_STATE_RENDER_TARGET, 
+        D3D12_RESOURCE_STATE_GENERIC_READ);
 }
 

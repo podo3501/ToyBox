@@ -126,7 +126,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
 	auto protoTextArea = CreateSampleTextArea({ { 130, 30 }, Origin::Center }, L"");
 	ReturnIfFalse(renderer->LoadComponent(protoTextArea.get()));
 
-	protoTextArea->Rename("TextArea");
+	protoTextArea->Rename("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
 	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 75, 15 });
 	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
@@ -135,9 +135,28 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
 	for (auto idx : views::iota(0, itemCount))
 	{
 		auto container = listArea->PrepareContainer();
-		TextArea* textArea = UIEx(container).GetComponent<TextArea*>("TextArea_" + to_string(idx));
+		TextArea* textArea = UIEx(container).GetComponent<TextArea*>("ListTextArea_" + to_string(idx));
 		textArea->SetText(L"<English><Black>Test " + IntToWString(idx*10) + L"</Black></English>");
 	}
+
+	//auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
+	//ReturnIfFalse(renderer->LoadComponent(button.get()));
+
+	//button->Rename("Button");
+	//auto prototype = listArea->GetPrototypeContainer();
+	//auto failed = UIEx(prototype).AttachComponent(move(button), { 0, 0 });
+	//if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
+
+	//auto container = listArea->PrepareContainer(); //하나를 생성해 본다.
+	////Button* btnPtr = UIEx(container).GetComponent<Button*>("Button_" + to_string(0));
+
+	////const int& itemCount = 1;
+	////for (auto idx : views::iota(0, itemCount))
+	////{
+	//	//auto container = listArea->PrepareContainer();
+	//	//TextArea* textArea = UIEx(container).GetComponent<TextArea*>("TextArea_" + to_string(idx));
+	//	//textArea->SetText(L"<English><Black>Test " + IntToWString(idx*10) + L"</Black></English>");
+	////}
 
 	return true;
 }

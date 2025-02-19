@@ -95,7 +95,12 @@ namespace ComponentTest
 
 	static void TestRenderTextureRender(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(IsTrue(dest, { 75, 75, 107, 107 }, *source, { 46, 138, 78, 170 })); //hover이미지
+		auto testResult{ false };
+
+		testResult |= IsTrue(dest, { 75, 75, 125, 125 }, *source, { 0, 0, 50, 50}); //RenderTexture 
+		testResult |= IsTrue(dest, { 75, 75, 107, 107 }, *source, { 46, 138, 78, 170 }); //hover이미지
+
+		EXPECT_TRUE(testResult);
 	}
 
 	TEST_F(BasicFunctionalityTest, RenderTexture)
@@ -108,10 +113,10 @@ namespace ComponentTest
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		//로드하고 나면 컴포넌트의 좌표가 바뀌고 마우스가 바뀐 좌표에서 반응하기 때문에 버튼이라면 이미지가 바뀔 것이다.
-		//버튼은 렌더링이 꺼져 있을(RenderTexture) 것이다. 확인하기 위해서 랜더링 옵션을 켠다.
+		//버튼은 렌더링이 꺼져 있을(RenderTexture) 것이다. 마우스가 hover 되었을때 확인하기 위해서 랜더링 옵션을 켠다.
 		buttonPtr->EnableStateFlag(StateFlag::Render);
 		TestUpdate(m_panel.get(), 76, 76);	//hover
-		CallMockRender(m_panel.get(), TestRenderTextureRender, 1);
+		CallMockRender(m_panel.get(), TestRenderTextureRender, 2);
 	}
 
 	////////////////////////////////////////////////////////

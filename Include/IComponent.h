@@ -14,4 +14,5 @@ public:
 	virtual bool ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept = 0;
 	virtual void ProcessRenderTexture(ITextureRender*) = 0;
 	virtual void ProcessRender(ITextureRender*) = 0;
+	virtual XMINT2 GetPosition() const noexcept = 0;
 };

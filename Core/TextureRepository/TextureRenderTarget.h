@@ -19,6 +19,7 @@ public:
 	void Render(ID3D12GraphicsCommandList* commandList, ITextureRender* renderer, SpriteBatch* sprite);
 
 private:
+	bool CreateTextureResource(DXGI_FORMAT texFormat, const XMUINT2& size);
 	inline D3D12_CLEAR_VALUE GetClearValue() const noexcept;
 	inline D3D12_RESOURCE_DESC GetResourceDesc(DXGI_FORMAT format, const XMUINT2& size) const noexcept;
 	void CreateRtvAndSrv(ID3D12Resource* resource);
