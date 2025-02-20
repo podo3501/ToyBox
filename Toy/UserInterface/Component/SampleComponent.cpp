@@ -131,7 +131,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
 	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 75, 15 });
 	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
 
-	const int& itemCount = 5;
+	const int& itemCount = 7;
 	for (auto idx : views::iota(0, itemCount))
 	{
 		auto container = listArea->PrepareContainer();

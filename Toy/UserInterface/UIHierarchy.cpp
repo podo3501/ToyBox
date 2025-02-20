@@ -59,9 +59,9 @@ bool UIHierarchy<UIComponent>::ForEachChildUntilFail(function<bool(UIComponent*)
 	return true;
 }
 
-void UIHierarchy<UIComponent>::ForEachChildBool(function<bool(UIComponent*)> func) noexcept
+void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> func) noexcept
 {
-	if (!func(GetThis()))
+	if (func(GetThis()) == CResult::SkipChildren)
 		return;
 
 	for (auto& child : m_children)

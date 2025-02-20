@@ -66,7 +66,7 @@ void Container::AttachComponent(ButtonState btnState, unique_ptr<UIComponent>&& 
 
 inline static void SetActiveStateFlag(bool condition, UIComponent* component) noexcept
 {
-	condition ? component->EnableStateFlag(StateFlag::Active) : component->DisableStateFlag(StateFlag::Active);
+	component->SetStateFlag(StateFlag::Active, condition);
 }
 
 bool Container::Setup(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList) noexcept
@@ -92,7 +92,15 @@ void Container::SetState(ButtonState state) noexcept
 	m_state = state;
 }
 
-bool Container::ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept
+bool Container::ImplementUpdatePosition(const XMINT2& absolutePos) noexcept
+{ 
+	if (IsDirty())
+		m_position = GetPositionByLayout(absolutePos); //GetPositionByLayout 이걸 안 쓰면 Origin 안될텐데 기존 코드가 이래서... 나중에 확인 ?!?
+
+	return true;
+}
+
+bool Container::ImplementActiveUpdate() noexcept
 {
 	if (!m_state)
 	{
@@ -101,7 +109,7 @@ bool Container::ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept
 	}
 
 	const auto& mouseTracker = InputManager::GetMouse();
-	const XMINT2& relativeMousePos = mouseTracker.GetPosition() - absolutePosition;
+	const XMINT2& relativeMousePos = mouseTracker.GetPosition() - m_position;
 	if (!IsArea(relativeMousePos))
 	{
 		SetState(Normal);

@@ -21,7 +21,7 @@ protected:
 	virtual bool ImplementLoadResource(ITextureLoad*) { return true; }
 	virtual bool ImplementPostLoaded(ITextureController*) { return true; }
 	virtual bool ImplementUpdatePosition(const XMINT2&) noexcept { return true; }
-	virtual bool ImplementActiveUpdate(const XMINT2&) noexcept { return true; }
+	virtual bool ImplementActiveUpdate() noexcept { return true; }
 	virtual void ImplementRender(ITextureRender*) const {};
 
 	//상속되어지는 함수는 구현한다.
@@ -47,7 +47,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
 	virtual bool LoadResources(ITextureLoad* load) override final;
 	virtual bool PostLoaded(ITextureController*) override final;
-	virtual bool ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept override final;
+	virtual bool ProcessUpdate() noexcept override final;
 	virtual void ProcessRenderTexture(ITextureRender* render) override final;
 	virtual void ProcessRender(ITextureRender* render) override final;
 	virtual XMINT2 GetPosition() const noexcept override final;
@@ -70,8 +70,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }
-	void EnableStateFlag(StateFlag::Type flag) noexcept;
-	inline void DisableStateFlag(StateFlag::Type flag) noexcept { m_stateFlag &= ~flag; }
+	void SetStateFlag(StateFlag::Type flag, bool enabled) noexcept;
 	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return (m_stateFlag & flag) != 0; }
 	bool RenameRegion(const string& region) noexcept;
 	inline const string& GetRegion() const noexcept { return m_region; }
@@ -83,6 +82,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	}
 
 private:
+	bool RecursiveUpdate(const XMINT2& position, bool active) noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }

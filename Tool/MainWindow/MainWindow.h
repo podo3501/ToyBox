@@ -6,7 +6,7 @@ namespace DX
     class StepTimer;
 }
 
-class UIComponent;
+class Panel;
 class MouseTracker;
 class RenderTexture;
 class ComponentController;
@@ -41,7 +41,7 @@ private:
     string m_name{};
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<RenderTexture> m_renderTex;
-    unique_ptr<UIComponent> m_panel;
+    unique_ptr<Panel> m_panel;
     unique_ptr<ComponentController> m_controller;
 
     bool m_isOpen{ false };

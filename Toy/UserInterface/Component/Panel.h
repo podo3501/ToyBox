@@ -13,19 +13,18 @@ public:
 
     static ComponentID GetTypeStatic() { return ComponentID::Panel; }
     virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
-    //virtual unique_ptr<UIComponent> Clone() const override;
-    //virtual const Rectangle& GetArea() const noexcept;
-
-    //void AddComponent(unique_ptr<UIComponent>&& comp, const Vector2& pos);
-
+    virtual bool ImplementActiveUpdate() noexcept override;
     virtual void SerializeIO(JsonOperation& operation) override;
+
+    inline void EnableChildMouseEvents(bool enable) noexcept { m_mouseEvents = enable; }
+
 
 protected:
     Panel(const Panel& other);
     virtual unique_ptr<UIComponent> CreateClone() const override;
 
 private:
-    Rectangle m_area{};
+    bool m_mouseEvents{ true };
 };
 
 unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer);

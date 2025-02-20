@@ -52,7 +52,7 @@ bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noe
 		auto grid3 = CreateImageGrid3(idx, source, posRects[idx].size);
 		UIEx(this).AttachComponent(move(grid3), posRects[idx].pos);
 	}
-	DisableStateFlag(StateFlag::Attach | StateFlag::Detach);
+	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 
 	return true;
 }

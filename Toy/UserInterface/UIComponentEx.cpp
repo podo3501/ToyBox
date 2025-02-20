@@ -34,7 +34,7 @@ unique_ptr<UIComponent> UIComponentEx::DetachChild(UIComponent* parent, UICompon
 	detached->m_parent = nullptr;
 	detached->m_transform.Clear();
 	detached->MarkDirty();
-	detached->ProcessUpdate({}, false);
+	detached->ProcessUpdate();
 
 	return detached;
 }
@@ -56,15 +56,15 @@ UIComponent* UIComponentEx::GetComponent(const string& name) noexcept
 
 	root->ForEachChildBool([this, &foundComponent, &name, &region](UIComponent* component) {
 		const string& curRegion = component->GetRegion();
-		if (!curRegion.empty() && region != curRegion) return false; //Region 루트가 아닌 새로운 region이 나왔을때 
+		if (!curRegion.empty() && region != curRegion) return CResult::SkipChildren; //Region 루트가 아닌 새로운 region이 나왔을때 
 
 		if (component->GetName() == name)
 		{
 			foundComponent = component;
-			return false;
+			return CResult::SkipChildren;
 		}
 
-		return true;
+		return CResult::Success;
 		});
 
 	return foundComponent;
@@ -79,17 +79,17 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 
 	root->ForEachChildBool([&foundComponent, &rootRegion, &findRegion](UIComponent* component) {
 		const string& curRegion = component->GetRegion();
-		if (curRegion.empty()) return true;
+		if (curRegion.empty()) return CResult::Success;
 
 		if (curRegion == findRegion)
 		{
 			foundComponent = component;
-			return false;
+			return CResult::SkipChildren;
 		}
 
-		if (rootRegion != curRegion) return false; //Region 루트가 아닌 새로운 region이 나왔을때
+		if (rootRegion != curRegion) return CResult::SkipChildren; //Region 루트가 아닌 새로운 region이 나왔을때
 
-		return true;
+		return CResult::Success;
 		});
 
 	return foundComponent;

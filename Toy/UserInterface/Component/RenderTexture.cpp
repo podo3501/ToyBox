@@ -70,7 +70,7 @@ bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 bool RenderTexture::Setup(const UILayout& layout, bool renderTextureOnly, UIComponent* component)
 {
 	SetLayout(layout);
-	if (renderTextureOnly) component->EnableStateFlag(StateFlag::RenderTexture);
+	if (renderTextureOnly) component->SetStateFlag(StateFlag::RenderTexture, true);
 	m_component = component;
 	
 	return true;
@@ -85,12 +85,16 @@ bool RenderTexture::ImplementUpdatePosition(const XMINT2& position) noexcept
 {
 	if (IsDirty())
 	{
-		m_position = GetPositionByLayout(position);
-		auto aa = GetRelativePosition();
-		m_component->SetRelativePosition(*aa);
+		m_position = position;
+		//auto test = m_component->GetRelativePosition();
+		XMINT2 test{};
+		test.y -= 50;
+		m_component->SetRelativePosition(test);
 	}
 
 	//여기서 휠을 움직이면 m_component의 위치를 조정한다.
+
+	
 
 	return true;
 }

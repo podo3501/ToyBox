@@ -25,6 +25,7 @@ MainWindow::MainWindow(IRenderer* renderer) :
 	//AddRenderComponent가 없는것은 main 화면에서 보여주는게 아니라 TextureRendering해서 보여주는거기
 	// 때문에 Render에 연결시키지 않는다.
 	m_panel->RenameRegion("MainRegionEntry");
+	m_panel->EnableChildMouseEvents(m_isActiveUpdate);
 	m_renderer->AddImguiComponent(this);
 }
 
@@ -83,6 +84,7 @@ void MainWindow::CheckActiveUpdate() noexcept
 	if (!IsInputAction(Keyboard::F5, KeyState::Pressed)) return;
 	
 	m_isActiveUpdate = !m_isActiveUpdate;
+	m_panel->EnableChildMouseEvents(m_isActiveUpdate);
 	m_controller->SetActive(!m_isActiveUpdate);
 }
 
@@ -112,7 +114,7 @@ void MainWindow::Update(const DX::StepTimer* timer)
 	CheckActiveUpdate();
 		
 	m_controller->Update();
-	m_panel->ProcessUpdate({}, m_isActiveUpdate);
+	m_panel->ProcessUpdate();
 }
 
 void MainWindow::IgnoreMouseClick() 

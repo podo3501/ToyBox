@@ -77,21 +77,30 @@ UITransform& UIComponent::GetTransform(UIComponent* component)
 	return component->m_transform;
 }
 
-bool UIComponent::ProcessUpdate(const XMINT2& position, bool activeUpdate) noexcept
+bool UIComponent::RecursiveUpdate(const XMINT2& position, bool active) noexcept
 {
 	if (!HasStateFlag(StateFlag::Update)) return true;
 
 	ReturnIfFalse(ImplementUpdatePosition(position));
-	if(activeUpdate) //툴에서는 마우스가 올라가서 상태변화가 생기면, 작업이 안된다.
-		ReturnIfFalse(ImplementActiveUpdate(position));
+	if (active)
+	{
+		ReturnIfFalse(ImplementActiveUpdate());
+		active = HasStateFlag(StateFlag::ActiveUpdate);
+	}
 
-	auto result = ranges::all_of(m_children, [this, &position, activeUpdate](auto& child) {
+	auto result = ranges::all_of(m_children, [this, &position, active](auto& child) {
 		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
-		return child->ProcessUpdate(curPosition, activeUpdate);
+		return child->RecursiveUpdate(curPosition, active);
 		});
-	m_isDirty = false;
 
 	return result;
+}
+
+bool UIComponent::ProcessUpdate() noexcept
+{
+	ReturnIfFalse(RecursiveUpdate({}, true));
+	m_isDirty = false;
+	return true;
 }
 
 void UIComponent::ProcessRenderTexture(ITextureRender* render)
@@ -112,16 +121,21 @@ void UIComponent::ProcessRender(ITextureRender* render)
 		});
 }
 
-void UIComponent::EnableStateFlag(StateFlag::Type flag) noexcept
+void UIComponent::SetStateFlag(StateFlag::Type flag, bool enabled) noexcept
 {
-	m_stateFlag |= flag;
-
-	//Render와 RenderTexture는 둘중에 하나만 셋팅되어야 한다.
-	switch (flag)
+	if (enabled)
 	{
-	case StateFlag::Render: DisableStateFlag(StateFlag::RenderTexture); break;
-	case StateFlag::RenderTexture: DisableStateFlag(StateFlag::Render); break;
+		m_stateFlag |= flag;
+
+		//Render와 RenderTexture는 둘중에 하나만 셋팅되어야 한다.
+		switch (flag)
+		{
+		case StateFlag::Render: SetStateFlag(StateFlag::RenderTexture, false); break;
+		case StateFlag::RenderTexture: SetStateFlag(StateFlag::Render, false); break;
+		}
 	}
+	else
+		m_stateFlag &= ~flag;
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.

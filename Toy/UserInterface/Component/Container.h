@@ -19,7 +19,8 @@ public:
 protected:
 	Container(const Container& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	bool ImplementActiveUpdate(const XMINT2& absolutePosition) noexcept override;
+	virtual bool ImplementUpdatePosition(const XMINT2& absolutePos) noexcept override;
+	virtual bool ImplementActiveUpdate() noexcept override;
 
 private:
 	void ReloadDatas() noexcept;
@@ -28,6 +29,7 @@ private:
 
 	map<ButtonState, UIComponent*> m_images;
 	optional<ButtonState> m_state;
+	XMINT2 m_position{};
 };
 
 unique_ptr<Container> CreateContainer(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList);

@@ -30,7 +30,7 @@ void CallMockRender(IComponent* component, function<void(size_t, const RECT&, co
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke(testRenderFunc));
-	component->ProcessUpdate({}, true);
+	component->ProcessUpdate();
 	component->ProcessRender(&mockRender);
 }
 
@@ -38,7 +38,7 @@ void CallMockRender(IComponent* component, function<void(size_t, const wstring&,
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
-	component->ProcessUpdate({}, true);
+	component->ProcessUpdate();
 	component->ProcessRender(&mockRender);
 }
 

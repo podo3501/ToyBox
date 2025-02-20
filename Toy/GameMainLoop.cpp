@@ -48,11 +48,11 @@ static inline void AttachComponentToPanel(UIComponent* panel,
 
 bool GameMainLoop::LoadResources()
 {
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton1({ {32, 32}, Origin::Center }), { 100, 100 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton3({ {180, 48}, Origin::Center }), { 400, 300 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton3({ {180, 48}, Origin::Center }), { 400, 240 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>"), { 160, 420 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageGrid9({ {210, 150}, Origin::LeftTop }), { 400, 300 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton1({ {32, 32}, Origin::Center }), { 100, 100 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton3({ {180, 48}, Origin::Center }), { 400, 300 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton3({ {180, 48}, Origin::Center }), { 400, 240 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>"), { 160, 420 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageGrid9({ {210, 150}, Origin::LeftTop }), { 400, 300 });
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleListArea1({ {150, 130}, Origin::LeftTop }), { 600, 200 });
 
     //auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
@@ -73,7 +73,7 @@ void GameMainLoop::Update(const DX::StepTimer* timer)
     UNREFERENCED_PARAMETER(timer);
     //float elapsedTime = float(timer->GetElapsedSeconds());
 
-    m_gamePanel->ProcessUpdate({}, true);
+    m_gamePanel->ProcessUpdate();
 
     PIXEndEvent();
 }
