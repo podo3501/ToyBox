@@ -94,6 +94,22 @@ inline bool IsInputAction(MouseButton mouseButton, KeyState keyState) noexcept
     return IsMouseButtonState(mouseTracker, mouseButton, GetMouseKeyState(keyState));
 }
 
+static int LastMouseWheelValue{ 0 };
+inline void ResetMouseWeelValue() noexcept
+{
+    LastMouseWheelValue = InputManager::GetMouse().GetLastState().scrollWheelValue;
+}
+
+inline int GetMouseWheelValue() noexcept
+{
+    const auto& mouseTracker = InputManager::GetMouse();
+    const int& curWheelValue = mouseTracker.GetLastState().scrollWheelValue;
+    int delta = ( curWheelValue - LastMouseWheelValue ) / 120 ;
+    LastMouseWheelValue = curWheelValue;
+
+    return delta;
+}
+
 /////////////////////////////////////////////////////////////////////////
 // Keyboard
 

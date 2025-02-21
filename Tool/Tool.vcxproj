@@ -227,6 +227,9 @@
       <Project>{ce88cfb8-f480-4ead-b13e-d54c92e8fde8}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\UI\Texture\ExtractTexture.json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

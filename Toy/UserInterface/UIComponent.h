@@ -82,6 +82,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	}
 
 private:
+	void UnlinkAndRefresh() noexcept;
 	bool RecursiveUpdate(const XMINT2& position, bool active) noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	UITransform& GetTransform(UIComponent* component);

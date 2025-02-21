@@ -53,9 +53,19 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 	return true;
 }
 
+void UIComponent::UnlinkAndRefresh() noexcept
+{
+	m_parent = nullptr;
+	m_transform.Clear();
+	MarkDirty();
+	ProcessUpdate();
+}
+
 unique_ptr<UIComponent> UIComponent::Clone() const 
 { 
-	return CreateClone();
+	auto clone = CreateClone();
+	clone->UnlinkAndRefresh(); //Clone의 root는 위치값을 초기화 시켜준다.
+	return clone;
 }
 
 bool UIComponent::LoadResources(ITextureLoad* load)
@@ -92,15 +102,14 @@ bool UIComponent::RecursiveUpdate(const XMINT2& position, bool active) noexcept
 		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
 		return child->RecursiveUpdate(curPosition, active);
 		});
+	m_isDirty = false;
 
 	return result;
 }
 
 bool UIComponent::ProcessUpdate() noexcept
 {
-	ReturnIfFalse(RecursiveUpdate({}, true));
-	m_isDirty = false;
-	return true;
+	return RecursiveUpdate({}, true);
 }
 
 void UIComponent::ProcessRenderTexture(ITextureRender* render)
@@ -123,19 +132,11 @@ void UIComponent::ProcessRender(ITextureRender* render)
 
 void UIComponent::SetStateFlag(StateFlag::Type flag, bool enabled) noexcept
 {
-	if (enabled)
-	{
-		m_stateFlag |= flag;
+	m_stateFlag = enabled ? (m_stateFlag | flag) : (m_stateFlag & ~flag);
 
-		//Render와 RenderTexture는 둘중에 하나만 셋팅되어야 한다.
-		switch (flag)
-		{
-		case StateFlag::Render: SetStateFlag(StateFlag::RenderTexture, false); break;
-		case StateFlag::RenderTexture: SetStateFlag(StateFlag::Render, false); break;
-		}
-	}
-	else
-		m_stateFlag &= ~flag;
+	if (!enabled) return;
+	if (flag == StateFlag::Render) SetStateFlag(StateFlag::RenderTexture, false); //랜더면 랜더텍스쳐를 비활성화
+	else if (flag == StateFlag::RenderTexture) SetStateFlag(StateFlag::Render, false); //랜더택스쳐면 랜더를 비활성화
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.

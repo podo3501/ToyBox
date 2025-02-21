@@ -84,17 +84,9 @@ bool RenderTexture::ModifyTexture(const XMUINT2& size)
 bool RenderTexture::ImplementUpdatePosition(const XMINT2& position) noexcept
 {
 	if (IsDirty())
-	{
 		m_position = position;
-		//auto test = m_component->GetRelativePosition();
-		XMINT2 test{};
-		test.y -= 50;
-		m_component->SetRelativePosition(test);
-	}
 
 	//여기서 휠을 움직이면 m_component의 위치를 조정한다.
-
-	
 
 	return true;
 }

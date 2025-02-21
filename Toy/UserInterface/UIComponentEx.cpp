@@ -31,10 +31,7 @@ unique_ptr<UIComponent> UIComponentEx::DetachChild(UIComponent* parent, UICompon
 	unique_ptr<UIComponent> detached = move(*find);
 	parent->m_children.erase(find);
 
-	detached->m_parent = nullptr;
-	detached->m_transform.Clear();
-	detached->MarkDirty();
-	detached->ProcessUpdate();
+	detached->UnlinkAndRefresh();
 
 	return detached;
 }

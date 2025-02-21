@@ -1,6 +1,8 @@
 #pragma once
 #include "../UIComponent.h"
 
+class Panel;
+
 class ListArea : public UIComponent
 {
 public:
@@ -19,6 +21,7 @@ public:
 protected:
 	ListArea(const ListArea& o) noexcept;
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	bool ImplementUpdatePosition(const XMINT2& position) noexcept;
 
 private:
 	void ReloadDatas() noexcept;
@@ -26,6 +29,8 @@ private:
 	UIComponent* m_bgImage;
 	UIComponent* m_renderTex;
 	UIComponent* m_prototypeContainer;
+	Panel* m_areaController;
+	vector<UIComponent*> m_containers;
 };
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout,

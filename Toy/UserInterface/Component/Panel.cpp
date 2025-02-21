@@ -23,13 +23,25 @@ unique_ptr<UIComponent> Panel::CreateClone() const
 
 bool Panel::ImplementActiveUpdate() noexcept
 {
+    CheckMouseInArea();
+    CheckEnterArea();
+    SetStateFlag(StateFlag::ActiveUpdate, m_mouseInArea && m_mouseEvents);
+    
+    return true;
+}
+
+void Panel::CheckMouseInArea() noexcept
+{
     auto rect = GetRectangle();
     const XMINT2& mousePos = InputManager::GetMouse().GetPosition();
 
-    bool isMouseInside = rect.Contains(mousePos.x, mousePos.y);
-    SetStateFlag(StateFlag::ActiveUpdate, isMouseInside && m_mouseEvents);
-    
-    return true;
+    m_mouseInArea = rect.Contains(mousePos.x, mousePos.y);
+}
+
+void Panel::CheckEnterArea() noexcept
+{
+    m_entered = !m_lastMouseInArea && m_mouseInArea;
+    m_lastMouseInArea = m_mouseInArea;
 }
 
 void Panel::SerializeIO(JsonOperation& operation)

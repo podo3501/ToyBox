@@ -47,8 +47,11 @@ bool MainWindow::CreateScene(const XMUINT2& size)
 
 bool MainWindow::CreateScene(const wstring& filename)
 {
-	ReturnIfFalse(JsonFile::ReadComponent(filename, m_panel));
-	ReturnIfFalse(m_renderer->LoadComponent(m_panel.get()));
+	unique_ptr<Panel> panel;
+	ReturnIfFalse(JsonFile::ReadComponent(filename, panel));
+	ReturnIfFalse(m_renderer->LoadComponent(panel.get()));
+	panel->EnableChildMouseEvents(m_isActiveUpdate);
+	m_panel = move(panel);
 
 	const auto& panelSize = m_panel->GetSize();
 	ReturnIfFalse(SetupProperty(panelSize));

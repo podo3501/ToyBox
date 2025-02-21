@@ -178,7 +178,7 @@ namespace ComponentTest
 
 	TEST_F(IntegrationTest, RecursivePosition)
 	{
-		std::unique_ptr<Panel> panel1 = std::make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
+		std::unique_ptr<Panel> panel1 = make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
 		std::unique_ptr<Panel> panel2 = make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center));
 
 		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
