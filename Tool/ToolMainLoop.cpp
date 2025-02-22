@@ -49,7 +49,7 @@ bool ToolMainLoop::PostLoaded(ITextureController* texController)
     return true;
 }
 
-void ToolMainLoop::Update(const DX::StepTimer* timer)
+void ToolMainLoop::Update(const DX::StepTimer& timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 

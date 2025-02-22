@@ -43,6 +43,7 @@ bool ImageGrid3::SetImage(const UILayout& layout, const ImageSource& source) noe
         UIEx(this).AttachComponent(move(grid1), posSizes[idx].pos);
     }
     SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+    UpdatePositionsManually();
 
 	return true;
 }

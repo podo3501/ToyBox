@@ -14,7 +14,7 @@ public:
 	TextureRenderTarget(DX::DeviceResources* deviceResources, DescriptorHeap* descHeap);
 	~TextureRenderTarget();
 
-	bool Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IComponent* component);
+	bool Create(DXGI_FORMAT texFormat, const XMUINT2& size, const XMINT2& pos, size_t offset, IComponent* component);
 	bool ModifyRenderTexture(const XMUINT2& size);
 	void Render(ID3D12GraphicsCommandList* commandList, ITextureRender* renderer, SpriteBatch* sprite);
 
@@ -30,4 +30,5 @@ private:
 
 	IComponent* m_component;
 	D3D12_RESOURCE_DESC m_resDesc{};
+	XMINT2 m_position{};
 };

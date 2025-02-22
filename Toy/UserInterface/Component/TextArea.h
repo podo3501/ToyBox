@@ -5,6 +5,7 @@ struct ITextureController;
 struct IRenderer;
 class UILayout;
 struct TextData;
+namespace DX { class StepTimer; }
 
 class TextArea : public UIComponent
 {
@@ -26,7 +27,7 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementLoadResource(ITextureLoad* load) override;
 	virtual bool ImplementPostLoaded(ITextureController* texController) override;
-	virtual bool ImplementUpdatePosition(const XMINT2& position) noexcept override;
+	virtual bool ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:

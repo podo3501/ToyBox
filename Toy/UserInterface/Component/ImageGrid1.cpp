@@ -76,7 +76,7 @@ optional<vector<Rectangle>> ImageGrid1::GetTextureAreaList()
 	 return m_texController->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0));
 }
 
-bool ImageGrid1::ImplementUpdatePosition(const XMINT2& position) noexcept
+bool ImageGrid1::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept
 {
 	if(IsDirty())
 		m_position = GetPositionByLayout(position);

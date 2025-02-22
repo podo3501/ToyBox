@@ -56,8 +56,8 @@ bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 {
 	if (m_gfxOffset && m_texController)
 		Release();
-
-	ReturnIfFalse(texController->CreateRenderTexture(GetSize(), m_component, m_index, &m_gfxOffset));
+	
+	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetSize(), GetPosition(), m_index, &m_gfxOffset));
 	if (m_component->HasStateFlag(StateFlag::RenderTexture))
 	{
 		//m_component->ChangeOrigin(Origin::LeftTop);
@@ -81,7 +81,7 @@ bool RenderTexture::ModifyTexture(const XMUINT2& size)
 	return m_texController->ModifyRenderTexture(m_index, size);
 }
 
-bool RenderTexture::ImplementUpdatePosition(const XMINT2& position) noexcept
+bool RenderTexture::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept
 {
 	if (IsDirty())
 		m_position = position;

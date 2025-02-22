@@ -95,7 +95,7 @@ inline bool IsInputAction(MouseButton mouseButton, KeyState keyState) noexcept
 }
 
 static int LastMouseWheelValue{ 0 };
-inline void ResetMouseWeelValue() noexcept
+inline void ResetMouseWheelValue() noexcept
 {
     LastMouseWheelValue = InputManager::GetMouse().GetLastState().scrollWheelValue;
 }

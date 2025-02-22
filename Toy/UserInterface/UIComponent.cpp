@@ -3,6 +3,7 @@
 #include "../Utility.h"
 #include "../InputManager.h"
 #include "JsonOperation.h"
+#include "StepTimer.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -58,7 +59,7 @@ void UIComponent::UnlinkAndRefresh() noexcept
 	m_parent = nullptr;
 	m_transform.Clear();
 	MarkDirty();
-	ProcessUpdate();
+	UpdatePositionsManually();
 }
 
 unique_ptr<UIComponent> UIComponent::Clone() const 
@@ -77,6 +78,7 @@ bool UIComponent::LoadResources(ITextureLoad* load)
 
 bool UIComponent::PostLoaded(ITextureController* texController)
 {
+	ReturnIfFalse(UpdatePositionsManually());
 	return ForEachChildUntilFail([texController](UIComponent* component) {
 		return component->ImplementPostLoaded(texController);
 		});
@@ -87,29 +89,48 @@ UITransform& UIComponent::GetTransform(UIComponent* component)
 	return component->m_transform;
 }
 
-bool UIComponent::RecursiveUpdate(const XMINT2& position, bool active) noexcept
+bool UIComponent::RecursiveUpdatePositionsManually(const DX::StepTimer& timer, const XMINT2& position) noexcept
 {
-	if (!HasStateFlag(StateFlag::Update)) return true;
+	ReturnIfFalse(ImplementUpdatePosition(timer, position));
 
-	ReturnIfFalse(ImplementUpdatePosition(position));
-	if (active)
-	{
-		ReturnIfFalse(ImplementActiveUpdate());
-		active = HasStateFlag(StateFlag::ActiveUpdate);
-	}
-
-	auto result = ranges::all_of(m_children, [this, &position, active](auto& child) {
+	auto result = ranges::all_of(m_children, [this, &position](auto& child) {
 		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
-		return child->RecursiveUpdate(curPosition, active);
+		return child->UpdatePositionsManually(curPosition);
 		});
 	m_isDirty = false;
 
 	return result;
 }
 
-bool UIComponent::ProcessUpdate() noexcept
+bool UIComponent::UpdatePositionsManually(const XMINT2& position) noexcept
 {
-	return RecursiveUpdate({}, true);
+	DX::StepTimer dummyTimer; //임시타이머이다. 이 타이머는 사용하지 않는다.
+	return RecursiveUpdatePositionsManually(dummyTimer, position);
+}
+
+bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position, bool active) noexcept
+{
+	if (!HasStateFlag(StateFlag::Update)) return true;
+
+	ReturnIfFalse(ImplementUpdatePosition(timer, position));
+	if (active)
+	{
+		ReturnIfFalse(ImplementActiveUpdate());
+		active = HasStateFlag(StateFlag::ActiveUpdate);
+	}
+
+	auto result = ranges::all_of(m_children, [this, &timer, &position, active](auto& child) {
+		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
+		return child->RecursiveUpdate(timer, curPosition, active);
+		});
+	m_isDirty = false;
+
+	return result;
+}
+
+bool UIComponent::ProcessUpdate(const DX::StepTimer& timer) noexcept
+{
+	return RecursiveUpdate(timer);
 }
 
 void UIComponent::ProcessRenderTexture(ITextureRender* render)

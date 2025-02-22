@@ -65,13 +65,14 @@ bool TextureRepository::LoadTexture(const wstring& filename, size_t& outIndex, X
         });
 }
 
-bool TextureRepository::CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, UINT64* outGfxMemOffset)
+bool TextureRepository::CreateRenderTexture(IComponent* component, 
+    const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset)
 {
     auto renderTex = make_unique<TextureRenderTarget>(m_deviceResources, m_descHeap);
 
     auto format = m_deviceResources->GetBackBufferFormat();
     auto offset = AllocateDescriptor();
-    if (!renderTex->Create(format, size, offset, component))
+    if (!renderTex->Create(format, size, position, offset, component))
     {
         ReleaseDescriptor(offset);
         return false;

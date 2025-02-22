@@ -19,14 +19,6 @@ using testing::ElementsAre;
 
 namespace ComponentTest
 {
-	static void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
-	{
-		unique_ptr<UIComponent> clonePanel = component->Clone();
-
-		CallMockRender(clonePanel.get(), renderFunc, times);
-		EXPECT_TRUE(WriteReadTest(clonePanel));
-	}
-
 	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		EXPECT_TRUE(index == 0);
@@ -45,8 +37,8 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(m_panel.get(), 144, 120);	//hover
-		CallMockRender(m_panel.get(), TestButton_ImageGrid1Render, 1);
+		TestUpdate(144, 120);	//hover
+		CallMockRender(TestButton_ImageGrid1Render, 1);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
@@ -80,14 +72,14 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(m_panel.get(), 110, 96);	//Hover
-		CallMockRender(m_panel.get(), TestButton_ImageGrid3Render, 3);
+		TestUpdate(110, 96);	//Hover
+		CallMockRender(TestButton_ImageGrid3Render, 3);
 
 		Button* btn = UIEx(m_panel).GetComponent<Button*>("Button_0");
 		btn->ChangeSize({ 150, 48 });
-		TestUpdate(m_panel.get(), 0, 0);	//Normal
+		TestUpdate(0, 0);	//Normal
 
-		CallMockRender(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
+		CallMockRender(TestButton_ImageGrid3ChangeAreaRender, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
@@ -115,8 +107,8 @@ namespace ComponentTest
 		////로드하고 나면 컴포넌트의 좌표가 바뀌고 마우스가 바뀐 좌표에서 반응하기 때문에 버튼이라면 이미지가 바뀔 것이다.
 		////버튼은 렌더링이 꺼져 있을(RenderTexture) 것이다. 마우스가 hover 되었을때 확인하기 위해서 랜더링 옵션을 켠다.
 		//buttonPtr->EnableStateFlag(StateFlag::Render);
-		//TestUpdate(m_panel.get(), 76, 76);	//hover
-		//CallMockRender(m_panel.get(), TestRenderTextureRender, 2);
+		//TestUpdate(76, 76);	//hover
+		//CallMockRender(TestRenderTextureRender, 2);
 	}
 
 	////////////////////////////////////////////////////////
@@ -133,7 +125,7 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		CallMockRender(m_panel.get(), TestImageGrid1Render, 1);
+		CallMockRender(TestImageGrid1Render, 1);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
@@ -181,13 +173,13 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(img), {400, 300});
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		CallMockRender(m_panel.get(), TestImageGrid3Render, 3);
+		CallMockRender(TestImageGrid3Render, 3);
 
 		ImageGrid3* img3 = UIEx(m_panel).GetComponent<ImageGrid3*>("ImageGrid3_0");
 		img3->ChangeOrigin(Origin::Center);
 		img3->ChangeSize({ 120, 36 });
 
-		CallMockRender(m_panel.get(), TestImageGrid3ChangeAreaRender, 3);
+		CallMockRender(TestImageGrid3ChangeAreaRender, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		SourceDivider srcDivider{ *img3->GetSourceAnd2Divider() };
@@ -198,7 +190,7 @@ namespace ComponentTest
 		srcDivider.list = { 20, 28 };
 		img3->SetSourceAnd2Divider(srcDivider);
 
-		CallMockRender(m_panel.get(), TestImageGrid3SourceAndDivider, 3);
+		CallMockRender(TestImageGrid3SourceAndDivider, 3);
 	}
 
 	////////////////////////////////////////////////////////
@@ -269,13 +261,13 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		CallMockRender(m_panel.get(), TestImageGrid9Render, 9);
+		CallMockRender(TestImageGrid9Render, 9);
 
 		ImageGrid9* img9 = UIEx(m_panel).GetComponent<ImageGrid9*>("ImageGrid9_0");
 		img9->ChangeOrigin(Origin::Center);
 		img9->ChangeSize({ 180, 150 });
 
-		CallMockRender(m_panel.get(), TestImageGrid9ChangeAreaRender, 9);
+		CallMockRender(TestImageGrid9ChangeAreaRender, 9);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		SourceDivider srcDivider{ *img9->GetSourceAnd4Divider() };
@@ -286,7 +278,7 @@ namespace ComponentTest
 		srcDivider.list = { 20, 44, 26, 48 };
 		img9->SetSourceAnd4Divider(srcDivider);
 
-		CallMockRender(m_panel.get(), TestImageGrid9SourceAndDivider, 9);
+		CallMockRender(TestImageGrid9SourceAndDivider, 9);
 	}
 
 	////////////////////////////////////////////////////////
@@ -318,7 +310,7 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(textArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		CallMockRender(m_panel.get(), TestTextAreaRender);
+		CallMockRender(TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		unique_ptr<UIComponent> clonePanel = m_panel->Clone();

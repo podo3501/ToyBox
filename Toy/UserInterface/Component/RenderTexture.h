@@ -2,6 +2,7 @@
 #include "../UIComponent.h"
 
 struct IRenderer;
+namespace DX { class StepTimer; }
 
 class RenderTexture : public UIComponent
 {
@@ -22,7 +23,7 @@ protected:
 	RenderTexture(const RenderTexture& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementPostLoaded(ITextureController*) override;
-	virtual bool ImplementUpdatePosition(const XMINT2& position) noexcept override;
+	virtual bool ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:

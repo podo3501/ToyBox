@@ -1,15 +1,11 @@
 #pragma once
+#include "StepTimer.h"
 
 class Window;
 class MouseTracker;
 struct IRenderer;
 struct IImguiItem;
 struct ITextureController;
-
-namespace DX
-{
-    class StepTimer;
-}
 
 class MainLoop
 {
@@ -25,14 +21,14 @@ protected:
     virtual bool InitializeDerived() = 0;
     virtual bool LoadResources() = 0;
     virtual bool PostLoaded(ITextureController* texController) = 0;
-    virtual void Update(const DX::StepTimer* timer) = 0;
+    virtual void Update(const DX::StepTimer& timer) = 0;
 
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     bool InitializeClass();
     void AddWinProcListener() noexcept;
     void Tick();
-    void OnResuming() const;
+    void OnResuming();
 
     bool m_sizemove{ false };
     bool m_suspend{ false };
@@ -42,5 +38,5 @@ private:
     wstring m_resourcePath;
     Window* m_window;
     IRenderer* m_renderer;
-    unique_ptr<DX::StepTimer> m_timer;
+    DX::StepTimer m_timer;
 };

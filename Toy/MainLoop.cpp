@@ -4,7 +4,6 @@
 #include "Utility.h"
 #include "Config.h"
 #include "Window.h"
-#include "StepTimer.h"
 #include "WindowProcedure.h"
 #include "InputManager.h"
 
@@ -33,8 +32,6 @@ bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
 
 bool MainLoop::InitializeClass()
 {
-    m_timer = make_unique<DX::StepTimer>();
-
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
     /*
@@ -73,25 +70,23 @@ int MainLoop::Run()
 
 void MainLoop::Tick()
 {
-    auto timer = m_timer.get();
-
     InputManager::Update();
 
-    m_timer->Tick([&, this]()
+    m_timer.Tick([&, this]()
         {
-            Update(timer);
+            Update(m_timer);
         });
    
     // Don't try to render anything before the first Update.
-    if (m_timer->GetFrameCount() == 0)
+    if (m_timer.GetFrameCount() == 0)
         return;
 
     m_renderer->Draw(); //Scene(Component의 집합)을 렌더링
 }
 
-void MainLoop::OnResuming() const
+void MainLoop::OnResuming()
 {
-    m_timer->ResetElapsedTime();
+    m_timer.ResetElapsedTime();
 
     m_renderer->OnResuming();
 }

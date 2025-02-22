@@ -9,6 +9,7 @@
 #include "UIHierarchy.h"
 
 class JsonOperation;
+namespace DX { class StepTimer; }
 
 class UIComponent : public IComponent, private UIHierarchy<UIComponent>
 {
@@ -20,11 +21,12 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
 	virtual bool ImplementLoadResource(ITextureLoad*) { return true; }
 	virtual bool ImplementPostLoaded(ITextureController*) { return true; }
-	virtual bool ImplementUpdatePosition(const XMINT2&) noexcept { return true; }
+	virtual bool ImplementUpdatePosition(const DX::StepTimer&, const XMINT2&) noexcept { return true; }
 	virtual bool ImplementActiveUpdate() noexcept { return true; }
 	virtual void ImplementRender(ITextureRender*) const {};
 
 	//상속되어지는 함수는 구현한다.
+	bool UpdatePositionsManually(const XMINT2& position = {}) noexcept;
 	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	vector<UIComponent*> GetChildComponents() const noexcept;
@@ -47,19 +49,20 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
 	virtual bool LoadResources(ITextureLoad* load) override final;
 	virtual bool PostLoaded(ITextureController*) override final;
-	virtual bool ProcessUpdate() noexcept override final;
 	virtual void ProcessRenderTexture(ITextureRender* render) override final;
 	virtual void ProcessRender(ITextureRender* render) override final;
-	virtual XMINT2 GetPosition() const noexcept override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;
 	virtual void ChangeSize(const XMUINT2& size) noexcept;
 	virtual void SerializeIO(JsonOperation& operation);
 
+	bool ProcessUpdate(const DX::StepTimer& timer) noexcept;
+
 	template<typename T>
 	T GetComponent(const string& name) noexcept;
 	
+	XMINT2 GetPosition() const noexcept;
 	bool Rename(const string& name) noexcept;
 	Rectangle GetRectangle() const noexcept;
 	const XMUINT2& GetSize() const noexcept;
@@ -83,7 +86,8 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 private:
 	void UnlinkAndRefresh() noexcept;
-	bool RecursiveUpdate(const XMINT2& position, bool active) noexcept;
+	bool RecursiveUpdatePositionsManually(const DX::StepTimer& timer, const XMINT2& position) noexcept;
+	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}, bool active = true) noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }

@@ -107,7 +107,7 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window)
 	}
 }
 
-void MainWindow::Update(const DX::StepTimer* timer)
+void MainWindow::Update(const DX::StepTimer& timer)
 {
 	//if (!IsWindowFocus(m_window)) return;
 	if (!m_window) return;
@@ -117,7 +117,7 @@ void MainWindow::Update(const DX::StepTimer* timer)
 	CheckActiveUpdate();
 		
 	m_controller->Update();
-	m_panel->ProcessUpdate();
+	m_panel->ProcessUpdate(timer);
 }
 
 void MainWindow::IgnoreMouseClick() 

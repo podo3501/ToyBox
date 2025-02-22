@@ -92,7 +92,7 @@ void Container::SetState(ButtonState state) noexcept
 	m_state = state;
 }
 
-bool Container::ImplementUpdatePosition(const XMINT2& absolutePos) noexcept
+bool Container::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& absolutePos) noexcept
 { 
 	if (IsDirty())
 		m_position = GetPositionByLayout(absolutePos); //GetPositionByLayout 이걸 안 쓰면 Origin 안될텐데 기존 코드가 이래서... 나중에 확인 ?!?

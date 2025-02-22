@@ -23,7 +23,7 @@ public:
     bool CreateScene(const wstring& filename);
     bool SaveScene(const wstring& filename);
     wstring GetSaveFilename() const noexcept;
-    void Update(const DX::StepTimer* timer);
+    void Update(const DX::StepTimer& timer);
     void ChangeWindowSize(const ImVec2& size);
 
     inline bool IsOpen() const noexcept { return m_isOpen; }

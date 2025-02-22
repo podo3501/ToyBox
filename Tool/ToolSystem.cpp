@@ -42,12 +42,12 @@ MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
     return it->get();
 }
 
-void ToolSystem::Update(const DX::StepTimer* timer)
+void ToolSystem::Update(const DX::StepTimer& timer)
 {
     m_menuBar->Update();
 
     erase_if(m_mainWindows, [](auto& wnd) { return !wnd->IsOpen(); });
-    ranges::for_each(m_mainWindows, [timer](const auto& wnd) {
+    ranges::for_each(m_mainWindows, [&timer](const auto& wnd) {
         wnd->Update(timer);
         });
 }

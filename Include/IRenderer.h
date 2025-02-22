@@ -22,7 +22,7 @@ public:
     virtual float GetLineSpacing(size_t index) const noexcept = 0;
 
     //Texture
-    virtual bool CreateRenderTexture(const XMUINT2& size, IComponent* component, size_t& outIndex, UINT64* outGfxMemOffset) = 0;
+    virtual bool CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset) = 0;
     virtual optional<vector<Rectangle>> GetTextureAreaList(const wstring& filename, const UINT32& bgColor) = 0;
     virtual void ReleaseTexture(size_t idx) noexcept = 0;
     virtual bool ModifyRenderTexture(size_t index, const XMUINT2& size) = 0;

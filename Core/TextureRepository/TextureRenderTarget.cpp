@@ -43,10 +43,12 @@ void TextureRenderTarget::CreateRtvAndSrv(ID3D12Resource* resource)
     CreateShaderResourceView(m_device, resource, m_srvDescriptors->GetCpuHandle(GetIndex()));
 }
 
-bool TextureRenderTarget::Create(DXGI_FORMAT texFormat, XMUINT2 size, size_t offset, IComponent* component)
+bool TextureRenderTarget::Create(DXGI_FORMAT texFormat, 
+    const XMUINT2& size, const XMINT2& pos, size_t offset, IComponent* component)
 {
     m_component = component;
     SetIndex(offset);
+    m_position = pos;
     return CreateTextureResource(texFormat, size);
 }
 
@@ -104,8 +106,7 @@ void TextureRenderTarget::Render(ID3D12GraphicsCommandList* commandList, ITextur
     commandList->ClearRenderTargetView(rtvHandle, ClearColor, 0, nullptr);
 
     //찍는것은 위치값을 0, 0로 옮긴다. 100, 100에서 찍는다면 텍스쳐는 좌표가 0, 0부터 시작하는게 고정이기 때문에 낭비가 된다.
-    const auto& pos = m_component->GetPosition(); 
-    XMMATRIX transform = XMMatrixTranslation(-static_cast<float>(pos.x), -static_cast<float>(pos.y), 0.0f);
+    XMMATRIX transform = XMMatrixTranslation(-static_cast<float>(m_position.x), -static_cast<float>(m_position.y), 0.0f);
 
     sprite->Begin(commandList, SpriteSortMode_Deferred, transform);
     m_component->ProcessRenderTexture(renderer);

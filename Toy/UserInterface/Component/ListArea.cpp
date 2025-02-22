@@ -85,26 +85,56 @@ UIComponent* ListArea::PrepareContainer()
 	return cloneContainerPtr;
 }
 
-bool ListArea::ImplementUpdatePosition(const XMINT2&) noexcept
+class WheelBoundedValue
+{
+public:
+	WheelBoundedValue() = delete;
+	WheelBoundedValue(int min, int max, int unit) : 
+		m_min{ min }, m_max{ max }, m_unit{ unit }
+	{}
+
+	int GetValue() noexcept
+	{
+		return ValidateRange(GetMouseWheelValue() * m_unit);
+	}
+
+	void ResetWheelValue() const noexcept
+	{
+		ResetMouseWheelValue();
+	}
+
+private:
+	int ValidateRange(int value) noexcept
+	{
+		m_value += value;
+		m_value = clamp(m_value, m_min, m_max);
+		int gap = m_value - m_lastValue;
+		m_lastValue = m_value;
+
+		return gap;
+	}
+	
+	int m_min{ 0 };
+	int m_max{ 0 };
+	int m_unit{ 0 };
+	int m_value{ 0 };
+	int m_lastValue{ 0 };
+};
+
+bool ListArea::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2&) noexcept
 {
 	if (!m_areaController->IsMouseInArea()) return true;
 
-	if (m_areaController->OnEnterArea()) 
-		ResetMouseWeelValue();
-
-	static int wheelPos{ 0 };
-	static int lastWheelPos{ 0 };
-	if (auto value = GetMouseWheelValue(); value)
+	static WheelBoundedValue wheelBoundedValue(-50, 0, 8);
+	if (m_areaController->OnEnterArea())
+		wheelBoundedValue.ResetWheelValue();
+		
+	if(auto value = wheelBoundedValue.GetValue(); value)
 	{
-		wheelPos += (value * 8);
-		wheelPos = clamp(wheelPos, -50, 0);
-		int gap = wheelPos - lastWheelPos;
-		lastWheelPos = wheelPos;
-
 		for (auto container : m_containers)
 		{
 			auto pos = container->GetRelativePosition();
-			pos->y += gap;
+			pos->y += value;
 			container->SetRelativePosition(*pos);
 		}
 	}

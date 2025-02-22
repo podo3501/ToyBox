@@ -32,10 +32,10 @@ namespace BasicCore
 		return { index, size };
 	}
 
-	static size_t LoadAndCheckRenderTexture(ITextureController* texController, const XMUINT2& size, IComponent* component)
+	static size_t LoadAndCheckRenderTexture(ITextureController* texController, IComponent* component, const XMUINT2& size, const XMINT2& pos)
 	{
 		size_t index{ 0 };
-		EXPECT_TRUE(texController->CreateRenderTexture(size, component, index, nullptr));
+		EXPECT_TRUE(texController->CreateRenderTexture(component, size, pos, index, nullptr));
 		return index;
 	}
 
@@ -92,7 +92,7 @@ namespace BasicCore
 		auto texController = m_renderer->GetTextureController();
 		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
 		for(auto idx : views::iota(2, 10))
-			EXPECT_EQ(LoadAndCheckRenderTexture(texController, img1->GetSize(), img1.get()), idx);
+			EXPECT_EQ(LoadAndCheckRenderTexture(texController, img1.get(), img1->GetSize(), img1->GetPosition()), idx);
 
 		testComponent->SetLoadTestFunction(LoadFont);
 		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));

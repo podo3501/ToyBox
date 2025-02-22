@@ -1,6 +1,8 @@
 #pragma once
 #include "../UIComponent.h"
 
+namespace DX { class StepTimer; }
+
 class Container : public UIComponent
 {
 public:
@@ -19,7 +21,7 @@ public:
 protected:
 	Container(const Container& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementUpdatePosition(const XMINT2& absolutePos) noexcept override;
+	virtual bool ImplementUpdatePosition(const DX::StepTimer& timer, const XMINT2& absolutePos) noexcept override;
 	virtual bool ImplementActiveUpdate() noexcept override;
 
 private:

@@ -119,11 +119,11 @@ void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<ws
 		});
 }
 
-bool TextArea::ImplementUpdatePosition(const XMINT2& position) noexcept
+bool TextArea::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept
 {
 	if (IsDirty())
 	{
-		ArrangeText(m_text);
+		if(m_texController) ArrangeText(m_text);
 		m_posByResolution = XMINT2ToVector2(GetPositionByLayout(position));
 	}
 

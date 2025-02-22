@@ -2,6 +2,7 @@
 #include "../UIComponent.h"
 
 class Panel;
+namespace DX { class StepTimer; }
 
 class ListArea : public UIComponent
 {
@@ -21,7 +22,7 @@ public:
 protected:
 	ListArea(const ListArea& o) noexcept;
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	bool ImplementUpdatePosition(const XMINT2& position) noexcept;
+	bool ImplementUpdatePosition(const DX::StepTimer&, const XMINT2&) noexcept;
 
 private:
 	void ReloadDatas() noexcept;
