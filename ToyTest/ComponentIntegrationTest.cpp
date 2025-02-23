@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
 #include "../Toy/Utility.h"
@@ -26,18 +26,18 @@ namespace ComponentTest
 		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 200, 100 }, Origin::LeftTop });
 		UIEx(m_panel).AttachComponent(move(img9), { 80, 60 });
 
-		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "ImageGrid9_0"), false);	//9¹æÇâ ÀÌ¹ÌÁö¿¡´Â attach ºÒ°¡
+		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "ImageGrid9_0"), false);	//9ë°©í–¥ ì´ë¯¸ì§€ì—ëŠ” attach ë¶ˆê°€
 		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "ImageGrid1_0"), true);
 
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid1_0"), false);
-		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid1_9"), true); //À§¿¡¼­ ImgGrid1¸¦ attach Çß´Ù.
+		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid1_9"), true); //ìœ„ì—ì„œ ImgGrid1ë¥¼ attach í–ˆë‹¤.
 
-		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid9_0"), true); //À§¿¡¼­ ImgGrid1¸¦ attach Çß´Ù.
+		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid9_0"), true); //ìœ„ì—ì„œ ImgGrid1ë¥¼ attach í–ˆë‹¤.
 
 		auto img1 = CreateSampleImageGrid1({ { 200, 100 }, Origin::LeftTop });
 		auto img2 = CreateSampleImageGrid1({ { 110, 60 }, Origin::LeftTop });
 		auto img1Ptr = img1.get();
-		UIEx(img1).AttachComponent(move(img2), { 100, 50 });	//ÁßÁ¡¿¡ attach ÇÑ´Ù.
+		UIEx(img1).AttachComponent(move(img2), { 100, 50 });	//ì¤‘ì ì— attach í•œë‹¤.
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 		m_panel->ProcessUpdate(m_timer);
 
@@ -60,9 +60,10 @@ namespace ComponentTest
 		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid1({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid3({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop }, L"L< Hangle >Å×½ºÆ® ÀÔ´Ï´Ù!< / Hangle>")));
+		EXPECT_TRUE(VerifyClone(CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop }, L"L< Hangle >í…ŒìŠ¤íŠ¸ ì…ë‹ˆë‹¤!< / Hangle>")));
 		EXPECT_TRUE(VerifyClone(CreateSampleButton1({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleButton3({ { 220, 190 }, Origin::LeftTop })));
+		//EXPECT_TRUE(VerifyClone(CreateSampleListArea1({ { 220, 190 }, Origin::LeftTop })));
 	}
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
@@ -84,9 +85,9 @@ namespace ComponentTest
 		img2Ptr->Rename("image2");
 		img1Ptr->RenameRegion("Region1");
 		
-		EXPECT_FALSE(UIEx(m_panel).GetComponent("image1")); //Img1ÀÌ ´Ù¸¥ RegionÀÌ¶ó¼­ Ã£À» ¼ö ¾ø´Ù.
+		EXPECT_FALSE(UIEx(m_panel).GetComponent("image1")); //Img1ì´ ë‹¤ë¥¸ Regionì´ë¼ì„œ ì°¾ì„ ìˆ˜ ì—†ë‹¤.
 		EXPECT_FALSE(UIEx(m_panel).GetComponent("image2"));
-		EXPECT_FALSE(UIEx(img1Ptr).GetComponent("Main"));//Img1ÀÌ RegionÀÌ¶ó¼­ À§¿¡ ³ëµå´Â ¸ø Ã£´Â´Ù.
+		EXPECT_FALSE(UIEx(img1Ptr).GetComponent("Main"));//Img1ì´ Regionì´ë¼ì„œ ìœ„ì— ë…¸ë“œëŠ” ëª» ì°¾ëŠ”ë‹¤.
 		EXPECT_TRUE(UIEx(img1Ptr).GetComponent("image2"));
 		EXPECT_FALSE(UIEx(img2Ptr).GetComponent("Main"));
 		EXPECT_TRUE(UIEx(img2Ptr).GetComponent("image1"));
@@ -131,9 +132,9 @@ namespace ComponentTest
 		EXPECT_EQ(component->GetRectangle(), Rectangle(270, 216, 160, 128));
 	}
 
-	//ÀÌ¸§À» ±¸¿ªÀ» ¸¸µé¾î¼­ ´Ù¸¥ ±¸¿ªÀÌ¸é °°Àº ÀÌ¸§À» ¾µ ¼ö ÀÖ°Ô ÇÑ´Ù. ±×·¯¸é close °°Àº ÀÌ¸§ÀÌ Áßº¹ÀÌ µÇ¾îµµ
-	//Ä«ÇÇ ÇßÀ»¶§ ´Ù¸¥ ±¸¿ªÀÌ¶ó¸é close ÀÌ¸§À» ¾µ ¼ö ÀÖ´Ù. ¸®½ºÆ® ÄÄÆ÷³ÍÆ®¿¡¼­ ´Ù¸¥ ±¸¿ªÀ¸·Î ÁöÁ¤ÇÏ¸é ÀÌ¸§ÀÌ 
-	//°°¾Æµµ µÇ´Ï±î ÄÚµùÇÒ¶§ ÀÌ¸§_1 ÀÌ·±°ÍÀ» Ã£Áö ¾Ê¾Æµµ µÈ´Ù.
+	//ì´ë¦„ì„ êµ¬ì—­ì„ ë§Œë“¤ì–´ì„œ ë‹¤ë¥¸ êµ¬ì—­ì´ë©´ ê°™ì€ ì´ë¦„ì„ ì“¸ ìˆ˜ ìˆê²Œ í•œë‹¤. ê·¸ëŸ¬ë©´ close ê°™ì€ ì´ë¦„ì´ ì¤‘ë³µì´ ë˜ì–´ë„
+	//ì¹´í”¼ í–ˆì„ë•Œ ë‹¤ë¥¸ êµ¬ì—­ì´ë¼ë©´ close ì´ë¦„ì„ ì“¸ ìˆ˜ ìˆë‹¤. ë¦¬ìŠ¤íŠ¸ ì»´í¬ë„ŒíŠ¸ì—ì„œ ë‹¤ë¥¸ êµ¬ì—­ìœ¼ë¡œ ì§€ì •í•˜ë©´ ì´ë¦„ì´ 
+	//ê°™ì•„ë„ ë˜ë‹ˆê¹Œ ì½”ë”©í• ë•Œ ì´ë¦„_1 ì´ëŸ°ê²ƒì„ ì°¾ì§€ ì•Šì•„ë„ ëœë‹¤.
 	TEST_F(IntegrationTest, Region)
 	{
 		unique_ptr<UIComponent> img1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
@@ -142,13 +143,13 @@ namespace ComponentTest
 		auto img1Ptr = img1.get();
 		auto img2Ptr = img2.get();
 
-		img1Ptr->RenameRegion("Region_0"); //¸ÕÀú Region°ªÀ» ³Ö¾îÁÖ¸é ÀÌ¸§ÀÌ °°¾Æµµ µÇ°í ³ªÁß¿¡ RegionÀ» ³ÖÀ¸¸é 
-		img2Ptr->RenameRegion("Region_0"); //Attach ÇÒ¶§ unique ÀÌ¸§À¸·Î ¸¸µé¾î ÁØ´Ù.
+		img1Ptr->RenameRegion("Region_0"); //ë¨¼ì € Regionê°’ì„ ë„£ì–´ì£¼ë©´ ì´ë¦„ì´ ê°™ì•„ë„ ë˜ê³  ë‚˜ì¤‘ì— Regionì„ ë„£ìœ¼ë©´ 
+		img2Ptr->RenameRegion("Region_0"); //Attach í• ë•Œ unique ì´ë¦„ìœ¼ë¡œ ë§Œë“¤ì–´ ì¤€ë‹¤.
 
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 		UIEx(m_panel).AttachComponent(move(img2), { 100, 100 });
 
-		EXPECT_EQ(img2Ptr->GetRegion(), "Region_1"); //ÀÌ¸§ÀÌ ¹Ù²î¾ú´Ù.
+		EXPECT_EQ(img2Ptr->GetRegion(), "Region_1"); //ì´ë¦„ì´ ë°”ë€Œì—ˆë‹¤.
 		EXPECT_EQ(img1Ptr->GetName(), "ImageGrid1_0");
 		EXPECT_EQ(img2Ptr->GetName(), "ImageGrid1_0");
 
@@ -195,7 +196,7 @@ namespace ComponentTest
 		outList = UIEx(m_panel).GetComponents({ 239, 140 });
 		EXPECT_EQ(outList.size(), 2);
 
-		//»çÀÌÁî°¡ ¹Ù²î¾úÀ»¶§ °ªÀÌ ¾î¶»°Ô ¹Ù²î´ÂÁö Å×½ºÆ®
+		//ì‚¬ì´ì¦ˆê°€ ë°”ë€Œì—ˆì„ë•Œ ê°’ì´ ì–´ë–»ê²Œ ë°”ë€ŒëŠ”ì§€ í…ŒìŠ¤íŠ¸
 	}
 
 	TEST_F(IntegrationTest, Rename)
@@ -204,10 +205,10 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(img9), { 80, 60 });
 
 		UIComponent* component = UIEx(m_panel).GetComponent("ImageGrid1_0");
-		EXPECT_FALSE(component->Rename("ImageGrid9_0")); //°°Àº ÀÌ¸§ÀÌ ÀÖÀ¸¸é renameÀÌ µÇÁö ¾Ê´Â´Ù.
+		EXPECT_FALSE(component->Rename("ImageGrid9_0")); //ê°™ì€ ì´ë¦„ì´ ìˆìœ¼ë©´ renameì´ ë˜ì§€ ì•ŠëŠ”ë‹¤.
 
 		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
-		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //°°Àº ÄÄÆ÷³ÍÆ®¸¦ attachÇÏ¸é ³»ºÎÀûÀ¸·Î ÀÌ¸§À» »ı¼ºÇØ ÁØ´Ù.
+		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //ê°™ì€ ì»´í¬ë„ŒíŠ¸ë¥¼ attachí•˜ë©´ ë‚´ë¶€ì ìœ¼ë¡œ ì´ë¦„ì„ ìƒì„±í•´ ì¤€ë‹¤.
 		EXPECT_TRUE(failed == nullptr);
 	}
 }

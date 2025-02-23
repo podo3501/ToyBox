@@ -29,7 +29,7 @@ void UITransform::Clear() noexcept
 	m_ratio = {};
 }
 
-const XMINT2& UITransform::GetPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept
+const XMINT2& UITransform::GetUpdatedPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept
 {
 	if (!IsDirty) return m_absolutePosition;
 	m_absolutePosition = layout.GetPosition(m_relativePosition) + parentPosition;

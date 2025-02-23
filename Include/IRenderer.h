@@ -28,7 +28,6 @@ public:
     virtual bool ModifyRenderTexture(size_t index, const XMUINT2& size) = 0;
 };
 
-//렌더링 할때 사용하는 인터페이스
 struct ITextureRender
 {
 public:

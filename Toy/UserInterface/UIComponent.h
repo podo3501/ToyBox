@@ -46,10 +46,9 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual ComponentID GetTypeID() const noexcept = 0;
 	unique_ptr<UIComponent> Clone() const;
 
-	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수)
+	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수. 로드때나 랜더링 때에는 콜백처럼 불려야 하기 때문이다. 그냥 클라이언트 값을 얻겠다고 함수를 추가하지 말자.)
 	virtual bool LoadResources(ITextureLoad* load) override final;
 	virtual bool PostLoaded(ITextureController*) override final;
-	virtual void ProcessRenderTexture(ITextureRender* render) override final;
 	virtual void ProcessRender(ITextureRender* render) override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
@@ -86,6 +85,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 private:
 	void UnlinkAndRefresh() noexcept;
+	const XMINT2& GetUpdatedPosition(UIComponent* component, const XMINT2& parentPos) noexcept;
 	bool RecursiveUpdatePositionsManually(const DX::StepTimer& timer, const XMINT2& position) noexcept;
 	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}, bool active = true) noexcept;
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;

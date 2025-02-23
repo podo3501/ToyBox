@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
 #include "TestHelper.h"
@@ -85,30 +85,19 @@ namespace ComponentTest
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
 	}
 
-	static void TestRenderTextureRender(size_t index, const RECT& dest, const RECT* source)
-	{
-		auto testResult{ false };
-
-		testResult |= IsTrue(dest, { 75, 75, 125, 125 }, *source, { 0, 0, 50, 50}); //RenderTexture 
-		testResult |= IsTrue(dest, { 75, 75, 107, 107 }, *source, { 46, 138, 78, 170 }); //hoverÀÌ¹ÌÁö
-
-		EXPECT_TRUE(testResult);
-	}
-
 	TEST_F(BasicFunctionalityTest, RenderTexture)
 	{
 		//auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
 		//auto buttonPtr = button.get();
-		//auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, true, button.get()); //ÀÌ·¸°Ô ¼³Á¤ÇÏ´Â ¼ø°£ buttonÀº ·£´õ¸µÀº µÇÁö ¾Ê°í ¾÷µ¥ÀÌÆ®¸¸ µÈ´Ù.
+		//auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, true, button.get()); //ì´ë ‡ê²Œ ì„¤ì •í•˜ëŠ” ìˆœê°„ buttonì€ ëžœë”ë§ì€ ë˜ì§€ ì•Šê³  ì—…ë°ì´íŠ¸ë§Œ ëœë‹¤.
 		//UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
 		//UIEx(m_panel).AttachComponent(move(button), { 200, 200 });
 		//EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		////·ÎµåÇÏ°í ³ª¸é ÄÄÆ÷³ÍÆ®ÀÇ ÁÂÇ¥°¡ ¹Ù²î°í ¸¶¿ì½º°¡ ¹Ù²ï ÁÂÇ¥¿¡¼­ ¹ÝÀÀÇÏ±â ¶§¹®¿¡ ¹öÆ°ÀÌ¶ó¸é ÀÌ¹ÌÁö°¡ ¹Ù²ð °ÍÀÌ´Ù.
-		////¹öÆ°Àº ·»´õ¸µÀÌ ²¨Á® ÀÖÀ»(RenderTexture) °ÍÀÌ´Ù. ¸¶¿ì½º°¡ hover µÇ¾úÀ»¶§ È®ÀÎÇÏ±â À§ÇØ¼­ ·£´õ¸µ ¿É¼ÇÀ» ÄÒ´Ù.
-		//buttonPtr->EnableStateFlag(StateFlag::Render);
 		//TestUpdate(76, 76);	//hover
-		//CallMockRender(TestRenderTextureRender, 2);
+		//CallMockRender([](size_t index, const RECT& dest, const RECT* source) {
+		//	EXPECT_TRUE(IsTrue(dest, { 75, 75, 125, 125 }, *source, { 0, 0, 50, 50 }));
+		//	}, 1);
 	}
 
 	////////////////////////////////////////////////////////
@@ -297,15 +286,15 @@ namespace ComponentTest
 
 	static void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
 	{
-		if (text == L"Å×½º") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
-		if (text == L"Å×½ºÆ®2") EXPECT_TRUE(index == 1 && pos == Vector2(282, 268.375f) && DirectX::XMVector4Equal(color, Colors::Red));
+		if (text == L"í…ŒìŠ¤") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
+		if (text == L"í…ŒìŠ¤íŠ¸2") EXPECT_TRUE(index == 1 && pos == Vector2(282, 268.375f) && DirectX::XMVector4Equal(color, Colors::Red));
 		if (text == L"^") EXPECT_TRUE(index == 0 && pos == Vector2(531.f, 268.375f) && DirectX::XMVector4Equal(color, Colors::Black));
 		if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(240.f, 296.75f) && DirectX::XMVector4Equal(color, Colors::Blue));
 	}
 
 	TEST_F(BasicFunctionalityTest, TextArea)
 	{
-		wstring text = L"<Hangle><Red>Å×½º<br>Æ®, Å×½ºÆ®2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
+		wstring text = L"<Hangle><Red>í…ŒìŠ¤<br>íŠ¸, í…ŒìŠ¤íŠ¸2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
 		auto textArea = CreateSampleTextArea({ {320, 120}, Origin::Center }, text);
 		UIEx(m_panel).AttachComponent(move(textArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));

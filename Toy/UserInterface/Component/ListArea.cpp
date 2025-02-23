@@ -2,32 +2,30 @@
 #include "ListArea.h"
 #include "../JsonOperation.h"
 #include "RenderTexture.h"
-#include "Panel.h"
 #include "../../InputManager.h"
 
 ListArea::~ListArea() = default;
 ListArea::ListArea() noexcept :
-	m_bgImage{ nullptr },
-	m_renderTex{ nullptr },
 	m_prototypeContainer{ nullptr },
-	m_areaController{ nullptr }
+	m_bgImage{ nullptr },
+	m_renderTex{ nullptr }	
 {}
 
 ListArea::ListArea(const ListArea& o) noexcept :
 	UIComponent{ o },
-	m_bgImage{ nullptr },
-	m_renderTex{ nullptr },
 	m_prototypeContainer{ nullptr },
-	m_areaController{ nullptr }
+	m_bgImage{ nullptr },
+	m_renderTex{ nullptr }
 {
 	ReloadDatas();
 }
 
 void ListArea::ReloadDatas() noexcept
 {
-	//vector<UIComponent*> componentList = GetChildComponents();
-	//m_bgImage = componentList[0];
-	//m_prototypeContainer = componentList[1];
+	vector<UIComponent*> componentList = GetChildComponents();
+	m_prototypeContainer = componentList[0];
+	m_bgImage = componentList[1];
+	m_renderTex = ComponentCast<RenderTexture*>(componentList[2]);
 }
 
 unique_ptr<UIComponent> ListArea::CreateClone() const
@@ -44,26 +42,24 @@ void ListArea::ChangeSize(const XMUINT2& size) noexcept
 bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent>&& bgImage, unique_ptr<UIComponent>&& container) noexcept
 {
 	SetLayout(layout);
+	UILayout partLayout{ layout.GetSize(), Origin::LeftTop }; //속성들은 정렬하지 않는다.
 	
 	m_prototypeContainer = container.get();
 	m_prototypeContainer->Rename("Prototype Container");
 	m_prototypeContainer->SetStateFlag(StateFlag::Active, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	UIEx(this).AttachComponent(move(container), {});
 
-	auto areaController = make_unique<Panel>("AreaController", layout);
-	areaController->EnableChildMouseEvents(true);
-	m_areaController = areaController.get();
-	UIEx(this).AttachComponent(move(areaController), {});
-
-	//BackGround, RenderTarget은 순서가 중요하다. BG뒤에 RT가 와야 이미지가 덮히지 않는다.
+	// 추후에 다양한 형태(2줄짜리 ListArea 같은)가 나오면 이 bgImage처럼 새로운 컴포넌트를 만들어서 넣는다.
+	// 지금은 Background로 간단하게 했지만 다양한 리스트 형태가 나올수 있다.
+	// RenderTexture는 단순히 RenderTexture만 하는 역할로 놔 두자.
 	m_bgImage = bgImage.get();
 	m_bgImage->Rename("Background Image");
-	UIEx(this).AttachComponent(move(bgImage), {});
 
-	auto renderTex = CreateRenderTexture(layout, true, m_areaController);
+	auto renderTex = CreateRenderTexture(partLayout, move(bgImage));
+	renderTex->EnableChildMouseEvents(true);
 	m_renderTex = renderTex.get();
 	UIEx(this).AttachComponent(move(renderTex), {});
-	
+		
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요
 
 	return true;
@@ -74,7 +70,7 @@ UIComponent* ListArea::PrepareContainer()
 	static int32_t y = 0;
 	auto cloneContainer = m_prototypeContainer->Clone();
 	auto cloneContainerPtr = cloneContainer.get();
-	UIEx(m_areaController).AttachComponent(move(cloneContainer), {});
+	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
 
 	cloneContainerPtr->SetStateFlag(StateFlag::Active, true);
 	cloneContainerPtr->SetRelativePosition({ 0, y });
@@ -123,10 +119,10 @@ private:
 
 bool ListArea::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2&) noexcept
 {
-	if (!m_areaController->IsMouseInArea()) return true;
+	if (!m_renderTex->IsMouseInArea()) return true;
 
 	static WheelBoundedValue wheelBoundedValue(-50, 0, 8);
-	if (m_areaController->OnEnterArea())
+	if (m_renderTex->OnEnterArea())
 		wheelBoundedValue.ResetWheelValue();
 		
 	if(auto value = wheelBoundedValue.GetValue(); value)

@@ -26,6 +26,22 @@ public:
 	}
 
 	template<typename T>
+	static bool WriteComponent(T data, const wstring& filename)
+	{
+		JsonOperation writeJ;
+		writeJ.Write("Component", data);
+		wstring curFilename = GetJsonFilename(data);
+		if (!filename.empty())
+			curFilename = filename;
+		auto result = writeJ.Write(curFilename);
+		if (result)
+			SetJsonFilename(data, curFilename);
+
+		return result;
+	}
+
+	//?!? 2개가 있다 하나 지울것 Read 문제가 해결되면.
+	template<typename T>
 	static bool WriteComponent(unique_ptr<T>& data, const wstring& filename)
 	{
 		JsonOperation writeJ;
@@ -46,7 +62,7 @@ public:
 		JsonOperation readJ;
 		if (!readJ.Read(filename))
 			return false;
-		readJ.Process("Component", data);
+		readJ.Process("Component", data); //?!? 이게 template<IsNotUIComponent T> 이쪽 Process로 가는데 문제가 있다.
 		SetJsonFilename(data.get(), filename);
 		return true;
 	}

@@ -3,12 +3,15 @@
 #include "../../../Include/IRenderer.h"
 #include "../../Utility.h"
 #include "../JsonOperation.h"
+#include "../../InputManager.h"
 
 RenderTexture::~RenderTexture() { Release(); }
 RenderTexture::RenderTexture() :
 	m_component{ nullptr },
 	m_texController{ nullptr }
-{}
+{
+	SetStateFlag(StateFlag::RenderTexture, true);
+}
 
 RenderTexture::RenderTexture(const RenderTexture& o) :
 	UIComponent{ o },
@@ -30,10 +33,10 @@ void RenderTexture::Release() noexcept
 void RenderTexture::ReloadDatas() noexcept
 {
 	//같은 라인에서 RenderTexture 옵션이 있는 애가 있을 것이다.
-	UIComponent* component = this->GetSiblingComponent(StateFlag::RenderTexture);
-	if (!component) return;
+	//UIComponent* component = this->GetSiblingComponent(StateFlag::RenderTexture);
+	//if (!component) return;
 	
-	m_component = component;
+	//m_component = component;
 }
 
 unique_ptr<UIComponent> RenderTexture::CreateClone() const
@@ -58,21 +61,17 @@ bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 		Release();
 	
 	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetSize(), GetPosition(), m_index, &m_gfxOffset));
-	if (m_component->HasStateFlag(StateFlag::RenderTexture))
-	{
-		//m_component->ChangeOrigin(Origin::LeftTop);
-	}
 
 	m_texController = texController;
 	return true;
 }
 
-bool RenderTexture::Setup(const UILayout& layout, bool renderTextureOnly, UIComponent* component)
+bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent>&& component) noexcept
 {
 	SetLayout(layout);
-	if (renderTextureOnly) component->SetStateFlag(StateFlag::RenderTexture, true);
-	m_component = component;
-	
+	m_component = component.get();
+	UIEx(this).AttachComponent(move(component), {});
+
 	return true;
 }
 
@@ -81,12 +80,33 @@ bool RenderTexture::ModifyTexture(const XMUINT2& size)
 	return m_texController->ModifyRenderTexture(m_index, size);
 }
 
+void RenderTexture::CheckMouseInArea() noexcept
+{
+	auto rect = GetRectangle();
+	const XMINT2& mousePos = InputManager::GetMouse().GetPosition();
+
+	m_mouseInArea = rect.Contains(mousePos.x, mousePos.y);
+}
+
+void RenderTexture::CheckEnterArea() noexcept
+{
+	m_entered = !m_lastMouseInArea && m_mouseInArea;
+	m_lastMouseInArea = m_mouseInArea;
+}
+
+bool RenderTexture::ImplementActiveUpdate() noexcept
+{
+	CheckMouseInArea();
+	CheckEnterArea();
+	SetStateFlag(StateFlag::ActiveUpdate, m_mouseInArea && m_mouseEvents);
+
+	return true;
+}
+
 bool RenderTexture::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept
 {
 	if (IsDirty())
-		m_position = position;
-
-	//여기서 휠을 움직이면 m_component의 위치를 조정한다.
+		m_position = GetPositionByLayout(position);
 
 	return true;
 }
@@ -111,9 +131,9 @@ void RenderTexture::SerializeIO(JsonOperation& operation)
 }
 
 //RenderStateFlag가 true면 렌더 항목도 RenderTexture에 찍히도록 한다.
-unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, bool renderTextureOnly, UIComponent* component)
+unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent>&& component)
 {
 	unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>();
-	if (!renderTexture->Setup(layout, renderTextureOnly, component)) return nullptr;
+	if (!renderTexture->Setup(layout, move(component))) return nullptr;
 	return renderTexture;
 }

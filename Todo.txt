@@ -84,7 +84,6 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 
 ?!?는 고쳐야 하거나 이상하거나 등등
 
-@GetPosition을 IComponent에서 뺄수 있는 방법 강구
 @리팩토링, TDD 코드 작성
 @휠로 움직일때 부드럽게 움직이게끔 수정
 @Slide Bar 만들기

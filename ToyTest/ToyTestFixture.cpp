@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ToyTestFixture.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Window.h"
@@ -92,8 +92,8 @@ void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, con
 
 void ToyTestFixture::TearDown()
 {
-	//¸Þ¸ð¸® ¾È »õ°Ô Áö¿öÁØ´Ù. °­Á¦·Î Áö¿ì´Â ÀÌÀ¯´Â ¾ÆÁ÷ ³¡³ªÁö ¾Ê¾Æ¼­ ¸Þ¸ð¸®°¡ ³²¾Æ ÀÖ´Âµ¥
-	//ReportLiveObjects ÇÔ¼ö°¡ ¸Þ¸ð¸®°¡ ¾È Áö¿ö Á³´Ù°í ¸Þ¼¼Áö¸¦ ¶ç¿ì±â ¶§¹®ÀÌ´Ù.
+	//ë©”ëª¨ë¦¬ ì•ˆ ìƒˆê²Œ ì§€ì›Œì¤€ë‹¤. ê°•ì œë¡œ ì§€ìš°ëŠ” ì´ìœ ëŠ” ì•„ì§ ëë‚˜ì§€ ì•Šì•„ì„œ ë©”ëª¨ë¦¬ê°€ ë‚¨ì•„ ìžˆëŠ”ë°
+	//ReportLiveObjects í•¨ìˆ˜ê°€ ë©”ëª¨ë¦¬ê°€ ì•ˆ ì§€ì›Œ ì¡Œë‹¤ê³  ë©”ì„¸ì§€ë¥¼ ë„ìš°ê¸° ë•Œë¬¸ì´ë‹¤.
 	m_panel.reset();
 	m_renderer.reset();
 	m_window.reset();

@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Container.h"
 #include "../../InputManager.h"
 #include "../JsonOperation.h"
@@ -21,7 +21,7 @@ Container::Container(const Container& o) :
 void Container::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_images.emplace(Normal, componentList[0]);		//¿©±â¿¡ ¼ø¼­°¡ Àß¸øµÇ¸é ¾ÈµÈ´Ù.
+	m_images.emplace(Normal, componentList[0]);		//ì—¬ê¸°ì— ìˆœì„œê°€ ì˜ëª»ë˜ë©´ ì•ˆëœë‹¤.
 	m_images.emplace(Hover, componentList[1]);
 	m_images.emplace(Pressed, componentList[2]);
 }
@@ -95,7 +95,7 @@ void Container::SetState(ButtonState state) noexcept
 bool Container::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& absolutePos) noexcept
 { 
 	if (IsDirty())
-		m_position = GetPositionByLayout(absolutePos); //GetPositionByLayout ÀÌ°É ¾È ¾²¸é Origin ¾ÈµÉÅÙµ¥ ±âÁ¸ ÄÚµå°¡ ÀÌ·¡¼­... ³ªÁß¿¡ È®ÀÎ ?!?
+		m_position = GetPositionByLayout(absolutePos); //GetPositionByLayout ì´ê±¸ ì•ˆ ì“°ë©´ Origin ì•ˆë í…ë° ê¸°ì¡´ ì½”ë“œê°€ ì´ë˜ì„œ... ë‚˜ì¤‘ì— í™•ì¸ ?!?
 
 	return true;
 }

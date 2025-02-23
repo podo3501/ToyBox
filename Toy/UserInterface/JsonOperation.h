@@ -173,6 +173,7 @@ public:
 	void Process(const string& key, map<wstring, wstring>& data) noexcept;
 	void Process(const string& key, map<int, UITransform>& datas) noexcept;
 	void Process(const string& key, deque<wstring>& data) noexcept;
+	void Write(const string& key, UIComponent* data);
 
 private:
 	template<typename T>
@@ -186,6 +187,7 @@ private:
 	nlohmann::json& GetRead();
 
 	void UpdateJson(const unique_ptr<UIComponent>& data) noexcept;
+	void UpdateJson(UIComponent* data) noexcept;
 	unique_ptr<UIComponent> CreateComponentFromType(const string& typeName);
 	void ProcessImpl(const string& key, auto readFunc, auto writeFunc);
 

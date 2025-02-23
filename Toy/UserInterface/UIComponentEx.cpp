@@ -95,7 +95,7 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 vector<UIComponent*> UIComponentEx::GetComponents(const XMINT2& pos) noexcept
 {
 	vector<UIComponent*> findList;
-	m_component->ForEachChildBFS(StateFlag::Render, [&findList, &pos](UIComponent* comp) {
+	m_component->ForEachChildBFS(StateFlag::Render | StateFlag::RenderTexture, [&findList, &pos](UIComponent* comp) {
 		const auto& curPosition = pos - comp->m_transform.GetAbsolutePosition();
 		if (comp->IsArea(curPosition))
 			findList.push_back(comp);

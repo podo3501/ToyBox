@@ -81,25 +81,26 @@ void UIHierarchy<UIComponent>::ForEachChildConst(function<void(const UIComponent
 	}
 }
 
+//함수 이름을 렌더링과 관련되게 지어야겠다. 렌더링 전용으로 사용하게끔
 void UIHierarchy<UIComponent>::ForEachChildBFS(StateFlag::Type flag, function<void(UIComponent*)> func) noexcept
 {
-	queue<UIComponent*> queue;
-	queue.push(GetThis());
+	queue<UIComponent*> cQueue;
+	auto PushChild = [&cQueue, flag](UIComponent* c) { if (c->HasStateFlag(flag)) cQueue.push(c); };
 
-	while (!queue.empty())
+	PushChild(GetThis());
+
+	while (!cQueue.empty())
 	{
-		UIComponent* current = queue.front();
-		queue.pop();
-
-		//if (!current->m_enable) continue;
-		if (!current->HasStateFlag(flag)) continue;
+		UIComponent* current = cQueue.front();
+		cQueue.pop();
 
 		func(current);
+		if (current->HasStateFlag(StateFlag::RenderTexture)) continue;
 
 		for (const auto& child : current->m_children)
 		{
 			if (child)
-				queue.push(child.get());
+				PushChild(child.get());
 		}
 	}
 }

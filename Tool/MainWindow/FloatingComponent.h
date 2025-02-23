@@ -39,7 +39,7 @@ private:
 	IRenderer* m_renderer;
 	unique_ptr<RenderTexture> m_renderTex;
 	string m_name;
-	unique_ptr<UIComponent> m_component;
+	UIComponent* m_component;
 	optional<MakeComponent> m_currentAction;
 	XMUINT2 m_drawTextureSize{}; //사라져야 할 변수
 	bool m_draw{ false };

@@ -30,7 +30,7 @@ public:
     inline const ImGuiWindow* GetImGuiWindow() const noexcept;
 
 private:
-    bool SetupProperty(const XMUINT2& size);
+    bool SetupProperty(unique_ptr<Panel>&& panel);
     void CheckActiveUpdate() noexcept;
     void CheckChangeWindow(const ImGuiWindow* window);
     void IgnoreMouseClick();
@@ -41,12 +41,13 @@ private:
     string m_name{};
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<RenderTexture> m_renderTex;
-    unique_ptr<Panel> m_panel;
     unique_ptr<ComponentController> m_controller;
+    Panel* m_panel;
 
     bool m_isOpen{ false };
     bool m_isActiveUpdate{ false };
     ImVec2 m_size{ 800.f, 600.f };
+    float m_fps{ 0.f };
 
     static int m_mainWindowIndex;
 };

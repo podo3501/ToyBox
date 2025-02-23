@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "UIComponent.h"
 #include "../Utility.h"
 #include "../InputManager.h"
@@ -15,7 +15,7 @@ UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
 	m_layout{ layout }
 {}
 
-//»ó¼Ó¹ŞÀº °÷¿¡¼­¸¸ º¹»ç»ı¼ºÀÚ¸¦ È£ÃâÇÒ ¼ö ÀÖ´Ù.
+//ìƒì†ë°›ì€ ê³³ì—ì„œë§Œ ë³µì‚¬ìƒì„±ìë¥¼ í˜¸ì¶œí•  ìˆ˜ ìˆë‹¤.
 UIComponent::UIComponent(const UIComponent& other)
 {
 	m_name = other.m_name;
@@ -65,7 +65,7 @@ void UIComponent::UnlinkAndRefresh() noexcept
 unique_ptr<UIComponent> UIComponent::Clone() const 
 { 
 	auto clone = CreateClone();
-	clone->UnlinkAndRefresh(); //CloneÀÇ root´Â À§Ä¡°ªÀ» ÃÊ±âÈ­ ½ÃÄÑÁØ´Ù.
+	clone->UnlinkAndRefresh(); //Cloneì˜ rootëŠ” ìœ„ì¹˜ê°’ì„ ì´ˆê¸°í™” ì‹œì¼œì¤€ë‹¤.
 	return clone;
 }
 
@@ -89,13 +89,17 @@ UITransform& UIComponent::GetTransform(UIComponent* component)
 	return component->m_transform;
 }
 
+const XMINT2& UIComponent::GetUpdatedPosition(UIComponent* component, const XMINT2& parentPos) noexcept
+{
+	return GetTransform(component).GetUpdatedPosition(m_isDirty, m_layout, parentPos);
+}
+
 bool UIComponent::RecursiveUpdatePositionsManually(const DX::StepTimer& timer, const XMINT2& position) noexcept
 {
 	ReturnIfFalse(ImplementUpdatePosition(timer, position));
 
-	auto result = ranges::all_of(m_children, [this, &position](auto& child) {
-		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
-		return child->UpdatePositionsManually(curPosition);
+	bool result = ranges::all_of(m_children, [this, &timer, &position](auto& child) {
+		return child->RecursiveUpdatePositionsManually(timer, GetUpdatedPosition(child.get(), position));
 		});
 	m_isDirty = false;
 
@@ -104,7 +108,7 @@ bool UIComponent::RecursiveUpdatePositionsManually(const DX::StepTimer& timer, c
 
 bool UIComponent::UpdatePositionsManually(const XMINT2& position) noexcept
 {
-	DX::StepTimer dummyTimer; //ÀÓ½ÃÅ¸ÀÌ¸ÓÀÌ´Ù. ÀÌ Å¸ÀÌ¸Ó´Â »ç¿ëÇÏÁö ¾Ê´Â´Ù.
+	DX::StepTimer dummyTimer; //ì„ì‹œíƒ€ì´ë¨¸ì´ë‹¤. ì´ íƒ€ì´ë¨¸ëŠ” ì‚¬ìš©í•˜ì§€ ì•ŠëŠ”ë‹¤.
 	return RecursiveUpdatePositionsManually(dummyTimer, position);
 }
 
@@ -119,9 +123,8 @@ bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& posi
 		active = HasStateFlag(StateFlag::ActiveUpdate);
 	}
 
-	auto result = ranges::all_of(m_children, [this, &timer, &position, active](auto& child) {
-		const auto& curPosition = GetTransform(child.get()).GetPosition(m_isDirty, m_layout, position);
-		return child->RecursiveUpdate(timer, curPosition, active);
+	bool result = ranges::all_of(m_children, [this, &timer, &position, active](auto& child) {
+		return child->RecursiveUpdate(timer, GetUpdatedPosition(child.get(), position), active);
 		});
 	m_isDirty = false;
 
@@ -133,20 +136,11 @@ bool UIComponent::ProcessUpdate(const DX::StepTimer& timer) noexcept
 	return RecursiveUpdate(timer);
 }
 
-void UIComponent::ProcessRenderTexture(ITextureRender* render)
-{
-	//StateFlag::Renderµµ ÅØ½ºÃÄ¿¡ ±×¸®´Â ÀÌÀ¯´Â ÅøÀÌ ÅØ½ºÃÄ¿¡ ±×¸®±â ¶§¹®¿¡. RenderTexture·Î ¼³Á¤ÇÏ¸é °ÔÀÓ È­¸é¿¡¼­ ¾È³ª¿Â´Ù.
-	//ÅøÀÌ ÅØ½ºÃÄ·Î ·ÎµùÇÏ´Â ¹æ½ÄÀÌ ¾Æ´Ï°Ô µÈ´Ù¸é StateFlag::Render°¡ ¾ø¾îÁ®µµ µÇ°ÚÁö.
-	ForEachChildBFS(StateFlag::Render | StateFlag::RenderTexture, [render](UIComponent* component) {
-		component->ImplementRender(render);
-		});
-}
-
 void UIComponent::ProcessRender(ITextureRender* render)
 {
-	//9¹æÇâ ÀÌ¹ÌÁö´Â °°Àº ·¹º§ÀÎµ¥ 9¹æÇâ ÀÌ¹ÌÁö À§¿¡ ´Ù¸¥ ÀÌ¹ÌÁö¸¦ ¿Ã·ÈÀ» °æ¿ì BFS°¡ ¾Æ´Ï¸é ¹Ø¿¡ ÀÌ¹ÌÁö°¡ ¿Ã¶ó¿Â´Ù.
-	//°¡Àå ¹Ø¿¡ ·¹º§ÀÌ °¡Àå À§¿¡ ¿Ã¶ó¿À´Âµ¥ DFS(Depth First Search)ÀÌ¸é °¡Àå ¹Ø¿¡ ÀÖ´Â°Ô °¡Àå ³ªÁß¿¡ ±×·ÁÁöÁö ¾Ê°Ô µÈ´Ù.
-	ForEachChildBFS(StateFlag::Render, [render](UIComponent* component) {
+	//9ë°©í–¥ ì´ë¯¸ì§€ëŠ” ê°™ì€ ë ˆë²¨ì¸ë° 9ë°©í–¥ ì´ë¯¸ì§€ ìœ„ì— ë‹¤ë¥¸ ì´ë¯¸ì§€ë¥¼ ì˜¬ë ¸ì„ ê²½ìš° BFSê°€ ì•„ë‹ˆë©´ ë°‘ì— ì´ë¯¸ì§€ê°€ ì˜¬ë¼ì˜¨ë‹¤.
+	//ê°€ì¥ ë°‘ì— ë ˆë²¨ì´ ê°€ì¥ ìœ„ì— ì˜¬ë¼ì˜¤ëŠ”ë° DFS(Depth First Search)ì´ë©´ ê°€ì¥ ë°‘ì— ìˆëŠ”ê²Œ ê°€ì¥ ë‚˜ì¤‘ì— ê·¸ë ¤ì§€ì§€ ì•Šê²Œ ëœë‹¤.
+	ForEachChildBFS(StateFlag::Render | StateFlag::RenderTexture, [render](UIComponent* component) {
 		component->ImplementRender(render);
 		});
 }
@@ -156,11 +150,11 @@ void UIComponent::SetStateFlag(StateFlag::Type flag, bool enabled) noexcept
 	m_stateFlag = enabled ? (m_stateFlag | flag) : (m_stateFlag & ~flag);
 
 	if (!enabled) return;
-	if (flag == StateFlag::Render) SetStateFlag(StateFlag::RenderTexture, false); //·£´õ¸é ·£´õÅØ½ºÃÄ¸¦ ºñÈ°¼ºÈ­
-	else if (flag == StateFlag::RenderTexture) SetStateFlag(StateFlag::Render, false); //·£´õÅÃ½ºÃÄ¸é ·£´õ¸¦ ºñÈ°¼ºÈ­
+	if (flag == StateFlag::Render) SetStateFlag(StateFlag::RenderTexture, false); //ëœë”ë©´ ëœë”í…ìŠ¤ì³ë¥¼ ë¹„í™œì„±í™”
+	else if (flag == StateFlag::RenderTexture) SetStateFlag(StateFlag::Render, false); //ëœë”íƒìŠ¤ì³ë©´ ëœë”ë¥¼ ë¹„í™œì„±í™”
 }
 
-//Å©±â¸¦ ¹Ù²Ù¸é ÀÌ ÄÄÆ÷³ÍÆ®ÀÇ ÀÚ½ÄµéÀÇ À§Ä¡°ªµµ ¹Ù²ãÁØ´Ù.
+//í¬ê¸°ë¥¼ ë°”ê¾¸ë©´ ì´ ì»´í¬ë„ŒíŠ¸ì˜ ìì‹ë“¤ì˜ ìœ„ì¹˜ê°’ë„ ë°”ê¿”ì¤€ë‹¤.
 void UIComponent::ChangeSize(const XMUINT2& size) noexcept
 {
 	ranges::for_each(m_children, [this, &size](auto& child) {

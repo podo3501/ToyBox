@@ -1,7 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
-class Panel;
+class RenderTexture;
 namespace DX { class StepTimer; }
 
 class ListArea : public UIComponent
@@ -27,10 +27,10 @@ protected:
 private:
 	void ReloadDatas() noexcept;
 
-	UIComponent* m_bgImage;
-	UIComponent* m_renderTex;
 	UIComponent* m_prototypeContainer;
-	Panel* m_areaController;
+	UIComponent* m_bgImage;
+	RenderTexture* m_renderTex;
+	
 	vector<UIComponent*> m_containers;
 };
 

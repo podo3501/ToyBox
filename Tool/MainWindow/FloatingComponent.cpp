@@ -22,7 +22,7 @@ void FloatingComponent::Clear() noexcept
 	m_drawTextureSize = {};
 	m_draw = false;
 	m_currentAction.reset();
-	m_renderer->RemoveRenderComponent(m_component.get()); //이걸 왜 하지? 넣은 적이 있나?!?
+	//m_renderer->RemoveRenderComponent(m_component.get()); //이걸 왜 하지? 넣은 적이 있나?!?
 }
 
 bool FloatingComponent::IsComponent() const noexcept
@@ -32,12 +32,15 @@ bool FloatingComponent::IsComponent() const noexcept
 
 unique_ptr<UIComponent> FloatingComponent::GetComponent() noexcept
 {
-	return move(m_component);
+	auto[component, _] = UIEx(m_component).DetachComponent();
+	m_renderTex.reset();
+	m_component = nullptr;
+	return move(component);
 }
 
 void FloatingComponent::SetComponent(unique_ptr<UIComponent> component) noexcept
 {
-	m_component = move(component);
+	LoadComponentInternal(move(component), UIEx(component).GetTotalChildSize());
 }
 
 bool FloatingComponent::Excute()
@@ -118,11 +121,10 @@ void FloatingComponent::Render()
 bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size)
 {
 	ReturnIfNullptr(component);
-	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, false, component.get()));
-	ReturnIfFalse(m_renderer->LoadComponent(component.get()));
+	m_component = component.get();
+	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(component)));
 	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
 
-	m_component = move(component);
 	m_drawTextureSize = size;
 	m_draw = true;
 

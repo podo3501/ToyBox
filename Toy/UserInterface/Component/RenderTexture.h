@@ -13,11 +13,16 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::RenderTexture; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
+	virtual bool ImplementActiveUpdate() noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, bool renderTextureOnly, UIComponent* component);
+	bool Setup(const UILayout& layout, unique_ptr<UIComponent>&& component) noexcept;
 	bool ModifyTexture(const XMUINT2& size);
+
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
+	inline bool IsMouseInArea() const noexcept { return m_mouseInArea; }
+	inline void EnableChildMouseEvents(bool enable) noexcept { m_mouseEvents = enable; }
+	inline bool OnEnterArea() const noexcept { return m_entered; }
 
 protected:
 	RenderTexture(const RenderTexture& other);
@@ -29,6 +34,8 @@ protected:
 private:
 	void Release() noexcept;
 	void ReloadDatas() noexcept;
+	void CheckMouseInArea() noexcept;
+	void CheckEnterArea() noexcept;
 
 	UIComponent* m_component;
 	ITextureController* m_texController;
@@ -36,6 +43,11 @@ private:
 	size_t m_index{ 0 };
 	UINT64 m_gfxOffset{};
 	XMINT2 m_position{};
+
+	bool m_mouseEvents{ true };
+	bool m_mouseInArea{ false };
+	bool m_lastMouseInArea{ false };
+	bool m_entered{ false };
 };
 
-unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, bool renderTextureOnly, UIComponent* component);
+unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent>&& component);

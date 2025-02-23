@@ -12,7 +12,7 @@ public:
 	bool operator==(const UITransform& o) const noexcept;
 
 	void Clear() noexcept;
-	const XMINT2& GetPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept;
+	const XMINT2& GetUpdatedPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept;
 	void SetRelativePosition(const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	void AdjustPosition(const XMUINT2& size) noexcept;
 	void SerializeIO(JsonOperation& operation);

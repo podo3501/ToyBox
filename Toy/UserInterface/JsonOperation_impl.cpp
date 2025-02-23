@@ -20,6 +20,16 @@ void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
     m_write->GetCurrent().update(jsOp.GetWrite());
 }
 
+void JsonOperation::UpdateJson(UIComponent* data) noexcept
+{
+    JsonOperation jsOp{};
+    data->SerializeIO(jsOp);
+    //static_cast를 해서 json으로 할당하면 json내의 타입값이 바뀌면서 새로운 타입이 되어 이전 정보 (여기서는 position)값이 사라진다. 그래서 update를 해서 병합하는 것.
+    if (jsOp.GetWrite().empty())
+        return;
+    m_write->GetCurrent().update(jsOp.GetWrite());
+}
+
 using FactoryFunc = unique_ptr<UIComponent>(*)();   //constexpr을 쓰기 때문에 function(동적할당)을 쓸 수없다.
 constexpr FactoryFunc ComponentFactory[] = //enum의 값과 일치가 되어야 한다. 아니면 if로 해야 한다.
 {
@@ -41,6 +51,19 @@ unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typ
 
     comp->SerializeIO(*this);
     return comp;
+}
+
+//?!? Read를 만들고 void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data) 얘를 지우자
+void JsonOperation::Write(const string& key, UIComponent* data)
+{
+    if (data == nullptr)
+        return;
+
+    m_write->GotoKey(key);
+    const string& type = EnumToString<ComponentID>(data->GetTypeID());
+    Process("Type", const_cast<string&>(type));
+    UpdateJson(data);
+    m_write->GoBack();
 }
 
 void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data)

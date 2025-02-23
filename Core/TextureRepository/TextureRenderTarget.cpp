@@ -109,7 +109,7 @@ void TextureRenderTarget::Render(ID3D12GraphicsCommandList* commandList, ITextur
     XMMATRIX transform = XMMatrixTranslation(-static_cast<float>(m_position.x), -static_cast<float>(m_position.y), 0.0f);
 
     sprite->Begin(commandList, SpriteSortMode_Deferred, transform);
-    m_component->ProcessRenderTexture(renderer);
+    m_component->ProcessRender(renderer);
     sprite->End();
 
     TransitionResource(commandList, m_texResource.Get(),

@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "MainLoop.h"
 #include "../Include/IRenderer.h"
 #include "Utility.h"
@@ -81,7 +81,7 @@ void MainLoop::Tick()
     if (m_timer.GetFrameCount() == 0)
         return;
 
-    m_renderer->Draw(); //Scene(ComponentÀÇ ÁıÇÕ)À» ·»´õ¸µ
+    m_renderer->Draw(); //Scene(Componentì˜ ì§‘í•©)ì„ ë Œë”ë§
 }
 
 void MainLoop::OnResuming()

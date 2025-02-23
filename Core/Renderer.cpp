@@ -31,7 +31,12 @@ Renderer::Renderer(HWND hwnd, int width, int height, unique_ptr<IImgui>&& imgui)
 {
     //WICOnceInitialize();
 
-    m_deviceResources = make_unique<DX::DeviceResources>();
+    m_deviceResources = make_unique<DX::DeviceResources>(
+        DXGI_FORMAT_B8G8R8A8_UNORM,
+        DXGI_FORMAT_D32_FLOAT,
+        2,
+        D3D_FEATURE_LEVEL_11_0,
+        DX::DeviceResources::c_AllowTearing);
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
     //   Add DX::DeviceResources::c_AllowTearing to opt-in to variable rate displays.
     //   Add DX::DeviceResources::c_EnableHDR for HDR10 display.
