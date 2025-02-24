@@ -3,6 +3,9 @@
 #include "../JsonOperation.h"
 #include "RenderTexture.h"
 #include "../../InputManager.h"
+#include "../../Utility.h"
+#include "Container.h"
+#include "../../StepTimer.h"
 
 ListArea::~ListArea() = default;
 ListArea::ListArea() noexcept :
@@ -24,13 +27,25 @@ void ListArea::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
 	m_prototypeContainer = componentList[0];
-	m_bgImage = componentList[1];
-	m_renderTex = ComponentCast<RenderTexture*>(componentList[2]);
+	m_renderTex = ComponentCast<RenderTexture*>(componentList[1]);
+	m_bgImage = m_renderTex->GetRenderedComponent();
 }
 
 unique_ptr<UIComponent> ListArea::CreateClone() const
 {
 	return unique_ptr<ListArea>(new ListArea(*this));
+}
+
+bool ListArea::operator==(const UIComponent& rhs) const noexcept
+{
+	ReturnIfFalse(UIComponent::operator==(rhs));
+
+	const ListArea* o = static_cast<const ListArea*>(&rhs);
+	ReturnIfFalse(EqualComponent(m_prototypeContainer, o->m_prototypeContainer));
+	ReturnIfFalse(EqualComponent(m_bgImage, o->m_bgImage));
+	ReturnIfFalse(EqualComponent(m_renderTex, o->m_renderTex));
+
+	return true;
 }
 
 void ListArea::ChangeSize(const XMUINT2& size) noexcept
@@ -67,7 +82,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent>&& bgImage, 
 
 UIComponent* ListArea::PrepareContainer()
 {
-	static int32_t y = 0;
+	static int32_t y = 0; //임시로 작업한거 이거 수정해야함. ?!?
 	auto cloneContainer = m_prototypeContainer->Clone();
 	auto cloneContainerPtr = cloneContainer.get();
 	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
@@ -77,63 +92,47 @@ UIComponent* ListArea::PrepareContainer()
 	y += cloneContainerPtr->GetSize().y;
 
 	m_containers.emplace_back(cloneContainerPtr);
+	if(int height = m_renderTex->GetSize().y - y; height < 0)
+		m_bounded.SetBounds(height, 0, 15);
 
 	return cloneContainerPtr;
 }
 
-class WheelBoundedValue
+void ListArea::ScrollContainers(const DX::StepTimer& timer) noexcept
 {
-public:
-	WheelBoundedValue() = delete;
-	WheelBoundedValue(int min, int max, int unit) : 
-		m_min{ min }, m_max{ max }, m_unit{ unit }
-	{}
-
-	int GetValue() noexcept
-	{
-		return ValidateRange(GetMouseWheelValue() * m_unit);
-	}
-
-	void ResetWheelValue() const noexcept
-	{
-		ResetMouseWheelValue();
-	}
-
-private:
-	int ValidateRange(int value) noexcept
-	{
-		m_value += value;
-		m_value = clamp(m_value, m_min, m_max);
-		int gap = m_value - m_lastValue;
-		m_lastValue = m_value;
-
-		return gap;
-	}
-	
-	int m_min{ 0 };
-	int m_max{ 0 };
-	int m_unit{ 0 };
-	int m_value{ 0 };
-	int m_lastValue{ 0 };
-};
-
-bool ListArea::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2&) noexcept
-{
-	if (!m_renderTex->IsMouseInArea()) return true;
-
-	static WheelBoundedValue wheelBoundedValue(-50, 0, 8);
 	if (m_renderTex->OnEnterArea())
-		wheelBoundedValue.ResetWheelValue();
-		
-	if(auto value = wheelBoundedValue.GetValue(); value)
+		ResetMouseWheelValue();
+
+	int wheelValue{ 0 };
+	if (m_renderTex->IsMouseInArea())
+		wheelValue = GetMouseWheelValue();
+
+	auto value = m_bounded.GetValue(wheelValue, timer);
+	if (!value) return;
+	
+	for (auto container : m_containers)
 	{
-		for (auto container : m_containers)
-		{
-			auto pos = container->GetRelativePosition();
-			pos->y += value;
-			container->SetRelativePosition(*pos);
-		}
+		auto pos = container->GetRelativePosition();
+		pos->y += value;
+		container->SetRelativePosition(*pos);
 	}
+}
+
+void ListArea::CheckMouseInteraction() noexcept
+{
+	if (!m_renderTex->OnLeaveArea()) return;
+
+	for (auto& container : m_containers)
+	{
+		if (Container* cur = ComponentCast<Container*>(container); cur)
+			cur->ClearInteraction();
+	}
+}
+
+bool ListArea::ImplementUpdatePosition(const DX::StepTimer& timer, const XMINT2&) noexcept
+{
+	CheckMouseInteraction();
+	ScrollContainers(timer);
 
 	return true;
 }

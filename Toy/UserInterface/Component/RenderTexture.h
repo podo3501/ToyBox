@@ -20,9 +20,11 @@ public:
 	bool ModifyTexture(const XMUINT2& size);
 
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
+	inline UIComponent* GetRenderedComponent() const noexcept { return m_component; }
 	inline bool IsMouseInArea() const noexcept { return m_mouseInArea; }
 	inline void EnableChildMouseEvents(bool enable) noexcept { m_mouseEvents = enable; }
 	inline bool OnEnterArea() const noexcept { return m_entered; }
+	inline bool OnLeaveArea() const noexcept { return m_left; }
 
 protected:
 	RenderTexture(const RenderTexture& other);
@@ -35,7 +37,7 @@ private:
 	void Release() noexcept;
 	void ReloadDatas() noexcept;
 	void CheckMouseInArea() noexcept;
-	void CheckEnterArea() noexcept;
+	void CheckEnterLeave() noexcept;
 
 	UIComponent* m_component;
 	ITextureController* m_texController;
@@ -48,6 +50,7 @@ private:
 	bool m_mouseInArea{ false };
 	bool m_lastMouseInArea{ false };
 	bool m_entered{ false };
+	bool m_left{ false };
 };
 
 unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent>&& component);

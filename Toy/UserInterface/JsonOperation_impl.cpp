@@ -9,6 +9,7 @@
 #include "Component/Dialog.h"
 #include "Component/ListArea.h"
 #include "Component/Container.h"
+#include "Component/RenderTexture.h"
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {
@@ -42,6 +43,7 @@ constexpr FactoryFunc ComponentFactory[] = //enum의 값과 일치가 되어야 한다. 아�
     []() -> unique_ptr<UIComponent> { return make_unique<Dialog>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<ListArea>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<Container>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<RenderTexture>(); },
 };
 
 unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typeName)

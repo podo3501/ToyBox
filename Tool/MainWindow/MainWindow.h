@@ -34,8 +34,13 @@ private:
     void CheckActiveUpdate() noexcept;
     void CheckChangeWindow(const ImGuiWindow* window);
     void IgnoreMouseClick();
+    inline ImVec2 GetPanelSize() const noexcept;
+
     void SetupWindowAppearing() noexcept;
-    void ShowStatusBar();
+    void SetupImGuiWindow();
+    void RenderContent();
+    void ShowStatusBar() const;
+    void HandleMouseEvents();
 
     IRenderer* m_renderer;
     string m_name{};
@@ -46,7 +51,6 @@ private:
 
     bool m_isOpen{ false };
     bool m_isActiveUpdate{ false };
-    ImVec2 m_size{ 800.f, 600.f };
     float m_fps{ 0.f };
 
     static int m_mainWindowIndex;

@@ -29,9 +29,9 @@ public:
 	bool IsActive() const noexcept { return m_isActive; }
 	const ImVec2& GetPosition() const noexcept { return m_position; }
 	bool ComponentToFloating(unique_ptr<UIComponent>&& component);
-	void Clear() noexcept;
 
 private:
+	void Clear() noexcept;
 	bool LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size);
 	bool LoadComponent(unique_ptr<UIComponent>&& component);
 	void DrawMakeComponent();
@@ -41,8 +41,6 @@ private:
 	string m_name;
 	UIComponent* m_component;
 	optional<MakeComponent> m_currentAction;
-	XMUINT2 m_drawTextureSize{}; //사라져야 할 변수
-	bool m_draw{ false };
 	bool m_isActive{ false };
 	ImVec2 m_position{};
 };

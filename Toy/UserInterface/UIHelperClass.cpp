@@ -1,0 +1,54 @@
+#include "pch.h"
+#include "UIHelperClass.h"
+#include "../StepTimer.h"
+
+enum class MovementType
+{
+	None,
+	Lerp,
+};
+
+static double GetMovementController(MovementType type, double current, double target, double deltaTime) noexcept
+{
+	switch (type)
+	{
+	case MovementType::Lerp: return lerp(current, target, deltaTime);
+	}
+
+	return target;
+}
+
+BoundedValue::BoundedValue() noexcept :
+	m_min{ 0 }, m_max{ 0 }, m_unit{ 0 }
+{}
+
+BoundedValue::BoundedValue(int min, int max, int unit) noexcept :
+	m_min{ min }, m_max{ max }, m_unit{ unit }
+{}
+
+void BoundedValue::SetBounds(int min, int max, int unit) noexcept
+{
+	m_min = min;
+	m_max = max;
+	m_unit = unit;
+}
+
+int BoundedValue::GetValue(int wheelValue, const DX::StepTimer& timer) noexcept
+{
+	return ValidateRange(wheelValue * m_unit, timer.GetElapsedSeconds());
+}
+
+int BoundedValue::ValidateRange(int value, double deltaTime) noexcept
+{
+	m_target += value;
+	m_target = clamp(m_target, m_min, m_max);
+
+	m_current = GetMovementController(MovementType::Lerp, m_current, m_target, 30.f * deltaTime);
+	m_current = clamp(m_current, static_cast<double>(m_min), static_cast<double>(m_max));
+
+	int current = static_cast<int>(m_current);
+	int gap = current - m_previous;
+	m_previous = current;
+	return gap;
+}
+

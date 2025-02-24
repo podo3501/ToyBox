@@ -63,7 +63,7 @@ namespace ComponentTest
 		EXPECT_TRUE(VerifyClone(CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop }, L"L< Hangle >테스트 입니다!< / Hangle>")));
 		EXPECT_TRUE(VerifyClone(CreateSampleButton1({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(CreateSampleButton3({ { 220, 190 }, Origin::LeftTop })));
-		//EXPECT_TRUE(VerifyClone(CreateSampleListArea1({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(CreateSampleListArea1({ { 220, 190 }, Origin::LeftTop })));
 	}
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)

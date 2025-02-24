@@ -17,9 +17,9 @@ TextArea::TextArea() :
 {}
 
 TextArea::TextArea(const TextArea& other) :
-	UIComponent{ other }
+	UIComponent{ other },
+	m_texController{ other.m_texController }
 {
-	m_texController = other.m_texController;
 	m_posByResolution = other.m_posByResolution;
 	m_text = other.m_text;
 	m_fontFileList = other.m_fontFileList;

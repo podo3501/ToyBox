@@ -234,6 +234,7 @@
     <ClInclude Include="UserInterface\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation.hpp" />
     <ClInclude Include="UserInterface\Property.h" />
+    <ClInclude Include="UserInterface\UIHelperClass.h" />
     <ClInclude Include="UserInterface\UIHierarchy.h" />
     <ClInclude Include="UserInterface\UITransform.h" />
     <ClInclude Include="UserInterface\UIComponent.h" />
@@ -268,6 +269,7 @@
     <ClCompile Include="UserInterface\EnumUtility.cpp" />
     <ClCompile Include="UserInterface\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation.cpp" />
+    <ClCompile Include="UserInterface\UIHelperClass.cpp" />
     <ClCompile Include="UserInterface\UIHierarchy.cpp" />
     <ClCompile Include="UserInterface\UITransform.cpp" />
     <ClCompile Include="UserInterface\UIComponent.cpp" />

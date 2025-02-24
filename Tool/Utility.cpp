@@ -84,7 +84,6 @@ bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, Float
 		floater->SetComponent(move(failed));
 		return false;
 	}
-	
-	floater->Clear(); //마지막으로 클리어 해 줘서 완전히 떼 낸다.
+
 	return true;
 }

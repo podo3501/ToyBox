@@ -140,18 +140,9 @@ void UIComponent::ProcessRender(ITextureRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
-	ForEachChildBFS(StateFlag::Render | StateFlag::RenderTexture, [render](UIComponent* component) {
+	ForEachChildBFS(StateFlag::Render, [render](UIComponent* component) {
 		component->ImplementRender(render);
 		});
-}
-
-void UIComponent::SetStateFlag(StateFlag::Type flag, bool enabled) noexcept
-{
-	m_stateFlag = enabled ? (m_stateFlag | flag) : (m_stateFlag & ~flag);
-
-	if (!enabled) return;
-	if (flag == StateFlag::Render) SetStateFlag(StateFlag::RenderTexture, false); //랜더면 랜더텍스쳐를 비활성화
-	else if (flag == StateFlag::RenderTexture) SetStateFlag(StateFlag::Render, false); //랜더택스쳐면 랜더를 비활성화
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.

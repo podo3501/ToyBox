@@ -82,10 +82,6 @@ bool TextureRenderTarget::CreateTextureResource(DXGI_FORMAT texFormat, const XMU
 
 void TextureRenderTarget::Render(ID3D12GraphicsCommandList* commandList, ITextureRender* renderer, SpriteBatch* sprite)
 {
-    //static int idx = 0;
-    //if (idx > 1000) return;
-    //idx++;
-
     if (m_component == nullptr)
         return;
 

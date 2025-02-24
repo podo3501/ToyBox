@@ -61,7 +61,7 @@ constexpr auto EnumToStringMap<Origin>() -> array<const char*, EnumSize<Origin>(
 
 ///////////////////////////////////////////////////////////////
 
-enum class ButtonState : int
+enum class ButtonState : int //?!? 버튼 스테이트 말고 다른 이름으로 바꾸자 이건 container에서 사용하기 때문이다.
 {
 	Normal,
 	Hover,

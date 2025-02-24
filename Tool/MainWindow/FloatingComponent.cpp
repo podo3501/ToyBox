@@ -9,7 +9,8 @@
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
-	m_name{ "PopupMenu_" + mainWndName }
+	m_name{ "PopupMenu_" + mainWndName },
+	m_component{ nullptr }
 {}
 
 FloatingComponent::~FloatingComponent()
@@ -19,10 +20,9 @@ FloatingComponent::~FloatingComponent()
 
 void FloatingComponent::Clear() noexcept
 {
-	m_drawTextureSize = {};
-	m_draw = false;
+	m_component = nullptr;
+	m_renderTex.reset();
 	m_currentAction.reset();
-	//m_renderer->RemoveRenderComponent(m_component.get()); //이걸 왜 하지? 넣은 적이 있나?!?
 }
 
 bool FloatingComponent::IsComponent() const noexcept
@@ -33,8 +33,7 @@ bool FloatingComponent::IsComponent() const noexcept
 unique_ptr<UIComponent> FloatingComponent::GetComponent() noexcept
 {
 	auto[component, _] = UIEx(m_component).DetachComponent();
-	m_renderTex.reset();
-	m_component = nullptr;
+	Clear();
 	return move(component);
 }
 
@@ -73,10 +72,11 @@ void FloatingComponent::DrawMakeComponent()
 	ImVec4 tintColor = ImVec4(1.0f, 1.0f, 1.0f, 0.7f);
 	ImU32 colorU32 = ImGui::GetColorU32(tintColor);
 
+	const auto& texSize = m_renderTex->GetSize();
 	drawList->AddImage(
 		m_renderTex->GetGraphicMemoryOffset(),
 		{ m_position.x, m_position.y },                      // 시작 좌표
-		{ m_position.x + m_drawTextureSize.x, m_position.y + m_drawTextureSize.y },    // 종료 좌표
+		{ m_position.x + texSize.x, m_position.y + texSize.y },    // 종료 좌표
 		ImVec2(0, 0),
 		ImVec2(1, 1),
 		colorU32
@@ -91,7 +91,7 @@ void FloatingComponent::DrawMakeComponent()
 
 void FloatingComponent::Render()
 {
-	if (m_draw)
+	if (IsComponent())
 	{
 		DrawMakeComponent();
 		return;
@@ -124,9 +124,6 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 	m_component = component.get();
 	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(component)));
 	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
-
-	m_drawTextureSize = size;
-	m_draw = true;
 
 	return true;
 }

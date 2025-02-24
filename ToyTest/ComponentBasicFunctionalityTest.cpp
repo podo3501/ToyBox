@@ -87,17 +87,15 @@ namespace ComponentTest
 
 	TEST_F(BasicFunctionalityTest, RenderTexture)
 	{
-		//auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
-		//auto buttonPtr = button.get();
-		//auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, true, button.get()); //이렇게 설정하는 순간 button은 랜더링은 되지 않고 업데이트만 된다.
-		//UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
-		//UIEx(m_panel).AttachComponent(move(button), { 200, 200 });
-		//EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
+		auto buttonPtr = button.get();
+		auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(button));
+		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		//TestUpdate(76, 76);	//hover
-		//CallMockRender([](size_t index, const RECT& dest, const RECT* source) {
-		//	EXPECT_TRUE(IsTrue(dest, { 75, 75, 125, 125 }, *source, { 0, 0, 50, 50 }));
-		//	}, 1);
+		CallMockRender([](size_t index, const RECT& dest, const RECT* source) {
+			EXPECT_TRUE(IsTrue(dest, { 75, 75, 125, 125 }, *source, { 0, 0, 50, 50 }));
+			}, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
 	}
 
 	////////////////////////////////////////////////////////
@@ -280,6 +278,8 @@ namespace ComponentTest
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), listAreaPtr));
+
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	////////////////////////////////////////////////////////

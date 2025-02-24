@@ -10,15 +10,16 @@ RenderTexture::RenderTexture() :
 	m_component{ nullptr },
 	m_texController{ nullptr }
 {
-	SetStateFlag(StateFlag::RenderTexture, true);
+	SetStateFlag(StateFlag::Render | StateFlag::RenderTexture, true);
 }
 
 RenderTexture::RenderTexture(const RenderTexture& o) :
 	UIComponent{ o },
 	m_component{ nullptr },
-	m_texController{ nullptr }
+	m_texController{ nullptr },
+	m_index{ o.m_index },
+	m_mouseEvents{ o.m_mouseEvents }
 {
-	m_index = o.m_index;
 	ReloadDatas();
 }
 
@@ -32,11 +33,8 @@ void RenderTexture::Release() noexcept
 
 void RenderTexture::ReloadDatas() noexcept
 {
-	//같은 라인에서 RenderTexture 옵션이 있는 애가 있을 것이다.
-	//UIComponent* component = this->GetSiblingComponent(StateFlag::RenderTexture);
-	//if (!component) return;
-	
-	//m_component = component;
+	vector<UIComponent*> componentList = GetChildComponents();
+	m_component = componentList[0];
 }
 
 unique_ptr<UIComponent> RenderTexture::CreateClone() const
@@ -49,10 +47,10 @@ bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const RenderTexture* o = static_cast<const RenderTexture*>(&rhs);
 
-	auto result = tie(m_index) == tie(o->m_index);
-	assert(result);
+	ReturnIfFalse(tie(m_mouseEvents) == tie(o->m_mouseEvents));
+	ReturnIfFalse(EqualComponent(m_component, o->m_component));
 
-	return result;
+	return true;
 }
 
 bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
@@ -77,7 +75,10 @@ bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent>&& comp
 
 bool RenderTexture::ModifyTexture(const XMUINT2& size)
 {
-	return m_texController->ModifyRenderTexture(m_index, size);
+	ReturnIfFalse(m_texController->ModifyRenderTexture(m_index, size));
+	SetSize(size);
+
+	return true;
 }
 
 void RenderTexture::CheckMouseInArea() noexcept
@@ -88,16 +89,17 @@ void RenderTexture::CheckMouseInArea() noexcept
 	m_mouseInArea = rect.Contains(mousePos.x, mousePos.y);
 }
 
-void RenderTexture::CheckEnterArea() noexcept
+void RenderTexture::CheckEnterLeave() noexcept
 {
 	m_entered = !m_lastMouseInArea && m_mouseInArea;
+	m_left = m_lastMouseInArea && !m_mouseInArea;
 	m_lastMouseInArea = m_mouseInArea;
 }
 
 bool RenderTexture::ImplementActiveUpdate() noexcept
 {
 	CheckMouseInArea();
-	CheckEnterArea();
+	CheckEnterLeave();	
 	SetStateFlag(StateFlag::ActiveUpdate, m_mouseInArea && m_mouseEvents);
 
 	return true;
@@ -125,6 +127,7 @@ void RenderTexture::ImplementRender(ITextureRender* render) const
 void RenderTexture::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
+	operation.Process("MouseEvents", m_mouseEvents);
 
 	if (operation.IsWrite()) return;
 	ReloadDatas();

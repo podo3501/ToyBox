@@ -26,6 +26,7 @@ protected:
 	virtual void ImplementRender(ITextureRender*) const {};
 
 	//상속되어지는 함수는 구현한다.
+	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	bool UpdatePositionsManually(const XMINT2& position = {}) noexcept;
 	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
@@ -72,7 +73,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }
-	void SetStateFlag(StateFlag::Type flag, bool enabled) noexcept;
+	inline void SetStateFlag(StateFlag::Type flag, bool enabled) noexcept { m_stateFlag = enabled ? (m_stateFlag | flag) : (m_stateFlag & ~flag); }
 	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return (m_stateFlag & flag) != 0; }
 	bool RenameRegion(const string& region) noexcept;
 	inline const string& GetRegion() const noexcept { return m_region; }
@@ -88,7 +89,6 @@ private:
 	const XMINT2& GetUpdatedPosition(UIComponent* component, const XMINT2& parentPos) noexcept;
 	bool RecursiveUpdatePositionsManually(const DX::StepTimer& timer, const XMINT2& position) noexcept;
 	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}, bool active = true) noexcept;
-	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 	void MarkDirty() noexcept;

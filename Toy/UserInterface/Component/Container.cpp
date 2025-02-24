@@ -42,14 +42,11 @@ bool Container::operator==(const UIComponent& o) const noexcept
 		});
 }
 
-//bool Container::LoadResources(ITextureLoad* load)
-//{
-//	ReturnIfFalse(ranges::all_of(m_images | views::values, [this, load](const auto& image) {
-//		return image->LoadResources(load);
-//		}));
-//
-//	return true;
-//}
+void Container::ClearInteraction() noexcept
+{ 
+	if (m_state && m_state == ButtonState::Hover)
+		SetState(ButtonState::Normal);
+}
 
 void Container::ChangeSize(const XMUINT2& size) noexcept
 {

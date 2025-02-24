@@ -25,18 +25,23 @@ MainWindow::MainWindow(IRenderer* renderer) :
 	m_renderer->AddImguiComponent(this);
 }
 
+ImVec2 MainWindow::GetPanelSize() const noexcept
+{
+	return XMUINT2ToImVec2(m_panel->GetSize());
+}
+
 bool MainWindow::SetupProperty(unique_ptr<Panel>&& panel)
 {
-	auto panelPtr = panel.get();
-	const auto& size = panelPtr->GetSize();
-	m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(panel));
-	m_controller = make_unique<ComponentController>(m_renderer, panelPtr, m_name);
 	//AddRenderComponent가 없는것은 main 화면에서 보여주는게 아니라 TextureRendering해서 보여주는거기 때문에 Render에 연결시키지 않는다.
-	panelPtr->RenameRegion("MainRegionEntry");
+	m_panel = panel.get();
+	m_panel->RenameRegion("MainRegionEntry");
+	m_controller = make_unique<ComponentController>(m_renderer, m_panel, m_name);
 
+	const auto& size = m_panel->GetSize();
+	m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(panel));
 	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
+
 	m_renderTex->EnableChildMouseEvents(m_isActiveUpdate);
-	m_size = XMUINT2ToImVec2(size);
 	m_isOpen = true;
 
 	return true;
@@ -45,8 +50,6 @@ bool MainWindow::SetupProperty(unique_ptr<Panel>&& panel)
 bool MainWindow::CreateScene(const XMUINT2& size)
 {
 	auto panel = make_unique<Panel>("Main", UILayout(size, Origin::LeftTop));
-	m_panel = panel.get();
-
 	return SetupProperty(move(panel));
 }
 
@@ -55,7 +58,6 @@ bool MainWindow::CreateScene(const wstring& filename)
 	unique_ptr<Panel> panel;
 	ReturnIfFalse(JsonFile::ReadComponent(filename, panel));
 	ReturnIfFalse(m_renderer->LoadComponent(panel.get()));
-	m_panel = panel.get();
 
 	return SetupProperty(move(panel));
 }
@@ -77,8 +79,9 @@ wstring MainWindow::GetSaveFilename() const noexcept
 
 void MainWindow::ChangeWindowSize(const ImVec2& size)
 {
-	m_renderTex->ModifyTexture(ImVec2ToXMUINT2(size));
-	m_size = size;
+	const XMUINT2& uint2Size = ImVec2ToXMUINT2(size);
+	m_renderTex->ModifyTexture(uint2Size);
+	m_panel->ChangeSize(uint2Size);
 }
 
 void MainWindow::CheckActiveUpdate() noexcept
@@ -108,7 +111,6 @@ void MainWindow::CheckChangeWindow(const ImGuiWindow* window)
 
 void MainWindow::Update(const DX::StepTimer& timer)
 {
-	//if (!IsWindowFocus(m_window)) return;
 	if (!m_window) return;
 	SetMouseStartOffset(m_window);
 	CheckChangeWindow(m_window); //창이 변했을때 RenderTexture를 다시 만들어준다.
@@ -117,7 +119,6 @@ void MainWindow::Update(const DX::StepTimer& timer)
 		
 	m_controller->Update();
 	m_renderTex->ProcessUpdate(timer);
-	//m_panel->ProcessUpdate(timer);
 
 	if (float elapsedTime = static_cast<float>(timer.GetElapsedSeconds()); elapsedTime)
 		m_fps = 1.0f / elapsedTime;
@@ -126,10 +127,23 @@ void MainWindow::Update(const DX::StepTimer& timer)
 void MainWindow::IgnoreMouseClick() 
 {
 	const ImVec2& rectMin = GetWindowStartPosition(m_window);
-	const ImVec2& rectMax = rectMin + m_size;
+	const ImVec2& rectMax = rectMin + GetPanelSize();
 	if (!ImGui::IsMouseHoveringRect(rectMin, rectMax)) return;
 	
 	ImGui::GetIO().MouseDown[0] = false;
+}
+
+void MainWindow::Render(ImGuiIO* io)
+{
+	if (!m_isOpen)
+		return;
+
+	SetupImGuiWindow();
+	SetupWindowAppearing();
+	HandleMouseEvents();
+	RenderContent();
+
+	ImGui::End();
 }
 
 void MainWindow::SetupWindowAppearing() noexcept
@@ -140,7 +154,16 @@ void MainWindow::SetupWindowAppearing() noexcept
 	m_controller->SetMainWindow(m_window);
 }
 
-void MainWindow::ShowStatusBar() //상태 표시줄(임시)
+void MainWindow::HandleMouseEvents()
+{
+	if (m_window && IsWindowFocus(m_window))
+	{
+		IgnoreMouseClick();
+		Tool::MouseCursor::Render();
+	}
+}
+
+void MainWindow::ShowStatusBar() const//상태 표시줄(임시)
 {
 	if (m_isActiveUpdate)
 	{
@@ -156,30 +179,19 @@ void MainWindow::ShowStatusBar() //상태 표시줄(임시)
 	}
 }
 
-void MainWindow::Render(ImGuiIO* io)
+void MainWindow::SetupImGuiWindow()
 {
-	if (!m_isOpen)
-		return;
-
+	const auto& panelSize = GetPanelSize();
+	auto windowSize = ImVec2(panelSize.x, panelSize.y + GetFrameHeight());
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::SetNextWindowSize({ m_size.x, m_size.y + GetFrameHeight() });
+	ImGui::SetNextWindowSize(windowSize);
 	ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_None);
-	//ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
+	ImGui::PopStyleVar();
+}
 
-	SetupWindowAppearing();
-
-	ImGui::Image(m_renderTex->GetGraphicMemoryOffset(), m_size);
-
-	if (m_window && IsWindowFocus(m_window))
-	{
-		IgnoreMouseClick();
-		Tool::MouseCursor::Render();
-	}
-	
+void MainWindow::RenderContent()
+{
+	ImGui::Image(m_renderTex->GetGraphicMemoryOffset(), GetPanelSize());
 	m_controller->Render();
-
 	ShowStatusBar();
-
-	ImGui::End();
 }
