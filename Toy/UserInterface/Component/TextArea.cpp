@@ -11,7 +11,15 @@ using ordered_json = nlohmann::ordered_json;
 
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
-TextArea::~TextArea() = default;
+TextArea::~TextArea()
+{
+	if (!m_texController) return;
+
+	for (const auto& font : m_font)
+		m_texController->ReleaseTexture(font.second);
+	m_texController = nullptr;
+}
+
 TextArea::TextArea() :
 	m_texController{ nullptr }
 {}

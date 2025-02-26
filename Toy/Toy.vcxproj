@@ -228,6 +228,7 @@
     <ClInclude Include="UserInterface\Component\ListArea.h" />
     <ClInclude Include="UserInterface\Component\Panel.h" />
     <ClInclude Include="UserInterface\Component\SampleComponent.h" />
+    <ClInclude Include="UserInterface\Component\ScrollBar.h" />
     <ClInclude Include="UserInterface\Component\TextArea.h" />
     <ClInclude Include="UserInterface\EnumUtility.h" />
     <ClInclude Include="UserInterface\JsonHelper.h" />
@@ -265,6 +266,7 @@
     <ClCompile Include="UserInterface\Component\ListArea.cpp" />
     <ClCompile Include="UserInterface\Component\Panel.cpp" />
     <ClCompile Include="UserInterface\Component\SampleComponent.cpp" />
+    <ClCompile Include="UserInterface\Component\ScrollBar.cpp" />
     <ClCompile Include="UserInterface\Component\TextArea.cpp" />
     <ClCompile Include="UserInterface\EnumUtility.cpp" />
     <ClCompile Include="UserInterface\JsonHelper.cpp" />

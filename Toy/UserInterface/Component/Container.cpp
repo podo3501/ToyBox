@@ -4,7 +4,7 @@
 #include "../JsonOperation.h"
 #include "../../Utility.h"
 
-using enum ButtonState;
+using enum InteractState;
 
 Container::~Container() = default;
 Container::Container() noexcept :
@@ -44,8 +44,8 @@ bool Container::operator==(const UIComponent& o) const noexcept
 
 void Container::ClearInteraction() noexcept
 { 
-	if (m_state && m_state == ButtonState::Hover)
-		SetState(ButtonState::Normal);
+	if (m_state && m_state == InteractState::Hover)
+		SetState(InteractState::Normal);
 }
 
 void Container::ChangeSize(const XMUINT2& size) noexcept
@@ -55,9 +55,9 @@ void Container::ChangeSize(const XMUINT2& size) noexcept
 	UIComponent::ChangeSize(size);
 }
 
-void Container::AttachComponent(ButtonState btnState, unique_ptr<UIComponent>&& component) noexcept
+void Container::AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept
 {
-	m_images.emplace(btnState, component.get());
+	m_images.emplace(state, component.get());
 	UIEx(this).AttachComponent(move(component), {});
 }
 
@@ -66,7 +66,7 @@ inline static void SetActiveStateFlag(bool condition, UIComponent* component) no
 	component->SetStateFlag(StateFlag::Active, condition);
 }
 
-bool Container::Setup(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList) noexcept
+bool Container::Setup(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>>&& imgGridList) noexcept
 {
 	SetLayout(layout);
 
@@ -79,7 +79,7 @@ bool Container::Setup(const UILayout& layout, map<ButtonState, unique_ptr<UIComp
 	return true;
 }
 
-void Container::SetState(ButtonState state) noexcept
+void Container::SetState(InteractState state) noexcept
 {
 	if (m_state == state) return;
 
@@ -92,7 +92,7 @@ void Container::SetState(ButtonState state) noexcept
 bool Container::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& absolutePos) noexcept
 { 
 	if (IsDirty())
-		m_position = GetPositionByLayout(absolutePos); //GetPositionByLayout 이걸 안 쓰면 Origin 안될텐데 기존 코드가 이래서... 나중에 확인 ?!?
+		m_position = GetPositionByLayout(absolutePos);
 
 	return true;
 }
@@ -128,7 +128,7 @@ void Container::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList)
+unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>>&& imgGridList)
 {
 	if (imgGridList.size() != 3) return nullptr;
 

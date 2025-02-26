@@ -133,6 +133,9 @@
     <ClInclude Include="UserInterface\UIHelperClass.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Component\ScrollBar.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -218,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UIHelperClass.cpp">
       <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\ScrollBar.cpp">
+      <Filter>UserInterface\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -42,7 +42,7 @@ private:
 	UIComponent* m_component;
 	ITextureController* m_texController;
 
-	size_t m_index{ 0 };
+	optional<size_t> m_index;
 	UINT64 m_gfxOffset{};
 	XMINT2 m_position{};
 

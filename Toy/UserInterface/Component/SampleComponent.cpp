@@ -9,6 +9,7 @@
 #include "TextArea.h"
 #include "Container.h"
 #include "ListArea.h"
+#include "ScrollBar.h"
 #include "../UIUtility.h"
 #include "../../Utility.h"
 
@@ -55,11 +56,11 @@ static ImageSource CreateImageSource(const wstring& texturePath, const vector<Re
 
 template <typename ImageGridType>
 static unique_ptr<UIComponent> CreateSampleButton(const UILayout& layout,
-	const map<ButtonState, vector<Rectangle>>& sources, const wstring& texturePath)
+	const map<InteractState, vector<Rectangle>>& sources, const wstring& texturePath)
 {
 	UILayout gridLayout(layout.GetSize(), Origin::LeftTop);
 
-	map<ButtonState, unique_ptr<UIComponent>> imageGridList;
+	map<InteractState, unique_ptr<UIComponent>> imageGridList;
 	for (const auto& rects : sources)
 	{
 		ImageSource imgSrc = CreateImageSource(texturePath, rects.second);
@@ -71,29 +72,29 @@ static unique_ptr<UIComponent> CreateSampleButton(const UILayout& layout,
 
 unique_ptr<UIComponent> CreateSampleButton1(const UILayout& layout)
 {
-	map<ButtonState, vector<Rectangle>> sources{
-		{ ButtonState::Normal, { {10, 138, 32, 32} } },
-		{ ButtonState::Hover, { {46, 138, 32, 32} } },
-		{ ButtonState::Pressed, { {82, 138, 32, 32} } } };
+	map<InteractState, vector<Rectangle>> sources{
+		{ InteractState::Normal, { {10, 138, 32, 32} } },
+		{ InteractState::Hover, { {46, 138, 32, 32} } },
+		{ InteractState::Pressed, { {82, 138, 32, 32} } } };
 	return CreateSampleButton<ImageGrid1>(layout, sources, L"UI/SampleTexture/Sample_0.png");
 }
 
 unique_ptr<UIComponent> CreateSampleButton3(const UILayout& layout)
 {
-	map<ButtonState, vector<Rectangle>> sources{
-		{ ButtonState::Normal, { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } },
-		{ ButtonState::Hover, { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } },
-		{ ButtonState::Pressed, { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } };
+	map<InteractState, vector<Rectangle>> sources{
+		{ InteractState::Normal, { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } },
+		{ InteractState::Hover, { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } },
+		{ InteractState::Pressed, { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } };
 	return CreateSampleButton<ImageGrid3>(layout, sources, L"UI/SampleTexture/Sample_0.png");
 }
 
 template <typename ImageGridType>
 static unique_ptr<UIComponent> CreateSampleListArea(const UILayout& layout,
-	const map<ButtonState, vector<Rectangle>>& sources, const wstring& texturePath)
+	const map<InteractState, vector<Rectangle>>& sources, const wstring& texturePath)
 {
 	UILayout gridLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
 
-	map<ButtonState, unique_ptr<UIComponent>> imageGridList;
+	map<InteractState, unique_ptr<UIComponent>> imageGridList;
 	for (const auto& rects : sources)
 	{
 		ImageSource imgSrc = CreateImageSource(texturePath, rects.second);
@@ -109,10 +110,10 @@ static unique_ptr<UIComponent> CreateSampleListArea(const UILayout& layout,
 
 unique_ptr<UIComponent> CreateSampleListArea1(const UILayout& layout)
 {
-	map<ButtonState, vector<Rectangle>> sources{
-		{ ButtonState::Normal, { {118, 138, 32, 32} } },
-		{ ButtonState::Hover, { {154, 138, 32, 32} } },
-		{ ButtonState::Pressed, { {190, 138, 32, 32} } } };
+	map<InteractState, vector<Rectangle>> sources{
+		{ InteractState::Normal, { {118, 138, 32, 32} } },
+		{ InteractState::Hover, { {154, 138, 32, 32} } },
+		{ InteractState::Pressed, { {190, 138, 32, 32} } } };
 
 	auto listArea = CreateSampleListArea<ImageGrid1>(layout, sources, L"UI/SampleTexture/Sample_0.png");
 	//auto listAreaPtr = ComponentCast<ListArea*>(listArea.get());
@@ -140,4 +141,22 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
 	}
 
 	return true;
+}
+
+unique_ptr<UIComponent> CreateSampleScrollBar(const UILayout& layout)
+{
+	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
+	ImageSource trackSource{
+		L"UI/SampleTexture/Sample_0.png", {
+			{ 114, 178, 16, 10 }, { 114, 188, 16, 28 }, { 114, 216, 16, 10 }
+		} };
+	auto scrollTrack = CreateImageGrid<ImageGrid3>(gridLayout, trackSource);
+
+	map<InteractState, vector<Rectangle>> btnSources{
+		{ InteractState::Normal, { {134, 178, 7, 16}, {141, 178, 2, 16}, {143, 178, 7, 16} } },
+		{ InteractState::Hover, { {154, 178, 7, 16}, {161, 178, 2, 16}, {163, 178, 7, 16} } },
+		{ InteractState::Pressed, { {174, 178, 7, 16}, {181, 178, 2, 16}, {183, 178, 7, 16} } } };
+	auto scrollButton = CreateSampleButton<ImageGrid3>(gridLayout, btnSources, L"UI/SampleTexture/Sample_0.png");
+
+	return CreateScrollBar(layout, move(scrollTrack), move(scrollButton));
 }

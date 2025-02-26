@@ -85,19 +85,6 @@ namespace ComponentTest
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
 	}
 
-	TEST_F(BasicFunctionalityTest, RenderTexture)
-	{
-		auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
-		auto buttonPtr = button.get();
-		auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(button));
-		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-
-		CallMockRender([](size_t index, const RECT& dest, const RECT* source) {
-			EXPECT_TRUE(IsTrue(dest, { 75, 75, 125, 125 }, *source, { 0, 0, 50, 50 }));
-			}, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
-	}
-
 	////////////////////////////////////////////////////////
 
 	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
@@ -278,8 +265,34 @@ namespace ComponentTest
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), listAreaPtr));
-
 		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	////////////////////////////////////////////////////////
+
+	TEST_F(BasicFunctionalityTest, RenderTexture)
+	{
+		auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
+		auto buttonPtr = button.get();
+		auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(button));
+		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		CallMockRender([](size_t index, const RECT& dest, const RECT* source) {
+			EXPECT_TRUE(IsTrue(dest, { 75, 75, 125, 125 }, *source, { 0, 0, 50, 50 }));
+			}, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
+		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	////////////////////////////////////////////////////////
+
+	TEST_F(BasicFunctionalityTest, ScrollBar)
+	{
+		auto scrollBar = CreateSampleScrollBar({ { 200, 16 }, Origin::LeftTop });
+		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+
 	}
 
 	////////////////////////////////////////////////////////

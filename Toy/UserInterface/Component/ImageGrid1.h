@@ -36,7 +36,7 @@ protected:
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
-	size_t m_index{ 0 }; //core 상태에 따라서 인덱스는 변할 수 있기 때문에 저장하지 않는다.
+	optional<size_t> m_index; //0값도 인덱스로 사용하기 때문에 optional
 	wstring m_filename;
 	Rectangle m_source{};
 	XMINT2 m_position{};

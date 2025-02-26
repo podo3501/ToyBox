@@ -13,6 +13,7 @@ enum class ComponentID : int
 	ListArea,
 	Container,
 	RenderTexture,
+	ScrollBar,
 	Unknown //부모 기본 UIComponent. 이게 문제가 되면 UICompnent가 혼자서 생성되었다는 건데, 생성자가 protected에서 public이 되었을 것이다.
 };
 
@@ -61,7 +62,7 @@ constexpr auto EnumToStringMap<Origin>() -> array<const char*, EnumSize<Origin>(
 
 ///////////////////////////////////////////////////////////////
 
-enum class ButtonState : int //?!? 버튼 스테이트 말고 다른 이름으로 바꾸자 이건 container에서 사용하기 때문이다.
+enum class InteractState : int
 {
 	Normal,
 	Hover,
@@ -69,10 +70,10 @@ enum class ButtonState : int //?!? 버튼 스테이트 말고 다른 이름으로 바꾸자 이건 
 };
 
 template<>
-constexpr size_t EnumSize<ButtonState>() { return 3; }
+constexpr size_t EnumSize<InteractState>() { return 3; }
 
 template<>
-constexpr auto EnumToStringMap<ButtonState>()->array<const char*, EnumSize<ButtonState>()> {
+constexpr auto EnumToStringMap<InteractState>()->array<const char*, EnumSize<InteractState>()> {
 	return { {
 		{ "Normal" },
 		{ "Hover" },

@@ -54,6 +54,7 @@ bool GameMainLoop::LoadResources()
     //AttachComponentToPanel(m_gamePanel.get(), CreateSampleTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>"), { 160, 420 });
     //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageGrid9({ {210, 150}, Origin::LeftTop }), { 400, 300 });
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleListArea1({ {150, 130}, Origin::Center }), { 600, 200 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleScrollBar({ {16, 200}, Origin::Center }), { 50, 200 });
 
     //auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
     //auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, true, button.get()); //이렇게 설정하는 순간 button은 랜더링은 되지 않고 업데이트만 된다.

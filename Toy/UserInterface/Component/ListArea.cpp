@@ -54,7 +54,7 @@ void ListArea::ChangeSize(const XMUINT2& size) noexcept
 	UIComponent::ChangeSize(size);
 }
 
-bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent>&& bgImage, unique_ptr<UIComponent>&& container) noexcept
+bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, unique_ptr<UIComponent> container) noexcept
 {
 	SetLayout(layout);
 	UILayout partLayout{ layout.GetSize(), Origin::LeftTop }; //속성들은 정렬하지 않는다.
@@ -80,19 +80,28 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent>&& bgImage, 
 	return true;
 }
 
+int32_t ListArea::GetContainerHeight() const noexcept
+{
+	int32_t height{ 0 };
+	for (auto container : m_containers)
+		height += container->GetSize().y;
+
+	return height;
+}
+
 UIComponent* ListArea::PrepareContainer()
 {
-	static int32_t y = 0; //임시로 작업한거 이거 수정해야함. ?!?
 	auto cloneContainer = m_prototypeContainer->Clone();
 	auto cloneContainerPtr = cloneContainer.get();
 	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
 
+	const auto& containerHeight = GetContainerHeight();
 	cloneContainerPtr->SetStateFlag(StateFlag::Active, true);
-	cloneContainerPtr->SetRelativePosition({ 0, y });
-	y += cloneContainerPtr->GetSize().y;
-
+	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
 	m_containers.emplace_back(cloneContainerPtr);
-	if(int height = m_renderTex->GetSize().y - y; height < 0)
+
+	auto curHeight = containerHeight + cloneContainerPtr->GetSize().y;
+	if(int height = m_renderTex->GetSize().y - curHeight; height < 0)
 		m_bounded.SetBounds(height, 0, 15);
 
 	return cloneContainerPtr;
@@ -146,8 +155,8 @@ void ListArea::SerializeIO(JsonOperation& operation)
 }
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout, 
-	unique_ptr<UIComponent>&& bgImage,
-	unique_ptr<UIComponent>&& container)
+	unique_ptr<UIComponent> bgImage,
+	unique_ptr<UIComponent> container)
 {
 	unique_ptr<ListArea> listArea= make_unique<ListArea>();
 	if (!listArea->Setup(layout, move(bgImage), move(container))) return nullptr;

@@ -15,7 +15,7 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList) noexcept;
+	bool Setup(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>>&& imgGridList) noexcept;
 	void ClearInteraction() noexcept;
 
 protected:
@@ -26,12 +26,12 @@ protected:
 
 private:
 	void ReloadDatas() noexcept;
-	void SetState(ButtonState state) noexcept;
-	void AttachComponent(ButtonState btnState, unique_ptr<UIComponent>&& component) noexcept;
+	void SetState(InteractState state) noexcept;
+	void AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept;
 
-	map<ButtonState, UIComponent*> m_images;
-	optional<ButtonState> m_state;
+	map<InteractState, UIComponent*> m_images;
+	optional<InteractState> m_state;
 	XMINT2 m_position{};
 };
 
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<ButtonState, unique_ptr<UIComponent>>&& imgGridList);
+unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>>&& imgGridList);

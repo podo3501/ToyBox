@@ -19,7 +19,7 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, unique_ptr<UIComponent>&& bgImage, unique_ptr<UIComponent>&& container) noexcept;
+	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, unique_ptr<UIComponent> container) noexcept;
 	UIComponent* GetPrototypeContainer() noexcept { return m_prototypeContainer; }
 	UIComponent* PrepareContainer();
 
@@ -32,6 +32,7 @@ private:
 	void ReloadDatas() noexcept;
 	void ScrollContainers(const DX::StepTimer& timer) noexcept;
 	void CheckMouseInteraction() noexcept;
+	int32_t GetContainerHeight() const noexcept;
 
 	UIComponent* m_prototypeContainer;
 	UIComponent* m_bgImage;
@@ -42,5 +43,5 @@ private:
 };
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout,
-	unique_ptr<UIComponent>&& bgImage,
-	unique_ptr<UIComponent>&& container);
+	unique_ptr<UIComponent> bgImage,
+	unique_ptr<UIComponent> container);

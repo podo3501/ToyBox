@@ -7,9 +7,9 @@
 
 ImageGrid1::~ImageGrid1()
 {
-	if (m_texController)
+	if (m_texController && m_index)
 	{
-		m_texController->ReleaseTexture(m_index);
+		m_texController->ReleaseTexture(*m_index);
 		m_texController = nullptr;
 	}
 }
@@ -46,9 +46,11 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
 {
 	XMUINT2 texSize{};
-	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), m_index, &texSize, &m_gfxOffset));
+	size_t index{ 0 };
+	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), index, &texSize, &m_gfxOffset));
+	m_index = index;
 
-	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다. ?!? optional index로 해도 되지 않나?
+	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다.
 	{
 		SetSize(texSize);
 		m_source = { 0, 0, static_cast<long>(texSize.x), static_cast<long>(texSize.y) };
@@ -90,7 +92,7 @@ void ImageGrid1::ImplementRender(ITextureRender* render) const
 	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
 
 	RECT source = RectangleToRect(m_source);
-	render->Render(m_index, destination, &source);
+	render->Render(*m_index, destination, &source);
 }
 
 bool ImageGrid1::SetImage(const UILayout& layout, const ImageSource& source) noexcept

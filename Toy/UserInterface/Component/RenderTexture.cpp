@@ -25,10 +25,11 @@ RenderTexture::RenderTexture(const RenderTexture& o) :
 
 void RenderTexture::Release() noexcept
 {
-	if (!m_texController) return;
-
-	m_texController->ReleaseTexture(m_index);
-	m_texController = nullptr;
+	if (m_texController && m_index)
+	{
+		m_texController->ReleaseTexture(*m_index);
+		m_texController = nullptr;
+	}
 }
 
 void RenderTexture::ReloadDatas() noexcept
@@ -58,8 +59,10 @@ bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 	if (m_gfxOffset && m_texController)
 		Release();
 	
-	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetSize(), GetPosition(), m_index, &m_gfxOffset));
+	size_t index{ 0 };
+	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetSize(), GetPosition(), index, &m_gfxOffset));
 
+	m_index = index;
 	m_texController = texController;
 	return true;
 }
@@ -75,7 +78,7 @@ bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent>&& comp
 
 bool RenderTexture::ModifyTexture(const XMUINT2& size)
 {
-	ReturnIfFalse(m_texController->ModifyRenderTexture(m_index, size));
+	ReturnIfFalse(m_texController->ModifyRenderTexture(*m_index, size));
 	SetSize(size);
 
 	return true;
@@ -119,7 +122,7 @@ void RenderTexture::ImplementRender(ITextureRender* render) const
 	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
 
 	RECT source{ 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };
-	render->Render(m_index, destination, &source);
+	render->Render(*m_index, destination, &source);
 
 	return;
 }
