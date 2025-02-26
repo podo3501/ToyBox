@@ -43,3 +43,5 @@ private:
 	UINT64 m_gfxOffset{};
 	ITextureController* m_texController;
 };
+
+unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const ImageSource& source);

@@ -155,19 +155,19 @@ static vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) 
 	return { 0, thisEdge, thisEdge + middle, length };
 }
 
-vector<PositionSize> StretchSize(StretchType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept
+vector<PositionSize> StretchSize(DirectionType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept
 {
 	if (data.size() != 3) return {};
 
 	vector<long> xPoints, yPoints;
 
 	switch (stretchType) {
-	case StretchType::Width:
+	case DirectionType::Horizontal:
 		// 가로 확장
 		xPoints = GetStretchedSize(size.x, data[0].width, data[2].width);
 		yPoints = { 0, static_cast<long>(size.y) };
 		break;
-	case StretchType::Height:
+	case DirectionType::Vertical:
 		// 세로 확장
 		yPoints = GetStretchedSize(size.y, data[0].height, data[2].height);
 		xPoints = { 0, static_cast<long>(size.x) };
@@ -203,10 +203,10 @@ vector<Rectangle> GetSourcesFromArea(const Rectangle& area, const vector<int>& w
 	vector<Rectangle> areas;
 	long currentY = area.y;
 	
-	for (auto heightIndex : std::views::iota(size_t{ 0 }, heights.size())) 
+	for (auto heightIndex : views::iota(size_t{ 0 }, heights.size())) 
 	{
 		long currentX = area.x;  
-		for (auto widthIndex : std::views::iota(size_t{ 0 }, widths.size())) 
+		for (auto widthIndex : views::iota(size_t{ 0 }, widths.size())) 
 		{
 			areas.emplace_back(currentX, currentY, widths[widthIndex], heights[heightIndex]);
 			currentX += widths[widthIndex];  
@@ -229,29 +229,42 @@ Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept
 	return result;
 }
 
-bool GetWidthsAndHeights(const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights)
+static vector<int> GetDivisions(const vector<int>& points, int totalSize) noexcept
 {
-	if (srcDivider.list.size() != 2 && srcDivider.list.size() != 4)
-		return false;
+	vector<int> divisions = points;
+	divisions.push_back(totalSize);
+	ranges::sort(divisions);
+	return { divisions[0], divisions[1] - divisions[0], divisions[2] - divisions[1] };
+}
 
-	auto getDivisions = [](const vector<int>& points, int totalSize) -> vector<int> {
-		vector<int> divisions = points;
-		divisions.push_back(totalSize);
-		ranges::sort(divisions);
+bool GetSizeDividedByThree(DirectionType type, const SourceDivider& srcDivider,
+	vector<int>& outWidths, vector<int>& outHeights) noexcept
+{
+	const auto& divideList = srcDivider.list;
+	const auto& rect = srcDivider.rect;
+	if (divideList.size() != 2) return false;
 
-		return { divisions[0], divisions[1] - divisions[0], divisions[2] - divisions[1] };
-		};
-
-	// Width 계산
-	outWidths = getDivisions({ srcDivider.list.begin(), srcDivider.list.begin() + 2 }, srcDivider.rect.width);
-
-	if (srcDivider.list.size() == 2) {
-		outHeights = { srcDivider.rect.height };
-		return true;
+	switch (type)
+	{
+	case DirectionType::Horizontal:
+		outWidths = GetDivisions({ divideList.begin(), divideList.begin() + 2 }, rect.width);
+		outHeights = { rect.height };
+		break;
+	case DirectionType::Vertical:
+		outWidths = { rect.width };
+		outHeights = GetDivisions({ divideList.begin(), divideList.begin() + 2 }, rect.height);
+		break;
 	}
+	return true;
+}
 
-	// Height 계산 (srcDivider.list가 4일 때만)
-	outHeights = getDivisions({ srcDivider.list.begin() + 2, srcDivider.list.begin() + 4 }, srcDivider.rect.height);
+bool GetSizeDividedByNine(const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights) noexcept
+{
+	const auto& divideList = srcDivider.list;
+	const auto& rect = srcDivider.rect;
+	if (divideList.size() != 4) return false;
 
+	outWidths = GetDivisions({ divideList.begin(), divideList.begin() + 2 }, rect.width);
+	outHeights = GetDivisions({ divideList.begin() + 2, divideList.begin() + 4 }, rect.height);
 	return true;
 }

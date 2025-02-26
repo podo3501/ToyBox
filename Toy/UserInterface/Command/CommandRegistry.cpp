@@ -307,7 +307,7 @@ SetSourceAndDividerCommand::SetSourceAndDividerCommand(const ImageGrid39Variant&
 	m_record{ srcDivider }
 {}
 
-optional<SourceDivider> SetSourceAndDividerCommand::GetSourceAndDivider() const noexcept
+SourceDivider SetSourceAndDividerCommand::GetSourceAndDivider() const noexcept
 {
 	if (auto imgGrid3 = get_if<ImageGrid3*>(&m_imgGridVariant); imgGrid3 && *imgGrid3)
 		return (*imgGrid3)->GetSourceAnd2Divider();
@@ -315,7 +315,7 @@ optional<SourceDivider> SetSourceAndDividerCommand::GetSourceAndDivider() const 
 	if (auto imgGrid9 = get_if<ImageGrid9*>(&m_imgGridVariant); imgGrid9 && *imgGrid9)
 		return (*imgGrid9)->GetSourceAnd4Divider();
 
-	return nullopt;
+	return {};
 }
 
 bool SetSourceAndDividerCommand::SetSourceAndDivider(const SourceDivider& srcDivider) noexcept
@@ -332,9 +332,9 @@ bool SetSourceAndDividerCommand::SetSourceAndDivider(const SourceDivider& srcDiv
 bool SetSourceAndDividerCommand::Execute()
 {
 	auto srcDivider = GetSourceAndDivider();
-	ReturnIfFalse(srcDivider);
+	ReturnIfFalse(!srcDivider.Empty());
 
-	m_record.previous = *srcDivider;
+	m_record.previous = srcDivider;
 	return SetSourceAndDivider(m_record.current);
 }
 

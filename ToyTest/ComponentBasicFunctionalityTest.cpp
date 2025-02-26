@@ -13,6 +13,7 @@
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/Utility.h"
 
 using testing::ElementsAre;
@@ -21,14 +22,11 @@ namespace ComponentTest
 {
 	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 10, 138, 42, 170 });
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 46, 138, 78, 170 });
-		testResult |= IsTrue(dest, { 144, 104, 176, 136 }, *source, { 82, 138, 114, 170 });
-
-		EXPECT_TRUE(testResult);
+		TestRender(index, dest, source, {
+			{{144, 104, 176, 136}, {10, 138, 42, 170}},
+			{{144, 104, 176, 136}, {46, 138, 78, 170}},
+			{{144, 104, 176, 136}, {82, 138, 114, 170}}
+			});
 	}
 
 	TEST_F(BasicFunctionalityTest, Button_ImageGrid1)
@@ -42,55 +40,85 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
-	static void TestButton_ImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestButton_ImageGrid3Render_H(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 110, 96, 132, 144 }, *source, { 62, 82, 84, 130 });
-		testResult |= IsTrue(dest, { 132, 96, 188, 144 }, *source, { 84, 82, 88, 130 });
-		testResult |= IsTrue(dest, { 188, 96, 210, 144 }, *source, { 88, 82, 110, 130 });
-
-		EXPECT_TRUE(testResult);
+		TestRender(index, dest, source, {
+			{{110, 96, 132, 144}, {62, 82, 84, 130}},
+			{{132, 96, 188, 144}, {84, 82, 88, 130}},
+			{{188, 96, 210, 144}, {88, 82, 110, 130}}
+			});
 	}
 
-	static void TestButton_ImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
+	static void TestButton_ImageGrid3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 85, 96, 107, 144 }, *source, { 10, 82, 32, 130 });
-		testResult |= IsTrue(dest, { 107, 96, 213, 144 }, *source, { 32, 82, 36, 130 });
-		testResult |= IsTrue(dest, { 213, 96, 235, 144 }, *source, { 36, 82, 58, 130 });
-
-		EXPECT_TRUE(testResult);
+		TestRender(index, dest, source, {
+			{{85, 96, 107, 144}, {10, 82, 32, 130}},
+			{{107, 96, 213, 144}, {32, 82, 36, 130}},
+			{{213, 96, 235, 144}, {36, 82, 58, 130}}
+			});
 	}
 
-	TEST_F(BasicFunctionalityTest, Button_ImageGrid3)
+	TEST_F(BasicFunctionalityTest, Button_ImageGrid3_Horizontal)
 	{
-		auto button = CreateSampleButton3({ {100, 48}, Origin::Center });
+		auto button = CreateSampleButton3(DirectionType::Horizontal, { {100, 48}, Origin::Center });
+		auto btnPtr = ComponentCast<Button*>(button.get());
 		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		TestUpdate(110, 96);	//Hover
-		CallMockRender(TestButton_ImageGrid3Render, 3);
+		CallMockRender(TestButton_ImageGrid3Render_H, 3);
 
-		Button* btn = UIEx(m_panel).GetComponent<Button*>("Button_0");
-		btn->ChangeSize({ 150, 48 });
+		btnPtr->ChangeSize({ 150, 48 });
 		TestUpdate(0, 0);	//Normal
-
-		CallMockRender(TestButton_ImageGrid3ChangeAreaRender, 3);
+		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_H, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender, 3);
+		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_H, 3);
+	}
+
+	static void TestButton_ImageGrid3Render_V(size_t index, const RECT& dest, const RECT* source)
+	{
+		TestRender(index, dest, source, {
+			{{76, 50, 124, 72}, {62, 82, 110, 104}},
+			{{76, 72, 124, 128}, {62, 104, 110, 108}},
+			{{76, 128, 124, 150}, {62, 108, 110, 130}}
+			});
+	}
+
+	static void TestButton_ImageGrid3ChangeAreaRender_V(size_t index, const RECT& dest, const RECT* source)
+	{
+		TestRender(index, dest, source, {
+			{{76, 25, 124, 47}, {10, 82, 58, 104}},
+			{{76, 47, 124, 153}, {10, 104, 58, 108}},
+			{{76, 153, 124, 175}, {10, 108, 58, 130}}
+			});
+	}
+
+	TEST_F(BasicFunctionalityTest, Button_ImageGrid3_Vertical)
+	{
+		auto button = CreateSampleButton3(DirectionType::Vertical, { {48, 100}, Origin::Center });
+		auto btnPtr = ComponentCast<Button*>(button.get());
+		UIEx(m_panel).AttachComponent(move(button), { 100, 100 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		TestUpdate(77, 51);	//Hover
+		CallMockRender(TestButton_ImageGrid3Render_V, 3);
+
+		btnPtr->ChangeSize({ 48, 150 });
+		TestUpdate(0, 0);	//Normal
+		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_V, 3);
+		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_V, 3);
 	}
 
 	////////////////////////////////////////////////////////
 
 	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
-		EXPECT_TRUE(IsTrue(dest, { 400, 300, 464, 364 }, *source, { 10, 10, 74, 74 }));
+		TestRender(index, dest, source, {
+			{{400, 300, 464, 364}, {10, 10, 74, 74}}
+			});
 	}
 
 	TEST_F(BasicFunctionalityTest, ImageGrid1)
@@ -105,128 +133,162 @@ namespace ComponentTest
 
 	////////////////////////////////////////////////////////
 
-	static void TestImageGrid3Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid3Render_H(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 400, 300, 422, 336 }, *source, { 10, 82, 32, 130 });
-		testResult |= IsTrue(dest, { 422, 300, 478, 336 }, *source, { 32, 82, 36, 130 });
-		testResult |= IsTrue(dest, { 478, 300, 500, 336 }, *source, { 36, 82, 58, 130 });
-
-		EXPECT_TRUE(testResult);
+		TestRender(index, dest, source, {
+			{{400, 300, 422, 336}, {10, 82, 32, 130}},
+			{{422, 300, 478, 336}, {32, 82, 36, 130}},
+			{{478, 300, 500, 336}, {36, 82, 58, 130}}
+			});
 	}
 
-	static void TestImageGrid3ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 340, 282, 362, 318 }, *source, { 10, 82, 32, 130 });
-		testResult |= IsTrue(dest, { 362, 282, 438, 318 }, *source, { 32, 82, 36, 130 });
-		testResult |= IsTrue(dest, { 438, 282, 460, 318 }, *source, { 36, 82, 58, 130 });
-
-		EXPECT_TRUE(testResult);
+		TestRender(index, dest, source, {
+			{{340, 282, 362, 318}, {10, 82, 32, 130}},
+			{{362, 282, 438, 318}, {32, 82, 36, 130}},
+			{{438, 282, 460, 318}, {36, 82, 58, 130}}
+			});
 	}
 
-	static void TestImageGrid3SourceAndDivider(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid3SourceAndDivider_H(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
-
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 340, 282, 362, 318 }, *source, { 10, 82, 30, 130 });
-		testResult |= IsTrue(dest, { 362, 282, 438, 318 }, *source, { 30, 82, 38, 130 });
-		testResult |= IsTrue(dest, { 438, 282, 460, 318 }, *source, { 38, 82, 58, 130 });
-
-		EXPECT_TRUE(testResult);
+		TestRender(index, dest, source, {
+			{{340, 282, 362, 318}, {10, 82, 30, 130}},
+			{{362, 282, 438, 318}, {30, 82, 38, 130}},
+			{{438, 282, 460, 318}, {38, 82, 58, 130}}
+			});
 	}
 
-	TEST_F(BasicFunctionalityTest, ImageGrid3)
+	TEST_F(BasicFunctionalityTest, ImageGrid3_Horizontal)
 	{
-		auto img = CreateSampleImageGrid3({ {100, 36}, Origin::LeftTop });
+		auto img = CreateSampleImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop });
+		auto imgPtr = ComponentCast<ImageGrid3*>(img.get());
 		UIEx(m_panel).AttachComponent(move(img), {400, 300});
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		CallMockRender(TestImageGrid3Render, 3);
+		CallMockRender(TestImageGrid3Render_H, 3);
 
-		ImageGrid3* img3 = UIEx(m_panel).GetComponent<ImageGrid3*>("ImageGrid3_0");
-		img3->ChangeOrigin(Origin::Center);
-		img3->ChangeSize({ 120, 36 });
+		imgPtr->ChangeOrigin(Origin::Center);
+		imgPtr->ChangeSize({ 120, 36 });
 
-		CallMockRender(TestImageGrid3ChangeAreaRender, 3);
+		CallMockRender(TestImageGrid3ChangeAreaRender_H, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		SourceDivider srcDivider{ *img3->GetSourceAnd2Divider() };
+		SourceDivider srcDivider{ imgPtr->GetSourceAnd2Divider() };
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 82, 48, 48 }));
 		EXPECT_THAT(srcDivider.list, ElementsAre(22, 26));
 
 		srcDivider.list.clear();
 		srcDivider.list = { 20, 28 };
-		img3->SetSourceAnd2Divider(srcDivider);
+		imgPtr->SetSourceAnd2Divider(srcDivider);
 
-		CallMockRender(TestImageGrid3SourceAndDivider, 3);
+		CallMockRender(TestImageGrid3SourceAndDivider_H, 3);
+	}
+
+	static void TestImageGrid3Render_V(size_t index, const RECT& dest, const RECT* source)
+	{
+		TestRender(index, dest, source, {
+			{{400, 300, 436, 322}, {10, 82, 58, 104}},
+			{{400, 322, 436, 378}, {10, 104, 58, 108}},
+			{{400, 378, 436, 400}, {10, 108, 58, 130}}
+			});
+	}
+
+	static void TestImageGrid3ChangeAreaRender_V(size_t index, const RECT& dest, const RECT* source)
+	{
+		TestRender(index, dest, source, {
+			{{382, 240, 418, 262}, {10, 82, 58, 104}},
+			{{382, 262, 418, 338}, {10, 104, 58, 108}},
+			{{382, 338, 418, 360}, {10, 108, 58, 130}}
+			});
+	}
+
+	static void TestImageGrid3SourceAndDivider_V(size_t index, const RECT& dest, const RECT* source)
+	{
+		TestRender(index, dest, source, {
+			{{382, 240, 418, 262}, {10, 82, 58, 102}},
+			{{382, 262, 418, 338}, {10, 102, 58, 110}},
+			{{382, 338, 418, 360}, {10, 110, 58, 130}}
+			});
+	}
+
+	TEST_F(BasicFunctionalityTest, ImageGrid3_Vertical)
+	{
+		auto img3 = CreateSampleImageGrid3(DirectionType::Vertical, { {36, 100}, Origin::LeftTop });
+		auto img3Ptr = ComponentCast<ImageGrid3*>(img3.get());
+		UIEx(m_panel).AttachComponent(move(img3), { 400, 300 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		CallMockRender(TestImageGrid3Render_V, 3);
+
+		img3Ptr->ChangeOrigin(Origin::Center);
+		img3Ptr->ChangeSize({ 36, 120 });
+		CallMockRender(TestImageGrid3ChangeAreaRender_V, 3);
+		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		SourceDivider srcDivider{ img3Ptr->GetSourceAnd2Divider() };
+		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 82, 48, 48 }));
+		EXPECT_THAT(srcDivider.list, ElementsAre(22, 26));
+
+		srcDivider.list.clear();
+		srcDivider.list = { 20, 28 };
+		img3Ptr->SetSourceAnd2Divider(srcDivider);
+
+		CallMockRender(TestImageGrid3SourceAndDivider_V, 3);
 	}
 
 	////////////////////////////////////////////////////////
 
 	static void TestImageGrid9Render(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
+		TestRender(index, dest, source, {
+			{{400, 300, 430, 336}, {10, 10, 40, 46}},
+			{{430, 300, 540, 336}, {40, 10, 44, 46}},
+			{{540, 300, 570, 336}, {44, 10, 74, 46}},
 
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 400, 300, 430, 336 }, *source, { 10, 10, 40, 46 });
-		testResult |= IsTrue(dest, { 430, 300, 540, 336 }, *source, { 40, 10, 44, 46 });
-		testResult |= IsTrue(dest, { 540, 300, 570, 336 }, *source, { 44, 10, 74, 46 });
+			{{400, 336, 430, 394}, {10, 46, 40, 48}},
+			{{430, 336, 540, 394}, {40, 46, 44, 48}},
+			{{540, 336, 570, 394}, {44, 46, 74, 48}},
 
-		testResult |= IsTrue(dest, { 400, 336, 430, 394 }, *source, { 10, 46, 40, 48 });
-		testResult |= IsTrue(dest, { 430, 336, 540, 394 }, *source, { 40, 46, 44, 48 });
-		testResult |= IsTrue(dest, { 540, 336, 570, 394 }, *source, { 44, 46, 74, 48 });
-
-		testResult |= IsTrue(dest, { 400, 394, 430, 420 }, *source, { 10, 48, 40, 74 });
-		testResult |= IsTrue(dest, { 430, 394, 540, 420 }, *source, { 40, 48, 44, 74 });
-		testResult |= IsTrue(dest, { 540, 394, 570, 420 }, *source, { 44, 48, 74, 74 });
-
-		EXPECT_TRUE(testResult);
+			{{400, 394, 430, 420}, {10, 48, 40, 74}},
+			{{430, 394, 540, 420}, {40, 48, 44, 74}},
+			{{540, 394, 570, 420}, {44, 48, 74, 74}}
+			});
 	}
 
 	static void TestImageGrid9ChangeAreaRender(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
+		TestRender(index, dest, source, {
+			{{310, 225, 340, 261}, {10, 10, 40, 46}},
+			{{340, 225, 460, 261}, {40, 10, 44, 46}},
+			{{460, 225, 490, 261}, {44, 10, 74, 46}},
 
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 310, 225, 340, 261 }, *source, { 10, 10, 40, 46 });
-		testResult |= IsTrue(dest, { 340, 225, 460, 261 }, *source, { 40, 10, 44, 46 });
-		testResult |= IsTrue(dest, { 460, 225, 490, 261 }, *source, { 44, 10, 74, 46 });
+			{{310, 261, 340, 349}, {10, 46, 40, 48}},
+			{{340, 261, 460, 349}, {40, 46, 44, 48}},
+			{{460, 261, 490, 349}, {44, 46, 74, 48}},
 
-		testResult |= IsTrue(dest, { 310, 261, 340, 349 }, *source, { 10, 46, 40, 48 });
-		testResult |= IsTrue(dest, { 340, 261, 460, 349 }, *source, { 40, 46, 44, 48 });
-		testResult |= IsTrue(dest, { 460, 261, 490, 349 }, *source, { 44, 46, 74, 48 });
-
-		testResult |= IsTrue(dest, { 310, 349, 340, 375 }, *source, { 10, 48, 40, 74 });
-		testResult |= IsTrue(dest, { 340, 349, 460, 375 }, *source, { 40, 48, 44, 74 });
-		testResult |= IsTrue(dest, { 460, 349, 490, 375 }, *source, { 44, 48, 74, 74 });
-
-		EXPECT_TRUE(testResult);
+			{{310, 349, 340, 375}, {10, 48, 40, 74}},
+			{{340, 349, 460, 375}, {40, 48, 44, 74}},
+			{{460, 349, 490, 375}, {44, 48, 74, 74}}
+			});
 	}
 
 	static void TestImageGrid9SourceAndDivider(size_t index, const RECT& dest, const RECT* source)
 	{
-		EXPECT_TRUE(index == 0);
+		TestRender(index, dest, source, {
+			{{310, 225, 340, 261}, {10, 10, 30, 36}},
+			{{340, 225, 460, 261}, {30, 10, 54, 36}},
+			{{460, 225, 490, 261}, {54, 10, 74, 36}},
 
-		auto testResult{ false };
-		testResult |= IsTrue(dest, { 310, 225, 340, 261 }, *source, { 10, 10, 30, 36 });
-		testResult |= IsTrue(dest, { 340, 225, 460, 261 }, *source, { 30, 10, 54, 36 });
-		testResult |= IsTrue(dest, { 460, 225, 490, 261 }, *source, { 54, 10, 74, 36 });
+			{{310, 261, 340, 349}, {10, 36, 30, 58}},
+			{{340, 261, 460, 349}, {30, 36, 54, 58}},
+			{{460, 261, 490, 349}, {54, 36, 74, 58}},
 
-		testResult |= IsTrue(dest, { 310, 261, 340, 349 }, *source, { 10, 36, 30, 58 });
-		testResult |= IsTrue(dest, { 340, 261, 460, 349 }, *source, { 30, 36, 54, 58 });
-		testResult |= IsTrue(dest, { 460, 261, 490, 349 }, *source, { 54, 36, 74, 58 });
-
-		testResult |= IsTrue(dest, { 310, 349, 340, 375 }, *source, { 10, 58, 30, 74 });
-		testResult |= IsTrue(dest, { 340, 349, 460, 375 }, *source, { 30, 58, 54, 74 });
-		testResult |= IsTrue(dest, { 460, 349, 490, 375 }, *source, { 54, 58, 74, 74 });
-
-		EXPECT_TRUE(testResult);
+			{{310, 349, 340, 375}, {10, 58, 30, 74}},
+			{{340, 349, 460, 375}, {30, 58, 54, 74}},
+			{{460, 349, 490, 375}, {54, 58, 74, 74}}
+			});
 	}
 
 	TEST_F(BasicFunctionalityTest, ImageGrid9)
@@ -244,7 +306,7 @@ namespace ComponentTest
 		CallMockRender(TestImageGrid9ChangeAreaRender, 9);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		SourceDivider srcDivider{ *img9->GetSourceAnd4Divider() };
+		SourceDivider srcDivider{ img9->GetSourceAnd4Divider() };
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 64 }));
 		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34, 36, 38));
 
@@ -270,6 +332,14 @@ namespace ComponentTest
 
 	////////////////////////////////////////////////////////
 
+	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source)
+	{
+		EXPECT_EQ(index, 1); //0은 texture 1은 renderTexture이다. 그래서 1이 들어오고
+		TestRender(0, dest, source, {//0값 비교하니까 0을 그냥 넣어줌. 
+			{{75, 75, 125, 125}, {0, 0, 50, 50}}
+			});
+	}
+
 	TEST_F(BasicFunctionalityTest, RenderTexture)
 	{
 		auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
@@ -278,9 +348,7 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		CallMockRender([](size_t index, const RECT& dest, const RECT* source) {
-			EXPECT_TRUE(IsTrue(dest, { 75, 75, 125, 125 }, *source, { 0, 0, 50, 50 }));
-			}, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
+		CallMockRender(TestRenderTexture, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 

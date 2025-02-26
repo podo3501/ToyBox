@@ -21,7 +21,7 @@ public:
 	optional<wstring> GetFilename() const noexcept;
 
 	bool SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept;
-	optional<SourceDivider> GetSourceAnd4Divider() const noexcept;
+	SourceDivider GetSourceAnd4Divider() const noexcept;
 
 	bool SetSources(const vector<Rectangle>& sources) noexcept;
 	vector<Rectangle> GetSources() const noexcept;
@@ -29,5 +29,6 @@ public:
 protected:
 	ImageGrid9(const ImageGrid9& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	
 };
+
+unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const ImageSource& source);

@@ -109,6 +109,11 @@ namespace StateFlag
 	constexpr StateFlag::Type operator|(StateFlag::Type lhs, StateFlag::Type rhs) { return static_cast<StateFlag::Type>(static_cast<int>(lhs) | static_cast<int>(rhs)); }
 }
 
+enum class DirectionType
+{
+	Horizontal,
+	Vertical
+};
 
 /////////////////////////////////////////////////////////////// 
 
@@ -128,6 +133,7 @@ struct SourceDivider
 	{
 		return rect == other.rect && list == other.list;
 	}
+	bool Empty() const noexcept { return rect == Rectangle{} && list.empty(); }
 
 	Rectangle rect{};
 	vector<int> list;

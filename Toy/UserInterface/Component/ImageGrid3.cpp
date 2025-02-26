@@ -18,25 +18,31 @@ unique_ptr<UIComponent> ImageGrid3::CreateClone() const
     return unique_ptr<ImageGrid3>(new ImageGrid3(*this));
 }
 
+bool ImageGrid3::operator==(const UIComponent& rhs) const noexcept
+{
+    ReturnIfFalse(UIComponent::operator==(rhs));
+    const ImageGrid3* o = static_cast<const ImageGrid3*>(&rhs);
+
+    return(tie(m_dirType) == tie(o->m_dirType));
+}
+
 static unique_ptr<ImageGrid1> CreateImageGrid1(size_t idx, const ImageSource& source, const XMUINT2& size)
 {
     UILayout grid1layout(size, Origin::LeftTop);
     ImageSource imgSource{ source.filename, { source.list[idx] } };
 
-    auto grid1 = make_unique<ImageGrid1>();
-    grid1->SetImage(grid1layout, imgSource);
-
-    return grid1;
+    return CreateImageGrid1(grid1layout, imgSource);
 }
 
-bool ImageGrid3::SetImage(const UILayout& layout, const ImageSource& source) noexcept
+bool ImageGrid3::SetImage(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept
 {
     if (source.filename.empty()) return false;
     if (source.list.size() != 3) return false;
 
 	SetLayout(layout);
+    m_dirType = dirType;
 
-    vector<PositionSize> posSizes = StretchSize(StretchType::Width, layout.GetSize(), source.list);
+    vector<PositionSize> posSizes = StretchSize(dirType, layout.GetSize(), source.list);
     for(auto idx : views::iota(0u, source.list.size()))
     {
         auto grid1 = CreateImageGrid1(idx, source, posSizes[idx].size);
@@ -62,7 +68,7 @@ void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
 {
     const vector<UIComponent*> components = GetChildComponents();
     vector<Rectangle> list = GetSourceList(components);
-    vector<PositionSize> posSizes = StretchSize(StretchType::Width, size, list);
+    vector<PositionSize> posSizes = StretchSize(m_dirType, size, list);
 
     for (auto idx : views::iota(0u, components.size()))
     {
@@ -99,19 +105,28 @@ bool ImageGrid3::SetFilename(const wstring& filename) noexcept
     return true;
 }
 
-optional<SourceDivider> ImageGrid3::GetSourceAnd2Divider() const noexcept
+SourceDivider ImageGrid3::GetSourceAnd2Divider() const noexcept //?!? 이 함수 정리
 {
     vector<ImageGrid1*> components;
-    if(!GetImageGridComponents(GetChildComponents(), components)) return nullopt;
+    if (!GetImageGridComponents(GetChildComponents(), components)) return {};
 
     Rectangle mergedSource = GetMergedSource();
 
     SourceDivider srcDivider{};
     srcDivider.rect = mergedSource;
     const Rectangle& leftSource = components[0]->GetSource();
-    srcDivider.list.push_back(leftSource.x + leftSource.width - mergedSource.x);   //x값 2개와 사각형 하나면 source 사각형 3개를 만들 수 있다.
-    srcDivider.list.push_back(components[2]->GetSource().x - mergedSource.x);
-
+    switch (m_dirType) //값 2개와 사각형 하나면 source 사각형 3개를 만들 수 있다.
+    {
+    case DirectionType::Horizontal:
+        srcDivider.list.push_back(leftSource.x + leftSource.width - mergedSource.x);   
+        srcDivider.list.push_back(components[2]->GetSource().x - mergedSource.x);
+        break;
+    case DirectionType::Vertical:
+        srcDivider.list.push_back(leftSource.y + leftSource.height - mergedSource.y);   
+        srcDivider.list.push_back(components[2]->GetSource().y - mergedSource.y);
+        break;
+    }
+    
     return srcDivider;
 }
 
@@ -148,10 +163,22 @@ vector<Rectangle> ImageGrid3::GetSources() const noexcept
 bool ImageGrid3::SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept
 {
     vector<int> widths{}, heights{};
-    ReturnIfFalse(GetWidthsAndHeights(srcDivider, widths, heights));
+    ReturnIfFalse(GetSizeDividedByThree(m_dirType, srcDivider, widths, heights));
 
     vector<Rectangle> sources = GetSourcesFromArea(srcDivider.rect, widths, heights);
     if (sources.size() != 3) return false;
 
     return SetSources(sources);
+}
+
+void ImageGrid3::SerializeIO(JsonOperation& operation)
+{
+    UIComponent::SerializeIO(operation);
+    operation.Process("DirectionType", m_dirType);
+}
+
+unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const ImageSource& source)
+{
+    auto grid3 = make_unique<ImageGrid3>();
+    return grid3->SetImage(dirType, layout, source) ? move(grid3) : nullptr;
 }

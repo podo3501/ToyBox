@@ -208,7 +208,7 @@ protected:
 	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
 
 private:
-	optional<SourceDivider> GetSourceAndDivider() const noexcept;
+	SourceDivider GetSourceAndDivider() const noexcept;
 	bool SetSourceAndDivider(const SourceDivider& srcDivider) noexcept;
 
 	ImageGrid39Variant m_imgGridVariant;

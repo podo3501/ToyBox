@@ -4,6 +4,7 @@
 struct ImageSource;
 struct SourceDivider;
 class ImageGrid1;
+enum class DirectionType;
 
 class ImageGrid3 : public UIComponent
 {
@@ -13,16 +14,18 @@ public:
 
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid3; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
+	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
+	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
+	bool SetImage(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
 
 	bool SetFilename(const wstring& filename) noexcept;
 	optional<wstring> GetFilename() const noexcept;
 
 	bool SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept;
-	optional<SourceDivider> GetSourceAnd2Divider() const noexcept;
+	SourceDivider GetSourceAnd2Divider() const noexcept;
 
 	bool SetSources(const vector<Rectangle>& sources) noexcept;
 	vector<Rectangle> GetSources() const noexcept;
@@ -31,4 +34,9 @@ public:
 protected:
 	ImageGrid3(const ImageGrid3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+
+private:
+	DirectionType m_dirType{ DirectionType::Horizontal };
 };
+
+unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const ImageSource& source);

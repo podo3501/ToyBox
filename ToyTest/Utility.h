@@ -18,5 +18,3 @@ void ReportLiveObjects();
         return false;                                                \
 }
 #endif
-
-bool IsTrue(const RECT& dest, const RECT& destRect, const RECT& source, const RECT& sourceRect);

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Utility.h"
-#include "../Toy/Utility.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()
@@ -21,9 +20,3 @@ void ReportLiveObjects()
 	debug->Release();
 }
 #endif
-
-bool IsTrue(const RECT& dest, const RECT& destRect, const RECT& source, const RECT& sourceRect)
-{
-	if (dest == destRect) { if(source == sourceRect) return true; }
-	return false;
-}

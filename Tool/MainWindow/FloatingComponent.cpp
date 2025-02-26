@@ -51,10 +51,10 @@ bool FloatingComponent::Excute()
 	switch (m_currentAction.value())
 	{
 	case ImageGrid1: result = LoadComponent(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop })); break;
-	case ImageGrid3: result = LoadComponent(CreateSampleImageGrid3({ { 48, 48 }, Origin::LeftTop })); break;
+	case ImageGrid3: result = LoadComponent(CreateSampleImageGrid3(DirectionType::Horizontal, { { 48, 48 }, Origin::LeftTop })); break;
 	case ImageGrid9: result = LoadComponent(CreateSampleImageGrid9({ { 170, 120 }, Origin::LeftTop })); break;
 	case Button1: result = LoadComponent(CreateSampleButton1({ { 32, 32 }, Origin::LeftTop })); break;
-	case Button3: result = LoadComponent(CreateSampleButton3({ { 100, 48 }, Origin::LeftTop })); break;
+	case Button3: result = LoadComponent(CreateSampleButton3(DirectionType::Horizontal, { { 100, 48 }, Origin::LeftTop })); break;
 	case Text: result = LoadComponent(CreateSampleTextArea({ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>")); break;
 
 	}

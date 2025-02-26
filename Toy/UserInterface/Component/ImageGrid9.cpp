@@ -23,7 +23,7 @@ static inline vector<Rectangle> ExtractSourceRects(const ImageSource& source)
 	return { source.list[0], source.list[3], source.list[6] };
 }
 
-static unique_ptr<ImageGrid3> CreateImageGrid3(size_t idx, const ImageSource& source, const XMUINT2& size)
+static unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, size_t idx, const ImageSource& source, const XMUINT2& size)
 {
 	UILayout grid3layout(size, Origin::LeftTop);
 	ImageSource imgSource
@@ -32,10 +32,7 @@ static unique_ptr<ImageGrid3> CreateImageGrid3(size_t idx, const ImageSource& so
 		{ source.list[idx * 3], source.list[idx * 3 + 1], source.list[idx * 3 + 2] }
 	};
 
-	auto grid3 = make_unique<ImageGrid3>();
-	grid3->SetImage(grid3layout, imgSource);
-
-	return grid3;
+	return CreateImageGrid3(dirType, grid3layout, imgSource);
 }
 
 bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noexcept
@@ -46,10 +43,10 @@ bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noe
 	SetLayout(layout);
 
 	auto srcHList = ExtractSourceRects(source);
-	auto posRects = StretchSize(StretchType::Height, layout.GetSize(), srcHList);
+	auto posRects = StretchSize(DirectionType::Vertical, layout.GetSize(), srcHList);
 	for (size_t idx = 0; idx < srcHList.size(); ++idx)
 	{
-		auto grid3 = CreateImageGrid3(idx, source, posRects[idx].size);
+		auto grid3 = CreateImageGrid3(DirectionType::Horizontal, idx, source, posRects[idx].size);
 		UIEx(this).AttachComponent(move(grid3), posRects[idx].pos);
 	}
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
@@ -72,7 +69,7 @@ void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
 	vector<Rectangle> list = GetSourceList(components);
-	vector<PositionSize> posRects = StretchSize(StretchType::Height, size, list);
+	vector<PositionSize> posRects = StretchSize(DirectionType::Vertical, size, list);
 
 	for (int idx{ 0 }; idx < components.size(); ++idx)
 	{
@@ -100,10 +97,10 @@ bool ImageGrid9::SetFilename(const wstring& filename) noexcept
 		});
 }
 
-optional<SourceDivider> ImageGrid9::GetSourceAnd4Divider() const noexcept
+SourceDivider ImageGrid9::GetSourceAnd4Divider() const noexcept
 {
 	vector<ImageGrid3*> components;
-	if(!GetImageGridComponents(GetChildComponents(), components)) return nullopt;
+	if (!GetImageGridComponents(GetChildComponents(), components)) return {};
 
 	const Rectangle& firstMergedSource = components[0]->GetMergedSource();
 
@@ -116,8 +113,8 @@ optional<SourceDivider> ImageGrid9::GetSourceAnd4Divider() const noexcept
 
 	//x값으로 2개 Divider를 담는다.
 	auto firstComponent = components[0]->GetSourceAnd2Divider();
-	if (!firstComponent.has_value()) return nullopt;
-	srcDivider.list = firstComponent->list;
+	if (firstComponent.Empty()) return {};
+	srcDivider.list = firstComponent.list;
 
 	//y값으로 2개 Divider를 담는다.
 	const Rectangle& topSource = firstMergedSource;
@@ -145,7 +142,7 @@ bool ImageGrid9::SetSources(const vector<Rectangle>& sources) noexcept
 bool ImageGrid9::SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept
 {
 	vector<int> widths{}, heights{};
-	ReturnIfFalse(GetWidthsAndHeights(srcDivider, widths, heights));
+	ReturnIfFalse(GetSizeDividedByNine(srcDivider, widths, heights));
 
 	vector<Rectangle> sources = GetSourcesFromArea(srcDivider.rect, widths, heights);
 	if (sources.size() != 9) return false;
@@ -163,4 +160,10 @@ vector<Rectangle> ImageGrid9::GetSources() const noexcept
 		ranges::copy(imgGrid3->GetSources(), back_inserter(areas));
 
 	return areas;
+}
+
+unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const ImageSource& source)
+{
+	auto imgGrid9 = make_unique<ImageGrid9>();
+	return imgGrid9->SetImage(layout, source) ? move(imgGrid9) : nullptr;
 }

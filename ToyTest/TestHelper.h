@@ -18,3 +18,5 @@ protected:
 private:
 	function<bool(ITextureLoad*)> m_loadTestFunc;
 };
+
+void TestRender(size_t index, const RECT& dest, const RECT* source, vector<pair<RECT, RECT>> testCases) noexcept;

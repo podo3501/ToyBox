@@ -1,6 +1,7 @@
 #pragma once
 
 struct SourceDivider;
+enum class DirectionType;
 
 struct TextData
 {
@@ -28,12 +29,6 @@ private:
 //L"<Hangle><Red>테스트, </Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>()</English>"
 bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept;
 
-enum class StretchType 
-{
-	Width,
-	Height
-};
-
 struct PositionSize
 {
 	//Vector2 pos;
@@ -41,27 +36,11 @@ struct PositionSize
 	XMUINT2 size;
 };
 
-vector<PositionSize> StretchSize(StretchType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept;
-
-class UILayout;
-struct ImageSource;
-
-template<typename T>
-concept ImageGridClass = requires(T obj, const UILayout & layout, const ImageSource & source) {
-	{ obj.SetImage(layout, source) };
-};
-
-template<ImageGridClass T>
-unique_ptr<T> CreateImageGrid(const UILayout& layout, const ImageSource& source)
-{
-	auto imgGrid = make_unique<T>();
-	if (!imgGrid->SetImage(layout, source)) return nullptr;
-
-	return imgGrid;
-}
+vector<PositionSize> StretchSize(DirectionType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept;
 
 //하나의 사각형과 두개의 점이 있을때 3개의 사각형을 찾는 함수
 vector<Rectangle> GetSourcesFromArea(
 	const Rectangle& area, const vector<int>& widths, const vector<int>& heights) noexcept;
 Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept;
-bool GetWidthsAndHeights(const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights);
+bool GetSizeDividedByThree(DirectionType type, const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights) noexcept;
+bool GetSizeDividedByNine(const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights) noexcept;

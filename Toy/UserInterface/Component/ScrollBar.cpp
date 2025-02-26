@@ -21,8 +21,8 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollTrac
 	m_scrollTrack = scrollTrack.get();
 	UIEx(this).AttachComponent(move(scrollTrack), {});
 	
-	//m_scrollButton = scrollButton.get();
-	//UIEx(this).AttachComponent(move(scrollButton), {});
+	m_scrollButton = scrollButton.get();
+	UIEx(this).AttachComponent(move(scrollButton), {});
 
 	return true;
 }

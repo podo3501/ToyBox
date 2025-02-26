@@ -97,7 +97,7 @@ void EditImageGrid3::RenderComponentEdit()
     if (EditFilename("Filename", filename))
         GetCommandList()->SetFilename(m_imageGrid3, GetRenderer(), filename);
     
-    SourceDivider srcDivider{ *m_imageGrid3->GetSourceAnd2Divider() };
+    SourceDivider srcDivider{ m_imageGrid3->GetSourceAnd2Divider() };
     if (EditSourceAndDivider("Source", "Deviders", srcDivider))
         GetCommandList()->SetSourceAndDivider(m_imageGrid3, srcDivider);
 
@@ -120,7 +120,7 @@ void EditImageGrid9::RenderComponentEdit()
     if (EditFilename("Filename", filename))
         GetCommandList()->SetFilename(m_imageGrid9, GetRenderer(), filename);
     
-    SourceDivider srcDivider{ *m_imageGrid9->GetSourceAnd4Divider() };
+    SourceDivider srcDivider{ m_imageGrid9->GetSourceAnd4Divider() };
     if (EditSourceAndDivider("Source", "Deviders", srcDivider))
         GetCommandList()->SetSourceAndDivider(m_imageGrid9, srcDivider);
 
