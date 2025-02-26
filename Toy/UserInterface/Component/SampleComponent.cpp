@@ -150,7 +150,7 @@ unique_ptr<UIComponent> CreateSampleScrollBar(const UILayout& layout)
 		L"UI/SampleTexture/Sample_0.png", {
 			{ 114, 178, 16, 10 }, { 114, 188, 16, 28 }, { 114, 216, 16, 10 }
 		} };
-	auto scrollTrack = CreateImageGrid<ImageGrid3>(gridLayout, trackSource);
+	auto scrollTrack = CreateSampleImageGrid3(DirectionType::Vertical, gridLayout, trackSource);
 
 	map<InteractState, vector<Rectangle>> btnSources{
 		{ InteractState::Normal, { {134, 178, 7, 16}, {141, 178, 2, 16}, {143, 178, 7, 16} } },
