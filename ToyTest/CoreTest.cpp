@@ -5,6 +5,7 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "TestHelper.h"
 
 using ::testing::Pair;

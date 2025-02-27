@@ -13,13 +13,13 @@
 #include "../UIUtility.h"
 #include "../../Utility.h"
 
-unique_ptr<UIComponent> CreateSampleImageGrid1(const UILayout& layout)
+unique_ptr<ImageGrid1> CreateSampleImageGrid1(const UILayout& layout)
 {
 	ImageSource grid1Source{ L"UI/SampleTexture/Sample_0.png", { { 10, 10, 64, 64 } } };
 	return CreateImageGrid1(layout, grid1Source);
 }
 
-unique_ptr<UIComponent> CreateSampleImageGrid3(DirectionType dirType, const UILayout& layout)
+unique_ptr<ImageGrid3> CreateSampleImageGrid3(DirectionType dirType, const UILayout& layout)
 {
 	ImageSource source{};
 	source.filename = L"UI/SampleTexture/Sample_0.png";
@@ -34,7 +34,7 @@ unique_ptr<UIComponent> CreateSampleImageGrid3(DirectionType dirType, const UILa
 	return imgGrid3->SetImage(dirType, layout, source) ? move(imgGrid3) : nullptr;
 }
 
-unique_ptr<UIComponent> CreateSampleImageGrid9(const UILayout& layout)
+unique_ptr<ImageGrid9> CreateSampleImageGrid9(const UILayout& layout)
 {
 	ImageSource source{
 		L"UI/SampleTexture/Sample_0.png", {
@@ -45,7 +45,7 @@ unique_ptr<UIComponent> CreateSampleImageGrid9(const UILayout& layout)
 	return CreateImageGrid9(layout, source);
 }
 
-unique_ptr<UIComponent> CreateSampleTextArea(const UILayout& layout, const wstring& text)
+unique_ptr<TextArea> CreateSampleTextArea(const UILayout& layout, const wstring& text)
 {
 	map<wstring, wstring> fontFileList;
 	fontFileList.insert(make_pair(L"Hangle", L"UI/Font/MaleunGothicS16.spritefont"));
@@ -60,7 +60,7 @@ static ImageSource CreateImageSource(const wstring& texturePath, const vector<Re
 }
 
 template <typename ImageGridFunc>
-static unique_ptr<UIComponent> CreateSampleButton( const UILayout& layout, const map<InteractState, vector<Rectangle>>& sources,
+static unique_ptr<Button> CreateSampleButton( const UILayout& layout, const map<InteractState, vector<Rectangle>>& sources,
 	const wstring& texturePath, ImageGridFunc createImageGridFunc)
 {
 	UILayout gridLayout(layout.GetSize(), Origin::LeftTop);
@@ -71,19 +71,19 @@ static unique_ptr<UIComponent> CreateSampleButton( const UILayout& layout, const
 		imageGridList.emplace(state, createImageGridFunc(gridLayout, imgSrc));
 	}
 
-	return CreateButton(layout, CreateContainer(gridLayout, move(imageGridList)));
+	return CreateButton(layout, CreateContainer(gridLayout, move(imageGridList), false));
 }
 
-static unique_ptr<UIComponent> CreateSampleButton1( const UILayout& layout, 
+static unique_ptr<Button> CreateSampleButton1(const UILayout& layout,
 	const map<InteractState, vector<Rectangle>>& sources, const wstring& texturePath)
 {
 	return CreateSampleButton(layout, sources, texturePath,
 		[](const UILayout& layout, const ImageSource& imgSrc) {
-			return CreateImageGrid1(layout, imgSrc);
-		});
+		return CreateImageGrid1(layout, imgSrc);
+	});
 }
 
-static unique_ptr<UIComponent> CreateSampleButton3( DirectionType dirType, const UILayout& layout,
+static unique_ptr<Button> CreateSampleButton3(DirectionType dirType, const UILayout& layout,
 	const map<InteractState, vector<Rectangle>>& sources, const wstring& texturePath)
 {
 	return CreateSampleButton(layout, sources, texturePath,
@@ -92,7 +92,7 @@ static unique_ptr<UIComponent> CreateSampleButton3( DirectionType dirType, const
 		});
 }
 
-unique_ptr<UIComponent> CreateSampleButton1(const UILayout& layout)
+unique_ptr<Button> CreateSampleButton1(const UILayout& layout)
 {
 	map<InteractState, vector<Rectangle>> sources{
 		{ InteractState::Normal, { {10, 138, 32, 32} } },
@@ -101,7 +101,7 @@ unique_ptr<UIComponent> CreateSampleButton1(const UILayout& layout)
 	return CreateSampleButton1(layout, sources, L"UI/SampleTexture/Sample_0.png");
 }
 
-unique_ptr<UIComponent> CreateSampleButton3(DirectionType dirType, const UILayout& layout)
+unique_ptr<Button> CreateSampleButton3(DirectionType dirType, const UILayout& layout)
 {
 	map<InteractState, vector<Rectangle>> sources{};
 	switch (dirType)
@@ -118,33 +118,38 @@ unique_ptr<UIComponent> CreateSampleButton3(DirectionType dirType, const UILayou
 	return CreateSampleButton3(dirType, layout, sources, L"UI/SampleTexture/Sample_0.png");
 }
 
-static unique_ptr<UIComponent> CreateSampleListArea(const UILayout& layout,
-	const map<InteractState, vector<Rectangle>>& sources, const wstring& texturePath)
+static unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout, unique_ptr<Container> container)
 {
-	UILayout gridLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
-
-	map<InteractState, unique_ptr<UIComponent>> imageGridList;
-	for (const auto& rects : sources)
-	{
-		ImageSource imgSrc = CreateImageSource(texturePath, rects.second);
-		imageGridList.emplace(rects.first, CreateImageGrid1(gridLayout, imgSrc));
-	}
-	auto container = CreateContainer(gridLayout, move(imageGridList));
-
 	ImageSource imgGrid1Source{ L"UI/SampleTexture/Sample_0.png", { { 10, 178, 48, 48 } } }; //리스트 배경 그림
 	auto imgGrid1 = CreateImageGrid1({ layout.GetSize(), Origin::LeftTop }, imgGrid1Source);
 
-	return CreateListArea(layout, move(imgGrid1), move(container));
+	UILayout scrollBarLayout({ {16, layout.GetSize().y }, Origin::LeftTop });
+	auto scrollBar = CreateSampleScrollBar(DirectionType::Vertical, scrollBarLayout);
+
+	return CreateListArea(layout, move(imgGrid1), move(container), move(scrollBar));
 }
 
-unique_ptr<UIComponent> CreateSampleListArea1(const UILayout& layout)
+static unique_ptr<Container> CreateListContainer(const UILayout& layout)
 {
 	map<InteractState, vector<Rectangle>> sources{
 		{ InteractState::Normal, { {118, 138, 32, 32} } },
 		{ InteractState::Hover, { {154, 138, 32, 32} } },
 		{ InteractState::Pressed, { {190, 138, 32, 32} } } };
 
-	auto listArea = CreateSampleListArea(layout, sources, L"UI/SampleTexture/Sample_0.png");
+	UILayout gridLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
+	map<InteractState, unique_ptr<UIComponent>> imageGridList;
+	for (const auto& rects : sources)
+	{
+		ImageSource imgSrc = CreateImageSource(L"UI/SampleTexture/Sample_0.png", rects.second);
+		imageGridList.emplace(rects.first, CreateImageGrid1(gridLayout, imgSrc));
+	}
+
+	return CreateContainer(gridLayout, move(imageGridList), false);
+}
+
+unique_ptr<ListArea> CreateSampleListArea1(const UILayout& layout)
+{
+	auto listArea = CreateSampleListArea(layout, CreateListContainer(layout));
 	//auto listAreaPtr = ComponentCast<ListArea*>(listArea.get());
 	//if (!MakeSampleListAreaData(listAreaPtr)) return nullptr;
 	return listArea;
@@ -172,20 +177,31 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
 	return true;
 }
 
-unique_ptr<UIComponent> CreateSampleScrollBar(const UILayout& layout)
+static unique_ptr<Container> CreateScrollContainer(const UILayout& layout)
+{
+	map<InteractState, vector<Rectangle>> sources{
+		{ InteractState::Normal, { {134, 178, 16, 7}, {134, 185, 16, 2}, {134, 187, 16, 7} } },
+		{ InteractState::Hover, { {154, 178, 16, 7}, {154, 185, 16, 2}, {154, 187, 16, 7} } },
+		{ InteractState::Pressed, { {174, 178, 16, 7}, {174, 185, 16, 2}, {174, 187, 16, 7} } } };
+
+	map<InteractState, unique_ptr<UIComponent>> imageGridList;
+	for (const auto& rects : sources)
+	{
+		ImageSource imgSrc = CreateImageSource(L"UI/SampleTexture/Sample_0.png", rects.second);
+		imageGridList.emplace(rects.first, CreateImageGrid3(DirectionType::Vertical, layout, imgSrc));
+	}
+	return CreateContainer(layout, move(imageGridList), true);
+}
+
+unique_ptr<ScrollBar> CreateSampleScrollBar(DirectionType dirType, const UILayout& layout)
 {
 	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
 	ImageSource trackSource{
 		L"UI/SampleTexture/Sample_0.png", {
 			{ 114, 178, 16, 10 }, { 114, 188, 16, 28 }, { 114, 216, 16, 10 }
 		} };
-	auto scrollTrack = CreateImageGrid3(DirectionType::Vertical, gridLayout, trackSource);
 	
-	map<InteractState, vector<Rectangle>> btnSources{
-		{ InteractState::Normal, { {134, 178, 16, 7}, {134, 185, 16, 2}, {134, 187, 16, 7} } },
-		{ InteractState::Hover, { {154, 178, 16, 7}, {154, 185, 16, 2}, {154, 187, 16, 7} } },
-		{ InteractState::Pressed, { {174, 178, 16, 7}, {174, 185, 16, 2}, {174, 187, 16, 7} } } };
-	auto scrollButton = CreateSampleButton3(DirectionType::Vertical, gridLayout, btnSources, L"UI/SampleTexture/Sample_0.png");
-
-	return CreateScrollBar(layout, move(scrollTrack), move(scrollButton));
+	return CreateScrollBar(layout, 
+		CreateImageGrid3(dirType, gridLayout, trackSource),
+		CreateScrollContainer(gridLayout));
 }

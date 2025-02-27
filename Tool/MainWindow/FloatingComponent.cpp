@@ -5,6 +5,11 @@
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/UserInterface/Component/Button.h"
+#include "../Toy/UserInterface/Component/TextArea.h"
+#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/Component/ImageGrid3.h"
+#include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Utility.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
@@ -128,7 +133,7 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 	return true;
 }
 
-bool FloatingComponent::LoadComponent(unique_ptr<UIComponent>&& component)
+bool FloatingComponent::LoadComponent(unique_ptr<UIComponent> component)
 {
 	return LoadComponentInternal(move(component), component->GetSize());
 }

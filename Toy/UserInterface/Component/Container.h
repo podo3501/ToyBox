@@ -15,7 +15,8 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>>&& imgGridList) noexcept;
+	bool Setup(const UILayout& layout, 
+		map<InteractState, unique_ptr<UIComponent>> imgGridList, bool holdToKeepPressed) noexcept;
 	void ClearInteraction() noexcept;
 
 protected:
@@ -32,6 +33,8 @@ private:
 	map<InteractState, UIComponent*> m_images;
 	optional<InteractState> m_state;
 	XMINT2 m_position{};
+
+	bool m_holdToKeepPressed{ false };//추후에 옵션으로 바뀔 예정
 };
 
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>>&& imgGridList);
+unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> imgGridList, bool holdToKeepPressed);

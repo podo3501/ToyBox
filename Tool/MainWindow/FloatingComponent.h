@@ -33,7 +33,7 @@ public:
 private:
 	void Clear() noexcept;
 	bool LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size);
-	bool LoadComponent(unique_ptr<UIComponent>&& component);
+	bool LoadComponent(unique_ptr<UIComponent> component);
 	void DrawMakeComponent();
 
 	IRenderer* m_renderer;

@@ -66,9 +66,11 @@ inline static void SetActiveStateFlag(bool condition, UIComponent* component) no
 	component->SetStateFlag(StateFlag::Active, condition);
 }
 
-bool Container::Setup(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>>&& imgGridList) noexcept
+bool Container::Setup(const UILayout& layout, 
+	map<InteractState, unique_ptr<UIComponent>> imgGridList, bool holdToKeepPressed) noexcept
 {
 	SetLayout(layout);
+	m_holdToKeepPressed = holdToKeepPressed;
 
 	for (auto& imgGrid : imgGridList)
 	{
@@ -128,12 +130,12 @@ void Container::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>>&& imgGridList)
+unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> imgGridList, bool holdToKeepPressed)
 {
 	if (imgGridList.size() != 3) return nullptr;
 
 	unique_ptr<Container> container = make_unique<Container>();
-	if(!container->Setup(layout, move(imgGridList))) return nullptr;
+	if(!container->Setup(layout, move(imgGridList), holdToKeepPressed)) return nullptr;
 
 	return container;
 }

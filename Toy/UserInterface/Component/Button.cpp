@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "../JsonOperation.h"
 
+//이 클래스는 당장에는 하는게 없다. container가 할 일을 다 가져갔다. 추후에 이 클래스가 어떻게 될지 지켜보자.
 Button::~Button() = default;
 Button::Button() :
 	m_container{ nullptr }
@@ -27,10 +28,11 @@ unique_ptr<UIComponent> Button::CreateClone() const
 void Button::ChangeSize(const XMUINT2& size) noexcept
 {
 	m_container->ChangeSize(size);
-	UIComponent::ChangeSize(size);
+	UIComponent::ChangeSize(size); //hover, pressed의 사이즈도 조정하는건데 함수 이름을 바꿔야 겠다 ?!?
 }
 
-bool Button::Setup(const UILayout& layout, unique_ptr<UIComponent>&& container) noexcept
+//holdToKeepPressed는 나중에 옵션을 지정하는 변수로 바뀔예정. 버튼은 다양한 버튼들이 존재하기 때문.
+bool Button::Setup(const UILayout& layout, unique_ptr<UIComponent> container) noexcept
 {
 	SetLayout(layout);
 
@@ -51,7 +53,7 @@ void Button::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent>&& container)
+unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent> container)
 {
 	unique_ptr<Button> button = make_unique<Button>();
 	if(!button->Setup(layout, move(container))) return nullptr;

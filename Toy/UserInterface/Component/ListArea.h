@@ -3,6 +3,8 @@
 #include "../UIHelperClass.h"
 
 class RenderTexture;
+class Container;
+class ScrollBar;
 namespace DX { class StepTimer; }
 
 //RenderTexture와 Prototype Container, SlideBar를 조합해서 만들어지는 컴포넌트
@@ -19,8 +21,9 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, unique_ptr<UIComponent> container) noexcept;
-	UIComponent* GetPrototypeContainer() noexcept { return m_prototypeContainer; }
+	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, 
+		unique_ptr<UIComponent> container, unique_ptr<UIComponent> scrollBar) noexcept;
+	Container* GetPrototypeContainer() noexcept { return m_prototypeContainer; }
 	UIComponent* PrepareContainer();
 
 protected:
@@ -34,8 +37,9 @@ private:
 	void CheckMouseInteraction() noexcept;
 	int32_t GetContainerHeight() const noexcept;
 
-	UIComponent* m_prototypeContainer;
+	Container* m_prototypeContainer;
 	UIComponent* m_bgImage;
+	ScrollBar* m_scrollBar;
 	RenderTexture* m_renderTex;
 	
 	vector<UIComponent*> m_containers; //이건 저장하지 않는다. 실행시에 채워지는 데이터이다.
@@ -44,4 +48,5 @@ private:
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout,
 	unique_ptr<UIComponent> bgImage,
-	unique_ptr<UIComponent> container);
+	unique_ptr<UIComponent> container,
+	unique_ptr<UIComponent> scrollBar);

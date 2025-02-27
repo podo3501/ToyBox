@@ -2,6 +2,8 @@
 #include "ListArea.h"
 #include "../JsonOperation.h"
 #include "RenderTexture.h"
+#include "ScrollBar.h"
+#include "Container.h"
 #include "../../InputManager.h"
 #include "../../Utility.h"
 #include "Container.h"
@@ -11,14 +13,16 @@ ListArea::~ListArea() = default;
 ListArea::ListArea() noexcept :
 	m_prototypeContainer{ nullptr },
 	m_bgImage{ nullptr },
-	m_renderTex{ nullptr }	
+	m_renderTex{ nullptr },
+	m_scrollBar{ nullptr }
 {}
 
 ListArea::ListArea(const ListArea& o) noexcept :
 	UIComponent{ o },
 	m_prototypeContainer{ nullptr },
 	m_bgImage{ nullptr },
-	m_renderTex{ nullptr }
+	m_renderTex{ nullptr },
+	m_scrollBar{ nullptr }
 {
 	ReloadDatas();
 }
@@ -26,7 +30,7 @@ ListArea::ListArea(const ListArea& o) noexcept :
 void ListArea::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_prototypeContainer = componentList[0];
+	m_prototypeContainer = ComponentCast<Container*>(componentList[0]);
 	m_renderTex = ComponentCast<RenderTexture*>(componentList[1]);
 	m_bgImage = m_renderTex->GetRenderedComponent();
 }
@@ -54,12 +58,14 @@ void ListArea::ChangeSize(const XMUINT2& size) noexcept
 	UIComponent::ChangeSize(size);
 }
 
-bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, unique_ptr<UIComponent> container) noexcept
+bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, 
+	unique_ptr<UIComponent> container, unique_ptr<UIComponent> scrollBar) noexcept
 {
 	SetLayout(layout);
 	UILayout partLayout{ layout.GetSize(), Origin::LeftTop }; //속성들은 정렬하지 않는다.
 	
-	m_prototypeContainer = container.get();
+	m_prototypeContainer = ComponentCast<Container*>(container.get());
+	m_prototypeContainer->ChangeSize({ layout.GetSize().x - 22, 30 });
 	m_prototypeContainer->Rename("Prototype Container");
 	m_prototypeContainer->SetStateFlag(StateFlag::Active, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	UIEx(this).AttachComponent(move(container), {});
@@ -74,6 +80,12 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, un
 	renderTex->EnableChildMouseEvents(true);
 	m_renderTex = renderTex.get();
 	UIEx(this).AttachComponent(move(renderTex), {});
+
+	constexpr int scrollBarGap = 3;
+	m_scrollBar = ComponentCast<ScrollBar*>(scrollBar.get());
+	m_scrollBar->ChangeSize({ 16, layout.GetSize().y - (scrollBarGap * 2) });
+	XMINT2 scrollBarPos{ static_cast<int32_t>(layout.GetSize().x - m_scrollBar->GetSize().x - scrollBarGap), scrollBarGap };
+	UIEx(this).AttachComponent(move(scrollBar), scrollBarPos);
 		
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요
 
@@ -100,9 +112,12 @@ UIComponent* ListArea::PrepareContainer()
 	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
 	m_containers.emplace_back(cloneContainerPtr);
 
+	auto viewArea = m_renderTex->GetSize().y;
 	auto curHeight = containerHeight + cloneContainerPtr->GetSize().y;
-	if(int height = m_renderTex->GetSize().y - curHeight; height < 0)
+	if(int height = viewArea - curHeight; height < 0)
 		m_bounded.SetBounds(height, 0, 15);
+
+	m_scrollBar->SetViewContentRatio(static_cast<float>(viewArea) / static_cast<float>(containerHeight));
 
 	return cloneContainerPtr;
 }
@@ -125,6 +140,8 @@ void ListArea::ScrollContainers(const DX::StepTimer& timer) noexcept
 		pos->y += value;
 		container->SetRelativePosition(*pos);
 	}
+
+	m_scrollBar->SetPositionRatio(m_bounded.GetPositionRatio());
 }
 
 void ListArea::CheckMouseInteraction() noexcept
@@ -156,9 +173,10 @@ void ListArea::SerializeIO(JsonOperation& operation)
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout, 
 	unique_ptr<UIComponent> bgImage,
-	unique_ptr<UIComponent> container)
+	unique_ptr<UIComponent> container,
+	unique_ptr<UIComponent> scrollBar)
 {
 	unique_ptr<ListArea> listArea= make_unique<ListArea>();
-	if (!listArea->Setup(layout, move(bgImage), move(container))) return nullptr;
+	if (!listArea->Setup(layout, move(bgImage), move(container), move(scrollBar))) return nullptr;
 	return listArea;
 }

@@ -72,13 +72,14 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const wstring&, const 
 	m_panel->ProcessRender(&mockRender);
 }
 
-void ToyTestFixture::TestUpdate(int mouseX, int mouseY)
+void ToyTestFixture::TestUpdate(int mouseX, int mouseY, bool leftButton)
 {
 	m_panel->ProcessUpdate(m_timer);
 	auto& mouseTracker = const_cast<MouseTracker&>(InputManager::GetMouse());
 	auto state = mouseTracker.GetLastState();
 	state.x = mouseX;
 	state.y = mouseY;
+	state.leftButton = leftButton;
 	mouseTracker.Update(state);
 }
 

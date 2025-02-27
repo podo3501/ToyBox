@@ -10,7 +10,8 @@ ImageGrid3::~ImageGrid3() = default;
 ImageGrid3::ImageGrid3() = default;
 
 ImageGrid3::ImageGrid3(const ImageGrid3& o) :
-    UIComponent{ o }
+    UIComponent{ o },
+    m_dirType{ o.m_dirType }
 {}
 
 unique_ptr<UIComponent> ImageGrid3::CreateClone() const
@@ -177,6 +178,7 @@ void ImageGrid3::SerializeIO(JsonOperation& operation)
     operation.Process("DirectionType", m_dirType);
 }
 
+//?!? component를 넣는 식으로 바꾸자. 함수 인자를 계속해서 전달할 필요는 없으니까.
 unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const ImageSource& source)
 {
     auto grid3 = make_unique<ImageGrid3>();

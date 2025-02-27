@@ -13,6 +13,7 @@
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/UserInterface/Component/ScrollBar.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/Utility.h"
 
@@ -23,20 +24,22 @@ namespace ComponentTest
 	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		TestRender(index, dest, source, {
-			{{144, 104, 176, 136}, {10, 138, 42, 170}},
-			{{144, 104, 176, 136}, {46, 138, 78, 170}},
-			{{144, 104, 176, 136}, {82, 138, 114, 170}}
+			{{144, 104, 176, 136}, {10, 138, 42, 170}}, //Normal
+			{{144, 104, 176, 136}, {46, 138, 78, 170}}, //hovered
+			{{144, 104, 176, 136}, {82, 138, 114, 170}} //Pressed
 			});
 	}
 
 	TEST_F(BasicFunctionalityTest, Button_ImageGrid1)
 	{
 		auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
+		auto buttonPtr = button.get();
 		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(144, 120);	//hover
+		TestUpdate(144, 120, true);	//Pressed
 		CallMockRender(TestButton_ImageGrid1Render, 1);
+
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
@@ -354,13 +357,28 @@ namespace ComponentTest
 
 	////////////////////////////////////////////////////////
 
+	static void TestScrollBar(size_t index, const RECT& dest, const RECT* source)
+	{
+		TestRender(index, dest, source, {
+			{{75, 75, 125, 125}, {0, 0, 50, 50}}
+			});
+	}
+
+
 	TEST_F(BasicFunctionalityTest, ScrollBar)
 	{
-		auto scrollBar = CreateSampleScrollBar({ { 200, 16 }, Origin::LeftTop });
+		auto scrollBar = CreateSampleScrollBar(DirectionType::Vertical, { { 16, 200 }, Origin::Center });
+		auto scrollBarPtr = scrollBar.get();
 		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
+		uint32_t viewArea = 500;
+		uint32_t contentSize = 2000;
+		scrollBarPtr->SetViewContentRatio(static_cast<float>(viewArea) / static_cast<float>(contentSize));
+		scrollBarPtr->SetPositionRatio(0.5f);
 
+		//CallMockRender(TestScrollBar, 6);
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	////////////////////////////////////////////////////////

@@ -84,6 +84,7 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 
 ?!?는 고쳐야 하거나 이상하거나 등등
 
+@Container에서 keepPressed 구현
 @Scroll Bar 만들기
 	컴포넌트만들기
 	세로 ImageGrid3만들기

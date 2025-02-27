@@ -2,8 +2,14 @@
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
 #include "../Toy/Utility.h"
+#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/Component/ImageGrid3.h"
+#include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/UserInterface/Component/Button.h"
+#include "../Toy/UserInterface/Component/TextArea.h"
+#include "../Toy/UserInterface/Component/ListArea.h"
 
 namespace ComponentTest
 {
@@ -47,12 +53,13 @@ namespace ComponentTest
 	}
 
 	template <typename T>
-	bool VerifyClone(unique_ptr<T> original) 
+	static bool VerifyClone(unique_ptr<T> original) 
 	{
 		if (!original) return false;
-		auto clone = original->Clone();
+		unique_ptr<UIComponent> origin = move(original); //업 캐스트 한다. unique_ptr은 업 캐스트가 안되고 move를 통해서만 된다.
+		auto clone = origin->Clone();
 		
-		return CompareUniquePtr(original, clone);
+		return CompareUniquePtr(origin, clone);
 	}
 
 	TEST_F(IntegrationTest, Clone)

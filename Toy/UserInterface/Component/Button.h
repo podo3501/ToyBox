@@ -12,7 +12,7 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, unique_ptr<UIComponent>&& container) noexcept;
+	bool Setup(const UILayout& layout, unique_ptr<UIComponent> container) noexcept;
 
 protected:
 	Button(const Button& o);
@@ -24,4 +24,4 @@ private:
 	UIComponent* m_container;
 };
 
-unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent>&& container);
+unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent> container);
