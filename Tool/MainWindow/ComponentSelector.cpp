@@ -98,7 +98,7 @@ void ComponentSelector::Render()
 		m_tooltip->Render(m_mainWnd);
 
 	if (m_component)
-		DrawRectangle(m_component->GetRectangle(), m_mainWnd);
+		DrawRectangle(m_component->GetArea(), m_mainWnd);
 
 	if (m_editWindow)
 		m_editWindow->Render(m_mainWnd);

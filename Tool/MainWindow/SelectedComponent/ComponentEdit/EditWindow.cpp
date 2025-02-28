@@ -43,7 +43,7 @@ static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
 
 static OnDrag IsMouseOverResizeZone(const XMINT2& pos, const UIComponent* component) noexcept
 {
-    auto zones = GenerateResizeZone(component->GetRectangle(), 8);
+    auto zones = GenerateResizeZone(component->GetArea(), 8);
     for (const auto& zone : zones)
     {
         if (Contains(zone.first, pos))

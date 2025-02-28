@@ -71,7 +71,7 @@ static unique_ptr<Button> CreateSampleButton( const UILayout& layout, const map<
 		imageGridList.emplace(state, createImageGridFunc(gridLayout, imgSrc));
 	}
 
-	return CreateButton(layout, CreateContainer(gridLayout, move(imageGridList), false));
+	return CreateButton(layout, CreateContainer(gridLayout, move(imageGridList), BehaviorMode::Normal));
 }
 
 static unique_ptr<Button> CreateSampleButton1(const UILayout& layout,
@@ -144,7 +144,7 @@ static unique_ptr<Container> CreateListContainer(const UILayout& layout)
 		imageGridList.emplace(rects.first, CreateImageGrid1(gridLayout, imgSrc));
 	}
 
-	return CreateContainer(gridLayout, move(imageGridList), false);
+	return CreateContainer(gridLayout, move(imageGridList), BehaviorMode::Normal);
 }
 
 unique_ptr<ListArea> CreateSampleListArea1(const UILayout& layout)
@@ -177,20 +177,21 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
 	return true;
 }
 
-static unique_ptr<Container> CreateScrollContainer(const UILayout& layout)
+unique_ptr<Container> CreateScrollContainer(const UILayout& layout)
 {
 	map<InteractState, vector<Rectangle>> sources{
 		{ InteractState::Normal, { {134, 178, 16, 7}, {134, 185, 16, 2}, {134, 187, 16, 7} } },
 		{ InteractState::Hover, { {154, 178, 16, 7}, {154, 185, 16, 2}, {154, 187, 16, 7} } },
 		{ InteractState::Pressed, { {174, 178, 16, 7}, {174, 185, 16, 2}, {174, 187, 16, 7} } } };
 
+	UILayout imgLayout(layout.GetSize(), Origin::LeftTop);
 	map<InteractState, unique_ptr<UIComponent>> imageGridList;
 	for (const auto& rects : sources)
 	{
 		ImageSource imgSrc = CreateImageSource(L"UI/SampleTexture/Sample_0.png", rects.second);
-		imageGridList.emplace(rects.first, CreateImageGrid3(DirectionType::Vertical, layout, imgSrc));
+		imageGridList.emplace(rects.first, CreateImageGrid3(DirectionType::Vertical, imgLayout, imgSrc));
 	}
-	return CreateContainer(layout, move(imageGridList), true);
+	return CreateContainer(layout, move(imageGridList), BehaviorMode::HoldToKeepPressed);
 }
 
 unique_ptr<ScrollBar> CreateSampleScrollBar(DirectionType dirType, const UILayout& layout)

@@ -70,18 +70,6 @@ XMINT2 UILayout::GetPosition(const XMINT2& relativePosition) const noexcept
 	return relativePosition - m_originPoint;
 }
 
-bool UILayout::IsArea(const XMINT2& pos) const noexcept
-{
-	//정렬값을 기준으로 포지션이 여기에 포함되는지 확인한다.
-	Rectangle curArea{ 
-		-m_originPoint.x, 
-		-m_originPoint.y, 
-		static_cast<long>(m_size.x), 
-		static_cast<long>(m_size.y)
-	};	
-	return curArea.Contains(pos.x, pos.y);
-}
-
 void UILayout::SerializeIO(JsonOperation& operation)
 {
 	operation.Process("Size", m_size);

@@ -24,33 +24,410 @@
         "Children": [
             {
                 "Child": {
-                    "Type": "TextArea",
-                    "FontFileList": {
-                        "English": "UI/Font/CourierNewBoldS18.spritefont",
-                        "Hangle": "UI/Font/MaleunGothicS16.spritefont"
-                    },
-                    "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
-                    "Name": "TextArea_0",
+                    "Type": "Container",
+                    "Name": "Container_0",
                     "Layout": {
                         "Size": {
-                            "x": 320,
-                            "y": 120
+                            "x": 16,
+                            "y": 16
                         },
                         "Origin": "Center"
                     },
                     "Transform": {
                         "RelativePosition": {
-                            "x": 400,
-                            "y": 300
+                            "x": 100,
+                            "y": 100
                         },
                         "Ratio": {
-                            "x": 0.5,
-                            "y": 0.5
+                            "x": 0.125,
+                            "y": 0.166667
                         }
                     },
                     "Region": "",
                     "StateFlag": 55,
-                    "Children": []
+                    "Children": [
+                        {
+                            "Child": {
+                                "Type": "ImageGrid3",
+                                "Name": "ImageGrid3_0",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 16,
+                                        "y": 16
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Transform": {
+                                    "RelativePosition": {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    "Ratio": {
+                                        "x": 0.0,
+                                        "y": 0.0
+                                    }
+                                },
+                                "Region": "",
+                                "StateFlag": 0,
+                                "Children": [
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_0",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 7
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 134,
+                                                "y": 178,
+                                                "width": 16,
+                                                "height": 7
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_1",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 2
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 7
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.4375
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 134,
+                                                "y": 185,
+                                                "width": 16,
+                                                "height": 2
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_2",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 7
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 9
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.5625
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 134,
+                                                "y": 187,
+                                                "width": 16,
+                                                "height": 7
+                                            }
+                                        }
+                                    }
+                                ],
+                                "DirectionType": 1
+                            }
+                        },
+                        {
+                            "Child": {
+                                "Type": "ImageGrid3",
+                                "Name": "ImageGrid3_1",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 16,
+                                        "y": 16
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Transform": {
+                                    "RelativePosition": {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    "Ratio": {
+                                        "x": 0.0,
+                                        "y": 0.0
+                                    }
+                                },
+                                "Region": "",
+                                "StateFlag": 0,
+                                "Children": [
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_3",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 7
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 154,
+                                                "y": 178,
+                                                "width": 16,
+                                                "height": 7
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_4",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 2
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 7
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.4375
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 154,
+                                                "y": 185,
+                                                "width": 16,
+                                                "height": 2
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_5",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 7
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 9
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.5625
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 154,
+                                                "y": 187,
+                                                "width": 16,
+                                                "height": 7
+                                            }
+                                        }
+                                    }
+                                ],
+                                "DirectionType": 1
+                            }
+                        },
+                        {
+                            "Child": {
+                                "Type": "ImageGrid3",
+                                "Name": "ImageGrid3_2",
+                                "Layout": {
+                                    "Size": {
+                                        "x": 16,
+                                        "y": 16
+                                    },
+                                    "Origin": "LeftTop"
+                                },
+                                "Transform": {
+                                    "RelativePosition": {
+                                        "x": 0,
+                                        "y": 0
+                                    },
+                                    "Ratio": {
+                                        "x": 0.0,
+                                        "y": 0.0
+                                    }
+                                },
+                                "Region": "",
+                                "StateFlag": 7,
+                                "Children": [
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_6",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 7
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 0
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.0
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 174,
+                                                "y": 178,
+                                                "width": 16,
+                                                "height": 7
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_7",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 2
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 7
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.4375
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 174,
+                                                "y": 185,
+                                                "width": 16,
+                                                "height": 2
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Child": {
+                                            "Type": "ImageGrid1",
+                                            "Name": "ImageGrid1_8",
+                                            "Layout": {
+                                                "Size": {
+                                                    "x": 16,
+                                                    "y": 7
+                                                },
+                                                "Origin": "LeftTop"
+                                            },
+                                            "Transform": {
+                                                "RelativePosition": {
+                                                    "x": 0,
+                                                    "y": 9
+                                                },
+                                                "Ratio": {
+                                                    "x": 0.0,
+                                                    "y": 0.5625
+                                                }
+                                            },
+                                            "Region": "",
+                                            "StateFlag": 55,
+                                            "Children": [],
+                                            "Filename": "UI/SampleTexture/Sample_0.png",
+                                            "Source": {
+                                                "x": 174,
+                                                "y": 187,
+                                                "width": 16,
+                                                "height": 7
+                                            }
+                                        }
+                                    }
+                                ],
+                                "DirectionType": 1
+                            }
+                        }
+                    ]
                 }
             }
         ]

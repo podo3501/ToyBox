@@ -220,7 +220,7 @@ bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
 	return true;
 }
 
-Rectangle UIComponent::GetRectangle() const noexcept
+Rectangle UIComponent::GetArea() const noexcept
 {
 	const XMINT2& curPosition = GetPosition();
 	const XMUINT2& curSize = GetSize();

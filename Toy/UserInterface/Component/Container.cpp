@@ -31,15 +31,21 @@ unique_ptr<UIComponent> Container::CreateClone() const
 	return unique_ptr<Container>(new Container(*this));
 }
 
-bool Container::operator==(const UIComponent& o) const noexcept
+bool Container::operator==(const UIComponent& rhs) const noexcept
 {
-	ReturnIfFalse(UIComponent::operator==(o));
-	const Container* rhs = static_cast<const Container*>(&o);
+	ReturnIfFalse(UIComponent::operator==(rhs));
+	const Container* o = static_cast<const Container*>(&rhs);
 
-	return std::all_of(m_images.begin(), m_images.end(), [rhs](const auto& pair) {
+	return std::all_of(m_images.begin(), m_images.end(), [o](const auto& pair) {
 		auto state = pair.first;
-		return pair.second->GetName() == rhs->m_images.at(state)->GetName();
+		return pair.second->GetName() == o->m_images.at(state)->GetName();
 		});
+}
+
+bool Container::ImplementPostLoaded(ITextureController*)
+{
+	SetState(Normal);
+	return true;
 }
 
 void Container::ClearInteraction() noexcept
@@ -67,10 +73,10 @@ inline static void SetActiveStateFlag(bool condition, UIComponent* component) no
 }
 
 bool Container::Setup(const UILayout& layout, 
-	map<InteractState, unique_ptr<UIComponent>> imgGridList, bool holdToKeepPressed) noexcept
+	map<InteractState, unique_ptr<UIComponent>> imgGridList, BehaviorMode behaviorMode) noexcept
 {
 	SetLayout(layout);
-	m_holdToKeepPressed = holdToKeepPressed;
+	m_behaviorMode = behaviorMode;
 
 	for (auto& imgGrid : imgGridList)
 	{
@@ -91,34 +97,51 @@ void Container::SetState(InteractState state) noexcept
 	m_state = state;
 }
 
-bool Container::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& absolutePos) noexcept
+bool Container::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2&) noexcept
 { 
 	if (IsDirty())
-		m_position = GetPositionByLayout(absolutePos);
+		m_area = GetArea();
 
 	return true;
 }
 
+bool Container::NormalMode(bool isPressed, bool isHeld) noexcept
+{
+	if (!Contains(m_area, InputManager::GetMouse().GetPosition()))
+	{
+		SetState(Normal);
+		return true;
+	}
+
+	SetState((isPressed || (*m_state == Pressed && isHeld)) ? Pressed : Hover);
+	return true;
+}
+
+//마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)
+bool Container::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept
+{
+	if(isPressed || isHeld)
+	{
+		KeyState keyState = isPressed ? KeyState::Pressed : KeyState::Held;
+		m_onPressCB(keyState);
+	}
+
+	if (*m_state == Pressed && isHeld)	return true; //Pressed가 계속 되고 있다면 리턴한다.
+	return NormalMode(isPressed, isHeld);
+}
+
 bool Container::ImplementActiveUpdate() noexcept
 {
-	if (!m_state)
-	{
-		SetState(Normal);
-		return true;
-	}
-
-	const auto& mouseTracker = InputManager::GetMouse();
-	const XMINT2& relativeMousePos = mouseTracker.GetPosition() - m_position;
-	if (!IsArea(relativeMousePos))
-	{
-		SetState(Normal);
-		return true;
-	}
-
+	//이 두값이 이전프레임과 비교해서 달라졌다면 실행하게 한다면 좀 더 빠르게 된다.
 	bool isPressed = IsInputAction(MouseButton::Left, KeyState::Pressed);
 	bool isHeld = IsInputAction(MouseButton::Left, KeyState::Held);
 
-	SetState((isPressed || (*m_state == Pressed && isHeld)) ? Pressed : Hover);
+	switch (m_behaviorMode) //이 부분은 배열에 함수포인터로 하면 더 빨라지는데 추후 다양한 behavior가 생기면 인자가 달라질수 있기 때문에 일단 보류한다.
+	{
+	case BehaviorMode::Normal: return NormalMode(isPressed, isHeld);
+	case BehaviorMode::HoldToKeepPressed: return HoldToKeepPressedMode(isPressed, isHeld);
+	}
+
 	return true;
 }
 
@@ -130,12 +153,12 @@ void Container::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> imgGridList, bool holdToKeepPressed)
+unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> imgGridList, BehaviorMode behaviorMode)
 {
 	if (imgGridList.size() != 3) return nullptr;
 
 	unique_ptr<Container> container = make_unique<Container>();
-	if(!container->Setup(layout, move(imgGridList), holdToKeepPressed)) return nullptr;
+	if(!container->Setup(layout, move(imgGridList), behaviorMode)) return nullptr;
 
 	return container;
 }

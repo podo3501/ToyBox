@@ -35,7 +35,6 @@ protected:
 	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;
 
 	inline bool IsDirty() const noexcept { return m_isDirty; }
-	inline bool IsArea(const XMINT2& pos) const noexcept { return m_layout.IsArea(pos); }
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
 	
 public:
@@ -64,7 +63,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	
 	XMINT2 GetPosition() const noexcept;
 	bool Rename(const string& name) noexcept;
-	Rectangle GetRectangle() const noexcept;
+	Rectangle GetArea() const noexcept;
 	const XMUINT2& GetSize() const noexcept;
 	optional<XMINT2> GetRelativePosition() const noexcept;
 	bool SetRelativePosition(const XMINT2& relativePos) noexcept;

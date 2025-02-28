@@ -96,8 +96,7 @@ vector<UIComponent*> UIComponentEx::GetComponents(const XMINT2& pos) noexcept
 {
 	vector<UIComponent*> findList;
 	m_component->ForEachChildBFS(StateFlag::Render | StateFlag::RenderTexture, [&findList, &pos](UIComponent* comp) {
-		const auto& curPosition = pos - comp->m_transform.GetAbsolutePosition();
-		if (comp->IsArea(curPosition))
+		if(Contains(comp->GetArea(), pos))
 			findList.push_back(comp);
 		});
 	return findList;
@@ -107,13 +106,13 @@ Rectangle UIComponentEx::GetTotalChildSize(const UIComponent* component) noexcep
 {
 	if (component == nullptr) return {};
 
-	Rectangle rect{ component->GetRectangle() }; //초기값을 지정하지 않으면 0, 0 부터 시작하는 큰 사각형이 union된다.
-	component->ForEachChildConst([&rect](const UIComponent* child) {
-		const auto& curRect = child->GetRectangle();
-		rect = Rectangle::Union(rect, curRect);
+	Rectangle totalArea{ component->GetArea() }; //초기값을 지정하지 않으면 0, 0 부터 시작하는 큰 사각형이 union된다.
+	component->ForEachChildConst([&totalArea](const UIComponent* child) {
+		const auto& area = child->GetArea();
+		totalArea = Rectangle::Union(totalArea, area);
 		});
 
-	return rect;
+	return totalArea;
 }
 
 XMUINT2 UIComponentEx::GetTotalChildSize() noexcept

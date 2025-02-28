@@ -72,9 +72,8 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const wstring&, const 
 	m_panel->ProcessRender(&mockRender);
 }
 
-void ToyTestFixture::TestUpdate(int mouseX, int mouseY, bool leftButton)
-{
-	m_panel->ProcessUpdate(m_timer);
+void ToyTestFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
+{ //마우스의 상태값은 업데이트를 계속해도 셋팅한 상태값이 계속 들어간다.
 	auto& mouseTracker = const_cast<MouseTracker&>(InputManager::GetMouse());
 	auto state = mouseTracker.GetLastState();
 	state.x = mouseX;
@@ -93,6 +92,7 @@ void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, con
 
 void ToyTestFixture::TearDown()
 {
+	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.
 	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
 	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.
 	m_panel.reset();

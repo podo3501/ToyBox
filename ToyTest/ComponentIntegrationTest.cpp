@@ -136,7 +136,7 @@ namespace ComponentTest
 		UIComponent* component = UIEx(m_panel).GetComponent("ImageGrid1_4");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
-		EXPECT_EQ(component->GetRectangle(), Rectangle(270, 216, 160, 128));
+		EXPECT_EQ(component->GetArea(), Rectangle(270, 216, 160, 128));
 	}
 
 	//이름을 구역을 만들어서 다른 구역이면 같은 이름을 쓸 수 있게 한다. 그러면 close 같은 이름이 중복이 되어도

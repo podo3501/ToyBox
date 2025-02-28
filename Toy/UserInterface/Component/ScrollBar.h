@@ -15,6 +15,7 @@ public:
 	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
+	void AddScrollChangedCB(function<void(float)> callback) { m_onScrollChangedCB = callback; }
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> scrollTrack, unique_ptr<UIComponent> scrollButton);
 	void SetViewContentRatio(float contentRatio) noexcept;
 	void SetPositionRatio(float positionRatio) noexcept;
@@ -22,12 +23,14 @@ public:
 protected:
 	ScrollBar(const ScrollBar& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementActiveUpdate() noexcept override;
 
 private:
 	void ReloadDatas() noexcept;
 
 	ImageGrid3* m_scrollTrack;
 	Container* m_scrollContainer;
+	function<void(float)> m_onScrollChangedCB;
 };
 
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout,

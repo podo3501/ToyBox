@@ -86,10 +86,7 @@ bool RenderTexture::ModifyTexture(const XMUINT2& size)
 
 void RenderTexture::CheckMouseInArea() noexcept
 {
-	auto rect = GetRectangle();
-	const XMINT2& mousePos = InputManager::GetMouse().GetPosition();
-
-	m_mouseInArea = rect.Contains(mousePos.x, mousePos.y);
+	m_mouseInArea = Contains(GetArea(), InputManager::GetMouse().GetPosition());
 }
 
 void RenderTexture::CheckEnterLeave() noexcept

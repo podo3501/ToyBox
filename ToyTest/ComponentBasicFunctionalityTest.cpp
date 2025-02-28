@@ -14,7 +14,9 @@
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Toy/UserInterface/Component/ScrollBar.h"
+#include "../Toy/UserInterface/Component/Container.h"
 #include "../Toy/UserInterface/UIUtility.h"
+#include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
 
 using testing::ElementsAre;
@@ -37,7 +39,7 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(144, 120, true);	//Pressed
+		MockMouseInput(144, 120, true);	//Pressed
 		CallMockRender(TestButton_ImageGrid1Render, 1);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -68,11 +70,11 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(110, 96);	//Hover
+		MockMouseInput(110, 96);	//Hover
 		CallMockRender(TestButton_ImageGrid3Render_H, 3);
 
 		btnPtr->ChangeSize({ 150, 48 });
-		TestUpdate(0, 0);	//Normal
+		MockMouseInput(0, 0);	//Normal
 		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_H, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
@@ -104,15 +106,48 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(button), { 100, 100 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		TestUpdate(77, 51);	//Hover
+		MockMouseInput(77, 51);	//Hover
 		CallMockRender(TestButton_ImageGrid3Render_V, 3);
 
 		btnPtr->ChangeSize({ 48, 150 });
-		TestUpdate(0, 0);	//Normal
+		MockMouseInput(0, 0);	//Normal
 		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_V, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_V, 3);
+	}
+
+	////////////////////////////////////////////////////////
+
+	static void TestContainer_Scroll(size_t index, const RECT& dest, const RECT* source)
+	{
+		TestRender(index, dest, source, { //Pressed
+			{{92, 92, 108, 99}, {174, 178, 190, 185}},
+			{{92, 99, 108, 101}, {174, 185, 190, 187}},
+			{{92, 101, 108, 108}, {174, 187, 190, 194}}
+			});
+	}
+
+	TEST_F(BasicFunctionalityTest, Container_Scroll)
+	{
+		auto scrollContainer = CreateScrollContainer({ {16, 16}, Origin::Center });
+		auto scrollContainerPtr = scrollContainer.get();
+		UIEx(m_panel).AttachComponent(move(scrollContainer), { 100, 100 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		testing::MockFunction<void(KeyState)> mockOnPress;
+		scrollContainerPtr->AddPressCB(mockOnPress.AsStdFunction());
+
+		EXPECT_CALL(mockOnPress, Call(KeyState::Pressed)).Times(1); //Pressed 인자를 넣어서 한번 호출할 것을 기대
+		EXPECT_CALL(mockOnPress, Call(KeyState::Held)).Times(1);
+
+		MockMouseInput(100, 100, true); //Pressed
+		CallMockRender(TestContainer_Scroll, 3);
+
+		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Held가 되어야한다.
+		CallMockRender(TestContainer_Scroll, 3);
+
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	////////////////////////////////////////////////////////
@@ -360,10 +395,19 @@ namespace ComponentTest
 	static void TestScrollBar(size_t index, const RECT& dest, const RECT* source)
 	{
 		TestRender(index, dest, source, {
-			{{75, 75, 125, 125}, {0, 0, 50, 50}}
+			{ {92, 100, 108, 110 }, {114, 178, 130, 188} },
+			{ {92, 110, 108, 290 }, {114, 188, 130, 216} },
+			{ {92, 290, 108, 300 }, {114, 216, 130, 226} },
+			{ {92, 175, 108, 182 }, {134, 178, 150, 185} },
+			{ {92, 182, 108, 218 }, {134, 185, 150, 187} },
+			{ {92, 218, 108, 225 }, {134, 187, 150, 194} }
 			});
 	}
+	
+	static void TestOnScrollChanged(float pos)
+	{
 
+	}
 
 	TEST_F(BasicFunctionalityTest, ScrollBar)
 	{
@@ -376,8 +420,13 @@ namespace ComponentTest
 		uint32_t contentSize = 2000;
 		scrollBarPtr->SetViewContentRatio(static_cast<float>(viewArea) / static_cast<float>(contentSize));
 		scrollBarPtr->SetPositionRatio(0.5f);
+		CallMockRender(TestScrollBar, 6);
 
-		//CallMockRender(TestScrollBar, 6);
+		MockMouseInput(100, 200, true); //Pressed
+		MockMouseInput(110, 210, true); //벗어났지만 Pressed가 되어야한다.
+
+		scrollBarPtr->AddScrollChangedCB(TestOnScrollChanged);
+		
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 

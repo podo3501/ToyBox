@@ -80,6 +80,13 @@ constexpr auto EnumToStringMap<InteractState>()->array<const char*, EnumSize<Int
 		{ "Pressed" }
 	} };
 }
+
+enum class BehaviorMode : int //컨테이너의 동작방식
+{
+	Normal,
+	HoldToKeepPressed,
+};
+
 ///////////////////////////////////////////////////////////////
 
 enum class CResult : int

@@ -64,6 +64,25 @@ unique_ptr<UIComponent> ScrollBar::CreateClone() const
 	return unique_ptr<ScrollBar>(new ScrollBar(*this));
 }
 
+bool ScrollBar::ImplementActiveUpdate() noexcept
+{
+	////눌러져 있다면 위치를 저장한다.
+	//bool isPressed = m_scrollContainer->IsPressed();
+	//const auto& state = m_scrollContainer->GetState();
+	//if (isPressed || state == InteractState::Held)
+	//{
+	//	
+	//}
+
+	//if ( != InteractState::Pressed) return true;
+	//이전위치와 차이값만큼 버튼을 이동한다.
+	//콜백으로 그 차이값을 호출한다.
+	
+
+	return true;
+}
+
+
 void ScrollBar::ChangeSize(const XMUINT2& size) noexcept
 {
 	m_scrollTrack->ChangeSize(size);
@@ -99,6 +118,5 @@ unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout,
 	unique_ptr<UIComponent> scrollContainer)
 {
 	unique_ptr<ScrollBar> scrollBar = make_unique<ScrollBar>();
-	if (!scrollBar->Setup(layout, move(scrollTrack), move(scrollContainer))) return nullptr;
-	return scrollBar;
+	return scrollBar->Setup(layout, move(scrollTrack), move(scrollContainer)) ? move(scrollBar) : nullptr;
 }
