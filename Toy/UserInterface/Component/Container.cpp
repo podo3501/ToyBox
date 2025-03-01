@@ -97,49 +97,42 @@ void Container::SetState(InteractState state) noexcept
 	m_state = state;
 }
 
-bool Container::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2&) noexcept
-{ 
-	if (IsDirty())
-		m_area = GetArea();
-
-	return true;
-}
-
-bool Container::NormalMode(bool isPressed, bool isHeld) noexcept
+void Container::NormalMode(bool isPressed, bool isHeld) noexcept
 {
-	if (!Contains(m_area, InputManager::GetMouse().GetPosition()))
+	if (!Contains(GetArea(), InputManager::GetMouse().GetPosition()))
 	{
 		SetState(Normal);
-		return true;
+		return;
 	}
 
-	SetState((isPressed || (*m_state == Pressed && isHeld)) ? Pressed : Hover);
-	return true;
+	SetState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hover);
 }
 
 //마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)
-bool Container::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept
+void Container::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept
 {
-	if(isPressed || isHeld)
+	if (m_state == Pressed && isHeld) //Pressed가 계속 되고 있다면 리턴한다.
 	{
-		KeyState keyState = isPressed ? KeyState::Pressed : KeyState::Held;
-		m_onPressCB(keyState);
+		m_onPressCB(KeyState::Held);
+		return; 
 	}
 
-	if (*m_state == Pressed && isHeld)	return true; //Pressed가 계속 되고 있다면 리턴한다.
-	return NormalMode(isPressed, isHeld);
+	NormalMode(isPressed, isHeld);
+
+	if (m_state == Pressed && isPressed) m_onPressCB(KeyState::Pressed);
 }
 
-bool Container::ImplementActiveUpdate() noexcept
+bool Container::ImplementUpdate(const DX::StepTimer&) noexcept
 {
+	if (!m_state.has_value()) return true; //로드 하지 않았다면 값이 셋팅되지 않는다.
 	//이 두값이 이전프레임과 비교해서 달라졌다면 실행하게 한다면 좀 더 빠르게 된다.
 	bool isPressed = IsInputAction(MouseButton::Left, KeyState::Pressed);
 	bool isHeld = IsInputAction(MouseButton::Left, KeyState::Held);
 
 	switch (m_behaviorMode) //이 부분은 배열에 함수포인터로 하면 더 빨라지는데 추후 다양한 behavior가 생기면 인자가 달라질수 있기 때문에 일단 보류한다.
 	{
-	case BehaviorMode::Normal: return NormalMode(isPressed, isHeld);
-	case BehaviorMode::HoldToKeepPressed: return HoldToKeepPressedMode(isPressed, isHeld);
+	case BehaviorMode::Normal: NormalMode(isPressed, isHeld); break;
+	case BehaviorMode::HoldToKeepPressed: HoldToKeepPressedMode(isPressed, isHeld); break;
 	}
 
 	return true;

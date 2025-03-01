@@ -21,21 +21,16 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
 	virtual bool ImplementLoadResource(ITextureLoad*) { return true; }
 	virtual bool ImplementPostLoaded(ITextureController*) { return true; }
-	virtual bool ImplementUpdatePosition(const DX::StepTimer&, const XMINT2&) noexcept { return true; }
-	virtual bool ImplementActiveUpdate() noexcept { return true; }
+	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept { return true; }
 	virtual void ImplementRender(ITextureRender*) const {};
 
 	//상속되어지는 함수는 구현한다.
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
-	bool UpdatePositionsManually(const XMINT2& position = {}) noexcept;
 	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
-	XMINT2 GetPositionByLayout(const XMINT2& position) const noexcept;
 	vector<UIComponent*> GetChildComponents() const noexcept;
 	UIComponent* GetChildComponent(size_t index) const noexcept;
 	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;
-
-	inline bool IsDirty() const noexcept { return m_isDirty; }
-	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); MarkDirty(); }
+	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); }
 	
 public:
 	virtual ~UIComponent();
@@ -56,24 +51,26 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual void ChangeSize(const XMUINT2& size) noexcept;
 	virtual void SerializeIO(JsonOperation& operation);
 
+	bool UpdatePositionsManually() noexcept;
 	bool ProcessUpdate(const DX::StepTimer& timer) noexcept;
 
 	template<typename T>
 	T GetComponent(const string& name) noexcept;
 	
-	XMINT2 GetPosition() const noexcept;
+	const XMINT2& GetPosition() const noexcept { return m_transform.GetAbsolutePosition(); }
 	bool Rename(const string& name) noexcept;
 	Rectangle GetArea() const noexcept;
 	const XMUINT2& GetSize() const noexcept;
 	optional<XMINT2> GetRelativePosition() const noexcept;
 	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
-	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); MarkDirty(); }
-	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); MarkDirty(); }
+	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); }
+	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); }
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }
 	inline void SetStateFlag(StateFlag::Type flag, bool enabled) noexcept { m_stateFlag = enabled ? (m_stateFlag | flag) : (m_stateFlag & ~flag); }
 	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return (m_stateFlag & flag) != 0; }
+	void SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept;
 	bool RenameRegion(const string& region) noexcept;
 	inline const string& GetRegion() const noexcept { return m_region; }
 
@@ -85,18 +82,14 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 private:
 	void UnlinkAndRefresh() noexcept;
-	const XMINT2& GetUpdatedPosition(UIComponent* component, const XMINT2& parentPos) noexcept;
-	bool RecursiveUpdatePositionsManually(const DX::StepTimer& timer, const XMINT2& position) noexcept;
 	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}, bool active = true) noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
-	void MarkDirty() noexcept;
 
 	string m_name;
 	UILayout m_layout;
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
 
-	bool m_isDirty{ true };
 	string m_region; //UI에서 네임스페이스 역할을 한다. GetRegionComponent로 찾을 수 있다.
 	int m_stateFlag{ StateFlag::Default };
 

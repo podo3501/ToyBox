@@ -28,7 +28,6 @@ TextArea::TextArea(const TextArea& other) :
 	UIComponent{ other },
 	m_texController{ other.m_texController }
 {
-	m_posByResolution = other.m_posByResolution;
 	m_text = other.m_text;
 	m_fontFileList = other.m_fontFileList;
 	m_font = other.m_font;
@@ -114,8 +113,13 @@ bool TextArea::SetText(const wstring& text)
 bool TextArea::ImplementPostLoaded(ITextureController* texController)
 {
 	m_texController = texController;
-
 	return ArrangeText(m_text);
+}
+
+void TextArea::ChangeSize(const XMUINT2& size) noexcept
+{
+	UIComponent::ChangeSize(size);
+	ArrangeText(m_text);
 }
 
 void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept
@@ -127,22 +131,12 @@ void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<ws
 		});
 }
 
-bool TextArea::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept
-{
-	if (IsDirty())
-	{
-		if(m_texController) ArrangeText(m_text);
-		m_posByResolution = XMINT2ToVector2(GetPositionByLayout(position));
-	}
-
-	return true;
-}
-
 void TextArea::ImplementRender(ITextureRender* render) const
 {
+	const auto& position = XMINT2ToVector2(GetPosition());
 	for (const auto& word : m_lines)
 		render->DrawString(m_font.at(word.fontStyle), 
-			word.text, m_posByResolution + word.position,
+			word.text, position + word.position,
 			XMLoadFloat4(&word.color));
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
+enum class KeyState;
 class ImageGrid3;
 class Container;
 
@@ -23,10 +24,11 @@ public:
 protected:
 	ScrollBar(const ScrollBar& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementActiveUpdate() noexcept override;
+	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 
 private:
 	void ReloadDatas() noexcept;
+	void OnPressCB(KeyState keyState);
 
 	ImageGrid3* m_scrollTrack;
 	Container* m_scrollContainer;

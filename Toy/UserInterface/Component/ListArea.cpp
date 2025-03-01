@@ -155,7 +155,7 @@ void ListArea::CheckMouseInteraction() noexcept
 	}
 }
 
-bool ListArea::ImplementUpdatePosition(const DX::StepTimer& timer, const XMINT2&) noexcept
+bool ListArea::ImplementUpdate(const DX::StepTimer& timer) noexcept
 {
 	CheckMouseInteraction();
 	ScrollContainers(timer);

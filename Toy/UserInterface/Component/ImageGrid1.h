@@ -32,14 +32,12 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementLoadResource(ITextureLoad* load) override;
 	virtual bool ImplementPostLoaded(ITextureController* texController) override;
-	virtual bool ImplementUpdatePosition(const DX::StepTimer& timer, const XMINT2& position) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
 	optional<size_t> m_index; //0값도 인덱스로 사용하기 때문에 optional
 	wstring m_filename;
 	Rectangle m_source{};
-	XMINT2 m_position{};
 	UINT64 m_gfxOffset{};
 	ITextureController* m_texController;
 };

@@ -96,30 +96,23 @@ void RenderTexture::CheckEnterLeave() noexcept
 	m_lastMouseInArea = m_mouseInArea;
 }
 
-bool RenderTexture::ImplementActiveUpdate() noexcept
+bool RenderTexture::ImplementUpdate(const DX::StepTimer&) noexcept
 {
 	CheckMouseInArea();
 	CheckEnterLeave();	
-	SetStateFlag(StateFlag::ActiveUpdate, m_mouseInArea && m_mouseEvents);
-
-	return true;
-}
-
-bool RenderTexture::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept
-{
-	if (IsDirty())
-		m_position = GetPositionByLayout(position);
+	SetChildrenStateFlag(StateFlag::ActiveUpdate, m_mouseInArea && m_mouseEvents);
 
 	return true;
 }
 
 void RenderTexture::ImplementRender(ITextureRender* render) const
 {
+	const auto& position = GetPosition();
 	const auto& size = GetSize();
-	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
+	Rectangle destination(position.x, position.y, size.x, size.y);
 
 	RECT source{ 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };
-	render->Render(*m_index, destination, &source);
+	render->Render(m_index.value(), destination, &source);
 
 	return;
 }

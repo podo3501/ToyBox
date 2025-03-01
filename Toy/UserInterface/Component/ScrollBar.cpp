@@ -3,6 +3,7 @@
 #include "ImageGrid3.h"
 #include "Button.h"
 #include "Container.h"
+#include "../../InputManager.h"
 #include "../JsonOperation.h"
 #include "../../Utility.h"
 
@@ -46,6 +47,7 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollTrac
 	UIEx(this).AttachComponent(move(scrollTrack), {});
 	
 	m_scrollContainer = ComponentCast<Container*>(scrollContainer.get());
+	m_scrollContainer->AddPressCB([this](KeyState keystate) { OnPressCB(keystate); });
 	UIEx(this).AttachComponent(move(scrollContainer), {});
 
 	return true;
@@ -64,7 +66,28 @@ unique_ptr<UIComponent> ScrollBar::CreateClone() const
 	return unique_ptr<ScrollBar>(new ScrollBar(*this));
 }
 
-bool ScrollBar::ImplementActiveUpdate() noexcept
+void ScrollBar::OnPressCB(KeyState keyState)
+{
+	static int32_t startPosY{ 0 };
+	const auto& mPos = InputManager::GetMouse().GetPosition();
+	if (keyState == KeyState::Pressed)
+	{
+		startPosY = mPos.y;
+		auto curPos = m_scrollContainer->GetRelativePosition();
+		//m_scrollContainer->SetRelativePosition({ curPos->x, 50 });
+		return;
+	}
+
+	//auto moved = mPos.y - startPosY;
+	//if (keyState == KeyState::Held && moved)
+	//{
+	//	uint32_t curY = m_scrollContainer->GetRelativePosition()->y + moved;
+	//	auto resultY = clamp(curY, 0u, m_scrollTrack->GetSize().y);
+	//	m_scrollContainer->SetRelativePosition({ m_scrollContainer->GetRelativePosition()->x, static_cast<int32_t>(resultY) });
+	//}
+}
+
+bool ScrollBar::ImplementUpdate(const DX::StepTimer&) noexcept
 {
 	////눌러져 있다면 위치를 저장한다.
 	//bool isPressed = m_scrollContainer->IsPressed();

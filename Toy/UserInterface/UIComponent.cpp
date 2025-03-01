@@ -58,7 +58,6 @@ void UIComponent::UnlinkAndRefresh() noexcept
 {
 	m_parent = nullptr;
 	m_transform.Clear();
-	MarkDirty();
 	UpdatePositionsManually();
 }
 
@@ -89,44 +88,28 @@ UITransform& UIComponent::GetTransform(UIComponent* component)
 	return component->m_transform;
 }
 
-const XMINT2& UIComponent::GetUpdatedPosition(UIComponent* component, const XMINT2& parentPos) noexcept
-{
-	return GetTransform(component).GetUpdatedPosition(m_isDirty, m_layout, parentPos);
-}
-
-bool UIComponent::RecursiveUpdatePositionsManually(const DX::StepTimer& timer, const XMINT2& position) noexcept
-{
-	ReturnIfFalse(ImplementUpdatePosition(timer, position));
-
-	bool result = ranges::all_of(m_children, [this, &timer, &position](auto& child) {
-		return child->RecursiveUpdatePositionsManually(timer, GetUpdatedPosition(child.get(), position));
-		});
-	m_isDirty = false;
-
-	return result;
-}
-
-bool UIComponent::UpdatePositionsManually(const XMINT2& position) noexcept
+bool UIComponent::UpdatePositionsManually() noexcept
 {
 	DX::StepTimer dummyTimer; //임시타이머이다. 이 타이머는 사용하지 않는다.
-	return RecursiveUpdatePositionsManually(dummyTimer, position);
+	return RecursiveUpdate(dummyTimer, {}, false); //ActiveUpdate true를 하면 상태가 바뀐다.
 }
 
 bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position, bool active) noexcept
 {
 	if (!HasStateFlag(StateFlag::Update)) return true;
 
-	ReturnIfFalse(ImplementUpdatePosition(timer, position));
+	const auto& startPos = GetTransform(this).GetUpdatedPosition(m_layout, position);
 	if (active)
 	{
-		ReturnIfFalse(ImplementActiveUpdate());
 		active = HasStateFlag(StateFlag::ActiveUpdate);
+		if(active) ReturnIfFalse(ImplementUpdate(timer));
 	}
-
-	bool result = ranges::all_of(m_children, [this, &timer, &position, active](auto& child) {
-		return child->RecursiveUpdate(timer, GetUpdatedPosition(child.get(), position), active);
+	
+	bool result = ranges::all_of(m_children, [this, &timer, &startPos, active](auto& child) {
+		auto childStartPos = startPos + GetTransform(child.get()).GetRelativePosition();
+		return child->RecursiveUpdate(timer, childStartPos, active);
 		});
-	m_isDirty = false;
+	
 
 	return result;
 }
@@ -145,6 +128,13 @@ void UIComponent::ProcessRender(ITextureRender* render)
 		});
 }
 
+void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept
+{
+	ranges::for_each(m_children, [this, flag, enabled](auto& child) {
+		child->SetStateFlag(flag, enabled);
+		});
+}
+
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
 void UIComponent::ChangeSize(const XMUINT2& size) noexcept
 {
@@ -158,10 +148,7 @@ void UIComponent::ChangeSize(const XMUINT2& size) noexcept
 bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
 	if (index >= m_children.size()) return false;
-	
 	GetTransform(m_children[index].get()).SetRelativePosition(size, relativePos);
-	MarkDirty();
-
 	return true;
 }
 
@@ -200,13 +187,6 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 		});
 }
 
-void UIComponent::MarkDirty() noexcept
-{
-	ForEachChild([](UIComponent* component) {
-		component->m_isDirty = true;
-		});
-}
-
 optional<XMINT2> UIComponent::GetRelativePosition() const noexcept
 {
 	return m_transform.GetRelativePosition();
@@ -216,7 +196,6 @@ bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
 {
 	if (!m_parent) return false;
 	m_transform.SetRelativePosition(m_parent->GetSize(), relativePos);
-	m_parent->MarkDirty();
 	return true;
 }
 
@@ -226,22 +205,11 @@ Rectangle UIComponent::GetArea() const noexcept
 	const XMUINT2& curSize = GetSize();
 	return Rectangle(curPosition.x, curPosition.y, curSize.x, curSize.y);
 }
-
+   
 const XMUINT2& UIComponent::GetSize() const noexcept
 {
 	return m_layout.GetSize();
 }
-
-XMINT2 UIComponent::GetPosition() const noexcept
-{
-	return GetPositionByLayout(m_transform.GetAbsolutePosition());
-}
-
-XMINT2 UIComponent::GetPositionByLayout(const XMINT2& position) const noexcept
-{
-	return position + m_layout.GetPosition();
-}
-
 
 UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
 {

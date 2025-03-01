@@ -84,6 +84,18 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 
 ?!?는 고쳐야 하거나 이상하거나 등등
 
+@
+const XMINT2& UIComponent::GetUpdatedPosition(UIComponent* component, const XMINT2& parentPos) noexcept
+{
+	return GetTransform(component).GetUpdatedPosition(m_isDirty, m_layout, parentPos);
+}
+이 함수가 component 이건 자식이고, m_isDirty 부모, m_layout부모, 막 꼬여 있다. 이걸 풀어서
+ReturnIfFalse(ImplementUpdatePosition(timer, position)); 이 함수가 기본일때는 return true 하는데 
+이 부분을 수정해서 업데이트 하게 한다.
+그러면 이 부분 이후에 m_isDirty = false; 를 넣을 수 있을것 같다. 그러면 콜백 함수에서 부모의 Dirty를 true로 수정
+하면 다음 프레임에 적용이 될 것이다. 지금은 부모의 Dirty를 true로 해도 마지막에 false로 덮어버리기 때문에 
+업데이트가 되지 않는다. 
+
 @Container에서 keepPressed 구현
 @Scroll Bar 만들기
 	컴포넌트만들기

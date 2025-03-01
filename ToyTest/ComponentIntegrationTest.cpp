@@ -49,6 +49,7 @@ namespace ComponentTest
 
 		EXPECT_EQ(UIEx(img1Ptr).GetTotalChildSize(), XMUINT2(210, 110));
 		auto [detached, parent] = UIEx(img1Ptr).DetachComponent();
+		detached->ProcessUpdate(m_timer);
 		EXPECT_EQ(UIEx(detached).GetTotalChildSize(), XMUINT2(210, 110));
 	}
 
@@ -198,6 +199,7 @@ namespace ComponentTest
 
 		Panel* ptrPanel = UIEx(m_panel).GetComponent<Panel*>("Panel2");
 		ptrPanel->ChangeOrigin(Origin::LeftTop);
+		m_panel->ProcessUpdate(m_timer);
 
 		outList.clear();
 		outList = UIEx(m_panel).GetComponents({ 239, 140 });

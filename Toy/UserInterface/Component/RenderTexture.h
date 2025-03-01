@@ -13,7 +13,6 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::RenderTexture; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
-	virtual bool ImplementActiveUpdate() noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent>&& component) noexcept;
@@ -30,7 +29,7 @@ protected:
 	RenderTexture(const RenderTexture& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementPostLoaded(ITextureController*) override;
-	virtual bool ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept override;
+	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
@@ -44,7 +43,6 @@ private:
 
 	optional<size_t> m_index;
 	UINT64 m_gfxOffset{};
-	XMINT2 m_position{};
 
 	bool m_mouseEvents{ true };
 	bool m_mouseInArea{ false };

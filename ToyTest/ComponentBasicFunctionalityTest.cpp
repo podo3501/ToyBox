@@ -155,13 +155,13 @@ namespace ComponentTest
 	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		TestRender(index, dest, source, {
-			{{400, 300, 464, 364}, {10, 10, 74, 74}}
+			{{368, 268, 432, 332}, {10, 10, 74, 74}}
 			});
 	}
 
 	TEST_F(BasicFunctionalityTest, ImageGrid1)
 	{
-		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
+		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::Center });
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 

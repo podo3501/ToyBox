@@ -16,7 +16,6 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	child->SetParent(m_component);
 	child->m_transform.SetRelativePosition(m_component->m_layout.GetSize(), relativePos); //부모 사이즈와 나의 위치를 비교해야 상대적인 위치값을 구할 수 있다.
 	m_component->m_children.emplace_back(move(child));
-	m_component->MarkDirty();
 
 	return nullptr;
 }

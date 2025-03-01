@@ -26,19 +26,17 @@ protected:
 	Container(const Container& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementPostLoaded(ITextureController*) override;
-	virtual bool ImplementUpdatePosition(const DX::StepTimer& timer, const XMINT2& absolutePos) noexcept override;
-	virtual bool ImplementActiveUpdate() noexcept override;
+	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 
 private:
 	void ReloadDatas() noexcept;
 	void SetState(InteractState state) noexcept;
 	void AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept;
-	bool NormalMode(bool isPressed, bool isHeld) noexcept;
-	bool HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept;
+	void NormalMode(bool isPressed, bool isHeld) noexcept;
+	void HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept;
 
 	map<InteractState, UIComponent*> m_images;
 	optional<InteractState> m_state;
-	Rectangle m_area{};
 
 	BehaviorMode m_behaviorMode{ BehaviorMode::Normal };
 	function<void(KeyState)> m_onPressCB;

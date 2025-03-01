@@ -78,18 +78,11 @@ optional<vector<Rectangle>> ImageGrid1::GetTextureAreaList()
 	 return m_texController->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0));
 }
 
-bool ImageGrid1::ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept
-{
-	if(IsDirty())
-		m_position = GetPositionByLayout(position);
-
-	return true;
-}
-
 void ImageGrid1::ImplementRender(ITextureRender* render) const
 {
+	const auto& position = GetPosition();
 	const auto& size = GetSize();
-	Rectangle destination(m_position.x, m_position.y, size.x, size.y);
+	Rectangle destination(position.x, position.y, size.x, size.y);
 
 	RECT source = RectangleToRect(m_source);
 	render->Render(*m_index, destination, &source);

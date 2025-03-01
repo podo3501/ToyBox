@@ -27,14 +27,13 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementLoadResource(ITextureLoad* load) override;
 	virtual bool ImplementPostLoaded(ITextureController* texController) override;
-	virtual bool ImplementUpdatePosition(const DX::StepTimer&, const XMINT2& position) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
+	virtual void ChangeSize(const XMUINT2& size) noexcept override;
 
 private:
 	bool ArrangeText(const wstring& text);
 
 	ITextureController* m_texController;
-	Vector2 m_posByResolution{};
 	wstring m_text{};
 	map<wstring, wstring> m_fontFileList;
 	map<wstring, size_t> m_font; //core상태에 따라서 인덱스는 변할수 있기 때문에 저장하지 않는다.

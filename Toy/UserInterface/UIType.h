@@ -102,8 +102,8 @@ namespace StateFlag
 {
 	enum Type : int //갯수는 32개까지 가능. 
 	{
-		Update = 1 << 0,
-		ActiveUpdate = 1 << 1,
+		Update = 1 << 0, //위치 업데이트 및 ActiveUpdate포함
+		ActiveUpdate = 1 << 1, //Active업데이트(Update함수 실행하는가 아닌가) 실행여부
 		Render = 1 << 2, //Render라면 RenderTexture 및 Render 두군데 다 그려준다.
 		RenderTexture = 1 << 3, //RenderTexture라면 Texture셋팅일때만 그린다.
 		Attach = 1 << 4,

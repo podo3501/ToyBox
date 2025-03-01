@@ -5,15 +5,6 @@
 #include "../Utility.h"
 
 UITransform::UITransform() = default;
-UITransform::UITransform(const XMINT2& relativePos, const Vector2& ratio) :
-	m_relativePosition{ relativePos }, m_ratio{ ratio }
-{}
-
-UITransform::UITransform(const XMUINT2& size, const XMINT2& relativePos)
-{
-	SetRelativePosition(size, relativePos);
-}
-
 bool UITransform::operator==(const UITransform& o) const noexcept
 {
 	if (m_relativePosition != o.m_relativePosition) return false;
@@ -24,16 +15,14 @@ bool UITransform::operator==(const UITransform& o) const noexcept
 
 void UITransform::Clear() noexcept
 {
+	m_ratio = {};
 	m_absolutePosition = {};
 	m_relativePosition = {};
-	m_ratio = {};
 }
 
-const XMINT2& UITransform::GetUpdatedPosition(bool IsDirty, const UILayout& layout, const XMINT2& parentPosition) noexcept
+XMINT2 UITransform::GetUpdatedPosition(const UILayout& layout, const XMINT2& parentPos) noexcept
 {
-	if (!IsDirty) return m_absolutePosition;
-	m_absolutePosition = layout.GetPosition(m_relativePosition) + parentPosition;
-
+	m_absolutePosition = layout.GetPosition(parentPos);
 	return m_absolutePosition;
 }
 
@@ -54,6 +43,6 @@ void UITransform::AdjustPosition(const XMUINT2& size) noexcept
 
 void UITransform::SerializeIO(JsonOperation& operation)
 {
-	operation.Process("RelativePosition", m_relativePosition);
 	operation.Process("Ratio", m_ratio);
+	operation.Process("RelativePosition", m_relativePosition);
 }
