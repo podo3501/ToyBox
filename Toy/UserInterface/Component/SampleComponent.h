@@ -19,8 +19,11 @@ unique_ptr<ImageGrid9> CreateSampleImageGrid9(const UILayout& layout);
 unique_ptr<TextArea> CreateSampleTextArea(const UILayout& layout, const wstring& text);
 unique_ptr<Button> CreateSampleButton1(const UILayout& layout);
 unique_ptr<Button> CreateSampleButton3(DirectionType dirtype, const UILayout& layout);
+unique_ptr<ImageGrid1> CreateListBackgroudImage(const UILayout& layout);
 unique_ptr<ListArea> CreateSampleListArea1(const UILayout& layout);
+unique_ptr<Container> CreateSampleListContainer(const UILayout& layout);
+unique_ptr<ImageGrid3> CreateScrollTrack(DirectionType dirType, const UILayout& layout);
 unique_ptr<Container> CreateScrollContainer(const UILayout& layout);
 unique_ptr<ScrollBar> CreateSampleScrollBar(DirectionType dirType, const UILayout& layout);
 
-bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea);
+bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea, int itemCount);

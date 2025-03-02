@@ -118,18 +118,21 @@ unique_ptr<Button> CreateSampleButton3(DirectionType dirType, const UILayout& la
 	return CreateSampleButton3(dirType, layout, sources, L"UI/SampleTexture/Sample_0.png");
 }
 
-static unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout, unique_ptr<Container> container)
+unique_ptr<ImageGrid1> CreateListBackgroudImage(const UILayout& layout)
 {
 	ImageSource imgGrid1Source{ L"UI/SampleTexture/Sample_0.png", { { 10, 178, 48, 48 } } }; //리스트 배경 그림
-	auto imgGrid1 = CreateImageGrid1({ layout.GetSize(), Origin::LeftTop }, imgGrid1Source);
+	return CreateImageGrid1({ layout.GetSize(), Origin::LeftTop }, imgGrid1Source);
+}
 
+static unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout, unique_ptr<Container> container)
+{
 	UILayout scrollBarLayout({ {16, layout.GetSize().y }, Origin::LeftTop });
 	auto scrollBar = CreateSampleScrollBar(DirectionType::Vertical, scrollBarLayout);
 
-	return CreateListArea(layout, move(imgGrid1), move(container), move(scrollBar));
+	return CreateListArea(layout, CreateListBackgroudImage(layout), move(container), move(scrollBar));
 }
 
-static unique_ptr<Container> CreateListContainer(const UILayout& layout)
+unique_ptr<Container> CreateSampleListContainer(const UILayout& layout)
 {
 	map<InteractState, vector<Rectangle>> sources{
 		{ InteractState::Normal, { {118, 138, 32, 32} } },
@@ -149,13 +152,13 @@ static unique_ptr<Container> CreateListContainer(const UILayout& layout)
 
 unique_ptr<ListArea> CreateSampleListArea1(const UILayout& layout)
 {
-	auto listArea = CreateSampleListArea(layout, CreateListContainer(layout));
+	auto listArea = CreateSampleListArea(layout, CreateSampleListContainer(layout));
 	//auto listAreaPtr = ComponentCast<ListArea*>(listArea.get());
 	//if (!MakeSampleListAreaData(listAreaPtr)) return nullptr;
 	return listArea;
 }
 
-bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
+bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea, int itemCount)
 {
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	auto protoTextArea = CreateSampleTextArea({ { 130, 30 }, Origin::Center }, L"");
@@ -166,7 +169,6 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
 	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 75, 15 });
 	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
 
-	const int& itemCount = 7;
 	for (auto idx : views::iota(0, itemCount))
 	{
 		auto container = listArea->PrepareContainer();
@@ -175,6 +177,16 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea)
 	}
 
 	return true;
+}
+
+unique_ptr<ImageGrid3> CreateScrollTrack(DirectionType dirType, const UILayout& layout)
+{
+	ImageSource trackSource{
+	L"UI/SampleTexture/Sample_0.png", {
+		{ 114, 178, 16, 10 }, { 114, 188, 16, 28 }, { 114, 216, 16, 10 }
+	} };
+
+	return CreateImageGrid3(dirType, layout, trackSource);
 }
 
 unique_ptr<Container> CreateScrollContainer(const UILayout& layout)
@@ -197,12 +209,8 @@ unique_ptr<Container> CreateScrollContainer(const UILayout& layout)
 unique_ptr<ScrollBar> CreateSampleScrollBar(DirectionType dirType, const UILayout& layout)
 {
 	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
-	ImageSource trackSource{
-		L"UI/SampleTexture/Sample_0.png", {
-			{ 114, 178, 16, 10 }, { 114, 188, 16, 28 }, { 114, 216, 16, 10 }
-		} };
-	
-	return CreateScrollBar(layout, 
-		CreateImageGrid3(dirType, gridLayout, trackSource),
+		
+	return CreateScrollBar(layout,
+		CreateScrollTrack(dirType, gridLayout),
 		CreateScrollContainer(gridLayout));
 }

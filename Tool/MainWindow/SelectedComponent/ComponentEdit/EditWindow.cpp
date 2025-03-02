@@ -181,12 +181,9 @@ void EditWindow::RenderCommon()
 {
     EditName("Name");
 
-    auto relativePosition = m_component->GetRelativePosition();
-    if(relativePosition.has_value())
-    {
-        if(EditPosition(*relativePosition))
-            m_cmdList->SetRelativePosition(m_component, *relativePosition);
-    }
+    XMINT2 relativePosition = m_component->GetRelativePosition();   
+    if(EditPosition(relativePosition))
+        m_cmdList->SetRelativePosition(m_component, relativePosition);
 
     XMUINT2 size{ m_component->GetSize() };
     if (EditSize(size))

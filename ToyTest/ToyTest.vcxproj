@@ -129,7 +129,8 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ComponentBasicFunctionalityTest.cpp" />
+    <ClCompile Include="BasicComponentTest.cpp" />
+    <ClCompile Include="ComplexComponentTest.cpp" />
     <ClCompile Include="ComponentIntegrationTest.cpp" />
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />

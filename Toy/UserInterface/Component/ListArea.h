@@ -33,9 +33,12 @@ protected:
 
 private:
 	void ReloadDatas() noexcept;
+	void UpdateContainersScroll(const DX::StepTimer& timer) noexcept;
 	void ScrollContainers(const DX::StepTimer& timer) noexcept;
 	void CheckMouseInteraction() noexcept;
 	int32_t GetContainerHeight() const noexcept;
+	void OnScrollChangedCB(float ratio);
+	void MoveContainers(int32_t targetPos) noexcept;
 
 	Container* m_prototypeContainer;
 	UIComponent* m_bgImage;

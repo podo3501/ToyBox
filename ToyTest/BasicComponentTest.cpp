@@ -9,11 +9,8 @@
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Component/Panel.h"
-#include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
-#include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
-#include "../Toy/UserInterface/Component/ScrollBar.h"
 #include "../Toy/UserInterface/Component/Container.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/InputManager.h"
@@ -32,7 +29,7 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(BasicFunctionalityTest, Button_ImageGrid1)
+	TEST_F(BasicComponentTest, Button_ImageGrid1)
 	{
 		auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
 		auto buttonPtr = button.get();
@@ -63,7 +60,7 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(BasicFunctionalityTest, Button_ImageGrid3_Horizontal)
+	TEST_F(BasicComponentTest, Button_ImageGrid3_Horizontal)
 	{
 		auto button = CreateSampleButton3(DirectionType::Horizontal, { {100, 48}, Origin::Center });
 		auto btnPtr = ComponentCast<Button*>(button.get());
@@ -99,7 +96,7 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(BasicFunctionalityTest, Button_ImageGrid3_Vertical)
+	TEST_F(BasicComponentTest, Button_ImageGrid3_Vertical)
 	{
 		auto button = CreateSampleButton3(DirectionType::Vertical, { {48, 100}, Origin::Center });
 		auto btnPtr = ComponentCast<Button*>(button.get());
@@ -128,7 +125,7 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(BasicFunctionalityTest, Container_Scroll)
+	TEST_F(BasicComponentTest, Container_Scroll)
 	{
 		auto scrollContainer = CreateScrollContainer({ {16, 16}, Origin::Center });
 		auto scrollContainerPtr = scrollContainer.get();
@@ -159,7 +156,7 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(BasicFunctionalityTest, ImageGrid1)
+	TEST_F(BasicComponentTest, ImageGrid1)
 	{
 		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::Center });
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
@@ -198,7 +195,7 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(BasicFunctionalityTest, ImageGrid3_Horizontal)
+	TEST_F(BasicComponentTest, ImageGrid3_Horizontal)
 	{
 		auto img = CreateSampleImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop });
 		auto imgPtr = ComponentCast<ImageGrid3*>(img.get());
@@ -251,7 +248,7 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(BasicFunctionalityTest, ImageGrid3_Vertical)
+	TEST_F(BasicComponentTest, ImageGrid3_Vertical)
 	{
 		auto img3 = CreateSampleImageGrid3(DirectionType::Vertical, { {36, 100}, Origin::LeftTop });
 		auto img3Ptr = ComponentCast<ImageGrid3*>(img3.get());
@@ -329,7 +326,7 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(BasicFunctionalityTest, ImageGrid9)
+	TEST_F(BasicComponentTest, ImageGrid9)
 	{
 		auto img = CreateSampleImageGrid9({ {170, 120}, Origin::LeftTop });
 		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
@@ -357,81 +354,6 @@ namespace ComponentTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicFunctionalityTest, ListArea)
-	{
-		auto listArea = CreateSampleListArea1({ { 150, 130 }, Origin::Center });
-		auto listAreaPtr = ComponentCast<ListArea*>(listArea.get());
-		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-
-		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), listAreaPtr));
-		EXPECT_TRUE(WriteReadTest(m_panel));
-	}
-
-	////////////////////////////////////////////////////////
-
-	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source)
-	{
-		EXPECT_EQ(index, 1); //0은 texture 1은 renderTexture이다. 그래서 1이 들어오고
-		TestRender(0, dest, source, {//0값 비교하니까 0을 그냥 넣어줌. 
-			{{75, 75, 125, 125}, {0, 0, 50, 50}}
-			});
-	}
-
-	TEST_F(BasicFunctionalityTest, RenderTexture)
-	{
-		auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
-		auto buttonPtr = button.get();
-		auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(button));
-		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-
-		CallMockRender(TestRenderTexture, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
-		EXPECT_TRUE(WriteReadTest(m_panel));
-	}
-
-	////////////////////////////////////////////////////////
-
-	static void TestScrollBar(size_t index, const RECT& dest, const RECT* source)
-	{
-		TestRender(index, dest, source, {
-			{ {92, 100, 108, 110 }, {114, 178, 130, 188} },
-			{ {92, 110, 108, 290 }, {114, 188, 130, 216} },
-			{ {92, 290, 108, 300 }, {114, 216, 130, 226} },
-			{ {92, 175, 108, 182 }, {134, 178, 150, 185} },
-			{ {92, 182, 108, 218 }, {134, 185, 150, 187} },
-			{ {92, 218, 108, 225 }, {134, 187, 150, 194} }
-			});
-	}
-	
-	static void TestOnScrollChanged(float pos)
-	{
-
-	}
-
-	TEST_F(BasicFunctionalityTest, ScrollBar)
-	{
-		auto scrollBar = CreateSampleScrollBar(DirectionType::Vertical, { { 16, 200 }, Origin::Center });
-		auto scrollBarPtr = scrollBar.get();
-		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-
-		uint32_t viewArea = 500;
-		uint32_t contentSize = 2000;
-		scrollBarPtr->SetViewContentRatio(static_cast<float>(viewArea) / static_cast<float>(contentSize));
-		scrollBarPtr->SetPositionRatio(0.5f);
-		CallMockRender(TestScrollBar, 6);
-
-		MockMouseInput(100, 200, true); //Pressed
-		MockMouseInput(110, 210, true); //벗어났지만 Pressed가 되어야한다.
-
-		scrollBarPtr->AddScrollChangedCB(TestOnScrollChanged);
-		
-		EXPECT_TRUE(WriteReadTest(m_panel));
-	}
-
-	////////////////////////////////////////////////////////
-
 	static void TestTextAreaRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
 	{
 		if (text == L"테스") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
@@ -440,7 +362,7 @@ namespace ComponentTest
 		if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(240.f, 296.75f) && DirectX::XMVector4Equal(color, Colors::Blue));
 	}
 
-	TEST_F(BasicFunctionalityTest, TextArea)
+	TEST_F(BasicComponentTest, TextArea)
 	{
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
 		auto textArea = CreateSampleTextArea({ {320, 120}, Origin::Center }, text);

@@ -187,7 +187,7 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 		});
 }
 
-optional<XMINT2> UIComponent::GetRelativePosition() const noexcept
+const XMINT2& UIComponent::GetRelativePosition() const noexcept
 {
 	return m_transform.GetRelativePosition();
 }

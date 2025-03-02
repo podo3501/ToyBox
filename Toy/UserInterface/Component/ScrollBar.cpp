@@ -66,6 +66,14 @@ unique_ptr<UIComponent> ScrollBar::CreateClone() const
 	return unique_ptr<ScrollBar>(new ScrollBar(*this));
 }
 
+template<typename ReturnType>
+ReturnType ScrollBar::GetMaxScrollRange() const noexcept
+{
+	const XMUINT2& trackSize = m_scrollTrack->GetSize();
+	const XMUINT2& containerSize = m_scrollContainer->GetSize();
+	return static_cast<ReturnType>(trackSize.y - containerSize.y);
+}
+
 void ScrollBar::OnPressCB(KeyState keyState)
 {
 	static int32_t startPosY{ 0 };
@@ -73,38 +81,20 @@ void ScrollBar::OnPressCB(KeyState keyState)
 	if (keyState == KeyState::Pressed)
 	{
 		startPosY = mPos.y;
-		auto curPos = m_scrollContainer->GetRelativePosition();
-		//m_scrollContainer->SetRelativePosition({ curPos->x, 50 });
 		return;
 	}
 
-	//auto moved = mPos.y - startPosY;
-	//if (keyState == KeyState::Held && moved)
-	//{
-	//	uint32_t curY = m_scrollContainer->GetRelativePosition()->y + moved;
-	//	auto resultY = clamp(curY, 0u, m_scrollTrack->GetSize().y);
-	//	m_scrollContainer->SetRelativePosition({ m_scrollContainer->GetRelativePosition()->x, static_cast<int32_t>(resultY) });
-	//}
-}
-
-bool ScrollBar::ImplementUpdate(const DX::StepTimer&) noexcept
-{
-	////눌러져 있다면 위치를 저장한다.
-	//bool isPressed = m_scrollContainer->IsPressed();
-	//const auto& state = m_scrollContainer->GetState();
-	//if (isPressed || state == InteractState::Held)
-	//{
-	//	
-	//}
-
-	//if ( != InteractState::Pressed) return true;
-	//이전위치와 차이값만큼 버튼을 이동한다.
-	//콜백으로 그 차이값을 호출한다.
+	int32_t moved = mPos.y - startPosY;
+	if (keyState != KeyState::Held || !moved) return;
 	
+	const auto& containerPos = m_scrollContainer->GetRelativePosition();
+	auto maxRange = GetMaxScrollRange<int32_t>();
+	auto curY = clamp(containerPos.y + moved, 0, maxRange);
+	m_scrollContainer->SetRelativePosition({ containerPos.x, curY });
+	startPosY = mPos.y;
 
-	return true;
+	m_onScrollChangedCB(static_cast<float>(curY) / static_cast<float>(maxRange));
 }
-
 
 void ScrollBar::ChangeSize(const XMUINT2& size) noexcept
 {
@@ -128,12 +118,10 @@ void ScrollBar::SetViewContentRatio(float contentRatio) noexcept
 void ScrollBar::SetPositionRatio(float positionRatio) noexcept
 {
 	positionRatio = clamp(positionRatio, 0.f, 1.f);
-	auto& trackSize = m_scrollTrack->GetSize();
-	auto& btnSize = m_scrollContainer->GetSize();
 
-	auto relativePosY = static_cast<int32_t>(static_cast<float>(trackSize.y - btnSize.y) * positionRatio);
-	auto curPos = m_scrollContainer->GetRelativePosition();
-	m_scrollContainer->SetRelativePosition({ curPos->x, relativePosY });
+	auto relativePosY = static_cast<int32_t>(GetMaxScrollRange<float>() * positionRatio);
+	const auto& curPos = m_scrollContainer->GetRelativePosition();
+	m_scrollContainer->SetRelativePosition({ curPos.x, relativePosY });
 }
 
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout, 

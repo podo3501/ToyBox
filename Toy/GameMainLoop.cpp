@@ -59,7 +59,7 @@ bool GameMainLoop::LoadResources()
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleListArea1({ {150, 130}, Origin::Center }), { 600, 200 });
     m_renderer->LoadComponent(m_gamePanel.get());
 
-    MakeSampleListAreaData(m_renderer, UIEx(m_gamePanel).GetComponent<ListArea*>("ListArea_0"));
+    MakeSampleListAreaData(m_renderer, UIEx(m_gamePanel).GetComponent<ListArea*>("ListArea_0"), 10);
     
     return true;
 }

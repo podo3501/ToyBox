@@ -56,13 +56,11 @@ DetachComponentCommand::DetachComponentCommand(UIComponent* detach) noexcept :
 
 bool DetachComponentCommand::Execute()
 {
-	auto pos = m_detach->GetRelativePosition();
-	if (!pos.has_value()) return false;
-
+	const auto& pos = m_detach->GetRelativePosition();
 	auto [component, parent] = UIEx(m_detach).DetachComponent();
 	if (!component) return false;
 
-	m_position = *pos;
+	m_position = pos;
 	m_component = move(component); //원본은 저장하고 클론은 밖으로 
 	m_parent = parent;
 
@@ -107,9 +105,8 @@ SetRelativePositionCommand::SetRelativePositionCommand(UIComponent* component, c
 
 bool SetRelativePositionCommand::Execute()
 {
-	auto prevPos = GetComponent()->GetRelativePosition();
-	ReturnIfFalse(prevPos.has_value());
-	m_record.previous = *prevPos;
+	const auto& prevPos = GetComponent()->GetRelativePosition();
+	m_record.previous = prevPos;
 	ReturnIfFalse(GetComponent()->SetRelativePosition(m_record.current));
 
 	return true;

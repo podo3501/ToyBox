@@ -52,3 +52,9 @@ int BoundedValue::ValidateRange(int value, double deltaTime) noexcept
 	return gap;
 }
 
+void BoundedValue::SetPositionRatio(float ratio) noexcept
+{
+	m_target = m_previous = static_cast<int>(ratio * static_cast<float>(m_min));
+	m_current = m_target;
+}
+

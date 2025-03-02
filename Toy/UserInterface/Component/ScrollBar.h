@@ -24,10 +24,11 @@ public:
 protected:
 	ScrollBar(const ScrollBar& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 
 private:
 	void ReloadDatas() noexcept;
+	template<typename ReturnType>
+	inline ReturnType GetMaxScrollRange() const noexcept;
 	void OnPressCB(KeyState keyState);
 
 	ImageGrid3* m_scrollTrack;

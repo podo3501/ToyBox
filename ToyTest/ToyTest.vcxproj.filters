@@ -11,10 +11,11 @@
     <ClCompile Include="ToyTestFixture.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="TestHelper.cpp" />
-    <ClCompile Include="ComponentBasicFunctionalityTest.cpp" />
+    <ClCompile Include="BasicComponentTest.cpp" />
     <ClCompile Include="JsonSerializeTest.cpp" />
     <ClCompile Include="ComponentIntegrationTest.cpp" />
     <ClCompile Include="PracticeTest_Pattern.cpp" />
+    <ClCompile Include="ComplexComponentTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />
