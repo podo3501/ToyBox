@@ -133,7 +133,7 @@ bool UIHierarchy<UIComponent>::IsUniqueName(const string& name, UIComponent* sel
 {
 	//붙는 Component에도 region이 있을수 있기 때문에 먼저 이 Component에 맞는 부모 regionRoot를 찾는다.
 	auto& uiComponentEx = self->GetRegionRoot() ? self->GetUIComponentEx() : GetThis()->GetUIComponentEx();
-	UIComponent* findComponent = uiComponentEx.GetComponent(name);
+	UIComponent* findComponent = uiComponentEx.FindComponent(name);
 	if (findComponent && findComponent != self) return false;
 
 	return true;

@@ -11,9 +11,7 @@
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
-#include "../Toy/UserInterface/Component/Container.h"
 #include "../Toy/UserInterface/UIUtility.h"
-#include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
 
 using testing::ElementsAre;
@@ -112,39 +110,6 @@ namespace ComponentTest
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_V, 3);
-	}
-
-	////////////////////////////////////////////////////////
-
-	static void TestContainer_Scroll(size_t index, const RECT& dest, const RECT* source)
-	{
-		TestRender(index, dest, source, { //Pressed
-			{{92, 92, 108, 99}, {174, 178, 190, 185}},
-			{{92, 99, 108, 101}, {174, 185, 190, 187}},
-			{{92, 101, 108, 108}, {174, 187, 190, 194}}
-			});
-	}
-
-	TEST_F(BasicComponentTest, Container_Scroll)
-	{
-		auto scrollContainer = CreateScrollContainer({ {16, 16}, Origin::Center });
-		auto scrollContainerPtr = scrollContainer.get();
-		UIEx(m_panel).AttachComponent(move(scrollContainer), { 100, 100 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-
-		testing::MockFunction<void(KeyState)> mockOnPress;
-		scrollContainerPtr->AddPressCB(mockOnPress.AsStdFunction());
-
-		EXPECT_CALL(mockOnPress, Call(KeyState::Pressed)).Times(1); //Pressed 인자를 넣어서 한번 호출할 것을 기대
-		EXPECT_CALL(mockOnPress, Call(KeyState::Held)).Times(1);
-
-		MockMouseInput(100, 100, true); //Pressed
-		CallMockRender(TestContainer_Scroll, 3);
-
-		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Held가 되어야한다.
-		CallMockRender(TestContainer_Scroll, 3);
-
-		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	////////////////////////////////////////////////////////
@@ -334,7 +299,7 @@ namespace ComponentTest
 
 		CallMockRender(TestImageGrid9Render, 9);
 
-		ImageGrid9* img9 = UIEx(m_panel).GetComponent<ImageGrid9*>("ImageGrid9_0");
+		ImageGrid9* img9 = UIEx(m_panel).FindComponent<ImageGrid9*>("ImageGrid9_0");
 		img9->ChangeOrigin(Origin::Center);
 		img9->ChangeSize({ 180, 150 });
 

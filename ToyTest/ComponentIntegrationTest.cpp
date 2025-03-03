@@ -16,13 +16,13 @@ namespace ComponentTest
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
 		auto imgGrid1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-		UIComponent* component = UIEx(panel).GetComponent(componentName);
+		UIComponent* component = UIEx(panel).FindComponent(componentName);
 		return UIEx(component).AttachComponent(move(imgGrid1), { 10, 10 }) ? false : true;
 	}
 
 	static bool DetachComponentHelper(UIComponent* panel, const string& componentName) noexcept 
 	{
-		UIComponent* component = UIEx(panel).GetComponent(componentName);
+		UIComponent* component = UIEx(panel).FindComponent(componentName);
 		auto [detach, parent] = UIEx(component).DetachComponent();
 		return detach != nullptr;
 	}
@@ -93,17 +93,17 @@ namespace ComponentTest
 		img2Ptr->Rename("image2");
 		img1Ptr->RenameRegion("Region1");
 		
-		EXPECT_FALSE(UIEx(m_panel).GetComponent("image1")); //Img1이 다른 Region이라서 찾을 수 없다.
-		EXPECT_FALSE(UIEx(m_panel).GetComponent("image2"));
-		EXPECT_FALSE(UIEx(img1Ptr).GetComponent("Main"));//Img1이 Region이라서 위에 노드는 못 찾는다.
-		EXPECT_TRUE(UIEx(img1Ptr).GetComponent("image2"));
-		EXPECT_FALSE(UIEx(img2Ptr).GetComponent("Main"));
-		EXPECT_TRUE(UIEx(img2Ptr).GetComponent("image1"));
+		EXPECT_FALSE(UIEx(m_panel).FindComponent("image1")); //Img1이 다른 Region이라서 찾을 수 없다.
+		EXPECT_FALSE(UIEx(m_panel).FindComponent("image2"));
+		EXPECT_FALSE(UIEx(img1Ptr).FindComponent("Main"));//Img1이 Region이라서 위에 노드는 못 찾는다.
+		EXPECT_TRUE(UIEx(img1Ptr).FindComponent("image2"));
+		EXPECT_FALSE(UIEx(img2Ptr).FindComponent("Main"));
+		EXPECT_TRUE(UIEx(img2Ptr).FindComponent("image1"));
 
 		img2Ptr->RenameRegion("Region2");
 
-		EXPECT_FALSE(UIEx(img1Ptr).GetComponent("image2"));
-		EXPECT_FALSE(UIEx(img2Ptr).GetComponent("image1"));
+		EXPECT_FALSE(UIEx(img1Ptr).FindComponent("image2"));
+		EXPECT_FALSE(UIEx(img2Ptr).FindComponent("image1"));
 
 		EXPECT_EQ(UIEx(m_panel).GetRegionComponent("Region1"), img1Ptr);
 		EXPECT_FALSE(UIEx(m_panel).GetRegionComponent("Region2"));
@@ -134,7 +134,7 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(panel), { 400, 300 });
 		m_panel->ProcessUpdate(m_timer);
 
-		UIComponent* component = UIEx(m_panel).GetComponent("ImageGrid1_4");
+		UIComponent* component = UIEx(m_panel).FindComponent("ImageGrid1_4");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
 		EXPECT_EQ(component->GetArea(), Rectangle(270, 216, 160, 128));
@@ -182,7 +182,7 @@ namespace ComponentTest
 		auto img5 = img1Ptr->Clone();
 		auto img5Ptr = img5.get();
 		UIEx(m_panel).AttachComponent(move(img5), { 100, 100 });
-		EXPECT_TRUE(UIEx(img5Ptr).GetComponent("UnChanging Name"));
+		EXPECT_TRUE(UIEx(img5Ptr).FindComponent("UnChanging Name"));
 	}
 
 	TEST_F(IntegrationTest, RecursivePosition)
@@ -197,7 +197,7 @@ namespace ComponentTest
 		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
-		Panel* ptrPanel = UIEx(m_panel).GetComponent<Panel*>("Panel2");
+		Panel* ptrPanel = UIEx(m_panel).FindComponent<Panel*>("Panel2");
 		ptrPanel->ChangeOrigin(Origin::LeftTop);
 		m_panel->ProcessUpdate(m_timer);
 
@@ -213,7 +213,7 @@ namespace ComponentTest
 		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		UIEx(m_panel).AttachComponent(move(img9), { 80, 60 });
 
-		UIComponent* component = UIEx(m_panel).GetComponent("ImageGrid1_0");
+		UIComponent* component = UIEx(m_panel).FindComponent("ImageGrid1_0");
 		EXPECT_FALSE(component->Rename("ImageGrid9_0")); //같은 이름이 있으면 rename이 되지 않는다.
 
 		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });

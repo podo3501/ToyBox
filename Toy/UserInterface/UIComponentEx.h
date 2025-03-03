@@ -12,12 +12,12 @@ public:
 	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
 
-	UIComponent* GetComponent(const string& name) noexcept;
+	UIComponent* FindComponent(const string& name) noexcept;
 
 	template<typename T>
-	T GetComponent(const string& name) noexcept
+	T FindComponent(const string& name) noexcept
 	{
-		UIComponent* find = GetComponent(name);
+		UIComponent* find = FindComponent(name);
 		return ComponentCast<T>(find);
 	}
 

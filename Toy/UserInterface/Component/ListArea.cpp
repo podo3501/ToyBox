@@ -83,6 +83,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 
 	constexpr int scrollBarGap = 3;
 	m_scrollBar = ComponentCast<ScrollBar*>(scrollBar.get());
+	m_scrollBar->SetStateFlag(StateFlag::Active, false);
 	m_scrollBar->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
 	m_scrollBar->ChangeSize({ 16, layout.GetSize().y - (scrollBarGap * 2) });
 	XMINT2 scrollBarPos{ static_cast<int32_t>(layout.GetSize().x - m_scrollBar->GetSize().x - scrollBarGap), scrollBarGap };
@@ -119,11 +120,15 @@ UIComponent* ListArea::PrepareContainer()
 		m_bounded.SetBounds(height, 0, 15);
 
 	float contentRatio = static_cast<float>(viewArea) / static_cast<float>(curHeight);
-	bool enableScrollBar = (contentRatio) < 1.f ? true : false;
-	m_scrollBar->SetStateFlag(StateFlag::Active, enableScrollBar);
+	m_scrollBar->SetStateFlag(StateFlag::Active, (contentRatio) < 1.f ? true : false);
 	m_scrollBar->SetViewContentRatio(contentRatio);
 
 	return cloneContainerPtr;
+}
+
+void ListArea::ClearContainers() noexcept
+{
+	m_containers.clear();
 }
 
 void ListArea::MoveContainers(int32_t targetPos) noexcept

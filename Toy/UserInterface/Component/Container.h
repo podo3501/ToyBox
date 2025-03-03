@@ -19,6 +19,7 @@ public:
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	bool Setup(const UILayout& layout, 
 		map<InteractState, unique_ptr<UIComponent>> imgGridList, BehaviorMode behaviorMode) noexcept;
+	void ChangeSize(DirectionType dirType, float ratio) noexcept;
 	void ClearInteraction() noexcept;
 	const optional<InteractState>& GetState() const noexcept { return m_state; }
 

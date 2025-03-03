@@ -8,6 +8,7 @@ class UITransform;
 enum class Origin;//enum은 컨셉에 추가만 하면 된다.
 enum class InteractState; 
 enum class DirectionType;
+namespace StateFlag { enum Type : int; }
 
 namespace Tool
 {
@@ -106,6 +107,7 @@ concept IsBasicType =
 is_arithmetic_v<T> ||
 is_same_v<T, string> ||
 is_same_v<T, size_t> ||
+is_same_v<T, StateFlag::Type> ||
 is_same_v <T, InteractState> ||
 is_same_v <T, DirectionType> ||
 is_same_v<T, Tool::ResolutionType>;

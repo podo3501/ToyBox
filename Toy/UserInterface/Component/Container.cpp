@@ -61,6 +61,19 @@ void Container::ChangeSize(const XMUINT2& size) noexcept
 	UIComponent::ChangeSize(size);
 }
 
+void Container::ChangeSize(DirectionType dirType, float ratio) noexcept
+{
+	const auto& size = GetSize();
+	XMUINT2 ratioSize{ size };
+
+	switch (dirType) {
+	case DirectionType::Horizontal: ratioSize.x = static_cast<uint32_t>(size.x * ratio); break;
+	case DirectionType::Vertical: ratioSize.y = static_cast<uint32_t>(size.y * ratio); break;
+	}
+
+	ChangeSize(ratioSize);
+}
+
 void Container::AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept
 {
 	m_images.emplace(state, component.get());

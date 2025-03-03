@@ -115,6 +115,11 @@ void ScrollBar::SetViewContentRatio(float contentRatio) noexcept
 	m_scrollContainer->ChangeSize(ratioBtnSize);
 }
 
+void ScrollBar::SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept
+{
+	//m_scrollContainer->ChangeSize(static_cast<float>(viewArea) / static_cast<float>(contentSize));
+}
+
 void ScrollBar::SetPositionRatio(float positionRatio) noexcept
 {
 	positionRatio = clamp(positionRatio, 0.f, 1.f);

@@ -14,11 +14,11 @@ enum class ComponentID : int
 	Container,
 	RenderTexture,
 	ScrollBar,
-	Unknown //부모 기본 UIComponent. 이게 문제가 되면 UICompnent가 혼자서 생성되었다는 건데, 생성자가 protected에서 public이 되었을 것이다.
+	Unknown //부모 기본 UIComponent. 이게 문제가 되면 UICompnent가 혼자서 생성되었다는 건데, 생성자가 protected에서 public이 되었을 것이다. 아니면 enum에서 추가를 안시켰던지.
 };
 
 template<>
-constexpr size_t EnumSize<ComponentID>() { return 11; }
+constexpr size_t EnumSize<ComponentID>() { return 12; }
 
 template<>
 constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<ComponentID>()> {
@@ -33,6 +33,7 @@ constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<Com
 		{ "ListArea" },
 		{ "Container" },
 		{ "RenderTexture" },
+		{ "ScrollBar" },
 		{ "Unknown" }
 	} };
 }
@@ -95,6 +96,42 @@ enum class CResult : int
 	Success,
 	SkipChildren,
 };
+
+//bit enum을 템플릿화 해서 다른 bit enum들도 동일하게 함수를 사용하게끔 한다.
+namespace BitEnum
+{
+	template <typename EnumType>
+	constexpr typename std::enable_if_t<std::is_enum_v<EnumType>, EnumType>
+		operator|(EnumType lhs, EnumType rhs) {
+		using UnderlyingType = std::underlying_type_t<EnumType>;
+		return static_cast<EnumType>(static_cast<UnderlyingType>(lhs) | static_cast<UnderlyingType>(rhs));
+	}
+
+	template <typename EnumType>
+	constexpr typename std::enable_if_t<std::is_enum_v<EnumType>, EnumType>
+		operator&(EnumType lhs, EnumType rhs) {
+		using UnderlyingType = std::underlying_type_t<EnumType>;
+		return static_cast<EnumType>(static_cast<UnderlyingType>(lhs) & static_cast<UnderlyingType>(rhs));
+	}
+
+	template <typename EnumType>
+	constexpr typename std::enable_if_t<std::is_enum_v<EnumType>, EnumType>
+		operator~(EnumType flag) {
+		using UnderlyingType = std::underlying_type_t<EnumType>;
+		return static_cast<EnumType>(~static_cast<UnderlyingType>(flag));
+	}
+
+	// SetBitEnum & HasBitEnum 함수 템플릿화
+	template <typename EnumType>
+	inline void Set(EnumType& stateFlag, EnumType flag, bool enabled) noexcept {
+		stateFlag = enabled ? (stateFlag | flag) : (stateFlag & ~flag);
+	}
+
+	template <typename EnumType>
+	inline bool Has(EnumType stateFlag, EnumType flag) noexcept {
+		return (stateFlag & flag) != 0;
+	}
+}
 
 // namespac + enum을 쓰는 이유는 함수 인자로 int를 쓰는 것보다 나아서. enum만 쓰면 쟤들 이름이 흔해서 자꾸 이름 충돌된다.
 // enum class는 오퍼레이터 함수가 많이 생성되고 타입 변환을 계속 해 줘야 해서 귀찮다.

@@ -25,6 +25,7 @@ public:
 		unique_ptr<UIComponent> container, unique_ptr<UIComponent> scrollBar) noexcept;
 	Container* GetPrototypeContainer() noexcept { return m_prototypeContainer; }
 	UIComponent* PrepareContainer();
+	void ClearContainers() noexcept;
 
 protected:
 	ListArea(const ListArea& o) noexcept;

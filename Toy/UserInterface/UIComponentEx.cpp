@@ -43,7 +43,7 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	return { move(DetachChild(parent, m_component)), parent };
 }
 
-UIComponent* UIComponentEx::GetComponent(const string& name) noexcept
+UIComponent* UIComponentEx::FindComponent(const string& name) noexcept
 {
 	UIComponent* root = m_component->GetRegionRoot();
 	if (!root) root = m_component->GetRoot(); //Region이 없을 경우 root가 region root가 되고 ""가 region name이다.
