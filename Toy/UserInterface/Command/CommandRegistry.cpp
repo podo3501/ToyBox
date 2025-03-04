@@ -56,7 +56,7 @@ DetachComponentCommand::DetachComponentCommand(UIComponent* detach) noexcept :
 
 bool DetachComponentCommand::Execute()
 {
-	const auto& pos = m_detach->GetRelativePosition();
+	XMINT2 pos = m_detach->GetRelativePosition();
 	auto [component, parent] = UIEx(m_detach).DetachComponent();
 	if (!component) return false;
 
@@ -130,12 +130,11 @@ SetSizeCommand::SetSizeCommand(UIComponent* component, const XMUINT2& size) noex
 bool SetSizeCommand::Execute()
 {
 	m_record.previous = GetComponent()->GetSize();
-	GetComponent()->ChangeSize(m_record.current);
-	return true;
+	return GetComponent()->ChangeSize(m_record.current);
 }
 
-bool SetSizeCommand::Undo() { GetComponent()->ChangeSize(m_record.previous); return true; }
-bool SetSizeCommand::Redo() { GetComponent()->ChangeSize(m_record.current);	return true; }
+bool SetSizeCommand::Undo() { return GetComponent()->ChangeSize(m_record.previous); }
+bool SetSizeCommand::Redo() { return GetComponent()->ChangeSize(m_record.current); }
 
 void SetSizeCommand::PostMerge(unique_ptr<Command> other) noexcept
 {

@@ -65,10 +65,12 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
     return srcList;
 }
 
-void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
+bool ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
 {
     const vector<UIComponent*> components = GetChildComponents();
     vector<Rectangle> list = GetSourceList(components);
+    ReturnIfFalse(IsBiggerThanSource(m_dirType, size, list));
+
     vector<PositionSize> posSizes = StretchSize(m_dirType, size, list);
 
     for (auto idx : views::iota(0u, components.size()))
@@ -77,6 +79,8 @@ void ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
         components[idx]->ChangeSize(posSizes[idx].size);
     }
     ApplySize(size);
+
+    return true;
 }
 
 Rectangle ImageGrid3::GetFirstComponentSource() const noexcept

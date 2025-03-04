@@ -1,6 +1,5 @@
 #pragma once
 #include "../UIComponent.h"
-#include "../UIHelperClass.h"
 
 class RenderTexture;
 class Container;
@@ -18,7 +17,7 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ListArea; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
-	virtual void ChangeSize(const XMUINT2& size) noexcept override;
+	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, 
@@ -47,7 +46,6 @@ private:
 	RenderTexture* m_renderTex;
 	
 	vector<UIComponent*> m_containers; //이건 저장하지 않는다. 실행시에 채워지는 데이터이다.
-	BoundedValue m_bounded;
 };
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout,

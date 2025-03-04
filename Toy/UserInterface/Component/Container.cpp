@@ -54,24 +54,12 @@ void Container::ClearInteraction() noexcept
 		SetState(InteractState::Normal);
 }
 
-void Container::ChangeSize(const XMUINT2& size) noexcept
+bool Container::ChangeSize(const XMUINT2& size) noexcept
 {
-	for (const auto& component : GetChildComponents())
-		component->ChangeSize(size);
-	UIComponent::ChangeSize(size);
-}
-
-void Container::ChangeSize(DirectionType dirType, float ratio) noexcept
-{
-	const auto& size = GetSize();
-	XMUINT2 ratioSize{ size };
-
-	switch (dirType) {
-	case DirectionType::Horizontal: ratioSize.x = static_cast<uint32_t>(size.x * ratio); break;
-	case DirectionType::Vertical: ratioSize.y = static_cast<uint32_t>(size.y * ratio); break;
-	}
-
-	ChangeSize(ratioSize);
+	ReturnIfFalse(ranges::all_of(GetChildComponents(), [&size](const auto& component) {
+			return component->ChangeSize(size);
+		}));
+	return UIComponent::ChangeSize(size);
 }
 
 void Container::AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept

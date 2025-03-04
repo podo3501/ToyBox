@@ -17,15 +17,15 @@ namespace ComponentTest
 	static void TestContainer_Scroll(size_t index, const RECT& dest, const RECT* source)
 	{
 		TestRender(index, dest, source, { //Pressed
-			{{92, 92, 108, 99}, {174, 178, 190, 185}},
-			{{92, 99, 108, 101}, {174, 185, 190, 187}},
-			{{92, 101, 108, 108}, {174, 187, 190, 194}}
+			{{92, 50, 108, 57}, {174, 178, 190, 185}},
+			{{92, 57, 108, 143}, {174, 185, 190, 187}},
+			{{92, 143, 108, 150}, {174, 187, 190, 194}}
 			});
 	}
 
 	TEST_F(ComplexComponentTest, Container_Scroll)
 	{
-		auto scrollContainer = CreateScrollContainer({ {16, 16}, Origin::Center });
+		auto scrollContainer = CreateScrollContainer({ {16, 100}, Origin::Center });
 		auto scrollContainerPtr = scrollContainer.get();
 		UIEx(m_panel).AttachComponent(move(scrollContainer), { 100, 100 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
@@ -40,9 +40,6 @@ namespace ComponentTest
 		CallMockRender(TestContainer_Scroll, 3);
 
 		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Held가 되어야한다.
-		CallMockRender(TestContainer_Scroll, 3);
-
-		scrollContainerPtr->ChangeSize(DirectionType::Vertical, 0.5f);
 		CallMockRender(TestContainer_Scroll, 3);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -115,8 +112,7 @@ namespace ComponentTest
 
 		uint32_t viewArea = 500;
 		uint32_t contentSize = 2000;
-		scrollBarPtr->SetViewContentRatio(static_cast<float>(viewArea) / static_cast<float>(contentSize));
-		//scrollBarPtr->SetViewContent(viewArea, contentSize);
+		scrollBarPtr->SetViewContent(viewArea, contentSize);
 		scrollBarPtr->SetPositionRatio(0.5f);
 		CallMockRender(TestScrollBar, 6);
 

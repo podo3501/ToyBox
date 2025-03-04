@@ -52,10 +52,10 @@ bool ListArea::operator==(const UIComponent& rhs) const noexcept
 	return true;
 }
 
-void ListArea::ChangeSize(const XMUINT2& size) noexcept
+bool ListArea::ChangeSize(const XMUINT2& size) noexcept
 {
-	m_prototypeContainer->ChangeSize(size);
-	UIComponent::ChangeSize(size);
+	ReturnIfFalse(m_prototypeContainer->ChangeSize(size));
+	return UIComponent::ChangeSize(size);
 }
 
 bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, 
@@ -116,12 +116,10 @@ UIComponent* ListArea::PrepareContainer()
 
 	auto viewArea = m_renderTex->GetSize().y;
 	auto curHeight = containerHeight + cloneContainerPtr->GetSize().y;
-	if (int height = viewArea - curHeight; height < 0)
-		m_bounded.SetBounds(height, 0, 15);
 
 	float contentRatio = static_cast<float>(viewArea) / static_cast<float>(curHeight);
 	m_scrollBar->SetStateFlag(StateFlag::Active, (contentRatio) < 1.f ? true : false);
-	m_scrollBar->SetViewContentRatio(contentRatio);
+	m_scrollBar->SetViewContent(viewArea, curHeight);
 
 	return cloneContainerPtr;
 }
@@ -148,29 +146,11 @@ void ListArea::OnScrollChangedCB(float ratio)
 	auto startPos = -static_cast<int32_t>(ratio * (totalContainerHeight - viewArea));
 
 	MoveContainers(startPos);
-
-	m_bounded.SetPositionRatio(ratio);
 }
 
-void ListArea::ScrollContainers(const DX::StepTimer& timer) noexcept
+void ListArea::ScrollContainers(const DX::StepTimer&) noexcept
 {
-	if (m_renderTex->OnEnterArea())
-		ResetMouseWheelValue();
-
-	int wheelValue{ 0 };
-	if (m_renderTex->IsMouseInArea())
-		wheelValue = GetMouseWheelValue();
-
-	auto value = m_bounded.GetValue(wheelValue, timer);
-	if (!value) return;
-
-	// 첫 번째 컨테이너의 현재 위치를 기준으로 새로운 목표 위치 계산
-	const auto& firstPos = m_containers.front()->GetRelativePosition();
-	int targetPos = firstPos.y + value;
-
-	MoveContainers(targetPos);
-
-	m_scrollBar->SetPositionRatio(m_bounded.GetPositionRatio());
+	m_scrollBar->SetEnableWheel(m_renderTex->IsMouseInArea());
 }
 
 void ListArea::CheckMouseInteraction() noexcept

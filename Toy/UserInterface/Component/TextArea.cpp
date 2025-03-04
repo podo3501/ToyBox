@@ -116,10 +116,10 @@ bool TextArea::ImplementPostLoaded(ITextureController* texController)
 	return ArrangeText(m_text);
 }
 
-void TextArea::ChangeSize(const XMUINT2& size) noexcept
+bool TextArea::ChangeSize(const XMUINT2& size) noexcept
 {
-	UIComponent::ChangeSize(size);
-	ArrangeText(m_text);
+	ReturnIfFalse(UIComponent::ChangeSize(size));
+	return ArrangeText(m_text);
 }
 
 void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept

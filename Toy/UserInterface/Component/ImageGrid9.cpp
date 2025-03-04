@@ -65,18 +65,22 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
 	return srcList;
 }
 
-void ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
+bool ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
 	vector<Rectangle> list = GetSourceList(components);
+	ReturnIfFalse(IsBiggerThanSource(DirectionType::Vertical, size, list));
+
 	vector<PositionSize> posRects = StretchSize(DirectionType::Vertical, size, list);
 
 	for (int idx{ 0 }; idx < components.size(); ++idx)
 	{
+		ReturnIfFalse(components[idx]->ChangeSize(posRects[idx].size));
 		ChangePosition(idx, size, posRects[idx].pos);
-		components[idx]->ChangeSize(posRects[idx].size);
 	}
 	ApplySize(size);
+
+	return true;
 }
 
 optional<wstring> ImageGrid9::GetFilename() const noexcept

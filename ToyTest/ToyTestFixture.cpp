@@ -4,6 +4,7 @@
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -102,4 +103,22 @@ void ToyTestFixture::TearDown()
 #if defined(DEBUG) | defined(_DEBUG)
 	ReportLiveObjects();
 #endif
+}
+
+void IntegrationTest::CaptureSnapshot(CommandList& cmdList, vector<unique_ptr<UIComponent>>& history)
+{
+	history.emplace_back(m_panel->Clone());
+}
+
+void IntegrationTest::VerifyUndoRedo(CommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
+{
+	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
+		cmdList.Undo();
+		EXPECT_TRUE(CompareUniquePtr(m_panel, snapshot));
+		});
+
+	for_each(history.begin() + 1, history.end(), [&](const auto& snapshot) {
+		cmdList.Redo();
+		EXPECT_TRUE(CompareUniquePtr(m_panel, snapshot));
+		});
 }

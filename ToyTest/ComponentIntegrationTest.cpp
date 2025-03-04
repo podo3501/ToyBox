@@ -10,6 +10,7 @@
 #include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/ListArea.h"
+#include "../Toy/UserInterface/Command/CommandList.h"
 
 namespace ComponentTest
 {
@@ -219,5 +220,47 @@ namespace ComponentTest
 		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
+	}
+
+	//////////////////////////////////////////////////////////
+	TEST_F(IntegrationTest, UndoRedo)
+	{
+		CommandList cmdList;
+		vector<unique_ptr<UIComponent>> history;
+		UIComponent* panel = m_panel.get();
+		CaptureSnapshot(cmdList, history);
+
+		auto img9 = CreateSampleImageGrid9({ {170, 120}, Origin::Center });
+		auto img9Ptr = ComponentCast<ImageGrid9*>(img9.get());
+		unique_ptr<UIComponent> img1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::Center });
+		ImageGrid1* img1Ptr = ComponentCast<ImageGrid1*>(img1.get());
+		cmdList.AttachComponent(m_panel.get(), move(img1), { 111, 222 });
+		CaptureSnapshot(cmdList, history);
+
+		cmdList.SetRelativePosition(img1Ptr, { 123, 234 });
+		CaptureSnapshot(cmdList, history);
+
+		cmdList.SetSize(img1Ptr, { 32, 32 });
+		CaptureSnapshot(cmdList, history);
+
+		cmdList.RenameRegion(img1Ptr, "region");
+		CaptureSnapshot(cmdList, history);
+
+		cmdList.Rename(img1Ptr, "img1");
+		CaptureSnapshot(cmdList, history);
+
+		cmdList.SetSource(img1Ptr, { 11, 11, 32, 32 }); //원래는{ 10, 10, 64, 64 }
+		CaptureSnapshot(cmdList, history);
+
+		cmdList.DetachComponent(img1Ptr);
+		CaptureSnapshot(cmdList, history);
+
+		cmdList.AttachComponent(m_panel.get(), move(img9), { 200, 210 });
+		SourceDivider srcDivider{ img9Ptr->GetSourceAnd4Divider() };
+		srcDivider.list = { 20, 44, 26, 48 };
+		img9Ptr->SetSourceAnd4Divider(srcDivider);
+		CaptureSnapshot(cmdList, history);
+
+		VerifyUndoRedo(cmdList, history);
 	}
 }

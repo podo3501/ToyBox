@@ -34,6 +34,12 @@ protected:
 
 class BasicComponentTest : public ToyTestFixture	{};
 class ComplexComponentTest : public ToyTestFixture {};
-class IntegrationTest : public ToyTestFixture {};
-class UndoRedoTest : public ToyTestFixture {};
+
+class CommandList;
+class IntegrationTest : public ToyTestFixture 
+{
+protected:
+	void CaptureSnapshot(CommandList& cmdList, vector<unique_ptr<UIComponent>>& history);
+	void VerifyUndoRedo(CommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
+};
 class IRendererTest : public ToyTestFixture {};

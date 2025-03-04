@@ -168,12 +168,7 @@ inline Rectangle XMUINT2ToRectangle(const XMUINT2& size) {
 	};
 }
 
-inline XMUINT2 RectangleToXMUINT2(const Rectangle& rect) {
-	return XMUINT2{
-		static_cast<uint32_t>(rect.width - rect.x),
-		static_cast<uint32_t>(rect.height - rect.y)
-	};
-}
+inline XMUINT2 RectangleToXMUINT2(const Rectangle& rect) { return XMUINT2(rect.width, rect.height); }
 
 inline bool Contains(const Rectangle& rect, const XMINT2& pos) noexcept
 {

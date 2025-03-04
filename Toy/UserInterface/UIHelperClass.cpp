@@ -33,17 +33,12 @@ void BoundedValue::SetBounds(int min, int max, int unit) noexcept
 	m_unit = unit;
 }
 
-int BoundedValue::GetValue(int wheelValue, const DX::StepTimer& timer) noexcept
+int BoundedValue::ValidateRange(int value, const DX::StepTimer& timer) noexcept
 {
-	return ValidateRange(wheelValue * m_unit, timer.GetElapsedSeconds());
-}
-
-int BoundedValue::ValidateRange(int value, double deltaTime) noexcept
-{
-	m_target += value;
+	m_target += (value * m_unit);
 	m_target = clamp(m_target, m_min, m_max);
 
-	m_current = GetMovementController(MovementType::Lerp, m_current, m_target, 30.f * deltaTime);
+	m_current = GetMovementController(MovementType::Lerp, m_current, m_target, 30.f * timer.GetElapsedSeconds());
 	m_current = clamp(m_current, static_cast<double>(m_min), static_cast<double>(m_max));
 
 	int current = static_cast<int>(m_current);

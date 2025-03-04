@@ -13,7 +13,7 @@ public:
 
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid9; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
-	virtual void ChangeSize(const XMUINT2& size) noexcept override;
+	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 
 	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
 

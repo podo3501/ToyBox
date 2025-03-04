@@ -37,7 +37,7 @@ struct PositionSize
 };
 
 vector<PositionSize> StretchSize(DirectionType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept;
-
+bool IsBiggerThanSource(DirectionType dirType, const XMUINT2& size, const vector<Rectangle>& list);
 //하나의 사각형과 두개의 점이 있을때 3개의 사각형을 찾는 함수
 vector<Rectangle> GetSourcesFromArea(
 	const Rectangle& area, const vector<int>& widths, const vector<int>& heights) noexcept;

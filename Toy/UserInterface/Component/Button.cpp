@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Button.h"
 #include "../JsonOperation.h"
+#include "../../Utility.h"
 
 //이 클래스는 당장에는 하는게 없다. container가 할 일을 다 가져갔다. 추후에 이 클래스가 어떻게 될지 지켜보자.
 Button::~Button() = default;
@@ -25,10 +26,10 @@ unique_ptr<UIComponent> Button::CreateClone() const
 	return unique_ptr<Button>(new Button(*this));
 }
 
-void Button::ChangeSize(const XMUINT2& size) noexcept
+bool Button::ChangeSize(const XMUINT2& size) noexcept
 {
-	m_container->ChangeSize(size);
-	UIComponent::ChangeSize(size); //hover, pressed의 사이즈도 조정하는건데 함수 이름을 바꿔야 겠다 ?!?
+	ReturnIfFalse(m_container->ChangeSize(size));
+	return UIComponent::ChangeSize(size); //hover, pressed의 사이즈도 조정하는건데 함수 이름을 바꿔야 겠다 ?!?
 }
 
 //holdToKeepPressed는 나중에 옵션을 지정하는 변수로 바뀔예정. 버튼은 다양한 버튼들이 존재하기 때문.

@@ -28,7 +28,7 @@ protected:
 	virtual bool ImplementLoadResource(ITextureLoad* load) override;
 	virtual bool ImplementPostLoaded(ITextureController* texController) override;
 	virtual void ImplementRender(ITextureRender* render) const override;
-	virtual void ChangeSize(const XMUINT2& size) noexcept override;
+	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 
 private:
 	bool ArrangeText(const wstring& text);

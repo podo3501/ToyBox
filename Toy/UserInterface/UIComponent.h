@@ -48,7 +48,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;
-	virtual void ChangeSize(const XMUINT2& size) noexcept;
+	virtual bool ChangeSize(const XMUINT2& size) noexcept;
 	virtual void SerializeIO(JsonOperation& operation);
 
 	bool UpdatePositionsManually() noexcept;

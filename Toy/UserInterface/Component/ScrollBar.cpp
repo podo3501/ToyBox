@@ -39,6 +39,11 @@ bool ScrollBar::operator==(const UIComponent& rhs) const noexcept
 	return true;
 }
 
+unique_ptr<UIComponent> ScrollBar::CreateClone() const
+{
+	return unique_ptr<ScrollBar>(new ScrollBar(*this));
+}
+
 bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollTrack, unique_ptr<UIComponent> scrollContainer)
 {
 	SetLayout(layout);
@@ -53,17 +58,27 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollTrac
 	return true;
 }
 
+bool ScrollBar::ImplementUpdate(const DX::StepTimer& timer) noexcept
+{
+	int wheelValue{ 0 };
+	if (m_isWheelEnabled)
+		wheelValue = GetMouseWheelValue();
+
+	if (!m_bounded.ValidateRange(wheelValue, timer)) return true;
+
+	auto posRatio = m_bounded.GetPositionRatio();
+	SetPositionRatio(posRatio);
+	m_onScrollChangedCB(posRatio);
+
+	return true;
+}
+
 void ScrollBar::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
 
 	if (operation.IsWrite()) return;
 	ReloadDatas();
-}
-
-unique_ptr<UIComponent> ScrollBar::CreateClone() const
-{
-	return unique_ptr<ScrollBar>(new ScrollBar(*this));
 }
 
 template<typename ReturnType>
@@ -93,31 +108,41 @@ void ScrollBar::OnPressCB(KeyState keyState)
 	m_scrollContainer->SetRelativePosition({ containerPos.x, curY });
 	startPosY = mPos.y;
 
-	m_onScrollChangedCB(static_cast<float>(curY) / static_cast<float>(maxRange));
+	auto ratio = static_cast<float>(curY) / static_cast<float>(maxRange);
+	m_bounded.SetPositionRatio(ratio);
+	m_onScrollChangedCB(ratio);
 }
 
-void ScrollBar::ChangeSize(const XMUINT2& size) noexcept
+bool ScrollBar::ChangeSize(const XMUINT2& size) noexcept
 {
-	m_scrollTrack->ChangeSize(size);
+	ReturnIfFalse(m_scrollTrack->ChangeSize(size));
 	//크기가 바뀌면 상대적으로 버튼 크기가 정해지기 때문에 조정되어야 한다.
 	auto& btnHeight = m_scrollContainer->GetSize().y;
 	auto btnSize = XMUINT2{ size.x, min(size.y, btnHeight) };
-	m_scrollContainer->ChangeSize(btnSize);
+	return m_scrollContainer->ChangeSize(btnSize);
 }
 
-void ScrollBar::SetViewContentRatio(float contentRatio) noexcept
+void ScrollBar::SetScrollContainerSize(float ratio) noexcept
 {
-	//ratio가 1보다 같거나 클 경우에는 스크롤바가 사라지게 해야 할것 같다.
-	contentRatio = clamp(contentRatio, 0.2f, 1.f);
-	auto& btnSize = m_scrollContainer->GetSize();
-	auto sizeY = contentRatio * static_cast<float>(btnSize.y);
-	XMUINT2 ratioBtnSize{ btnSize.x, static_cast<uint32_t>(sizeY) };
-	m_scrollContainer->ChangeSize(ratioBtnSize);
+	DirectionType dirType = m_scrollTrack->GetDirectionType();
+	const auto& area = m_scrollTrack->GetArea();
+	XMUINT2 ratioSize = RectangleToXMUINT2(area);
+
+	switch (dirType) {
+	case DirectionType::Horizontal: ratioSize.x = static_cast<uint32_t>(area.width * ratio); break;
+	case DirectionType::Vertical: ratioSize.y = static_cast<uint32_t>(area.height * ratio); break;
+	}
+
+	m_scrollContainer->ChangeSize(ratioSize);
 }
 
 void ScrollBar::SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept
 {
-	//m_scrollContainer->ChangeSize(static_cast<float>(viewArea) / static_cast<float>(contentSize));
+	//ratio가 1보다 같거나 클 경우에는 스크롤바가 사라지게 해야 할것 같다.
+	if (int height = viewArea - contentSize; height < 0)
+		m_bounded.SetBounds(height, 0, 15);
+
+	SetScrollContainerSize(static_cast<float>(viewArea) / static_cast<float>(contentSize));
 }
 
 void ScrollBar::SetPositionRatio(float positionRatio) noexcept
@@ -127,6 +152,12 @@ void ScrollBar::SetPositionRatio(float positionRatio) noexcept
 	auto relativePosY = static_cast<int32_t>(GetMaxScrollRange<float>() * positionRatio);
 	const auto& curPos = m_scrollContainer->GetRelativePosition();
 	m_scrollContainer->SetRelativePosition({ curPos.x, relativePosY });
+}
+
+void ScrollBar::SetEnableWheel(bool enable) noexcept
+{
+	if(!m_isWheelEnabled && enable) ResetMouseWheelValue();
+	m_isWheelEnabled = enable;
 }
 
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout, 

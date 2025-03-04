@@ -13,13 +13,12 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::Container; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
-	virtual void ChangeSize(const XMUINT2& size) noexcept override;
+	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	bool Setup(const UILayout& layout, 
 		map<InteractState, unique_ptr<UIComponent>> imgGridList, BehaviorMode behaviorMode) noexcept;
-	void ChangeSize(DirectionType dirType, float ratio) noexcept;
 	void ClearInteraction() noexcept;
 	const optional<InteractState>& GetState() const noexcept { return m_state; }
 

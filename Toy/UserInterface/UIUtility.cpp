@@ -194,6 +194,28 @@ vector<PositionSize> StretchSize(DirectionType stretchType, const XMUINT2& size,
 	return result;
 }
 
+bool IsBiggerThanSource(DirectionType dirType, const XMUINT2& size, const vector<Rectangle>& list)
+{
+	uint32_t sizeValue{ 0 };
+	uint32_t sourceSum{ 0 };
+	function<int(uint32_t, const Rectangle&)> accumulator;
+
+	switch (dirType) {
+	case DirectionType::Horizontal:
+		accumulator = [](uint32_t sum, const Rectangle& rect) { return sum + rect.width; };
+		sizeValue = size.x;
+		break;
+	case DirectionType::Vertical:
+		accumulator = [](uint32_t sum, const Rectangle& rect) { return sum + rect.height; };
+		sizeValue = size.y;
+		break;
+	}
+
+	sourceSum = accumulate(list.begin(), list.end(), 0, accumulator);
+	return sourceSum <= sizeValue;
+}
+
+
 vector<Rectangle> GetSourcesFromArea(const Rectangle& area, const vector<int>& widths, const vector<int>& heights) noexcept
 {
 	if (area.IsEmpty() || widths.empty() || heights.empty()) {

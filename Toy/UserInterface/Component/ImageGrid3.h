@@ -15,7 +15,7 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid3; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
-	virtual void ChangeSize(const XMUINT2& size) noexcept override;
+	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool SetImage(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept;
@@ -30,6 +30,7 @@ public:
 	bool SetSources(const vector<Rectangle>& sources) noexcept;
 	vector<Rectangle> GetSources() const noexcept;
 	Rectangle GetMergedSource() const noexcept;
+	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
 
 protected:
 	ImageGrid3(const ImageGrid3& o);
