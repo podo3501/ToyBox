@@ -33,6 +33,7 @@ protected:
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
+	void AddRef() const noexcept;
 	void Release() noexcept;
 	void ReloadDatas() noexcept;
 	void CheckMouseInArea() noexcept;

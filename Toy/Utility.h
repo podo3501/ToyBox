@@ -117,37 +117,44 @@ bool CompareAssoc(const map<Key, unique_ptr<Value>>& lhs, const map<Key, unique_
 	return true;
 }
 
-inline bool CompareEpsilon(float a, float b, float epsilon = 1e-6f) 
+inline bool CompareEpsilon(float a, float b, float epsilon = 1e-6f) noexcept
 {
 	return fabs(a - b) <= epsilon;
 }
 
-inline bool CompareEpsilon(const Vector2& a, const Vector2& b, float epsilon = 1e-6f)
+inline bool CompareEpsilon(const Vector2& a, const Vector2& b, float epsilon = 1e-6f) noexcept
 {
 	return CompareEpsilon(a.x, b.x, epsilon) && CompareEpsilon(a.y, b.y, epsilon);
 }
 
-inline XMINT2 operator+(const XMINT2& a, const XMINT2& b) { return XMINT2(a.x + b.x, a.y + b.y); }
-inline XMINT2 operator-(const XMINT2& a, const XMINT2& b) { return XMINT2(a.x - b.x, a.y - b.y); }
-inline XMINT2 operator*(const XMINT2& a, const XMINT2& b) { return XMINT2(a.x * b.x, a.y * b.y); }
-inline XMINT2 operator/(const XMINT2& a, const XMINT2& b) { 
+inline XMINT2 operator+(const XMINT2& a, const XMINT2& b) noexcept { return XMINT2(a.x + b.x, a.y + b.y); }
+inline XMINT2 operator-(const XMINT2& a, const XMINT2& b) noexcept { return XMINT2(a.x - b.x, a.y - b.y); }
+inline XMINT2 operator*(const XMINT2& a, const XMINT2& b) noexcept { return XMINT2(a.x * b.x, a.y * b.y); }
+inline XMINT2 operator/(const XMINT2& a, const XMINT2& b) noexcept {
 	return XMINT2((b.x != 0) ? a.x / b.x : 0, (b.y != 0) ? a.y / b.y : 0); }
 
-inline ImVec2 operator+(const ImVec2& a, const ImVec2& b) { return ImVec2(a.x + b.x, a.y + b.y); }
-inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) { return ImVec2(a.x - b.x, a.y - b.y); }
+inline ImVec2 operator+(const ImVec2& a, const ImVec2& b) noexcept { return ImVec2(a.x + b.x, a.y + b.y); }
+inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) noexcept { return ImVec2(a.x - b.x, a.y - b.y); }
 
-inline XMINT2 Vector2ToXMINT2(const Vector2& rhs) {
+inline XMINT2 Vector2ToXMINT2(const Vector2& rhs) noexcept {
 	return { static_cast<int32_t>(rhs.x), static_cast<int32_t>(rhs.y) };
 }
-inline Vector2 XMINT2ToVector2(const XMINT2& rhs) {
+inline Vector2 XMINT2ToVector2(const XMINT2& rhs) noexcept {
 	return { static_cast<float>(rhs.x), static_cast<float>(rhs.y) };
 }
-inline XMINT2 ImVec2ToXMINT2(const ImVec2& rhs) {
+inline XMINT2 ImVec2ToXMINT2(const ImVec2& rhs) noexcept {
 	return { static_cast<int32_t>(rhs.x), static_cast<int32_t>(rhs.y) };
 }
-inline ImVec2 XMINT2ToImVec2(const XMINT2& rhs) {
+inline ImVec2 XMINT2ToImVec2(const XMINT2& rhs) noexcept {
 	return { static_cast<float>(rhs.x), static_cast<float>(rhs.y) };
 }
+
+inline XMINT2 XMUINT2ToXMINT2(const XMUINT2& uint2) noexcept { return XMINT2{ static_cast<int32_t>(uint2.x), static_cast<int32_t>(uint2.y) }; };
+// XMUINT2에 대한 사칙연산 오버로딩
+inline XMUINT2 operator+(const XMUINT2& lhs, const XMUINT2& rhs) noexcept { return XMUINT2(lhs.x + rhs.x, lhs.y + rhs.y); }
+inline XMUINT2 operator-(const XMUINT2& lhs, const XMUINT2& rhs) noexcept { return XMUINT2(lhs.x - rhs.x, lhs.y - rhs.y); }
+inline XMUINT2 operator*(const XMUINT2& lhs, uint32_t rhs) noexcept { return XMUINT2(lhs.x * rhs, lhs.y * rhs); }
+inline XMUINT2 operator/(const XMUINT2& lhs, uint32_t rhs) noexcept { return XMUINT2(lhs.x / rhs, lhs.y / rhs); }
 
 inline bool operator==(const RECT& lhs, const RECT& rhs) {
 	return lhs.left == rhs.left &&

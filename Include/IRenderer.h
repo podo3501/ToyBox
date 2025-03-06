@@ -26,6 +26,7 @@ public:
     virtual optional<vector<Rectangle>> GetTextureAreaList(const wstring& filename, const UINT32& bgColor) = 0;
     virtual void ReleaseTexture(size_t idx) noexcept = 0;
     virtual bool ModifyRenderTexture(size_t index, const XMUINT2& size) = 0;
+    virtual void AddRef(size_t index) noexcept = 0;
 };
 
 struct ITextureRender

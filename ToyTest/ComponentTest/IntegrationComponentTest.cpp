@@ -55,10 +55,11 @@ namespace ComponentTest
 	}
 
 	template <typename T>
-	static bool VerifyClone(unique_ptr<T> original) 
+	static bool VerifyClone(IRenderer* renderer, unique_ptr<T> original) 
 	{
 		if (!original) return false;
 		unique_ptr<UIComponent> origin = move(original); //업 캐스트 한다. unique_ptr은 업 캐스트가 안되고 move를 통해서만 된다.
+		EXPECT_TRUE(renderer->LoadComponent(origin.get()));
 		auto clone = origin->Clone();
 		
 		return CompareUniquePtr(origin, clone);
@@ -66,13 +67,13 @@ namespace ComponentTest
 
 	TEST_F(IntegrationTest, Clone)
 	{
-		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid1({ { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid3(DirectionType::Horizontal, { { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop }, L"L< Hangle >테스트 입니다!< / Hangle>")));
-		EXPECT_TRUE(VerifyClone(CreateSampleButton1({ { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(CreateSampleButton3(DirectionType::Horizontal, { { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(CreateSampleListArea1({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleImageGrid1({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleImageGrid3(DirectionType::Horizontal, { { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>")));
+		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleButton1({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleButton3(DirectionType::Horizontal, { { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleListArea1({ { 220, 190 }, Origin::LeftTop })));
 	}
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)

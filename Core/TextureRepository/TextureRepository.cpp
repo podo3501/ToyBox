@@ -6,7 +6,11 @@
 #include "../DeviceResources.h"
 #include "../Utility.h"
 
-TextureRepository::~TextureRepository() = default;
+TextureRepository::~TextureRepository()
+{
+    assert(ranges::all_of(m_texResources, [](const auto& ptr) { return ptr == nullptr; })); //잘 지워졌는지 확인
+}
+
 TextureRepository::TextureRepository(DX::DeviceResources* deviceRes, DescriptorHeap* descriptorHeap, ResourceUploadBatch* upload, SpriteBatch* sprite) :
     m_deviceResources{ deviceRes },
     m_device{ deviceRes->GetD3DDevice() },
@@ -28,6 +32,11 @@ static TextureResource* FindResourceByFilename(array<unique_ptr<TextureResource>
     return nullptr;
 }
 
+void TextureRepository::AddRef(size_t index) noexcept
+{
+    m_refCount[index]++;
+}
+
 template<typename TexResType>
 bool TextureRepository::LoadTextureResource(const wstring& filename, size_t& outIndex,
     function<void(TextureResource*)> postLoadAction)
@@ -35,7 +44,7 @@ bool TextureRepository::LoadTextureResource(const wstring& filename, size_t& out
     if (auto find = FindResourceByFilename(m_texResources, filename); find)
     {
         outIndex = find->GetIndex();
-        m_refCount[outIndex]++;
+        AddRef(outIndex);
         postLoadAction(find);
         return true;
     }
@@ -157,6 +166,7 @@ void TextureRepository::ReleaseTexture(size_t idx) noexcept
     }
         
     m_deviceResources->WaitForGpu();
+    assert(m_texResources[idx]);
     m_texResources[idx] = nullptr;
     ReleaseDescriptor(idx);
 }

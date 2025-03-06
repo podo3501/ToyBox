@@ -3,6 +3,7 @@
 #include "../JsonOperation.h"
 #include "RenderTexture.h"
 #include "ScrollBar.h"
+#include "ScrollSlider.h"
 #include "Container.h"
 #include "../../InputManager.h"
 #include "../../Utility.h"
@@ -14,7 +15,8 @@ ListArea::ListArea() noexcept :
 	m_prototypeContainer{ nullptr },
 	m_bgImage{ nullptr },
 	m_renderTex{ nullptr },
-	m_scrollBar{ nullptr }
+	m_scrollBar{ nullptr },
+	m_scrollSlider{ nullptr }
 {}
 
 ListArea::ListArea(const ListArea& o) noexcept :
@@ -22,7 +24,8 @@ ListArea::ListArea(const ListArea& o) noexcept :
 	m_prototypeContainer{ nullptr },
 	m_bgImage{ nullptr },
 	m_renderTex{ nullptr },
-	m_scrollBar{ nullptr }
+	m_scrollBar{ nullptr },
+	m_scrollSlider{ nullptr }
 {
 	ReloadDatas();
 }
@@ -33,6 +36,8 @@ void ListArea::ReloadDatas() noexcept
 	m_prototypeContainer = ComponentCast<Container*>(componentList[0]);
 	m_renderTex = ComponentCast<RenderTexture*>(componentList[1]);
 	m_bgImage = m_renderTex->GetRenderedComponent();
+	m_scrollBar = ComponentCast<ScrollBar*>(componentList[2]);
+	m_scrollSlider = m_scrollBar->GetScrollSlider();
 }
 
 unique_ptr<UIComponent> ListArea::CreateClone() const
@@ -48,14 +53,16 @@ bool ListArea::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(EqualComponent(m_prototypeContainer, o->m_prototypeContainer));
 	ReturnIfFalse(EqualComponent(m_bgImage, o->m_bgImage));
 	ReturnIfFalse(EqualComponent(m_renderTex, o->m_renderTex));
+	ReturnIfFalse(EqualComponent(m_scrollBar, o->m_scrollBar));
+	ReturnIfFalse(EqualComponent(m_scrollSlider, o->m_scrollSlider));
 
 	return true;
 }
 
-bool ListArea::ChangeSize(const XMUINT2& size) noexcept
+bool ListArea::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	ReturnIfFalse(m_prototypeContainer->ChangeSize(size));
-	return UIComponent::ChangeSize(size);
+	return UIComponent::ImplementChangeSize(size);
 }
 
 bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, 
@@ -81,13 +88,14 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	m_renderTex = renderTex.get();
 	UIEx(this).AttachComponent(move(renderTex), {});
 
-	constexpr int scrollBarGap = 3;
 	m_scrollBar = ComponentCast<ScrollBar*>(scrollBar.get());
 	m_scrollBar->SetStateFlag(StateFlag::Active, false);
-	m_scrollBar->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
-	m_scrollBar->ChangeSize({ 16, layout.GetSize().y - (scrollBarGap * 2) });
-	XMINT2 scrollBarPos{ static_cast<int32_t>(layout.GetSize().x - m_scrollBar->GetSize().x + scrollBarGap), scrollBarGap };
+	m_scrollBar->ChangeSize({ 22, layout.GetSize().y });
+	XMINT2 scrollBarPos{ static_cast<int32_t>(layout.GetSize().x - m_scrollBar->GetSize().x), 0 };
 	UIEx(this).AttachComponent(move(scrollBar), scrollBarPos);
+
+	m_scrollSlider = m_scrollBar->GetScrollSlider();
+	m_scrollSlider->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
 		
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요
 
@@ -119,7 +127,7 @@ UIComponent* ListArea::PrepareContainer()
 
 	float contentRatio = static_cast<float>(viewArea) / static_cast<float>(curHeight);
 	m_scrollBar->SetStateFlag(StateFlag::Active, (contentRatio) < 1.f ? true : false);
-	m_scrollBar->SetViewContent(viewArea, curHeight);
+	m_scrollSlider->SetViewContent(viewArea, curHeight);
 
 	return cloneContainerPtr;
 }
@@ -150,7 +158,7 @@ void ListArea::OnScrollChangedCB(float ratio)
 
 void ListArea::ScrollContainers(const DX::StepTimer&) noexcept
 {
-	m_scrollBar->SetEnableWheel(m_renderTex->IsMouseInArea());
+	m_scrollSlider->SetEnableWheel(m_renderTex->IsMouseInArea());
 }
 
 void ListArea::CheckMouseInteraction() noexcept

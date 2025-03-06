@@ -135,6 +135,16 @@ void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexc
 		});
 }
 
+bool UIComponent::ImplementChangeSize(const XMUINT2& size) noexcept
+{
+	ranges::for_each(m_children, [this, &size](auto& child) {
+		GetTransform(child.get()).AdjustPosition(size);
+		});
+
+	ApplySize(size);
+	return true;
+}
+
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
 bool UIComponent::ChangeSize(const XMUINT2& size) noexcept
 {
@@ -144,12 +154,7 @@ bool UIComponent::ChangeSize(const XMUINT2& size) noexcept
 	if (HasStateFlag(StateFlag::Y_SizeLocked)) lockedSize.y = preSize.y;
 	if (lockedSize == preSize) return true;
 
-	ranges::for_each(m_children, [this, &size](auto& child) {
-		GetTransform(child.get()).AdjustPosition(size);
-		});
-
-	ApplySize(size);
-	return true;
+	return ImplementChangeSize(lockedSize);
 }
 
 bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept

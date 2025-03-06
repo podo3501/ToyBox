@@ -15,7 +15,6 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid3; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
-	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool SetImage(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept;
@@ -35,6 +34,7 @@ public:
 protected:
 	ImageGrid3(const ImageGrid3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
 	DirectionType m_dirType{ DirectionType::Horizontal };

@@ -72,7 +72,7 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
 	return srcList;
 }
 
-bool ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
+bool ImageGrid9::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
 	vector<Rectangle> list = GetSourceList(components);

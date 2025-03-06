@@ -28,6 +28,7 @@ public:
     virtual optional<vector<Rectangle>> GetTextureAreaList(const wstring& filename, const UINT32& bgColor) override;
     virtual void ReleaseTexture(size_t idx) noexcept override;
     virtual bool ModifyRenderTexture(size_t index, const XMUINT2& size) override;
+    virtual void AddRef(size_t index) noexcept override;
 
     //ITextureRender
     virtual void Render(size_t index, const RECT& dest, const RECT* source) override;

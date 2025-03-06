@@ -13,7 +13,6 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::Container; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
-	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
@@ -27,6 +26,7 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementPostLoaded(ITextureController*) override;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
+	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
 	void ReloadDatas() noexcept;

@@ -4,6 +4,7 @@
 #include "../TestHelper.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Toy/UserInterface/Component/ScrollBar.h"
+#include "../Toy/UserInterface/Component/ScrollSlider.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Component/Button.h"
@@ -79,11 +80,15 @@ namespace ComponentTest
 		auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
 		auto buttonPtr = button.get();
 		auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(button));
+		auto renderTexPtr = renderTex.get();
 		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(TestRenderTexture, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
 		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		auto clone = renderTexPtr->Clone();
+		EXPECT_TRUE(m_renderer->LoadComponent(clone.get()));
 	}
 
 	////////////////////////////////////////////////////////
@@ -101,20 +106,20 @@ namespace ComponentTest
 			});
 	}
 
-	TEST_F(ComplexComponentTest, ScrollBar)
+	TEST_F(ComplexComponentTest, ScrollSlider)
 	{
-		auto scrollBar = CreateSampleScrollBar(DirectionType::Vertical, { { 16, 200 }, Origin::Center });
-		auto scrollBarPtr = scrollBar.get();
-		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
+		auto scrollSlider = CreateSampleScrollSlider(DirectionType::Vertical, { { 16, 200 }, Origin::Center });
+		auto scrollSliderPtr = scrollSlider.get();
+		UIEx(m_panel).AttachComponent(move(scrollSlider), { 100, 200 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		testing::MockFunction<void(float)> mockOnScrollChanged;
-		scrollBarPtr->AddScrollChangedCB(mockOnScrollChanged.AsStdFunction());
+		scrollSliderPtr->AddScrollChangedCB(mockOnScrollChanged.AsStdFunction());
 
 		uint32_t viewArea = 500;
 		uint32_t contentSize = 2000;
-		scrollBarPtr->SetViewContent(viewArea, contentSize);
-		scrollBarPtr->SetPositionRatio(0.5f);
+		scrollSliderPtr->SetViewContent(viewArea, contentSize);
+		scrollSliderPtr->SetPositionRatio(0.5f);
 		CallMockRender(TestScrollBar, 6);
 
 		EXPECT_CALL(mockOnScrollChanged, Call(testing::FloatEq(85.f / 150.f))).Times(1);

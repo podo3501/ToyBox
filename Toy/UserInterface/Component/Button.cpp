@@ -26,10 +26,10 @@ unique_ptr<UIComponent> Button::CreateClone() const
 	return unique_ptr<Button>(new Button(*this));
 }
 
-bool Button::ChangeSize(const XMUINT2& size) noexcept
+bool Button::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	ReturnIfFalse(m_container->ChangeSize(size));
-	return UIComponent::ChangeSize(size);
+	return UIComponent::ImplementChangeSize(size);
 }
 
 //holdToKeepPressed는 나중에 옵션을 지정하는 변수로 바뀔예정. 버튼은 다양한 버튼들이 존재하기 때문.

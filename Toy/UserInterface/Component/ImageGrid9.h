@@ -13,7 +13,6 @@ public:
 
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid9; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
-	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 
 	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
 	bool SetFilename(const wstring& filename) noexcept;
@@ -28,6 +27,8 @@ public:
 protected:
 	ImageGrid9(const ImageGrid9& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
+
 };
 
 unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const ImageSource& source);

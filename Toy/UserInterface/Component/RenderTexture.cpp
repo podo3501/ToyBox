@@ -29,18 +29,28 @@ void RenderTexture::Release() noexcept
 	{
 		m_texController->ReleaseTexture(*m_index);
 		m_texController = nullptr;
+		m_gfxOffset = {};
+		m_index = nullopt;
 	}
+}
+
+void RenderTexture::AddRef() const noexcept
+{
+	if (m_texController && m_index)
+		m_texController->AddRef(*m_index);
+}
+
+unique_ptr<UIComponent> RenderTexture::CreateClone() const
+{
+	auto clone = unique_ptr<RenderTexture>(new RenderTexture(*this));
+	clone->AddRef();
+	return clone;
 }
 
 void RenderTexture::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
 	m_component = componentList[0];
-}
-
-unique_ptr<UIComponent> RenderTexture::CreateClone() const
-{
-	return unique_ptr<RenderTexture>(new RenderTexture(*this));
 }
 
 bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
@@ -56,9 +66,8 @@ bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 
 bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 {
-	if (m_gfxOffset && m_texController)
-		Release();
-	
+	Release(); //데이터가 존재하면 지운다.
+
 	size_t index{ 0 };
 	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetSize(), GetPosition(), index, &m_gfxOffset));
 

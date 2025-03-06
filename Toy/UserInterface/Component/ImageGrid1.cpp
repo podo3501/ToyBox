@@ -7,10 +7,17 @@
 
 ImageGrid1::~ImageGrid1()
 {
+	Release();
+}
+
+void ImageGrid1::Release() noexcept
+{
 	if (m_texController && m_index)
 	{
 		m_texController->ReleaseTexture(*m_index);
 		m_texController = nullptr;
+		m_gfxOffset = {};
+		m_index = nullopt;
 	}
 }
 
@@ -27,9 +34,17 @@ ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	m_source = o.m_source;
 }
 
+void ImageGrid1::AddRef() const noexcept
+{
+	if(m_texController && m_index)
+		m_texController->AddRef(*m_index);
+}
+
 unique_ptr<UIComponent> ImageGrid1::CreateClone() const
 {
-	return unique_ptr<ImageGrid1>(new ImageGrid1(*this));
+	auto clone = unique_ptr<ImageGrid1>(new ImageGrid1(*this));
+	clone->AddRef();
+	return clone;
 }
 
 bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
@@ -45,9 +60,12 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 
 bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
 {
+	Release();
+
 	XMUINT2 texSize{};
 	size_t index{ 0 };
 	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), index, &texSize, &m_gfxOffset));
+
 	m_index = index;
 
 	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다.

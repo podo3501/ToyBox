@@ -67,7 +67,6 @@ namespace BasicCore
 		wstring englishFilename{ L"Resources/UI/Font/CourierNewBoldS18.spritefont" };
 
 		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 10);
-		EXPECT_EQ(LoadAndCheckFont(load, hangleFilename), 10);
 		EXPECT_EQ(LoadAndCheckFont(load, englishFilename), 11);
 
 		return true;
@@ -104,5 +103,8 @@ namespace BasicCore
 
 		testComponent->SetLoadTestFunction(ReloadingTest);
 		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
+
+		for (auto idx : views::iota(0, 12))
+			texController->ReleaseTexture(idx);
 	}
 }

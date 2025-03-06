@@ -13,11 +13,17 @@ using ordered_json = nlohmann::ordered_json;
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
 TextArea::~TextArea()
 {
+	Release();
+}
+
+void TextArea::Release() noexcept
+{
 	if (!m_texController) return;
 
 	for (const auto& font : m_font)
 		m_texController->ReleaseTexture(font.second);
 	m_texController = nullptr;
+	m_font.clear();
 }
 
 TextArea::TextArea() :
@@ -34,9 +40,19 @@ TextArea::TextArea(const TextArea& other) :
 	m_lines = other.m_lines;
 }
 
+void TextArea::AddRef() const noexcept
+{
+	if (!m_texController) return;
+
+	for (auto index : m_font | views::values)
+		m_texController->AddRef(index);
+}
+
 unique_ptr<UIComponent> TextArea::CreateClone() const
 {
-	return unique_ptr<TextArea>(new TextArea(*this));
+	auto clone = unique_ptr<TextArea>(new TextArea(*this));
+	clone->AddRef();
+	return clone;
 }
 
 bool TextArea::operator==(const UIComponent& o) const noexcept
@@ -49,11 +65,13 @@ bool TextArea::operator==(const UIComponent& o) const noexcept
 
 bool TextArea::ImplementLoadResource(ITextureLoad* load)
 {
+	Release();
+
+	size_t index{ 0 };
 	for (const auto& file : m_fontFileList)
 	{
-		size_t index{ 0 };
 		ReturnIfFalse(load->LoadFont(GetResourceFullFilename(file.second), index));
-		m_font.insert(make_pair(file.first, index));
+		m_font.emplace(file.first, index);
 	}
 
 	return true;
@@ -116,9 +134,9 @@ bool TextArea::ImplementPostLoaded(ITextureController* texController)
 	return ArrangeText(m_text);
 }
 
-bool TextArea::ChangeSize(const XMUINT2& size) noexcept
+bool TextArea::ImplementChangeSize(const XMUINT2& size) noexcept
 {
-	ReturnIfFalse(UIComponent::ChangeSize(size));
+	ReturnIfFalse(UIComponent::ImplementChangeSize(size));
 	return ArrangeText(m_text);
 }
 

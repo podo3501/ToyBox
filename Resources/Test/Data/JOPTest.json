@@ -24,8 +24,8 @@
         "Children": [
             {
                 "Child": {
-                    "Type": "ScrollBar",
-                    "Name": "ScrollBar_0",
+                    "Type": "ScrollSlider",
+                    "Name": "ScrollSlider_0",
                     "Layout": {
                         "Size": {
                             "x": 16,

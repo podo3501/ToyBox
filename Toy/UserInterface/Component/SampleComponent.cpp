@@ -10,6 +10,7 @@
 #include "Container.h"
 #include "ListArea.h"
 #include "ScrollBar.h"
+#include "ScrollSlider.h"
 #include "../UIUtility.h"
 #include "../../Utility.h"
 
@@ -126,8 +127,8 @@ unique_ptr<ImageGrid1> CreateListBackgroudImage(const UILayout& layout)
 
 static unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout, unique_ptr<Container> container)
 {
-	UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
-	auto scrollBar = CreateSampleScrollBar(DirectionType::Vertical, scrollBarLayout);
+	UILayout scrollBarLayout({ {16, layout.GetSize().y }, Origin::LeftTop });
+	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);
 
 	return CreateListArea(layout, CreateListBackgroudImage(layout), move(container), move(scrollBar));
 }
@@ -212,12 +213,20 @@ unique_ptr<Container> CreateScrollContainer(const UILayout& layout)
 	return CreateContainer(layout, move(imageGridList), BehaviorMode::HoldToKeepPressed);
 }
 
-unique_ptr<ScrollBar> CreateSampleScrollBar(DirectionType dirType, const UILayout& layout)
+unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)
+{
+	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
+
+	return CreateScrollBar(layout, 
+		CreateScrollBackground(gridLayout), 
+		CreateSampleScrollSlider(DirectionType::Vertical, gridLayout), 3);
+}
+
+unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const UILayout& layout)
 {
 	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
 		
-	return CreateScrollBar(layout,
-		CreateScrollBackground(gridLayout),
+	return CreateScrollSlider(layout,
 		CreateScrollTrack(dirType, gridLayout),
 		CreateScrollContainer(gridLayout));
 }
