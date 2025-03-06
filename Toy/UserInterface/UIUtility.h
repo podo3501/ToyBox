@@ -1,6 +1,7 @@
 #pragma once
 
 struct SourceDivider;
+class UIComponent;
 enum class DirectionType;
 
 struct TextData
@@ -29,14 +30,8 @@ private:
 //L"<Hangle><Red>테스트, </Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>()</English>"
 bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept;
 
-struct PositionSize
-{
-	//Vector2 pos;
-	XMINT2 pos;
-	XMUINT2 size;
-};
-
-vector<PositionSize> StretchSize(DirectionType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept;
+vector<XMUINT2> StretchSize(DirectionType dirType, const XMUINT2& size, const vector<UIComponent*>& components) noexcept;
+vector<XMINT2> ExtractStartPosFromSizes(DirectionType dirType, const vector<XMUINT2>& sizes) noexcept;
 bool IsBiggerThanSource(DirectionType dirType, const XMUINT2& size, const vector<Rectangle>& list);
 //하나의 사각형과 두개의 점이 있을때 3개의 사각형을 찾는 함수
 vector<Rectangle> GetSourcesFromArea(

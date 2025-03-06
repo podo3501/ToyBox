@@ -40,15 +40,22 @@ bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noe
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 9) return false;
 
+	vector<optional<StateFlag::Type>> stateFlags{ StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
+
+	vector<XMUINT2> sizes; //source의 크기로 dest를 만든다.
+	ranges::transform(source.list, back_inserter(sizes), [](auto& src) { return RectangleToXMUINT2(src); });
+	vector<XMUINT2> firstSizes = { sizes[0], sizes[3], sizes[6] };
+	vector<XMINT2> positions = ExtractStartPosFromSizes(DirectionType::Vertical, firstSizes);
+	for (auto idx : views::iota(0u, positions.size()))
+	{
+		auto grid3 = CreateImageGrid3(DirectionType::Horizontal, idx, source, firstSizes[idx]);
+		if (auto flag = stateFlags[idx]; flag) grid3->SetStateFlag(*flag, true);
+		UIEx(this).AttachComponent(move(grid3), positions[idx]);
+	}
+
+	ChangeSize(layout.GetSize());
 	SetLayout(layout);
 
-	auto srcHList = ExtractSourceRects(source);
-	auto posRects = StretchSize(DirectionType::Vertical, layout.GetSize(), srcHList);
-	for (size_t idx = 0; idx < srcHList.size(); ++idx)
-	{
-		auto grid3 = CreateImageGrid3(DirectionType::Horizontal, idx, source, posRects[idx].size);
-		UIEx(this).AttachComponent(move(grid3), posRects[idx].pos);
-	}
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 	UpdatePositionsManually();
 
@@ -71,12 +78,12 @@ bool ImageGrid9::ChangeSize(const XMUINT2& size) noexcept
 	vector<Rectangle> list = GetSourceList(components);
 	ReturnIfFalse(IsBiggerThanSource(DirectionType::Vertical, size, list));
 
-	vector<PositionSize> posRects = StretchSize(DirectionType::Vertical, size, list);
-
-	for (int idx{ 0 }; idx < components.size(); ++idx)
+	vector<XMUINT2> sizes = StretchSize(DirectionType::Vertical, size, components);
+	vector<XMINT2> positions = ExtractStartPosFromSizes(DirectionType::Vertical, sizes);
+	for (auto idx : views::iota(0u, components.size()))
 	{
-		ReturnIfFalse(components[idx]->ChangeSize(posRects[idx].size));
-		ChangePosition(idx, size, posRects[idx].pos);
+		ChangePosition(idx, size, positions[idx]);
+		ReturnIfFalse(components[idx]->ChangeSize(sizes[idx]));
 	}
 	ApplySize(size);
 

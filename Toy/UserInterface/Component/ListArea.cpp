@@ -86,7 +86,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	m_scrollBar->SetStateFlag(StateFlag::Active, false);
 	m_scrollBar->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
 	m_scrollBar->ChangeSize({ 16, layout.GetSize().y - (scrollBarGap * 2) });
-	XMINT2 scrollBarPos{ static_cast<int32_t>(layout.GetSize().x - m_scrollBar->GetSize().x - scrollBarGap), scrollBarGap };
+	XMINT2 scrollBarPos{ static_cast<int32_t>(layout.GetSize().x - m_scrollBar->GetSize().x + scrollBarGap), scrollBarGap };
 	UIEx(this).AttachComponent(move(scrollBar), scrollBarPos);
 		
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요

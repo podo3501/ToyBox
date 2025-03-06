@@ -85,8 +85,8 @@ bool DetachComponentCommand::Redo()
 	if (!component) return false;
 
 	m_component = move(component);
-
-	m_result = { m_component->Clone(), parent };
+	if(!CompareUniquePtr(m_result.first, m_component)) //Undo, Redo를 계속하면 m_result에 값이 있어서 소멸자가 호출된다. 그래서 texture의 reference count가 꼬이게 된다.
+		m_result = { m_component->Clone(), parent };
 
 	return m_result.first != nullptr;
 }

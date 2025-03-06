@@ -16,7 +16,6 @@ public:
 	virtual bool ChangeSize(const XMUINT2& size) noexcept override;
 
 	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
-
 	bool SetFilename(const wstring& filename) noexcept;
 	optional<wstring> GetFilename() const noexcept;
 

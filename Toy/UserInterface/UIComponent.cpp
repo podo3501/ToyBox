@@ -138,6 +138,12 @@ void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexc
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
 bool UIComponent::ChangeSize(const XMUINT2& size) noexcept
 {
+	XMUINT2 lockedSize{ size };
+	const auto& preSize = GetSize();
+	if (HasStateFlag(StateFlag::X_SizeLocked)) lockedSize.x = preSize.x;
+	if (HasStateFlag(StateFlag::Y_SizeLocked)) lockedSize.y = preSize.y;
+	if (lockedSize == preSize) return true;
+
 	ranges::for_each(m_children, [this, &size](auto& child) {
 		GetTransform(child.get()).AdjustPosition(size);
 		});
@@ -186,11 +192,6 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 	ranges::for_each(m_children, [this](auto& child) {
 		child->SetParent(this);
 		});
-}
-
-const XMINT2& UIComponent::GetRelativePosition() const noexcept
-{
-	return m_transform.GetRelativePosition();
 }
 
 bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept

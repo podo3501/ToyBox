@@ -1,8 +1,8 @@
 ﻿#include "pch.h"
-#include "ToyTestFixture.h"
-#include "IMockRenderer.h"
-#include "TestHelper.h"
-#include "Utility.h"
+#include "../ToyTestFixture.h"
+#include "../IMockRenderer.h"
+#include "../TestHelper.h"
+#include "../Utility.h"
 #include "../Toy/Window.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
@@ -124,10 +124,26 @@ namespace ComponentTest
 	TEST_F(BasicComponentTest, ImageGrid1)
 	{
 		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::Center });
+		auto img1Ptr = img1.get();
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-
 		CallMockRender(TestImageGrid1Render, 1);
+
+		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
+		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, false);
+		img1Ptr->ChangeSize({ 128, 64 });
+		CallMockRender(TestImageGrid1Render, 1);
+
+		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, false);
+		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
+		img1Ptr->ChangeSize({ 64, 128 });
+		CallMockRender(TestImageGrid1Render, 1);
+
+		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
+		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
+		img1Ptr->ChangeSize({ 128, 128 });
+		CallMockRender(TestImageGrid1Render, 1);
+
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 

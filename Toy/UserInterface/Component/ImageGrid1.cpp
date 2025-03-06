@@ -20,7 +20,7 @@ ImageGrid1::ImageGrid1() :
 
 ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	UIComponent{ o },
-	m_texController{ nullptr }
+	m_texController{ o.m_texController }
 {
 	m_index = o.m_index;
 	m_filename = o.m_filename;

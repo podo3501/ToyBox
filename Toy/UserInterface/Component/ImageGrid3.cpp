@@ -40,19 +40,31 @@ bool ImageGrid3::SetImage(DirectionType dirType, const UILayout& layout, const I
     if (source.filename.empty()) return false;
     if (source.list.size() != 3) return false;
 
-	SetLayout(layout);
     m_dirType = dirType;
 
-    vector<PositionSize> posSizes = StretchSize(dirType, layout.GetSize(), source.list);
-    for(auto idx : views::iota(0u, source.list.size()))
-    {
-        auto grid1 = CreateImageGrid1(idx, source, posSizes[idx].size);
-        UIEx(this).AttachComponent(move(grid1), posSizes[idx].pos);
+    vector<optional<StateFlag::Type>> stateFlags;
+    switch (m_dirType) {
+    case DirectionType::Horizontal: stateFlags = { StateFlag::X_SizeLocked, nullopt, StateFlag::X_SizeLocked }; break;
+    case DirectionType::Vertical: stateFlags = { StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked }; break;
     }
+
+    vector<XMUINT2> sizes; //source의 크기로 dest를 만든다.
+    ranges::transform(source.list, back_inserter(sizes), [](auto& src) { return RectangleToXMUINT2(src); });
+    vector<XMINT2> positions = ExtractStartPosFromSizes(dirType, sizes);
+    for (auto idx : views::iota(0u, source.list.size()))
+    {
+        auto grid1 = CreateImageGrid1(idx, source, sizes[idx]);
+        if (auto flag = stateFlags[idx]; flag) grid1->SetStateFlag(*flag, true);
+        UIEx(this).AttachComponent(move(grid1), positions[idx]);
+    }
+
+    ChangeSize(layout.GetSize());
+    SetLayout(layout);
+
     SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
     UpdatePositionsManually();
 
-	return true;
+    return true;
 }
 
 static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
@@ -71,15 +83,15 @@ bool ImageGrid3::ChangeSize(const XMUINT2& size) noexcept
     vector<Rectangle> list = GetSourceList(components);
     ReturnIfFalse(IsBiggerThanSource(m_dirType, size, list));
 
-    vector<PositionSize> posSizes = StretchSize(m_dirType, size, list);
-
+    vector<XMUINT2> sizes = StretchSize(m_dirType, size, components);
+    vector<XMINT2> positions = ExtractStartPosFromSizes(m_dirType, sizes);
     for (auto idx : views::iota(0u, components.size()))
     {
-        ChangePosition(idx, size, posSizes[idx].pos);
-        components[idx]->ChangeSize(posSizes[idx].size);
+        ChangePosition(idx, size, positions[idx]);
+        ReturnIfFalse(components[idx]->ChangeSize(sizes[idx]));
     }
     ApplySize(size);
-
+    
     return true;
 }
 
@@ -178,7 +190,7 @@ bool ImageGrid3::SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept
 
 void ImageGrid3::SerializeIO(JsonOperation& operation)
 {
-    UIComponent::SerializeIO(operation);
+    UIComponent::SerializeIO(operation); 
     operation.Process("DirectionType", m_dirType);
 }
 

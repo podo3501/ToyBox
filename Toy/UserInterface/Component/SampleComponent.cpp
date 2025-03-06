@@ -126,7 +126,7 @@ unique_ptr<ImageGrid1> CreateListBackgroudImage(const UILayout& layout)
 
 static unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout, unique_ptr<Container> container)
 {
-	UILayout scrollBarLayout({ {16, layout.GetSize().y }, Origin::LeftTop });
+	UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
 	auto scrollBar = CreateSampleScrollBar(DirectionType::Vertical, scrollBarLayout);
 
 	return CreateListArea(layout, CreateListBackgroudImage(layout), move(container), move(scrollBar));
@@ -179,6 +179,12 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea, int itemCou
 	return true;
 }
 
+static unique_ptr<ImageGrid1> CreateScrollBackground(const UILayout& layout)
+{
+	ImageSource background{ L"UI/SampleTexture/Sample_0.png", { { 118, 138, 32, 32 } } };
+	return CreateImageGrid1(layout, background);
+}
+
 unique_ptr<ImageGrid3> CreateScrollTrack(DirectionType dirType, const UILayout& layout)
 {
 	ImageSource trackSource{
@@ -211,6 +217,7 @@ unique_ptr<ScrollBar> CreateSampleScrollBar(DirectionType dirType, const UILayou
 	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
 		
 	return CreateScrollBar(layout,
+		CreateScrollBackground(gridLayout),
 		CreateScrollTrack(dirType, gridLayout),
 		CreateScrollContainer(gridLayout));
 }

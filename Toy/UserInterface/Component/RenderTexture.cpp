@@ -16,7 +16,7 @@ RenderTexture::RenderTexture() :
 RenderTexture::RenderTexture(const RenderTexture& o) :
 	UIComponent{ o },
 	m_component{ nullptr },
-	m_texController{ nullptr },
+	m_texController{ o.m_texController },
 	m_index{ o.m_index },
 	m_mouseEvents{ o.m_mouseEvents }
 {

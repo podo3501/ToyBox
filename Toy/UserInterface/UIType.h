@@ -145,6 +145,8 @@ namespace StateFlag
 		RenderTexture = 1 << 3, //RenderTexture라면 Texture셋팅일때만 그린다.
 		Attach = 1 << 4,
 		Detach = 1 << 5,
+		X_SizeLocked = 1 << 6,
+		Y_SizeLocked = 1 << 7,
 
 		Active = Update | ActiveUpdate | Render,
 		Default = Active | Attach | Detach, // 기본 옵션(모든 옵션 포함)

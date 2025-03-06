@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
-#include "ToyTestFixture.h"
-#include "IMockRenderer.h"
+#include "../ToyTestFixture.h"
+#include "../IMockRenderer.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"

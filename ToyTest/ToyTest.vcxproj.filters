@@ -11,11 +11,17 @@
     <ClCompile Include="ToyTestFixture.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="TestHelper.cpp" />
-    <ClCompile Include="BasicComponentTest.cpp" />
     <ClCompile Include="JsonSerializeTest.cpp" />
-    <ClCompile Include="ComponentIntegrationTest.cpp" />
     <ClCompile Include="PracticeTest_Pattern.cpp" />
-    <ClCompile Include="ComplexComponentTest.cpp" />
+    <ClCompile Include="ComponentTest\BasicComponentTest.cpp">
+      <Filter>ComponentTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTest\ComplexComponentTest.cpp">
+      <Filter>ComponentTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTest\IntegrationComponentTest.cpp">
+      <Filter>ComponentTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />
@@ -35,6 +41,9 @@
     </Filter>
     <Filter Include="Resources\Test\Data">
       <UniqueIdentifier>{0f7f180e-4b95-4726-8d63-07cc408c7dd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ComponentTest">
+      <UniqueIdentifier>{e41c47f8-ef45-4072-97e0-377ca418d8cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ScrollBar.h"
+#include "ImageGrid1.h"
 #include "ImageGrid3.h"
 #include "Button.h"
 #include "Container.h"
@@ -9,12 +10,14 @@
 
 ScrollBar::~ScrollBar() = default;
 ScrollBar::ScrollBar() :
+	m_scrollBackground{ nullptr },
 	m_scrollTrack{ nullptr },
 	m_scrollContainer{ nullptr }
 {}
 
 ScrollBar::ScrollBar(const ScrollBar& other) :
 	UIComponent{ other },
+	m_scrollBackground{ nullptr },
 	m_scrollTrack{ nullptr },
 	m_scrollContainer{ nullptr }
 {
@@ -24,6 +27,7 @@ ScrollBar::ScrollBar(const ScrollBar& other) :
 void ScrollBar::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
+	//m_scrollBackground = ComponentCast<ImageGrid1*>(componentList[0]);
 	m_scrollTrack = ComponentCast<ImageGrid3*>(componentList[0]);
 	m_scrollContainer = ComponentCast<Container*>(componentList[1]);
 }
@@ -33,6 +37,7 @@ bool ScrollBar::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 
 	const ScrollBar* o = static_cast<const ScrollBar*>(&rhs);
+	ReturnIfFalse(EqualComponent(m_scrollBackground, o->m_scrollBackground));
 	ReturnIfFalse(EqualComponent(m_scrollTrack, o->m_scrollTrack));
 	ReturnIfFalse(EqualComponent(m_scrollContainer, o->m_scrollContainer));
 
@@ -44,9 +49,15 @@ unique_ptr<UIComponent> ScrollBar::CreateClone() const
 	return unique_ptr<ScrollBar>(new ScrollBar(*this));
 }
 
-bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollTrack, unique_ptr<UIComponent> scrollContainer)
+bool ScrollBar::Setup(const UILayout& layout, 
+	unique_ptr<UIComponent> scrollBackground, 
+	unique_ptr<UIComponent> scrollTrack, 
+	unique_ptr<UIComponent> scrollContainer)
 {
 	SetLayout(layout);
+
+	//m_scrollBackground = ComponentCast<ImageGrid1*>(scrollBackground.get());
+	//UIEx(this).AttachComponent(move(scrollBackground), {});
 
 	m_scrollTrack = ComponentCast<ImageGrid3*>(scrollTrack.get());
 	UIEx(this).AttachComponent(move(scrollTrack), {});
@@ -91,22 +102,19 @@ ReturnType ScrollBar::GetMaxScrollRange() const noexcept
 
 void ScrollBar::OnPressCB(KeyState keyState)
 {
-	static int32_t startPosY{ 0 };
-	const auto& mPos = InputManager::GetMouse().GetPosition();
+	int32_t mPosY = InputManager::GetMouse().GetPosition().y;
 	if (keyState == KeyState::Pressed)
 	{
-		startPosY = mPos.y;
+		m_pressContainerPos = m_scrollContainer->GetRelativePosition();
+		m_pressMousePos = mPosY;
 		return;
 	}
+	if (keyState != KeyState::Held) return;
 
-	int32_t moved = mPos.y - startPosY;
-	if (keyState != KeyState::Held || !moved) return;
-	
-	const auto& containerPos = m_scrollContainer->GetRelativePosition();
+	int32_t moved = mPosY - m_pressMousePos;
 	auto maxRange = GetMaxScrollRange<int32_t>();
-	auto curY = clamp(containerPos.y + moved, 0, maxRange);
-	m_scrollContainer->SetRelativePosition({ containerPos.x, curY });
-	startPosY = mPos.y;
+	auto curY = std::clamp(m_pressContainerPos.y + moved, 0, maxRange);
+	m_scrollContainer->SetRelativePosition({ m_pressContainerPos.x, curY });
 
 	auto ratio = static_cast<float>(curY) / static_cast<float>(maxRange);
 	m_bounded.SetPositionRatio(ratio);
@@ -115,6 +123,7 @@ void ScrollBar::OnPressCB(KeyState keyState)
 
 bool ScrollBar::ChangeSize(const XMUINT2& size) noexcept
 {
+	//ReturnIfFalse(m_scrollBackground->ChangeSize(size));
 	ReturnIfFalse(m_scrollTrack->ChangeSize(size));
 	//크기가 바뀌면 상대적으로 버튼 크기가 정해지기 때문에 조정되어야 한다.
 	auto& btnHeight = m_scrollContainer->GetSize().y;
@@ -161,9 +170,10 @@ void ScrollBar::SetEnableWheel(bool enable) noexcept
 }
 
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout, 
+	unique_ptr<UIComponent> scrollBackground,
 	unique_ptr<UIComponent> scrollTrack,
 	unique_ptr<UIComponent> scrollContainer)
 {
 	unique_ptr<ScrollBar> scrollBar = make_unique<ScrollBar>();
-	return scrollBar->Setup(layout, move(scrollTrack), move(scrollContainer)) ? move(scrollBar) : nullptr;
+	return scrollBar->Setup(layout, move(scrollBackground), move(scrollTrack), move(scrollContainer)) ? move(scrollBar) : nullptr;
 }

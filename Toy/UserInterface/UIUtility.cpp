@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UIUtility.h"
 #include "UIType.h"
+#include "UIComponent.h"
 
 static inline bool operator==(const DirectX::XMFLOAT4& a, const DirectX::XMFLOAT4& b) noexcept
 {
@@ -143,55 +144,46 @@ bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept
 	return tagStack.empty(); // 태그가 남아 있으면 false
 }
 
-//양 끝단을 빼고 중간길이를 구한다음 총 4점을 리턴한다.
-//가로 4점 세로2점이면 3개의 Rectangle을 구할 수 있다.
-//중간에 한쪽 방향으로만 늘어나고 옆으로 늘릴때에는 높이, 위아래로 늘릴때는 넓이가 일정하다고 가정한다.
-static vector<long> GetStretchedSize(long length, long thisEdge, long thatEdge) noexcept
+vector<XMUINT2> StretchSize(DirectionType dirType, const XMUINT2& size, const vector<UIComponent*>& components) noexcept
 {
-	long middle = 0;
-	if (length > thisEdge + thatEdge)
-		middle = length - (thisEdge + thatEdge);
+	vector<XMUINT2> sizes;
+	bool isHorizontal = (dirType == DirectionType::Horizontal);
+	uint32_t middleSize = isHorizontal ? size.x : size.y;
 
-	return { 0, thisEdge, thisEdge + middle, length };
-}
-
-vector<PositionSize> StretchSize(DirectionType stretchType, const XMUINT2& size, const vector<Rectangle>& data) noexcept
-{
-	if (data.size() != 3) return {};
-
-	vector<long> xPoints, yPoints;
-
-	switch (stretchType) {
-	case DirectionType::Horizontal:
-		// 가로 확장
-		xPoints = GetStretchedSize(size.x, data[0].width, data[2].width);
-		yPoints = { 0, static_cast<long>(size.y) };
-		break;
-	case DirectionType::Vertical:
-		// 세로 확장
-		yPoints = GetStretchedSize(size.y, data[0].height, data[2].height);
-		xPoints = { 0, static_cast<long>(size.x) };
-		break;
-	}
-
-	// 결과 리스트 생성
-	vector<PositionSize> result;
-	result.reserve((xPoints.size() - 1) * (yPoints.size() - 1)); // 메모리 예약
-
-	// PositionRectangle 생성
-	for (size_t iy = 0; iy < yPoints.size() - 1; ++iy) {
-		for (size_t ix = 0; ix < xPoints.size() - 1; ++ix) {
-			result.emplace_back(PositionSize{
-				{ static_cast<int32_t>(xPoints[ix]), static_cast<int32_t>(yPoints[iy]) },
-				{	
-					static_cast<uint32_t>(xPoints[ix + 1] - xPoints[ix]),
-					static_cast<uint32_t>(yPoints[iy + 1] - yPoints[iy]) 
-				}
-			});
+	for (const auto& component : components)
+	{
+		if (component->HasStateFlag(isHorizontal ? StateFlag::X_SizeLocked : StateFlag::Y_SizeLocked))
+		{
+			const auto& curSize = component->GetSize();
+			middleSize -= (isHorizontal ? curSize.x : curSize.y);
+			sizes.emplace_back(isHorizontal ? XMUINT2{ curSize.x, size.y } : XMUINT2{ size.x, curSize.y });
 		}
 	}
 
-	return result;
+	sizes.insert(sizes.begin() + 1, isHorizontal ? XMUINT2{ middleSize, size.y } : XMUINT2{ size.x, middleSize });
+	return sizes;
+}
+
+//사이즈 리스트를 이용해서 위치값을 얻어내는 함수
+vector<XMINT2> ExtractStartPosFromSizes(DirectionType dirType, const vector<XMUINT2>& sizes) noexcept
+{
+	vector<XMINT2> positions;
+	int32_t xPosition{ 0 };
+	int32_t yPosition{ 0 };
+
+	for (const auto& size : sizes)
+	{
+		XMINT2 position;
+		switch (dirType)
+		{
+		case DirectionType::Horizontal: position = { xPosition, 0 }; xPosition += size.x; break;
+		case DirectionType::Vertical: position = { 0, yPosition }; yPosition += size.y; break;
+		}
+
+		positions.emplace_back(position);
+	}
+
+	return positions;
 }
 
 bool IsBiggerThanSource(DirectionType dirType, const XMUINT2& size, const vector<Rectangle>& list)
@@ -214,7 +206,6 @@ bool IsBiggerThanSource(DirectionType dirType, const XMUINT2& size, const vector
 	sourceSum = accumulate(list.begin(), list.end(), 0, accumulator);
 	return sourceSum <= sizeValue;
 }
-
 
 vector<Rectangle> GetSourcesFromArea(const Rectangle& area, const vector<int>& widths, const vector<int>& heights) noexcept
 {

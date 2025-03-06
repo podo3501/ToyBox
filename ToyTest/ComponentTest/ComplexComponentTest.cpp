@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "ToyTestFixture.h"
-#include "IMockRenderer.h"
-#include "TestHelper.h"
+#include "../ToyTestFixture.h"
+#include "../IMockRenderer.h"
+#include "../TestHelper.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Toy/UserInterface/Component/ScrollBar.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
@@ -91,6 +91,7 @@ namespace ComponentTest
 	static void TestScrollBar(size_t index, const RECT& dest, const RECT* source)
 	{
 		TestRender(index, dest, source, {
+			//{ {92, 100, 108, 300 }, {118, 138, 150, 170} },
 			{ {92, 100, 108, 110 }, {114, 178, 130, 188} },
 			{ {92, 110, 108, 290 }, {114, 188, 130, 216} },
 			{ {92, 290, 108, 300 }, {114, 216, 130, 226} },

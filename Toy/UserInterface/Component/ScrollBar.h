@@ -3,6 +3,7 @@
 #include "../UIHelperClass.h"
 
 enum class KeyState;
+class ImageGrid1;
 class ImageGrid3;
 class Container;
 
@@ -18,7 +19,10 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	void AddScrollChangedCB(function<void(float)> callback) { m_onScrollChangedCB = callback; }
-	bool Setup(const UILayout& layout, unique_ptr<UIComponent> scrollTrack, unique_ptr<UIComponent> scrollButton);
+	bool Setup(const UILayout& layout, 
+		unique_ptr<UIComponent> scrollBackground,
+		unique_ptr<UIComponent> scrollTrack, 
+		unique_ptr<UIComponent> scrollButton);
 	void SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept;
 	void SetPositionRatio(float positionRatio) noexcept;
 	void SetEnableWheel(bool enable) noexcept;
@@ -35,13 +39,17 @@ private:
 	inline ReturnType GetMaxScrollRange() const noexcept;
 	void OnPressCB(KeyState keyState);
 
+	ImageGrid1* m_scrollBackground;
 	ImageGrid3* m_scrollTrack;
 	Container* m_scrollContainer;
 	BoundedValue m_bounded;
 	bool m_isWheelEnabled{ false };
+	int32_t m_pressMousePos{ 0 };
+	XMINT2 m_pressContainerPos{};
 	function<void(float)> m_onScrollChangedCB;
 };
 
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout,
+	unique_ptr<UIComponent> scrollBackground,
 	unique_ptr<UIComponent> scrollTrack,
 	unique_ptr<UIComponent> scrollButton);

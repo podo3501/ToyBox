@@ -57,11 +57,11 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	template<typename T>
 	T GetComponent(const string& name) noexcept;
 	
-	const XMINT2& GetPosition() const noexcept { return m_transform.GetAbsolutePosition(); }
+	inline const XMINT2& GetPosition() const noexcept { return m_transform.GetAbsolutePosition(); }
+	inline const XMINT2& GetRelativePosition() const noexcept { return m_transform.GetRelativePosition(); }
 	bool Rename(const string& name) noexcept;
 	Rectangle GetArea() const noexcept;
 	const XMUINT2& GetSize() const noexcept;
-	const XMINT2& GetRelativePosition() const noexcept;
 	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); }
 	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); }
