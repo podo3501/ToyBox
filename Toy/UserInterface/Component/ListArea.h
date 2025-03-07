@@ -24,6 +24,8 @@ public:
 		unique_ptr<UIComponent> container, unique_ptr<UIComponent> scrollBar) noexcept;
 	Container* GetPrototypeContainer() noexcept { return m_prototypeContainer; }
 	UIComponent* PrepareContainer();
+	inline UIComponent* GetContainer(unsigned int idx) const noexcept;
+	bool RemoveContainer(unsigned int idx) noexcept;
 	void ClearContainers() noexcept;
 
 protected:
@@ -34,6 +36,9 @@ protected:
 
 private:
 	void ReloadDatas() noexcept;
+	void ResizeContainerForScrollbar() noexcept;
+	void UpdateScrollBar() noexcept;
+	XMUINT2 GetUsableContentSize() const noexcept;
 	void UpdateContainersScroll(const DX::StepTimer& timer) noexcept;
 	void ScrollContainers(const DX::StepTimer& timer) noexcept;
 	void CheckMouseInteraction() noexcept;

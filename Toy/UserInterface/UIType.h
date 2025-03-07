@@ -125,8 +125,10 @@ namespace BitEnum
 
 	// SetBitEnum & HasBitEnum 함수 템플릿화
 	template <typename EnumType>
-	inline void Set(EnumType& stateFlag, EnumType flag, bool enabled) noexcept {
+	inline bool Set(EnumType& stateFlag, EnumType flag, bool enabled) noexcept {
+		EnumType previous = stateFlag;
 		stateFlag = enabled ? (stateFlag | flag) : (stateFlag & ~flag);
+		return previous != stateFlag;
 	}
 
 	template <typename EnumType>

@@ -45,9 +45,8 @@ unique_ptr<UIComponent> ScrollBar::CreateClone() const
 }
 
 bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBackground, 
-	unique_ptr<UIComponent> scrollSlider, uint32_t padding) noexcept
+	unique_ptr<UIComponent> scrollSlider) noexcept
 {
-	m_scrollPadding = padding;
 	SetLayout(layout);
 
 	m_scrollBackground = ComponentCast<ImageGrid1*>(scrollBackground.get());
@@ -58,7 +57,7 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBack
 
 	m_scrollSlider = ComponentCast<ScrollSlider*>(scrollSlider.get());
 	m_scrollSlider->ChangeOrigin(Origin::Center);
-	m_scrollSlider->SetStateFlag(StateFlag::X_SizeLocked, true);
+	m_scrollPadding = size.y - m_scrollSlider->GetSize().y;
 	ChangeSliderSize(size);
 	UIEx(this).AttachComponent(move(scrollSlider), centerPos);
 
@@ -67,8 +66,7 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBack
 
 bool ScrollBar::ChangeSliderSize(const XMUINT2& size) noexcept
 {
-	uint32_t doublePadding = (m_scrollPadding * 2);
-	return m_scrollSlider->ChangeSize({ size.x - doublePadding, size.y - doublePadding });
+	return m_scrollSlider->ChangeSize({ size.x - m_scrollPadding, size.y - m_scrollPadding });
 }
 
 bool ScrollBar::ImplementChangeSize(const XMUINT2& size) noexcept
@@ -87,9 +85,16 @@ void ScrollBar::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
+bool ScrollBar::UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept
+{
+	bool isChange = SetStateFlag(StateFlag::Active, contentSize > viewArea );
+	m_scrollSlider->SetViewContent(viewArea, contentSize);
+	return isChange;
+}
+
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout, unique_ptr<UIComponent> scrollBackground,
-	unique_ptr<UIComponent> scrollSlider, uint32_t padding)
+	unique_ptr<UIComponent> scrollSlider)
 {
 	unique_ptr<ScrollBar> scrollBar = make_unique<ScrollBar>();
-	return scrollBar->Setup(layout, move(scrollBackground), move(scrollSlider), padding) ? move(scrollBar) : nullptr;
+	return scrollBar->Setup(layout, move(scrollBackground), move(scrollSlider)) ? move(scrollBar) : nullptr;
 }

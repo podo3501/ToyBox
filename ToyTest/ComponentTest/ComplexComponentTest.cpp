@@ -58,9 +58,15 @@ namespace ComponentTest
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), listAreaPtr, 7));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
+
+		for(auto idx : views::iota(0, 3)) listAreaPtr->RemoveContainer(0);
+		EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
+		EXPECT_NE(preSizeX, curSizeX);
 
 		listAreaPtr->ClearContainers();
-		//EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
@@ -92,6 +98,19 @@ namespace ComponentTest
 	}
 
 	////////////////////////////////////////////////////////
+
+	TEST_F(ComplexComponentTest, ScrollBar)
+	{
+		auto scrollBar = CreateSampleScrollBar({ {16, 200}, Origin::LeftTop });
+		auto scrollBarPtr = scrollBar.get();
+		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		uint32_t viewArea = 500;
+		uint32_t contentSize = 2000;
+		scrollBarPtr->UpdateScrollView(viewArea, contentSize);
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+	}
 
 	static void TestScrollBar(size_t index, const RECT& dest, const RECT* source)
 	{

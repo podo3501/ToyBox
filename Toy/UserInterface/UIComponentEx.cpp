@@ -121,3 +121,8 @@ XMUINT2 UIComponentEx::GetTotalChildSize() noexcept
 		static_cast<uint32_t>(totalRectangle.width),
 		static_cast<uint32_t>(totalRectangle.height) };
 }
+
+/////////////////////////////////////////////////////////////////
+
+bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ v, c->GetSize().y }); }
+bool ChangeSizeY(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ c->GetSize().x, v }); }

@@ -69,7 +69,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }
-	inline void SetStateFlag(StateFlag::Type flag, bool enabled) noexcept { BitEnum::Set(m_stateFlag, flag, enabled); }
+	inline bool SetStateFlag(StateFlag::Type flag, bool enabled) noexcept { return BitEnum::Set(m_stateFlag, flag, enabled); }
 	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return BitEnum::Has(m_stateFlag, flag); }
 	void SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept;
 	bool RenameRegion(const string& region) noexcept;

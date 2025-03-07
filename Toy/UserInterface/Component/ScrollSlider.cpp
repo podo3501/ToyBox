@@ -46,14 +46,10 @@ unique_ptr<UIComponent> ScrollSlider::CreateClone() const
 }
 
 bool ScrollSlider::Setup(const UILayout& layout,
-	//unique_ptr<UIComponent> scrollBackground, 
 	unique_ptr<UIComponent> scrollTrack, 
 	unique_ptr<UIComponent> scrollContainer)
 {
 	SetLayout(layout);
-
-	//m_scrollBackground = ComponentCast<ImageGrid1*>(scrollBackground.get());
-	//UIEx(this).AttachComponent(move(scrollBackground), {});
 
 	m_scrollTrack = ComponentCast<ImageGrid3*>(scrollTrack.get());
 	UIEx(this).AttachComponent(move(scrollTrack), {});
@@ -61,6 +57,10 @@ bool ScrollSlider::Setup(const UILayout& layout,
 	m_scrollContainer = ComponentCast<Container*>(scrollContainer.get());
 	m_scrollContainer->AddPressCB([this](KeyState keystate) { OnPressCB(keystate); });
 	UIEx(this).AttachComponent(move(scrollContainer), {});
+
+	DirectionType dirType = m_scrollTrack->GetDirectionType();
+	StateFlag::Type flag = (dirType == DirectionType::Vertical) ? StateFlag::X_SizeLocked : StateFlag::Y_SizeLocked;
+	SetStateFlag(flag, true);
 
 	return true;
 }
@@ -143,7 +143,6 @@ void ScrollSlider::SetScrollContainerSize(float ratio) noexcept
 
 void ScrollSlider::SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept
 {
-	//ratio가 1보다 같거나 클 경우에는 스크롤바가 사라지게 해야 할것 같다.
 	if (int height = viewArea - contentSize; height < 0)
 		m_bounded.SetBounds(height, 0, 15);
 

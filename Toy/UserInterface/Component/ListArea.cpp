@@ -72,7 +72,6 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	UILayout partLayout{ layout.GetSize(), Origin::LeftTop }; //속성들은 정렬하지 않는다.
 	
 	m_prototypeContainer = ComponentCast<Container*>(container.get());
-	m_prototypeContainer->ChangeSize({ layout.GetSize().x - 22, 30 });
 	m_prototypeContainer->Rename("Prototype Container");
 	m_prototypeContainer->SetStateFlag(StateFlag::Active, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	UIEx(this).AttachComponent(move(container), {});
@@ -90,7 +89,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 
 	m_scrollBar = ComponentCast<ScrollBar*>(scrollBar.get());
 	m_scrollBar->SetStateFlag(StateFlag::Active, false);
-	m_scrollBar->ChangeSize({ 22, layout.GetSize().y });
+	ChangeSizeY(m_scrollBar, layout.GetSize().y);
 	XMINT2 scrollBarPos{ static_cast<int32_t>(layout.GetSize().x - m_scrollBar->GetSize().x), 0 };
 	UIEx(this).AttachComponent(move(scrollBar), scrollBarPos);
 
@@ -111,6 +110,29 @@ int32_t ListArea::GetContainerHeight() const noexcept
 	return height;
 }
 
+void ListArea::UpdateScrollBar() noexcept
+{
+	bool isActiveChange = m_scrollBar->UpdateScrollView(m_renderTex->GetSize().y, GetContainerHeight());
+	if (isActiveChange) ResizeContainerForScrollbar();
+}
+
+XMUINT2 ListArea::GetUsableContentSize() const noexcept
+{
+	uint32_t padding = m_scrollBar->HasStateFlag(StateFlag::Active) ? m_scrollBar->GetSize().x : 0;
+	XMUINT2 usableSize{ m_prototypeContainer->GetSize() };
+	usableSize.x -= padding;
+
+	return usableSize;
+}
+
+void ListArea::ResizeContainerForScrollbar() noexcept
+{
+	XMUINT2 usableSize(GetUsableContentSize());
+	
+	for (auto container : m_containers)
+		container->ChangeSize(usableSize);
+}
+
 UIComponent* ListArea::PrepareContainer()
 {
 	auto cloneContainer = m_prototypeContainer->Clone();
@@ -120,21 +142,40 @@ UIComponent* ListArea::PrepareContainer()
 	const auto& containerHeight = GetContainerHeight();
 	cloneContainerPtr->SetStateFlag(StateFlag::Active, true);
 	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
+	cloneContainerPtr->ChangeSize(GetUsableContentSize());
 	m_containers.emplace_back(cloneContainerPtr);
 
-	auto viewArea = m_renderTex->GetSize().y;
-	auto curHeight = containerHeight + cloneContainerPtr->GetSize().y;
-
-	float contentRatio = static_cast<float>(viewArea) / static_cast<float>(curHeight);
-	m_scrollBar->SetStateFlag(StateFlag::Active, (contentRatio) < 1.f ? true : false);
-	m_scrollSlider->SetViewContent(viewArea, curHeight);
+	UpdateScrollBar();
 
 	return cloneContainerPtr;
 }
 
+UIComponent* ListArea::GetContainer(unsigned int idx) const noexcept
+{
+	if (m_containers.size() <= idx) return nullptr;
+	return m_containers[idx];
+}
+
+bool ListArea::RemoveContainer(unsigned int idx) noexcept
+{
+	auto container = GetContainer(idx);
+	if (!container) return false;
+	
+	auto [detach, _] = UIEx(container).DetachComponent();
+	if (!detach) return false;
+	m_containers.erase(m_containers.begin() + idx);
+
+	UpdateScrollBar();
+	return true;
+}
+
 void ListArea::ClearContainers() noexcept
 {
+	for (auto container : m_containers)
+		UIEx(container).DetachComponent();
 	m_containers.clear();
+	
+	UpdateScrollBar();
 }
 
 void ListArea::MoveContainers(int32_t targetPos) noexcept

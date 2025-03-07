@@ -12,9 +12,11 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ScrollBar; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
+
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBackground, 
-		unique_ptr<UIComponent> scrollSlider, uint32_t padding) noexcept;
+		unique_ptr<UIComponent> scrollSlider) noexcept;
 	void SerializeIO(JsonOperation& operation);
+	bool UpdateScrollView(uint32_t viewArea, uint32_t contentSize)  noexcept;
 	inline ScrollSlider* GetScrollSlider() const noexcept { return m_scrollSlider; }
 
 protected:
@@ -32,4 +34,4 @@ private:
 };
 
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout, unique_ptr<UIComponent> scrollBackground,
-	unique_ptr<UIComponent> scrollSlider, uint32_t padding);
+	unique_ptr<UIComponent> scrollSlider);
