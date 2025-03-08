@@ -87,6 +87,9 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditContainer.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditRenderTexture.cpp">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -149,6 +152,9 @@
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditContainer.h">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditRenderTexture.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
   </ItemGroup>

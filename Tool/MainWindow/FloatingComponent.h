@@ -15,7 +15,8 @@ class FloatingComponent
 		ImageGrid9,
 		Button1,
 		Button3,
-		Text
+		Text,
+		ListArea
 	};
 
 public:

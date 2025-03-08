@@ -1,4 +1,5 @@
 #pragma once
+#include "../Toy/UserInterface/UIType.h"
 
 inline float GetFrameHeight()
 {

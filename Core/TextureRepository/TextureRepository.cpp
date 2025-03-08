@@ -93,9 +93,14 @@ bool TextureRepository::CreateRenderTexture(IComponent* component,
     return true;
 }
 
-bool TextureRepository::ModifyRenderTexture(size_t index, const XMUINT2& size)
+void TextureRepository::ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept
 {
-    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifyRenderTexture(size);
+    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifyPosition(position);
+}
+
+bool TextureRepository::ModifyRenderTextureSize(size_t index, const XMUINT2& size)
+{
+    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifySize(size);
 }
 
 void TextureRepository::DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const 

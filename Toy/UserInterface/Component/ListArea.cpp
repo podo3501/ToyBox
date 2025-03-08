@@ -65,6 +65,11 @@ bool ListArea::ImplementChangeSize(const XMUINT2& size) noexcept
 	return UIComponent::ImplementChangeSize(size);
 }
 
+void ListArea::OnAttached(UIComponent*)
+{
+	m_renderTex->OnAttached(this);
+}
+
 bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, 
 	unique_ptr<UIComponent> container, unique_ptr<UIComponent> scrollBar) noexcept
 {

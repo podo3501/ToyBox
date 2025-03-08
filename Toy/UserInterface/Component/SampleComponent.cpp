@@ -159,27 +159,6 @@ unique_ptr<ListArea> CreateSampleListArea1(const UILayout& layout)
 	return listArea;
 }
 
-bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea, int itemCount)
-{
-	//글자가 크기에 안 맞으면 안찍힌다. 
-	auto protoTextArea = CreateSampleTextArea({ { 130, 30 }, Origin::Center }, L"");
-	ReturnIfFalse(renderer->LoadComponent(protoTextArea.get()));
-
-	protoTextArea->Rename("ListTextArea");
-	auto prototype = listArea->GetPrototypeContainer();
-	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 75, 15 });
-	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
-
-	for (auto idx : views::iota(0, itemCount))
-	{
-		auto container = listArea->PrepareContainer();
-		TextArea* textArea = UIEx(container).FindComponent<TextArea*>("ListTextArea_" + to_string(idx));
-		textArea->SetText(L"<English><Black>Test " + IntToWString(idx*10) + L"</Black></English>");
-	}
-
-	return true;
-}
-
 static unique_ptr<ImageGrid1> CreateScrollBackground(const UILayout& layout)
 {
 	ImageSource background{ L"UI/SampleTexture/Sample_0.png", { { 118, 138, 32, 32 } } };
@@ -231,4 +210,25 @@ unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const U
 	return CreateScrollSlider(layout,
 		CreateScrollTrack(dirType, gridLayout),
 		CreateScrollContainer(gridLayout));
+}
+
+bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea, int itemCount)
+{
+	//글자가 크기에 안 맞으면 안찍힌다. 
+	auto protoTextArea = CreateSampleTextArea({ { 200, 30 }, Origin::LeftTop }, L"");
+	ReturnIfFalse(renderer->LoadComponent(protoTextArea.get()));
+
+	protoTextArea->Rename("ListTextArea");
+	auto prototype = listArea->GetPrototypeContainer();
+	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 5, 2 });
+	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
+
+	for (auto idx : views::iota(0, itemCount))
+	{
+		auto container = listArea->PrepareContainer();
+		TextArea* textArea = UIEx(container).FindComponent<TextArea*>("ListTextArea_" + to_string(idx));
+		textArea->SetText(L"<English><Black>Test " + IntToWString(idx * 10) + L"</Black></English>");
+	}
+
+	return true;
 }

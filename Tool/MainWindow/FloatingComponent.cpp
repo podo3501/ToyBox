@@ -10,6 +10,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Utility.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
@@ -61,7 +62,7 @@ bool FloatingComponent::Excute()
 	case Button1: result = LoadComponent(CreateSampleButton1({ { 32, 32 }, Origin::LeftTop })); break;
 	case Button3: result = LoadComponent(CreateSampleButton3(DirectionType::Horizontal, { { 100, 48 }, Origin::LeftTop })); break;
 	case Text: result = LoadComponent(CreateSampleTextArea({ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>")); break;
-
+	case ListArea: result = LoadComponent(CreateSampleListArea1({ { 200, 170 }, Origin::LeftTop })); break;
 	}
 	m_currentAction.reset(); // 상태 초기화
 
@@ -86,12 +87,6 @@ void FloatingComponent::DrawMakeComponent()
 		ImVec2(1, 1),
 		colorU32
 	);
-
-	//ImGui::SetCursorPos(m_position);
-	//ImGui::Image(m_textureID, XMUINT2ToImVec2(m_drawTextureSize),
-	//	ImVec2(0, 0),
-	//	ImVec2(1, 1),
-	//	tintColor);
 }
 
 void FloatingComponent::Render()
@@ -118,6 +113,7 @@ void FloatingComponent::Render()
 	if (ImGui::MenuItem("Button 1")) m_currentAction = Button1;
 	if (ImGui::MenuItem("Button 3")) m_currentAction = Button3;
 	if (ImGui::MenuItem("Text")) m_currentAction = Text;
+	if (ImGui::MenuItem("ListArea")) m_currentAction = ListArea;
 	if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();

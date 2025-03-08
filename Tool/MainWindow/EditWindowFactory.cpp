@@ -5,12 +5,14 @@
 #include "SelectedComponent/ComponentEdit/EditButton.h"
 #include "SelectedComponent/ComponentEdit/EditTextArea.h"
 #include "SelectedComponent/ComponentEdit/EditContainer.h"
+#include "SelectedComponent/ComponentEdit/EditRenderTexture.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
+#include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/Container.h"
 
 using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, CommandList*)>;
@@ -31,6 +33,7 @@ void EditWindowFactory::RegisterFactories()
     RegisterEditWindowWithRenderer<EditImageGrid1, ImageGrid1*>(ComponentID::ImageGrid1);
     RegisterEditWindowWithRenderer<EditImageGrid3, ImageGrid3*>(ComponentID::ImageGrid3);
     RegisterEditWindowWithRenderer<EditImageGrid9, ImageGrid9*>(ComponentID::ImageGrid9);
+    RegisterEditWindowWithRenderer<EditRenderTexture, RenderTexture*>(ComponentID::RenderTexture);
     //UIComponent*, IRenderer*, CommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 }
 

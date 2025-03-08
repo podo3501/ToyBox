@@ -5,7 +5,11 @@
 #include "../JsonOperation.h"
 #include "../../InputManager.h"
 
-RenderTexture::~RenderTexture() { Release(); }
+RenderTexture::~RenderTexture() 
+{ 
+	Release(); 
+}
+
 RenderTexture::RenderTexture() :
 	m_component{ nullptr },
 	m_texController{ nullptr }
@@ -64,6 +68,13 @@ bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 	return true;
 }
 
+void RenderTexture::OnAttached(UIComponent*)
+{
+	UpdatePositionsManually(true);
+	if (m_texController && m_index)
+		m_texController->ModifyRenderTexturePosition(*m_index, GetPosition());
+}
+
 bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 {
 	Release(); //데이터가 존재하면 지운다.
@@ -87,7 +98,7 @@ bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent>&& comp
 
 bool RenderTexture::ModifyTexture(const XMUINT2& size)
 {
-	ReturnIfFalse(m_texController->ModifyRenderTexture(*m_index, size));
+	ReturnIfFalse(m_texController->ModifyRenderTextureSize(*m_index, size));
 	SetSize(size);
 
 	return true;

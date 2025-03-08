@@ -88,10 +88,11 @@ UITransform& UIComponent::GetTransform(UIComponent* component)
 	return component->m_transform;
 }
 
-bool UIComponent::UpdatePositionsManually() noexcept
+bool UIComponent::UpdatePositionsManually(bool root) noexcept
 {
 	DX::StepTimer dummyTimer; //임시타이머이다. 이 타이머는 사용하지 않는다.
-	return RecursiveUpdate(dummyTimer, {}, false); //ActiveUpdate true를 하면 상태가 바뀐다.
+	UIComponent* component = (root) ? GetRoot() : this;
+	return component->RecursiveUpdate(dummyTimer, {}, false); //ActiveUpdate true를 하면 상태가 바뀐다.
 }
 
 bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position, bool active) noexcept

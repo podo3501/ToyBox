@@ -56,10 +56,10 @@ bool GameMainLoop::LoadResources()
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleButton3(DirectionType::Horizontal, { {180, 48}, Origin::Center }), { 400, 240 });
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>"), { 160, 420 });
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageGrid9({ {210, 150}, Origin::LeftTop }), { 400, 300 });
-    AttachComponentToPanel(m_gamePanel.get(), CreateSampleListArea1({ {150, 130}, Origin::Center }), { 600, 200 });
+    AttachComponentToPanel(m_gamePanel.get(), CreateSampleListArea1({ {200, 170}, Origin::Center }), { 600, 200 });
     m_renderer->LoadComponent(m_gamePanel.get());
 
-    MakeSampleListAreaData(m_renderer, UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 13);
+    MakeSampleListAreaData(m_renderer, UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 16);
     
     return true;
 }

@@ -52,7 +52,12 @@ bool TextureRenderTarget::Create(DXGI_FORMAT texFormat,
     return CreateTextureResource(texFormat, size);
 }
 
-bool TextureRenderTarget::ModifyRenderTexture(const XMUINT2& size)
+void TextureRenderTarget::ModifyPosition(const XMINT2& position) noexcept
+{
+    m_position = position;
+}
+
+bool TextureRenderTarget::ModifySize(const XMUINT2& size)
 {
     m_deviceResources->WaitForGpu();
     return CreateTextureResource(m_resDesc.Format, size);
@@ -102,6 +107,8 @@ void TextureRenderTarget::Render(ID3D12GraphicsCommandList* commandList, ITextur
     commandList->ClearRenderTargetView(rtvHandle, ClearColor, 0, nullptr);
 
     //찍는것은 위치값을 0, 0로 옮긴다. 100, 100에서 찍는다면 텍스쳐는 좌표가 0, 0부터 시작하는게 고정이기 때문에 낭비가 된다.
+    //좌표를 옮겨서 찍는 것과 전체적으로 좌표를 옮기는 방법이 있는데 좌표를 옮겨서 찍으면 Update 좌표도 옮겨줘야 하기 때문에 계산이 많이 들어간다.
+    //여기서 찍을때 좌표만 옮기면 XMMatrixTranslation한번만 계산 하면 되고, 좌표를 옮겨 찍으면 계산적으로는 문제가 없다고 해도 중간중간에 if문과 복잡도가 올라간다.
     XMMATRIX transform = XMMatrixTranslation(-static_cast<float>(m_position.x), -static_cast<float>(m_position.y), 0.0f);
 
     sprite->Begin(commandList, SpriteSortMode_Deferred, transform);

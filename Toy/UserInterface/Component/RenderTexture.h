@@ -13,6 +13,7 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::RenderTexture; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
+	virtual void OnAttached(UIComponent*);
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent>&& component) noexcept;
