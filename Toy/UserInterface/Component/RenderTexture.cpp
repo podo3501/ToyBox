@@ -87,7 +87,13 @@ bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 	return true;
 }
 
-bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent>&& component) noexcept
+bool RenderTexture::ImplementChangeSize(const XMUINT2& size) noexcept
+{
+	ReturnIfFalse(m_component->ChangeSize(size));
+	return UIComponent::ImplementChangeSize(size);
+}
+
+bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent> component) noexcept
 {
 	SetLayout(layout);
 	m_component = component.get();
@@ -147,7 +153,7 @@ void RenderTexture::SerializeIO(JsonOperation& operation)
 }
 
 //RenderStateFlag가 true면 렌더 항목도 RenderTexture에 찍히도록 한다.
-unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent>&& component)
+unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent> component)
 {
 	unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>();
 	if (!renderTexture->Setup(layout, move(component))) return nullptr;

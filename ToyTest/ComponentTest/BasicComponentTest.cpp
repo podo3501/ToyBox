@@ -10,6 +10,7 @@
 #include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
+#include "../Toy/UserInterface/Component/ImageChanger.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/Utility.h"
@@ -29,8 +30,7 @@ namespace ComponentTest
 
 	TEST_F(BasicComponentTest, Button_ImageGrid1)
 	{
-		auto button = CreateSampleButton1({ {32, 32}, Origin::Center });
-		auto buttonPtr = button.get();
+		auto [button, buttonPtr] = GetPtrs(CreateSampleButton1({ {32, 32}, Origin::Center }));
 		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -39,6 +39,25 @@ namespace ComponentTest
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
+
+	////////////////////////////////////////////////////////////////
+	
+	TEST_F(BasicComponentTest, ImageChanger_ImageGrid1)
+	{
+		map<InteractState, ImageSource> sources{
+			{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 138, 32, 32} } } },
+			{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {46, 138, 32, 32} } } },
+			{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {82, 138, 32, 32} } } } };
+
+		auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({{32, 32}, Origin::Center}, sources));
+		UIEx(m_panel).AttachComponent(move(imgChanger), { 160, 120 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		MockMouseInput(144, 120, true);	//Pressed
+		CallMockRender(TestButton_ImageGrid1Render, 1);
+	}
+
+	////////////////////////////////////////////////////////////////
 
 	static void TestButton_ImageGrid3Render_H(size_t index, const RECT& dest, const RECT* source)
 	{

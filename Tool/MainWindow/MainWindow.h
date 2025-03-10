@@ -31,6 +31,7 @@ public:
 
 private:
     bool SetupProperty(unique_ptr<Panel>&& panel);
+    void ToggleToolMode() noexcept;
     void CheckActiveUpdate() noexcept;
     void CheckChangeWindow(const ImGuiWindow* window);
     void IgnoreMouseClick();
@@ -50,7 +51,7 @@ private:
     Panel* m_panel;
 
     bool m_isOpen{ false };
-    bool m_isActiveUpdate{ false };
+    bool m_isTool{ false };
     float m_fps{ 0.f };
 
     static int m_mainWindowIndex;

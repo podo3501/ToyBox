@@ -41,7 +41,7 @@ bool MainWindow::SetupProperty(unique_ptr<Panel>&& panel)
 	m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(panel));
 	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
 
-	m_renderTex->EnableChildMouseEvents(m_isActiveUpdate);
+	ToggleToolMode();
 	m_isOpen = true;
 
 	return true;
@@ -84,13 +84,19 @@ void MainWindow::ChangeWindowSize(const ImVec2& size)
 	m_panel->ChangeSize(uint2Size);
 }
 
+void MainWindow::ToggleToolMode() noexcept
+{
+	m_isTool = !m_isTool;
+	m_renderTex->EnableChildMouseEvents(!m_isTool);
+	SetRenderFilterFlag(m_isTool ? StateFlag::Render | StateFlag::RenderEditable : StateFlag::Render);
+	m_controller->SetActive(m_isTool);
+}
+
 void MainWindow::CheckActiveUpdate() noexcept
 {
 	if (!IsInputAction(Keyboard::F5, KeyState::Pressed)) return;
 	
-	m_isActiveUpdate = !m_isActiveUpdate;
-	m_renderTex->EnableChildMouseEvents(m_isActiveUpdate);
-	m_controller->SetActive(!m_isActiveUpdate);
+	ToggleToolMode();
 }
 
 void MainWindow::CheckChangeWindow(const ImGuiWindow* window)
@@ -165,18 +171,18 @@ void MainWindow::HandleMouseEvents()
 
 void MainWindow::ShowStatusBar() const//상태 표시줄(임시)
 {
-	if (m_isActiveUpdate)
-	{
-		ImGui::SetCursorPos({ 0, GetFrameHeight() });
-		ImGui::Text("Status update has been activated.");
-	}
-	else
+	if (m_isTool)
 	{
 		ImGui::SetCursorPos({ 0, GetFrameHeight() });
 		ImGui::Text("Frames per Second: %.4f", m_fps);
 		ImGui::SetCursorPos(ImVec2(0, ImGui::GetWindowHeight() - ImGui::GetFontSize()));
 		ImGui::Text("Right Mouse Button: Floating Menu     Shift + Left Mouse Button: Attach     D: Detach     B: Clone     Del: Delete     F5: Update State     Ctrl + Z, Y: Undo/Redo");
 	}
+	else
+	{
+		ImGui::SetCursorPos({ 0, GetFrameHeight() });
+		ImGui::Text("Status update has been activated.");
+	}	
 }
 
 void MainWindow::SetupImGuiWindow()

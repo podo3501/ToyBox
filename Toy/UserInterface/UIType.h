@@ -15,11 +15,12 @@ enum class ComponentID : int
 	RenderTexture,
 	ScrollBar,
 	ScrollSlider,
+	ImageChanger,
 	Unknown //부모 기본 UIComponent. 이게 문제가 되면 UICompnent가 혼자서 생성되었다는 건데, 생성자가 protected에서 public이 되었을 것이다. 아니면 enum에서 추가를 안시켰던지.
 };
 
 template<>
-constexpr size_t EnumSize<ComponentID>() { return 13; }
+constexpr size_t EnumSize<ComponentID>() { return 14; }
 
 template<>
 constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<ComponentID>()> {
@@ -36,6 +37,7 @@ constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<Com
 		{ "RenderTexture" },
 		{ "ScrollBar" },
 		{ "ScrollSlider" },
+		{ "ImageChanger" },
 		{ "Unknown" }
 	} };
 }
@@ -44,22 +46,20 @@ constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<Com
 
 enum class Origin : int
 {
-	Init = 0,
-	Center,
 	LeftTop,
-	Count,
+	RightTop,
+	Center,
 };
 
 template<>
-constexpr size_t EnumSize<Origin>() { return 4; }
+constexpr size_t EnumSize<Origin>() { return 3; }
 
 template<>
 constexpr auto EnumToStringMap<Origin>() -> array<const char*, EnumSize<Origin>()> {
 	return { {
-		{ "Init" },
-		{ "Center" },
 		{ "LeftTop" },
-		{ "Count" }
+		{ "RightTop" },
+		{ "Center" }
 	} };
 }
 
@@ -145,12 +145,13 @@ namespace StateFlag
 	{
 		Update = 1 << 0, //위치 업데이트 및 ActiveUpdate포함
 		ActiveUpdate = 1 << 1, //Active업데이트(Update함수 실행하는가 아닌가) 실행여부
-		Render = 1 << 2, //Render라면 RenderTexture 및 Render 두군데 다 그려준다.
+		Render = 1 << 2, //Render라면 RenderTexture를 동시에 셋팅할 수 있다. RenderTexture에 그려진 것을 Render할때 보여준다.
 		RenderTexture = 1 << 3, //RenderTexture라면 Texture셋팅일때만 그린다.
-		Attach = 1 << 4,
-		Detach = 1 << 5,
-		X_SizeLocked = 1 << 6,
-		Y_SizeLocked = 1 << 7,
+		RenderEditable = 1 << 4, //화면에 보여주지는 않지만 Tool에서는 보여줄때 사용한다. prototype ui 같은 경우.
+		Attach = 1 << 5,
+		Detach = 1 << 6,
+		X_SizeLocked = 1 << 7,
+		Y_SizeLocked = 1 << 8,
 
 		Active = Update | ActiveUpdate | Render,
 		Default = Active | Attach | Detach, // 기본 옵션(모든 옵션 포함)

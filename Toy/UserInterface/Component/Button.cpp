@@ -38,10 +38,8 @@ bool Button::Setup(const UILayout& layout, unique_ptr<UIComponent> container) no
 	SetLayout(layout);
 
 	m_container = container.get();
-	m_container->SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+	//m_container->SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 	UIEx(this).AttachComponent(move(container), {});
-
-	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 
 	return true;
 }

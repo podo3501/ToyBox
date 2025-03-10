@@ -50,20 +50,28 @@ namespace ComponentTest
 
 	TEST_F(ComplexComponentTest, ListArea)
 	{
-		auto listArea = CreateSampleListArea1({ { 150, 130 }, Origin::Center });
+		auto listArea = CreateSampleListArea1({ { 150, 120 }, Origin::Center });
 		auto listAreaPtr = ComponentCast<ListArea*>(listArea.get());
 		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
 		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
-		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), listAreaPtr, 7));
+		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), listAreaPtr, 5));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 
-		for(auto idx : views::iota(0, 3)) listAreaPtr->RemoveContainer(0);
+		listAreaPtr->RemoveContainer(0);
 		EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 		auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 		EXPECT_NE(preSizeX, curSizeX);
+
+		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
+		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 60 }));
+		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 60));
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+
+		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<Container*>("Container_0");
+		EXPECT_EQ(scrollContainerPtr->GetSize().y, 27); //(60 - 6) * (60 / 120) ÃÑ slider ±æÀÌ(-padding)¿¡ º¸¿©ÁÙ ÄÁÅÙÃ÷ ºñ·ÊÇØ¼­ Å©±âÁ¶Á¤°ª 
 
 		listAreaPtr->ClearContainers();
 		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));

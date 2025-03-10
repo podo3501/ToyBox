@@ -6,6 +6,9 @@
 #include "SelectedComponent/ComponentEdit/EditTextArea.h"
 #include "SelectedComponent/ComponentEdit/EditContainer.h"
 #include "SelectedComponent/ComponentEdit/EditRenderTexture.h"
+#include "SelectedComponent/ComponentEdit/EditListArea.h"
+#include "SelectedComponent/ComponentEdit/EditScrollSlider.h"
+#include "SelectedComponent/ComponentEdit/EditScrollBar.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
@@ -14,6 +17,9 @@
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/Container.h"
+#include "../Toy/UserInterface/Component/ListArea.h"
+#include "../Toy/UserInterface/Component/ScrollSlider.h"
+#include "../Toy/UserInterface/Component/ScrollBar.h"
 
 using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, CommandList*)>;
 optional<unordered_map<ComponentID, FactoryFunction>> EditWindowFactory::m_factoryMap{ nullopt };
@@ -34,6 +40,9 @@ void EditWindowFactory::RegisterFactories()
     RegisterEditWindowWithRenderer<EditImageGrid3, ImageGrid3*>(ComponentID::ImageGrid3);
     RegisterEditWindowWithRenderer<EditImageGrid9, ImageGrid9*>(ComponentID::ImageGrid9);
     RegisterEditWindowWithRenderer<EditRenderTexture, RenderTexture*>(ComponentID::RenderTexture);
+    RegisterEditWindowWithRenderer<EditListArea, ListArea*>(ComponentID::ListArea);
+    RegisterEditWindowWithRenderer<EditScrollSlider, ScrollSlider*>(ComponentID::ScrollSlider);
+    RegisterEditWindowWithRenderer<EditScrollBar, ScrollBar*>(ComponentID::ScrollBar);
     //UIComponent*, IRenderer*, CommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 }
 

@@ -16,7 +16,7 @@ public:
 	virtual void OnAttached(UIComponent*);
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, unique_ptr<UIComponent>&& component) noexcept;
+	bool Setup(const UILayout& layout, unique_ptr<UIComponent> component) noexcept;
 	bool ModifyTexture(const XMUINT2& size);
 
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
@@ -30,6 +30,7 @@ protected:
 	RenderTexture(const RenderTexture& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementPostLoaded(ITextureController*) override;
+	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 
@@ -53,4 +54,4 @@ private:
 	bool m_left{ false };
 };
 
-unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent>&& component);
+unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent> component);

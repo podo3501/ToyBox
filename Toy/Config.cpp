@@ -1,14 +1,26 @@
 #include "pch.h"
 #include "Config.h"
+#include "UserInterface/UIType.h"
 #include <filesystem>
 
 static wstring g_resourcePath{};
 static Vector2 g_resolution{};
+static StateFlag::Type renderFilter{ StateFlag::Render };
 
 void InitializeConfig(const wstring& resourcePath, const Vector2& resolution) noexcept
 {
 	g_resourcePath = resourcePath;
 	g_resolution = resolution;
+}
+
+void SetRenderFilterFlag(StateFlag::Type filterFlag) noexcept
+{
+	renderFilter = filterFlag;
+}
+
+StateFlag::Type GetRenderFilterFlag() noexcept
+{
+	return renderFilter;
 }
 
 //const wstring& GetResourcePath() noexcept { return g_resourcePath; }

@@ -85,8 +85,17 @@ void ScrollBar::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
+bool ScrollBar::ToolUpdateScrollView() noexcept
+{
+	bool isChange = false;
+	m_scrollSlider->SetViewContent(1, 2);
+	return isChange;
+}
+
 bool ScrollBar::UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept
 {
+	if (IsToolMode(this)) return ToolUpdateScrollView();
+
 	bool isChange = SetStateFlag(StateFlag::Active, contentSize > viewArea );
 	m_scrollSlider->SetViewContent(viewArea, contentSize);
 	return isChange;

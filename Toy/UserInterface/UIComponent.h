@@ -81,7 +81,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 		if (!m_componentEx) m_componentEx.emplace(this);
 		return *m_componentEx;
 	}
-	StateFlag::Type m_stateFlag{ StateFlag::Default };
+	
 private:
 	void UnlinkAndRefresh() noexcept;
 	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}, bool active = true) noexcept;
@@ -91,7 +91,7 @@ private:
 	string m_name;
 	UILayout m_layout;
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
-
+	StateFlag::Type m_stateFlag{ StateFlag::Default };
 	string m_region; //UI에서 네임스페이스 역할을 한다. GetRegionComponent로 찾을 수 있다.
 	
 

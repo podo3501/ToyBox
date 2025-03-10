@@ -4,6 +4,7 @@
 #include "../InputManager.h"
 #include "JsonOperation.h"
 #include "StepTimer.h"
+#include "../Config.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -124,7 +125,7 @@ void UIComponent::ProcessRender(ITextureRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
-	ForEachChildBFS(StateFlag::Render, [render](UIComponent* component) {
+	ForEachChildBFS(GetRenderFilterFlag(), [render](UIComponent* component) {
 		component->ImplementRender(render);
 		});
 }

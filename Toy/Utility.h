@@ -196,3 +196,9 @@ inline RECT RectangleToRect(const Rectangle& rect) noexcept
 	rct.bottom = rect.y + rect.height;
 	return rct;
 }
+
+template<typename PointerType>
+inline pair<unique_ptr<PointerType>, PointerType*> GetPtrs(unique_ptr<PointerType> uniquePtr)
+{
+	return make_pair(move(uniquePtr), uniquePtr.get());
+}

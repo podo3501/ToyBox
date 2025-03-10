@@ -139,6 +139,9 @@
     <ClInclude Include="UserInterface\Component\ScrollBar.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Component\ImageChanger.h">
+      <Filter>UserInterface\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -229,6 +232,9 @@
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Component\ScrollBar.cpp">
+      <Filter>UserInterface\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Component\ImageChanger.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
   </ItemGroup>

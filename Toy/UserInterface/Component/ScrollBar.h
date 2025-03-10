@@ -27,6 +27,7 @@ protected:
 private:
 	void ReloadDatas() noexcept;
 	inline bool ChangeSliderSize(const XMUINT2& size) noexcept;
+	bool ToolUpdateScrollView() noexcept;
 
 	ImageGrid1* m_scrollBackground;
 	ScrollSlider* m_scrollSlider;

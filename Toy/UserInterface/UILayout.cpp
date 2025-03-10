@@ -29,8 +29,9 @@ XMINT2 UILayout::GetOriginPoint(Origin origin) const noexcept
 {
 	switch (origin)
 	{
-	case Origin::Center: return XMINT2(m_size.x / 2, m_size.y / 2);
 	case Origin::LeftTop: return { 0, 0 };
+	case Origin::RightTop: return { static_cast<int32_t>(m_size.x), 0 };
+	case Origin::Center: return XMINT2(m_size.x / 2, m_size.y / 2);
 	}
 	return { 0, 0 };
 }

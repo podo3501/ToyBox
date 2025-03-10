@@ -62,6 +62,8 @@ bool ScrollSlider::Setup(const UILayout& layout,
 	StateFlag::Type flag = (dirType == DirectionType::Vertical) ? StateFlag::X_SizeLocked : StateFlag::Y_SizeLocked;
 	SetStateFlag(flag, true);
 
+	SetScrollContainerSize(0.5f);	//±âº»°ª
+
 	return true;
 }
 

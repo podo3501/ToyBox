@@ -59,26 +59,21 @@ bool ListArea::operator==(const UIComponent& rhs) const noexcept
 	return true;
 }
 
-bool ListArea::ImplementChangeSize(const XMUINT2& size) noexcept
-{
-	ReturnIfFalse(m_prototypeContainer->ChangeSize(size));
-	return UIComponent::ImplementChangeSize(size);
-}
-
 void ListArea::OnAttached(UIComponent*)
 {
 	m_renderTex->OnAttached(this);
 }
 
-bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, 
+bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	unique_ptr<UIComponent> container, unique_ptr<UIComponent> scrollBar) noexcept
 {
 	SetLayout(layout);
 	UILayout partLayout{ layout.GetSize(), Origin::LeftTop }; //속성들은 정렬하지 않는다.
-	
+
 	m_prototypeContainer = ComponentCast<Container*>(container.get());
 	m_prototypeContainer->Rename("Prototype Container");
-	m_prototypeContainer->SetStateFlag(StateFlag::Active, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
+	m_prototypeContainer->SetStateFlag(StateFlag::ActiveUpdate | StateFlag::Render, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
+	m_prototypeContainer->SetStateFlag(StateFlag::RenderEditable, true);
 	UIEx(this).AttachComponent(move(container), {});
 
 	// 추후에 다양한 형태(2줄짜리 ListArea 같은)가 나오면 이 bgImage처럼 새로운 컴포넌트를 만들어서 넣는다.
@@ -93,10 +88,11 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	UIEx(this).AttachComponent(move(renderTex), {});
 
 	m_scrollBar = ComponentCast<ScrollBar*>(scrollBar.get());
-	m_scrollBar->SetStateFlag(StateFlag::Active, false);
-	ChangeSizeY(m_scrollBar, layout.GetSize().y);
-	XMINT2 scrollBarPos{ static_cast<int32_t>(layout.GetSize().x - m_scrollBar->GetSize().x), 0 };
-	UIEx(this).AttachComponent(move(scrollBar), scrollBarPos);
+	m_scrollBar->ChangeOrigin(Origin::RightTop);
+	m_scrollBar->SetStateFlag(StateFlag::Render, false);
+	m_scrollBar->SetStateFlag(StateFlag::RenderEditable, true);
+	ChangeSizeY(m_scrollBar, layout.GetSize());
+	UIEx(this).AttachComponent(move(scrollBar), { static_cast<int32_t>(layout.GetSize().x), 0 });
 
 	m_scrollSlider = m_scrollBar->GetScrollSlider();
 	m_scrollSlider->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
@@ -104,6 +100,16 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요
 
 	return true;
+}
+
+bool ListArea::ImplementChangeSize(const XMUINT2& size) noexcept
+{
+	ReturnIfFalse(ChangeSizeX(m_prototypeContainer, size));
+	ReturnIfFalse(ChangeSizeY(m_scrollBar, size));
+	ReturnIfFalse(m_renderTex->ChangeSize(size));
+	UpdateScrollBar();
+
+	return UIComponent::ImplementChangeSize(size);
 }
 
 int32_t ListArea::GetContainerHeight() const noexcept
@@ -146,6 +152,7 @@ UIComponent* ListArea::PrepareContainer()
 
 	const auto& containerHeight = GetContainerHeight();
 	cloneContainerPtr->SetStateFlag(StateFlag::Active, true);
+	cloneContainerPtr->SetStateFlag(StateFlag::RenderEditable, false);
 	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
 	cloneContainerPtr->ChangeSize(GetUsableContentSize());
 	m_containers.emplace_back(cloneContainerPtr);

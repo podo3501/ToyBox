@@ -35,4 +35,8 @@ private:
 
 //public 함수들끼리 조합이 가능하면 여기서 처리한다.
 bool ChangeSizeX(UIComponent* component, uint32_t value) noexcept;
+bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept;
 bool ChangeSizeY(UIComponent* component, uint32_t value) noexcept;
+bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept;
+
+bool IsToolMode(UIComponent* component) noexcept;
