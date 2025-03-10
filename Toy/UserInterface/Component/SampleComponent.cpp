@@ -32,7 +32,7 @@ unique_ptr<ImageGrid3> CreateSampleImageGrid3(DirectionType dirType, const UILay
 	}
 
 	auto imgGrid3 = make_unique<ImageGrid3>();
-	return imgGrid3->SetImage(dirType, layout, source) ? move(imgGrid3) : nullptr;
+	return imgGrid3->Setup(dirType, layout, source) ? move(imgGrid3) : nullptr;
 }
 
 unique_ptr<ImageGrid9> CreateSampleImageGrid9(const UILayout& layout)

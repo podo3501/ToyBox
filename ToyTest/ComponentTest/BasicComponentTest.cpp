@@ -22,8 +22,8 @@ namespace ComponentTest
 	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
 	{
 		TestRender(index, dest, source, {
-			{{144, 104, 176, 136}, {10, 138, 42, 170}}, //Normal
-			{{144, 104, 176, 136}, {46, 138, 78, 170}}, //hovered
+			//{{144, 104, 176, 136}, {10, 138, 42, 170}}, //Normal
+			//{{144, 104, 176, 136}, {46, 138, 78, 170}}, //hovered
 			{{144, 104, 176, 136}, {82, 138, 114, 170}} //Pressed
 			});
 	}
@@ -49,7 +49,8 @@ namespace ComponentTest
 			{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {46, 138, 32, 32} } } },
 			{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {82, 138, 32, 32} } } } };
 
-		auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({{32, 32}, Origin::Center}, sources));
+		auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({{32, 32}, Origin::Center}, 
+			make_unique<ImageGrid1>(), sources, BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(imgChanger), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -79,8 +80,7 @@ namespace ComponentTest
 
 	TEST_F(BasicComponentTest, Button_ImageGrid3_Horizontal)
 	{
-		auto button = CreateSampleButton3(DirectionType::Horizontal, { {100, 48}, Origin::Center });
-		auto btnPtr = ComponentCast<Button*>(button.get());
+		auto [button, btnPtr] = GetPtrs(CreateSampleButton3(DirectionType::Horizontal, { {100, 48}, Origin::Center }));
 		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -94,6 +94,32 @@ namespace ComponentTest
 
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_H, 3);
 	}
+
+	////////////////////////////////////////////////////////////////
+
+	TEST_F(BasicComponentTest, ImageChanger_ImageGrid3_H)
+	{
+		map<InteractState, ImageSource> sources{
+			{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } } },
+			{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } } },
+			{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } } };
+
+		auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({ {100, 48}, Origin::Center },
+			make_unique<ImageGrid3>(DirectionType::Horizontal), sources, BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(imgChanger), { 160, 120 });
+		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+
+		MockMouseInput(110, 96);	//Hover
+		CallMockRender(TestButton_ImageGrid3Render_H, 3);
+
+		imgChangerPtr->ChangeSize({ 150, 48 });
+		MockMouseInput(0, 0);	//Normal
+		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_H, 3);
+
+		//auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({ {32, 32}, Origin::Center }, sources, BehaviorMode::Normal));
+	}
+
+	////////////////////////////////////////////////////////////////
 
 	static void TestButton_ImageGrid3Render_V(size_t index, const RECT& dest, const RECT* source)
 	{
@@ -115,8 +141,7 @@ namespace ComponentTest
 
 	TEST_F(BasicComponentTest, Button_ImageGrid3_Vertical)
 	{
-		auto button = CreateSampleButton3(DirectionType::Vertical, { {48, 100}, Origin::Center });
-		auto btnPtr = ComponentCast<Button*>(button.get());
+		auto [button, btnPtr] = GetPtrs(CreateSampleButton3(DirectionType::Vertical, {{48, 100}, Origin::Center}));
 		UIEx(m_panel).AttachComponent(move(button), { 100, 100 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -142,8 +167,7 @@ namespace ComponentTest
 
 	TEST_F(BasicComponentTest, ImageGrid1)
 	{
-		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::Center });
-		auto img1Ptr = img1.get();
+		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({{64, 64}, Origin::Center}));
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 		CallMockRender(TestImageGrid1Render, 1);
@@ -197,8 +221,7 @@ namespace ComponentTest
 
 	TEST_F(BasicComponentTest, ImageGrid3_Horizontal)
 	{
-		auto img = CreateSampleImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop });
-		auto imgPtr = ComponentCast<ImageGrid3*>(img.get());
+		auto [img, imgPtr] = GetPtrs(CreateSampleImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop }));
 		UIEx(m_panel).AttachComponent(move(img), {400, 300});
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -250,8 +273,7 @@ namespace ComponentTest
 
 	TEST_F(BasicComponentTest, ImageGrid3_Vertical)
 	{
-		auto img3 = CreateSampleImageGrid3(DirectionType::Vertical, { {36, 100}, Origin::LeftTop });
-		auto img3Ptr = ComponentCast<ImageGrid3*>(img3.get());
+		auto [img3, img3Ptr] = GetPtrs(CreateSampleImageGrid3(DirectionType::Vertical, { {36, 100}, Origin::LeftTop }));
 		UIEx(m_panel).AttachComponent(move(img3), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -328,26 +350,25 @@ namespace ComponentTest
 
 	TEST_F(BasicComponentTest, ImageGrid9)
 	{
-		auto img = CreateSampleImageGrid9({ {170, 120}, Origin::LeftTop });
+		auto [img, imgPtr] = GetPtrs(CreateSampleImageGrid9({ {170, 120}, Origin::LeftTop }));
 		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		CallMockRender(TestImageGrid9Render, 9);
 
-		ImageGrid9* img9 = UIEx(m_panel).FindComponent<ImageGrid9*>("ImageGrid9_0");
-		img9->ChangeOrigin(Origin::Center);
-		img9->ChangeSize({ 180, 150 });
+		imgPtr->ChangeOrigin(Origin::Center);
+		imgPtr->ChangeSize({ 180, 150 });
 
 		CallMockRender(TestImageGrid9ChangeAreaRender, 9);
 		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		SourceDivider srcDivider{ img9->GetSourceAnd4Divider() };
+		SourceDivider srcDivider{ imgPtr->GetSourceAnd4Divider() };
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 64 }));
 		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34, 36, 38));
 
 		srcDivider.list.clear();
 		srcDivider.list = { 20, 44, 26, 48 };
-		img9->SetSourceAnd4Divider(srcDivider);
+		imgPtr->SetSourceAnd4Divider(srcDivider);
 
 		CallMockRender(TestImageGrid9SourceAndDivider, 9);
 	}

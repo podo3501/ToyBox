@@ -35,7 +35,7 @@ static unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, size_t idx
 	return CreateImageGrid3(dirType, grid3layout, imgSource);
 }
 
-bool ImageGrid9::SetImage(const UILayout& layout, const ImageSource& source) noexcept
+bool ImageGrid9::Setup(const UILayout& layout, const ImageSource& source) noexcept
 {
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 9) return false;
@@ -176,5 +176,5 @@ vector<Rectangle> ImageGrid9::GetSources() const noexcept
 unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const ImageSource& source)
 {
 	auto imgGrid9 = make_unique<ImageGrid9>();
-	return imgGrid9->SetImage(layout, source) ? move(imgGrid9) : nullptr;
+	return CreateIfSetup(move(imgGrid9), layout, source);
 }

@@ -12,6 +12,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/Container.h"
 #include "../Toy/InputManager.h"
+#include "../Toy/Utility.h"
 
 namespace ComponentTest
 {
@@ -26,8 +27,7 @@ namespace ComponentTest
 
 	TEST_F(ComplexComponentTest, Container_Scroll)
 	{
-		auto scrollContainer = CreateScrollContainer({ {16, 100}, Origin::Center });
-		auto scrollContainerPtr = scrollContainer.get();
+		auto [scrollContainer, scrollContainerPtr] = GetPtrs(CreateScrollContainer({ {16, 100}, Origin::Center }));
 		UIEx(m_panel).AttachComponent(move(scrollContainer), { 100, 100 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -50,8 +50,7 @@ namespace ComponentTest
 
 	TEST_F(ComplexComponentTest, ListArea)
 	{
-		auto listArea = CreateSampleListArea1({ { 150, 120 }, Origin::Center });
-		auto listAreaPtr = ComponentCast<ListArea*>(listArea.get());
+		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea1({ { 150, 120 }, Origin::Center }));
 		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
 		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
@@ -91,8 +90,7 @@ namespace ComponentTest
 
 	TEST_F(ComplexComponentTest, RenderTexture)
 	{
-		auto button = CreateSampleButton1({ {32, 32}, Origin::LeftTop });
-		auto buttonPtr = button.get();
+		auto [button, buttonPtr] = GetPtrs(CreateSampleButton1({ {32, 32}, Origin::LeftTop }));
 		auto renderTex = CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(button));
 		auto renderTexPtr = renderTex.get();
 		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
@@ -109,8 +107,7 @@ namespace ComponentTest
 
 	TEST_F(ComplexComponentTest, ScrollBar)
 	{
-		auto scrollBar = CreateSampleScrollBar({ {16, 200}, Origin::LeftTop });
-		auto scrollBarPtr = scrollBar.get();
+		auto [scrollBar, scrollBarPtr] = GetPtrs(CreateSampleScrollBar({ {16, 200}, Origin::LeftTop }));
 		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
@@ -135,8 +132,7 @@ namespace ComponentTest
 
 	TEST_F(ComplexComponentTest, ScrollSlider)
 	{
-		auto scrollSlider = CreateSampleScrollSlider(DirectionType::Vertical, { { 16, 200 }, Origin::Center });
-		auto scrollSliderPtr = scrollSlider.get();
+		auto [scrollSlider, scrollSliderPtr] = GetPtrs(CreateSampleScrollSlider(DirectionType::Vertical, { { 16, 200 }, Origin::Center }));
 		UIEx(m_panel).AttachComponent(move(scrollSlider), { 100, 200 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 

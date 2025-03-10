@@ -40,3 +40,16 @@ bool ChangeSizeY(UIComponent* component, uint32_t value) noexcept;
 bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept;
 
 bool IsToolMode(UIComponent* component) noexcept;
+
+
+template<typename PointerType>
+inline pair<unique_ptr<PointerType>, PointerType*> GetPtrs(unique_ptr<PointerType> uniquePtr)
+{
+	return make_pair(move(uniquePtr), uniquePtr.get());
+}
+
+template<typename T, typename... Args>
+unique_ptr<T> CreateIfSetup(unique_ptr<T> obj, Args&&... args)
+{
+	return obj && obj->Setup(forward<Args>(args)...) ? move(obj) : nullptr;
+}

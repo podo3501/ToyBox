@@ -26,7 +26,7 @@ ImageGrid1::ImageGrid1() :
 {}
 
 ImageGrid1::ImageGrid1(const ImageGrid1& o) :
-	UIComponent{ o },
+	ImageGrid{ o },
 	m_texController{ o.m_texController }
 {
 	m_index = o.m_index;
@@ -60,6 +60,8 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 
 bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
 {
+	if (m_filename.empty()) return true;
+
 	Release();
 
 	XMUINT2 texSize{};
@@ -79,7 +81,17 @@ bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
 
 bool ImageGrid1::ImplementPostLoaded(ITextureController* texController)
 {
+	if (m_filename.empty()) return true;
+
 	m_texController = texController;
+	return true;
+}
+
+bool ImageGrid1::SetupFromData(const XMUINT2& size, const IndexedSource& idxSource)
+{
+	SetLayout({ size, Origin::LeftTop });
+	SetIndexedSource(idxSource);
+
 	return true;
 }
 
@@ -106,7 +118,7 @@ void ImageGrid1::ImplementRender(ITextureRender* render) const
 	render->Render(*m_index, destination, &source);
 }
 
-bool ImageGrid1::SetImage(const UILayout& layout, const ImageSource& source) noexcept
+bool ImageGrid1::Setup(const UILayout& layout, const ImageSource& source) noexcept
 {
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 1) return false;
@@ -117,6 +129,12 @@ bool ImageGrid1::SetImage(const UILayout& layout, const ImageSource& source) noe
 	m_source = source.list.at(0);
 
 	return true;
+}
+
+void ImageGrid1::SetIndexedSource(const IndexedSource& idxSource) noexcept
+{
+	m_index = idxSource.index;
+	m_source = idxSource.list[0];
 }
 
 void ImageGrid1::SetFilenameToLoadInfo(const wstring& filename) noexcept
@@ -134,5 +152,5 @@ void ImageGrid1::SerializeIO(JsonOperation& operation)
 unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const ImageSource& source)
 {
 	auto grid1 = make_unique<ImageGrid1>();
-	return grid1->SetImage(layout, source) ? move(grid1) : nullptr;
+	return CreateIfSetup(move(grid1), layout, source);
 }

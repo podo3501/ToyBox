@@ -174,6 +174,12 @@ struct ImageSource
 	vector<Rectangle> list;
 };
 
+struct IndexedSource
+{
+	size_t index{ 0 };
+	vector<Rectangle> list;
+};
+
 struct SourceDivider
 {
 	SourceDivider() = default;

@@ -8,9 +8,12 @@
 
 ImageGrid3::~ImageGrid3() = default;
 ImageGrid3::ImageGrid3() = default;
+ImageGrid3::ImageGrid3(DirectionType dirType) :
+    m_dirType{ dirType }
+{}
 
 ImageGrid3::ImageGrid3(const ImageGrid3& o) :
-    UIComponent{ o },
+    ImageGrid{ o },
     m_dirType{ o.m_dirType }
 {}
 
@@ -35,7 +38,35 @@ static unique_ptr<ImageGrid1> CreateImageGrid1(size_t idx, const ImageSource& so
     return CreateImageGrid1(grid1layout, imgSource);
 }
 
-bool ImageGrid3::SetImage(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept
+bool ImageGrid3::SetupFromData(const XMUINT2& size, const IndexedSource& idxSource)
+{
+    vector<optional<StateFlag::Type>> stateFlags;
+    switch (m_dirType) {
+    case DirectionType::Horizontal: stateFlags = { StateFlag::X_SizeLocked, nullopt, StateFlag::X_SizeLocked }; break;
+    case DirectionType::Vertical: stateFlags = { StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked }; break;
+    }
+
+    vector<XMUINT2> srcSizes; //source의 크기로 dest를 만든다.
+    ranges::transform(idxSource.list, back_inserter(srcSizes), [](auto& src) { return RectangleToXMUINT2(src); });
+    vector<XMINT2> positions = ExtractStartPosFromSizes(m_dirType, srcSizes);
+    for (auto idx : views::iota(0u, idxSource.list.size()))
+    {
+        auto img1 = make_unique<ImageGrid1>();
+        IndexedSource img1Source{ idxSource.index, { idxSource.list[idx] } };
+        img1->SetupFromData(srcSizes[idx], img1Source);
+        if (auto flag = stateFlags[idx]; flag) img1->SetStateFlag(*flag, true);
+        UIEx(this).AttachComponent(move(img1), positions[idx]);
+    }
+    ChangeSize(size);
+    SetLayout({ size, Origin::LeftTop });
+
+    SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+    UpdatePositionsManually();
+
+    return true;
+}
+
+bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept
 {
     if (source.filename.empty()) return false;
     if (source.list.size() != 3) return false;
@@ -65,6 +96,16 @@ bool ImageGrid3::SetImage(DirectionType dirType, const UILayout& layout, const I
     UpdatePositionsManually();
 
     return true;
+}
+
+void ImageGrid3::SetIndexedSource(const IndexedSource& idxSource) noexcept
+{
+    for (auto idx : views::iota(0u, idxSource.list.size()))
+    {
+        IndexedSource img1Source{ idxSource.index, { idxSource.list[idx] } };
+        if (auto img1 = ComponentCast<ImageGrid1*>(GetChildComponent(idx)); img1)
+            img1->SetIndexedSource(img1Source);
+    }
 }
 
 static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
@@ -198,5 +239,5 @@ void ImageGrid3::SerializeIO(JsonOperation& operation)
 unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const ImageSource& source)
 {
     auto grid3 = make_unique<ImageGrid3>();
-    return grid3->SetImage(dirType, layout, source) ? move(grid3) : nullptr;
+    return CreateIfSetup(move(grid3), dirType, layout, source);
 }

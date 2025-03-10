@@ -1,12 +1,12 @@
 #pragma once
-#include "../UIComponent.h"
+#include "ImageGrid.h"
 
 struct IRenderer;
 struct ImageSource;
 class ImagePart;
 namespace DX { class StepTimer; }
 
-class ImageGrid1 : public UIComponent
+class ImageGrid1 : public ImageGrid
 {
 public:
 	~ImageGrid1();
@@ -16,9 +16,11 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
+	virtual bool SetupFromData(const XMUINT2& size, const IndexedSource& idxSource) override;
+	virtual void SetIndexedSource(const IndexedSource&) noexcept override;
 
 	optional<vector<Rectangle>> GetTextureAreaList();
-	bool SetImage(const UILayout& layout, const ImageSource& source) noexcept;
+	bool Setup(const UILayout& layout, const ImageSource& source) noexcept;
 	void SetFilenameToLoadInfo(const wstring& filename) noexcept;
 
 	inline void SetSource(const Rectangle& source) noexcept { m_source = source; }

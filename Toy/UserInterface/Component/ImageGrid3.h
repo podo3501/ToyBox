@@ -1,23 +1,26 @@
 #pragma once
-#include "../UIComponent.h"
+#include "ImageGrid.h"
 
 struct ImageSource;
 struct SourceDivider;
 class ImageGrid1;
 enum class DirectionType;
 
-class ImageGrid3 : public UIComponent
+class ImageGrid3 : public ImageGrid
 {
 public:
 	~ImageGrid3();
 	ImageGrid3();
+	ImageGrid3(DirectionType dirType);
 
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid3; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
+	virtual bool SetupFromData(const XMUINT2& size, const IndexedSource& idxSource) override;
+	virtual void SetIndexedSource(const IndexedSource&) noexcept;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool SetImage(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept;
+	bool Setup(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
 
 	bool SetFilename(const wstring& filename) noexcept;

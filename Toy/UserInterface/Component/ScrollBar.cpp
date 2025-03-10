@@ -105,5 +105,5 @@ unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout, unique_ptr<UICompo
 	unique_ptr<UIComponent> scrollSlider)
 {
 	unique_ptr<ScrollBar> scrollBar = make_unique<ScrollBar>();
-	return scrollBar->Setup(layout, move(scrollBackground), move(scrollSlider)) ? move(scrollBar) : nullptr;
+	return CreateIfSetup(move(scrollBar), layout, move(scrollBackground), move(scrollSlider));
 }

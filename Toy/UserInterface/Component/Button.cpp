@@ -55,7 +55,5 @@ void Button::SerializeIO(JsonOperation& operation)
 unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent> container)
 {
 	unique_ptr<Button> button = make_unique<Button>();
-	if(!button->Setup(layout, move(container))) return nullptr;
-
-	return button;
+	return CreateIfSetup(move(button), layout, move(container));
 }

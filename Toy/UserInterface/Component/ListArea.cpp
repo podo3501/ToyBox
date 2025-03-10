@@ -146,8 +146,7 @@ void ListArea::ResizeContainerForScrollbar() noexcept
 
 UIComponent* ListArea::PrepareContainer()
 {
-	auto cloneContainer = m_prototypeContainer->Clone();
-	auto cloneContainerPtr = cloneContainer.get();
+	auto [cloneContainer, cloneContainerPtr] = GetPtrs(m_prototypeContainer->Clone());
 	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
 
 	const auto& containerHeight = GetContainerHeight();
@@ -254,6 +253,5 @@ unique_ptr<ListArea> CreateListArea(const UILayout& layout,
 	unique_ptr<UIComponent> scrollBar)
 {
 	unique_ptr<ListArea> listArea= make_unique<ListArea>();
-	if (!listArea->Setup(layout, move(bgImage), move(container), move(scrollBar))) return nullptr;
-	return listArea;
+	return CreateIfSetup(move(listArea), layout, move(bgImage), move(container), move(scrollBar));
 }

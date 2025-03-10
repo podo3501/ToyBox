@@ -41,9 +41,8 @@ namespace ComponentTest
 
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid9_0"), true); //위에서 ImgGrid1를 attach 했다.
 
-		auto img1 = CreateSampleImageGrid1({ { 200, 100 }, Origin::LeftTop });
+		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({ { 200, 100 }, Origin::LeftTop }));
 		auto img2 = CreateSampleImageGrid1({ { 110, 60 }, Origin::LeftTop });
-		auto img1Ptr = img1.get();
 		UIEx(img1).AttachComponent(move(img2), { 100, 50 });	//중점에 attach 한다.
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 		m_panel->ProcessUpdate(m_timer);
@@ -84,10 +83,8 @@ namespace ComponentTest
 
 	TEST_F(IntegrationTest, GetComponent)
 	{
-		unique_ptr<UIComponent> img2 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-		unique_ptr<UIComponent> img1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-		auto img2Ptr = img2.get();
-		auto img1Ptr = img1.get();
+		auto [img2, img2Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
+		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
 		UIEx(img1).AttachComponent(move(img2), { 100, 100 });
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 
@@ -147,11 +144,8 @@ namespace ComponentTest
 	//같아도 되니까 코딩할때 이름_1 이런것을 찾지 않아도 된다.
 	TEST_F(IntegrationTest, Region)
 	{
-		unique_ptr<UIComponent> img1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-		unique_ptr<UIComponent> img2 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
-
-		auto img1Ptr = img1.get();
-		auto img2Ptr = img2.get();
+		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
+		auto [img2, img2Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
 
 		img1Ptr->RenameRegion("Region_0"); //먼저 Region값을 넣어주면 이름이 같아도 되고 나중에 Region을 넣으면 
 		img2Ptr->RenameRegion("Region_0"); //Attach 할때 unique 이름으로 만들어 준다.
@@ -163,12 +157,9 @@ namespace ComponentTest
 		EXPECT_EQ(img1Ptr->GetName(), "ImageGrid1_0");
 		EXPECT_EQ(img2Ptr->GetName(), "ImageGrid1_0");
 
-		unique_ptr<UIComponent> img3 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		auto [img3, img3Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
 		img3->Rename("UnChanging Name");
-		auto img4 = img3->Clone();
-
-		auto img3Ptr = img3.get();
-		auto img4Ptr = img4.get();
+		auto [img4, img4Ptr] = GetPtrs(img3->Clone());
 
 		UIEx(img1Ptr).AttachComponent(move(img3), { 100, 100 });
 		UIEx(img2Ptr).AttachComponent(move(img4), { 100, 100 });
@@ -181,8 +172,7 @@ namespace ComponentTest
 		UIEx(m_panel).AttachComponent(move(imgDummy), { 100, 100 });
 		EXPECT_TRUE(imgDummyPtr->Rename("UnChanging Name"));
 
-		auto img5 = img1Ptr->Clone();
-		auto img5Ptr = img5.get();
+		auto [img5, img5Ptr] = GetPtrs(img1Ptr->Clone());
 		UIEx(m_panel).AttachComponent(move(img5), { 100, 100 });
 		EXPECT_TRUE(UIEx(img5Ptr).FindComponent("UnChanging Name"));
 	}
@@ -190,7 +180,7 @@ namespace ComponentTest
 	TEST_F(IntegrationTest, RecursivePosition)
 	{
 		std::unique_ptr<Panel> panel1 = make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
-		std::unique_ptr<Panel> panel2 = make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center));
+		auto [panel2, panel2Ptr] = GetPtrs(make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center)));
 
 		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
 		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
@@ -199,8 +189,7 @@ namespace ComponentTest
 		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
-		Panel* ptrPanel = UIEx(m_panel).FindComponent<Panel*>("Panel2");
-		ptrPanel->ChangeOrigin(Origin::LeftTop);
+		panel2Ptr->ChangeOrigin(Origin::LeftTop);
 		m_panel->ProcessUpdate(m_timer);
 
 		outList.clear();
@@ -231,10 +220,9 @@ namespace ComponentTest
 		UIComponent* panel = m_panel.get();
 		CaptureSnapshot(cmdList, history);
 
-		auto img9 = CreateSampleImageGrid9({ {170, 120}, Origin::Center });
-		auto img9Ptr = ComponentCast<ImageGrid9*>(img9.get());
-		unique_ptr<UIComponent> img1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::Center });
-		ImageGrid1* img1Ptr = ComponentCast<ImageGrid1*>(img1.get());
+		auto [img9, img9Ptr] = GetPtrs(CreateSampleImageGrid9({ {170, 120}, Origin::Center }));
+		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::Center }));
+
 		cmdList.AttachComponent(m_panel.get(), move(img1), { 111, 222 });
 		CaptureSnapshot(cmdList, history);
 

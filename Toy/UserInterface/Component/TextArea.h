@@ -20,7 +20,7 @@ public:
 
 	bool SetText(const wstring& text);
 	inline const wstring& GetText() const noexcept { return m_text; }
-	void SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept;
+	bool Setup(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept;
 
 protected:
 	TextArea(const TextArea& o);

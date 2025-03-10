@@ -156,6 +156,5 @@ void RenderTexture::SerializeIO(JsonOperation& operation)
 unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent> component)
 {
 	unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>();
-	if (!renderTexture->Setup(layout, move(component))) return nullptr;
-	return renderTexture;
+	return CreateIfSetup(move(renderTexture), layout, move(component));
 }

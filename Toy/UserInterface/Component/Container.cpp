@@ -152,7 +152,5 @@ unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState,
 	if (imgGridList.size() != 3) return nullptr;
 
 	unique_ptr<Container> container = make_unique<Container>();
-	if(!container->Setup(layout, move(imgGridList), behaviorMode)) return nullptr;
-
-	return container;
+	return CreateIfSetup(move(container), layout, move(imgGridList), behaviorMode);
 }

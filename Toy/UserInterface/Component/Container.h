@@ -3,7 +3,6 @@
 
 enum class KeyState;
 namespace DX { class StepTimer; }
-
 class Container : public UIComponent
 {
 public:

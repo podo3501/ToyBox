@@ -140,13 +140,15 @@ bool TextArea::ImplementChangeSize(const XMUINT2& size) noexcept
 	return ArrangeText(m_text);
 }
 
-void TextArea::SetFont(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept
+bool TextArea::Setup(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept
 {
 	m_text = text;
 	SetLayout(layout);
 	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
 		return make_pair(filename.first, filename.second);
 		});
+
+	return true;
 }
 
 void TextArea::ImplementRender(ITextureRender* render) const
@@ -169,7 +171,5 @@ unique_ptr<TextArea> CreateTextArea(const UILayout& layout,
 	const wstring& text, map<wstring, wstring>& fontFileList)
 {
 	unique_ptr<TextArea> textArea = make_unique<TextArea>();
-	textArea->SetFont(text, layout, fontFileList);
-
-	return textArea;
+	return CreateIfSetup(move(textArea), text, layout, fontFileList);
 }

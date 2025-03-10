@@ -171,5 +171,5 @@ unique_ptr<ScrollSlider> CreateScrollSlider(const UILayout& layout,
 	unique_ptr<UIComponent> scrollContainer)
 {
 	unique_ptr<ScrollSlider> scrollSlider = make_unique<ScrollSlider>();
-	return scrollSlider->Setup(layout, move(scrollTrack), move(scrollContainer)) ? move(scrollSlider) : nullptr;
+	return CreateIfSetup(move(scrollSlider), layout, move(scrollTrack), move(scrollContainer));
 }
