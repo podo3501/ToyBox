@@ -1,20 +1,20 @@
 #include "pch.h"
-#include "TextureWindow.h"
-#include "SourceExtractor.h"
-#include "../../Utility.h"
+#include "MainTextureWindow.h"
+#include "MainSourceExtractor.h"
+#include "../Utility.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 
-TextureWindow::~TextureWindow() = default;
-TextureWindow::TextureWindow(IRenderer* renderer, unique_ptr<SourceExtractor> sourceExtractor) :
+MainTextureWindow::~MainTextureWindow() = default;
+MainTextureWindow::MainTextureWindow(IRenderer* renderer, unique_ptr<MainSourceExtractor> sourceExtractor) :
     m_renderer{ renderer },
     m_sourceExtractor{ move(sourceExtractor) },
     m_sourceTexture{ make_unique<ImageGrid1>() }
 {}
 
-bool TextureWindow::Create(const wstring& filename)
+bool MainTextureWindow::Create(const wstring& filename)
 {
     m_sourceTexture->SetFilenameToLoadInfo(filename);
     ReturnIfFalse(m_renderer->LoadComponent(m_sourceTexture.get()));
@@ -28,7 +28,7 @@ bool TextureWindow::Create(const wstring& filename)
     return true;
 }
 
-void TextureWindow::Update()
+void MainTextureWindow::Update()
 {
     if (!m_window) return;
 
@@ -36,7 +36,7 @@ void TextureWindow::Update()
     m_sourceExtractor->Update();
 }
 
-void TextureWindow::Render()
+void MainTextureWindow::Render()
 {
     if (!m_isOpen) return;
 

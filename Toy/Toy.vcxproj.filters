@@ -139,7 +139,7 @@
     <ClInclude Include="UserInterface\Component\ScrollBar.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\Component\ImageChanger.h">
+    <ClInclude Include="UserInterface\Component\ImageSwitcher.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\Component\ImageGrid.h">
@@ -237,7 +237,7 @@
     <ClCompile Include="UserInterface\Component\ScrollBar.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\Component\ImageChanger.cpp">
+    <ClCompile Include="UserInterface\Component\ImageSwitcher.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Component\ImageGrid.cpp">

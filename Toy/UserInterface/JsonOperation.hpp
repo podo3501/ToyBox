@@ -146,6 +146,38 @@ void JsonOperation::Process(const string& key, vector<unique_ptr<T>>& data)
 }
 
 template<typename T>
+void JsonOperation::Process(const string& key, vector<T>& datas)
+{
+	if (IsWrite())
+	{
+		if (datas.empty())
+			return;
+
+		ProcessWriteKey(key, [&datas, idx{ 0 }](auto& currentJson) mutable {
+			for (auto& data : datas)
+			{
+				JsonOperation jsOp{};
+				jsOp.Process(to_string(idx++), data);
+				currentJson.push_back(jsOp.GetWrite());
+			}
+			});
+	}
+	else
+	{
+		datas.clear();
+		ProcessReadKey(key, [&datas, idx{ 0 }](const auto& dataJsons) mutable {
+			for (const auto& dataJson : dataJsons)
+			{
+				T tempValue;
+				JsonOperation js(dataJson);
+				js.Process(to_string(idx++), tempValue);
+				datas.emplace_back(tempValue);
+			}
+			});
+	}
+}
+
+template<typename T>
 void JsonOperation::Process(const string& key, Property<T>& data)
 {
 	if (IsWrite())

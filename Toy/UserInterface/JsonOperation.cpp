@@ -191,43 +191,50 @@ void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noex
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-void JsonOperation::Process(const string& key, map<int, UITransform>& datas) noexcept
+void JsonOperation::Process(const string& key, map<InteractState, ImageSource>& datas) noexcept
 {
-    if (IsWrite())
-    {
-        if (datas.empty())
-            return;
+    auto writeFunc = [&datas](auto& j) {
+        for (auto& [k, v] : datas)
+        {
+            JsonOperation jsOp{};
+            v.SerializeIO(jsOp);
+            j[EnumToString(k)] = jsOp.GetWrite();
+        }};
 
-        ProcessWriteKey(key, [&datas](auto& currentJson) {
-            for (auto& [k, v] : datas)
-            {
-                JsonOperation jsOp{};
-                v.SerializeIO(jsOp);
-                
-                JsonOperation map{}; //새로운 operation에 데이터를 넣은뒤에 push_back으로 넣어준다.
-                auto& writeJson = map.GetWrite();
-                writeJson[to_string(k)] = jsOp.GetWrite();
-
-                currentJson.push_back(map.GetWrite());
-            }
-            });
-    }
-    else
-    {
+    auto readFunc = [&datas](const auto& j) {
         datas.clear();
-        ProcessReadKey(key, [&datas, this](const auto& currentJson) {
-            for (const auto& j : currentJson) //그냥 디버깅 창을 유심히 보자.
-            {
-                for (const auto& [k, v] : j.items()) //배열값에서 다시 map 값으로 가져온다.
-                {
-                    UITransform data{};
-                    JsonOperation jsOp{ v };
-                    data.SerializeIO(jsOp);
-                    datas.insert(make_pair(stoi(k), data));
-                }
-            }
-            });
-    }
+        for (auto& [k, v] : j.items())
+        {
+            ImageSource imgSource{};
+            JsonOperation jsOp{ v };
+            imgSource.SerializeIO(jsOp);
+            datas.emplace(StringToEnum<InteractState>(k), imgSource);
+        }};
+
+    ProcessImpl(key, writeFunc, readFunc);
+}
+
+void JsonOperation::Process(const string& key, map<int, UITransform>& datas) noexcept 
+{
+    auto writeFunc = [&datas](auto& j) {
+        for (auto& [k, v] : datas)
+        {
+            JsonOperation jsOp{};
+            v.SerializeIO(jsOp);
+            j[to_string(k)] = jsOp.GetWrite();
+        }};
+
+    auto readFunc = [&datas](const auto& j) {
+        datas.clear();
+        for (auto& [k, v] : j.items())
+        {
+            UITransform trasform{};
+            JsonOperation jsOp{ v };
+            trasform.SerializeIO(jsOp);
+            datas.emplace(stoi(k), trasform);
+        }};
+
+    ProcessImpl(key, writeFunc, readFunc);
 }
 
 void JsonOperation::Process(const string& key, deque<wstring>& data) noexcept

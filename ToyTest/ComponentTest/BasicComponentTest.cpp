@@ -10,7 +10,7 @@
 #include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
-#include "../Toy/UserInterface/Component/ImageChanger.h"
+#include "../Toy/UserInterface/Component/ImageSwitcher.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/Utility.h"
@@ -44,18 +44,14 @@ namespace ComponentTest
 	
 	TEST_F(BasicComponentTest, ImageChanger_ImageGrid1)
 	{
-		map<InteractState, ImageSource> sources{
-			{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 138, 32, 32} } } },
-			{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {46, 138, 32, 32} } } },
-			{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {82, 138, 32, 32} } } } };
-
-		auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({{32, 32}, Origin::Center}, 
-			make_unique<ImageGrid1>(), sources, BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(imgChanger), { 160, 120 });
+		auto [imgSwitcher, imgSwitcherPtr] = GetPtrs(CreateSampleImageSwitcher1({ {32, 32}, Origin::Center }, BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(imgSwitcher), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		MockMouseInput(144, 120, true);	//Pressed
 		CallMockRender(TestButton_ImageGrid1Render, 1);
+
+		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -99,24 +95,28 @@ namespace ComponentTest
 
 	TEST_F(BasicComponentTest, ImageChanger_ImageGrid3_H)
 	{
-		map<InteractState, ImageSource> sources{
-			{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } } },
-			{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } } },
-			{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } } };
+		//map<InteractState, ImageSource> sources{
+			//{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } } },
+			//{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } } },
+			//{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } } };
 
-		auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({ {100, 48}, Origin::Center },
-			make_unique<ImageGrid3>(DirectionType::Horizontal), sources, BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(imgChanger), { 160, 120 });
+		//auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({ {100, 48}, Origin::Center },
+			//make_unique<ImageGrid3>(DirectionType::Horizontal), sources, BehaviorMode::Normal));
+
+		auto [imgSwitcher, imgSwitcherPtr] = GetPtrs(CreateSampleImageSwitcher3({ {100, 48}, Origin::Center },
+			DirectionType::Horizontal, BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(imgSwitcher), { 160, 120 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 
 		MockMouseInput(110, 96);	//Hover
 		CallMockRender(TestButton_ImageGrid3Render_H, 3);
 
-		imgChangerPtr->ChangeSize({ 150, 48 });
+		imgSwitcherPtr->ChangeSize({ 150, 48 });
 		MockMouseInput(0, 0);	//Normal
 		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_H, 3);
+		EXPECT_TRUE(WriteReadTest(m_panel));
 
-		//auto [imgChanger, imgChangerPtr] = GetPtrs(CreateImageChanger({ {32, 32}, Origin::Center }, sources, BehaviorMode::Normal));
+		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_H, 3);
 	}
 
 	////////////////////////////////////////////////////////////////

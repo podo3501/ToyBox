@@ -13,6 +13,8 @@ class FloatingComponent
 		ImageGrid1,
 		ImageGrid3,
 		ImageGrid9,
+		ImageSwitcher1,
+		ImageSwitcher3,
 		Button1,
 		Button3,
 		Text,

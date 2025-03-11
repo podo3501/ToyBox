@@ -22,7 +22,12 @@ FileTab::FileTab(ToolSystem* toolSystem) :
 void FileTab::Show()
 {
     if (ImGui::MenuItem("New")) HandleFileMenuAction(FileMenuAction::NewFile);
-    if (ImGui::MenuItem("Open", "Ctrl+O")) HandleFileMenuAction(FileMenuAction::OpenFile);
+    if (ImGui::BeginMenu("Open"))
+    {
+        if (ImGui::MenuItem("UI File", "Ctrl+O")) HandleFileMenuAction(FileMenuAction::OpenUIFile);
+        if (ImGui::MenuItem("Texture File")) HandleFileMenuAction(FileMenuAction::OpenTextureFile);
+        ImGui::EndMenu();
+    }
     if (m_recentFiles->Show()) HandleFileMenuAction(FileMenuAction::OpenRecent);
     if (ImGui::MenuItem("Save", "Ctrl+S")) HandleFileMenuAction(FileMenuAction::SaveFile);
     if (ImGui::MenuItem("Save As..")) HandleFileMenuAction(FileMenuAction::SaveAsFile);
@@ -50,7 +55,8 @@ bool FileTab::Excute()
     switch (m_currentAction.value())
     {
     case FileMenuAction::NewFile: result = NewFile();  break;
-    case FileMenuAction::OpenFile: result = CreateMainWindow(); break;
+    case FileMenuAction::OpenUIFile: result = CreateMainWindow(); break;
+    //case FileMenuAction::OpenTextureFile: result = Create
     case FileMenuAction::OpenRecent: result = m_recentFiles->OpenFile(*this); break;
     case FileMenuAction::SaveFile: result = SaveMainWindow(); break;
     case FileMenuAction::SaveAsFile: result = SaveAsMainWindow(); break;

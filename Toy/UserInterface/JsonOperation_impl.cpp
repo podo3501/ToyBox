@@ -12,6 +12,7 @@
 #include "Component/RenderTexture.h"
 #include "Component/ScrollBar.h"
 #include "Component/ScrollSlider.h"
+#include "Component/ImageSwitcher.h"
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {
@@ -48,6 +49,7 @@ constexpr FactoryFunc ComponentFactory[] = //enum의 값과 일치가 되어야 한다. 아�
     []() -> unique_ptr<UIComponent> { return make_unique<RenderTexture>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<ScrollBar>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<ScrollSlider>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<ImageSwitcher>(); },
 };
 
 unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typeName)

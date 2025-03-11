@@ -87,10 +87,10 @@ bool ImageGrid1::ImplementPostLoaded(ITextureController* texController)
 	return true;
 }
 
-bool ImageGrid1::SetupFromData(const XMUINT2& size, const IndexedSource& idxSource)
+bool ImageGrid1::SetupFromData(const XMUINT2& size, size_t index, const vector<Rectangle>& source)
 {
 	SetLayout({ size, Origin::LeftTop });
-	SetIndexedSource(idxSource);
+	SetIndexedSource(index, source);
 
 	return true;
 }
@@ -131,10 +131,10 @@ bool ImageGrid1::Setup(const UILayout& layout, const ImageSource& source) noexce
 	return true;
 }
 
-void ImageGrid1::SetIndexedSource(const IndexedSource& idxSource) noexcept
+void ImageGrid1::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept
 {
-	m_index = idxSource.index;
-	m_source = idxSource.list[0];
+	m_index = index;
+	m_source = source[0];
 }
 
 void ImageGrid1::SetFilenameToLoadInfo(const wstring& filename) noexcept

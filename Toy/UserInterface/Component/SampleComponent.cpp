@@ -11,6 +11,7 @@
 #include "ListArea.h"
 #include "ScrollBar.h"
 #include "ScrollSlider.h"
+#include "ImageSwitcher.h"
 #include "../UIUtility.h"
 #include "../../Utility.h"
 
@@ -117,6 +118,26 @@ unique_ptr<Button> CreateSampleButton3(DirectionType dirType, const UILayout& la
 			{ InteractState::Pressed, { {114, 82, 48, 22}, {114, 104, 48, 4}, {114, 108, 48, 22} } } }; break;
 	}
 	return CreateSampleButton3(dirType, layout, sources, L"UI/SampleTexture/Sample_0.png");
+}
+
+unique_ptr<ImageSwitcher> CreateSampleImageSwitcher1(const UILayout& layout, BehaviorMode behavior)
+{
+	map<InteractState, ImageSource> sources{
+		{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 138, 32, 32} } } },
+		{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {46, 138, 32, 32} } } },
+		{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {82, 138, 32, 32} } } } };
+
+	return CreateImageSwitcher(layout, make_unique<ImageGrid1>(), sources, behavior);
+}
+
+unique_ptr<ImageSwitcher> CreateSampleImageSwitcher3(const UILayout& layout, DirectionType dirType, BehaviorMode behavior)
+{
+	map<InteractState, ImageSource> sources{
+		{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } } },
+		{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } } },
+		{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } } };
+
+	return CreateImageSwitcher(layout, make_unique<ImageGrid3>(dirType), sources, behavior);
 }
 
 unique_ptr<ImageGrid1> CreateListBackgroudImage(const UILayout& layout)

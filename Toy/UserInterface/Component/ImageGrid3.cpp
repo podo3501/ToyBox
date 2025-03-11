@@ -38,30 +38,52 @@ static unique_ptr<ImageGrid1> CreateImageGrid1(size_t idx, const ImageSource& so
     return CreateImageGrid1(grid1layout, imgSource);
 }
 
-bool ImageGrid3::SetupFromData(const XMUINT2& size, const IndexedSource& idxSource)
+static vector<optional<StateFlag::Type>> GetStateFlagsForDirection(DirectionType dirType) noexcept
 {
-    vector<optional<StateFlag::Type>> stateFlags;
-    switch (m_dirType) {
-    case DirectionType::Horizontal: stateFlags = { StateFlag::X_SizeLocked, nullopt, StateFlag::X_SizeLocked }; break;
-    case DirectionType::Vertical: stateFlags = { StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked }; break;
-    }
-
-    vector<XMUINT2> srcSizes; //source의 크기로 dest를 만든다.
-    ranges::transform(idxSource.list, back_inserter(srcSizes), [](auto& src) { return RectangleToXMUINT2(src); });
-    vector<XMINT2> positions = ExtractStartPosFromSizes(m_dirType, srcSizes);
-    for (auto idx : views::iota(0u, idxSource.list.size()))
+    switch (dirType)
     {
-        auto img1 = make_unique<ImageGrid1>();
-        IndexedSource img1Source{ idxSource.index, { idxSource.list[idx] } };
-        img1->SetupFromData(srcSizes[idx], img1Source);
-        if (auto flag = stateFlags[idx]; flag) img1->SetStateFlag(*flag, true);
-        UIEx(this).AttachComponent(move(img1), positions[idx]);
+    case DirectionType::Horizontal: return { StateFlag::X_SizeLocked, nullopt, StateFlag::X_SizeLocked };
+    case DirectionType::Vertical: return { StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
     }
+    return {};
+}
+
+static pair<vector<XMUINT2>, vector<XMINT2>> ComputeBoundsFromSources(DirectionType dirType, const vector<Rectangle>& sources) noexcept
+{
+    vector<XMUINT2> srcSizes; //source의 크기로 dest를 만든다.
+    ranges::transform(sources, back_inserter(srcSizes), [](auto& src) { return RectangleToXMUINT2(src); });
+    vector<XMINT2> positions = ExtractStartPosFromSizes(dirType, srcSizes);
+
+    return make_pair(srcSizes, positions);
+}
+
+void ImageGrid3::SetupDetails(const XMUINT2& size) noexcept
+{
     ChangeSize(size);
     SetLayout({ size, Origin::LeftTop });
 
     SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
     UpdatePositionsManually();
+}
+
+bool ImageGrid3::SetupFromData(const XMUINT2& size, size_t index, const vector<Rectangle>& sources)
+{
+    if (!GetChildComponents().empty()) //로딩했다면 자식이 있으므로, 값만 셋팅해 준다.
+    {
+        SetIndexedSource(index, sources);
+        return true;
+    }
+
+    vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
+    auto [srcSizes, positions] = ComputeBoundsFromSources(m_dirType, sources);
+    for (auto idx : views::iota(0u, sources.size()))
+    {
+        auto img1 = make_unique<ImageGrid1>();
+        img1->SetupFromData(srcSizes[idx], index, { sources[idx] });
+        if (auto flag = stateFlags[idx]; flag) img1->SetStateFlag(*flag, true);
+        UIEx(this).AttachComponent(move(img1), positions[idx]);
+    }
+    SetupDetails(size);
 
     return true;
 }
@@ -73,38 +95,25 @@ bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const Imag
 
     m_dirType = dirType;
 
-    vector<optional<StateFlag::Type>> stateFlags;
-    switch (m_dirType) {
-    case DirectionType::Horizontal: stateFlags = { StateFlag::X_SizeLocked, nullopt, StateFlag::X_SizeLocked }; break;
-    case DirectionType::Vertical: stateFlags = { StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked }; break;
-    }
-
-    vector<XMUINT2> sizes; //source의 크기로 dest를 만든다.
-    ranges::transform(source.list, back_inserter(sizes), [](auto& src) { return RectangleToXMUINT2(src); });
-    vector<XMINT2> positions = ExtractStartPosFromSizes(dirType, sizes);
+    vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
+    auto [srcSizes, positions] = ComputeBoundsFromSources(m_dirType, source.list);
     for (auto idx : views::iota(0u, source.list.size()))
     {
-        auto grid1 = CreateImageGrid1(idx, source, sizes[idx]);
+        auto grid1 = CreateImageGrid1(idx, source, srcSizes[idx]);
         if (auto flag = stateFlags[idx]; flag) grid1->SetStateFlag(*flag, true);
         UIEx(this).AttachComponent(move(grid1), positions[idx]);
     }
-
-    ChangeSize(layout.GetSize());
-    SetLayout(layout);
-
-    SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
-    UpdatePositionsManually();
+    SetupDetails(layout.GetSize());
 
     return true;
 }
 
-void ImageGrid3::SetIndexedSource(const IndexedSource& idxSource) noexcept
+void ImageGrid3::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
 {
-    for (auto idx : views::iota(0u, idxSource.list.size()))
+    for (auto idx : views::iota(0u, sources.size()))
     {
-        IndexedSource img1Source{ idxSource.index, { idxSource.list[idx] } };
         if (auto img1 = ComponentCast<ImageGrid1*>(GetChildComponent(idx)); img1)
-            img1->SetIndexedSource(img1Source);
+            img1->SetIndexedSource(index, { sources[idx] });
     }
 }
 
@@ -163,7 +172,7 @@ bool ImageGrid3::SetFilename(const wstring& filename) noexcept
     return true;
 }
 
-SourceDivider ImageGrid3::GetSourceAnd2Divider() const noexcept //?!? 이 함수 정리
+SourceDivider ImageGrid3::GetSourceAnd2Divider() const noexcept
 {
     vector<ImageGrid1*> components;
     if (!GetImageGridComponents(GetChildComponents(), components)) return {};

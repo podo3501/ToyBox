@@ -15,7 +15,7 @@ enum class ComponentID : int
 	RenderTexture,
 	ScrollBar,
 	ScrollSlider,
-	ImageChanger,
+	ImageSwitcher,
 	Unknown //부모 기본 UIComponent. 이게 문제가 되면 UICompnent가 혼자서 생성되었다는 건데, 생성자가 protected에서 public이 되었을 것이다. 아니면 enum에서 추가를 안시켰던지.
 };
 
@@ -37,7 +37,7 @@ constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<Com
 		{ "RenderTexture" },
 		{ "ScrollBar" },
 		{ "ScrollSlider" },
-		{ "ImageChanger" },
+		{ "ImageSwitcher" },
 		{ "Unknown" }
 	} };
 }
@@ -168,15 +168,12 @@ enum class DirectionType
 
 /////////////////////////////////////////////////////////////// 
 
+class JsonOperation;
 struct ImageSource
 {
+	bool operator==(const ImageSource& o) const noexcept { return tie(filename, list) == tie(o.filename, o.list); }
+	void SerializeIO(JsonOperation& operation);
 	wstring filename{};
-	vector<Rectangle> list;
-};
-
-struct IndexedSource
-{
-	size_t index{ 0 };
 	vector<Rectangle> list;
 };
 

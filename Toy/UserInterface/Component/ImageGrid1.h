@@ -16,8 +16,8 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
-	virtual bool SetupFromData(const XMUINT2& size, const IndexedSource& idxSource) override;
-	virtual void SetIndexedSource(const IndexedSource&) noexcept override;
+	virtual bool SetupFromData(const XMUINT2& size, size_t index, const vector<Rectangle>& source) override;
+	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
 
 	optional<vector<Rectangle>> GetTextureAreaList();
 	bool Setup(const UILayout& layout, const ImageSource& source) noexcept;

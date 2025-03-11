@@ -5,9 +5,11 @@ class Property;
 class UIComponent;
 class Scene;
 class UITransform;
+struct ImageSource;
 enum class Origin;//enum은 컨셉에 추가만 하면 된다.
 enum class InteractState; 
 enum class DirectionType;
+enum class BehaviorMode;
 namespace StateFlag { enum Type : int; }
 
 namespace Tool
@@ -110,6 +112,7 @@ is_same_v<T, size_t> ||
 is_same_v<T, StateFlag::Type> ||
 is_same_v <T, InteractState> ||
 is_same_v <T, DirectionType> ||
+is_same_v <T, BehaviorMode> ||
 is_same_v<T, Tool::ResolutionType>;
 
 template<typename T>
@@ -162,6 +165,8 @@ public:
 	template<IsClassContainer T>
 	void Process(const string& key, T& data) noexcept;
 	template<typename T>
+	void Process(const string& key, vector<T>& datas);
+	template<typename T>
 	void Process(const string& key, vector<unique_ptr<T>>& data);
 	template<typename T>
 	void Process(const string& key, Property<T>& data);
@@ -176,6 +181,7 @@ public:
 	void Process(const string& key, wstring& data) noexcept;
 	void Process(const string& key, map<wstring, wstring>& data) noexcept;
 	void Process(const string& key, map<int, UITransform>& datas) noexcept;
+	void Process(const string& key, map<InteractState, ImageSource>& datas) noexcept;
 	void Process(const string& key, deque<wstring>& data) noexcept;
 	void Write(const string& key, UIComponent* data);
 

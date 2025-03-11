@@ -1,14 +1,15 @@
 #include "pch.h"
 #include "../Toy/UserInterface/UIType.h"
 #include "EditWindowFactory.h"
-#include "SelectedComponent/ComponentEdit/EditImageGrid.h"
-#include "SelectedComponent/ComponentEdit/EditButton.h"
-#include "SelectedComponent/ComponentEdit/EditTextArea.h"
-#include "SelectedComponent/ComponentEdit/EditContainer.h"
-#include "SelectedComponent/ComponentEdit/EditRenderTexture.h"
-#include "SelectedComponent/ComponentEdit/EditListArea.h"
-#include "SelectedComponent/ComponentEdit/EditScrollSlider.h"
-#include "SelectedComponent/ComponentEdit/EditScrollBar.h"
+#include "ComponentEdit/EditImageGrid.h"
+#include "ComponentEdit/EditButton.h"
+#include "ComponentEdit/EditTextArea.h"
+#include "ComponentEdit/EditContainer.h"
+#include "ComponentEdit/EditRenderTexture.h"
+#include "ComponentEdit/EditListArea.h"
+#include "ComponentEdit/EditScrollSlider.h"
+#include "ComponentEdit/EditScrollBar.h"
+#include "ComponentEdit/EditImageSwitcher.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
@@ -20,6 +21,7 @@
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Component/ScrollSlider.h"
 #include "../Toy/UserInterface/Component/ScrollBar.h"
+#include "../Toy/UserInterface/Component/ImageSwitcher.h"
 
 using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, CommandList*)>;
 optional<unordered_map<ComponentID, FactoryFunction>> EditWindowFactory::m_factoryMap{ nullopt };
@@ -43,6 +45,7 @@ void EditWindowFactory::RegisterFactories()
     RegisterEditWindowWithRenderer<EditListArea, ListArea*>(ComponentID::ListArea);
     RegisterEditWindowWithRenderer<EditScrollSlider, ScrollSlider*>(ComponentID::ScrollSlider);
     RegisterEditWindowWithRenderer<EditScrollBar, ScrollBar*>(ComponentID::ScrollBar);
+    RegisterEditWindowWithRenderer<EditImageSwitcher, ImageSwitcher*>(ComponentID::ImageSwitcher);
     //UIComponent*, IRenderer*, CommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 }
 

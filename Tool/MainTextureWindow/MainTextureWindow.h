@@ -1,0 +1,31 @@
+#pragma once
+
+struct IRenderer;
+class RenderTexture;
+class ImageGrid1;
+class MainSourceExtractor;
+
+class MainTextureWindow
+{
+public:
+    ~MainTextureWindow();
+    MainTextureWindow(IRenderer* renderer, unique_ptr<MainSourceExtractor> sourceExtractor);
+    
+    bool Create(const wstring& filename);
+    void Update();
+    void Render();
+    bool IsOpen() const noexcept { return m_isOpen; }
+    void Open() noexcept { m_isOpen = true; }
+
+private:
+    IRenderer* m_renderer;
+    ImGuiWindow* m_window{ nullptr };
+    unique_ptr<RenderTexture> m_renderTex;
+    unique_ptr<MainSourceExtractor> m_sourceExtractor;
+    unique_ptr<ImageGrid1> m_sourceTexture;
+
+    ImVec2 m_size;
+    string m_name;
+    bool m_isOpen{ false };
+};
+

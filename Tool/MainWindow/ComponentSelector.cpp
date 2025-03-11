@@ -2,13 +2,13 @@
 #include "ComponentSelector.h"
 #include "SelectedComponent/ComponentEdit/EditWindow.h"
 #include "SelectedComponent/ComponentTooltip.h"
+#include "SelectedComponent/EditWindowFactory.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
 #include "../Dialog.h"
 #include "../Utility.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
-#include "EditWindowFactory.h"
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, CommandList* cmdList, UIComponent* panel) :

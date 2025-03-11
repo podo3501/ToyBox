@@ -22,6 +22,9 @@
     <Filter Include="Resources\UI\Texture">
       <UniqueIdentifier>{5ddbd022-ae6b-4d12-a581-545377146d5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainTextureWindow">
+      <UniqueIdentifier>{0575b7f4-4f55-439d-82f1-8478226e5f0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp" />
@@ -75,9 +78,6 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\EditWindowFactory.cpp">
-      <Filter>MainWindow</Filter>
-    </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditTextArea.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
@@ -98,6 +98,18 @@
     </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditImageSwitcher.cpp">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\EditWindowFactory.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MainTextureWindow\MainTextureWindow.cpp">
+      <Filter>MainTextureWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="MainTextureWindow\MainSourceExtractor.cpp">
+      <Filter>MainTextureWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,9 +163,6 @@
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow\EditWindowFactory.h">
-      <Filter>MainWindow</Filter>
-    </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditTextArea.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
@@ -174,6 +183,18 @@
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditImageSwitcher.h">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\EditWindowFactory.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MainTextureWindow\MainTextureWindow.h">
+      <Filter>MainTextureWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainTextureWindow\MainSourceExtractor.h">
+      <Filter>MainTextureWindow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

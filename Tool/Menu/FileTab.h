@@ -11,7 +11,8 @@ class FileTab
 	{
 		None,
 		NewFile,
-		OpenFile,
+		OpenUIFile,
+		OpenTextureFile,
 		OpenRecent,
 		SaveFile,
 		SaveAsFile,

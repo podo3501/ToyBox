@@ -11,6 +11,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/ListArea.h"
+#include "../Toy/UserInterface/Component/ImageSwitcher.h"
 #include "../Utility.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
@@ -59,6 +60,8 @@ bool FloatingComponent::Excute()
 	case ImageGrid1: result = LoadComponent(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop })); break;
 	case ImageGrid3: result = LoadComponent(CreateSampleImageGrid3(DirectionType::Horizontal, { { 48, 48 }, Origin::LeftTop })); break;
 	case ImageGrid9: result = LoadComponent(CreateSampleImageGrid9({ { 170, 120 }, Origin::LeftTop })); break;
+	case ImageSwitcher1: result = LoadComponent(CreateSampleImageSwitcher1({ { 32, 32 }, Origin::LeftTop }, BehaviorMode::Normal)); break;
+	case ImageSwitcher3: result = LoadComponent(CreateSampleImageSwitcher3({ { 100, 48 }, Origin::LeftTop }, DirectionType::Horizontal, BehaviorMode::Normal)); break;
 	case Button1: result = LoadComponent(CreateSampleButton1({ { 32, 32 }, Origin::LeftTop })); break;
 	case Button3: result = LoadComponent(CreateSampleButton3(DirectionType::Horizontal, { { 100, 48 }, Origin::LeftTop })); break;
 	case Text: result = LoadComponent(CreateSampleTextArea({ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>")); break;
@@ -110,6 +113,8 @@ void FloatingComponent::Render()
 	if (ImGui::MenuItem("Image Grid 1")) m_currentAction = ImageGrid1;
 	if (ImGui::MenuItem("Image Grid 3")) m_currentAction = ImageGrid3;
 	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = ImageGrid9;
+	if (ImGui::MenuItem("Image Switcher 1")) m_currentAction = ImageSwitcher1;
+	if (ImGui::MenuItem("Image Switcher 3")) m_currentAction = ImageSwitcher3;
 	if (ImGui::MenuItem("Button 1")) m_currentAction = Button1;
 	if (ImGui::MenuItem("Button 3")) m_currentAction = Button3;
 	if (ImGui::MenuItem("Text")) m_currentAction = Text;
