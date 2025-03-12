@@ -33,13 +33,16 @@ bool EditSize(XMUINT2& size)
 bool EditRectangle(const string& label, Rectangle& rect)
 {
     ImGui::Text("%s", label.c_str());
-    ImGui::PushID(label.c_str());
+    return EditRectangleNoLabel(label, rect);
+}
 
+bool EditRectangleNoLabel(const string& id, Rectangle& rect)
+{
+    ImGui::PushID(id.c_str());
     bool modify = EditIntegerFields<long>({
         {"X", rect.x}, {"Y", rect.y},
         {"Width", rect.width}, {"Height", rect.height}
         });
-
     ImGui::PopID();
 
     return modify;

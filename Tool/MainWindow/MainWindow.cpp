@@ -130,15 +130,6 @@ void MainWindow::Update(const DX::StepTimer& timer)
 		m_fps = 1.0f / elapsedTime;
 }
 
-void MainWindow::IgnoreMouseClick() 
-{
-	const ImVec2& rectMin = GetWindowStartPosition(m_window);
-	const ImVec2& rectMax = rectMin + GetPanelSize();
-	if (!ImGui::IsMouseHoveringRect(rectMin, rectMax)) return;
-	
-	ImGui::GetIO().MouseDown[0] = false;
-}
-
 void MainWindow::Render(ImGuiIO* io)
 {
 	if (!m_isOpen)
@@ -162,11 +153,9 @@ void MainWindow::SetupWindowAppearing() noexcept
 
 void MainWindow::HandleMouseEvents()
 {
+	IgnoreMouseClick(m_window);
 	if (m_window && IsWindowFocus(m_window))
-	{
-		IgnoreMouseClick();
 		Tool::MouseCursor::Render();
-	}
 }
 
 void MainWindow::ShowStatusBar() const//상태 표시줄(임시)

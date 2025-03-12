@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="HelperClass.cpp" />
     <ClCompile Include="MainTextureWindow\MainTextureWindow.cpp" />
     <ClCompile Include="MainTextureWindow\MainSourceExtractor.cpp" />
     <ClCompile Include="MainWindow\ComponentController.cpp" />
@@ -197,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="HelperClass.h" />
     <ClInclude Include="MainTextureWindow\MainTextureWindow.h" />
     <ClInclude Include="MainTextureWindow\MainSourceExtractor.h" />
     <ClInclude Include="MainWindow\ComponentController.h" />

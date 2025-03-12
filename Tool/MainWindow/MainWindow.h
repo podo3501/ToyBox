@@ -34,7 +34,6 @@ private:
     void ToggleToolMode() noexcept;
     void CheckActiveUpdate() noexcept;
     void CheckChangeWindow(const ImGuiWindow* window);
-    void IgnoreMouseClick();
     inline ImVec2 GetPanelSize() const noexcept;
 
     void SetupWindowAppearing() noexcept;

@@ -2,6 +2,7 @@
 #include "../Include/IRenderer.h"
 
 class MainWindow;
+class MainTextureWindow;
 class GuiWidget;
 
 namespace DX
@@ -31,6 +32,7 @@ public:
 
     MainWindow* GetFocusMainWindow() const noexcept;
     void SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept;
+    void SetTextureWindow(unique_ptr<MainTextureWindow> textureWindow) noexcept;
     IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
 private:
@@ -43,5 +45,6 @@ private:
     XMUINT2 m_size{};
 
     vector<unique_ptr<MainWindow>> m_mainWindows;
+    vector<unique_ptr<MainTextureWindow>> m_textureWindows;
     unique_ptr<GuiWidget> m_guiWidget;
 };

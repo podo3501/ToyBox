@@ -33,6 +33,7 @@ bool EditPosition(XMINT2& position);
 bool EditSize(XMUINT2& size);
 bool EditRectangle(const string& label, Rectangle& rect);
 bool EditRectangle(const string& label, Property<Rectangle>& rect);
+bool EditRectangleNoLabel(const string& id, Rectangle& rect);
 bool EditCheckbox(const string& label, bool& check);
 bool EditText(const string& label, string& text);
 bool EditText(const string& label, wstring& text);

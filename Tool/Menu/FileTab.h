@@ -33,6 +33,8 @@ private:
 	void HandleFileMenuAction(FileMenuAction action);
 	bool NewFile() noexcept;
 	bool CreateMainWindow();
+	bool CreateTextureWindowFromFile(const wstring& filename);
+	bool CreateTextureWindow();
 	bool Save(MainWindow* focusWnd, const wstring& filename = L"") const;
 	bool SaveMainWindow();
 	bool SaveAsMainWindow();

@@ -54,6 +54,7 @@ namespace Tool
 		static ImGuiMouseCursor_ m_mouseCursor;
 	};
 }
+void IgnoreMouseClick(ImGuiWindow* window);
 
 class UIComponent;
 class CommandList;
@@ -65,3 +66,4 @@ inline ImVec4 ToColor(const DirectX::XMVECTORF32& color) noexcept
 }
 
 bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept;
+wstring ReplaceFileExtension(const wstring& filename, const wstring& newExtension);

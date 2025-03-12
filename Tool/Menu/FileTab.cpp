@@ -6,6 +6,7 @@
 #include "../Toy/Config.h"
 #include "../ToolSystem.h"
 #include "../MainWindow/MainWindow.h"
+#include "../MainTextureWindow/MainTextureWindow.h"
 #include "MenuHelper.h"
 #include "RecentFiles.h"
 #include "../Config.h"
@@ -56,7 +57,7 @@ bool FileTab::Excute()
     {
     case FileMenuAction::NewFile: result = NewFile();  break;
     case FileMenuAction::OpenUIFile: result = CreateMainWindow(); break;
-    //case FileMenuAction::OpenTextureFile: result = Create
+    case FileMenuAction::OpenTextureFile: result = CreateTextureWindow(); break;
     case FileMenuAction::OpenRecent: result = m_recentFiles->OpenFile(*this); break;
     case FileMenuAction::SaveFile: result = SaveMainWindow(); break;
     case FileMenuAction::SaveAsFile: result = SaveAsMainWindow(); break;
@@ -84,10 +85,10 @@ bool FileTab::NewFile() noexcept
 
 bool FileTab::CreateMainWindowFromFile(const wstring& filename)
 {
-    auto mainWindow = std::make_unique<MainWindow>(m_toolSystem->GetRenderer());
+    auto mainWindow = make_unique<MainWindow>(m_toolSystem->GetRenderer());
     if (!mainWindow->CreateScene(filename))
     {
-        Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to open the file. Please check the file path.");
+        Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to open the UI file. Please check the file path.");
         return false;
     }
 
@@ -107,6 +108,29 @@ bool FileTab::CreateMainWindow()
         m_recentFiles->AddFile(relativePath);
 
     return true;
+}
+
+bool FileTab::CreateTextureWindowFromFile(const wstring& filename)
+{
+    auto textureWindow = make_unique<MainTextureWindow>(m_toolSystem->GetRenderer());
+    if (!textureWindow->Create(filename))
+    {
+        Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to open the texture file. Please check the file path.");
+        return false;
+    }
+
+    m_toolSystem->SetTextureWindow(move(textureWindow));
+
+    return true;
+}
+
+bool FileTab::CreateTextureWindow()
+{
+    wstring relativePath{};
+    GetRelativePathFromDialog(relativePath);
+    if (relativePath.empty()) return true;
+
+    return CreateTextureWindowFromFile(relativePath);
 }
 
 MainWindow* FileTab::GetFocusWindow() const noexcept

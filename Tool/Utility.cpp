@@ -37,6 +37,17 @@ bool IsWindowFocus(const ImGuiWindow* window) noexcept
 	return true;
 }
 
+void IgnoreMouseClick(ImGuiWindow* window)
+{
+	if (!window || !IsWindowFocus(window)) return;
+
+	const ImVec2& rectMin = GetWindowStartPosition(window);
+	const ImVec2& rectMax = rectMin + ImGui::GetWindowSize();
+	if (!ImGui::IsMouseHoveringRect(rectMin, rectMax)) return;
+
+	ImGui::GetIO().MouseDown[0] = false;
+}
+
 static tuple<ImVec2, ImVec2> RectangleToImVec2(const Rectangle& rect)
 {
 	return { {static_cast<float>(rect.x), static_cast<float>(rect.y) },
@@ -86,4 +97,10 @@ bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, Float
 	}
 
 	return true;
+}
+
+wstring ReplaceFileExtension(const wstring& filename, const wstring& newExtension)
+{
+	filesystem::path path(filename);
+	return path.replace_extension(newExtension).wstring();
 }

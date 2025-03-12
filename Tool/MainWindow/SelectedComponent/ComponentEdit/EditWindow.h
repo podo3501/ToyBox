@@ -3,6 +3,7 @@
 struct IRenderer;
 class CommandList;
 class UIComponent;
+class RenameNotifier;
 class MouseTracker;
 enum class OnDrag;
 namespace Tool{
@@ -33,11 +34,10 @@ private:
 	void ResizeComponentOnClick() noexcept;
 	void UpdateDragState(OnDrag dragState, XMINT2& outStartPos) noexcept;
 	void ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept;
-	void EditName(const string& nameLabel) noexcept;
 
 	UIComponent* m_component;
 	CommandList* m_cmdList;
-	char m_nameBuffer[128] = "";
+	unique_ptr<RenameNotifier> m_renameNotifier;
 	bool m_visible{ true };
 	OnDrag m_dragState;
 };
