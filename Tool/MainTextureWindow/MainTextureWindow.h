@@ -22,12 +22,16 @@ public:
     MainTextureWindow(IRenderer* renderer);
     
     bool Create(const wstring& filename);
+    bool CreateNew();
     void Update();
     void Render();
     bool IsOpen() const noexcept { return m_isOpen; }
     void Open() noexcept { m_isOpen = true; }
+    ImGuiWindow* GetWindow() noexcept { return m_window; }
 
 private:
+    ImVec2 GetWindowSize() const noexcept;
+
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<RenderTexture> m_renderTex;

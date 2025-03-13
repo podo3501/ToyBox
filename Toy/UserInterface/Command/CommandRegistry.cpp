@@ -266,10 +266,8 @@ SetFilenameCommand::SetFilenameCommand(const ImageGridVariant& imgGridVariant,
 
 wstring SetFilenameCommand::GetFilename() const noexcept
 {
-	return visit([](auto* imgGrid) -> wstring {
-		if (imgGrid && imgGrid->GetFilename().has_value())
-			return *imgGrid->GetFilename();
-		return L"";
+	return visit([](auto* imgGrid) -> wstring { 
+		return imgGrid ? imgGrid->GetFilename() : L"";
 		}, m_imgGridVariant);
 }
 

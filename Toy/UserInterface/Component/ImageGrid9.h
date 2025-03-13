@@ -16,7 +16,7 @@ public:
 
 	bool Setup(const UILayout& layout, const ImageSource& source) noexcept;
 	bool SetFilename(const wstring& filename) noexcept;
-	optional<wstring> GetFilename() const noexcept;
+	wstring GetFilename() const noexcept;
 
 	bool SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept;
 	SourceDivider GetSourceAnd4Divider() const noexcept;

@@ -26,7 +26,7 @@ public:
 	inline void SetSource(const Rectangle& source) noexcept { m_source = source; }
 	inline const Rectangle& GetSource() const noexcept { return m_source; }
 	inline void SetFilename(const wstring& filename) noexcept { m_filename = filename; }
-	inline optional<wstring> GetFilename() const noexcept { return m_filename; }
+	inline wstring GetFilename() const noexcept { return m_filename; }
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 
 protected:

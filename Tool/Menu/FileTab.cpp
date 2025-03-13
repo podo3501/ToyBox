@@ -13,6 +13,22 @@
 
 using namespace Tool;
 
+enum class FileMenuAction
+{
+    None,
+    NewUIFile,
+    NewTextureFile,
+    OpenUIFile,
+    OpenTextureFile,
+    OpenRecent,
+    SaveFile,
+    SaveAsFile,
+    Resolution,
+    Quit
+};
+
+using enum FileMenuAction;
+
 FileTab::~FileTab() = default;
 FileTab::FileTab(ToolSystem* toolSystem) :
     m_toolSystem{ toolSystem },
@@ -22,24 +38,29 @@ FileTab::FileTab(ToolSystem* toolSystem) :
 //Render에서 실행
 void FileTab::Show()
 {
-    if (ImGui::MenuItem("New")) HandleFileMenuAction(FileMenuAction::NewFile);
-    if (ImGui::BeginMenu("Open"))
+    if (ImGui::BeginMenu("New"))
     {
-        if (ImGui::MenuItem("UI File", "Ctrl+O")) HandleFileMenuAction(FileMenuAction::OpenUIFile);
-        if (ImGui::MenuItem("Texture File")) HandleFileMenuAction(FileMenuAction::OpenTextureFile);
+        if (ImGui::MenuItem("UI File")) HandleFileMenuAction(NewUIFile);
+        if (ImGui::MenuItem("Texture File")) HandleFileMenuAction(NewTextureFile);
         ImGui::EndMenu();
     }
-    if (m_recentFiles->Show()) HandleFileMenuAction(FileMenuAction::OpenRecent);
-    if (ImGui::MenuItem("Save", "Ctrl+S")) HandleFileMenuAction(FileMenuAction::SaveFile);
-    if (ImGui::MenuItem("Save As..")) HandleFileMenuAction(FileMenuAction::SaveAsFile);
+    if (ImGui::BeginMenu("Open"))
+    {
+        if (ImGui::MenuItem("UI File", "Ctrl+O")) HandleFileMenuAction(OpenUIFile);
+        if (ImGui::MenuItem("Texture File")) HandleFileMenuAction(OpenTextureFile);
+        ImGui::EndMenu();
+    }
+    if (m_recentFiles->Show()) HandleFileMenuAction(OpenRecent);
+    if (ImGui::MenuItem("Save", "Ctrl+S")) HandleFileMenuAction(SaveFile);
+    if (ImGui::MenuItem("Save As..")) HandleFileMenuAction(SaveAsFile);
 
     ImGui::Separator();
 
-    if(ResolutionSettingShow()) HandleFileMenuAction(FileMenuAction::Resolution);
+    if(ResolutionSettingShow()) HandleFileMenuAction(Resolution);
 
     ImGui::Separator();
 
-    if (ImGui::MenuItem("Quit")) HandleFileMenuAction(FileMenuAction::Quit);
+    if (ImGui::MenuItem("Quit")) HandleFileMenuAction(Quit);
 }
 
 void FileTab::HandleFileMenuAction(FileMenuAction action)
@@ -55,15 +76,16 @@ bool FileTab::Excute()
     auto result{ true };
     switch (m_currentAction.value())
     {
-    case FileMenuAction::NewFile: result = NewFile();  break;
-    case FileMenuAction::OpenUIFile: result = CreateMainWindow(); break;
-    case FileMenuAction::OpenTextureFile: result = CreateTextureWindow(); break;
-    case FileMenuAction::OpenRecent: result = m_recentFiles->OpenFile(*this); break;
-    case FileMenuAction::SaveFile: result = SaveMainWindow(); break;
-    case FileMenuAction::SaveAsFile: result = SaveAsMainWindow(); break;
-    case FileMenuAction::Resolution: result = SetResolution(); break;
+    case NewUIFile: result = CreateNewUIFile();  break;
+    case NewTextureFile: result = CreateNewTextureFile(); break;
+    case OpenUIFile: result = CreateMainWindow(); break;
+    case OpenTextureFile: result = CreateTextureWindow(); break;
+    case OpenRecent: result = m_recentFiles->OpenFile(*this); break;
+    case SaveFile: result = SaveMainWindow(); break;
+    case SaveAsFile: result = SaveAsMainWindow(); break;
+    case Resolution: result = SetResolution(); break;
 
-    case FileMenuAction::Quit: Window::ExitGame(); break;
+    case Quit: Window::ExitGame(); break;
     default:
         break;
     }
@@ -72,7 +94,7 @@ bool FileTab::Excute()
     return result;
 }
 
-bool FileTab::NewFile() noexcept
+bool FileTab::CreateNewUIFile() noexcept
 {
     auto mainWindow = std::make_unique<MainWindow>(m_toolSystem->GetRenderer());
     const XMUINT2& resolution = Config::GetResolutionInCoordinate();
@@ -80,6 +102,15 @@ bool FileTab::NewFile() noexcept
 
     m_toolSystem->SetMainWindow(move(mainWindow));
 
+    return true;
+}
+
+bool FileTab::CreateNewTextureFile() noexcept
+{
+    auto textureWindow = make_unique<MainTextureWindow>(m_toolSystem->GetRenderer());
+    ReturnIfFalse(textureWindow->CreateNew());
+
+    m_toolSystem->SetTextureWindow(move(textureWindow));
     return true;
 }
 

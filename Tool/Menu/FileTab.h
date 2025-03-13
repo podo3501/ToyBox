@@ -4,22 +4,10 @@ class ToolSystem;
 class RecentFiles;
 class MainWindow;
 class ResolutionSetting;
+enum class FileMenuAction;
 
 class FileTab
 {
-	enum class FileMenuAction
-	{
-		None,
-		NewFile,
-		OpenUIFile,
-		OpenTextureFile,
-		OpenRecent,
-		SaveFile,
-		SaveAsFile,
-		Resolution,
-		Quit
-	};
-
 public:
 	FileTab(ToolSystem* toolSystem);
 	~FileTab();
@@ -31,7 +19,8 @@ public:
 private:
 	MainWindow* GetFocusWindow() const noexcept;
 	void HandleFileMenuAction(FileMenuAction action);
-	bool NewFile() noexcept;
+	bool CreateNewUIFile() noexcept;
+	bool CreateNewTextureFile() noexcept;
 	bool CreateMainWindow();
 	bool CreateTextureWindowFromFile(const wstring& filename);
 	bool CreateTextureWindow();

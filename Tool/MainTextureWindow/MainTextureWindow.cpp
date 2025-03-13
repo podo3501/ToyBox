@@ -3,19 +3,24 @@
 #include "MainSourceExtractor.h"
 #include "../Utility.h"
 #include "../Include/IRenderer.h"
+#include "../Dialog.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/TextureSourceBinder.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../MainWindow/EditUtility.h"
+#include "../HelperClass.h"
 
 class EditTextureWindow
 {
 public:
     ~EditTextureWindow() = default;
     EditTextureWindow() :
-        m_texWindow{ nullptr }
+        m_textureWindow{ nullptr },
+        m_renameNotifier{ make_unique<RenameNotifier>() },
+        m_sourceBinder{ make_unique<TextureSourceBinder>() }
     {}
 
     void SetResourceAreas(optional<vector<Rectangle>> resourceAreas) noexcept 
@@ -24,51 +29,92 @@ public:
 
         //이 리소스 에어리어에 맞는 것을 찾아본다. 이름이 있으면 가져온다.
         m_sourceAreas = resourceAreas;
-        m_selectedIndex = 0;
+        m_sourceIdx = 0;
     }
-    void SetTextureWindow(ImGuiWindow* texWindow) noexcept { m_texWindow = texWindow; }
+
+    void SetTextureWindow(MainTextureWindow* texWindow) noexcept { m_textureWindow = texWindow; }
+
+    void Update() noexcept
+    {
+        if (m_preTextureIdx != m_textureIdx)
+        {
+            const wstring& filename = StringToWString(m_textureFiles[m_textureIdx]);
+            m_textureWindow->Create(filename);
+            m_preTextureIdx = m_textureIdx;
+        }
+    }
 
     void Render()
     {
-        if (!m_sourceAreas) return;
-
-        bool visible{ true };
         string wndName = string("Texture Source Window");
-        ImGui::Begin(wndName.c_str(), &visible, ImGuiWindowFlags_NoFocusOnAppearing);
-        if (!visible) SetResourceAreas(nullopt);
+        ImGui::Begin(wndName.c_str(), nullptr, ImGuiWindowFlags_NoFocusOnAppearing);
 
-        if (m_sourceAreas)
-            DrawRectangle(*m_sourceAreas, m_texWindow);
-
+        RenderTextureList();
         RenderTextureInfo();
 
         ImGui::End();
     }
 
 private:
+    void RenderTextureList()
+    {
+        if (ImGui::Button("Add Texture File"))
+        {
+            wstring filename;
+            GetRelativePathFromDialog(filename);
+            if (!filename.empty()) m_textureFiles.emplace_back(WStringToString(filename));
+        }
+
+        vector<const char*> texFiles;
+        for (const auto& curFile : m_textureFiles)
+            texFiles.push_back(curFile.c_str());
+      
+        ImGui::ListBox("Texture List", &m_textureIdx, texFiles.data(), static_cast<int>(texFiles.size()), 4);
+    }
+
     void RenderTextureInfo()
     {
         if (!m_sourceAreas) return; 
         if (m_sourceAreas->empty()) return;
+        
+        DrawRectangle(*m_sourceAreas, m_textureWindow->GetWindow());
 
+        const string& bindingKey = m_sourceBinder->GetBindingKey(*m_sourceAreas);
         //이름을 출력하고 이름이 바뀌면 이름과 위치를 저장시킨다.
+        m_renameNotifier->EditName("Binding Key", bindingKey, [this](const string& newKey) {
+            return m_sourceBinder->ChangeBindingKey(newKey, *m_sourceAreas); });
+
         constexpr string_view label{ "Resource Areas" };
         ImGui::Text("%s", label.data());
-        ImGui::SliderInt("Area Index", &m_selectedIndex, 0, static_cast<int>(m_sourceAreas->size() - 1));
-        Rectangle& currArea = m_sourceAreas->at(m_selectedIndex);
+        ImGui::SliderInt("Area Index", &m_sourceIdx, 0, static_cast<int>(m_sourceAreas->size() - 1));
+        Rectangle& currArea = m_sourceAreas->at(m_sourceIdx);
         EditRectangleNoLabel(label.data(), currArea);
     }
 
-    ImGuiWindow* m_texWindow;
-    int m_selectedIndex{ 0 };
+    MainTextureWindow* m_textureWindow;
+    int m_preTextureIdx{ -1 };
+    int m_textureIdx{ -1 };
+    vector<string> m_textureFiles;
+    int m_sourceIdx{ 0 };
+    unique_ptr<RenameNotifier> m_renameNotifier;
     optional<vector<Rectangle>> m_sourceAreas;
+    unique_ptr<TextureSourceBinder> m_sourceBinder;
 };
 
 MainTextureWindow::~MainTextureWindow() = default;
 MainTextureWindow::MainTextureWindow(IRenderer* renderer) :
     m_renderer{ renderer },
-    m_sourceTexture{ make_unique<ImageGrid1>() }
+    m_sourceTexture{ make_unique<ImageGrid1>() },
+    m_editTextureWindow{ make_unique<EditTextureWindow>() }
 {}
+
+bool MainTextureWindow::CreateNew()
+{
+    m_name = "empty";
+    m_isOpen = true;
+
+    return true;
+}
 
 bool MainTextureWindow::Create(const wstring& filename)
 {
@@ -78,12 +124,11 @@ bool MainTextureWindow::Create(const wstring& filename)
         m_areaList = (*areaList);
 
     wstring jsonFile = ReplaceFileExtension(filename, L".json"); //파일에 매칭되는 json파일을 읽는다.
+
     //TextureSourceBinder 클래스 작성후 파일을 읽은후 editTexWindow에 넘겨준다.
 
     m_name = WStringToString(filename);
     m_isOpen = true;
-
-    m_editTextureWindow = make_unique<EditTextureWindow>();
 
     return true;
 }
@@ -113,25 +158,33 @@ void MainTextureWindow::Update()
     if (DeselectImageSource()) return;
     if (IsWindowFocus(m_window))
         SelectImageSource();
+    m_editTextureWindow->Update();
+}
+
+ImVec2 MainTextureWindow::GetWindowSize() const noexcept
+{
+    const auto& size = m_sourceTexture->GetSize();
+    return size != XMUINT2{} ? XMUINT2ToImVec2(size) : ImVec2{ 512, 512 };
 }
 
 void MainTextureWindow::Render()
 {
     if (!m_isOpen) return;
 
-    ImVec2 size = XMUINT2ToImVec2(m_sourceTexture->GetSize());
+    const ImVec2& size = GetWindowSize();
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
     ImGui::SetNextWindowSize({ size.x, size.y + GetFrameHeight() });
-    //ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_None);
     ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
 
     if (ImGui::IsWindowAppearing())
     {
         m_window = ImGui::FindWindowByName(m_name.c_str());
-        m_editTextureWindow->SetTextureWindow(m_window);
+        m_editTextureWindow->SetTextureWindow(this);
     }
-    ImGui::Image(m_sourceTexture->GetGraphicMemoryOffset(), size);
+
+    if(auto offset = m_sourceTexture->GetGraphicMemoryOffset(); offset != 0)
+        ImGui::Image(offset, size);
 
     IgnoreMouseClick(m_window);
     RenderPopupMenu();

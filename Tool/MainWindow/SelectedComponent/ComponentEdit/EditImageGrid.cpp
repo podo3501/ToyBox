@@ -70,7 +70,7 @@ EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer, Comman
 
 void EditImageGrid1::RenderComponentEdit()
 {
-    wstring filename{ *m_imageGrid1->GetFilename() };
+    wstring filename{ m_imageGrid1->GetFilename() };
     if (EditFilename("Filename", filename))
         GetCommandList()->SetFilename(m_imageGrid1, GetRenderer(), filename);
 
@@ -80,7 +80,7 @@ void EditImageGrid1::RenderComponentEdit()
 
     ImGui::Spacing();
     
-    RenderExtractTextureButton(*m_imageGrid1->GetFilename(), m_imageGrid1);
+    RenderExtractTextureButton(m_imageGrid1->GetFilename(), m_imageGrid1);
 }
 
 ////////////////////////////////////////////////
@@ -93,7 +93,7 @@ EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer, Comman
 
 void EditImageGrid3::RenderComponentEdit()
 {
-    wstring filename{ *m_imageGrid3->GetFilename() };
+    wstring filename{ m_imageGrid3->GetFilename() };
     if (EditFilename("Filename", filename))
         GetCommandList()->SetFilename(m_imageGrid3, GetRenderer(), filename);
     
@@ -116,7 +116,7 @@ EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer, Comman
 
 void EditImageGrid9::RenderComponentEdit()
 {
-    wstring filename{ *m_imageGrid9->GetFilename() };
+    wstring filename{ m_imageGrid9->GetFilename() };
     if (EditFilename("Filename", filename))
         GetCommandList()->SetFilename(m_imageGrid9, GetRenderer(), filename);
     

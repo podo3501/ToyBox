@@ -90,10 +90,10 @@ bool ImageGrid9::ImplementChangeSize(const XMUINT2& size) noexcept
 	return true;
 }
 
-optional<wstring> ImageGrid9::GetFilename() const noexcept
+wstring ImageGrid9::GetFilename() const noexcept
 {
 	ImageGrid3* img3 = ComponentCast<ImageGrid3*>(GetChildComponent(0));
-	if (!img3) return nullopt;
+	if (!img3) return L"";
 
 	return img3->GetFilename();
 }

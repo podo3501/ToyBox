@@ -24,7 +24,7 @@ public:
 	Rectangle GetFirstComponentSource() const noexcept;
 
 	bool SetFilename(const wstring& filename) noexcept;
-	optional<wstring> GetFilename() const noexcept;
+	wstring GetFilename() const noexcept;
 
 	bool SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept;
 	SourceDivider GetSourceAnd2Divider() const noexcept;

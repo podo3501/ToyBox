@@ -153,10 +153,10 @@ Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
     return img1->GetSource();
 }
 
-optional<wstring> ImageGrid3::GetFilename() const noexcept
+wstring ImageGrid3::GetFilename() const noexcept
 {
     ImageGrid1* img1 = ComponentCast<ImageGrid1*>(GetChildComponent(0));
-    if (!img1) return nullopt;
+    if (!img1) return L"";
 
     return img1->GetFilename();
 }
