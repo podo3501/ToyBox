@@ -164,12 +164,28 @@ bool FileTab::CreateTextureWindow()
     return CreateTextureWindowFromFile(relativePath);
 }
 
-MainWindow* FileTab::GetFocusWindow() const noexcept
+static optional<bool> CompareFocusOrder(InnerWindow* lhs, InnerWindow* rhs)
 {
-    return m_toolSystem->GetFocusMainWindow();
+    if (!lhs && !rhs) return nullopt;
+    if (!lhs) return false;
+    if (!rhs) return true;
+
+    const ImGuiWindow* wLhs = lhs->GetImGuiWindow();
+    const ImGuiWindow* wRhs = rhs->GetImGuiWindow();
+
+    return wLhs->FocusOrder > wRhs->FocusOrder;
 }
 
-bool FileTab::Save(MainWindow* focusWnd, const wstring& filename) const 
+InnerWindow* FileTab::GetFocusWindow() const noexcept //?!? 이건 ToolSystem에 넣자.
+{
+    MainWindow* mainWindow = m_toolSystem->GetFocusMainWindow();
+    MainTextureWindow* mainTextureWindow = m_toolSystem->GetFocusMainTextureWindow();
+    auto order = CompareFocusOrder(mainWindow, mainTextureWindow);
+    if (!order) return nullptr;
+    return *order ? static_cast<InnerWindow*>(mainWindow) : static_cast<InnerWindow*>(mainTextureWindow);
+}
+
+bool FileTab::Save(InnerWindow* focusWnd, const wstring& filename) const 
 {
     auto result = focusWnd->SaveScene(filename);
     if (result)
@@ -186,10 +202,10 @@ bool FileTab::Save(MainWindow* focusWnd, const wstring& filename) const
 
 bool FileTab::SaveMainWindow()
 {
-    MainWindow* focusWnd = GetFocusWindow();
+    InnerWindow* focusWnd = GetFocusWindow();
     if (focusWnd == nullptr)
     {
-        Tool::Dialog::ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
+        Tool::Dialog::ShowInfoDialog(DialogType::Alert, "No window has been selected to save.");
         return true;
     }
 
@@ -198,10 +214,10 @@ bool FileTab::SaveMainWindow()
 
 bool FileTab::SaveAsMainWindow()
 {
-    MainWindow* focusWnd = GetFocusWindow();
+    InnerWindow* focusWnd = GetFocusWindow();
     if (focusWnd == nullptr)
     {
-        Tool::Dialog::ShowInfoDialog(DialogType::Alert, "There's no Main Window available to save.");
+        Tool::Dialog::ShowInfoDialog(DialogType::Alert, "No window has been selected to save.");
         return true;
     }
 

@@ -3,6 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
+#include "../Toy/UserInterface/TextureSourceBinder.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/InputManager.h"
@@ -32,10 +33,23 @@ void ToyTestFixture::SetUp()
 	InputManager::Initialize(hwnd);
 	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
 	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
+	m_sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
 }
 
 using ::testing::_;
 using ::testing::Invoke;
+
+void ToyTestFixture::CallMockRender2(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times)
+{
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, Render(_, _, _))
+		.Times(times)
+		.WillRepeatedly(Invoke([this, testRenderFunc](size_t index, const RECT& dest, const RECT* source) {
+		testRenderFunc(index, dest, source, m_sourceBinder.get());
+			}));
+	component->ProcessUpdate(m_timer);
+	component->ProcessRender(&mockRender);
+}
 
 void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
 {
@@ -45,6 +59,18 @@ void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t
 		.WillRepeatedly(Invoke(testRenderFunc));
 	component->ProcessUpdate(m_timer);
 	component->ProcessRender(&mockRender);
+}
+
+void ToyTestFixture::CallMockRender2(function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times)
+{
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, Render(_, _, _))
+		.Times(times)
+		.WillRepeatedly(Invoke([this, testRenderFunc](size_t index, const RECT& dest, const RECT* source) {
+		testRenderFunc(index, dest, source, m_sourceBinder.get());
+			}));
+	m_panel->ProcessUpdate(m_timer);
+	m_panel->ProcessRender(&mockRender);
 }
 
 void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
@@ -103,6 +129,20 @@ void ToyTestFixture::TearDown()
 #if defined(DEBUG) | defined(_DEBUG)
 	ReportLiveObjects();
 #endif
+}
+
+static bool IsTrue(const RECT& dest, const RECT& destRect, const RECT& source, const RECT& sourceRect) noexcept
+{
+	if (dest == destRect) { if (source == sourceRect) return true; }
+	return false;
+}
+
+void BasicComponentTest::TestRender(size_t index, const RECT& dest, const RECT* source, vector<pair<RECT, RECT>> testCases) noexcept
+{
+	EXPECT_TRUE(index == 0);
+	EXPECT_TRUE(ranges::any_of(testCases, [&](const auto& pair) {
+		return IsTrue(dest, pair.first, *source, pair.second);
+		}));
 }
 
 void IntegrationTest::CaptureSnapshot(CommandList& cmdList, vector<unique_ptr<UIComponent>>& history)

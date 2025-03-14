@@ -48,7 +48,7 @@
 #endif
 
 wstring StringToWString(const string& str) noexcept;
-string RemoveNullTerminator(const string& str) noexcept;
+//string RemoveNullTerminator(const string& str) noexcept;
 string WStringToString(const wstring& wstr) noexcept;
 void StringToChar(const string& str, span<char> outstr) noexcept;
 wstring CharToWString(const span<char> str) noexcept;

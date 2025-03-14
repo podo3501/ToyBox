@@ -25,7 +25,7 @@ wstring StringToWString(const string& str) noexcept
 	return wstrTo;
 }
 
-string RemoveNullTerminator(const string& str) noexcept
+static string RemoveNullTerminator(const string& str) noexcept
 {
 	size_t end = str.find('\0');
 	return (end == std::string::npos) ? str : str.substr(0, end);
@@ -36,7 +36,8 @@ string WStringToString(const wstring& wstr) noexcept
 	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
 	std::string str(bufferSize, 0);
 	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
-	return str;
+	string curStr = string(str);
+	return RemoveNullTerminator(curStr);
 }
 
 void StringToChar(const string& str, span<char> outstr) noexcept

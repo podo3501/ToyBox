@@ -18,8 +18,8 @@ MainWindow::~MainWindow()
 }
 
 MainWindow::MainWindow(IRenderer* renderer) :
+	InnerWindow{ "Main Window " + to_string(m_mainWindowIndex++) },
 	m_renderer{ renderer },
-	m_name{ "Main Window " + to_string(m_mainWindowIndex++) },
 	m_panel{ nullptr }
 {
 	m_renderer->AddImguiComponent(this);
@@ -35,7 +35,7 @@ bool MainWindow::SetupProperty(unique_ptr<Panel>&& panel)
 	//AddRenderComponent가 없는것은 main 화면에서 보여주는게 아니라 TextureRendering해서 보여주는거기 때문에 Render에 연결시키지 않는다.
 	m_panel = panel.get();
 	m_panel->RenameRegion("MainRegionEntry");
-	m_controller = make_unique<ComponentController>(m_renderer, m_panel, m_name);
+	m_controller = make_unique<ComponentController>(m_renderer, m_panel, GetName());
 
 	const auto& size = m_panel->GetSize();
 	m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(panel));
@@ -65,11 +65,6 @@ bool MainWindow::CreateScene(const wstring& filename)
 bool MainWindow::SaveScene(const wstring& filename)
 {
 	return JsonFile::WriteComponent(m_panel, filename);
-}
-
-const ImGuiWindow* MainWindow::GetImGuiWindow() const noexcept
-{
-	return ImGui::FindWindowByName(m_name.c_str());
 }
 
 wstring MainWindow::GetSaveFilename() const noexcept
@@ -147,7 +142,7 @@ void MainWindow::SetupWindowAppearing() noexcept
 {
 	if (!ImGui::IsWindowAppearing()) return;
 	
-	m_window = const_cast<ImGuiWindow*>(GetImGuiWindow());
+	m_window = GetImGuiWindow();
 	m_controller->SetMainWindow(m_window);
 }
 
@@ -180,7 +175,7 @@ void MainWindow::SetupImGuiWindow()
 	auto windowSize = ImVec2(panelSize.x, panelSize.y + GetFrameHeight());
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::SetNextWindowSize(windowSize);
-	ImGui::Begin(m_name.c_str(), &m_isOpen, ImGuiWindowFlags_None);
+	ImGui::Begin(GetName().c_str(), &m_isOpen, ImGuiWindowFlags_None);
 	ImGui::PopStyleVar();
 }
 

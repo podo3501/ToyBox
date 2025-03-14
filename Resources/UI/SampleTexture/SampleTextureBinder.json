@@ -1,0 +1,225 @@
+{
+    "BindingTable": {
+        "BackImage": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 10,
+                        "y": 10,
+                        "width": 64,
+                        "height": 64
+                    }
+                }
+            ]
+        },
+        "ExitButton1_Hovered": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 46,
+                        "y": 138,
+                        "width": 32,
+                        "height": 32
+                    }
+                }
+            ]
+        },
+        "ListContainer": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 62,
+                        "y": 201,
+                        "width": 48,
+                        "height": 25
+                    }
+                }
+            ]
+        },
+        "Button3_Normal": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 10,
+                        "y": 82,
+                        "width": 48,
+                        "height": 48
+                    }
+                }
+            ]
+        },
+        "ExitButton1_Normal": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 10,
+                        "y": 138,
+                        "width": 32,
+                        "height": 32
+                    }
+                }
+            ]
+        },
+        "Button3_Hovered": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 62,
+                        "y": 82,
+                        "width": 48,
+                        "height": 48
+                    }
+                }
+            ]
+        },
+        "Button3_Pressed": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 114,
+                        "y": 82,
+                        "width": 48,
+                        "height": 48
+                    }
+                }
+            ]
+        },
+        "ScrollButton3_Hovered": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 154,
+                        "y": 178,
+                        "width": 16,
+                        "height": 16
+                    }
+                }
+            ]
+        },
+        "ExitButton1_Pressed": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 82,
+                        "y": 138,
+                        "width": 32,
+                        "height": 32
+                    }
+                }
+            ]
+        },
+        "Image1_Normal": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 118,
+                        "y": 138,
+                        "width": 32,
+                        "height": 32
+                    }
+                }
+            ]
+        },
+        "Image1_Hovered": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 154,
+                        "y": 138,
+                        "width": 32,
+                        "height": 32
+                    }
+                }
+            ]
+        },
+        "Image1_Pressed": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 190,
+                        "y": 138,
+                        "width": 32,
+                        "height": 32
+                    }
+                }
+            ]
+        },
+        "ListBackground1": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 10,
+                        "y": 178,
+                        "width": 48,
+                        "height": 48
+                    }
+                }
+            ]
+        },
+        "ScrollTrack3_H": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 62,
+                        "y": 178,
+                        "width": 48,
+                        "height": 16
+                    }
+                }
+            ]
+        },
+        "ScrollTrack3_V": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 114,
+                        "y": 178,
+                        "width": 16,
+                        "height": 48
+                    }
+                }
+            ]
+        },
+        "ScrollButton3_Normal": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 134,
+                        "y": 178,
+                        "width": 16,
+                        "height": 16
+                    }
+                }
+            ]
+        },
+        "ScrollButton3_Pressed": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "Sources": [
+                {
+                    "0": {
+                        "x": 174,
+                        "y": 178,
+                        "width": 16,
+                        "height": 16
+                    }
+                }
+            ]
+        }
+    }
+}

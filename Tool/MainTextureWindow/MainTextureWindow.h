@@ -1,4 +1,5 @@
 #pragma once
+#include "../InnerWindow.h"
 
 struct IRenderer;
 class RenderTexture;
@@ -6,7 +7,7 @@ class ImageGrid1;
 class MainSourceExtractor;
 class EditTextureWindow;
 
-class MainTextureWindow
+class MainTextureWindow : public InnerWindow
 {
     enum class SourcePartition
     {
@@ -18,13 +19,15 @@ class MainTextureWindow
 
 public:
     ~MainTextureWindow();
-    //MainTextureWindow(IRenderer* renderer, unique_ptr<MainSourceExtractor> sourceExtractor);
     MainTextureWindow(IRenderer* renderer);
+    virtual void Render(ImGuiIO* io) override;
+    virtual bool SaveScene(const wstring& filename) override;
+    virtual wstring GetSaveFilename() const noexcept override;
     
-    bool Create(const wstring& filename);
+    bool Create(const wstring& filename); //Json파일
     bool CreateNew();
+    bool LoadTexture(const wstring& filename);
     void Update();
-    void Render();
     bool IsOpen() const noexcept { return m_isOpen; }
     void Open() noexcept { m_isOpen = true; }
     ImGuiWindow* GetWindow() noexcept { return m_window; }
@@ -34,11 +37,10 @@ private:
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
-    unique_ptr<RenderTexture> m_renderTex;
-    unique_ptr<ImageGrid1> m_sourceTexture;
+    unique_ptr<RenderTexture> m_renderTex; //InnerWindow를 그리는 텍스쳐
+    unique_ptr<ImageGrid1> m_sourceTexture; //작업할 텍스쳐
     unique_ptr<EditTextureWindow> m_editTextureWindow;
     ImVec2 m_size;
-    string m_name;
     bool m_isOpen{ false };
 
     //////////////////////////////////////////////////

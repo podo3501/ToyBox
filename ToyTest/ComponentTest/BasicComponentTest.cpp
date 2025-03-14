@@ -12,6 +12,7 @@
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
+#include "../Toy/UserInterface/TextureSourceBinder.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/Utility.h"
 
@@ -165,12 +166,24 @@ namespace ComponentTest
 			});
 	}
 
+	static inline RECT Binder(TextureSourceBinder* sourceBinder, const string& key, int index)
+	{
+		return RectangleToRect(sourceBinder->GetArea(key, index));
+	}
+
+	static void TestImageGrid1Render2(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
+	{
+		TestRender(index, dest, source, {
+			{ { 368, 268, 432, 332 }, Binder(sb, "BackImage", 0)}
+			});
+	}
+
 	TEST_F(BasicComponentTest, ImageGrid1)
 	{
 		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({{64, 64}, Origin::Center}));
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-		CallMockRender(TestImageGrid1Render, 1);
+		CallMockRender2(TestImageGrid1Render2, 1);
 
 		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
 		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, false);

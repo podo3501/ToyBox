@@ -4,6 +4,7 @@ class ToolSystem;
 class RecentFiles;
 class MainWindow;
 class ResolutionSetting;
+class InnerWindow;
 enum class FileMenuAction;
 
 class FileTab
@@ -17,14 +18,14 @@ public:
 	bool CreateMainWindowFromFile(const wstring& filename);
 
 private:
-	MainWindow* GetFocusWindow() const noexcept;
+	InnerWindow* GetFocusWindow() const noexcept;
 	void HandleFileMenuAction(FileMenuAction action);
 	bool CreateNewUIFile() noexcept;
 	bool CreateNewTextureFile() noexcept;
 	bool CreateMainWindow();
 	bool CreateTextureWindowFromFile(const wstring& filename);
 	bool CreateTextureWindow();
-	bool Save(MainWindow* focusWnd, const wstring& filename = L"") const;
+	bool Save(InnerWindow* focusWnd, const wstring& filename = L"") const;
 	bool SaveMainWindow();
 	bool SaveAsMainWindow();
 	bool SetResolution();

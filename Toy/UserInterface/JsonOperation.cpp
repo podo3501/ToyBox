@@ -4,6 +4,7 @@
 #include "../Utility.h"
 #include "UIType.h"
 #include "UITransform.h"
+#include "UserInterface/TextureSourceBinder.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -164,14 +165,14 @@ void JsonOperation::Process(const string & key, Vector2& data) noexcept
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-static string RemoveNullWToSA(const wstring& data) noexcept
-{
-    return RemoveNullTerminator(WStringToString(data));
-}
+//static string RemoveNullWToSA(const wstring& data) noexcept
+//{
+//    return RemoveNullTerminator(WStringToString(data));
+//}
 
 void JsonOperation::Process(const string& key, wstring& data) noexcept
 {
-    auto writeFunc = [&data](auto& j) { j = RemoveNullWToSA(data); };
+    auto writeFunc = [&data](auto& j) { j = WStringToString(data); };
     auto readFunc = [&data](const auto& j) { data = StringToWString(j); };
     ProcessImpl(key, writeFunc, readFunc);
 }
@@ -180,7 +181,7 @@ void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noex
 {
     auto writeFunc = [&data](auto& j) {
         for (const auto& font : data)
-            j[RemoveNullWToSA(font.first)] = RemoveNullWToSA(font.second);
+            j[WStringToString(font.first)] = WStringToString(font.second);
         };
 
     auto readFunc = [&data](const auto& j) {
@@ -209,6 +210,29 @@ void JsonOperation::Process(const string& key, map<InteractState, ImageSource>& 
             JsonOperation jsOp{ v };
             imgSource.SerializeIO(jsOp);
             datas.emplace(StringToEnum<InteractState>(k), imgSource);
+        }};
+
+    ProcessImpl(key, writeFunc, readFunc);
+}
+
+void JsonOperation::Process(const string& key, unordered_map<string, TextureSourceInfo>& datas) noexcept
+{
+    auto writeFunc = [&datas](auto& j) {
+        for (auto& [k, v] : datas)
+        {
+            JsonOperation jsOp{};
+            v.SerializeIO(jsOp);
+            j[k] = jsOp.GetWrite();
+        }};
+
+    auto readFunc = [&datas](const auto& j) {
+        datas.clear();
+        for (auto& [k, v] : j.items())
+        {
+            TextureSourceInfo sourceInfo{};
+            JsonOperation jsOp{ v };
+            sourceInfo.SerializeIO(jsOp);
+            datas.emplace(k, sourceInfo);
         }};
 
     ProcessImpl(key, writeFunc, readFunc);
@@ -246,7 +270,7 @@ void JsonOperation::Process(const string& key, deque<wstring>& data) noexcept
 
         ProcessWriteKey(key, [&data](auto& currentJson) {
             for (auto& wstr : data)
-                currentJson.push_back(RemoveNullWToSA(wstr));
+                currentJson.push_back(WStringToString(wstr));
             });
     }
     else

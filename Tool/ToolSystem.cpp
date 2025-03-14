@@ -28,24 +28,31 @@ void ToolSystem::SetTextureWindow(unique_ptr<MainTextureWindow> textureWindow) n
     m_textureWindows.emplace_back(move(textureWindow));
 }
 
-MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
+template <typename InnerWindow>
+static InnerWindow* GetFocusWindow(const vector<unique_ptr<InnerWindow>>& windows) noexcept
 {
     auto it = ranges::max_element(
-        m_mainWindows,
+        windows,
         [](const auto& rhs, const auto& lhs) {
             const ImGuiWindow* wRhs = rhs->GetImGuiWindow();
             const ImGuiWindow* wlhs = lhs->GetImGuiWindow();
             return wRhs->FocusOrder < wlhs->FocusOrder;
         });
 
-    //auto it = ranges::find_if(m_mainWindows, [](const auto& wnd) {
-       // return wnd->IsFocus();
-        //});
-
-    if (it == m_mainWindows.end())
+    if (it == windows.end())
         return nullptr;
 
     return it->get();
+}
+
+MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
+{
+    return GetFocusWindow(m_mainWindows);
+}
+
+MainTextureWindow* ToolSystem::GetFocusMainTextureWindow() const noexcept
+{
+    return GetFocusWindow(m_textureWindows);
 }
 
 void ToolSystem::Update(const DX::StepTimer& timer)
@@ -67,9 +74,6 @@ void ToolSystem::Render(ImGuiIO* io)
 {
     Tool::Dialog::Render();
     m_menuBar->Render();
-    ranges::for_each(m_textureWindows, [](const auto& texWnd) {
-        texWnd->Render();
-        });
 
     return;
 }

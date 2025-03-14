@@ -112,6 +112,7 @@
       <Filter>MainTextureWindow</Filter>
     </ClCompile>
     <ClCompile Include="HelperClass.cpp" />
+    <ClCompile Include="InnerWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -198,6 +199,7 @@
       <Filter>MainTextureWindow</Filter>
     </ClInclude>
     <ClInclude Include="HelperClass.h" />
+    <ClInclude Include="InnerWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\UI\Texture\ExtractTexture.json">

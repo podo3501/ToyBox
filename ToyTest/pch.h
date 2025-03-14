@@ -84,6 +84,7 @@
 #include <tuple>
 #include <typeindex>
 #include <unordered_map>
+#include <unordered_set>
 #include <variant>
 #include <vector>
 #include <windowsx.h>

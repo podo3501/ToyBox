@@ -31,6 +31,7 @@ public:
     virtual void Render(ImGuiIO* io) override;
 
     MainWindow* GetFocusMainWindow() const noexcept;
+    MainTextureWindow* GetFocusMainTextureWindow() const noexcept;
     void SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept;
     void SetTextureWindow(unique_ptr<MainTextureWindow> textureWindow) noexcept;
     IRenderer* GetRenderer() const noexcept { return m_renderer; }

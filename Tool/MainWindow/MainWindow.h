@@ -1,5 +1,5 @@
 #pragma once
-#include "../Include/IRenderer.h"
+#include "../InnerWindow.h"
 
 namespace DX
 {
@@ -11,7 +11,7 @@ class MouseTracker;
 class RenderTexture;
 class ComponentController;
 
-class MainWindow : public IImguiComponent
+class MainWindow : public InnerWindow
 {
 public:
     MainWindow(IRenderer* renderer);
@@ -27,7 +27,6 @@ public:
     void ChangeWindowSize(const ImVec2& size);
 
     inline bool IsOpen() const noexcept { return m_isOpen; }
-    inline const ImGuiWindow* GetImGuiWindow() const noexcept;
 
 private:
     bool SetupProperty(unique_ptr<Panel>&& panel);
@@ -43,7 +42,6 @@ private:
     void HandleMouseEvents();
 
     IRenderer* m_renderer;
-    string m_name{};
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<RenderTexture> m_renderTex;
     unique_ptr<ComponentController> m_controller;
