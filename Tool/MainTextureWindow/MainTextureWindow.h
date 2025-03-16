@@ -5,6 +5,7 @@ struct IRenderer;
 class RenderTexture;
 class ImageGrid1;
 class MainSourceExtractor;
+class TextureSourceBinder;
 class EditTextureWindow;
 
 class MainTextureWindow : public InnerWindow
@@ -37,6 +38,7 @@ private:
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
+    unique_ptr<TextureSourceBinder> m_sourceBinder;
     unique_ptr<RenderTexture> m_renderTex; //InnerWindow를 그리는 텍스쳐
     unique_ptr<ImageGrid1> m_sourceTexture; //작업할 텍스쳐
     unique_ptr<EditTextureWindow> m_editTextureWindow;
@@ -45,7 +47,7 @@ private:
 
     //////////////////////////////////////////////////
 private:
-    Rectangle FindRectangleFromMousePosition() const noexcept;
+    Rectangle FindAreaFromMousePos() const noexcept;
     void SelectImageSource() noexcept;
     bool DeselectImageSource() noexcept;
     void CheckSourcePartition();

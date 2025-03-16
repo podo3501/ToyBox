@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+class TextureSourceBinder;
 class UIComponent;
 class FloatingComponent;
 class ComponentSelector;
@@ -10,7 +11,7 @@ class ComponentController
 {
 public:
 	~ComponentController();
-	ComponentController(IRenderer* renderer,
+	ComponentController(IRenderer* renderer, TextureSourceBinder* sourceBinder,
 		UIComponent* panel, const string& mainWndNam) noexcept;
 
 	void SetPanel(UIComponent* panel) noexcept;

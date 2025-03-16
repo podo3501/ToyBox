@@ -9,6 +9,7 @@ namespace DX
 class Panel;
 class MouseTracker;
 class RenderTexture;
+class TextureSourceBinder;
 class ComponentController;
 
 class MainWindow : public InnerWindow
@@ -43,6 +44,7 @@ private:
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
+    unique_ptr<TextureSourceBinder> m_sourceBinder;
     unique_ptr<RenderTexture> m_renderTex;
     unique_ptr<ComponentController> m_controller;
     Panel* m_panel;

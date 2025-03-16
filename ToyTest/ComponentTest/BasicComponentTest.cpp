@@ -12,20 +12,17 @@
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
-#include "../Toy/UserInterface/TextureSourceBinder.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/Utility.h"
 
 using testing::ElementsAre;
 
-namespace ComponentTest
+namespace UserInterfaceTest
 {
-	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		TestRender(index, dest, source, {
-			//{{144, 104, 176, 136}, {10, 138, 42, 170}}, //Normal
-			//{{144, 104, 176, 136}, {46, 138, 78, 170}}, //hovered
-			{{144, 104, 176, 136}, {82, 138, 114, 170}} //Pressed
+			{ { 144, 104, 176, 136 }, Binder(sb, "ExitButton1_Pressed", 0)}
 			});
 	}
 
@@ -159,22 +156,10 @@ namespace ComponentTest
 
 	////////////////////////////////////////////////////////
 
-	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source)
+	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		TestRender(index, dest, source, {
-			{{368, 268, 432, 332}, {10, 10, 74, 74}}
-			});
-	}
-
-	static inline RECT Binder(TextureSourceBinder* sourceBinder, const string& key, int index)
-	{
-		return RectangleToRect(sourceBinder->GetArea(key, index));
-	}
-
-	static void TestImageGrid1Render2(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
-	{
-		TestRender(index, dest, source, {
-			{ { 368, 268, 432, 332 }, Binder(sb, "BackImage", 0)}
+			{ { 368, 268, 432, 332 }, Binder(sb, "BackImage1", 0)}
 			});
 	}
 
@@ -183,7 +168,7 @@ namespace ComponentTest
 		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({{64, 64}, Origin::Center}));
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
-		CallMockRender2(TestImageGrid1Render2, 1);
+		CallMockRender(TestImageGrid1Render, 1);
 
 		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
 		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, false);

@@ -3,7 +3,6 @@
 
 struct IRenderer;
 struct ImageSource;
-class ImagePart;
 namespace DX { class StepTimer; }
 
 class ImageGrid1 : public ImageGrid

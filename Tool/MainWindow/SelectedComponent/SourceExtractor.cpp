@@ -75,8 +75,8 @@ void ImageGrid1Extractor::UpdateProcess()
 
 void ImageGrid1Extractor::RenderProcess() const
 {
-    DrawRectangle(m_component->GetSource(), GetWindow());
-    DrawRectangle(m_hoveredArea, GetWindow());
+    DrawRectangle(GetWindow(), m_component->GetSource(), ToColor(Colors::White), ToColor(Colors::White, 0.3f));
+    DrawRectangle(GetWindow(), m_hoveredArea, ToColor(Colors::White), ToColor(Colors::White, 0.3f));
 }
 
 ////////////////////////////////////////////////////////////
@@ -128,8 +128,8 @@ void ImageGrid3Extractor::UpdateProcess()
 
 void ImageGrid3Extractor::RenderProcess() const
 {
-    DrawRectangle(m_component->GetSources(), GetWindow());
-    DrawRectangle(m_hoveredAreas, GetWindow());
+    DrawRectangles(GetWindow(), m_component->GetSources(), ToColor(Colors::White), ToColor(Colors::White, 0.3f));
+    DrawRectangles(GetWindow(), m_hoveredAreas, ToColor(Colors::White), ToColor(Colors::White, 0.3f));
 }
 
 ////////////////////////////////////////////////////////////
@@ -148,8 +148,8 @@ void ImageGrid9Extractor::UpdateProcess()
 
 void ImageGrid9Extractor::RenderProcess() const
 {
-    DrawRectangle(m_component->GetSources(), GetWindow());
-    DrawRectangle(m_hoveredAreas, GetWindow());
+    DrawRectangles(GetWindow(), m_component->GetSources(), ToColor(Colors::White), ToColor(Colors::White, 0.3f));
+    DrawRectangles(GetWindow(), m_hoveredAreas, ToColor(Colors::White), ToColor(Colors::White, 0.3f));
 }
 
 ////////////////////////////////////////////////////////////

@@ -1,6 +1,8 @@
 #pragma once
 #include "../Toy/UserInterface/UIComponent.h"
+
 struct ITextureLoad;
+class TextureSourceBinder;
 
 bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"UI/Data/WriteReadTest.json");
 
@@ -20,3 +22,4 @@ private:
 };
 
 void TestRender(size_t index, const RECT& dest, const RECT* source, vector<pair<RECT, RECT>> testCases) noexcept;
+RECT Binder(TextureSourceBinder* sourceBinder, const string& key, int index) noexcept;

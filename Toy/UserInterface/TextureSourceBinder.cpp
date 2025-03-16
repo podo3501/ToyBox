@@ -2,6 +2,8 @@
 #include "TextureSourceBinder.h"
 #include "JsonOperation.h"
 #include "JsonHelper.h"
+#include "UIType.h"
+#include "../Utility.h"
 
 void TextureSourceInfo::SerializeIO(JsonOperation& operation)
 {
@@ -15,18 +17,35 @@ TextureSourceBinder::~TextureSourceBinder() = default;
 TextureSourceBinder::TextureSourceBinder()
 {}
 
+bool TextureSourceBinder::Load(const wstring& jsonFilename)
+{
+    ReturnIfFalse(JsonFile::Read(jsonFilename, *this));
+    m_jsonFilename = jsonFilename;
+
+    return true;
+}
+
+bool TextureSourceBinder::Save(const wstring& jsonFilename)
+{
+    ReturnIfFalse(JsonFile::Write(*this, jsonFilename));
+    m_jsonFilename = jsonFilename;
+
+    return true;
+}
+
 bool TextureSourceBinder::ChangeBindingKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept
 {
     if (auto it = m_bindingTable.find(bindingKey); it != m_bindingTable.end())
     {
-        if (it->second != sourceAreas) return false;
+        if (it->second != sourceAreas) return false; //같은 이름이 있다.
         return true; 
     }
 
-    erase_if(m_bindingTable, [&](const auto& pair) {
+    erase_if(m_bindingTable, [&](const auto& pair) { //일단 지운다.
         return pair.second == sourceAreas;
         });
 
+    if (bindingKey.empty()) return true; //키가 없다면 삭제한다고 간주한다.
     m_bindingTable.emplace(bindingKey, sourceAreas);
     return true;
 }
@@ -55,6 +74,17 @@ Rectangle TextureSourceBinder::GetArea(const string& key, int index) const noexc
     return it->second.GetSource(index);
 }
 
+vector<TextureSourceInfo> TextureSourceBinder::GetAreas(const wstring& filename, ImagePart part) const noexcept
+{
+    vector<TextureSourceInfo> filteredTextures;
+    for (const auto& entry : m_bindingTable) {
+        const TextureSourceInfo& sourceInfo = entry.second;
+        if (sourceInfo.filename == filename && sourceInfo.sources.size() == static_cast<int>(part)) 
+            filteredTextures.push_back(sourceInfo);
+    }
+    return filteredTextures;
+}
+
 void TextureSourceBinder::SerializeIO(JsonOperation& operation)
 {
     operation.Process("BindingTable", m_bindingTable);
@@ -63,9 +93,8 @@ void TextureSourceBinder::SerializeIO(JsonOperation& operation)
 unique_ptr<TextureSourceBinder> CreateSourceBinder(const wstring& jsonFilename)
 {
     auto sourceBinder = make_unique<TextureSourceBinder>();
-    if (jsonFilename.empty()) return sourceBinder;
+    if (jsonFilename.empty()) return move(sourceBinder);
 
-    if (!JsonFile::Read(jsonFilename, *sourceBinder)) return nullptr;
-    return sourceBinder;
+    return sourceBinder->Load(jsonFilename) ? move(sourceBinder) : nullptr;
 }
 

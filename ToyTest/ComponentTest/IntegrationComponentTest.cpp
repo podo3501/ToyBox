@@ -11,8 +11,9 @@
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/TextureSourceBinder.h"
 
-namespace ComponentTest
+namespace UserInterfaceTest
 {
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
@@ -210,6 +211,18 @@ namespace ComponentTest
 		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
 		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
+	}
+
+	//////////////////////////////////////////////////////////
+
+	TEST_F(IntegrationTest, TextureSourceBinder)
+	{
+		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
+		EXPECT_TRUE((m_sourceBinder->GetArea("BackImage1", 0) == Rectangle{ 10, 10, 64, 64 }));
+		TextureSourceInfo sourceInfo{ filename, {{10, 10, 64, 64}} };
+		EXPECT_EQ(m_sourceBinder->GetBindingKey(sourceInfo), "BackImage1");
+		vector<TextureSourceInfo> areas = m_sourceBinder->GetAreas(filename, ImagePart::Three);
+		EXPECT_TRUE(!areas.empty() && areas[0].sources.size() == 3);
 	}
 
 	//////////////////////////////////////////////////////////

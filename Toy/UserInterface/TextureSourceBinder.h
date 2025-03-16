@@ -1,5 +1,6 @@
 #pragma once
 
+enum class ImagePart : int;
 class JsonOperation;
 struct TextureSourceInfo
 {
@@ -29,16 +30,19 @@ public:
 	~TextureSourceBinder();
 	TextureSourceBinder();
 
+	bool Load(const wstring& jsonFilename);
+	bool Save(const wstring& jsonFilename);
+	inline const wstring& GetJsonFilename() const noexcept { return m_jsonFilename; }
 	bool ChangeBindingKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept;
 	vector<wstring> GetTextureFiles() const noexcept;
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
 	Rectangle GetArea(const string& key, int index) const noexcept;
-
+	vector<TextureSourceInfo> GetAreas(const wstring& filename, ImagePart part) const noexcept;
 	void SerializeIO(JsonOperation& operation);
 
 private:
+	wstring m_jsonFilename;
 	unordered_map<string, TextureSourceInfo> m_bindingTable;
 };
 
 unique_ptr<TextureSourceBinder> CreateSourceBinder(const wstring& jsonFilename = L"");
-

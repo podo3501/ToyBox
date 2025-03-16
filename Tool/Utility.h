@@ -10,8 +10,10 @@ ImVec2 GetWindowStartPosition(const ImGuiWindow* window) noexcept;
 ImVec2 GetWindowIGMousePos(const ImGuiWindow* window) noexcept;
 void SetMouseStartOffset(const ImGuiWindow* window) noexcept;
 bool IsWindowFocus(const ImGuiWindow* window) noexcept;
-void DrawRectangle(const Rectangle& rect, const ImGuiWindow* window);
-void DrawRectangle(const vector<Rectangle>& rects, const ImGuiWindow* window);
+void DrawRectangle(const ImGuiWindow* window, const Rectangle& rect, 
+	optional<ImU32> outlineColor = nullopt, optional<ImU32> fillColor = nullopt);
+void DrawRectangles(const ImGuiWindow* window, const vector<Rectangle>& rects,
+	optional<ImU32> outlineColor = nullopt, optional<ImU32> fillColor = nullopt);
 
 inline XMUINT2 ImVec2ToXMUINT2(const ImVec2& vec)
 {
@@ -60,9 +62,12 @@ class UIComponent;
 class CommandList;
 class FloatingComponent;
 
-inline ImVec4 ToColor(const DirectX::XMVECTORF32& color) noexcept
-{
-	return ImVec4(color.f[0], color.f[1], color.f[2], color.f[3]);
+inline ImColor ToColor(const XMVECTORF32& color, float alpha = 1.f) noexcept {
+	return {
+		static_cast<int>(color.f[0] * 255.0f),
+		static_cast<int>(color.f[1] * 255.0f),
+		static_cast<int>(color.f[2] * 255.0f),
+		static_cast<int>(alpha * 255.0f) };
 }
 
 bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept;

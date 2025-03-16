@@ -11,6 +11,7 @@
 #include "UserInterface/Component/SampleComponent.h"
 #include "UserInterface/Component/RenderTexture.h"
 #include "UserInterface/Component/ImageSwitcher.h"
+#include "UserInterface/TextureSourceBinder.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -52,6 +53,7 @@ static inline void AttachComponentToPanel(UIComponent* panel,
 
 bool GameMainLoop::LoadResources()
 {
+    m_sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher1({ {32, 32}, Origin::Center }, BehaviorMode::Normal), { 100, 100 });
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher3({ {180, 48}, Origin::Center }, DirectionType::Horizontal, BehaviorMode::Normal), { 400, 300 });
     AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher3({ {180, 48}, Origin::Center }, DirectionType::Horizontal, BehaviorMode::Normal), { 400, 240 });

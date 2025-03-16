@@ -39,7 +39,7 @@ void ToyTestFixture::SetUp()
 using ::testing::_;
 using ::testing::Invoke;
 
-void ToyTestFixture::CallMockRender2(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times)
+void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times)
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _))
@@ -51,17 +51,7 @@ void ToyTestFixture::CallMockRender2(UIComponent* component, function<void(size_
 	component->ProcessRender(&mockRender);
 }
 
-void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
-{
-	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _))
-		.Times(times)
-		.WillRepeatedly(Invoke(testRenderFunc));
-	component->ProcessUpdate(m_timer);
-	component->ProcessRender(&mockRender);
-}
-
-void ToyTestFixture::CallMockRender2(function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times)
+void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times)
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _))
@@ -71,6 +61,18 @@ void ToyTestFixture::CallMockRender2(function<void(size_t, const RECT&, const RE
 			}));
 	m_panel->ProcessUpdate(m_timer);
 	m_panel->ProcessRender(&mockRender);
+}
+
+
+
+void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
+{
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, Render(_, _, _))
+		.Times(times)
+		.WillRepeatedly(Invoke(testRenderFunc));
+	component->ProcessUpdate(m_timer);
+	component->ProcessRender(&mockRender);
 }
 
 void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)

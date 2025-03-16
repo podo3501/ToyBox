@@ -14,7 +14,7 @@
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
 
-namespace ComponentTest
+namespace UserInterfaceTest
 {
 	static void TestContainer_Scroll(size_t index, const RECT& dest, const RECT* source)
 	{

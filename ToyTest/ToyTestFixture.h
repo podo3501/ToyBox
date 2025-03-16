@@ -13,8 +13,8 @@ public:
 	ToyTestFixture();
 	~ToyTestFixture();
 
-	void CallMockRender2(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times);
-	void CallMockRender2(function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times);
+	void CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times);
+	void CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times);
 
 	void CallMockRender(function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times);
 	void CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times);

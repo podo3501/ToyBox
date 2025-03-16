@@ -12,10 +12,12 @@
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
+#include "../Toy/UserInterface/TextureSourceBinder.h"
 #include "../Utility.h"
 
-FloatingComponent::FloatingComponent(IRenderer* renderer, const string& mainWndName) noexcept :
+FloatingComponent::FloatingComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
+	m_sourceBinder{ sourceBinder },
 	m_name{ "PopupMenu_" + mainWndName },
 	m_component{ nullptr }
 {}

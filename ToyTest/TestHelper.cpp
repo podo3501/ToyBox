@@ -4,6 +4,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/UserInterface/TextureSourceBinder.h"
 #include "../Toy/Utility.h"
 
 using json = nlohmann::json;
@@ -36,4 +37,9 @@ void TestRender(size_t index, const RECT& dest, const RECT* source, vector<pair<
 	EXPECT_TRUE(ranges::any_of(testCases, [&](const auto& pair) {
 		return IsTrue(dest, pair.first, *source, pair.second);
 		}));
+}
+
+RECT Binder(TextureSourceBinder* sourceBinder, const string& key, int index) noexcept
+{
+	return RectangleToRect(sourceBinder->GetArea(key, index));
 }

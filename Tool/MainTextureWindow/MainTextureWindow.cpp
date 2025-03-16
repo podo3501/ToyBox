@@ -19,8 +19,8 @@ public:
     ~EditTextureWindow() = default;
     EditTextureWindow() :
         m_textureWindow{ nullptr },
-        m_renameNotifier{ make_unique<RenameNotifier>() },
-        m_sourceBinder{ make_unique<TextureSourceBinder>() }
+        m_sourceBinder{ nullptr },
+        m_renameNotifier{ make_unique<RenameNotifier>() }
     {}
 
     void SetResourceAreas(optional<TextureSourceInfo> resourceAreas) noexcept
@@ -55,11 +55,10 @@ public:
         ImGui::End();
     }
 
-    bool Save(const wstring& filename) noexcept
+    void SetSourceBinder(TextureSourceBinder* sourceBinder) noexcept
     {
-        ReturnIfFalse(JsonFile::Write(*m_sourceBinder, filename));
-        m_sourceBinderFilename = filename;
-        return true;
+        m_sourceBinder = sourceBinder;
+        m_textureFiles = WStringVecToStringVec(m_sourceBinder->GetTextureFiles());
     }
 
     static vector<string> WStringVecToStringVec(const vector<wstring>& v) 
@@ -67,21 +66,6 @@ public:
         vector<string> res(v.size());
         ranges::transform(v, res.begin(), WStringToString);
         return res;
-    }
-
-    bool Load(const wstring& filename) noexcept
-    {
-        m_sourceBinder = CreateSourceBinder(filename);
-        ReturnIfFalse(m_sourceBinder);
-
-        m_textureFiles = WStringVecToStringVec(m_sourceBinder->GetTextureFiles());
-        m_sourceBinderFilename = filename;
-        return true;
-    }
-
-    wstring GetSaveFilename() const noexcept
-    {
-        return m_sourceBinderFilename;
     }
 
 private:
@@ -106,7 +90,9 @@ private:
         if (!m_sourceAreas) return; 
         if (m_sourceAreas->IsEmpty()) return;
         
-        DrawRectangle(m_sourceAreas->sources, m_textureWindow->GetWindow());
+        DrawImagePart();
+        DrawRectangles(m_textureWindow->GetWindow(), m_sourceAreas->sources,
+            ToColor(Colors::White), ToColor(Colors::White, 0.3f));
 
         const string& bindingKey = m_sourceBinder->GetBindingKey(*m_sourceAreas);
         m_renameNotifier->EditName("Binding Key", bindingKey, [this](const string& newKey) {
@@ -120,16 +106,34 @@ private:
             m_sourceAreas->SetSource(m_sourceIdx, currArea);
     }
 
+    void DrawImagePart()
+    {
+        wstring filename;
+        if (m_textureFiles.empty()) return;
+
+        static int selected{ 0 };
+        if (ImGui::RadioButton("1 Part", &selected, 0)) m_selectImagePart = ImagePart::One; ImGui::SameLine();
+        if (ImGui::RadioButton("3 Part", &selected, 1)) m_selectImagePart = ImagePart::Three; ImGui::SameLine();
+        if (ImGui::RadioButton("9 Part", &selected, 2)) m_selectImagePart = ImagePart::Nine;
+
+        filename = StringToWString(m_textureFiles[m_textureIdx]);
+        vector<TextureSourceInfo> sourceInfos = m_sourceBinder->GetAreas(filename, m_selectImagePart);
+        for( auto& info : sourceInfos)
+            DrawRectangles(m_textureWindow->GetWindow(), info.sources, ToColor(Colors::Blue));
+    }
+
     MainTextureWindow* m_textureWindow;
+    TextureSourceBinder* m_sourceBinder;
     int m_preTextureIdx{ -1 };
     int m_textureIdx{ -1 };
     vector<string> m_textureFiles;
     int m_sourceIdx{ 0 };
+    ImagePart m_selectImagePart{ ImagePart::One };
     unique_ptr<RenameNotifier> m_renameNotifier;
     optional<TextureSourceInfo> m_sourceAreas;
-    unique_ptr<TextureSourceBinder> m_sourceBinder; //?!? ToolSystem쪽으로 옮길꺼임
-    wstring m_sourceBinderFilename{};
 };
+
+//////////////////////////////////////////////////////////////////
 
 MainTextureWindow::~MainTextureWindow()
 {
@@ -147,6 +151,10 @@ MainTextureWindow::MainTextureWindow(IRenderer* renderer) :
 
 bool MainTextureWindow::CreateNew()
 {
+    m_sourceBinder = CreateSourceBinder();
+    ReturnIfFalse(m_sourceBinder);
+
+    m_editTextureWindow->SetSourceBinder(m_sourceBinder.get());
     m_isOpen = true;
     return true;
 }
@@ -164,9 +172,11 @@ bool MainTextureWindow::LoadTexture(const wstring& filename)
 
 bool MainTextureWindow::Create(const wstring& filename)
 {
-    ReturnIfFalse(m_editTextureWindow->Load(filename));
-    m_isOpen = true;
+    m_sourceBinder = CreateSourceBinder(filename);
+    ReturnIfFalse(m_sourceBinder);
 
+    m_editTextureWindow->SetSourceBinder(m_sourceBinder.get());
+    m_isOpen = true;
     return true;
 }
 
@@ -234,17 +244,17 @@ void MainTextureWindow::Render(ImGuiIO* io)
 
 bool MainTextureWindow::SaveScene(const wstring& filename)
 {
-    return m_editTextureWindow->Save(filename);
+    return m_sourceBinder->Save(filename);
 }
 
 wstring MainTextureWindow::GetSaveFilename() const noexcept
 {
-    return m_editTextureWindow->GetSaveFilename();
+    return m_sourceBinder->GetJsonFilename();
 }
 
 ////////////////////////////////////////////////////////
 
-Rectangle MainTextureWindow::FindRectangleFromMousePosition() const noexcept
+Rectangle MainTextureWindow::FindAreaFromMousePos() const noexcept
 {
     const XMINT2& pos = InputManager::GetMouse().GetPosition();
     auto it = ranges::find_if(m_areaList, [&pos](const Rectangle& rect) {
@@ -258,27 +268,33 @@ Rectangle MainTextureWindow::FindRectangleFromMousePosition() const noexcept
     return {};
 }
 
-static void DivideLengthByThree(const Rectangle& area, vector<int>* outWidth, vector<int>* outHeight)
+enum DivideType : int 
+{
+    X = 1 << 0,
+    Y = 1 << 1,
+    XY = X | Y
+};
+
+static void DivideLengthByThree(const Rectangle& area, DivideType divideType, 
+    vector<int>& outWidth, vector<int>& outHeight) noexcept
 {
     if (area.IsEmpty()) return;
+    outWidth = { area.width };
+    outHeight = { area.height };
 
     auto divideByThree = [](int totalSize) -> std::vector<int> {
         int oneThird = totalSize / 3;
         return { oneThird, totalSize - oneThird * 2, oneThird };
         };
 
-    if (outWidth)
-        (*outWidth) = divideByThree(area.width);
-    if (outHeight)
-        (*outHeight) = divideByThree(area.height);
+    if (divideType & DivideType::X) outWidth = divideByThree(area.width);
+    if (divideType & DivideType::Y) outHeight = divideByThree(area.height);
 }
 
-static vector<Rectangle> GenerateSourceAreas(const Rectangle& area, bool is9Grid)
+static vector<Rectangle> GenerateSourceAreas(const Rectangle& area, DivideType divideType)
 {
-    vector<int> widths{};
-    vector<int> heights = is9Grid ? vector<int>{} : vector<int>{ area.height };
-    DivideLengthByThree(area, &widths, is9Grid ? &heights : nullptr);
-
+    vector<int> widths, heights;
+    DivideLengthByThree(area, divideType, widths, heights);
     return GetSourcesFromArea(area, widths, heights);
 }
 
@@ -289,9 +305,10 @@ void MainTextureWindow::CheckSourcePartition()
     vector<Rectangle> hoveredAreas{};
     switch (m_sourcePartition)
     {
-    case OnePart: m_hoveredAreas.emplace_back(FindRectangleFromMousePosition()); break;
-    case ThreePartHorizontal: m_hoveredAreas = GenerateSourceAreas(FindRectangleFromMousePosition(), false); break;
-    case NinePart: m_hoveredAreas = GenerateSourceAreas(FindRectangleFromMousePosition(), true); break;
+    case OnePart: m_hoveredAreas.emplace_back(FindAreaFromMousePos()); break;
+    case ThreePartHorizontal: m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePos(), DivideType::X); break;
+    case ThreePartVertical: m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePos(), DivideType::Y); break;
+    case NinePart: m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePos(), DivideType::XY); break;
     }
 }
 
@@ -310,5 +327,5 @@ void MainTextureWindow::RenderPopupMenu()
 
 void MainTextureWindow::RenderHighlightArea() const
 {
-    DrawRectangle(m_hoveredAreas, m_window);
+    DrawRectangles(m_window, m_hoveredAreas, ToColor(Colors::White), ToColor(Colors::White, 0.3f));
 }

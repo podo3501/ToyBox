@@ -4,6 +4,7 @@
 class Button;
 class TextArea;
 class UIComponent;
+class TextureSourceBinder;
 
 class GameMainLoop final : public MainLoop
 {
@@ -23,4 +24,5 @@ private:
 	IRenderer* m_renderer;
 
 	unique_ptr<UIComponent> m_gamePanel;
+	unique_ptr<TextureSourceBinder> m_sourceBinder;
 };
