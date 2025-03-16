@@ -1,6 +1,8 @@
 #pragma once
 
+struct IRenderer;
 class UIComponent;
+class TextureSourceBinder;
 
 //UIComponent클래스에서 public에 관한 것들만 여기에서 정의한다. 
 // 함수가 UIComponent에 private함수를 을 써야 한다면 이 클래스에서 정의한다.
@@ -41,6 +43,7 @@ bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept;
 
 bool IsToolMode(UIComponent* component) noexcept;
 
+bool LoadComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, UIComponent* component);
 
 template<typename PointerType>
 inline pair<unique_ptr<PointerType>, PointerType*> GetPtrs(unique_ptr<PointerType> uniquePtr)

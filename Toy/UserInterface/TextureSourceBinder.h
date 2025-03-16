@@ -4,13 +4,13 @@ enum class ImagePart : int;
 class JsonOperation;
 struct TextureSourceInfo
 {
+	~TextureSourceInfo();
+	TextureSourceInfo();
+	TextureSourceInfo(const wstring& _filename, ImagePart _imagePart, const vector<Rectangle>& _sources) noexcept;
+
 	bool operator==(const TextureSourceInfo& o) const noexcept
 	{
-		wstring oFilename = o.filename;
-		if (filename != oFilename) return false;
-		if (sources != o.sources) return false;
-		return true;
-		//return (tie(filename, sources) == tie(o.filename, o.sources));
+		return (tie(filename, sources) == tie(o.filename, o.sources));
 	}
 
 	void SerializeIO(JsonOperation& operation);
@@ -21,6 +21,7 @@ struct TextureSourceInfo
 	inline void SetSource(int index, const Rectangle& area) noexcept { sources[index] = area; }
 
 	wstring filename;
+	ImagePart imagePart;
 	vector<Rectangle> sources;
 };
 
@@ -38,6 +39,7 @@ public:
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
 	Rectangle GetArea(const string& key, int index) const noexcept;
 	vector<TextureSourceInfo> GetAreas(const wstring& filename, ImagePart part) const noexcept;
+	pair<wstring, Rectangle> GetSourceInfo(const string& bindKey, size_t sourceIndex) const noexcept;
 	void SerializeIO(JsonOperation& operation);
 
 private:

@@ -4,6 +4,7 @@
 #include "../../Utility.h"
 #include "../../Config.h"
 #include "../JsonOperation.h"
+#include "../TextureSourceBinder.h"
 
 ImageGrid1::~ImageGrid1()
 {
@@ -58,6 +59,14 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	return result;
 }
 
+bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder) noexcept
+{
+	if (m_bindKey.empty()) return true; //?!? 나중에 binder로 다 바꾸면 return false로 바꿔지는지 확인하자.
+	tie(m_filename, m_source) = sourceBinder->GetSourceInfo(m_bindKey, m_sourceIndex);
+
+	return true;
+}
+
 bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
 {
 	if (m_filename.empty()) return true;
@@ -104,7 +113,7 @@ static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 }
 
 optional<vector<Rectangle>> ImageGrid1::GetTextureAreaList()
-{
+{	//?!? m_filename 이 멤버 변수를 없애고 TextureSourceBinder에서 파일을 로드해서 인덱스만 넘기면 GetTextureAreaList 이 함수도 이름 말고 인덱스로도 찾을 수 있다.
 	 return m_texController->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0));
 }
 
@@ -116,6 +125,16 @@ void ImageGrid1::ImplementRender(ITextureRender* render) const
 
 	RECT source = RectangleToRect(m_source);
 	render->Render(*m_index, destination, &source);
+}
+
+bool ImageGrid1::Setup(const UILayout& layout, const string& bindKey, int sourceIndex) noexcept
+{
+	if (bindKey.empty()) return false;
+	SetLayout(layout);
+	m_bindKey = bindKey;
+	m_sourceIndex = sourceIndex;
+
+	return true;
 }
 
 bool ImageGrid1::Setup(const UILayout& layout, const ImageSource& source) noexcept
@@ -153,4 +172,10 @@ unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const ImageSourc
 {
 	auto grid1 = make_unique<ImageGrid1>();
 	return CreateIfSetup(move(grid1), layout, source);
+}
+
+unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const string& bindKey)
+{
+	auto grid1 = make_unique<ImageGrid1>();
+	return grid1->Setup(layout, bindKey) ? move(grid1) : nullptr;
 }

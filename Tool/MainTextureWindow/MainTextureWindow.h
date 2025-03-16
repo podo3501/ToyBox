@@ -10,14 +10,6 @@ class EditTextureWindow;
 
 class MainTextureWindow : public InnerWindow
 {
-    enum class SourcePartition
-    {
-        OnePart,
-        ThreePartHorizontal,
-        ThreePartVertical,
-        NinePart
-    };
-
 public:
     ~MainTextureWindow();
     MainTextureWindow(IRenderer* renderer);
@@ -44,19 +36,5 @@ private:
     unique_ptr<EditTextureWindow> m_editTextureWindow;
     ImVec2 m_size;
     bool m_isOpen{ false };
-
-    //////////////////////////////////////////////////
-private:
-    Rectangle FindAreaFromMousePos() const noexcept;
-    void SelectImageSource() noexcept;
-    bool DeselectImageSource() noexcept;
-    void CheckSourcePartition();
-    void RenderPopupMenu();
-    void RenderHighlightArea() const;
-
-    SourcePartition m_sourcePartition{ SourcePartition::OnePart };
-    vector<Rectangle> m_areaList;
-    vector<Rectangle> m_hoveredAreas{};
-    optional<vector<Rectangle>> m_selectAreas;
 };
 

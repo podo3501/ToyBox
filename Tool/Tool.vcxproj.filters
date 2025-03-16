@@ -108,11 +108,11 @@
     <ClCompile Include="MainTextureWindow\MainTextureWindow.cpp">
       <Filter>MainTextureWindow</Filter>
     </ClCompile>
-    <ClCompile Include="MainTextureWindow\MainSourceExtractor.cpp">
-      <Filter>MainTextureWindow</Filter>
-    </ClCompile>
     <ClCompile Include="HelperClass.cpp" />
     <ClCompile Include="InnerWindow.cpp" />
+    <ClCompile Include="MainTextureWindow\EditTextureWindow.cpp">
+      <Filter>MainTextureWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -195,11 +195,11 @@
     <ClInclude Include="MainTextureWindow\MainTextureWindow.h">
       <Filter>MainTextureWindow</Filter>
     </ClInclude>
-    <ClInclude Include="MainTextureWindow\MainSourceExtractor.h">
-      <Filter>MainTextureWindow</Filter>
-    </ClInclude>
     <ClInclude Include="HelperClass.h" />
     <ClInclude Include="InnerWindow.h" />
+    <ClInclude Include="MainTextureWindow\EditTextureWindow.h">
+      <Filter>MainTextureWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\UI\Texture\ExtractTexture.json">

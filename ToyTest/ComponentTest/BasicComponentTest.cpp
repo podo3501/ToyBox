@@ -165,9 +165,9 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, ImageGrid1)
 	{
-		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({{64, 64}, Origin::Center}));
+		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		EXPECT_TRUE(LoadComponent(m_renderer.get(), m_sourceBinder.get(), m_panel.get()));
 		CallMockRender(TestImageGrid1Render, 1);
 
 		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
@@ -220,6 +220,7 @@ namespace UserInterfaceTest
 	TEST_F(BasicComponentTest, ImageGrid3_Horizontal)
 	{
 		auto [img, imgPtr] = GetPtrs(CreateSampleImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop }));
+		//auto [img, imgPtr] = GetPtrs(CreateImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop }));
 		UIEx(m_panel).AttachComponent(move(img), {400, 300});
 		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
 

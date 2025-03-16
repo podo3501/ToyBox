@@ -219,10 +219,13 @@ namespace UserInterfaceTest
 	{
 		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
 		EXPECT_TRUE((m_sourceBinder->GetArea("BackImage1", 0) == Rectangle{ 10, 10, 64, 64 }));
-		TextureSourceInfo sourceInfo{ filename, {{10, 10, 64, 64}} };
+		TextureSourceInfo sourceInfo{ filename, ImagePart::One, {{10, 10, 64, 64}} };
 		EXPECT_EQ(m_sourceBinder->GetBindingKey(sourceInfo), "BackImage1");
-		vector<TextureSourceInfo> areas = m_sourceBinder->GetAreas(filename, ImagePart::Three);
-		EXPECT_TRUE(!areas.empty() && areas[0].sources.size() == 3);
+
+		vector<TextureSourceInfo> horzAreas = m_sourceBinder->GetAreas(filename, ImagePart::ThreeH);
+		EXPECT_TRUE(!horzAreas.empty() && horzAreas[0].sources.size() == 3);
+		vector<TextureSourceInfo> vertAreas = m_sourceBinder->GetAreas(filename, ImagePart::ThreeV);
+		EXPECT_NE(horzAreas.size(), vertAreas.size());
 	}
 
 	//////////////////////////////////////////////////////////

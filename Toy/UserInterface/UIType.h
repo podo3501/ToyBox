@@ -44,9 +44,10 @@ constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<Com
 
 enum class ImagePart : int
 {
-	One = 1,
-	Three = 3,
-	Nine = 9
+	One,
+	ThreeH, //Horizontal
+	ThreeV, //Vertical
+	Nine
 };
 
 ///////////////////////////////////////////////////////////////

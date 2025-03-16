@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "../Utility.h"
 #include "UIComponent.h"
+#include "../Include/IRenderer.h"
+#include "TextureSourceBinder.h"
 #include "../Config.h"
 
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
@@ -136,4 +138,11 @@ bool IsToolMode(UIComponent* component) noexcept
 {
 	return (GetRenderFilterFlag() & StateFlag::RenderEditable) &&
 		component->HasStateFlag(StateFlag::RenderEditable);
+}
+
+bool LoadComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, UIComponent* component)
+{
+	ReturnIfFalse(component->BindTextureSourceInfo(sourceBinder));
+	ReturnIfFalse(renderer->LoadComponent(component));
+	return true;
 }

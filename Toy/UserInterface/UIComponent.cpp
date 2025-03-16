@@ -69,6 +69,13 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 	return clone;
 }
 
+bool UIComponent::BindTextureSourceInfo(TextureSourceBinder* sourceBinder) noexcept
+{
+	return ForEachChildUntilFail([sourceBinder](UIComponent* component) {
+		return component->ImplementBindSourceInfo(sourceBinder);
+		});
+}
+
 bool UIComponent::LoadResources(ITextureLoad* load)
 {
 	return ForEachChildUntilFail([load](UIComponent* component) {

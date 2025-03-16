@@ -5,9 +5,21 @@
 #include "UIType.h"
 #include "../Utility.h"
 
+TextureSourceInfo::~TextureSourceInfo() = default;
+TextureSourceInfo::TextureSourceInfo() :
+    imagePart{ ImagePart::One }
+{}
+
+TextureSourceInfo::TextureSourceInfo(const wstring& _filename, ImagePart _imagePart, const vector<Rectangle>& _sources) noexcept :
+    filename{ _filename },
+    imagePart{ _imagePart },
+    sources{ _sources }
+{}
+
 void TextureSourceInfo::SerializeIO(JsonOperation& operation)
 {
     operation.Process("Filename", filename);
+    operation.Process("ImagePart", imagePart);
     operation.Process("Sources", sources);
 }
 
@@ -74,15 +86,38 @@ Rectangle TextureSourceBinder::GetArea(const string& key, int index) const noexc
     return it->second.GetSource(index);
 }
 
+static int GetPartCount(ImagePart part) noexcept //임시 함수. 나중에 H, V를 저장시키면 이 함수는 없어진다. del
+{
+    switch (part) 
+    {
+    case ImagePart::One: return 1;
+    case ImagePart::ThreeH: return 3;
+    case ImagePart::ThreeV: return 3;
+    case ImagePart::Nine: return 9;
+    }
+
+    return 0;
+}
+
 vector<TextureSourceInfo> TextureSourceBinder::GetAreas(const wstring& filename, ImagePart part) const noexcept
 {
+    int partCount = GetPartCount(part);
+
     vector<TextureSourceInfo> filteredTextures;
     for (const auto& entry : m_bindingTable) {
         const TextureSourceInfo& sourceInfo = entry.second;
-        if (sourceInfo.filename == filename && sourceInfo.sources.size() == static_cast<int>(part)) 
+        if (sourceInfo.filename == filename && sourceInfo.sources.size() == partCount)
             filteredTextures.push_back(sourceInfo);
     }
     return filteredTextures;
+}
+
+pair<wstring, Rectangle> TextureSourceBinder::GetSourceInfo(const string& bindKey, size_t sourceIndex) const noexcept
+{
+    auto it = m_bindingTable.find(bindKey);
+    if (it == m_bindingTable.end() || it->second.sources.size() <= sourceIndex) return {};
+
+    return make_pair(it->second.filename, it->second.sources[sourceIndex]);
 }
 
 void TextureSourceBinder::SerializeIO(JsonOperation& operation)
