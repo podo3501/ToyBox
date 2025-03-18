@@ -1,17 +1,27 @@
 #include "pch.h"
+#include "../Include/IRenderer.h"
 #include "EditTextureWindow.h"
 #include "MainTextureWindow.h"
 #include "../MainWindow/EditUtility.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/UIUtility.h"
+#include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Dialog.h"
 #include "../Toy/Utility.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
 
+enum class PendingAction : int
+{
+    LoadTextureFile,
+    DeleteTextureFile,
+    SelectTextureFile
+};
+
 EditTextureWindow::~EditTextureWindow() = default;
-EditTextureWindow::EditTextureWindow() :
+EditTextureWindow::EditTextureWindow(IRenderer* renderer) :
     m_textureWindow{ nullptr },
+    m_renderer{ renderer },
     m_sourceBinder{ nullptr },
     m_selectImagePart{ ImagePart::One },
     m_renameNotifier{ make_unique<RenameNotifier>() }
@@ -26,34 +36,35 @@ void EditTextureWindow::SetResourceAreas(optional<TextureSourceInfo> resourceAre
     m_sourceIdx = 0;
 }
 
-void EditTextureWindow::Update() noexcept
-{
-    if (m_preTextureIdx != m_textureIdx)
-    {
-        const wstring& filename = StringToWString(m_textureFiles[m_textureIdx]);
-        m_textureWindow->LoadTexture(filename);
-        m_preTextureIdx = m_textureIdx;
-    }
-
-    CheckSourcePartition();
-    if(DeselectImageSource()) return;
-    if (IsWindowFocus(m_textureWindow->GetWindow()))
-        SelectImageSource();
-}
-
-void EditTextureWindow::Render()
-{
-    string wndName = string("Texture Source Window");
-    ImGui::Begin(wndName.c_str(), nullptr, ImGuiWindowFlags_NoFocusOnAppearing);
-
-    RenderTextureList();
-    DrawImagePart();
-    RenderTextureInfo();
-    RenderLabeledAreas();
-    RenderHighlightArea();
-
-    ImGui::End();
-}
+//void EditTextureWindow::Update() noexcept
+//{
+//    //if (m_preTextureIdx != m_textureIdx)
+//    //{
+//    //    const wstring& filename = StringToWString(m_textureFiles[m_textureIdx]);
+//    //    m_textureWindow->LoadTexture(filename);
+//    //    m_preTextureIdx = m_textureIdx;
+//    //}
+//
+//    ExecuteAction();
+//    CheckSourcePartition();
+//    if(DeselectImageSource()) return;
+//    if (IsWindowFocus(m_textureWindow->GetWindow()))
+//        SelectImageSource();
+//}
+//
+//void EditTextureWindow::Render()
+//{
+//    string wndName = string("Texture Source Window");
+//    ImGui::Begin(wndName.c_str(), nullptr, ImGuiWindowFlags_NoFocusOnAppearing);
+//
+//    RenderTextureList();
+//    DrawImagePart();
+//    RenderTextureInfo();
+//    RenderLabeledAreas();
+//    RenderHighlightArea();
+//
+//    ImGui::End();
+//}
 
 bool EditTextureWindow::DeselectImageSource() noexcept
 {
@@ -129,17 +140,6 @@ void EditTextureWindow::CheckSourcePartition()
     m_hoveredAreas = GenerateSourceAreas(currRectangle, ImagePartToDivideType(m_selectImagePart));
 }
 
-void EditTextureWindow::DrawImagePart()
-{
-    if (m_textureFiles.empty()) return;
-
-    static int selected{ 0 };
-    if (ImGui::RadioButton("1 Part", &selected, 0)) m_selectImagePart = ImagePart::One; ImGui::SameLine();
-    if (ImGui::RadioButton("3H Part", &selected, 1)) m_selectImagePart = ImagePart::ThreeH; ImGui::SameLine();
-    if (ImGui::RadioButton("3V Part", &selected, 2)) m_selectImagePart = ImagePart::ThreeV; ImGui::SameLine();
-    if (ImGui::RadioButton("9 Part", &selected, 3)) m_selectImagePart = ImagePart::Nine;
-}
-
 static vector<string> WStringVecToStringVec(const vector<wstring>& v)
 {
     vector<string> res(v.size());
@@ -151,22 +151,6 @@ void EditTextureWindow::SetSourceBinder(TextureSourceBinder* sourceBinder) noexc
 {
     m_sourceBinder = sourceBinder;
     m_textureFiles = WStringVecToStringVec(m_sourceBinder->GetTextureFiles());
-}
-
-void EditTextureWindow::RenderTextureList()
-{
-    if (ImGui::Button("Add Texture File"))
-    {
-        wstring filename;
-        GetRelativePathFromDialog(filename);
-        if (!filename.empty()) m_textureFiles.emplace_back(WStringToString(filename));
-    }
-
-    vector<const char*> texFiles;
-    for (const auto& curFile : m_textureFiles)
-        texFiles.push_back(curFile.c_str());
-
-    ImGui::ListBox("Texture List", &m_textureIdx, texFiles.data(), static_cast<int>(texFiles.size()), 4);
 }
 
 static int GetImagePartCount(ImagePart imgPart) noexcept
@@ -220,14 +204,10 @@ Rectangle EditTextureWindow::FindAreaFromMousePos(const XMINT2& pos) const noexc
     return {};
 }
 
-wstring EditTextureWindow::SelectedTextureFilename() const noexcept 
-{
-    return (m_textureIdx >= 0 && m_textureIdx < m_textureFiles.size()) ? StringToWString(m_textureFiles[m_textureIdx]) : L"";
-}
-
 void EditTextureWindow::RenderLabeledAreas() const
 {
-    if (m_textureIdx < 0 || m_textureIdx >= m_textureFiles.size()) return;
+    return;
+    if (!IsVaildTextureIndex()) return;
 
     wstring filename = StringToWString(m_textureFiles[m_textureIdx]);
     vector<TextureSourceInfo> sourceInfos = m_sourceBinder->GetAreas(filename, m_selectImagePart);
@@ -238,4 +218,161 @@ void EditTextureWindow::RenderLabeledAreas() const
 void EditTextureWindow::RenderHighlightArea() const
 {
     DrawRectangles(m_textureWindow->GetWindow(), m_hoveredAreas, ToColor(Colors::White), ToColor(Colors::White, 0.3f));
+}
+
+wstring EditTextureWindow::SelectedTextureFilename() const noexcept
+{
+    //return IsVaildTextureIndex() ? StringToWString(m_textureFiless[m_textureIdx]) : L"";
+    return L"";
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void EditTextureWindow::Update() noexcept
+{
+    ExecuteAction();
+    //CheckSourcePartition();
+    //if (DeselectImageSource()) return;
+    //if (IsWindowFocus(m_textureWindow->GetWindow()))
+       // SelectImageSource();
+}
+
+void EditTextureWindow::Render()
+{
+    string wndName = string("Texture Source Window");
+    ImGui::Begin(wndName.c_str(), nullptr, ImGuiWindowFlags_NoFocusOnAppearing);
+
+    RenderTextureList();
+    DrawImagePart();
+    //RenderTextureInfo();
+    //RenderLabeledAreas();
+    //RenderHighlightArea();
+
+    ImGui::End();
+}
+
+void EditTextureWindow::AddTextureFile(const wstring& filename) noexcept
+{ 
+    const string& strName = WStringToString(filename);
+    auto it = ranges::find(m_textureFiles, strName);
+    if (it != m_textureFiles.end()) return;
+
+    m_textureFiles.push_back(strName);
+}
+
+void EditTextureWindow::AddTexture(unique_ptr<ImageGrid1> texture) noexcept
+{
+    m_textureFiless.emplace_back(move(texture));
+    m_textureIdx = static_cast<int>(m_textureFiless.size() - 1);
+}
+
+void EditTextureWindow::RemoveTextureFile(const wstring& filename) noexcept
+{
+    const string& strName = WStringToString(filename);
+    erase(m_textureFiles, strName);
+}
+
+bool EditTextureWindow::IsLoadedTexture(const wstring& filename) const noexcept
+{
+    auto it = ranges::find_if(m_textureFiless, [&filename](auto& tex) { return tex->GetFilename() == filename; });
+    return (it != m_textureFiless.end()) ? true : false;
+}
+
+bool EditTextureWindow::LoadTextureFile()
+{
+    wstring filename;
+    GetRelativePathFromDialog(filename);
+    if (filename.empty()) return true;
+    if (IsLoadedTexture(filename)) return true;
+
+    unique_ptr<ImageGrid1> texture = make_unique<ImageGrid1>();
+    texture->SetFilenameToLoadInfo(filename);
+    ReturnIfFalse(m_renderer->LoadComponent(texture.get()));
+    if (const auto& areaList = texture->GetTextureAreaList(); areaList)
+        m_areaList = *areaList;
+
+    m_textureWindow->SetTexture(texture.get());
+    AddTexture(move(texture));
+
+    return true;
+}
+
+bool EditTextureWindow::DeleteTextureFile() noexcept
+{
+    ReturnIfFalse(IsVaildTextureIndex());
+    m_textureFiless.erase(m_textureFiless.begin() + m_textureIdx);
+
+    if (m_textureFiless.empty())
+    {
+        m_textureWindow->SetTexture(nullptr);
+        m_areaList = {};
+        return true;
+    }
+
+    m_textureIdx = 0;
+    SelectTextureFile();
+
+    return true;
+}
+
+bool EditTextureWindow::SelectTextureFile() noexcept
+{
+    if (!IsVaildTextureIndex()) return true;
+    const auto& curTexture = m_textureFiless[m_textureIdx].get();
+    m_textureWindow->SetTexture(curTexture);
+    if (const auto& areaList = curTexture->GetTextureAreaList(); areaList)
+        m_areaList = *areaList;
+
+    return true;
+}
+
+bool EditTextureWindow::ExecuteAction() noexcept
+{
+    if (!m_pendingAction.has_value()) return true;
+
+    auto result{ true };
+    switch (*m_pendingAction)
+    {
+    case PendingAction::LoadTextureFile: result = LoadTextureFile(); break;
+    case PendingAction::DeleteTextureFile: result = DeleteTextureFile(); break;
+    case PendingAction::SelectTextureFile: result = SelectTextureFile(); break;
+    default: break;
+    }
+
+    m_pendingAction.reset(); // 상태 초기화
+
+    return result;
+}
+
+static vector<string> GetTextureFiles(const vector<unique_ptr<ImageGrid1>>& texFiles) noexcept
+{
+    vector<string> strList;
+    for (auto& ws : texFiles)
+        strList.emplace_back(WStringToString(ws->GetFilename()));
+    return strList;
+}
+
+void EditTextureWindow::RenderTextureList()
+{
+    ImVec2 btnSize{ 130, 22 };
+    if (ImGui::Button("Add Texture File", btnSize)) m_pendingAction = PendingAction::LoadTextureFile; ImGui::SameLine();
+    if (ImGui::Button("Delete Texture File", btnSize)) m_pendingAction = PendingAction::DeleteTextureFile;
+
+    auto strFileList = GetTextureFiles(m_textureFiless);
+    vector<const char*> texFiles; //const char*은 값을 저장하는게 아니라 포인터를 저장하기 때문에 strFileList가 없어지면 글자가 깨진다.
+    for (auto& str : strFileList)
+        texFiles.emplace_back(str.c_str());
+    if (ImGui::ListBox("Texture List", &m_textureIdx, texFiles.data(), static_cast<int>(texFiles.size()), 4))
+        m_pendingAction = PendingAction::SelectTextureFile;
+}
+
+void EditTextureWindow::DrawImagePart()
+{
+    if (!IsVaildTextureIndex()) return;
+
+    static int selected{ 0 };
+    if (ImGui::RadioButton("1 Part", &selected, 0)) m_selectImagePart = ImagePart::One; ImGui::SameLine();
+    if (ImGui::RadioButton("3H Part", &selected, 1)) m_selectImagePart = ImagePart::ThreeH; ImGui::SameLine();
+    if (ImGui::RadioButton("3V Part", &selected, 2)) m_selectImagePart = ImagePart::ThreeV; ImGui::SameLine();
+    if (ImGui::RadioButton("9 Part", &selected, 3)) m_selectImagePart = ImagePart::Nine;
 }

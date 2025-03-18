@@ -16,8 +16,8 @@ MainTextureWindow::~MainTextureWindow()
 MainTextureWindow::MainTextureWindow(IRenderer* renderer) :
     InnerWindow{ "empty" },
     m_renderer{ renderer },
-    m_sourceTexture{ make_unique<ImageGrid1>() },
-    m_editTextureWindow{ make_unique<EditTextureWindow>() }
+    m_sourceTexture{ nullptr },
+    m_editTextureWindow{ make_unique<EditTextureWindow>(renderer) }
 {
     m_renderer->AddImguiComponent(this);
 }
@@ -32,15 +32,10 @@ bool MainTextureWindow::CreateNew()
     return true;
 }
 
-bool MainTextureWindow::LoadTexture(const wstring& filename)
-{
-    m_sourceTexture->SetFilenameToLoadInfo(filename);
-    ReturnIfFalse(m_renderer->LoadComponent(m_sourceTexture.get()));
-    if (const auto& areaList = m_sourceTexture->GetTextureAreaList(); areaList)
-        m_editTextureWindow->SetTextureAreaList(*areaList);
-
-    SetName(WStringToString(filename));
-    return true;
+void MainTextureWindow::SetTexture(ImageGrid1* texture) noexcept 
+{ 
+    m_sourceTexture = texture;
+    (texture) ? SetName(WStringToString(texture->GetFilename())) : SetName("empty");
 }
 
 bool MainTextureWindow::Create(const wstring& filename)
@@ -62,8 +57,8 @@ void MainTextureWindow::Update()
 
 ImVec2 MainTextureWindow::GetWindowSize() const noexcept
 {
-    const auto& size = m_sourceTexture->GetSize();
-    return size != XMUINT2{} ? XMUINT2ToImVec2(size) : ImVec2{ 512, 512 };
+    if (!m_sourceTexture) return ImVec2{ 512, 512 };
+    return XMUINT2ToImVec2(m_sourceTexture->GetSize());
 }
 
 void MainTextureWindow::Render(ImGuiIO* io)
@@ -82,8 +77,11 @@ void MainTextureWindow::Render(ImGuiIO* io)
         m_editTextureWindow->SetTextureWindow(this);
     }
 
-    if(auto offset = m_sourceTexture->GetGraphicMemoryOffset(); offset != 0)
-        ImGui::Image(offset, size);
+    if (m_sourceTexture)
+    {
+        if (auto offset = m_sourceTexture->GetGraphicMemoryOffset(); offset != 0)
+            ImGui::Image(offset, size);
+    }
 
     IgnoreMouseClick(m_window);
     m_editTextureWindow->Render();

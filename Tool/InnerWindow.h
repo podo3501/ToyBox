@@ -13,7 +13,7 @@ public:
     virtual wstring GetSaveFilename() const noexcept = 0;
 
     ImGuiWindow* GetImGuiWindow() const noexcept;
-    inline const string& GetName() const noexcept { return m_name; }
+    inline string GetName() const noexcept { return (m_name.empty()) ? "empty" : m_name; }
     inline void SetName(const string& name) noexcept { m_name = name; }
 
 private:

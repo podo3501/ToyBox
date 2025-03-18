@@ -1,7 +1,10 @@
 #pragma once
 #include "../Toy/UserInterface/TextureSourceBinder.h"
 
-enum class ImagePart : int;
+enum class ImagePart;
+enum class PendingAction;
+struct IRenderer;
+class ImageGrid1;
 struct TextureSourceInfo;
 class TextureSourceBinder;
 class MainTextureWindow;
@@ -11,7 +14,7 @@ class EditTextureWindow
 {
 public:
     ~EditTextureWindow();
-    EditTextureWindow();
+    EditTextureWindow(IRenderer* renderer);
 
     void SetResourceAreas(optional<TextureSourceInfo> resourceAreas) noexcept;
     void Update() noexcept;
@@ -26,23 +29,42 @@ private:
     bool DeselectImageSource() noexcept;
     void SelectImageSource() noexcept;
 
-    void RenderTextureList();
     void RenderTextureInfo();
     void RenderLabeledAreas() const;
     void RenderHighlightArea() const;
-    void DrawImagePart();
+  
     Rectangle FindAreaFromMousePos(const XMINT2& pos) const noexcept;
-    wstring SelectedTextureFilename() const noexcept;
 
     MainTextureWindow* m_textureWindow;
     TextureSourceBinder* m_sourceBinder;
     int m_preTextureIdx{ -1 };
-    int m_textureIdx{ -1 };
     vector<Rectangle> m_areaList;
     vector<Rectangle> m_hoveredAreas{};
-    vector<string> m_textureFiles;
+
     int m_sourceIdx{ 0 };
-    ImagePart m_selectImagePart;
     unique_ptr<RenameNotifier> m_renameNotifier;
     optional<TextureSourceInfo> m_sourceAreas;
+
+    ////////////////////////////////////////
+
+    inline bool IsVaildTextureIndex() const noexcept { return m_textureIdx >= 0 && m_textureIdx < m_textureFiless.size(); }
+    void AddTextureFile(const wstring& filename) noexcept;
+    void AddTexture(unique_ptr<ImageGrid1> texture) noexcept;
+    void RemoveTextureFile(const wstring& filename) noexcept;
+    wstring SelectedTextureFilename() const noexcept;
+    bool IsLoadedTexture(const wstring& filename) const noexcept;
+    bool LoadTextureFile();
+    bool DeleteTextureFile() noexcept;
+    bool SelectTextureFile() noexcept;
+    bool ExecuteAction() noexcept;
+    void RenderTextureList();
+    void DrawImagePart();
+    
+    IRenderer* m_renderer;
+    optional<PendingAction> m_pendingAction;
+    int m_textureIdx{ -1 };
+    vector<string> m_textureFiles; //del
+    vector<unique_ptr<ImageGrid1>> m_textureFiless;
+    ImagePart m_selectImagePart;
+
 };

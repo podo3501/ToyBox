@@ -19,7 +19,7 @@ public:
     
     bool Create(const wstring& filename); //Json파일
     bool CreateNew();
-    bool LoadTexture(const wstring& filename);
+    void SetTexture(ImageGrid1* texture) noexcept;
     void Update();
     bool IsOpen() const noexcept { return m_isOpen; }
     void Open() noexcept { m_isOpen = true; }
@@ -32,7 +32,7 @@ private:
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<TextureSourceBinder> m_sourceBinder;
     unique_ptr<RenderTexture> m_renderTex; //InnerWindow를 그리는 텍스쳐
-    unique_ptr<ImageGrid1> m_sourceTexture; //작업할 텍스쳐
+    ImageGrid1* m_sourceTexture; //작업할 텍스쳐
     unique_ptr<EditTextureWindow> m_editTextureWindow;
     ImVec2 m_size;
     bool m_isOpen{ false };
