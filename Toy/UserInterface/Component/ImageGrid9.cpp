@@ -117,7 +117,7 @@ SourceDivider ImageGrid9::GetSourceAnd4Divider() const noexcept
 
 	Rectangle mergedSource = firstMergedSource;
 	for (auto imgGrid3 : components)
-		mergedSource = Rectangle::Union(mergedSource, imgGrid3->GetMergedSource());
+		mergedSource = Rectangle::Union(mergedSource, imgGrid3->GetMergedSource());//?!? utilityø° CombineRectangles ¿÷¿Ω
 
 	SourceDivider srcDivider{};
 	srcDivider.rect = mergedSource;

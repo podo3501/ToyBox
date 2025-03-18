@@ -35,9 +35,13 @@ public:
 	bool Save(const wstring& jsonFilename);
 	inline const wstring& GetJsonFilename() const noexcept { return m_jsonFilename; }
 	bool ChangeBindingKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept;
+	
+	Rectangle GetArea(const string& key, int index) const noexcept;
+	bool SetArea(const string& bindingKey, int index, const Rectangle& area) noexcept;
+
 	vector<wstring> GetTextureFiles() const noexcept;
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
-	Rectangle GetArea(const string& key, int index) const noexcept;
+	vector<Rectangle> GetArea(const wstring& filename, const XMINT2& position) const noexcept;
 	vector<TextureSourceInfo> GetAreas(const wstring& filename, ImagePart part) const noexcept;
 	pair<wstring, Rectangle> GetSourceInfo(const string& bindKey, size_t sourceIndex) const noexcept;
 	void SerializeIO(JsonOperation& operation);

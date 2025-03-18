@@ -2,6 +2,7 @@
 #include "UIUtility.h"
 #include "UIType.h"
 #include "UIComponent.h"
+#include "../Utility.h"
 
 static inline bool operator==(const DirectX::XMFLOAT4& a, const DirectX::XMFLOAT4& b) noexcept
 {
@@ -240,6 +241,12 @@ Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept
 		result = Rectangle::Union(result, rect);
 
 	return result;
+}
+
+bool IsContains(const vector<Rectangle>& rectangles, const XMINT2& position) noexcept
+{
+	const Rectangle& combinedRect = CombineRectangles(rectangles);
+	return Contains(combinedRect, position);
 }
 
 static vector<int> GetDivisions(const vector<int>& points, int totalSize) noexcept

@@ -49,6 +49,7 @@ void EditTextureWindow::Render()
     RenderTextureList();
     DrawImagePart();
     RenderTextureInfo();
+    RenderLabeledAreas();
     RenderHighlightArea();
 
     ImGui::End();
@@ -75,10 +76,23 @@ void EditTextureWindow::SelectImageSource() noexcept
 
 enum DivideType : int
 {
+    None = 0,
     X = 1 << 0,
     Y = 1 << 1,
     XY = X | Y
 };
+
+static DivideType ImagePartToDivideType(ImagePart imgPart) noexcept
+{
+    switch (imgPart)
+    {
+    case ImagePart::One: return DivideType::None;
+    case ImagePart::ThreeH: return DivideType::X;
+    case ImagePart::ThreeV: return DivideType::Y;
+    case ImagePart::Nine: return DivideType::XY;
+    default: return DivideType::None;
+    }
+}
 
 static void DivideLengthByThree(const Rectangle& area, DivideType divideType,
     vector<int>& outWidth, vector<int>& outHeight) noexcept
@@ -98,6 +112,8 @@ static void DivideLengthByThree(const Rectangle& area, DivideType divideType,
 
 static vector<Rectangle> GenerateSourceAreas(const Rectangle& area, DivideType divideType)
 {
+    if (divideType == DivideType::None) return { area };
+
     vector<int> widths, heights;
     DivideLengthByThree(area, divideType, widths, heights);
     return GetSourcesFromArea(area, widths, heights);
@@ -105,20 +121,16 @@ static vector<Rectangle> GenerateSourceAreas(const Rectangle& area, DivideType d
 
 void EditTextureWindow::CheckSourcePartition()
 {
-    m_hoveredAreas.clear();
-    vector<Rectangle> hoveredAreas{};
-    switch (m_selectImagePart)
-    {
-    case ImagePart::One: m_hoveredAreas.emplace_back(FindAreaFromMousePos()); break;
-    case ImagePart::ThreeH: m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePos(), DivideType::X); break;
-    case ImagePart::ThreeV: m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePos(), DivideType::Y); break;
-    case ImagePart::Nine: m_hoveredAreas = GenerateSourceAreas(FindAreaFromMousePos(), DivideType::XY); break;
-    }
+    const XMINT2& pos = InputManager::GetMouse().GetPosition();
+    m_hoveredAreas = m_sourceBinder->GetArea(SelectedTextureFilename(), pos);
+    if (!m_hoveredAreas.empty()) return;
+
+    const Rectangle& currRectangle = FindAreaFromMousePos(pos);
+    m_hoveredAreas = GenerateSourceAreas(currRectangle, ImagePartToDivideType(m_selectImagePart));
 }
 
 void EditTextureWindow::DrawImagePart()
 {
-    wstring filename;
     if (m_textureFiles.empty()) return;
 
     static int selected{ 0 };
@@ -126,13 +138,6 @@ void EditTextureWindow::DrawImagePart()
     if (ImGui::RadioButton("3H Part", &selected, 1)) m_selectImagePart = ImagePart::ThreeH; ImGui::SameLine();
     if (ImGui::RadioButton("3V Part", &selected, 2)) m_selectImagePart = ImagePart::ThreeV; ImGui::SameLine();
     if (ImGui::RadioButton("9 Part", &selected, 3)) m_selectImagePart = ImagePart::Nine;
-
-    if (m_textureIdx < 0 || m_textureIdx >= m_textureFiles.size()) return;
-
-    filename = StringToWString(m_textureFiles[m_textureIdx]);
-    vector<TextureSourceInfo> sourceInfos = m_sourceBinder->GetAreas(filename, m_selectImagePart);
-    for (auto& info : sourceInfos)
-        DrawRectangles(m_textureWindow->GetWindow(), info.sources, ToColor(Colors::Blue));
 }
 
 static vector<string> WStringVecToStringVec(const vector<wstring>& v)
@@ -164,6 +169,18 @@ void EditTextureWindow::RenderTextureList()
     ImGui::ListBox("Texture List", &m_textureIdx, texFiles.data(), static_cast<int>(texFiles.size()), 4);
 }
 
+static int GetImagePartCount(ImagePart imgPart) noexcept
+{
+    switch (imgPart)
+    {
+    case ImagePart::One: return 1;
+    case ImagePart::ThreeH: return 3;
+    case ImagePart::ThreeV: return 3;
+    case ImagePart::Nine: return 9;
+    default: return 0;
+    }
+}
+
 void EditTextureWindow::RenderTextureInfo()
 {
     if (!m_sourceAreas) return;
@@ -176,17 +193,22 @@ void EditTextureWindow::RenderTextureInfo()
     m_renameNotifier->EditName("Binding Key", bindingKey, [this](const string& newKey) {
         return m_sourceBinder->ChangeBindingKey(newKey, *m_sourceAreas); });
 
+    if (bindingKey.empty()) return;
+
+    //현재 선택된 조그마한 파란색의 크기를 셋팅한다.
     constexpr string_view label{ "Resource Areas" };
     ImGui::Text("%s", label.data());
-    ImGui::SliderInt("Area Index", &m_sourceIdx, 0, m_sourceAreas->GetSourceSize() - 1);
-    Rectangle currArea = m_sourceAreas->GetSource(m_sourceIdx);
+    ImGui::SliderInt("Area Index", &m_sourceIdx, 0, GetImagePartCount(m_selectImagePart) - 1);
+    Rectangle currArea = m_sourceBinder->GetArea(bindingKey, m_sourceIdx);
     if (EditRectangleNoLabel(label.data(), currArea))
-        m_sourceAreas->SetSource(m_sourceIdx, currArea);
+    {
+        m_sourceBinder->SetArea(bindingKey, m_sourceIdx, currArea);
+        //m_sourceAreas = currArea;
+    }
 }
 
-Rectangle EditTextureWindow::FindAreaFromMousePos() const noexcept
+Rectangle EditTextureWindow::FindAreaFromMousePos(const XMINT2& pos) const noexcept
 {
-    const XMINT2& pos = InputManager::GetMouse().GetPosition();
     auto it = ranges::find_if(m_areaList, [&pos](const Rectangle& rect) {
         return Contains(rect, pos);
         });
@@ -200,7 +222,17 @@ Rectangle EditTextureWindow::FindAreaFromMousePos() const noexcept
 
 wstring EditTextureWindow::SelectedTextureFilename() const noexcept 
 {
-    return (m_textureIdx > 0) ? StringToWString(m_textureFiles[m_textureIdx]) : L""; 
+    return (m_textureIdx >= 0 && m_textureIdx < m_textureFiles.size()) ? StringToWString(m_textureFiles[m_textureIdx]) : L"";
+}
+
+void EditTextureWindow::RenderLabeledAreas() const
+{
+    if (m_textureIdx < 0 || m_textureIdx >= m_textureFiles.size()) return;
+
+    wstring filename = StringToWString(m_textureFiles[m_textureIdx]);
+    vector<TextureSourceInfo> sourceInfos = m_sourceBinder->GetAreas(filename, m_selectImagePart);
+    for (auto& info : sourceInfos)
+        DrawRectangles(m_textureWindow->GetWindow(), info.sources, ToColor(Colors::Blue));
 }
 
 void EditTextureWindow::RenderHighlightArea() const

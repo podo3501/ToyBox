@@ -4,6 +4,7 @@
 #include "JsonHelper.h"
 #include "UIType.h"
 #include "../Utility.h"
+#include "UIUtility.h"
 
 TextureSourceInfo::~TextureSourceInfo() = default;
 TextureSourceInfo::TextureSourceInfo() :
@@ -84,6 +85,28 @@ Rectangle TextureSourceBinder::GetArea(const string& key, int index) const noexc
     if (it == m_bindingTable.end()) return {};
 
     return it->second.GetSource(index);
+}
+
+bool TextureSourceBinder::SetArea(const string& key, int index, const Rectangle& area) noexcept
+{
+    auto it = m_bindingTable.find(key);
+    if (it == m_bindingTable.end()) return false;
+
+    it->second.SetSource(index, area);
+
+    return true;
+}
+
+vector<Rectangle> TextureSourceBinder::GetArea(const wstring& filename, const XMINT2& position) const noexcept
+{
+    for (const auto& entry : m_bindingTable) {
+        const TextureSourceInfo& sourceInfo = entry.second;
+        if (sourceInfo.filename != filename) continue;
+        if (!IsContains(sourceInfo.sources, position)) continue;
+        
+        return sourceInfo.sources;
+    }
+    return {};
 }
 
 static int GetPartCount(ImagePart part) noexcept //임시 함수. 나중에 H, V를 저장시키면 이 함수는 없어진다. del

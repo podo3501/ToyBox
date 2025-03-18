@@ -28,9 +28,10 @@ private:
 
     void RenderTextureList();
     void RenderTextureInfo();
+    void RenderLabeledAreas() const;
     void RenderHighlightArea() const;
     void DrawImagePart();
-    Rectangle FindAreaFromMousePos() const noexcept;
+    Rectangle FindAreaFromMousePos(const XMINT2& pos) const noexcept;
     wstring SelectedTextureFilename() const noexcept;
 
     MainTextureWindow* m_textureWindow;
