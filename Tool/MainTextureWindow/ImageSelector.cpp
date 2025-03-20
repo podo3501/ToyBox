@@ -3,7 +3,7 @@
 #include "MainTextureWindow.h"
 #include "../MainWindow/EditUtility.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
-#include "../Toy/UserInterface/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/UserInterface/UIUtility.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"

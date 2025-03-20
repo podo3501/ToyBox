@@ -2,7 +2,7 @@
 #include "../Utility.h"
 #include "UIComponent.h"
 #include "../Include/IRenderer.h"
-#include "TextureSourceBinder.h"
+#include "TextureSourceBinder/TextureSourceBinder.h"
 #include "../Config.h"
 
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
@@ -142,7 +142,7 @@ bool IsToolMode(UIComponent* component) noexcept
 
 bool LoadComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, UIComponent* component)
 {
-	ReturnIfFalse(component->BindTextureSourceInfo(sourceBinder));
+	ReturnIfFalse(component->BindTextureSourceInfo(sourceBinder, renderer->GetTextureController()));
 	ReturnIfFalse(renderer->LoadComponent(component));
 	return true;
 }

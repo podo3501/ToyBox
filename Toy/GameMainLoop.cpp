@@ -11,7 +11,7 @@
 #include "UserInterface/Component/SampleComponent.h"
 #include "UserInterface/Component/RenderTexture.h"
 #include "UserInterface/Component/ImageSwitcher.h"
-#include "UserInterface/TextureSourceBinder.h"
+#include "UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"

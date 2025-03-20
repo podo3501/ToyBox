@@ -19,7 +19,7 @@ protected:
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
-	virtual bool ImplementBindSourceInfo(TextureSourceBinder*) noexcept { return true; }
+	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept { return true; }
 	virtual bool ImplementLoadResource(ITextureLoad*) { return true; }
 	virtual bool ImplementPostLoaded(ITextureController*) { return true; }
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept { return true; }
@@ -53,7 +53,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual bool operator==(const UIComponent& other) const noexcept;
 	virtual void SerializeIO(JsonOperation& operation);
 
-	bool BindTextureSourceInfo(TextureSourceBinder* sourceBinder) noexcept;
+	bool BindTextureSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept;
 	bool ChangeSize(const XMUINT2& size) noexcept;
 	bool UpdatePositionsManually(bool root = false) noexcept;
 	bool ProcessUpdate(const DX::StepTimer& timer) noexcept;

@@ -12,7 +12,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
-#include "../Toy/UserInterface/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Utility.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, const string& mainWndName) noexcept :

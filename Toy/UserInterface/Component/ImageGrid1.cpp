@@ -4,7 +4,7 @@
 #include "../../Utility.h"
 #include "../../Config.h"
 #include "../JsonOperation.h"
-#include "../TextureSourceBinder.h"
+#include "../TextureSourceBinder/TextureSourceBinder.h"
 
 ImageGrid1::~ImageGrid1()
 {
@@ -59,10 +59,11 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	return result;
 }
 
-bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder) noexcept
+bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept
 {
 	if (m_bindKey.empty()) return true; //?!? 나중에 binder로 다 바꾸면 return false로 바꿔지는지 확인하자.
 	tie(m_filename, m_source) = sourceBinder->GetSourceInfo(m_bindKey, m_sourceIndex);
+	m_texController = texController;
 
 	return true;
 }

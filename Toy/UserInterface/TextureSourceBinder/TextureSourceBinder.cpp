@@ -1,33 +1,19 @@
 #include "pch.h"
 #include "TextureSourceBinder.h"
-#include "JsonHelper.h"
-#include "UIType.h"
-#include "../Utility.h"
-#include "UIUtility.h"
-
-TextureSourceInfo::~TextureSourceInfo() = default;
-TextureSourceInfo::TextureSourceInfo() :
-    imagePart{ ImagePart::One }
-{}
-
-TextureSourceInfo::TextureSourceInfo(const wstring& _filename, ImagePart _imagePart, const vector<Rectangle>& _sources) noexcept :
-    filename{ _filename },
-    imagePart{ _imagePart },
-    sources{ _sources }
-{}
-
-void TextureSourceInfo::SerializeIO(JsonOperation& operation)
-{
-    operation.Process("Filename", filename);
-    operation.Process("ImagePart", imagePart);
-    operation.Process("Sources", sources);
-}
-
-/////////////////////////////////////////////////////////////////
+#include "../JsonHelper.h"
+#include "../../Utility.h"
+#include "../UIUtility.h"
 
 TextureSourceBinder::~TextureSourceBinder() = default;
 TextureSourceBinder::TextureSourceBinder()
 {}
+
+bool TextureSourceBinder::LoadResources(ITextureLoad* load)
+{
+    return ranges::all_of(m_bindingTable, [load](auto& pair) {
+        return pair.second.LoadResource(load);
+        });
+}
 
 bool TextureSourceBinder::Load(const wstring& jsonFilename)
 {

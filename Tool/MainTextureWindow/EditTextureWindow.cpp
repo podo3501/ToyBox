@@ -30,6 +30,7 @@ void EditTextureWindow::ApplyTexture(ImageGrid1* tex) const noexcept
 
 bool EditTextureWindow::LoadTextureFromFile(const wstring& filename)
 {
+    //Binder에서 로딩하고 난 후에 Component에 인덱스를 넘겨주는 방식으로 할 예정
     unique_ptr<ImageGrid1> texture = make_unique<ImageGrid1>();
     texture->SetFilenameToLoadInfo(filename);
     ReturnIfFalse(m_renderer->LoadComponent(texture.get()));

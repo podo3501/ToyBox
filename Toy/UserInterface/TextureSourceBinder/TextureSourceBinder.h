@@ -1,31 +1,18 @@
 #pragma once
+#include "../Include/ITextureBinder.h"
+#include "TextureSourceInfo.h" //TextureSourceInfo가 클래스로 바뀐다면 전방선언으로 바꾸는게 더 좋지 않을까 ?!?
 
 enum class ImagePart : int;
+struct ITextureLoad;
 class JsonOperation;
-struct TextureSourceInfo
-{
-	~TextureSourceInfo();
-	TextureSourceInfo();
-	TextureSourceInfo(const wstring& _filename, ImagePart _imagePart, const vector<Rectangle>& _sources) noexcept;
 
-	bool operator==(const TextureSourceInfo& o) const noexcept
-	{
-		return (tie(filename, sources) == tie(o.filename, o.sources));
-	}
-
-	void SerializeIO(JsonOperation& operation);
-	inline Rectangle GetSource(int index) const noexcept { return (sources.size() > index) ? sources.at(index) : Rectangle{}; }
-
-	wstring filename;
-	ImagePart imagePart;
-	vector<Rectangle> sources;
-};
-
-class TextureSourceBinder
+class TextureSourceBinder : public ITextureBinder
 {
 public:
 	~TextureSourceBinder();
 	TextureSourceBinder();
+
+	virtual bool LoadResources(ITextureLoad* load) override;
 
 	bool Load(const wstring& jsonFilename);
 	bool Save(const wstring& jsonFilename);

@@ -4,7 +4,7 @@
 #include "../Utility.h"
 #include "UIType.h"
 #include "UITransform.h"
-#include "UserInterface/TextureSourceBinder.h"
+#include "UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;

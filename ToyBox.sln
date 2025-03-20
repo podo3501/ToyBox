@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{69C6
 		Include\d3dx12.h = Include\d3dx12.h
 		Include\IComponent.h = Include\IComponent.h
 		Include\IRenderer.h = Include\IRenderer.h
+		Include\ITextureBinder.h = Include\ITextureBinder.h
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "Core\Core.vcxproj", "{60E13BBA-4299-40F7-8FC1-C9E1928486F4}"

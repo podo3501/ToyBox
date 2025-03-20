@@ -7,7 +7,7 @@
 #include "../Toy/UserInterface/JsonHelper.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/Panel.h"
-#include "../Toy/UserInterface/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/StepTimer.h"
 

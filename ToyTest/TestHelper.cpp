@@ -4,7 +4,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/UIComponent.h"
 #include "../Toy/UserInterface/JsonHelper.h"
-#include "../Toy/UserInterface/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/Utility.h"
 
 using json = nlohmann::json;

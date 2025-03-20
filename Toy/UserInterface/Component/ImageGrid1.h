@@ -32,7 +32,7 @@ public:
 protected:
 	ImageGrid1(const ImageGrid1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementBindSourceInfo(TextureSourceBinder*) noexcept override;
+	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementLoadResource(ITextureLoad* load) override;
 	virtual bool ImplementPostLoaded(ITextureController* texController) override;
 	virtual void ImplementRender(ITextureRender* render) const override;

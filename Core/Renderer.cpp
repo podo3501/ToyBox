@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "DeviceResources.h"
 #include "../Include/IComponent.h"
+#include "../Include/ITextureBinder.h"
 #include "TextureRepository/TextureRepository.h"
 #include "TextureRepository/TextureRenderTarget.h"
 #include "Imgui.h"
@@ -156,6 +157,33 @@ void Renderer::OnDeviceRestored()
     CreateWindowSizeDependentResources();
 }
 #pragma endregion
+
+bool Renderer::LoadTextureBinder(ITextureBinder* textureBinder)
+{
+    ReturnIfFalse(textureBinder);
+    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
+#ifdef __MINGW32__
+    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
+#else
+    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
+    if (FAILED(initialize)) return false;
+#endif
+    WICOnceInitialize();
+
+    auto load = m_texRepository.get();
+
+    m_batch->Begin();
+    if(!textureBinder->LoadResources(load))
+    {
+        m_batch->End(m_deviceResources->GetCommandQueue());
+        return false;
+    }
+
+    auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
+    uploadResourcesFinished.wait();
+
+    return true;
+}
 
 bool Renderer::LoadComponent(IComponent* component)
 {

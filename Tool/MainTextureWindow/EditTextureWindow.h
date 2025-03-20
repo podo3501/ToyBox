@@ -1,5 +1,5 @@
 #pragma once
-#include "../Toy/UserInterface/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 
 enum class ImagePart;
 enum class PendingAction;

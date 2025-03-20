@@ -3,7 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/InputManager.h"
@@ -125,6 +125,7 @@ void ToyTestFixture::TearDown()
 	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
 	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.
 	m_panel.reset();
+	m_sourceBinder.reset();
 	m_renderer.reset();
 	m_window.reset();
 

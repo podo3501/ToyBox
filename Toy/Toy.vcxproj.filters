@@ -29,6 +29,9 @@
     <Filter Include="UserInterface\Command">
       <UniqueIdentifier>{8095bd22-dd9e-443e-ac7d-edbdc3d9bae5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserInterface\TextureSourceBinder">
+      <UniqueIdentifier>{ce70d806-37c0-42f5-9a0e-dd3c79ef5026}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -145,8 +148,11 @@
     <ClInclude Include="UserInterface\Component\ImageGrid.h">
       <Filter>UserInterface\Component</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\TextureSourceBinder.h">
-      <Filter>UserInterface</Filter>
+    <ClInclude Include="UserInterface\TextureSourceBinder\TextureSourceBinder.h">
+      <Filter>UserInterface\TextureSourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureSourceBinder\TextureSourceInfo.h">
+      <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -246,8 +252,11 @@
     <ClCompile Include="UserInterface\Component\ImageGrid.cpp">
       <Filter>UserInterface\Component</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\TextureSourceBinder.cpp">
-      <Filter>UserInterface</Filter>
+    <ClCompile Include="UserInterface\TextureSourceBinder\TextureSourceBinder.cpp">
+      <Filter>UserInterface\TextureSourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureSourceBinder\TextureSourceInfo.cpp">
+      <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
