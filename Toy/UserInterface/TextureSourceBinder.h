@@ -14,11 +14,7 @@ struct TextureSourceInfo
 	}
 
 	void SerializeIO(JsonOperation& operation);
-
-	inline bool IsEmpty() const noexcept { return (filename.empty() && sources.empty()) ? true : false; }
-	inline int GetSourceSize() const noexcept { return static_cast<int>(sources.size()); }
 	inline Rectangle GetSource(int index) const noexcept { return (sources.size() > index) ? sources.at(index) : Rectangle{}; }
-	inline void SetSource(int index, const Rectangle& area) noexcept { sources[index] = area; }
 
 	wstring filename;
 	ImagePart imagePart;
@@ -34,16 +30,19 @@ public:
 	bool Load(const wstring& jsonFilename);
 	bool Save(const wstring& jsonFilename);
 	inline const wstring& GetJsonFilename() const noexcept { return m_jsonFilename; }
-	bool ChangeBindingKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept;
+	bool InsertBindingKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept;
+	bool ModifyBindingKey(const string& newKey, const string& preKey) noexcept;
+	void RemoveBindingKey(const string& bindingKey) noexcept;
+	void RemoveBindingKey(const wstring& filename) noexcept;
 	
 	Rectangle GetArea(const string& key, int index) const noexcept;
-	bool SetArea(const string& bindingKey, int index, const Rectangle& area) noexcept;
 
 	vector<wstring> GetTextureFiles() const noexcept;
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
-	vector<Rectangle> GetArea(const wstring& filename, const XMINT2& position) const noexcept;
+	vector<Rectangle> GetArea(const wstring& filename, ImagePart imgPart, const XMINT2& position) const noexcept;
 	vector<TextureSourceInfo> GetAreas(const wstring& filename, ImagePart part) const noexcept;
 	pair<wstring, Rectangle> GetSourceInfo(const string& bindKey, size_t sourceIndex) const noexcept;
+	bool SetSourceInfo(const string& bindKey, const TextureSourceInfo& sourceInfo) noexcept;
 	void SerializeIO(JsonOperation& operation);
 
 private:

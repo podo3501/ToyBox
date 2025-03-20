@@ -125,6 +125,7 @@ bool EditFilename(const string& label, Property<wstring>& filename)
 
 static bool EditList(const string& listLabel, vector<int>& list)
 {
+    if (list.empty()) return false;
     static constexpr array<string_view, 4> DividerLabel = { "Left", "Right", "Top", "Botton" };
 
     ImGui::Text("%s", listLabel.c_str());

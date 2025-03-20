@@ -41,5 +41,5 @@ void TestRender(size_t index, const RECT& dest, const RECT* source, vector<pair<
 
 RECT Binder(TextureSourceBinder* sourceBinder, const string& key, int index) noexcept
 {
-	return RectangleToRect(sourceBinder->GetArea(key, index));
+	return RectangleToRect(sourceBinder->GetArea(key, index));//?!? 테스트 밖에 함수가 사용되지 않고 있다.
 }

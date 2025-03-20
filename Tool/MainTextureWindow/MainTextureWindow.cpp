@@ -17,7 +17,7 @@ MainTextureWindow::MainTextureWindow(IRenderer* renderer) :
     InnerWindow{ "empty" },
     m_renderer{ renderer },
     m_sourceTexture{ nullptr },
-    m_editTextureWindow{ make_unique<EditTextureWindow>(renderer) }
+    m_editTextureWindow{ make_unique<EditTextureWindow>(renderer, this) }
 {
     m_renderer->AddImguiComponent(this);
 }
@@ -72,10 +72,7 @@ void MainTextureWindow::Render(ImGuiIO* io)
     ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
 
     if (ImGui::IsWindowAppearing())
-    {
         m_window = GetImGuiWindow();
-        m_editTextureWindow->SetTextureWindow(this);
-    }
 
     if (m_sourceTexture)
     {

@@ -188,7 +188,7 @@ struct ImageSource
 struct SourceDivider
 {
 	SourceDivider() = default;
-	SourceDivider(const Rectangle& _rect, const vector<int>& _list) noexcept :
+	SourceDivider(const Rectangle& _rect, const vector<int>& _list = {}) noexcept :
 		rect{ _rect }, list{ _list } {}
 	SourceDivider& operator=(const SourceDivider&) = default;
 	bool operator==(const SourceDivider& other) const

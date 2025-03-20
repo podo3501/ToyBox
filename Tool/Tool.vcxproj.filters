@@ -113,6 +113,9 @@
     <ClCompile Include="MainTextureWindow\EditTextureWindow.cpp">
       <Filter>MainTextureWindow</Filter>
     </ClCompile>
+    <ClCompile Include="MainTextureWindow\ImageSelector.cpp">
+      <Filter>MainTextureWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -198,6 +201,9 @@
     <ClInclude Include="HelperClass.h" />
     <ClInclude Include="InnerWindow.h" />
     <ClInclude Include="MainTextureWindow\EditTextureWindow.h">
+      <Filter>MainTextureWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainTextureWindow\ImageSelector.h">
       <Filter>MainTextureWindow</Filter>
     </ClInclude>
   </ItemGroup>

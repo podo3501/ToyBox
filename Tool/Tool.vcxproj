@@ -159,6 +159,7 @@
     <ClCompile Include="HelperClass.cpp" />
     <ClCompile Include="InnerWindow.cpp" />
     <ClCompile Include="MainTextureWindow\EditTextureWindow.cpp" />
+    <ClCompile Include="MainTextureWindow\ImageSelector.cpp" />
     <ClCompile Include="MainTextureWindow\MainTextureWindow.cpp" />
     <ClCompile Include="MainWindow\ComponentController.cpp" />
     <ClCompile Include="MainWindow\ComponentSelector.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="HelperClass.h" />
     <ClInclude Include="InnerWindow.h" />
     <ClInclude Include="MainTextureWindow\EditTextureWindow.h" />
+    <ClInclude Include="MainTextureWindow\ImageSelector.h" />
     <ClInclude Include="MainTextureWindow\MainTextureWindow.h" />
     <ClInclude Include="MainWindow\ComponentController.h" />
     <ClInclude Include="MainWindow\ComponentSelector.h" />
