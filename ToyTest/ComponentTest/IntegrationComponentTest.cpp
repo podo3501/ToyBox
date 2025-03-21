@@ -12,6 +12,7 @@
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../TestHelper.h"
 
 namespace UserInterfaceTest
 {
@@ -228,6 +229,17 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(!horzAreas.empty() && horzAreas[0].sources.size() == 3);
 		vector<TextureSourceInfo> vertAreas = m_sourceBinder->GetAreas(filename, ImagePart::ThreeV);
 		EXPECT_NE(horzAreas.size(), vertAreas.size());
+
+		TextureSourceInfo testSourceInfo{ L"TestTexFilename.json", ImagePart::One, {} };
+		TextureFontInfo testFontInfo{ L"TestFontFilename.json" };
+		EXPECT_TRUE(m_sourceBinder->InsertBindingKey(L"Test", testFontInfo));
+		EXPECT_TRUE(m_sourceBinder->InsertBindingKey("Test", testSourceInfo));
+		EXPECT_TRUE(m_sourceBinder->ModifyBindingKey(L"Test", L"NewTest"));
+		EXPECT_TRUE(m_sourceBinder->ModifyBindingKey("Test", "NewTest"));
+		EXPECT_TRUE(m_sourceBinder->RemoveBindingKey(L"TestFontFilename.json"));
+		EXPECT_TRUE(m_sourceBinder->RemoveBindingKey(L"TestTexFilename.json"));
+
+		WriteReadTest(m_sourceBinder);
 	}
 
 	//////////////////////////////////////////////////////////

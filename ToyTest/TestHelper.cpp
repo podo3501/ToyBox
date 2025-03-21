@@ -11,10 +11,22 @@ using json = nlohmann::json;
 
 bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
 {
-	JsonFile::WriteComponent(write, L"Test/Data/JOPTest.json");
+	JsonFile::WriteComponent(write, filename);
 
 	unique_ptr<UIComponent> read;
-	JsonFile::ReadComponent(L"Test/Data/JOPTest.json", read);
+	JsonFile::ReadComponent(filename, read);
+
+	EXPECT_TRUE(*write == *read);
+
+	return true;
+}
+
+bool WriteReadTest(unique_ptr<TextureSourceBinder>& write, const wstring& filename)
+{
+	ReturnIfFalse(write->Save(filename));
+
+	unique_ptr<TextureSourceBinder> read = make_unique<TextureSourceBinder>();
+	ReturnIfFalse(read->Load(filename));
 
 	EXPECT_TRUE(*write == *read);
 

@@ -6,7 +6,8 @@ class RenderTexture;
 class ImageGrid1;
 class MainSourceExtractor;
 class TextureSourceBinder;
-class EditTextureWindow;
+class EditFontTexture;
+class EditSourceTexture;
 
 class MainTextureWindow : public InnerWindow
 {
@@ -27,13 +28,15 @@ public:
 
 private:
     ImVec2 GetWindowSize() const noexcept;
+    void RenderSourceWindow();
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<TextureSourceBinder> m_sourceBinder;
     unique_ptr<RenderTexture> m_renderTex; //InnerWindow를 그리는 텍스쳐
     ImageGrid1* m_sourceTexture; //작업할 텍스쳐
-    unique_ptr<EditTextureWindow> m_editTextureWindow;
+    unique_ptr<EditFontTexture> m_editFontTexture;
+    unique_ptr<EditSourceTexture> m_editSourceTexture;
     ImVec2 m_size;
     bool m_isOpen{ false };
 };

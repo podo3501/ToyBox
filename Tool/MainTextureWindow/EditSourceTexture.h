@@ -1,5 +1,4 @@
 #pragma once
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 
 enum class ImagePart;
 enum class PendingAction;
@@ -11,11 +10,11 @@ class MainTextureWindow;
 class RenameNotifier;
 class ImageSelector;
 
-class EditTextureWindow
+class EditSourceTexture
 {
 public:
-    ~EditTextureWindow();
-    EditTextureWindow(IRenderer* renderer, MainTextureWindow* textureWindow);
+    ~EditSourceTexture();
+    EditSourceTexture(IRenderer* renderer, MainTextureWindow* textureWindow);
 
     void Update() noexcept;
     void Render();

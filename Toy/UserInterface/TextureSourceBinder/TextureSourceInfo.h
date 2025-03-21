@@ -1,9 +1,10 @@
 #pragma once
+#include "TextureInfo.h"
+
 enum class ImagePart : int;
 struct ITextureLoad;
 class JsonOperation;
-
-struct TextureSourceInfo
+struct TextureSourceInfo : public TextureInfo
 {
 	~TextureSourceInfo();
 	TextureSourceInfo() noexcept;
@@ -15,13 +16,9 @@ struct TextureSourceInfo
 	void SerializeIO(JsonOperation& operation);
 	inline Rectangle GetSource(int index) const noexcept { return (sources.size() > index) ? sources.at(index) : Rectangle{}; }
 
+	using TextureInfo::GetIndex;
+
 	wstring filename;
 	ImagePart imagePart;
 	vector<Rectangle> sources;
-
-private:
-	void Release() noexcept;
-
-	ITextureLoad* m_texLoader;
-	optional<size_t> m_index;
 };

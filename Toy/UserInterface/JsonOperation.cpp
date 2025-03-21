@@ -165,11 +165,6 @@ void JsonOperation::Process(const string & key, Vector2& data) noexcept
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-//static string RemoveNullWToSA(const wstring& data) noexcept
-//{
-//    return RemoveNullTerminator(WStringToString(data));
-//}
-
 void JsonOperation::Process(const string& key, wstring& data) noexcept
 {
     auto writeFunc = [&data](auto& j) { j = WStringToString(data); };
@@ -177,7 +172,7 @@ void JsonOperation::Process(const string& key, wstring& data) noexcept
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noexcept
+void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noexcept //?!? SourceBinder에서 처리하는 식으로 교체되면 이 함수 삭제
 {
     auto writeFunc = [&data](auto& j) {
         for (const auto& font : data)
@@ -210,6 +205,29 @@ void JsonOperation::Process(const string& key, map<InteractState, ImageSource>& 
             JsonOperation jsOp{ v };
             imgSource.SerializeIO(jsOp);
             datas.emplace(StringToEnum<InteractState>(k), imgSource);
+        }};
+
+    ProcessImpl(key, writeFunc, readFunc);
+}
+
+void JsonOperation::Process(const string& key, unordered_map<wstring, TextureFontInfo>& datas) noexcept
+{
+    auto writeFunc = [&datas](auto& j) {
+        for (auto& [k, v] : datas)
+        {
+            JsonOperation jsOp{};
+            v.SerializeIO(jsOp);
+            j[WStringToString(k)] = jsOp.GetWrite();
+        }};
+
+    auto readFunc = [&datas](const auto& j) {
+        datas.clear();
+        for (auto& [k, v] : j.items())
+        {
+            TextureFontInfo fontInfo{};
+            JsonOperation jsOp{ v };
+            fontInfo.SerializeIO(jsOp);
+            datas.emplace(StringToWString(k), fontInfo);
         }};
 
     ProcessImpl(key, writeFunc, readFunc);

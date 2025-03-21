@@ -4,7 +4,8 @@
 struct ITextureLoad;
 class TextureSourceBinder;
 
-bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"UI/Data/WriteReadTest.json");
+bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
+bool WriteReadTest(unique_ptr<TextureSourceBinder>& sourceBinder, const wstring& filename = L"Test/Data/RWSourceBinderTest.json");
 
 class TestComponent : public UIComponent
 {

@@ -222,10 +222,9 @@ void ImageSelector::EditSelectArea()
         m_sourceBinder->SetSourceInfo(bindingKey, *m_selectedArea);
     }
         
-    m_renameNotifier->EditName("Binding Key", bindingKey, [this, &bindingKey](const string& newKey) {
-        if (bindingKey.empty())
-            return m_sourceBinder->InsertBindingKey(newKey, *m_selectedArea);
-        else
-            return (newKey.empty()) ? RemoveArea() : m_sourceBinder->ModifyBindingKey(newKey, bindingKey);
+    m_renameNotifier->EditName("Tex Bind Key", bindingKey, [this, &bindingKey](const string& newKey) {
+        if (bindingKey.empty()) return m_sourceBinder->InsertBindingKey(newKey, *m_selectedArea);
+        if (newKey.empty()) return RemoveArea();
+        return m_sourceBinder->ModifyBindingKey(bindingKey, newKey);
         });
 }

@@ -7,6 +7,7 @@ class Scene;
 class UITransform;
 struct ImageSource;
 struct TextureSourceInfo;
+struct TextureFontInfo;
 enum class Origin;//enum은 컨셉에 추가만 하면 된다.
 enum class InteractState; 
 enum class DirectionType;
@@ -185,6 +186,7 @@ public:
 	void Process(const string& key, map<wstring, wstring>& data) noexcept;
 	void Process(const string& key, map<int, UITransform>& datas) noexcept;
 	void Process(const string& key, map<InteractState, ImageSource>& datas) noexcept;
+	void Process(const string& key, unordered_map<wstring, TextureFontInfo>& datas) noexcept;
 	void Process(const string& key, unordered_map<string, TextureSourceInfo>& datas) noexcept;
 	void Process(const string& key, deque<wstring>& data) noexcept;
 	void Write(const string& key, UIComponent* data);

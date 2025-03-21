@@ -3,6 +3,7 @@
 #include "UserInterface/UIType.h"
 #include <filesystem>
 
+static wstring g_fontPath{ L"UI/Font/" };
 static wstring g_resourcePath{};
 static Vector2 g_resolution{};
 static StateFlag::Type renderFilter{ StateFlag::Render };
@@ -23,7 +24,8 @@ StateFlag::Type GetRenderFilterFlag() noexcept
 	return renderFilter;
 }
 
-//const wstring& GetResourcePath() noexcept { return g_resourcePath; }
+wstring GetResourcePath() noexcept { return g_resourcePath; }
+wstring GetResourceFontPath() noexcept { return g_fontPath; }
 const Vector2& GetResolution() noexcept { return g_resolution; }
 Rectangle GetRectResolution() noexcept 
 { 

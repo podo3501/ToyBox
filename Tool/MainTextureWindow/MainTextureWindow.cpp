@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "MainTextureWindow.h"
-#include "EditTextureWindow.h"
+#include "EditFontTexture.h"
+#include "EditSourceTexture.h"
 #include "../Utility.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/UIUtility.h"
 
@@ -17,7 +19,8 @@ MainTextureWindow::MainTextureWindow(IRenderer* renderer) :
     InnerWindow{ "empty" },
     m_renderer{ renderer },
     m_sourceTexture{ nullptr },
-    m_editTextureWindow{ make_unique<EditTextureWindow>(renderer, this) }
+    m_editFontTexture{ make_unique<EditFontTexture>() },
+    m_editSourceTexture{ make_unique<EditSourceTexture>(renderer, this) }
 {
     m_renderer->AddImguiComponent(this);
 }
@@ -27,7 +30,8 @@ bool MainTextureWindow::CreateNew()
     m_sourceBinder = CreateSourceBinder();
     ReturnIfFalse(m_sourceBinder);
 
-    m_editTextureWindow->SetSourceBinder(m_sourceBinder.get());
+    m_editFontTexture->SetSourceBinder(m_sourceBinder.get());
+    m_editSourceTexture->SetSourceBinder(m_sourceBinder.get());
     m_isOpen = true;
     return true;
 }
@@ -43,7 +47,8 @@ bool MainTextureWindow::Create(const wstring& filename)
     m_sourceBinder = CreateSourceBinder(filename);
     ReturnIfFalse(m_sourceBinder);
 
-    m_editTextureWindow->SetSourceBinder(m_sourceBinder.get());
+    m_editFontTexture->SetSourceBinder(m_sourceBinder.get());
+    m_editSourceTexture->SetSourceBinder(m_sourceBinder.get());
     m_isOpen = true;
     return true;
 }
@@ -52,7 +57,9 @@ void MainTextureWindow::Update()
 {
     if (!m_window) return;
     SetMouseStartOffset(m_window);
-    m_editTextureWindow->Update();
+
+    m_editFontTexture->Update();
+    m_editSourceTexture->Update();
 }
 
 ImVec2 MainTextureWindow::GetWindowSize() const noexcept
@@ -81,7 +88,20 @@ void MainTextureWindow::Render(ImGuiIO* io)
     }
 
     IgnoreMouseClick(m_window);
-    m_editTextureWindow->Render();
+    RenderSourceWindow();
+    ImGui::End();
+}
+
+void MainTextureWindow::RenderSourceWindow()
+{
+    string wndName = string("Texture Source Window");
+    ImGui::Begin(wndName.c_str(), nullptr, ImGuiWindowFlags_NoFocusOnAppearing);
+
+    m_editFontTexture->Render();
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+    m_editSourceTexture->Render();
 
     ImGui::End();
 }
