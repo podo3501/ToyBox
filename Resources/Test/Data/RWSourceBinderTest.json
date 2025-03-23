@@ -16,23 +16,23 @@
                     "0": {
                         "x": 62,
                         "y": 82,
-                        "width": 16,
+                        "width": 22,
                         "height": 48
                     }
                 },
                 {
                     "1": {
-                        "x": 78,
+                        "x": 84,
                         "y": 82,
-                        "width": 16,
+                        "width": 4,
                         "height": 48
                     }
                 },
                 {
                     "2": {
-                        "x": 94,
+                        "x": 88,
                         "y": 82,
-                        "width": 16,
+                        "width": 22,
                         "height": 48
                     }
                 }
@@ -48,6 +48,84 @@
                         "y": 138,
                         "width": 32,
                         "height": 32
+                    }
+                }
+            ]
+        },
+        "BackImage9": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "ImagePart": 3,
+            "Sources": [
+                {
+                    "0": {
+                        "x": 10,
+                        "y": 10,
+                        "width": 30,
+                        "height": 36
+                    }
+                },
+                {
+                    "1": {
+                        "x": 40,
+                        "y": 10,
+                        "width": 4,
+                        "height": 36
+                    }
+                },
+                {
+                    "2": {
+                        "x": 44,
+                        "y": 10,
+                        "width": 30,
+                        "height": 36
+                    }
+                },
+                {
+                    "3": {
+                        "x": 10,
+                        "y": 46,
+                        "width": 30,
+                        "height": 2
+                    }
+                },
+                {
+                    "4": {
+                        "x": 40,
+                        "y": 46,
+                        "width": 4,
+                        "height": 2
+                    }
+                },
+                {
+                    "5": {
+                        "x": 44,
+                        "y": 46,
+                        "width": 30,
+                        "height": 2
+                    }
+                },
+                {
+                    "6": {
+                        "x": 10,
+                        "y": 48,
+                        "width": 30,
+                        "height": 26
+                    }
+                },
+                {
+                    "7": {
+                        "x": 40,
+                        "y": 48,
+                        "width": 4,
+                        "height": 26
+                    }
+                },
+                {
+                    "8": {
+                        "x": 44,
+                        "y": 48,
+                        "width": 30,
+                        "height": 26
                     }
                 }
             ]
@@ -94,6 +172,36 @@
                 }
             ]
         },
+        "ScrollButton3_Hovered_V": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "ImagePart": 2,
+            "Sources": [
+                {
+                    "0": {
+                        "x": 154,
+                        "y": 178,
+                        "width": 16,
+                        "height": 7
+                    }
+                },
+                {
+                    "1": {
+                        "x": 154,
+                        "y": 185,
+                        "width": 16,
+                        "height": 2
+                    }
+                },
+                {
+                    "2": {
+                        "x": 154,
+                        "y": 187,
+                        "width": 16,
+                        "height": 7
+                    }
+                }
+            ]
+        },
         "ScrollButton3_Normal_H": {
             "Filename": "UI/SampleTexture/Sample_0.png",
             "ImagePart": 1,
@@ -102,24 +210,54 @@
                     "0": {
                         "x": 10,
                         "y": 82,
-                        "width": 16,
+                        "width": 22,
                         "height": 48
                     }
                 },
                 {
                     "1": {
-                        "x": 26,
+                        "x": 32,
                         "y": 82,
-                        "width": 16,
+                        "width": 4,
                         "height": 48
                     }
                 },
                 {
                     "2": {
-                        "x": 42,
+                        "x": 36,
                         "y": 82,
-                        "width": 16,
+                        "width": 22,
                         "height": 48
+                    }
+                }
+            ]
+        },
+        "ScrollButton3_Normal_V": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "ImagePart": 2,
+            "Sources": [
+                {
+                    "0": {
+                        "x": 134,
+                        "y": 178,
+                        "width": 16,
+                        "height": 7
+                    }
+                },
+                {
+                    "1": {
+                        "x": 134,
+                        "y": 185,
+                        "width": 16,
+                        "height": 2
+                    }
+                },
+                {
+                    "2": {
+                        "x": 134,
+                        "y": 187,
+                        "width": 16,
+                        "height": 7
                     }
                 }
             ]
@@ -132,24 +270,84 @@
                     "0": {
                         "x": 114,
                         "y": 82,
-                        "width": 16,
+                        "width": 22,
                         "height": 48
                     }
                 },
                 {
                     "1": {
-                        "x": 130,
+                        "x": 136,
                         "y": 82,
-                        "width": 16,
+                        "width": 4,
                         "height": 48
                     }
                 },
                 {
                     "2": {
-                        "x": 146,
+                        "x": 140,
                         "y": 82,
-                        "width": 16,
+                        "width": 22,
                         "height": 48
+                    }
+                }
+            ]
+        },
+        "ScrollButton3_Pressed_V": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "ImagePart": 2,
+            "Sources": [
+                {
+                    "0": {
+                        "x": 174,
+                        "y": 178,
+                        "width": 16,
+                        "height": 7
+                    }
+                },
+                {
+                    "1": {
+                        "x": 174,
+                        "y": 185,
+                        "width": 16,
+                        "height": 2
+                    }
+                },
+                {
+                    "2": {
+                        "x": 174,
+                        "y": 187,
+                        "width": 16,
+                        "height": 7
+                    }
+                }
+            ]
+        },
+        "ScrollTrack3_V": {
+            "Filename": "UI/SampleTexture/Sample_0.png",
+            "ImagePart": 2,
+            "Sources": [
+                {
+                    "0": {
+                        "x": 114,
+                        "y": 178,
+                        "width": 16,
+                        "height": 10
+                    }
+                },
+                {
+                    "1": {
+                        "x": 114,
+                        "y": 188,
+                        "width": 16,
+                        "height": 28
+                    }
+                },
+                {
+                    "2": {
+                        "x": 114,
+                        "y": 216,
+                        "width": 16,
+                        "height": 10
                     }
                 }
             ]

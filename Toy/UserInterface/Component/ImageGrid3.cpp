@@ -88,6 +88,7 @@ bool ImageGrid3::SetupFromData(const XMUINT2& size, size_t index, const vector<R
     return true;
 }
 
+//?!? 삭제
 bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept
 {
     if (source.filename.empty()) return false;
@@ -104,6 +105,35 @@ bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const Imag
         UIEx(this).AttachComponent(move(grid1), positions[idx]);
     }
     SetupDetails(layout.GetSize());
+
+    return true;
+}
+
+bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
+{
+    m_dirType = dirType;
+    SetLayout({ layout.GetSize(), Origin::LeftTop });
+
+    vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
+    for (size_t idx : views::iota(0, 3)) //bindKey를 조회할 수 없어 빈 내용의 자식들을 생성한다.
+    {
+        size_t childSrcIdx = sourceIndex * 3 + idx;
+        auto grid1 = CreateImageGrid1({ {}, Origin::LeftTop }, bindKey, childSrcIdx);
+        if (auto flag = stateFlags[idx]; flag) grid1->SetStateFlag(*flag, true);
+        UIEx(this).AttachComponent(move(grid1), {});
+    }
+    SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+
+    return true;
+}
+
+bool ImageGrid3::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+{
+    if (GetSize() == XMUINT2{}) //ImageGrid9을 만들면 초기 크기값이 0로 설정 돼 있다.
+        SetSize(UIEx(this).GetTotalChildSize());
+    else
+        ChangeSize(GetSize(), true);
+    UpdatePositionsManually();
 
     return true;
 }
@@ -249,4 +279,10 @@ unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& l
 {
     auto grid3 = make_unique<ImageGrid3>();
     return CreateIfSetup(move(grid3), dirType, layout, source);
+}
+
+unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex)
+{
+    auto grid3 = make_unique<ImageGrid3>();
+    return grid3->Setup(dirType, layout, bindKey, sourceIndex) ? move(grid3) : nullptr;
 }

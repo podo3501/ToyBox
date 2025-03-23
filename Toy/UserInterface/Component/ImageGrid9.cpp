@@ -35,7 +35,8 @@ static unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, size_t idx
 	return CreateImageGrid3(dirType, grid3layout, imgSource);
 }
 
-bool ImageGrid9::Setup(const UILayout& layout, const ImageSource& source) noexcept
+//?!? ªË¡¶
+bool ImageGrid9::Setup(const UILayout& layout, const ImageSource& source)
 {
 	if (source.filename.empty()) return false;
 	if (source.list.size() != 9) return false;
@@ -57,6 +58,30 @@ bool ImageGrid9::Setup(const UILayout& layout, const ImageSource& source) noexce
 	SetLayout(layout);
 
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+	UpdatePositionsManually();
+
+	return true;
+}
+
+bool ImageGrid9::Setup(const UILayout& layout, const string& bindKey)
+{
+	SetLayout(layout);
+
+	vector<optional<StateFlag::Type>> stateFlags{ StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
+	for (size_t idx : views::iota(0, 3))
+	{
+		auto grid3 = CreateImageGrid3(DirectionType::Horizontal, { {}, Origin::LeftTop }, bindKey, idx);
+		if (auto flag = stateFlags[idx]; flag) grid3->SetStateFlag(*flag, true);
+		UIEx(this).AttachComponent(move(grid3), {});
+	}
+	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+
+	return true;
+}
+
+bool ImageGrid9::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+{
+	ChangeSize(GetSize(), true);
 	UpdatePositionsManually();
 
 	return true;
@@ -177,4 +202,10 @@ unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const ImageSourc
 {
 	auto imgGrid9 = make_unique<ImageGrid9>();
 	return CreateIfSetup(move(imgGrid9), layout, source);
+}
+
+unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const string& bindKey)
+{
+	auto img9 = make_unique<ImageGrid9>();
+	return img9->Setup(layout, bindKey) ? move(img9) : nullptr;
 }

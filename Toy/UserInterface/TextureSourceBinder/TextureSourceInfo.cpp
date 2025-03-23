@@ -29,7 +29,7 @@ TextureSourceInfo::TextureSourceInfo(const wstring& _filename, ImagePart _imageP
 
 bool TextureSourceInfo::operator==(const TextureSourceInfo& o) const noexcept
 {
-    return (tie(filename, sources) == tie(o.filename, o.sources));
+    return (tie(filename, imagePart, sources) == tie(o.filename, o.imagePart, o.sources));
 }
 
 bool TextureSourceInfo::LoadResource(ITextureLoad* load)

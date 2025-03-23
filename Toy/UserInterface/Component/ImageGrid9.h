@@ -14,7 +14,8 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid9; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 
-	bool Setup(const UILayout& layout, const ImageSource& source) noexcept;
+	bool Setup(const UILayout& layout, const ImageSource& source);
+	bool Setup(const UILayout& layout, const string& bindKey);
 	bool SetFilename(const wstring& filename) noexcept;
 	wstring GetFilename() const noexcept;
 
@@ -27,8 +28,10 @@ public:
 protected:
 	ImageGrid9(const ImageGrid9& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 };
 
 unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const ImageSource& source);
+unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const string& bindKey);

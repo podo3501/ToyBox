@@ -142,6 +142,15 @@ Rectangle TextureSourceBinder::GetArea(const string& key, int index) const noexc
     return it->second.GetSource(index);
 }
 
+optionalRef<TextureSourceInfo> TextureSourceBinder::GetSourceInfo(const string& key) const noexcept
+{
+    auto it = m_bindingTexTable.find(key);
+    if (it == m_bindingTexTable.end()) return nullopt;
+
+    return cref(it->second);
+}
+
+//?!? 파생된 함수들은 멤버 함수로 만들지 말고 GetSourceInfo을 사용해서 따로 전역함수를 만들어 사용하자.
 vector<Rectangle> TextureSourceBinder::GetArea(const wstring& filename, ImagePart imgPart, const XMINT2& position) const noexcept
 {
     for (const auto& entry : m_bindingTexTable) {
@@ -189,11 +198,21 @@ void TextureSourceBinder::SerializeIO(JsonOperation& operation)
     operation.Process("BindingTexTable", m_bindingTexTable);
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 unique_ptr<TextureSourceBinder> CreateSourceBinder(const wstring& jsonFilename)
 {
     auto sourceBinder = make_unique<TextureSourceBinder>();
     if (jsonFilename.empty()) return move(sourceBinder);
 
     return sourceBinder->Load(jsonFilename) ? move(sourceBinder) : nullptr;
+}
+
+optionalRef<vector<Rectangle>> GetRectangles(TextureSourceBinder* sourceBinder, const string& key) noexcept
+{
+    const auto& srcInfo = sourceBinder->GetSourceInfo(key);
+    if (!srcInfo) return nullopt;
+    
+    return cref(srcInfo->get().sources);
 }
 

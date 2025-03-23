@@ -18,7 +18,7 @@ namespace UserInterfaceTest
 {
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
-		auto imgGrid1 = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		auto [imgGrid1, _] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		UIComponent* component = UIEx(panel).FindComponent(componentName);
 		return UIEx(component).AttachComponent(move(imgGrid1), { 10, 10 }) ? false : true;
 	}
@@ -43,8 +43,8 @@ namespace UserInterfaceTest
 
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid9_0"), true); //위에서 ImgGrid1를 attach 했다.
 
-		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({ { 200, 100 }, Origin::LeftTop }));
-		auto img2 = CreateSampleImageGrid1({ { 110, 60 }, Origin::LeftTop });
+		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {200, 100}, Origin::LeftTop }, "BackImage1"));
+		auto [img2, _] = GetPtrs(CreateImageGrid1({ {110, 60}, Origin::LeftTop }, "BackImage1"));
 		UIEx(img1).AttachComponent(move(img2), { 100, 50 });	//중점에 attach 한다.
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 		m_panel->ProcessUpdate(m_timer);
@@ -68,7 +68,7 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, Clone)
 	{
-		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleImageGrid1({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateImageGrid1({ {220, 190}, Origin::LeftTop }, "BackImage1")));
 		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleImageGrid3(DirectionType::Horizontal, { { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop })));
 		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>")));
@@ -85,8 +85,8 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, GetComponent)
 	{
-		auto [img2, img2Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
-		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
+		auto [img2, img2Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		UIEx(img1).AttachComponent(move(img2), { 100, 100 });
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 
@@ -146,8 +146,8 @@ namespace UserInterfaceTest
 	//같아도 되니까 코딩할때 이름_1 이런것을 찾지 않아도 된다.
 	TEST_F(IntegrationTest, Region)
 	{
-		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
-		auto [img2, img2Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
+		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [img2, img2Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
 
 		img1Ptr->RenameRegion("Region_0"); //먼저 Region값을 넣어주면 이름이 같아도 되고 나중에 Region을 넣으면 
 		img2Ptr->RenameRegion("Region_0"); //Attach 할때 unique 이름으로 만들어 준다.
@@ -159,7 +159,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(img1Ptr->GetName(), "ImageGrid1_0");
 		EXPECT_EQ(img2Ptr->GetName(), "ImageGrid1_0");
 
-		auto [img3, img3Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop }));
+		auto [img3, img3Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		img3->Rename("UnChanging Name");
 		auto [img4, img4Ptr] = GetPtrs(img3->Clone());
 
@@ -169,7 +169,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(img3Ptr->GetName(), "UnChanging Name");
 		EXPECT_EQ(img4Ptr->GetName(), "UnChanging Name");
 
-		unique_ptr<UIComponent> imgDummy = CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop });
+		unique_ptr<UIComponent> imgDummy = CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1");
 		auto imgDummyPtr = imgDummy.get();
 		UIEx(m_panel).AttachComponent(move(imgDummy), { 100, 100 });
 		EXPECT_TRUE(imgDummyPtr->Rename("UnChanging Name"));
@@ -251,7 +251,7 @@ namespace UserInterfaceTest
 		CaptureSnapshot(cmdList, history);
 
 		auto [img9, img9Ptr] = GetPtrs(CreateSampleImageGrid9({ {170, 120}, Origin::Center }));
-		auto [img1, img1Ptr] = GetPtrs(CreateSampleImageGrid1({ { 64, 64 }, Origin::Center }));
+		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
 
 		cmdList.AttachComponent(m_panel.get(), move(img1), { 111, 222 });
 		CaptureSnapshot(cmdList, history);

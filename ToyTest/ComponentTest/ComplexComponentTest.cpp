@@ -16,13 +16,10 @@
 
 namespace UserInterfaceTest
 {
-	static void TestContainer_Scroll(size_t index, const RECT& dest, const RECT* source)
+	static void TestContainer_Scroll(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
-		TestRender(index, dest, source, { //Pressed
-			{{92, 50, 108, 57}, {174, 178, 190, 185}},
-			{{92, 57, 108, 143}, {174, 185, 190, 187}},
-			{{92, 143, 108, 150}, {174, 187, 190, 194}}
-			});
+		vector<RECT> expectDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_Pressed_V"));
 	}
 
 	TEST_F(ComplexComponentTest, Container_Scroll)
@@ -80,12 +77,12 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source)
+	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder*)
 	{
 		EXPECT_EQ(index, 1); //0은 texture 1은 renderTexture이다. 그래서 1이 들어오고
-		TestRender(0, dest, source, {//0값 비교하니까 0을 그냥 넣어줌. 
-			{{75, 75, 125, 125}, {0, 0, 50, 50}}
-			});
+		vector<RECT> expectDest = { { 75, 75, 125, 125 } };
+		vector<RECT> expectSource = { { 0, 0, 50, 50 } };
+		TestCoordinates(0, dest, source, expectDest, expectSource);//0값 비교하니까 0을 그냥 넣어줌. 
 	}
 
 	TEST_F(ComplexComponentTest, RenderTexture)
@@ -117,17 +114,16 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 	}
 
-	static void TestScrollBar(size_t index, const RECT& dest, const RECT* source)
+	static void TestScrollBar(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
-		TestRender(index, dest, source, {
-			//{ {92, 100, 108, 300 }, {118, 138, 150, 170} },
-			{ {92, 100, 108, 110 }, {114, 178, 130, 188} },
-			{ {92, 110, 108, 290 }, {114, 188, 130, 216} },
-			{ {92, 290, 108, 300 }, {114, 216, 130, 226} },
-			{ {92, 175, 108, 182 }, {134, 178, 150, 185} },
-			{ {92, 182, 108, 218 }, {134, 185, 150, 187} },
-			{ {92, 218, 108, 225 }, {134, 187, 150, 194} }
-			});
+		vector<RECT> expectDest = { 
+			{ 92, 100, 108, 110 }, { 92, 110, 108, 290 }, { 92, 290, 108, 300 },
+			{ 92, 175, 108, 182 }, { 92, 182, 108, 218 }, { 92, 218, 108, 225 } };
+
+		vector<RECT> expectSource{ GetSources(sb, "ScrollTrack3_V") };
+		vector<RECT> expectSource2{ GetSources(sb, "ScrollButton3_Normal_V") };
+		expectSource.insert(expectSource.end(), expectSource2.begin(), expectSource2.end());
+		TestCoordinates(index, dest, source, expectDest, expectSource);
 	}
 
 	TEST_F(ComplexComponentTest, ScrollSlider)

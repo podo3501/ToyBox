@@ -196,3 +196,10 @@ inline RECT RectangleToRect(const Rectangle& rect) noexcept
 	rct.bottom = rect.y + rect.height;
 	return rct;
 }
+
+inline vector<RECT> RectanglesToRects(const vector<Rectangle>& rectangles) noexcept
+{
+	vector<RECT> rects(rectangles.size());
+	ranges::transform(rectangles, rects.begin(), RectangleToRect);
+	return rects;
+}

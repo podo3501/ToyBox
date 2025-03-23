@@ -43,15 +43,21 @@ static bool IsTrue(const RECT& dest, const RECT& destRect, const RECT& source, c
 	return false;
 }
 
-void TestRender(size_t index, const RECT& dest, const RECT* source, vector<pair<RECT, RECT>> testCases) noexcept
+void TestCoordinates(size_t index, const RECT& dest, const RECT* source,
+	const vector<RECT>& expDests, const vector<RECT>& expSrcs) noexcept
 {
 	EXPECT_TRUE(index == 0);
-	EXPECT_TRUE(ranges::any_of(testCases, [&](const auto& pair) {
-		return IsTrue(dest, pair.first, *source, pair.second);
-		}));
+	EXPECT_EQ(expDests.size(), expSrcs.size());
+	bool result = false;
+	for(size_t idx : views::iota(0u, expDests.size())) //views::zip이 있으면 간단하게 되는데 c++23부터 지원
+		result |= IsTrue(dest, expDests[idx], *source, expSrcs[idx]);
+	EXPECT_TRUE(result);
 }
 
-RECT Binder(TextureSourceBinder* sourceBinder, const string& key, int index) noexcept
+vector<RECT> GetSources(TextureSourceBinder* sourceBinder, const string& key) noexcept
 {
-	return RectangleToRect(sourceBinder->GetArea(key, index));//?!? 테스트 밖에 함수가 사용되지 않고 있다.
+	const auto& rectangles = GetRectangles(sourceBinder, key);
+	if (!rectangles) return {};
+
+	return RectanglesToRects(rectangles->get());
 }

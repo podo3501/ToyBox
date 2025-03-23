@@ -21,6 +21,7 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept;
+	bool Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
 
 	bool SetFilename(const wstring& filename) noexcept;
@@ -37,6 +38,7 @@ public:
 protected:
 	ImageGrid3(const ImageGrid3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
@@ -46,3 +48,4 @@ private:
 };
 
 unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const ImageSource& source);
+unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);

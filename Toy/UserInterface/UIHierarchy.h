@@ -19,6 +19,7 @@ public:
 	//children을 순회하는 함수 모음
 	void ForEachChild(function<void(UIComponent*)> func) noexcept; //기본 DFS
 	bool ForEachChildUntilFail(function<bool(UIComponent*)> func) noexcept; //리턴값을 반환하는 재귀(로딩함수같은)
+	bool ForEachChildPostUntilFail(function<bool(UIComponent*)> func) noexcept; //후위 순회로 리턴값 반환 재귀(binder에사용)
 	void ForEachChildBool(function<CResult(UIComponent*)> func) noexcept; //무언가를 찾았으면 bool 반환으로 그만 하라는 함수
 	void ForEachChildConst(function<void(const UIComponent*)> func) const noexcept; //읽기전용
 	void ForEachChildBFS(StateFlag::Type flag, function<void(UIComponent*)> func) noexcept; //BFS용으로 만듦. 기본은DFS

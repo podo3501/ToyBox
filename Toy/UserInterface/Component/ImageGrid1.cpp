@@ -62,9 +62,12 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept
 {
 	if (m_bindKey.empty()) return true; //?!? 나중에 binder로 다 바꾸면 return false로 바꿔지는지 확인하자.
+	
 	tie(m_filename, m_source) = sourceBinder->GetSourceInfo(m_bindKey, m_sourceIndex);
 	m_texController = texController;
-
+	if (GetSize() == XMUINT2{}) //사이즈가 없다면 source 사이즈로 초기화 한다.
+		SetSize(RectangleToXMUINT2(m_source));
+	
 	return true;
 }
 
@@ -128,7 +131,7 @@ void ImageGrid1::ImplementRender(ITextureRender* render) const
 	render->Render(*m_index, destination, &source);
 }
 
-bool ImageGrid1::Setup(const UILayout& layout, const string& bindKey, int sourceIndex) noexcept
+bool ImageGrid1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
 {
 	if (bindKey.empty()) return false;
 	SetLayout(layout);
@@ -175,8 +178,8 @@ unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const ImageSourc
 	return CreateIfSetup(move(grid1), layout, source);
 }
 
-unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const string& bindKey)
+unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const string& bindKey, size_t sourceIndex)
 {
 	auto grid1 = make_unique<ImageGrid1>();
-	return grid1->Setup(layout, bindKey) ? move(grid1) : nullptr;
+	return grid1->Setup(layout, bindKey, sourceIndex) ? move(grid1) : nullptr;
 }

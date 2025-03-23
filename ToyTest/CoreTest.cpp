@@ -90,7 +90,7 @@ namespace BasicCore
 		EXPECT_TRUE(m_renderer->LoadComponent(testComponent.get()));
 
 		auto texController = m_renderer->GetTextureController();
-		auto img1 = CreateSampleImageGrid1({ {64, 64}, Origin::LeftTop });
+		auto img1 = CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1");
 		for(auto idx : views::iota(2, 10))
 			EXPECT_EQ(LoadAndCheckRenderTexture(texController, img1.get(), img1->GetSize(), img1->GetPosition()), idx);
 

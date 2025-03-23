@@ -71,7 +71,7 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 
 bool UIComponent::BindTextureSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept
 {
-	return ForEachChildUntilFail([sourceBinder, texController](UIComponent* component) {
+	return ForEachChildPostUntilFail([sourceBinder, texController](UIComponent* component) {
 		return component->ImplementBindSourceInfo(sourceBinder, texController);
 		});
 }
@@ -155,13 +155,14 @@ bool UIComponent::ImplementChangeSize(const XMUINT2& size) noexcept
 }
 
 //크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
-bool UIComponent::ChangeSize(const XMUINT2& size) noexcept
+bool UIComponent::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
 	XMUINT2 lockedSize{ size };
 	const auto& preSize = GetSize();
 	if (HasStateFlag(StateFlag::X_SizeLocked)) lockedSize.x = preSize.x;
 	if (HasStateFlag(StateFlag::Y_SizeLocked)) lockedSize.y = preSize.y;
-	if (lockedSize == preSize) return true;
+
+	if (!isForce && lockedSize == preSize) return true;
 
 	return ImplementChangeSize(lockedSize);
 }

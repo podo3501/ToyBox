@@ -19,7 +19,7 @@ public:
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
 
 	optional<vector<Rectangle>> GetTextureAreaList();
-	bool Setup(const UILayout& layout, const string& bindKey, int sourceIndex = 0) noexcept;
+	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
 	bool Setup(const UILayout& layout, const ImageSource& source) noexcept;
 	void SetFilenameToLoadInfo(const wstring& filename) noexcept;
 
@@ -43,7 +43,7 @@ private:
 
 	optional<size_t> m_index; //0값도 인덱스로 사용하기 때문에 optional
 	string m_bindKey;
-	int m_sourceIndex{ -1 };
+	size_t m_sourceIndex{ 0 };
 	wstring m_filename;
 	Rectangle m_source{};
 	UINT64 m_gfxOffset{};
@@ -51,4 +51,4 @@ private:
 };
 
 unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const ImageSource& source);
-unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const string& bindKey);
+unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);

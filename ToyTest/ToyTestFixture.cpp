@@ -110,8 +110,16 @@ void ToyTestFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 	state.leftButton = leftButton;
 	mouseTracker.Update(state);
 }
-
+//?!?이 함수 지우기
 void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
+{
+	unique_ptr<UIComponent> clonePanel = component->Clone();
+
+	CallMockRender(clonePanel.get(), renderFunc, times);
+	EXPECT_TRUE(WriteReadTest(clonePanel));
+}
+
+void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> renderFunc, int times)
 {
 	unique_ptr<UIComponent> clonePanel = component->Clone();
 

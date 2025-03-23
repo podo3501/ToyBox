@@ -1,4 +1,5 @@
 #pragma once
+#include "../Include/TypeAliases.h"
 #include "../Include/ITextureBinder.h"
 #include "TextureSourceInfo.h" //TextureSourceInfo가 클래스로 바뀐다면 전방선언으로 바꾸는게 더 좋지 않을까 ?!?
 #include "TextureFontInfo.h"
@@ -26,7 +27,7 @@ public:
 	bool RemoveBindingKey(const wstring& filename) noexcept;
 	
 	Rectangle GetArea(const string& key, int index) const noexcept;
-
+	optionalRef<TextureSourceInfo> GetSourceInfo(const string& key) const noexcept;
 	vector<wstring> GetTextureFiles() const noexcept;
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
 	wstring GetBindingKey(const wstring& fontFilename) const noexcept;
@@ -43,3 +44,4 @@ private:
 };
 
 unique_ptr<TextureSourceBinder> CreateSourceBinder(const wstring& jsonFilename = L"");
+optionalRef<vector<Rectangle>> GetRectangles(TextureSourceBinder* sourceBinder, const string& key) noexcept;

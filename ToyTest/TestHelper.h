@@ -22,5 +22,6 @@ private:
 	function<bool(ITextureLoad*)> m_loadTestFunc;
 };
 
-void TestRender(size_t index, const RECT& dest, const RECT* source, vector<pair<RECT, RECT>> testCases) noexcept;
-RECT Binder(TextureSourceBinder* sourceBinder, const string& key, int index) noexcept;
+void TestCoordinates(size_t index, const RECT& dest, const RECT* source,
+	const vector<RECT>& expDests, const vector<RECT>& expSrcs) noexcept;
+vector<RECT> GetSources(TextureSourceBinder* sourceBinder, const string& key) noexcept;

@@ -15,12 +15,14 @@
 #include "../UIUtility.h"
 #include "../../Utility.h"
 
+//?!? 삭제
 unique_ptr<ImageGrid1> CreateSampleImageGrid1(const UILayout& layout)
 {
 	ImageSource grid1Source{ L"UI/SampleTexture/Sample_0.png", { { 10, 10, 64, 64 } } };
 	return CreateImageGrid1(layout, grid1Source);
 }
 
+//?!? 삭제
 unique_ptr<ImageGrid3> CreateSampleImageGrid3(DirectionType dirType, const UILayout& layout)
 {
 	ImageSource source{};
@@ -29,7 +31,8 @@ unique_ptr<ImageGrid3> CreateSampleImageGrid3(DirectionType dirType, const UILay
 	switch (dirType)
 	{
 	case DirectionType::Horizontal: source.list = { { 10, 82, 22, 48 }, {32, 82, 4, 48}, {36, 82, 22, 48} }; break;
-	case DirectionType::Vertical: source.list = { { 10, 82, 48, 22 }, {10, 104, 48, 4}, {10, 108, 48, 22} }; break;
+	//case DirectionType::Vertical: source.list = { { 10, 82, 48, 22 }, {10, 104, 48, 4}, {10, 108, 48, 22} }; break;
+	case DirectionType::Vertical: source.list = { { 114, 178, 16, 10 }, { 114, 188, 16, 28 }, { 114, 216, 16, 10 } }; break;
 	}
 
 	auto imgGrid3 = make_unique<ImageGrid3>();
@@ -112,10 +115,14 @@ unique_ptr<Button> CreateSampleButton3(DirectionType dirType, const UILayout& la
 		sources = { { InteractState::Normal, { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } },
 			{ InteractState::Hover, { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } },
 			{ InteractState::Pressed, { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } }; break;
-	case DirectionType::Vertical:
+	/*case DirectionType::Vertical:
 		sources = { { InteractState::Normal, { {10, 82, 48, 22}, {10, 104, 48, 4}, {10, 108, 48, 22} } },
 			{ InteractState::Hover, { {62, 82, 48, 22}, {62, 104, 48, 4}, {62, 108, 48, 22} } },
-			{ InteractState::Pressed, { {114, 82, 48, 22}, {114, 104, 48, 4}, {114, 108, 48, 22} } } }; break;
+			{ InteractState::Pressed, { {114, 82, 48, 22}, {114, 104, 48, 4}, {114, 108, 48, 22} } } }; break;*/
+	case DirectionType::Vertical:
+		sources = { { InteractState::Normal, { {134, 178, 16, 7}, {134, 185, 16, 2}, {134, 187, 16, 7} } },
+			{ InteractState::Hover, { {154, 178, 16, 7}, {154, 185, 16, 2}, {154, 187, 16, 7} } },
+			{ InteractState::Pressed, { {174, 178, 16, 7}, {174, 185, 16, 2}, {174, 187, 16, 7} } } }; break;
 	}
 	return CreateSampleButton3(dirType, layout, sources, L"UI/SampleTexture/Sample_0.png");
 }
