@@ -28,12 +28,14 @@ ImageGrid1::ImageGrid1() :
 
 ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	ImageGrid{ o },
-	m_texController{ o.m_texController }
-{
-	m_index = o.m_index;
-	m_filename = o.m_filename;
-	m_source = o.m_source;
-}
+	m_bindKey{ o.m_bindKey },
+	m_sourceIndex{ o.m_sourceIndex },
+	m_texController{ o.m_texController },
+	m_index{ o.m_index },
+	m_filename{ o.m_filename },
+	m_source{ o.m_source },
+	m_gfxOffset{ o.m_gfxOffset }
+{}
 
 void ImageGrid1::AddRef() const noexcept
 {
@@ -53,18 +55,24 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const ImageGrid1* o = static_cast<const ImageGrid1*>(&rhs);
 
-	auto result = tie(m_filename, m_source) == tie(o->m_filename, o->m_source);
+	auto result = tie(m_bindKey, m_sourceIndex) == tie(o->m_bindKey, o->m_sourceIndex);
 	assert(result);
 
 	return result;
 }
 
-bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept
+bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController*) noexcept
 {
 	if (m_bindKey.empty()) return true; //?!? 나중에 binder로 다 바꾸면 return false로 바꿔지는지 확인하자.
-	
-	tie(m_filename, m_source) = sourceBinder->GetSourceInfo(m_bindKey, m_sourceIndex);
-	m_texController = texController;
+	auto sourceInfoRef = sourceBinder->GetSourceInfo(m_bindKey);
+	ReturnIfFalse(sourceInfoRef);
+
+	const auto& srcInfo = sourceInfoRef->get();
+	m_filename = srcInfo.filename;
+	m_index = srcInfo.GetIndex();
+	m_source = srcInfo.GetSource(m_sourceIndex);
+	//textureController는 직접 텍스쳐를 로딩 했을때에만 값을 셋팅한다. 텍스쳐를 로딩 안했는데 필요하게 되면 addref와 release에서 작동하게 되어서 레퍼런스카운터 숫자가 맞지 않는다.
+
 	if (GetSize() == XMUINT2{}) //사이즈가 없다면 source 사이즈로 초기화 한다.
 		SetSize(RectangleToXMUINT2(m_source));
 	
@@ -168,8 +176,8 @@ void ImageGrid1::SetFilenameToLoadInfo(const wstring& filename) noexcept
 void ImageGrid1::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
-	operation.Process("Filename", m_filename);
-	operation.Process("Source", m_source);
+	operation.Process("BindKey", m_bindKey);
+	operation.Process("SourceIndex", m_sourceIndex);
 }
 
 unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const ImageSource& source)

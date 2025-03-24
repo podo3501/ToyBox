@@ -46,7 +46,7 @@ static bool IsTrue(const RECT& dest, const RECT& destRect, const RECT& source, c
 void TestCoordinates(size_t index, const RECT& dest, const RECT* source,
 	const vector<RECT>& expDests, const vector<RECT>& expSrcs) noexcept
 {
-	EXPECT_TRUE(index == 0);
+	EXPECT_TRUE(index == 2); //0, 1은 폰트이다. 
 	EXPECT_EQ(expDests.size(), expSrcs.size());
 	bool result = false;
 	for(size_t idx : views::iota(0u, expDests.size())) //views::zip이 있으면 간단하게 되는데 c++23부터 지원

@@ -22,7 +22,7 @@ void Container::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
 	m_images.emplace(Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
-	m_images.emplace(Hover, componentList[1]);
+	m_images.emplace(Hovered, componentList[1]);
 	m_images.emplace(Pressed, componentList[2]);
 }
 
@@ -42,7 +42,7 @@ bool Container::operator==(const UIComponent& rhs) const noexcept
 		});
 }
 
-bool Container::ImplementPostLoaded(ITextureController*)
+bool Container::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
 {
 	SetState(Normal);
 	return true;
@@ -50,7 +50,7 @@ bool Container::ImplementPostLoaded(ITextureController*)
 
 void Container::ClearInteraction() noexcept
 { 
-	if (m_state && m_state == InteractState::Hover)
+	if (m_state && m_state == InteractState::Hovered)
 		SetState(InteractState::Normal);
 }
 
@@ -106,7 +106,7 @@ void Container::NormalMode(bool isPressed, bool isHeld) noexcept
 		return;
 	}
 
-	SetState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hover);
+	SetState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hovered);
 }
 
 //마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)

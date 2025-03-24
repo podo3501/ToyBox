@@ -2,6 +2,8 @@
 #include "ImageSwitcher.h"
 #include "ImageGrid.h"
 #include "ImageGrid1.h"
+#include "ImageGrid3.h"
+#include "../TextureSourceBinder/TextureSourceBinder.h"
 #include "../../../Include/IRenderer.h"
 #include "../../InputManager.h"
 #include "../JsonOperation.h"
@@ -12,7 +14,7 @@ using enum InteractState;
 
 ImageSwitcher::~ImageSwitcher()
 {
-	Release();
+	Release(); //?!? 삭제
 }
 
 ImageSwitcher::ImageSwitcher() :
@@ -20,7 +22,7 @@ ImageSwitcher::ImageSwitcher() :
 	m_texController{ nullptr }
 {}
 
-void ImageSwitcher::Release() noexcept
+void ImageSwitcher::Release() noexcept//?!? 삭제
 {
 	if (!m_texController) return;
 
@@ -47,7 +49,7 @@ void ImageSwitcher::ReloadDatas() noexcept
 	m_image = static_cast<ImageGrid*>(componentList[0]);
 }
 
-void ImageSwitcher::AddRef() const noexcept
+void ImageSwitcher::AddRef() const noexcept//?!? 삭제
 {
 	if (!m_texController) return;
 
@@ -70,7 +72,7 @@ bool ImageSwitcher::operator==(const UIComponent& rhs) const noexcept
 	return tie(m_sources, m_behaviorMode) == tie(o->m_sources, o->m_behaviorMode);
 }
 
-bool ImageSwitcher::ImplementLoadResource(ITextureLoad* load)
+bool ImageSwitcher::ImplementLoadResource(ITextureLoad* load)//?!? 삭제
 {
 	Release();
 
@@ -85,7 +87,7 @@ bool ImageSwitcher::ImplementLoadResource(ITextureLoad* load)
 	return true;
 }
 
-bool ImageSwitcher::ImplementPostLoaded(ITextureController* texController)
+bool ImageSwitcher::ImplementPostLoaded(ITextureController* texController)//?!? 삭제
 {
 	m_image->SetupFromData(GetSize(), m_indexes[Normal], m_sources[Normal].list);
 	m_state = Normal;
@@ -95,7 +97,7 @@ bool ImageSwitcher::ImplementPostLoaded(ITextureController* texController)
 }
 
 bool ImageSwitcher::Setup(const UILayout& layout, unique_ptr<ImageGrid> img,
-	const map<InteractState, ImageSource>& sources, BehaviorMode behaviorMode) noexcept
+	const map<InteractState, ImageSource>& sources, BehaviorMode behaviorMode) noexcept//?!? 삭제
 {
 	if (sources.empty()) return false;
 
@@ -108,6 +110,48 @@ bool ImageSwitcher::Setup(const UILayout& layout, unique_ptr<ImageGrid> img,
 	return true;
 }
 
+static unique_ptr<ImageGrid> CreateImageGrid(const UILayout& layout, ImagePart imgPart, const string& bindKey)
+{
+	UILayout ltLayout({ layout.GetSize(), Origin::LeftTop});
+	switch (imgPart)	{
+	case ImagePart::One: return CreateImageGrid1(ltLayout, bindKey);
+	case ImagePart::ThreeH: return CreateImageGrid3(DirectionType::Horizontal, ltLayout, bindKey);
+	case ImagePart::ThreeV: return CreateImageGrid3(DirectionType::Vertical, ltLayout, bindKey);
+	default: return nullptr;
+	}
+}
+
+bool ImageSwitcher::Setup(const UILayout& layout, ImagePart imgPart,
+	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
+{
+	SetLayout(layout);
+	unique_ptr<ImageGrid> img = nullptr;
+	tie(img, m_image) = GetPtrs(CreateImageGrid(layout, imgPart, stateKeys.at(InteractState::Normal)));
+	UIEx(this).AttachComponent(move(img), {});
+	m_stateKeys = stateKeys;
+	m_behaviorMode = behaviorMode;
+	m_state = Normal;
+
+	return true;
+}
+
+bool ImageSwitcher::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController*) noexcept
+{
+	for (const auto& pair : m_stateKeys)
+	{
+		auto sourceInfoRef = sourceBinder->GetSourceInfo(pair.second);
+		ReturnIfFalse(sourceInfoRef);
+
+		const auto& srcInfo = sourceInfoRef->get();
+		m_indexes.emplace(pair.first, srcInfo.GetIndex());
+		m_sources.emplace(pair.first, ImageSource{ srcInfo.filename, srcInfo.sources });
+	}
+
+	//ReturnIfFalse(m_image->SetupFromData(GetSize(), m_indexes[Normal], m_sources[Normal].list));
+
+	return true;
+}
+
 void ImageSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
 {
 	if (!Contains(GetArea(), InputManager::GetMouse().GetPosition()))
@@ -116,7 +160,7 @@ void ImageSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
 		return;
 	}
 
-	SetState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hover);
+	SetState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hovered);
 }
 
 //마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)
@@ -175,8 +219,15 @@ void ImageSwitcher::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<ImageSwitcher> CreateImageSwitcher(const UILayout& layout,
+unique_ptr<ImageSwitcher> CreateImageSwitcher(const UILayout& layout,//?!? 삭제
 	unique_ptr<ImageGrid> img, const map<InteractState, ImageSource>& sources, BehaviorMode behaviorMode)
 {
 	return CreateIfSetup(make_unique<ImageSwitcher>(), layout, move(img), sources, behaviorMode);
+}
+
+unique_ptr<ImageSwitcher> CreateImageSwitcher(const UILayout& layout, ImagePart imgPart,
+	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
+{
+	unique_ptr<ImageSwitcher> switcher = make_unique<ImageSwitcher>();
+	return switcher->Setup(layout, imgPart, stateKeys, behaviorMode) ? move(switcher) : nullptr;
 }

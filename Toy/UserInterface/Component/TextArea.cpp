@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TextArea.h"
+#include "../TextureSourceBinder/TextureSourceBinder.h"
 #include "../Include/IRenderer.h"
 #include "../../Utility.h"
 #include "../../Config.h"
@@ -18,12 +19,12 @@ TextArea::~TextArea()
 
 void TextArea::Release() noexcept
 {
-	if (!m_texController) return;
+	//if (!m_texController) return;
 
-	for (const auto& font : m_font)
-		m_texController->ReleaseTexture(font.second);
-	m_texController = nullptr;
-	m_font.clear();
+	//for (const auto& font : m_font)
+	//	m_texController->ReleaseTexture(font.second);
+	//m_texController = nullptr;
+	//m_font.clear();
 }
 
 TextArea::TextArea() :
@@ -42,10 +43,10 @@ TextArea::TextArea(const TextArea& other) :
 
 void TextArea::AddRef() const noexcept
 {
-	if (!m_texController) return;
+	//if (!m_texController) return;
 
-	for (auto index : m_font | views::values)
-		m_texController->AddRef(index);
+	//for (auto index : m_font | views::values)
+	//	m_texController->AddRef(index);
 }
 
 unique_ptr<UIComponent> TextArea::CreateClone() const
@@ -60,7 +61,7 @@ bool TextArea::operator==(const UIComponent& o) const noexcept
 	ReturnIfFalse(UIComponent::operator==(o));
 	const TextArea* rhs = static_cast<const TextArea*>(&o);
 	
-	return tie(m_fontFileList, m_text) == tie(rhs->m_fontFileList, rhs->m_text);
+	return tie(m_bindKeys, m_text) == tie(rhs->m_bindKeys, rhs->m_text);
 }
 
 bool TextArea::ImplementLoadResource(ITextureLoad* load)
@@ -151,6 +152,32 @@ bool TextArea::Setup(const wstring& text, const UILayout& layout, const map<wstr
 	return true;
 }
 
+bool TextArea::Setup(const UILayout& layout, const wstring& text, const vector<wstring> bindKeys) noexcept
+{
+	SetLayout(layout);
+	m_text = text;
+	m_bindKeys = bindKeys;
+
+	return true;
+}
+
+bool TextArea::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept
+{
+	for (const auto& bindKey : m_bindKeys)
+	{
+		auto fontInfoRef = sourceBinder->GetSourceInfo(bindKey);
+		ReturnIfFalse(fontInfoRef);
+
+		const auto& fontInfo = fontInfoRef->get();
+
+		m_font.emplace(bindKey, fontInfo.GetIndex());
+		m_fontFileList.emplace(bindKey, fontInfo.filename);
+	}
+	m_texController = texController;
+
+	return ArrangeText(m_text);
+}
+
 void TextArea::ImplementRender(ITextureRender* render) const
 {
 	const auto& position = XMINT2ToVector2(GetPosition());
@@ -162,8 +189,9 @@ void TextArea::ImplementRender(ITextureRender* render) const
 
 void TextArea::SerializeIO(JsonOperation& operation)
 {
-	operation.Process("FontFileList", m_fontFileList);
+	operation.Process("BindKeys", m_bindKeys);
 	operation.Process("Text", m_text);
+
 	UIComponent::SerializeIO(operation);
 }
 
@@ -172,4 +200,10 @@ unique_ptr<TextArea> CreateTextArea(const UILayout& layout,
 {
 	unique_ptr<TextArea> textArea = make_unique<TextArea>();
 	return CreateIfSetup(move(textArea), text, layout, fontFileList);
+}
+
+unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, vector<wstring>& bindKeys)
+{
+	unique_ptr<TextArea> textArea = make_unique<TextArea>();
+	return textArea->Setup(layout, text, bindKeys) ? move(textArea) : nullptr;
 }

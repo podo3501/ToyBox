@@ -101,7 +101,7 @@ unique_ptr<Button> CreateSampleButton1(const UILayout& layout)
 {
 	map<InteractState, vector<Rectangle>> sources{
 		{ InteractState::Normal, { {10, 138, 32, 32} } },
-		{ InteractState::Hover, { {46, 138, 32, 32} } },
+		{ InteractState::Hovered, { {46, 138, 32, 32} } },
 		{ InteractState::Pressed, { {82, 138, 32, 32} } } };
 	return CreateSampleButton1(layout, sources, L"UI/SampleTexture/Sample_0.png");
 }
@@ -113,7 +113,7 @@ unique_ptr<Button> CreateSampleButton3(DirectionType dirType, const UILayout& la
 	{
 	case DirectionType::Horizontal:
 		sources = { { InteractState::Normal, { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } },
-			{ InteractState::Hover, { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } },
+			{ InteractState::Hovered, { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } },
 			{ InteractState::Pressed, { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } }; break;
 	/*case DirectionType::Vertical:
 		sources = { { InteractState::Normal, { {10, 82, 48, 22}, {10, 104, 48, 4}, {10, 108, 48, 22} } },
@@ -121,7 +121,7 @@ unique_ptr<Button> CreateSampleButton3(DirectionType dirType, const UILayout& la
 			{ InteractState::Pressed, { {114, 82, 48, 22}, {114, 104, 48, 4}, {114, 108, 48, 22} } } }; break;*/
 	case DirectionType::Vertical:
 		sources = { { InteractState::Normal, { {134, 178, 16, 7}, {134, 185, 16, 2}, {134, 187, 16, 7} } },
-			{ InteractState::Hover, { {154, 178, 16, 7}, {154, 185, 16, 2}, {154, 187, 16, 7} } },
+			{ InteractState::Hovered, { {154, 178, 16, 7}, {154, 185, 16, 2}, {154, 187, 16, 7} } },
 			{ InteractState::Pressed, { {174, 178, 16, 7}, {174, 185, 16, 2}, {174, 187, 16, 7} } } }; break;
 	}
 	return CreateSampleButton3(dirType, layout, sources, L"UI/SampleTexture/Sample_0.png");
@@ -131,7 +131,7 @@ unique_ptr<ImageSwitcher> CreateSampleImageSwitcher1(const UILayout& layout, Beh
 {
 	map<InteractState, ImageSource> sources{
 		{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 138, 32, 32} } } },
-		{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {46, 138, 32, 32} } } },
+		{ InteractState::Hovered, { L"UI/SampleTexture/Sample_0.png", { {46, 138, 32, 32} } } },
 		{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {82, 138, 32, 32} } } } };
 
 	return CreateImageSwitcher(layout, make_unique<ImageGrid1>(), sources, behavior);
@@ -141,7 +141,7 @@ unique_ptr<ImageSwitcher> CreateSampleImageSwitcher3(const UILayout& layout, Dir
 {
 	map<InteractState, ImageSource> sources{
 		{ InteractState::Normal, { L"UI/SampleTexture/Sample_0.png", { {10, 82, 22, 48}, {32, 82, 4, 48}, {36, 82, 22, 48} } } },
-		{ InteractState::Hover, { L"UI/SampleTexture/Sample_0.png", { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } } },
+		{ InteractState::Hovered, { L"UI/SampleTexture/Sample_0.png", { {62, 82, 22, 48}, {84, 82, 4, 48}, {88, 82, 22, 48} } } },
 		{ InteractState::Pressed, { L"UI/SampleTexture/Sample_0.png", { {114, 82, 22, 48}, {136, 82, 4, 48}, {140, 82, 22, 48} } } } };
 
 	return CreateImageSwitcher(layout, make_unique<ImageGrid3>(dirType), sources, behavior);
@@ -165,7 +165,7 @@ unique_ptr<Container> CreateSampleListContainer(const UILayout& layout)
 {
 	map<InteractState, vector<Rectangle>> sources{
 		{ InteractState::Normal, { {118, 138, 32, 32} } },
-		{ InteractState::Hover, { {154, 138, 32, 32} } },
+		{ InteractState::Hovered, { {154, 138, 32, 32} } },
 		{ InteractState::Pressed, { {190, 138, 32, 32} } } };
 
 	UILayout gridLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
@@ -207,7 +207,7 @@ unique_ptr<Container> CreateScrollContainer(const UILayout& layout)
 {
 	map<InteractState, vector<Rectangle>> sources{
 		{ InteractState::Normal, { {134, 178, 16, 7}, {134, 185, 16, 2}, {134, 187, 16, 7} } },
-		{ InteractState::Hover, { {154, 178, 16, 7}, {154, 185, 16, 2}, {154, 187, 16, 7} } },
+		{ InteractState::Hovered, { {154, 178, 16, 7}, {154, 185, 16, 2}, {154, 187, 16, 7} } },
 		{ InteractState::Pressed, { {174, 178, 16, 7}, {174, 185, 16, 2}, {174, 187, 16, 7} } } };
 
 	UILayout imgLayout(layout.GetSize(), Origin::LeftTop);
@@ -259,4 +259,36 @@ bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea, int itemCou
 	}
 
 	return true;
+}
+
+///////////////////////////////////////////////////////////////
+
+static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
+	const XMUINT2& size, const string& bindKey,
+	function<unique_ptr<UIComponent>(UILayout&, const string&)> createFunc)
+{
+	UILayout layout{ size, Origin::LeftTop };
+	map<InteractState, unique_ptr<UIComponent>> components;
+
+	const auto& stateKeys = GetStateKeyMap(bindKey);
+	for (const auto& pair : stateKeys)
+	{
+		auto component = createFunc(layout, pair.second);
+		if (!component) return {}; // 실패 시 빈 맵 반환
+
+		components.emplace(pair.first, move(component));
+	}
+	return components;
+}
+
+map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(const XMUINT2& size, const string& bindKey)
+{
+	return GetComponentKeyMap(size, bindKey,
+		[](UILayout& layout, const string& key) { return CreateImageGrid1(layout, key); });
+}
+
+map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dirType, const XMUINT2& size, const string& bindKey)
+{
+	return GetComponentKeyMap(size, bindKey,
+		[dirType](UILayout& layout, const string& key) { return CreateImageGrid3(dirType, layout, key); });
 }

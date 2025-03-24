@@ -28,6 +28,7 @@ public:
 	
 	Rectangle GetArea(const string& key, int index) const noexcept;
 	optionalRef<TextureSourceInfo> GetSourceInfo(const string& key) const noexcept;
+	optionalRef<TextureFontInfo> GetSourceInfo(const wstring& key) const noexcept;
 	vector<wstring> GetTextureFiles() const noexcept;
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
 	wstring GetBindingKey(const wstring& fontFilename) const noexcept;

@@ -218,8 +218,6 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, TextureSourceBinder)
 	{
-		EXPECT_TRUE(m_renderer->LoadTextureBinder(m_sourceBinder.get()));
-
 		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
 		EXPECT_TRUE((m_sourceBinder->GetArea("BackImage1", 0) == Rectangle{ 10, 10, 64, 64 })); //?!? 테스트 밖에 함수가 사용되지 않고 있다.
 		TextureSourceInfo sourceInfo{ filename, ImagePart::One, {{10, 10, 64, 64}} };

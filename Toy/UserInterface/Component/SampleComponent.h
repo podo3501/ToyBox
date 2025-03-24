@@ -32,3 +32,16 @@ unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout);
 unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const UILayout& layout);
 
 bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea, int itemCount);
+
+///////////////////////////////////////////////////////////////
+
+inline map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept
+{
+	return {
+		{ InteractState::Normal, prefix + "_" + EnumToString(InteractState::Normal) },
+		{ InteractState::Hovered, prefix + "_" + EnumToString(InteractState::Hovered) },
+		{ InteractState::Pressed, prefix + "_" + EnumToString(InteractState::Pressed) } };
+}
+
+map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(const XMUINT2& size, const string& bindKey);
+map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dirType, const XMUINT2& size, const string& bindKey);

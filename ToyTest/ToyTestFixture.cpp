@@ -34,6 +34,7 @@ void ToyTestFixture::SetUp()
 	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
 	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
 	m_sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
+	m_renderer->LoadTextureBinder(m_sourceBinder.get());
 }
 
 using ::testing::_;
@@ -62,8 +63,6 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const REC
 	m_panel->ProcessUpdate(m_timer);
 	m_panel->ProcessRender(&mockRender);
 }
-
-
 
 void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
 {

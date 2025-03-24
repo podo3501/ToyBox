@@ -19,7 +19,7 @@ namespace UserInterfaceTest
 	static void TestContainer_Scroll(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		vector<RECT> expectDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_Pressed_V"));
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_V_Pressed"));
 	}
 
 	TEST_F(ComplexComponentTest, Container_Scroll)
@@ -121,7 +121,7 @@ namespace UserInterfaceTest
 			{ 92, 175, 108, 182 }, { 92, 182, 108, 218 }, { 92, 218, 108, 225 } };
 
 		vector<RECT> expectSource{ GetSources(sb, "ScrollTrack3_V") };
-		vector<RECT> expectSource2{ GetSources(sb, "ScrollButton3_Normal_V") };
+		vector<RECT> expectSource2{ GetSources(sb, "ScrollButton3_V_Normal") };
 		expectSource.insert(expectSource.end(), expectSource2.begin(), expectSource2.end());
 		TestCoordinates(index, dest, source, expectDest, expectSource);
 	}

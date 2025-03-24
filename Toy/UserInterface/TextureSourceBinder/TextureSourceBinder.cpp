@@ -150,7 +150,15 @@ optionalRef<TextureSourceInfo> TextureSourceBinder::GetSourceInfo(const string& 
     return cref(it->second);
 }
 
-//?!? 파생된 함수들은 멤버 함수로 만들지 말고 GetSourceInfo을 사용해서 따로 전역함수를 만들어 사용하자.
+optionalRef<TextureFontInfo> TextureSourceBinder::GetSourceInfo(const wstring& key) const noexcept
+{
+    auto it = m_bindingFontTable.find(key);
+    if (it == m_bindingFontTable.end()) return nullopt;
+
+    return cref(it->second);
+}
+
+//?!? 파생된 함수들은 멤버 함수로 만들지 말고 GetSourceInfo을 사용해서 유틸리티 함수를 만들어 사용하자.
 vector<Rectangle> TextureSourceBinder::GetArea(const wstring& filename, ImagePart imgPart, const XMINT2& position) const noexcept
 {
     for (const auto& entry : m_bindingTexTable) {

@@ -8,6 +8,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Component/Button.h"
+#include "../Toy/UserInterface/Component/Container.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
@@ -25,11 +26,12 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ExitButton1_Pressed"));
 	}
 
-	TEST_F(BasicComponentTest, Button_ImageGrid1)
+	TEST_F(BasicComponentTest, Container_ImageGrid1)
 	{
-		auto [button, buttonPtr] = GetPtrs(CreateSampleButton1({ {32, 32}, Origin::Center }));
-		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		UILayout layout{ {32, 32}, Origin::Center };
+		auto container = CreateContainer(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal);
+		UIEx(m_panel).AttachComponent(move(container), { 160, 120 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		MockMouseInput(144, 120, true);	//Pressed
 		CallMockRender(TestButton_ImageGrid1Render, 1);
@@ -38,12 +40,12 @@ namespace UserInterfaceTest
 	}
 
 	////////////////////////////////////////////////////////////////
-	
-	TEST_F(BasicComponentTest, ImageChanger_ImageGrid1)
+
+	TEST_F(BasicComponentTest, ImageSwitcher_ImageGrid1)
 	{
-		auto [imgSwitcher, imgSwitcherPtr] = GetPtrs(CreateSampleImageSwitcher1({ {32, 32}, Origin::Center }, BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(imgSwitcher), { 160, 120 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		auto switcher = CreateImageSwitcher({ {32, 32}, Origin::Center }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
+		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		MockMouseInput(144, 120, true);	//Pressed
 		CallMockRender(TestButton_ImageGrid1Render, 1);
@@ -56,25 +58,27 @@ namespace UserInterfaceTest
 	static void TestButton_ImageGrid3Render_H(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		vector<RECT> expectDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_Hovered_H"));
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_H_Hovered"));
 	}
 
 	static void TestButton_ImageGrid3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		vector<RECT> expectDest = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_Normal_H"));
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_H_Normal"));
 	}
 
-	TEST_F(BasicComponentTest, Button_ImageGrid3_Horizontal)
+	TEST_F(BasicComponentTest, Container_ImageGrid3_Horizontal)
 	{
-		auto [button, btnPtr] = GetPtrs(CreateSampleButton3(DirectionType::Horizontal, { {100, 48}, Origin::Center }));
-		UIEx(m_panel).AttachComponent(move(button), { 160, 120 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		UILayout layout{ {100, 48}, Origin::Center };
+		auto [container, containerBtr] = GetPtrs(CreateContainer(layout, 
+			GetComponentKeyMap(DirectionType::Horizontal, layout.GetSize(), "ScrollButton3_H"), BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(container), { 160, 120 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		MockMouseInput(110, 96);	//Hover
 		CallMockRender(TestButton_ImageGrid3Render_H, 3);
 
-		btnPtr->ChangeSize({ 150, 48 });
+		containerBtr->ChangeSize({ 150, 48 });
 		MockMouseInput(0, 0);	//Normal
 		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_H, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -84,17 +88,17 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, ImageChanger_ImageGrid3_H)
+	TEST_F(BasicComponentTest, ImageSwitcher_ImageGrid3_H)
 	{
-		auto [imgSwitcher, imgSwitcherPtr] = GetPtrs(CreateSampleImageSwitcher3({ {100, 48}, Origin::Center },
-			DirectionType::Horizontal, BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(imgSwitcher), { 160, 120 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({{100, 48}, Origin::Center},
+			ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		MockMouseInput(110, 96);	//Hover
 		CallMockRender(TestButton_ImageGrid3Render_H, 3);
 
-		imgSwitcherPtr->ChangeSize({ 150, 48 });
+		switcherPtr->ChangeSize({ 150, 48 });
 		MockMouseInput(0, 0);	//Normal
 		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_H, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -107,25 +111,27 @@ namespace UserInterfaceTest
 	static void TestButton_ImageGrid3Render_V(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		vector<RECT> expectDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_Hovered_V"));
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_V_Hovered"));
 	}
 
 	static void TestButton_ImageGrid3ChangeAreaRender_V(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		vector<RECT> expectDest = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_Normal_V"));
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_V_Normal"));
 	}
 
-	TEST_F(BasicComponentTest, Button_ImageGrid3_Vertical)
+	TEST_F(BasicComponentTest, Container_ImageGrid3_Vertical)
 	{
-		auto [button, btnPtr] = GetPtrs(CreateSampleButton3(DirectionType::Vertical, {{48, 100}, Origin::Center}));
-		UIEx(m_panel).AttachComponent(move(button), { 100, 100 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		UILayout layout{ {48, 100}, Origin::Center };
+		auto [container, containerPtr] = GetPtrs(CreateContainer(layout, 
+			GetComponentKeyMap(DirectionType::Vertical, layout.GetSize(), "ScrollButton3_V"), BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(container), { 100, 100 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		MockMouseInput(77, 51);	//Hover
 		CallMockRender(TestButton_ImageGrid3Render_V, 3);
 
-		btnPtr->ChangeSize({ 48, 150 });
+		containerPtr->ChangeSize({ 48, 150 });
 		MockMouseInput(0, 0);	//Normal
 		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_V, 3);
 		EXPECT_TRUE(WriteReadTest(m_panel));
@@ -145,7 +151,7 @@ namespace UserInterfaceTest
 	{
 		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
 		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
-		EXPECT_TRUE(LoadComponent(m_renderer.get(), m_sourceBinder.get(), m_panel.get()));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 		CallMockRender(TestImageGrid1Render, 1);
 
 		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
@@ -171,13 +177,13 @@ namespace UserInterfaceTest
 	static void TestImageGrid3Render_H(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		vector<RECT> expectDest = { { 400, 300, 422, 336 }, { 422, 300, 478, 336 }, {478, 300, 500, 336} };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_Normal_H"));
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_H_Normal"));
 	}
 
 	static void TestImageGrid3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
 	{
 		vector<RECT> expectDest = { { 340, 282, 362, 318 }, { 362, 282, 438, 318 }, {438, 282, 460, 318} };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_Normal_H"));
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_H_Normal"));
 	}
 
 	static void TestImageGrid3SourceAndDivider_H(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder*)
@@ -189,9 +195,9 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, ImageGrid3_Horizontal)
 	{
-		auto [img, imgPtr] = GetPtrs(CreateImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop }, "ScrollButton3_Normal_H"));
+		auto [img, imgPtr] = GetPtrs(CreateImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop }, "ScrollButton3_H_Normal"));
 		UIEx(m_panel).AttachComponent(move(img), {400, 300});
-		EXPECT_TRUE(LoadComponent(m_renderer.get(), m_sourceBinder.get(), m_panel.get()));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		CallMockRender(TestImageGrid3Render_H, 3);
 
@@ -237,7 +243,7 @@ namespace UserInterfaceTest
 	{
 		auto [img3, img3Ptr] = GetPtrs(CreateImageGrid3(DirectionType::Vertical, { {36, 100}, Origin::LeftTop }, "ScrollTrack3_V"));
 		UIEx(m_panel).AttachComponent(move(img3), { 400, 300 });
-		EXPECT_TRUE(LoadComponent(m_renderer.get(), m_sourceBinder.get(), m_panel.get()));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		CallMockRender(TestImageGrid3Render_V, 3);
 
@@ -294,7 +300,7 @@ namespace UserInterfaceTest
 	{
 		auto [img, imgPtr] = GetPtrs(CreateImageGrid9({ {170, 120}, Origin::LeftTop }, "BackImage9"));
 		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
-		EXPECT_TRUE(LoadComponent(m_renderer.get(), m_sourceBinder.get(), m_panel.get()));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		CallMockRender(TestImageGrid9Render, 9);
 
@@ -327,10 +333,11 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, TextArea)
 	{
+		vector<wstring> bindKeys{ L"Hangle", L"English" };
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
-		auto textArea = CreateSampleTextArea({ {320, 120}, Origin::Center }, text);
+		auto textArea = CreateTextArea({ {320, 120}, Origin::Center }, text, bindKeys);
 		UIEx(m_panel).AttachComponent(move(textArea), { 400, 300 });
-		EXPECT_TRUE(m_renderer->LoadComponent(m_panel.get()));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
 
 		CallMockRender(TestTextAreaRender);
 		EXPECT_TRUE(WriteReadTest(m_panel));

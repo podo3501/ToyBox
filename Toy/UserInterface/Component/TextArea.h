@@ -21,12 +21,14 @@ public:
 	bool SetText(const wstring& text);
 	inline const wstring& GetText() const noexcept { return m_text; }
 	bool Setup(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept;
+	bool Setup(const UILayout& layout, const wstring& text, const vector<wstring> bindKeys) noexcept;
 
 protected:
 	TextArea(const TextArea& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementLoadResource(ITextureLoad* load) override;
 	virtual bool ImplementPostLoaded(ITextureController* texController) override;
+	virtual bool ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController*) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
@@ -35,8 +37,10 @@ private:
 	void AddRef() const noexcept;
 	bool ArrangeText(const wstring& text);
 
-	ITextureController* m_texController;
+	vector<wstring> m_bindKeys;
 	wstring m_text{};
+
+	ITextureController* m_texController;
 	map<wstring, wstring> m_fontFileList;
 	map<wstring, size_t> m_font; //core상태에 따라서 인덱스는 변할수 있기 때문에 저장하지 않는다.
 	vector<TextData> m_lines;
@@ -44,3 +48,5 @@ private:
 
 unique_ptr<TextArea> CreateTextArea(const UILayout& layout, 
 	const wstring& text, map<wstring, wstring>& fontFileList);
+
+unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, vector<wstring>& bindKeys);

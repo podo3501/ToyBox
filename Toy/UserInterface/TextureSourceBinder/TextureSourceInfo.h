@@ -14,7 +14,7 @@ struct TextureSourceInfo : public TextureInfo
 
 	bool LoadResource(ITextureLoad* load);
 	void SerializeIO(JsonOperation& operation);
-	inline Rectangle GetSource(int index) const noexcept { return (sources.size() > index) ? sources.at(index) : Rectangle{}; }
+	inline Rectangle GetSource(size_t index) const noexcept { return (sources.size() > index) ? sources.at(index) : Rectangle{}; }
 
 	using TextureInfo::GetIndex;
 
