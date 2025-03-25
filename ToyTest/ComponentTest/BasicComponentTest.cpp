@@ -139,6 +139,26 @@ namespace UserInterfaceTest
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_V, 3);
 	}
 
+	////////////////////////////////////////////////////////////////
+
+	TEST_F(BasicComponentTest, ImageSwitcher_ImageGrid3_V)
+	{
+		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({ {48, 100}, Origin::Center },
+			ImagePart::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+
+		MockMouseInput(77, 51);	//Hover
+		CallMockRender(TestButton_ImageGrid3Render_V, 3);
+
+		switcherPtr->ChangeSize({ 48, 150 });
+		MockMouseInput(0, 0);	//Normal
+		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_V, 3);
+		EXPECT_TRUE(WriteReadTest(m_panel));
+
+		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_V, 3);
+	}
+
 	////////////////////////////////////////////////////////
 
 	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)

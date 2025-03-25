@@ -155,6 +155,15 @@ void BasicComponentTest::TestRender(size_t index, const RECT& dest, const RECT* 
 		}));
 }
 
+bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
+{
+	if (!original) return false;
+	EXPECT_TRUE(original->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+	auto clone = original->Clone();
+
+	return CompareUniquePtr(original, clone);
+}
+
 void IntegrationTest::CaptureSnapshot(CommandList& cmdList, vector<unique_ptr<UIComponent>>& history)
 {
 	history.emplace_back(m_panel->Clone());

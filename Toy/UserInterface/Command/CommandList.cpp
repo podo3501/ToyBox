@@ -18,7 +18,7 @@ bool CommandList::Undo() noexcept
 	
 	if (!result)
 	{
-		Assert(false, "Undo함수는 실행하는 것을 돌리는 것이기 때문에 실패해서는 안된다.");
+		AssertMsg(false, "Undo함수는 실행하는 것을 돌리는 것이기 때문에 실패해서는 안된다.");
 		return result;
 	}
 
@@ -35,7 +35,7 @@ bool CommandList::Redo() noexcept
 
 	if (!result)
 	{
-		Assert(false, "Redo함수는 실행했던 것을 다시 실행하는 것이기 때문에 실패해서는 안된다.");
+		AssertMsg(false, "Redo함수는 실행했던 것을 다시 실행하는 것이기 때문에 실패해서는 안된다.");
 		return result;
 	}
 

@@ -14,7 +14,25 @@
 //    int LineNumber = -1;
 //};
 
-#define Assert(expression, message) assert(expression && message)
+#ifndef AssertMsg
+#define AssertMsg(expr, msg) \
+    do { \
+        if (!(expr)) { \
+			__debugbreak(); \
+			assert(expr && msg); \
+        } \
+    } while (0)
+#endif
+
+#ifndef Assert
+#define Assert(expr) \
+    do { \
+        if (!(expr)) { \
+			__debugbreak(); \
+			assert(expr); \
+        } \
+    } while (0)
+#endif
 
 #ifndef ReturnIfFalse
 #define ReturnIfFalse(x)                       \

@@ -58,7 +58,7 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBack
 	m_scrollSlider = ComponentCast<ScrollSlider*>(scrollSlider.get());
 	m_scrollSlider->ChangeOrigin(Origin::Center);
 	m_scrollPadding = size.y - m_scrollSlider->GetSize().y;
-	ChangeSliderSize(size);
+	//ChangeSliderSize(size);
 	UIEx(this).AttachComponent(move(scrollSlider), centerPos);
 
 	return true;
@@ -67,6 +67,13 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBack
 bool ScrollBar::ChangeSliderSize(const XMUINT2& size) noexcept
 {
 	return m_scrollSlider->ChangeSize({ size.x - m_scrollPadding, size.y - m_scrollPadding });
+}
+
+bool ScrollBar::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+{
+	const auto& size = m_scrollBackground->GetSize();
+	ChangeSliderSize(size);
+	return true;
 }
 
 bool ScrollBar::ImplementChangeSize(const XMUINT2& size) noexcept

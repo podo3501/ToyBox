@@ -54,15 +54,15 @@ static inline void AttachComponentToPanel(UIComponent* panel,
 bool GameMainLoop::LoadResources()
 {
     m_sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
-    AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher1({ {32, 32}, Origin::Center }, BehaviorMode::Normal), { 100, 100 });
-    AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher3({ {180, 48}, Origin::Center }, DirectionType::Horizontal, BehaviorMode::Normal), { 400, 300 });
-    AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher3({ {180, 48}, Origin::Center }, DirectionType::Horizontal, BehaviorMode::Normal), { 400, 240 });
-    AttachComponentToPanel(m_gamePanel.get(), CreateSampleTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>"), { 160, 420 });
-    AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageGrid9({ {210, 150}, Origin::LeftTop }), { 400, 300 });
-    AttachComponentToPanel(m_gamePanel.get(), CreateSampleListArea1({ {200, 170}, Origin::Center }), { 600, 200 });
-    LoadComponent(m_renderer, m_sourceBinder.get(), m_gamePanel.get());
+    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher1({ {32, 32}, Origin::Center }, BehaviorMode::Normal), { 100, 100 });
+    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher3({ {180, 48}, Origin::Center }, DirectionType::Horizontal, BehaviorMode::Normal), { 400, 300 });
+    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher3({ {180, 48}, Origin::Center }, DirectionType::Horizontal, BehaviorMode::Normal), { 400, 240 });
+    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>"), { 160, 420 });
+    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageGrid9({ {210, 150}, Origin::LeftTop }), { 400, 300 });
+    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleListArea1({ {200, 170}, Origin::Center }), { 600, 200 });
+    //LoadComponent(m_renderer, m_sourceBinder.get(), m_gamePanel.get());
 
-    MakeSampleListAreaData(m_renderer, UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 16);
+    //MakeSampleListAreaData(m_renderer, UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 16);
     
     return true;
 }

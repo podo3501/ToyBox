@@ -135,6 +135,12 @@ bool ImageSwitcher::Setup(const UILayout& layout, ImagePart imgPart,
 	return true;
 }
 
+void ImageSwitcher::ClearInteraction() noexcept
+{
+	if (m_state && m_state == InteractState::Hovered)
+		SetState(InteractState::Normal);
+}
+
 bool ImageSwitcher::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController*) noexcept
 {
 	for (const auto& pair : m_stateKeys)

@@ -22,7 +22,8 @@ public:
 protected:
 	ScrollBar(const ScrollBar& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	bool ImplementChangeSize(const XMUINT2& size) noexcept;
+	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override;
+	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept override;
 
 private:
 	void ReloadDatas() noexcept;

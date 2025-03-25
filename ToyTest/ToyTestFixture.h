@@ -49,6 +49,7 @@ class CommandList;
 class IntegrationTest : public ToyTestFixture 
 {
 protected:
+	bool VerifyClone(unique_ptr<UIComponent> original);
 	void CaptureSnapshot(CommandList& cmdList, vector<unique_ptr<UIComponent>>& history);
 	void VerifyUndoRedo(CommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
 };

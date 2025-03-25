@@ -220,31 +220,32 @@ unique_ptr<Container> CreateScrollContainer(const UILayout& layout)
 	return CreateContainer(layout, move(imageGridList), BehaviorMode::HoldToKeepPressed);
 }
 
-unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)
-{
-	UILayout bgLayout({ layout.GetSize(), Origin::LeftTop });
-	const XMUINT2& padding{ 6, 6 };
-	UILayout sliderLayout({ layout.GetSize() - padding, Origin::LeftTop });
+//unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)
+//{
+//	UILayout bgLayout({ layout.GetSize(), Origin::LeftTop });
+//	const XMUINT2& padding{ 6, 6 };
+//	UILayout sliderLayout({ layout.GetSize() - padding, Origin::LeftTop });
+//
+//	return CreateScrollBar(layout, 
+//		CreateScrollBackground(bgLayout),
+//		CreateSampleScrollSlider(DirectionType::Vertical, sliderLayout));
+//}
 
-	return CreateScrollBar(layout, 
-		CreateScrollBackground(bgLayout),
-		CreateSampleScrollSlider(DirectionType::Vertical, sliderLayout));
-}
-
-unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const UILayout& layout)
-{
-	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
-		
-	return CreateScrollSlider(layout,
-		CreateScrollTrack(dirType, gridLayout),
-		CreateScrollContainer(gridLayout));
-}
+//unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const UILayout& layout)
+//{
+//	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
+//		
+//	return CreateScrollSlider(layout,
+//		CreateScrollTrack(dirType, gridLayout),
+//		CreateScrollContainer(gridLayout));
+//}
 
 bool MakeSampleListAreaData(IRenderer* renderer, ListArea* listArea, int itemCount)
 {
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	auto protoTextArea = CreateSampleTextArea({ { 200, 30 }, Origin::LeftTop }, L"");
 	ReturnIfFalse(renderer->LoadComponent(protoTextArea.get()));
+	//EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
 
 	protoTextArea->Rename("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
@@ -291,4 +292,71 @@ map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dir
 {
 	return GetComponentKeyMap(size, bindKey,
 		[dirType](UILayout& layout, const string& key) { return CreateImageGrid3(dirType, layout, key); });
+}
+
+static inline ImagePart DirTypeToImgPart(DirectionType dirType) noexcept
+{
+	switch (dirType)
+	{
+	case DirectionType::Horizontal: return ImagePart::ThreeH;
+	case DirectionType::Vertical: return ImagePart::ThreeV;
+	default: return ImagePart::ThreeH;
+	}
+}
+
+unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const UILayout& layout)
+{
+	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
+		
+	return CreateScrollSlider(layout,
+		CreateImageGrid3(dirType, gridLayout, "ScrollTrack3_V"), //?!? dirType, gridLayout 두 인자 자리를 서로 바꿔야 겠다.
+		CreateImageSwitcher(gridLayout, DirTypeToImgPart(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
+}
+
+unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)
+{
+	UILayout bgLayout({ layout.GetSize(), Origin::LeftTop });
+	const XMUINT2& padding{ 6, 6 };
+	UILayout sliderLayout({ layout.GetSize() - padding, Origin::LeftTop });
+
+	return CreateScrollBar(layout,
+		CreateImageGrid1(bgLayout, "ListBackground1_Normal"),
+		CreateSampleScrollSlider(DirectionType::Vertical, sliderLayout));
+}
+
+unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
+{
+	UILayout backImgLayout{ layout.GetSize(), Origin::LeftTop };
+	auto listBackImage = CreateImageGrid1(backImgLayout, "ListBackImage1");
+
+	UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
+	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);
+
+	UILayout switcherLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
+	auto switcher = CreateImageSwitcher(switcherLayout, ImagePart::ThreeH,
+		GetStateKeyMap("ListBackground1"), BehaviorMode::Normal);
+
+	return CreateListArea(layout, move(listBackImage), move(switcher), move(scrollBar));
+}
+
+bool MakeSampleListAreaData(IRenderer* renderer, TextureSourceBinder* sb, ListArea* listArea, int itemCount)
+{
+	//글자가 크기에 안 맞으면 안찍힌다. 
+	vector<wstring> bindKeys{ L"Hangle", L"English" };
+	auto protoTextArea = CreateTextArea({ {200, 30}, Origin::LeftTop }, L"", bindKeys);
+	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(sb, renderer->GetTextureController()));
+
+	protoTextArea->Rename("ListTextArea");
+	auto prototype = listArea->GetPrototypeContainer();
+	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 5, 2 });
+	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
+
+	for (auto idx : views::iota(0, itemCount))
+	{
+		auto container = listArea->PrepareContainer();
+		TextArea* textArea = UIEx(container).FindComponent<TextArea*>("ListTextArea_" + to_string(idx));
+		textArea->SetText(L"<English><Black>Test " + IntToWString(idx * 10) + L"</Black></English>");
+	}
+
+	return true;
 }

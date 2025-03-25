@@ -8,7 +8,7 @@
 
 TextureRepository::~TextureRepository()
 {
-    assert(ranges::all_of(m_texResources, [](const auto& ptr) { return ptr == nullptr; })); //잘 지워졌는지 확인
+    Assert(ranges::all_of(m_texResources, [](const auto& ptr) { return ptr == nullptr; })); //잘 지워졌는지 확인
 }
 
 TextureRepository::TextureRepository(DX::DeviceResources* deviceRes, DescriptorHeap* descriptorHeap, ResourceUploadBatch* upload, SpriteBatch* sprite) :

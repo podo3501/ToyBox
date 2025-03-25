@@ -4,10 +4,9 @@
 #include "RenderTexture.h"
 #include "ScrollBar.h"
 #include "ScrollSlider.h"
-#include "Container.h"
+#include "ImageSwitcher.h"
 #include "../../InputManager.h"
 #include "../../Utility.h"
-#include "Container.h"
 #include "../../StepTimer.h"
 
 ListArea::~ListArea() = default;
@@ -33,7 +32,7 @@ ListArea::ListArea(const ListArea& o) noexcept :
 void ListArea::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_prototypeContainer = ComponentCast<Container*>(componentList[0]);
+	m_prototypeContainer = ComponentCast<ImageSwitcher*>(componentList[0]);
 	m_renderTex = ComponentCast<RenderTexture*>(componentList[1]);
 	m_bgImage = m_renderTex->GetRenderedComponent();
 	m_scrollBar = ComponentCast<ScrollBar*>(componentList[2]);
@@ -70,7 +69,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	SetLayout(layout);
 	UILayout partLayout{ layout.GetSize(), Origin::LeftTop }; //속성들은 정렬하지 않는다.
 
-	m_prototypeContainer = ComponentCast<Container*>(container.get());
+	m_prototypeContainer = ComponentCast<ImageSwitcher*>(container.get());
 	m_prototypeContainer->Rename("Prototype Container");
 	m_prototypeContainer->SetStateFlag(StateFlag::ActiveUpdate | StateFlag::Render, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	m_prototypeContainer->SetStateFlag(StateFlag::RenderEditable, true);
@@ -219,7 +218,7 @@ void ListArea::CheckMouseInteraction() noexcept
 
 	for (auto& container : m_containers)
 	{
-		if (Container* cur = ComponentCast<Container*>(container); cur)
+		if (ImageSwitcher* cur = ComponentCast<ImageSwitcher*>(container); cur)
 			cur->ClearInteraction();
 	}
 }
@@ -247,11 +246,12 @@ void ListArea::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
+//?!? 다 정리한 후 UIComponent에서 실제 컴포넌트 이름으로 바꾸자. 지금은 container와 switcher가 충돌된다.
 unique_ptr<ListArea> CreateListArea(const UILayout& layout, 
 	unique_ptr<UIComponent> bgImage,
-	unique_ptr<UIComponent> container,
+	unique_ptr<UIComponent> switcher,
 	unique_ptr<UIComponent> scrollBar)
 {
 	unique_ptr<ListArea> listArea= make_unique<ListArea>();
-	return CreateIfSetup(move(listArea), layout, move(bgImage), move(container), move(scrollBar));
+	return CreateIfSetup(move(listArea), layout, move(bgImage), move(switcher), move(scrollBar));
 }

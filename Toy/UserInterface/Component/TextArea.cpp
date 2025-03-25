@@ -33,13 +33,13 @@ TextArea::TextArea() :
 
 TextArea::TextArea(const TextArea& other) :
 	UIComponent{ other },
-	m_texController{ other.m_texController }
-{
-	m_text = other.m_text;
-	m_fontFileList = other.m_fontFileList;
-	m_font = other.m_font;
-	m_lines = other.m_lines;
-}
+	m_text{ other.m_text },
+	m_bindKeys{ other.m_bindKeys },
+	m_texController{ other.m_texController },
+	m_fontFileList{ other.m_fontFileList },
+	m_font{ other.m_font },
+	m_lines{ other.m_lines }
+{}
 
 void TextArea::AddRef() const noexcept
 {

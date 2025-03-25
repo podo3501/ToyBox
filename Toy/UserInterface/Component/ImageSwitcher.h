@@ -20,6 +20,7 @@ public:
 	bool Setup(const UILayout& layout, ImagePart imgPart, 
 		const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
+	void ClearInteraction() noexcept;
 
 protected:
 	ImageSwitcher(const ImageSwitcher& o);

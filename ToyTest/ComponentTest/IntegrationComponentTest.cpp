@@ -5,6 +5,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
+#include "../Toy/UserInterface/Component/ImageSwitcher.h"
 #include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
 #include "../Toy/UserInterface/Component/Button.h"
@@ -18,7 +19,7 @@ namespace UserInterfaceTest
 {
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
-		auto [imgGrid1, _] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto imgGrid1 = CreateImageGrid1({ {64, 64}, Origin::LeftTop }, "BackImage1");
 		UIComponent* component = UIEx(panel).FindComponent(componentName);
 		return UIEx(component).AttachComponent(move(imgGrid1), { 10, 10 }) ? false : true;
 	}
@@ -32,7 +33,7 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, AttachDetachTest)
 	{
-		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 200, 100 }, Origin::LeftTop });
+		auto img9 = CreateImageGrid9({ {200, 100}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(img9), { 80, 60 });
 
 		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "ImageGrid9_0"), false);	//9방향 이미지에는 attach 불가
@@ -44,7 +45,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "ImageGrid9_0"), true); //위에서 ImgGrid1를 attach 했다.
 
 		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {200, 100}, Origin::LeftTop }, "BackImage1"));
-		auto [img2, _] = GetPtrs(CreateImageGrid1({ {110, 60}, Origin::LeftTop }, "BackImage1"));
+		auto img2 = CreateImageGrid1({ {110, 60}, Origin::LeftTop }, "BackImage1");
 		UIEx(img1).AttachComponent(move(img2), { 100, 50 });	//중점에 attach 한다.
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 		m_panel->ProcessUpdate(m_timer);
@@ -55,26 +56,16 @@ namespace UserInterfaceTest
 		EXPECT_EQ(UIEx(detached).GetTotalChildSize(), XMUINT2(210, 110));
 	}
 
-	template <typename T>
-	static bool VerifyClone(IRenderer* renderer, unique_ptr<T> original) 
-	{
-		if (!original) return false;
-		unique_ptr<UIComponent> origin = move(original); //업 캐스트 한다. unique_ptr은 업 캐스트가 안되고 move를 통해서만 된다.
-		EXPECT_TRUE(renderer->LoadComponent(origin.get()));
-		auto clone = origin->Clone();
-		
-		return CompareUniquePtr(origin, clone);
-	}
-
 	TEST_F(IntegrationTest, Clone)
 	{
-		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateImageGrid1({ {220, 190}, Origin::LeftTop }, "BackImage1")));
-		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleImageGrid3(DirectionType::Horizontal, { { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleTextArea({ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>")));
-		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleButton1({ { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleButton3(DirectionType::Horizontal, { { 220, 190 }, Origin::LeftTop })));
-		EXPECT_TRUE(VerifyClone(m_renderer.get(), CreateSampleListArea1({ { 220, 190 }, Origin::LeftTop })));
+		EXPECT_TRUE(VerifyClone(CreateImageGrid1({ {220, 190}, Origin::LeftTop }, "BackImage1")));
+		EXPECT_TRUE(VerifyClone(CreateImageGrid3(DirectionType::Horizontal, { { 100, 36 }, Origin::LeftTop }, "ScrollButton3_H_Normal")));
+		EXPECT_TRUE(VerifyClone(CreateImageGrid9({ { 220, 190 }, Origin::LeftTop }, "BackImage9")));
+		vector<wstring> bindFontKeys{ L"Hangle", L"English" };
+		EXPECT_TRUE(VerifyClone(CreateTextArea({ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>", bindFontKeys)));
+		EXPECT_TRUE(VerifyClone(CreateImageSwitcher({ { 220, 190 }, Origin::Center }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)));
+		EXPECT_TRUE(VerifyClone(CreateImageSwitcher({ { 48, 100 }, Origin::Center }, ImagePart::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal)));
+		EXPECT_TRUE(VerifyClone(CreateSampleListArea({ { 220, 190 }, Origin::LeftTop })));
 	}
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
@@ -114,31 +105,56 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, GetComponents)
 	{
-		unique_ptr<UIComponent> img9_0 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
+		auto img9_0 = CreateImageGrid9({ {220, 190}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(img9_0), { 80, 60 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 		m_panel->ProcessUpdate(m_timer);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), {0, 0}) == 1);
-		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 100, 100 }) == 4);
+		EXPECT_EQ(CheckComponentCount(m_panel.get(), { 100, 100 }), 4);
 
-		unique_ptr<UIComponent> img9_1 = CreateSampleImageGrid9({ { 221, 191 }, Origin::LeftTop });
+		auto img9_1 = CreateImageGrid9({ {221, 191}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(img9_1), { 88, 66 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 		m_panel->ProcessUpdate(m_timer);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 180, 160 }) == 7);
 	}
 
 	TEST_F(IntegrationTest, GetPosition)
 	{
-		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
+		auto img9 = CreateImageGrid9({ {220, 190}, Origin::LeftTop }, "BackImage9");
 		unique_ptr<UIComponent> panel = make_unique<Panel>();
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		UIEx(panel).AttachComponent(move(img9), { 40, 30 });
 		UIEx(m_panel).AttachComponent(move(panel), { 400, 300 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 		m_panel->ProcessUpdate(m_timer);
 
 		UIComponent* component = UIEx(m_panel).FindComponent("ImageGrid1_4");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
 		EXPECT_EQ(component->GetArea(), Rectangle(270, 216, 160, 128));
+	}
+
+	TEST_F(IntegrationTest, RecursivePosition)
+	{
+		std::unique_ptr<Panel> panel1 = make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
+		auto [panel2, panel2Ptr] = GetPtrs(make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center)));
+
+		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
+		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
+		m_panel->ProcessUpdate(m_timer);
+
+		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
+		EXPECT_EQ(outList.size(), 3);
+
+		panel2Ptr->ChangeOrigin(Origin::LeftTop);
+		m_panel->ProcessUpdate(m_timer);
+
+		outList.clear();
+		outList = UIEx(m_panel).GetComponents({ 239, 140 });
+		EXPECT_EQ(outList.size(), 2);
+
+		//사이즈가 바뀌었을때 값이 어떻게 바뀌는지 테스트
 	}
 
 	//이름을 구역을 만들어서 다른 구역이면 같은 이름을 쓸 수 있게 한다. 그러면 close 같은 이름이 중복이 되어도
@@ -179,37 +195,15 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(UIEx(img5Ptr).FindComponent("UnChanging Name"));
 	}
 
-	TEST_F(IntegrationTest, RecursivePosition)
-	{
-		std::unique_ptr<Panel> panel1 = make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
-		auto [panel2, panel2Ptr] = GetPtrs(make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center)));
-
-		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
-		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
-		m_panel->ProcessUpdate(m_timer);
-
-		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
-		EXPECT_EQ(outList.size(), 3);
-
-		panel2Ptr->ChangeOrigin(Origin::LeftTop);
-		m_panel->ProcessUpdate(m_timer);
-
-		outList.clear();
-		outList = UIEx(m_panel).GetComponents({ 239, 140 });
-		EXPECT_EQ(outList.size(), 2);
-
-		//사이즈가 바뀌었을때 값이 어떻게 바뀌는지 테스트
-	}
-
 	TEST_F(IntegrationTest, Rename)
 	{
-		unique_ptr<UIComponent> img9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
+		auto img9 = CreateImageGrid9({ {220, 190}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(img9), { 80, 60 });
 
 		UIComponent* component = UIEx(m_panel).FindComponent("ImageGrid1_0");
 		EXPECT_FALSE(component->Rename("ImageGrid9_0")); //같은 이름이 있으면 rename이 되지 않는다.
 
-		unique_ptr<UIComponent> newImg9 = CreateSampleImageGrid9({ { 220, 190 }, Origin::LeftTop });
+		auto newImg9 = CreateImageGrid9({ {220, 190}, Origin::LeftTop }, "BackImage9");
 		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
 	}
@@ -248,7 +242,7 @@ namespace UserInterfaceTest
 		UIComponent* panel = m_panel.get();
 		CaptureSnapshot(cmdList, history);
 
-		auto [img9, img9Ptr] = GetPtrs(CreateSampleImageGrid9({ {170, 120}, Origin::Center }));
+		auto [img9, img9Ptr] = GetPtrs(CreateImageGrid9({ {170, 120}, Origin::Center }, "BackImage9"));
 		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
 
 		cmdList.AttachComponent(m_panel.get(), move(img1), { 111, 222 });
