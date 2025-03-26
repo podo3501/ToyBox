@@ -25,6 +25,7 @@ MainWindow::MainWindow(IRenderer* renderer) :
 	m_panel{ nullptr }
 {
 	m_renderer->AddImguiComponent(this);
+	m_renderer->LoadTextureBinder(m_sourceBinder.get());
 }
 
 ImVec2 MainWindow::GetPanelSize() const noexcept
@@ -41,7 +42,7 @@ bool MainWindow::SetupProperty(unique_ptr<Panel>&& panel)
 
 	const auto& size = m_panel->GetSize();
 	m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(panel));
-	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
+	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
 
 	ToggleToolMode();
 	m_isOpen = true;
@@ -59,7 +60,6 @@ bool MainWindow::CreateScene(const wstring& filename)
 {
 	unique_ptr<Panel> panel;
 	ReturnIfFalse(JsonFile::ReadComponent(filename, panel));
-	ReturnIfFalse(m_renderer->LoadComponent(panel.get()));
 
 	return SetupProperty(move(panel));
 }

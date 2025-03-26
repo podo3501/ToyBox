@@ -27,6 +27,12 @@ TextureSourceInfo::TextureSourceInfo(const wstring& _filename, ImagePart _imageP
     sources{ _sources }
 {}
 
+TextureSourceInfo::TextureSourceInfo(const wstring& _filename) noexcept :
+    filename{ _filename },
+    imagePart{ ImagePart::One },
+    sources{}
+{}
+
 bool TextureSourceInfo::operator==(const TextureSourceInfo& o) const noexcept
 {
     return (tie(filename, imagePart, sources) == tie(o.filename, o.imagePart, o.sources));
@@ -38,9 +44,16 @@ bool TextureSourceInfo::LoadResource(ITextureLoad* load)
     Release();
 
     size_t index{ 0 };
-    ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(filename), index, nullptr, nullptr));
+    XMUINT2 texSize{};
+    UINT64 gfxOffset{ 0 };
+    ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(filename), index, &texSize, &gfxOffset));
+
     SetIndex(index);
+    SetGfxOffset(gfxOffset);
     SetTextureLoader(load);
+
+    if (imagePart == ImagePart::One && sources.empty())
+        sources.emplace_back(Rectangle{ 0, 0, static_cast<long>(texSize.x), static_cast<long>(texSize.y) });
 
     return true;
 }

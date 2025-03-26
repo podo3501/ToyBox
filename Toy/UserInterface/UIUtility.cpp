@@ -102,7 +102,7 @@ bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept
 {
 	stack<wstring> tagStack;
 	wstring fontStyle;
-	XMFLOAT4 color;
+	XMFLOAT4 color{ 0.f, 0.f, 0.f, 1.f }; //black
 
 	auto c = context.begin();
 	while (c != context.end())

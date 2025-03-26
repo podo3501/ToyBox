@@ -10,8 +10,7 @@ TextureSourceBinder::TextureSourceBinder()
 
 bool TextureSourceBinder::operator==(const TextureSourceBinder& o) const noexcept
 {
-    ReturnIfFalse(tie(m_jsonFilename, m_bindingFontTable, m_bindingTexTable) ==
-        tie(o.m_jsonFilename, o.m_bindingFontTable, o.m_bindingTexTable));
+    ReturnIfFalse(tie(m_bindingFontTable, m_bindingTexTable) == tie(o.m_bindingFontTable, o.m_bindingTexTable));
 
     return true;
 }

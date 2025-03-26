@@ -169,8 +169,10 @@ bool TextArea::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextu
 		ReturnIfFalse(fontInfoRef);
 
 		const auto& fontInfo = fontInfoRef->get();
+		auto curIndex = fontInfo.GetIndex();
+		ReturnIfFalse(curIndex);
 
-		m_font.emplace(bindKey, fontInfo.GetIndex());
+		m_font.emplace(bindKey, *curIndex);
 		m_fontFileList.emplace(bindKey, fontInfo.filename);
 	}
 	m_texController = texController;
@@ -202,7 +204,7 @@ unique_ptr<TextArea> CreateTextArea(const UILayout& layout,
 	return CreateIfSetup(move(textArea), text, layout, fontFileList);
 }
 
-unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, vector<wstring>& bindKeys)
+unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, const vector<wstring>& bindKeys)
 {
 	unique_ptr<TextArea> textArea = make_unique<TextArea>();
 	return textArea->Setup(layout, text, bindKeys) ? move(textArea) : nullptr;

@@ -13,6 +13,7 @@
 #include "../Toy/UserInterface/Component/ListArea.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureLoadBinder.h"
 #include "../TestHelper.h"
 
 namespace UserInterfaceTest
@@ -210,6 +211,25 @@ namespace UserInterfaceTest
 
 	//////////////////////////////////////////////////////////
 
+	static void TestLoadTextureFromFile(IRenderer* renderer, TextureLoadBinder* loadBinder, const wstring& filename)
+	{
+		loadBinder->AddTexture(filename);
+		renderer->LoadTextureBinder(loadBinder);
+		auto sourceInfo = loadBinder->GetSourceInfo(filename);
+		EXPECT_TRUE(sourceInfo);
+	}
+
+	TEST_F(IntegrationTest, TextureLoadBinder)
+	{
+		auto loadBinder = make_unique<TextureLoadBinder>();
+
+		const wstring& sampleFilename = L"UI/SampleTexture/Sample_0.png";
+		TestLoadTextureFromFile(m_renderer.get(), loadBinder.get(), sampleFilename);
+
+		const wstring& optionFilename = L"UI/SampleTexture/Option.png";
+		TestLoadTextureFromFile(m_renderer.get(), loadBinder.get(), optionFilename);
+	}
+
 	TEST_F(IntegrationTest, TextureSourceBinder)
 	{
 		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
@@ -232,6 +252,11 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_sourceBinder->RemoveBindingKey(L"TestTexFilename.json"));
 
 		WriteReadTest(m_sourceBinder);
+
+		auto sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
+		m_renderer->LoadTextureBinder(sourceBinder.get());
+		
+		EXPECT_EQ(*m_sourceBinder, *sourceBinder);
 	}
 
 	//////////////////////////////////////////////////////////

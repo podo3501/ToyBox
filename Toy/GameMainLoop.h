@@ -20,6 +20,8 @@ protected:
 	virtual void Update(const DX::StepTimer& timer) override;
 
 private:
+	bool AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept;
+
 	Window* m_window;
 	IRenderer* m_renderer;
 

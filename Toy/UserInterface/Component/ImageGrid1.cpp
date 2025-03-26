@@ -8,7 +8,7 @@
 
 ImageGrid1::~ImageGrid1()
 {
-	Release();
+	//Release();
 }
 
 void ImageGrid1::Release() noexcept
@@ -46,7 +46,7 @@ void ImageGrid1::AddRef() const noexcept
 unique_ptr<UIComponent> ImageGrid1::CreateClone() const
 {
 	auto clone = unique_ptr<ImageGrid1>(new ImageGrid1(*this));
-	clone->AddRef();
+	//clone->AddRef();
 	return clone;
 }
 
@@ -61,6 +61,19 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	return result;
 }
 
+void ImageGrid1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
+{
+	m_filename = sourceInfo.filename;
+	m_index = sourceInfo.GetIndex();
+	m_source = sourceInfo.GetSource(m_sourceIndex);
+	if (auto gfxOffset = sourceInfo.GetGfxOffset(); gfxOffset)
+		m_gfxOffset = *gfxOffset;
+	m_texController = texController;
+
+	if (GetSize() == XMUINT2{}) //사이즈가 없다면 source 사이즈로 초기화 한다.
+		SetSize(RectangleToXMUINT2(m_source));
+}
+
 bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController*) noexcept
 {
 	if (m_bindKey.empty()) return true; //?!? 나중에 binder로 다 바꾸면 return false로 바꿔지는지 확인하자.
@@ -68,13 +81,7 @@ bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITex
 	ReturnIfFalse(sourceInfoRef);
 
 	const auto& srcInfo = sourceInfoRef->get();
-	m_filename = srcInfo.filename;
-	m_index = srcInfo.GetIndex();
-	m_source = srcInfo.GetSource(m_sourceIndex);
-	//textureController는 직접 텍스쳐를 로딩 했을때에만 값을 셋팅한다. 텍스쳐를 로딩 안했는데 필요하게 되면 addref와 release에서 작동하게 되어서 레퍼런스카운터 숫자가 맞지 않는다.
-
-	if (GetSize() == XMUINT2{}) //사이즈가 없다면 source 사이즈로 초기화 한다.
-		SetSize(RectangleToXMUINT2(m_source));
+	SetSourceInfo(srcInfo, nullptr);
 	
 	return true;
 }

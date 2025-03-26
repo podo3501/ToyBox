@@ -5,6 +5,7 @@ enum class PendingAction;
 struct IRenderer;
 class ImageGrid1;
 struct TextureSourceInfo;
+class TextureLoadBinder;
 class TextureSourceBinder;
 class MainTextureWindow;
 class RenameNotifier;
@@ -36,6 +37,7 @@ private:
     
     IRenderer* m_renderer;
     MainTextureWindow* m_textureWindow;
+    unique_ptr<TextureLoadBinder> m_textureLoader;
     TextureSourceBinder* m_sourceBinder;
     unique_ptr<ImageSelector> m_imageSelector;
     int m_texIndex{ -1 };

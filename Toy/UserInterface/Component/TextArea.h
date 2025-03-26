@@ -49,4 +49,4 @@ private:
 unique_ptr<TextArea> CreateTextArea(const UILayout& layout, 
 	const wstring& text, map<wstring, wstring>& fontFileList);
 
-unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, vector<wstring>& bindKeys);
+unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, const vector<wstring>& bindKeys);

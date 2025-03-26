@@ -100,15 +100,16 @@
 --3이미지 9이미지 늘릴때 안늘어나는 이미지 가로 세로 lock 걸고 이미지 조정하는 걸로 수정
 --TextureSourceBinder도 TDD 작성 및 리팩토링
 --m_index를 컴포넌트들이 가지고 있는데 이것을 TextureSourceBinder가 가지는 방식도 고려
+--기존의 TDD에 좌표로 하드코딩 돼 있는 부분 TextrueSourceBinder로 수정
+    바꾸는 중에 m_index도 셋팅 하게끔 바꾸는데 그러다 보니 bind부분과 post부분이 겹치게 되어서 
+    한꺼번에 바꿔야 해서 img1 했고, 이전에는 반쪽만 했는데 switcher부터는 다 해야한다.
+
 
 @리팩토링 및 TDD 수정
     기존의 Image컴포넌트들도 TextureSourceBinder 사용하게 수정
         TextureWindow와 TextureMainWindow 두개가 있는데 TextureWindow를 삭제
         TextureMainWindow리팩토링 및 이름 수정
-            기존의 TDD에 좌표로 하드코딩 돼 있는 부분 TextrueSourceBinder로 수정
-            바꾸는 중에 m_index도 셋팅 하게끔 바꾸는데 그러다 보니 bind부분과 post부분이 겹치게 되어서 
-            한꺼번에 바꿔야 해서 img1 했고, 이전에는 반쪽만 했는데 switcher부터는 다 해야한다.
-            TEST_F(ComplexComponentTest, ScrollBar) 여기 할 차례
+            ImageGrid1이 텍스쳐 파일을 로딩하기도 하는데, 이 부분을 Binder로 옮기고 Component는 직접적으로 로딩 하는 부분을 없애자.
 
 @툴에서 리스트 할 수 있게끔
     ImageSwitcher editWindow 작업

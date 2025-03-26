@@ -38,6 +38,7 @@ ImageSwitcher::ImageSwitcher(const ImageSwitcher& o) :
 	m_behaviorMode{ o.m_behaviorMode },
 	m_indexes{ o.m_indexes },
 	m_image{ nullptr },
+	m_state{ o.m_state },
 	m_texController{ o.m_texController }
 {
 	ReloadDatas();
@@ -149,11 +150,12 @@ bool ImageSwitcher::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, I
 		ReturnIfFalse(sourceInfoRef);
 
 		const auto& srcInfo = sourceInfoRef->get();
-		m_indexes.emplace(pair.first, srcInfo.GetIndex());
+		auto curIndex = srcInfo.GetIndex();
+		ReturnIfFalse(curIndex);
+
+		m_indexes.emplace(pair.first, *curIndex);
 		m_sources.emplace(pair.first, ImageSource{ srcInfo.filename, srcInfo.sources });
 	}
-
-	//ReturnIfFalse(m_image->SetupFromData(GetSize(), m_indexes[Normal], m_sources[Normal].list));
 
 	return true;
 }

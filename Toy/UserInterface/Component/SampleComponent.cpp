@@ -333,7 +333,7 @@ unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);
 
 	UILayout switcherLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
-	auto switcher = CreateImageSwitcher(switcherLayout, ImagePart::ThreeH,
+	auto switcher = CreateImageSwitcher(switcherLayout, ImagePart::One,
 		GetStateKeyMap("ListBackground1"), BehaviorMode::Normal);
 
 	return CreateListArea(layout, move(listBackImage), move(switcher), move(scrollBar));

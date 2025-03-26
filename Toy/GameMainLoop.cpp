@@ -44,25 +44,29 @@ bool GameMainLoop::InitializeDerived()
     return true;
 }
 
-static inline void AttachComponentToPanel(UIComponent* panel, 
-    unique_ptr<UIComponent> component, const XMINT2& position)
+bool GameMainLoop::AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept
 {
-    if (panel && component)
-        UIEx(panel).AttachComponent(move(component), position);
+    if (!component) return false;
+
+    UIEx(m_gamePanel).AttachComponent(move(component), position);
+    return true;
 }
 
 bool GameMainLoop::LoadResources()
 {
     m_sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher1({ {32, 32}, Origin::Center }, BehaviorMode::Normal), { 100, 100 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher3({ {180, 48}, Origin::Center }, DirectionType::Horizontal, BehaviorMode::Normal), { 400, 300 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageSwitcher3({ {180, 48}, Origin::Center }, DirectionType::Horizontal, BehaviorMode::Normal), { 400, 240 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>"), { 160, 420 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleImageGrid9({ {210, 150}, Origin::LeftTop }), { 400, 300 });
-    //AttachComponentToPanel(m_gamePanel.get(), CreateSampleListArea1({ {200, 170}, Origin::Center }), { 600, 200 });
-    //LoadComponent(m_renderer, m_sourceBinder.get(), m_gamePanel.get());
+    m_renderer->LoadTextureBinder(m_sourceBinder.get());
 
-    //MakeSampleListAreaData(m_renderer, UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 16);
+    AttachComponentToPanel(CreateImageSwitcher({ {32, 32}, Origin::Center }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal), { 100, 100 });
+    AttachComponentToPanel(CreateImageSwitcher({ {180, 48}, Origin::Center }, ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 300 });
+    AttachComponentToPanel(CreateImageSwitcher({ {180, 48}, Origin::Center }, ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 240 });
+    vector<wstring> bindFontKeys{ L"English", L"Hangle" };
+    AttachComponentToPanel(CreateTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>", bindFontKeys), { 160, 420 });
+    AttachComponentToPanel(CreateImageGrid9({ {210, 150}, Origin::LeftTop }, "BackImage9"), { 400, 300 });
+    AttachComponentToPanel(CreateSampleListArea({ {200, 170}, Origin::Center }), { 600, 200 });
+    ReturnIfFalse(m_gamePanel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+
+    MakeSampleListAreaData(m_renderer, m_sourceBinder.get(), UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 16);
     
     return true;
 }

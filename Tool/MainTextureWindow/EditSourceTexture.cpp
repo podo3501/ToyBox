@@ -4,6 +4,7 @@
 #include "MainTextureWindow.h"
 #include "ImageSelector.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureLoadBinder.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Dialog.h"
 #include "../Toy/Utility.h"
@@ -19,6 +20,7 @@ EditSourceTexture::~EditSourceTexture() = default;
 EditSourceTexture::EditSourceTexture(IRenderer* renderer, MainTextureWindow* textureWindow) :
     m_renderer{ renderer },
     m_textureWindow{ textureWindow },
+    m_textureLoader{ make_unique<TextureLoadBinder>() },
     m_sourceBinder{ nullptr },
     m_imageSelector{ make_unique<ImageSelector>(textureWindow) }
 {}
@@ -31,10 +33,13 @@ void EditSourceTexture::ApplyTexture(ImageGrid1* tex) const noexcept
 
 bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
 {
-    //Binder에서 로딩하고 난 후에 Component에 인덱스를 넘겨주는 방식으로 할 예정
+    m_textureLoader->AddTexture(filename);
+    m_renderer->LoadTextureBinder(m_textureLoader.get());
+    auto sourceInfo = m_textureLoader->GetSourceInfo(filename);
+    ReturnIfFalse(sourceInfo);
+
     unique_ptr<ImageGrid1> texture = make_unique<ImageGrid1>();
-    texture->SetFilenameToLoadInfo(filename);
-    ReturnIfFalse(m_renderer->LoadComponent(texture.get()));
+    texture->SetSourceInfo(*sourceInfo, m_renderer->GetTextureController());
     AddTexture(move(texture));
 
     return true;

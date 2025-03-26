@@ -3,6 +3,7 @@
 
 struct IRenderer;
 struct ImageSource;
+struct TextureSourceInfo;
 namespace DX { class StepTimer; }
 
 class ImageGrid1 : public ImageGrid
@@ -22,6 +23,7 @@ public:
 	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
 	bool Setup(const UILayout& layout, const ImageSource& source) noexcept;
 	void SetFilenameToLoadInfo(const wstring& filename) noexcept;
+	void SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept;
 
 	inline void SetSource(const Rectangle& source) noexcept { m_source = source; }
 	inline const Rectangle& GetSource() const noexcept { return m_source; }

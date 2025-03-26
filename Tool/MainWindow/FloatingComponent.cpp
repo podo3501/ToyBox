@@ -56,18 +56,17 @@ bool FloatingComponent::Excute()
 	if (!m_currentAction.has_value()) return true;
 
 	auto result{ true };
+	static const vector<wstring> fontKeys{ L"Hangle", L"English" };
 	using enum MakeComponent;
 	switch (m_currentAction.value())
 	{
-	case ImageGrid1: result = LoadComponent(CreateSampleImageGrid1({ { 64, 64 }, Origin::LeftTop })); break;
-	case ImageGrid3: result = LoadComponent(CreateSampleImageGrid3(DirectionType::Horizontal, { { 48, 48 }, Origin::LeftTop })); break;
-	case ImageGrid9: result = LoadComponent(CreateSampleImageGrid9({ { 170, 120 }, Origin::LeftTop })); break;
-	case ImageSwitcher1: result = LoadComponent(CreateSampleImageSwitcher1({ { 32, 32 }, Origin::LeftTop }, BehaviorMode::Normal)); break;
-	case ImageSwitcher3: result = LoadComponent(CreateSampleImageSwitcher3({ { 100, 48 }, Origin::LeftTop }, DirectionType::Horizontal, BehaviorMode::Normal)); break;
-	case Button1: result = LoadComponent(CreateSampleButton1({ { 32, 32 }, Origin::LeftTop })); break;
-	case Button3: result = LoadComponent(CreateSampleButton3(DirectionType::Horizontal, { { 100, 48 }, Origin::LeftTop })); break;
-	case Text: result = LoadComponent(CreateSampleTextArea({ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>")); break;
-	case ListArea: result = LoadComponent(CreateSampleListArea1({ { 200, 170 }, Origin::LeftTop })); break;
+	case ImageGrid1: result = LoadComponent(CreateImageGrid1({ { 64, 64 }, Origin::LeftTop }, "BackImage1")); break;
+	case ImageGrid3: result = LoadComponent(CreateImageGrid3(DirectionType::Horizontal, { { 48, 48 }, Origin::LeftTop }, "ScrollButton3_H_Normal")); break;
+	case ImageGrid9: result = LoadComponent(CreateImageGrid9({ { 170, 120 }, Origin::LeftTop }, "BackImage9")); break;
+	case ImageSwitcher1: result = LoadComponent(CreateImageSwitcher({ { 32, 32 }, Origin::LeftTop }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)); break;
+	case ImageSwitcher3: result = LoadComponent(CreateImageSwitcher({ { 100, 48 }, Origin::LeftTop }, ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal)); break;
+	case Text: result = LoadComponent(CreateTextArea(UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
+	case ListArea: result = LoadComponent(CreateSampleListArea({ { 200, 170 }, Origin::LeftTop })); break;
 	}
 	m_currentAction.reset(); // 상태 초기화
 
@@ -117,8 +116,6 @@ void FloatingComponent::Render()
 	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = ImageGrid9;
 	if (ImGui::MenuItem("Image Switcher 1")) m_currentAction = ImageSwitcher1;
 	if (ImGui::MenuItem("Image Switcher 3")) m_currentAction = ImageSwitcher3;
-	if (ImGui::MenuItem("Button 1")) m_currentAction = Button1;
-	if (ImGui::MenuItem("Button 3")) m_currentAction = Button3;
 	if (ImGui::MenuItem("Text")) m_currentAction = Text;
 	if (ImGui::MenuItem("ListArea")) m_currentAction = ListArea;
 	if (ImGui::MenuItem("Close")) {}
@@ -131,7 +128,8 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 	ReturnIfNullptr(component);
 	m_component = component.get();
 	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(component)));
-	ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
+	//ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
+	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_sourceBinder, m_renderer->GetTextureController()));
 
 	return true;
 }
