@@ -71,11 +71,13 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 
 bool UIComponent::BindTextureSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept
 {
-	return ForEachChildPostUntilFail([sourceBinder, texController](UIComponent* component) {
+	ReturnIfFalse(ForEachChildPostUntilFail([sourceBinder, texController](UIComponent* component) {
 		bool result = component->ImplementBindSourceInfo(sourceBinder, texController);
-		assert(result);
+		Assert(result);
 		return result;
-		});
+		}));
+	ReturnIfFalse(UpdatePositionsManually());
+	return true;
 }
 
 bool UIComponent::LoadResources(ITextureLoad* load)
@@ -100,9 +102,19 @@ UITransform& UIComponent::GetTransform(UIComponent* component)
 
 bool UIComponent::UpdatePositionsManually(bool root) noexcept
 {
-	DX::StepTimer dummyTimer; //임시타이머이다. 이 타이머는 사용하지 않는다.
 	UIComponent* component = (root) ? GetRoot() : this;
-	return component->RecursiveUpdate(dummyTimer, {}, false); //ActiveUpdate true를 하면 상태가 바뀐다.
+	return component->RecursivePositionUpdate();
+}
+
+bool UIComponent::RecursivePositionUpdate(const XMINT2& position) noexcept
+{
+	const auto& startPos = GetTransform(this).GetUpdatedPosition(m_layout, position);
+	ImplementPositionUpdated();
+
+	return ranges::all_of(m_children, [this, &startPos](auto& child) {
+		auto childStartPos = startPos + GetTransform(child.get()).GetRelativePosition();
+		return child->RecursivePositionUpdate(childStartPos);
+		});
 }
 
 bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position, bool active) noexcept

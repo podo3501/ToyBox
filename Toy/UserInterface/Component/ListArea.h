@@ -31,6 +31,7 @@ public:
 protected:
 	ListArea(const ListArea& o) noexcept;
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 	virtual void OnAttached(UIComponent* parent);

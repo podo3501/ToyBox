@@ -75,6 +75,12 @@ void RenderTexture::OnAttached(UIComponent*)
 		m_texController->ModifyRenderTexturePosition(*m_index, GetPosition());
 }
 
+void RenderTexture::ImplementPositionUpdated() noexcept
+{
+	if (m_texController && m_index)
+		m_texController->ModifyRenderTexturePosition(*m_index, GetPosition());
+}
+
 //?!? rendertexture를 등록하는 것을 bind를 통해서 넣으면 텍스쳐 관리를 한군데에 몰아서 할 수 있을꺼 같은데.
 bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 {
@@ -91,12 +97,14 @@ bool RenderTexture::ImplementPostLoaded(ITextureController* texController)
 bool RenderTexture::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController* texController) noexcept
 {
 	Release(); //데이터가 존재하면 지운다.
-
+	
 	size_t index{ 0 };
+	UpdatePositionsManually(true);
 	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetSize(), GetPosition(), index, &m_gfxOffset));
 
 	m_index = index;
 	m_texController = texController;
+
 	return true;
 }
 

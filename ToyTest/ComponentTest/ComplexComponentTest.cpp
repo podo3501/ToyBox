@@ -17,42 +17,13 @@
 
 namespace UserInterfaceTest
 {
-	static void TestSwitcher_Scroll(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
-	{
-		vector<RECT> expectDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_V_Pressed"));
-	}
-
-	TEST_F(ComplexComponentTest, Switcher_Scroll)
-	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({ {16, 100}, Origin::Center },
-			ImagePart::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
-		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
-
-		testing::MockFunction<void(KeyState)> mockOnPress;
-		switcherPtr->AddPressCB(mockOnPress.AsStdFunction());
-
-		EXPECT_CALL(mockOnPress, Call(KeyState::Pressed)).Times(1); //Pressed 인자를 넣어서 한번 호출할 것을 기대
-		EXPECT_CALL(mockOnPress, Call(KeyState::Held)).Times(1);
-
-		MockMouseInput(100, 100, true); //Pressed
-		CallMockRender(TestSwitcher_Scroll, 3);
-
-		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Held가 되어야한다.
-		CallMockRender(TestSwitcher_Scroll, 3);
-
-		EXPECT_TRUE(WriteReadTest(m_panel));
-	}
-
-	////////////////////////////////////////////////////////
-
 	TEST_F(ComplexComponentTest, ListArea)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({ { 150, 120 }, Origin::Center }));
 		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
 		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+		EXPECT_TRUE(UIEx(m_panel).IsPositionUpdated());
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), m_sourceBinder.get(), listAreaPtr, 5));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
@@ -150,6 +121,36 @@ namespace UserInterfaceTest
 
 		MockMouseInput(110, 210, true); //벗어났지만 Pressed가 되어야한다.
 		m_panel->ProcessUpdate(m_timer);
+
+		EXPECT_TRUE(WriteReadTest(m_panel));
+	}
+
+	////////////////////////////////////////////////////////
+
+		static void TestSwitcher_Scroll(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
+	{
+		vector<RECT> expectDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
+		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_V_Pressed"));
+	}
+
+	TEST_F(ComplexComponentTest, Switcher_Scroll)
+	{
+		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({ {16, 100}, Origin::Center },
+			ImagePart::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
+		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+
+		testing::MockFunction<void(KeyState)> mockOnPress;
+		switcherPtr->AddPressCB(mockOnPress.AsStdFunction());
+
+		EXPECT_CALL(mockOnPress, Call(KeyState::Pressed)).Times(1); //Pressed 인자를 넣어서 한번 호출할 것을 기대
+		EXPECT_CALL(mockOnPress, Call(KeyState::Held)).Times(1);
+
+		MockMouseInput(100, 100, true); //Pressed
+		CallMockRender(TestSwitcher_Scroll, 3);
+
+		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Held가 되어야한다.
+		CallMockRender(TestSwitcher_Scroll, 3);
 
 		EXPECT_TRUE(WriteReadTest(m_panel));
 	}

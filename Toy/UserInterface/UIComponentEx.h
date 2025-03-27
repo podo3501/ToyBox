@@ -27,6 +27,7 @@ public:
 	UIComponent* GetRegionComponent(const string& regionName) noexcept;
 	vector<UIComponent*> GetComponents(const XMINT2& pos) noexcept;
 	XMUINT2 GetTotalChildSize() noexcept;
+	bool IsPositionUpdated() const noexcept;
 
 private:
 	unique_ptr<UIComponent> DetachChild(UIComponent* parent, UIComponent* detach) noexcept;

@@ -90,7 +90,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	m_scrollBar->ChangeOrigin(Origin::RightTop);
 	m_scrollBar->SetStateFlag(StateFlag::Render, false);
 	m_scrollBar->SetStateFlag(StateFlag::RenderEditable, true);
-	ChangeSizeY(m_scrollBar, layout.GetSize());
+	//ChangeSizeY(m_scrollBar, layout.GetSize());
 	UIEx(this).AttachComponent(move(scrollBar), { static_cast<int32_t>(layout.GetSize().x), 0 });
 
 	m_scrollSlider = m_scrollBar->GetScrollSlider();
@@ -98,6 +98,12 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 		
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요
 
+	return true;
+}
+
+bool ListArea::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+{
+	ChangeSizeY(m_scrollBar, GetSize());
 	return true;
 }
 

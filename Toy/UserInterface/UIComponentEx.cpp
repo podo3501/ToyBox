@@ -18,9 +18,9 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	m_component->GenerateUniqueRegionName(child.get());
 	child->SetParent(m_component);
 	child->m_transform.SetRelativePosition(m_component->m_layout.GetSize(), relativePos); //부모 사이즈와 나의 위치를 비교해야 상대적인 위치값을 구할 수 있다.
-	auto childPtr = child.get();
+
 	m_component->m_children.emplace_back(move(child));
-	childPtr->OnAttached(m_component);
+	m_component->UpdatePositionsManually(true);
 
 	return nullptr;
 }
@@ -125,6 +125,16 @@ XMUINT2 UIComponentEx::GetTotalChildSize() noexcept
 	return {
 		static_cast<uint32_t>(totalRectangle.width),
 		static_cast<uint32_t>(totalRectangle.height) };
+}
+
+bool UIComponentEx::IsPositionUpdated() const noexcept
+{
+	auto clone = m_component->Clone();
+	clone->UpdatePositionsManually(true); //클론을 만들어서 업데이트 시킨후 현재 컴포넌트와 포지션값 비교.
+	return m_component->ForEachChildUntilFail([&clone](const UIComponent* child) {
+		UIComponent* cloneComponent = UIEx(clone).FindComponent(child->GetName());
+		return cloneComponent->GetPosition() == child->GetPosition();
+		});
 }
 
 /////////////////////////////////////////////////////////////////
