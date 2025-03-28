@@ -12,21 +12,7 @@ using ordered_json = nlohmann::ordered_json;
 
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
-TextArea::~TextArea()
-{
-	Release();
-}
-
-void TextArea::Release() noexcept
-{
-	//if (!m_texController) return;
-
-	//for (const auto& font : m_font)
-	//	m_texController->ReleaseTexture(font.second);
-	//m_texController = nullptr;
-	//m_font.clear();
-}
-
+TextArea::~TextArea() = default;
 TextArea::TextArea() :
 	m_texController{ nullptr }
 {}
@@ -41,19 +27,9 @@ TextArea::TextArea(const TextArea& other) :
 	m_lines{ other.m_lines }
 {}
 
-void TextArea::AddRef() const noexcept
-{
-	//if (!m_texController) return;
-
-	//for (auto index : m_font | views::values)
-	//	m_texController->AddRef(index);
-}
-
 unique_ptr<UIComponent> TextArea::CreateClone() const
 {
-	auto clone = unique_ptr<TextArea>(new TextArea(*this));
-	clone->AddRef();
-	return clone;
+	return unique_ptr<TextArea>(new TextArea(*this));
 }
 
 bool TextArea::operator==(const UIComponent& o) const noexcept
@@ -62,20 +38,6 @@ bool TextArea::operator==(const UIComponent& o) const noexcept
 	const TextArea* rhs = static_cast<const TextArea*>(&o);
 	
 	return tie(m_bindKeys, m_text) == tie(rhs->m_bindKeys, rhs->m_text);
-}
-
-bool TextArea::ImplementLoadResource(ITextureLoad* load)
-{
-	Release();
-
-	size_t index{ 0 };
-	for (const auto& file : m_fontFileList)
-	{
-		ReturnIfFalse(load->LoadFont(GetResourceFullFilename(file.second), index));
-		m_font.emplace(file.first, index);
-	}
-
-	return true;
 }
 
 bool TextArea::ArrangeText(const wstring& text)
@@ -127,12 +89,6 @@ bool TextArea::SetText(const wstring& text)
 	m_text = text;
 
 	return true;
-}
-
-bool TextArea::ImplementPostLoaded(ITextureController* texController)
-{
-	m_texController = texController;
-	return ArrangeText(m_text);
 }
 
 bool TextArea::ImplementChangeSize(const XMUINT2& size) noexcept
@@ -197,15 +153,8 @@ void TextArea::SerializeIO(JsonOperation& operation)
 	UIComponent::SerializeIO(operation);
 }
 
-unique_ptr<TextArea> CreateTextArea(const UILayout& layout,
-	const wstring& text, map<wstring, wstring>& fontFileList)
-{
-	unique_ptr<TextArea> textArea = make_unique<TextArea>();
-	return CreateIfSetup(move(textArea), text, layout, fontFileList);
-}
-
 unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, const vector<wstring>& bindKeys)
 {
 	unique_ptr<TextArea> textArea = make_unique<TextArea>();
-	return textArea->Setup(layout, text, bindKeys) ? move(textArea) : nullptr;
+	return CreateIfSetup(move(textArea), layout, text, bindKeys);
 }

@@ -149,10 +149,3 @@ bool IsToolMode(UIComponent* component) noexcept
 	return (GetRenderFilterFlag() & StateFlag::RenderEditable) &&
 		component->HasStateFlag(StateFlag::RenderEditable);
 }
-
-bool LoadComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, UIComponent* component)
-{
-	ReturnIfFalse(component->BindTextureSourceInfo(sourceBinder, renderer->GetTextureController()));
-	ReturnIfFalse(renderer->LoadComponent(component));
-	return true;
-}

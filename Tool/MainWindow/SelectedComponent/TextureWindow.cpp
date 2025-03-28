@@ -17,7 +17,7 @@ TextureWindow::TextureWindow(IRenderer* renderer, unique_ptr<SourceExtractor> so
 bool TextureWindow::Create(const wstring& filename)
 {
     m_sourceTexture->SetFilenameToLoadInfo(filename);
-    ReturnIfFalse(m_renderer->LoadComponent(m_sourceTexture.get()));
+    //ReturnIfFalse(m_renderer->LoadComponent(m_sourceTexture.get()));
 
     if (const auto& areaList = m_sourceTexture->GetTextureAreaList(); areaList)
         m_sourceExtractor->SetTextureAreaList(*areaList);

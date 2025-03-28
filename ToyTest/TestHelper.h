@@ -16,7 +16,6 @@ public:
 
 protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementLoadResource(ITextureLoad* load) override;
 
 private:
 	function<bool(ITextureLoad*)> m_loadTestFunc;

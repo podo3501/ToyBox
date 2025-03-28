@@ -23,46 +23,6 @@ static inline vector<Rectangle> ExtractSourceRects(const ImageSource& source)
 	return { source.list[0], source.list[3], source.list[6] };
 }
 
-static unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, size_t idx, const ImageSource& source, const XMUINT2& size)
-{
-	UILayout grid3layout(size, Origin::LeftTop);
-	ImageSource imgSource
-	{
-		source.filename,
-		{ source.list[idx * 3], source.list[idx * 3 + 1], source.list[idx * 3 + 2] }
-	};
-
-	return CreateImageGrid3(dirType, grid3layout, imgSource);
-}
-
-//?!? 삭제
-bool ImageGrid9::Setup(const UILayout& layout, const ImageSource& source)
-{
-	if (source.filename.empty()) return false;
-	if (source.list.size() != 9) return false;
-
-	vector<optional<StateFlag::Type>> stateFlags{ StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
-
-	vector<XMUINT2> sizes; //source의 크기로 dest를 만든다.
-	ranges::transform(source.list, back_inserter(sizes), [](auto& src) { return RectangleToXMUINT2(src); });
-	vector<XMUINT2> firstSizes = { sizes[0], sizes[3], sizes[6] };
-	vector<XMINT2> positions = ExtractStartPosFromSizes(DirectionType::Vertical, firstSizes);
-	for (auto idx : views::iota(0u, positions.size()))
-	{
-		auto grid3 = CreateImageGrid3(DirectionType::Horizontal, idx, source, firstSizes[idx]);
-		if (auto flag = stateFlags[idx]; flag) grid3->SetStateFlag(*flag, true);
-		UIEx(this).AttachComponent(move(grid3), positions[idx]);
-	}
-
-	ChangeSize(layout.GetSize());
-	SetLayout(layout);
-
-	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
-	UpdatePositionsManually();
-
-	return true;
-}
-
 bool ImageGrid9::Setup(const UILayout& layout, const string& bindKey)
 {
 	SetLayout(layout);
@@ -198,14 +158,8 @@ vector<Rectangle> ImageGrid9::GetSources() const noexcept
 	return areas;
 }
 
-unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const ImageSource& source)
-{
-	auto imgGrid9 = make_unique<ImageGrid9>();
-	return CreateIfSetup(move(imgGrid9), layout, source);
-}
-
 unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const string& bindKey)
 {
 	auto img9 = make_unique<ImageGrid9>();
-	return img9->Setup(layout, bindKey) ? move(img9) : nullptr;
+	return CreateIfSetup(move(img9), layout, bindKey);
 }

@@ -80,21 +80,6 @@ bool UIComponent::BindTextureSourceInfo(TextureSourceBinder* sourceBinder, IText
 	return true;
 }
 
-bool UIComponent::LoadResources(ITextureLoad* load)
-{
-	return ForEachChildUntilFail([load](UIComponent* component) {
-		return component->ImplementLoadResource(load);
-		});
-}
-
-bool UIComponent::PostLoaded(ITextureController* texController)
-{
-	ReturnIfFalse(UpdatePositionsManually());
-	return ForEachChildUntilFail([texController](UIComponent* component) {
-		return component->ImplementPostLoaded(texController);
-		});
-}
-
 UITransform& UIComponent::GetTransform(UIComponent* component)
 {
 	return component->m_transform;

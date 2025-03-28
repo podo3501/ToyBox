@@ -185,38 +185,6 @@ bool Renderer::LoadTextureBinder(ITextureBinder* textureBinder)
     return true;
 }
 
-bool Renderer::LoadComponent(IComponent* component)
-{
-    if (!component) return false;
-    //com을 생성할때 다중쓰레드로 생성하게끔 초기화 한다. RAII이기 때문에 com을 사용할때 초기화 한다.
-#ifdef __MINGW32__
-    ReturnIfFailed(CoInitializeEx(nullptr, COINITBASE_MULTITHREADED))
-#else
-    Microsoft::WRL::Wrappers::RoInitializeWrapper initialize(RO_INIT_MULTITHREADED);
-    if (FAILED(initialize)) return false;
-#endif
-    WICOnceInitialize();
-
-    auto load = m_texRepository.get();
-
-    m_batch->Begin();
-    if (!component->LoadResources(load))
-    {
-        m_batch->End(m_deviceResources->GetCommandQueue());
-        return false;
-    }
-
-    auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
-    uploadResourcesFinished.wait();
-    
-    //로드 하고 나서 필요한 셋팅 및 위치계산을 해 준다.
-    //if (!component->PostLoaded(load) || !component->ProcessUpdate())
-    if (!component->PostLoaded(load))
-        return false;
-
-    return true;
-}
-
 #pragma region Frame Draw
 // Draws the scene.
 void Renderer::Draw()

@@ -12,25 +12,10 @@
 
 using enum InteractState;
 
-ImageSwitcher::~ImageSwitcher()
-{
-	Release(); //?!? 昏力
-}
-
+ImageSwitcher::~ImageSwitcher() = default;
 ImageSwitcher::ImageSwitcher() :
-	m_image{ nullptr },
-	m_texController{ nullptr }
+	m_image{ nullptr }
 {}
-
-void ImageSwitcher::Release() noexcept//?!? 昏力
-{
-	if (!m_texController) return;
-
-	for (const auto& index : m_indexes)
-		m_texController->ReleaseTexture(index.second);
-	m_texController = nullptr;
-	m_indexes.clear();
-}
 
 ImageSwitcher::ImageSwitcher(const ImageSwitcher& o) :
 	UIComponent{ o },
@@ -38,8 +23,7 @@ ImageSwitcher::ImageSwitcher(const ImageSwitcher& o) :
 	m_behaviorMode{ o.m_behaviorMode },
 	m_indexes{ o.m_indexes },
 	m_image{ nullptr },
-	m_state{ o.m_state },
-	m_texController{ o.m_texController }
+	m_state{ o.m_state }
 {
 	ReloadDatas();
 }
@@ -50,19 +34,9 @@ void ImageSwitcher::ReloadDatas() noexcept
 	m_image = static_cast<ImageGrid*>(componentList[0]);
 }
 
-void ImageSwitcher::AddRef() const noexcept//?!? 昏力
-{
-	if (!m_texController) return;
-
-	for (const auto& index : m_indexes)
-		m_texController->AddRef(index.second);
-}
-
 unique_ptr<UIComponent> ImageSwitcher::CreateClone() const
 {
-	auto clone = unique_ptr<ImageSwitcher>(new ImageSwitcher(*this));
-	clone->AddRef();
-	return clone;
+	return unique_ptr<ImageSwitcher>(new ImageSwitcher(*this));
 }
 
 bool ImageSwitcher::operator==(const UIComponent& rhs) const noexcept
@@ -71,44 +45,6 @@ bool ImageSwitcher::operator==(const UIComponent& rhs) const noexcept
 	const ImageSwitcher* o = static_cast<const ImageSwitcher*>(&rhs);
 
 	return tie(m_sources, m_behaviorMode) == tie(o->m_sources, o->m_behaviorMode);
-}
-
-bool ImageSwitcher::ImplementLoadResource(ITextureLoad* load)//?!? 昏力
-{
-	Release();
-
-	size_t index{ 0 };
-	for (const auto& source : m_sources)
-	{
-		const auto& imgSrc = source.second;
-		ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(imgSrc.filename), index, nullptr, nullptr));
-		m_indexes.emplace(source.first, index);
-	}
-	
-	return true;
-}
-
-bool ImageSwitcher::ImplementPostLoaded(ITextureController* texController)//?!? 昏力
-{
-	m_image->SetupFromData(GetSize(), m_indexes[Normal], m_sources[Normal].list);
-	m_state = Normal;
-
-	m_texController = texController;
-	return true;
-}
-
-bool ImageSwitcher::Setup(const UILayout& layout, unique_ptr<ImageGrid> img,
-	const map<InteractState, ImageSource>& sources, BehaviorMode behaviorMode) noexcept//?!? 昏力
-{
-	if (sources.empty()) return false;
-
-	SetLayout(layout);
-	m_image = img.get();
-	UIEx(this).AttachComponent(move(img), {});
-	m_sources = sources;
-	m_behaviorMode = behaviorMode;
-
-	return true;
 }
 
 static unique_ptr<ImageGrid> CreateImageGrid(const UILayout& layout, ImagePart imgPart, const string& bindKey)
@@ -227,15 +163,9 @@ void ImageSwitcher::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<ImageSwitcher> CreateImageSwitcher(const UILayout& layout,//?!? 昏力
-	unique_ptr<ImageGrid> img, const map<InteractState, ImageSource>& sources, BehaviorMode behaviorMode)
-{
-	return CreateIfSetup(make_unique<ImageSwitcher>(), layout, move(img), sources, behaviorMode);
-}
-
 unique_ptr<ImageSwitcher> CreateImageSwitcher(const UILayout& layout, ImagePart imgPart,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
 {
 	unique_ptr<ImageSwitcher> switcher = make_unique<ImageSwitcher>();
-	return switcher->Setup(layout, imgPart, stateKeys, behaviorMode) ? move(switcher) : nullptr;
+	return CreateIfSetup(move(switcher), layout, imgPart, stateKeys, behaviorMode);
 }

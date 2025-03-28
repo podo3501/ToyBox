@@ -64,16 +64,6 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const REC
 	m_panel->ProcessRender(&mockRender);
 }
 
-void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
-{
-	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _))
-		.Times(times)
-		.WillRepeatedly(Invoke(testRenderFunc));
-	component->ProcessUpdate(m_timer);
-	component->ProcessRender(&mockRender);
-}
-
 void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
 {
 	MockRender mockRender;
@@ -109,14 +99,6 @@ void ToyTestFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 	state.leftButton = leftButton;
 	mouseTracker.Update(state);
 }
-//?!?이 함수 지우기
-void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*)> renderFunc, int times)
-{
-	unique_ptr<UIComponent> clonePanel = component->Clone();
-
-	CallMockRender(clonePanel.get(), renderFunc, times);
-	EXPECT_TRUE(WriteReadTest(clonePanel));
-}
 
 void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> renderFunc, int times)
 {
@@ -139,20 +121,6 @@ void ToyTestFixture::TearDown()
 #if defined(DEBUG) | defined(_DEBUG)
 	ReportLiveObjects();
 #endif
-}
-
-static bool IsTrue(const RECT& dest, const RECT& destRect, const RECT& source, const RECT& sourceRect) noexcept
-{
-	if (dest == destRect) { if (source == sourceRect) return true; }
-	return false;
-}
-
-void BasicComponentTest::TestRender(size_t index, const RECT& dest, const RECT* source, vector<pair<RECT, RECT>> testCases) noexcept
-{
-	EXPECT_TRUE(index == 0);
-	EXPECT_TRUE(ranges::any_of(testCases, [&](const auto& pair) {
-		return IsTrue(dest, pair.first, *source, pair.second);
-		}));
 }
 
 bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)

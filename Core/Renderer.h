@@ -53,7 +53,6 @@ public:
     virtual void AddImguiComponent(IImguiComponent* item) override;
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept override;
 
-    virtual bool LoadComponent(IComponent* component) override;
     virtual bool LoadTextureBinder(ITextureBinder* textureBinder) override;
 
     virtual void Draw() override;

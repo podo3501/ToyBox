@@ -30,14 +30,6 @@ bool ImageGrid3::operator==(const UIComponent& rhs) const noexcept
     return(tie(m_dirType) == tie(o->m_dirType));
 }
 
-static unique_ptr<ImageGrid1> CreateImageGrid1(size_t idx, const ImageSource& source, const XMUINT2& size)
-{
-    UILayout grid1layout(size, Origin::LeftTop);
-    ImageSource imgSource{ source.filename, { source.list[idx] } };
-
-    return CreateImageGrid1(grid1layout, imgSource);
-}
-
 static vector<optional<StateFlag::Type>> GetStateFlagsForDirection(DirectionType dirType) noexcept
 {
     switch (dirType)
@@ -64,49 +56,6 @@ void ImageGrid3::SetupDetails(const XMUINT2& size) noexcept
 
     SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
     UpdatePositionsManually();
-}
-
-bool ImageGrid3::SetupFromData(const XMUINT2& size, size_t index, const vector<Rectangle>& sources)
-{
-    if (!GetChildComponents().empty()) //로딩했다면 자식이 있으므로, 값만 셋팅해 준다.
-    {
-        SetIndexedSource(index, sources);
-        return true;
-    }
-
-    vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
-    auto [srcSizes, positions] = ComputeBoundsFromSources(m_dirType, sources);
-    for (auto idx : views::iota(0u, sources.size()))
-    {
-        auto img1 = make_unique<ImageGrid1>();
-        img1->SetupFromData(srcSizes[idx], index, { sources[idx] });
-        if (auto flag = stateFlags[idx]; flag) img1->SetStateFlag(*flag, true);
-        UIEx(this).AttachComponent(move(img1), positions[idx]);
-    }
-    SetupDetails(size);
-
-    return true;
-}
-
-//?!? 삭제
-bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept
-{
-    if (source.filename.empty()) return false;
-    if (source.list.size() != 3) return false;
-
-    m_dirType = dirType;
-
-    vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
-    auto [srcSizes, positions] = ComputeBoundsFromSources(m_dirType, source.list);
-    for (auto idx : views::iota(0u, source.list.size()))
-    {
-        auto grid1 = CreateImageGrid1(idx, source, srcSizes[idx]);
-        if (auto flag = stateFlags[idx]; flag) grid1->SetStateFlag(*flag, true);
-        UIEx(this).AttachComponent(move(grid1), positions[idx]);
-    }
-    SetupDetails(layout.GetSize());
-
-    return true;
 }
 
 bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
@@ -275,14 +224,8 @@ void ImageGrid3::SerializeIO(JsonOperation& operation)
 }
 
 //?!? component를 넣는 식으로 바꾸자. 함수 인자를 계속해서 전달할 필요는 없으니까.
-unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const ImageSource& source)
-{
-    auto grid3 = make_unique<ImageGrid3>();
-    return CreateIfSetup(move(grid3), dirType, layout, source);
-}
-
 unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex)
 {
     auto grid3 = make_unique<ImageGrid3>();
-    return grid3->Setup(dirType, layout, bindKey, sourceIndex) ? move(grid3) : nullptr;
+    return CreateIfSetup(move(grid3), dirType, layout, bindKey, sourceIndex);
 }

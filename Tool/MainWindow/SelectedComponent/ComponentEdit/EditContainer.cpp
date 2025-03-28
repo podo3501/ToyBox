@@ -5,7 +5,8 @@
 
 EditContainer::~EditContainer() = default;
 EditContainer::EditContainer(Container* textArea, CommandList* cmdList) noexcept :
-	EditWindow{ textArea, cmdList }
+	EditWindow{ textArea, cmdList },
+	m_container{ nullptr }
 {
 }
 

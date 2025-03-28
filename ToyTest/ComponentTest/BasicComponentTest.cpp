@@ -2,19 +2,13 @@
 #include "../ToyTestFixture.h"
 #include "../IMockRenderer.h"
 #include "../TestHelper.h"
-#include "../Utility.h"
-#include "../Toy/Window.h"
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
-#include "../Toy/UserInterface/Component/Button.h"
 #include "../Toy/UserInterface/Component/Container.h"
-#include "../Toy/UserInterface/Component/Panel.h"
 #include "../Toy/UserInterface/Component/TextArea.h"
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
 #include "../Toy/UserInterface/Component/SampleComponent.h"
-#include "../Toy/UserInterface/UIUtility.h"
-#include "../Toy/Utility.h"
 
 using testing::ElementsAre;
 

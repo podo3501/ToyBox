@@ -16,11 +16,9 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid3; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
-	virtual bool SetupFromData(const XMUINT2& size, size_t index, const vector<Rectangle>& sources) override;
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(DirectionType dirType, const UILayout& layout, const ImageSource& source) noexcept;
 	bool Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
 
@@ -47,5 +45,4 @@ private:
 	DirectionType m_dirType{ DirectionType::Horizontal };
 };
 
-unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const ImageSource& source);
 unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);

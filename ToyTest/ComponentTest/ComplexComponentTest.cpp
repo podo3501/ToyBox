@@ -7,13 +7,8 @@
 #include "../Toy/UserInterface/Component/ScrollSlider.h"
 #include "../Toy/UserInterface/Component/RenderTexture.h"
 #include "../Toy/UserInterface/Component/ListArea.h"
-#include "../Toy/UserInterface/Component/Button.h"
-#include "../Toy/UserInterface/Component/ImageGrid1.h"
-#include "../Toy/UserInterface/Component/ImageGrid3.h"
-#include "../Toy/UserInterface/Component/Container.h"
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/Utility.h"
 
 namespace UserInterfaceTest
 {

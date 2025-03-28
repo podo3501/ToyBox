@@ -14,7 +14,6 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid9; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 
-	bool Setup(const UILayout& layout, const ImageSource& source);
 	bool Setup(const UILayout& layout, const string& bindKey);
 	bool SetFilename(const wstring& filename) noexcept;
 	wstring GetFilename() const noexcept;
@@ -33,5 +32,4 @@ protected:
 
 };
 
-unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const ImageSource& source);
 unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const string& bindKey);

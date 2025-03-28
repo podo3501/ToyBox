@@ -44,8 +44,6 @@ bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept;
 
 bool IsToolMode(UIComponent* component) noexcept;
 
-bool LoadComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, UIComponent* component);
-
 template<typename PointerType>
 inline pair<unique_ptr<PointerType>, PointerType*> GetPtrs(unique_ptr<PointerType> uniquePtr)
 {

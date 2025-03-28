@@ -31,7 +31,7 @@ public:
     virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept = 0;
     virtual bool ModifyRenderTextureSize(size_t index, const XMUINT2& size) = 0;
 
-    //?!? 밑에 두 함수는 TextureSourceBinder에서 리소스 로딩을 하는것으로 대체되면 여기서는 필요없어진다.
+    //?!? 밑에 두 함수는 RenderTexture에서 쓰긴 한데.. 없애고 싶긴하다.
     virtual void ReleaseTexture(size_t idx) noexcept = 0; 
     virtual void AddRef(size_t index) noexcept = 0;
 };
@@ -69,7 +69,6 @@ public:
     virtual void AddImguiComponent(IImguiComponent* item) = 0;
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept = 0;
 
-    virtual bool LoadComponent(IComponent* component) = 0;
     virtual bool LoadTextureBinder(ITextureBinder* textureBinder) = 0;
 
     virtual void Draw() = 0;

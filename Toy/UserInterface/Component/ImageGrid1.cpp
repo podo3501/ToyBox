@@ -6,22 +6,7 @@
 #include "../JsonOperation.h"
 #include "../TextureSourceBinder/TextureSourceBinder.h"
 
-ImageGrid1::~ImageGrid1()
-{
-	//Release();
-}
-
-void ImageGrid1::Release() noexcept
-{
-	if (m_texController && m_index)
-	{
-		m_texController->ReleaseTexture(*m_index);
-		m_texController = nullptr;
-		m_gfxOffset = {};
-		m_index = nullopt;
-	}
-}
-
+ImageGrid1::~ImageGrid1() = default;
 ImageGrid1::ImageGrid1() : 
 	m_texController{ nullptr }
 {}
@@ -37,17 +22,9 @@ ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	m_gfxOffset{ o.m_gfxOffset }
 {}
 
-void ImageGrid1::AddRef() const noexcept
-{
-	if(m_texController && m_index)
-		m_texController->AddRef(*m_index);
-}
-
 unique_ptr<UIComponent> ImageGrid1::CreateClone() const
 {
-	auto clone = unique_ptr<ImageGrid1>(new ImageGrid1(*this));
-	//clone->AddRef();
-	return clone;
+	return unique_ptr<ImageGrid1>(new ImageGrid1(*this));
 }
 
 bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
@@ -86,43 +63,6 @@ bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITex
 	return true;
 }
 
-bool ImageGrid1::ImplementLoadResource(ITextureLoad* load)
-{
-	if (m_filename.empty()) return true;
-
-	Release();
-
-	XMUINT2 texSize{};
-	size_t index{ 0 };
-	ReturnIfFalse(load->LoadTexture(GetResourceFullFilename(m_filename), index, &texSize, &m_gfxOffset));
-
-	m_index = index;
-
-	if (GetSize() == XMUINT2{} && m_source == Rectangle{}) //파일이름만 셋팅하면 크기 및 그려지는 부분은 전체로 설정한다.
-	{
-		SetSize(texSize);
-		m_source = { 0, 0, static_cast<long>(texSize.x), static_cast<long>(texSize.y) };
-	}
-
-	return true;
-}
-
-bool ImageGrid1::ImplementPostLoaded(ITextureController* texController)
-{
-	if (m_filename.empty()) return true;
-
-	m_texController = texController;
-	return true;
-}
-
-bool ImageGrid1::SetupFromData(const XMUINT2& size, size_t index, const vector<Rectangle>& source)
-{
-	SetLayout({ size, Origin::LeftTop });
-	SetIndexedSource(index, source);
-
-	return true;
-}
-
 static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 {
 	return (static_cast<UINT32>(a) << 24) |
@@ -156,19 +96,6 @@ bool ImageGrid1::Setup(const UILayout& layout, const string& bindKey, size_t sou
 	return true;
 }
 
-bool ImageGrid1::Setup(const UILayout& layout, const ImageSource& source) noexcept
-{
-	if (source.filename.empty()) return false;
-	if (source.list.size() != 1) return false;
-
-	SetLayout(layout);
-
-	m_filename = source.filename;
-	m_source = source.list.at(0);
-
-	return true;
-}
-
 void ImageGrid1::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept
 {
 	m_index = index;
@@ -187,14 +114,8 @@ void ImageGrid1::SerializeIO(JsonOperation& operation)
 	operation.Process("SourceIndex", m_sourceIndex);
 }
 
-unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const ImageSource& source)
-{
-	auto grid1 = make_unique<ImageGrid1>();
-	return CreateIfSetup(move(grid1), layout, source);
-}
-
 unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const string& bindKey, size_t sourceIndex)
 {
 	auto grid1 = make_unique<ImageGrid1>();
-	return grid1->Setup(layout, bindKey, sourceIndex) ? move(grid1) : nullptr;
+	return CreateIfSetup(move(grid1), layout, bindKey, sourceIndex);
 }

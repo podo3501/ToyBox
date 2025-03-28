@@ -34,7 +34,6 @@ bool WriteReadTest(unique_ptr<TextureSourceBinder>& write, const wstring& filena
 }
 
 unique_ptr<UIComponent> TestComponent::CreateClone() const { return nullptr; }
-bool TestComponent::ImplementLoadResource(ITextureLoad* load) { return m_loadTestFunc(load); };
 void TestComponent::SetLoadTestFunction(function<bool(ITextureLoad*)> func) { m_loadTestFunc = move(func); }
 
 static bool IsTrue(const RECT& dest, const RECT& destRect, const RECT& source, const RECT& sourceRect) noexcept

@@ -29,7 +29,6 @@ public:
 protected:
 	RenderTexture(const RenderTexture& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementPostLoaded(ITextureController*) override;
 	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override;
 	virtual void ImplementPositionUpdated() noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept override;

@@ -58,7 +58,6 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBack
 	m_scrollSlider = ComponentCast<ScrollSlider*>(scrollSlider.get());
 	m_scrollSlider->ChangeOrigin(Origin::Center);
 	m_scrollPadding = size.y - m_scrollSlider->GetSize().y;
-	//ChangeSliderSize(size);
 	UIEx(this).AttachComponent(move(scrollSlider), centerPos);
 
 	return true;
