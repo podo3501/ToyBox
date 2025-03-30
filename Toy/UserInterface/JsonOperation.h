@@ -183,9 +183,8 @@ public:
 	void Process(const string& key, unique_ptr<UIComponent>& data);
 	void Process(const string& key, vector<unique_ptr<UIComponent>>& datas);
 	void Process(const string& key, wstring& data) noexcept;
-	void Process(const string& key, map<wstring, wstring>& data) noexcept;
 	void Process(const string& key, map<int, UITransform>& datas) noexcept;
-	void Process(const string& key, map<InteractState, ImageSource>& datas) noexcept;
+	void Process(const string& key, map<InteractState, string>& datas) noexcept;
 	void Process(const string& key, unordered_map<wstring, TextureFontInfo>& datas) noexcept;
 	void Process(const string& key, unordered_map<string, TextureSourceInfo>& datas) noexcept;
 	void Process(const string& key, deque<wstring>& data) noexcept;

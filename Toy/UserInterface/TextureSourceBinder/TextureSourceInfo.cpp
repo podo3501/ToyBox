@@ -6,19 +6,9 @@
 #include "../../Utility.h"
 #include "../UIType.h"
 
-TextureSourceInfo::~TextureSourceInfo()
-{
-    Release();
-}
-
+TextureSourceInfo::~TextureSourceInfo() = default;
 TextureSourceInfo::TextureSourceInfo() noexcept :
     imagePart{ ImagePart::One }
-{}
-
-TextureSourceInfo::TextureSourceInfo(const TextureSourceInfo& other) noexcept :
-    filename{ other.filename },
-    imagePart{ other.imagePart },
-    sources{ other.sources }
 {}
 
 TextureSourceInfo::TextureSourceInfo(const wstring& _filename, ImagePart _imagePart, const vector<Rectangle>& _sources) noexcept :

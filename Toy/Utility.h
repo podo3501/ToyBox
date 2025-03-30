@@ -36,33 +36,17 @@
 
 #ifndef ReturnIfFalse
 #define ReturnIfFalse(x)                       \
-{                                                             \
-    if(!(x)) return false;                          \
-}
+	do{													\
+		if(!(x)) return false;						\
+	} while (0)
 #endif
 
 #ifndef ReturnIfFailed
 #define ReturnIfFailed(x)                                              \
-{                                                                     \
-    if(FAILED(x))                                            \
-        return false;                                                \
-}
-#endif
-
-#ifndef ReturnIfNullptr
-#define ReturnIfNullptr(x)                                              \
-{                                                                     \
-    if(x == nullptr)                                            \
-        return false;                                                \
-}
-#endif
-
-//std::optional을 사용했을때 매크로
-#ifndef ReturnIfEmpty
-#define ReturnIfEmpty(opt) \
-{                                            \
-    if (!(opt)) return false;     \
-}
+	do{													\
+		if(FAILED(x))                                            \
+			return false;                                                \
+	} while (0)
 #endif
 
 wstring StringToWString(const string& str) noexcept;

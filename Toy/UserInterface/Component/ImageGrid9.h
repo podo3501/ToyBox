@@ -15,11 +15,10 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 
 	bool Setup(const UILayout& layout, const string& bindKey);
-	bool SetFilename(const wstring& filename) noexcept;
 	wstring GetFilename() const noexcept;
 
 	bool SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept;
-	SourceDivider GetSourceAnd4Divider() const noexcept;
+	SourceDivider GetSourceAnd4Divider() const noexcept; //?!? 이렇게 자르는 함수들은 Binder에서 잘라서 저장했기 때문에 여기서는 할 필요가 없어졌다.
 
 	bool SetSources(const vector<Rectangle>& sources) noexcept;
 	vector<Rectangle> GetSources() const noexcept;

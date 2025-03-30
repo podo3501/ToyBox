@@ -19,8 +19,9 @@ ImageSwitcher::ImageSwitcher() :
 
 ImageSwitcher::ImageSwitcher(const ImageSwitcher& o) :
 	UIComponent{ o },
-	m_sources{ o.m_sources },
+	m_stateKeys{ o.m_stateKeys },
 	m_behaviorMode{ o.m_behaviorMode },
+	m_sources{ o.m_sources },
 	m_indexes{ o.m_indexes },
 	m_image{ nullptr },
 	m_state{ o.m_state }
@@ -44,7 +45,7 @@ bool ImageSwitcher::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const ImageSwitcher* o = static_cast<const ImageSwitcher*>(&rhs);
 
-	return tie(m_sources, m_behaviorMode) == tie(o->m_sources, o->m_behaviorMode);
+	return tie(m_stateKeys, m_behaviorMode) == tie(o->m_stateKeys, o->m_behaviorMode);
 }
 
 static unique_ptr<ImageGrid> CreateImageGrid(const UILayout& layout, ImagePart imgPart, const string& bindKey)
@@ -67,7 +68,6 @@ bool ImageSwitcher::Setup(const UILayout& layout, ImagePart imgPart,
 	UIEx(this).AttachComponent(move(img), {});
 	m_stateKeys = stateKeys;
 	m_behaviorMode = behaviorMode;
-	m_state = Normal;
 
 	return true;
 }
@@ -82,7 +82,7 @@ bool ImageSwitcher::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, I
 {
 	for (const auto& pair : m_stateKeys)
 	{
-		auto sourceInfoRef = sourceBinder->GetSourceInfo(pair.second);
+		auto sourceInfoRef = sourceBinder->GetTextureSourceInfo(pair.second);
 		ReturnIfFalse(sourceInfoRef);
 
 		const auto& srcInfo = sourceInfoRef->get();
@@ -92,6 +92,7 @@ bool ImageSwitcher::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, I
 		m_indexes.emplace(pair.first, *curIndex);
 		m_sources.emplace(pair.first, ImageSource{ srcInfo.filename, srcInfo.sources });
 	}
+	SetState(Normal);
 
 	return true;
 }
@@ -156,7 +157,7 @@ void ImageSwitcher::SetState(InteractState state) noexcept
 void ImageSwitcher::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
-	operation.Process("Sources", m_sources);
+	operation.Process("StateKey", m_stateKeys);
 	operation.Process("BehaviorMode", m_behaviorMode);
 
 	if (operation.IsWrite()) return;

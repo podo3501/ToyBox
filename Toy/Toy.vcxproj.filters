@@ -163,6 +163,12 @@
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureLoadBinder.h">
       <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponentFactory.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureSourceBinder\TextureBinderHelper.h">
+      <Filter>UserInterface\TextureSourceBinder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -274,6 +280,12 @@
       <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureLoadBinder.cpp">
+      <Filter>UserInterface\TextureSourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponentFactory.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureSourceBinder\TextureBinderHelper.cpp">
       <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClCompile>
   </ItemGroup>

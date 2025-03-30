@@ -4,8 +4,18 @@
 struct ITextureLoad;
 class TextureSourceBinder;
 
-bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
-bool WriteReadTest(unique_ptr<TextureSourceBinder>& sourceBinder, const wstring& filename = L"Test/Data/RWSourceBinderTest.json");
+unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
+
+template<typename T>
+unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, T& component, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json")
+{
+	auto read = WriteReadTest(write, filename);
+	component = UIEx(read).FindComponent<T>(component->GetName());
+
+	return move(read);
+}
+
+bool TestSourceBinderWriteRead(unique_ptr<TextureSourceBinder>& sourceBinder, const wstring& filename = L"Test/Data/RWSourceBinderTest.json");
 
 class TestComponent : public UIComponent
 {

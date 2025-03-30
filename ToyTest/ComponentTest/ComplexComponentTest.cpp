@@ -15,9 +15,10 @@ namespace UserInterfaceTest
 	TEST_F(ComplexComponentTest, ListArea)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({ { 150, 120 }, Origin::Center }));
-		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
 		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
+		m_panel = WriteReadTest(m_panel, listAreaPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
 		EXPECT_TRUE(UIEx(m_panel).IsPositionUpdated());
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), m_sourceBinder.get(), listAreaPtr, 5));
@@ -39,8 +40,6 @@ namespace UserInterfaceTest
 
 		listAreaPtr->ClearContainers();
 		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
-
-		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	////////////////////////////////////////////////////////
@@ -59,10 +58,10 @@ namespace UserInterfaceTest
 			ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
 		auto [renderTex, renderTexPtr] = GetPtrs(CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(switcher)));
 		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
+		m_panel = WriteReadTest(m_panel, renderTexPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
 
 		CallMockRender(TestRenderTexture, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
-		EXPECT_TRUE(WriteReadTest(m_panel));
 
 		auto clone = renderTexPtr->Clone();
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
@@ -74,6 +73,7 @@ namespace UserInterfaceTest
 	{
 		auto [scrollBar, scrollBarPtr] = GetPtrs(CreateSampleScrollBar({ {16, 200}, Origin::LeftTop }));
 		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
+		m_panel = WriteReadTest(m_panel, scrollBarPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		uint32_t viewArea = 500;
@@ -98,6 +98,7 @@ namespace UserInterfaceTest
 	{
 		auto [scrollSlider, scrollSliderPtr] = GetPtrs(CreateSampleScrollSlider(DirectionType::Vertical, { { 16, 200 }, Origin::Center }));
 		UIEx(m_panel).AttachComponent(move(scrollSlider), { 100, 200 });
+		m_panel = WriteReadTest(m_panel, scrollSliderPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		testing::MockFunction<void(float)> mockOnScrollChanged;
@@ -116,8 +117,6 @@ namespace UserInterfaceTest
 
 		MockMouseInput(110, 210, true); //벗어났지만 Pressed가 되어야한다.
 		m_panel->ProcessUpdate(m_timer);
-
-		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 
 	////////////////////////////////////////////////////////
@@ -133,6 +132,7 @@ namespace UserInterfaceTest
 		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({ {16, 100}, Origin::Center },
 			ImagePart::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
+		m_panel = WriteReadTest(m_panel, switcherPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
 
 		testing::MockFunction<void(KeyState)> mockOnPress;
@@ -144,9 +144,7 @@ namespace UserInterfaceTest
 		MockMouseInput(100, 100, true); //Pressed
 		CallMockRender(TestSwitcher_Scroll, 3);
 
-		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Held가 되어야한다.
+		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Pressed가 되어야한다.
 		CallMockRender(TestSwitcher_Scroll, 3);
-
-		EXPECT_TRUE(WriteReadTest(m_panel));
 	}
 }

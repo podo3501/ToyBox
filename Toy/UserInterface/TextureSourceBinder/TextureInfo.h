@@ -4,8 +4,11 @@ struct ITextureLoad;
 class TextureInfo
 {
 public:
-	virtual ~TextureInfo() {};
+	virtual ~TextureInfo();
 	TextureInfo() noexcept;
+	TextureInfo(const TextureInfo& other) noexcept;
+	TextureInfo(TextureInfo&& other) noexcept;
+	TextureInfo& operator=(const TextureInfo&) = default;
 	inline optional<size_t> GetIndex() const noexcept { return m_index; }
 	inline optional<size_t> GetGfxOffset() const noexcept { return m_gfxOffset; }
 
@@ -16,6 +19,8 @@ protected:
 	void Release() noexcept;
 
 private:
+	void AddRef() noexcept;
+
 	ITextureLoad* m_texLoader;
 	optional<size_t> m_index;
 	optional<UINT64> m_gfxOffset;

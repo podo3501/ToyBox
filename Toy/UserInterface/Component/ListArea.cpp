@@ -37,6 +37,7 @@ void ListArea::ReloadDatas() noexcept
 	m_bgImage = m_renderTex->GetRenderedComponent();
 	m_scrollBar = ComponentCast<ScrollBar*>(componentList[2]);
 	m_scrollSlider = m_scrollBar->GetScrollSlider();
+	m_scrollSlider->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
 }
 
 unique_ptr<UIComponent> ListArea::CreateClone() const
@@ -58,22 +59,17 @@ bool ListArea::operator==(const UIComponent& rhs) const noexcept
 	return true;
 }
 
-void ListArea::OnAttached(UIComponent*)
-{
-	m_renderTex->OnAttached(this);
-}
-
 bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
-	unique_ptr<UIComponent> container, unique_ptr<UIComponent> scrollBar) noexcept
+	unique_ptr<ImageSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept
 {
 	SetLayout(layout);
 	UILayout partLayout{ layout.GetSize(), Origin::LeftTop }; //속성들은 정렬하지 않는다.
 
-	m_prototypeContainer = ComponentCast<ImageSwitcher*>(container.get());
+	m_prototypeContainer = switcher.get();
 	m_prototypeContainer->Rename("Prototype Container");
 	m_prototypeContainer->SetStateFlag(StateFlag::ActiveUpdate | StateFlag::Render, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	m_prototypeContainer->SetStateFlag(StateFlag::RenderEditable, true);
-	UIEx(this).AttachComponent(move(container), {});
+	UIEx(this).AttachComponent(move(switcher), {});
 
 	// 추후에 다양한 형태(2줄짜리 ListArea 같은)가 나오면 이 bgImage처럼 새로운 컴포넌트를 만들어서 넣는다.
 	// 지금은 Background로 간단하게 했지만 다양한 리스트 형태가 나올수 있다.
@@ -86,11 +82,10 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	m_renderTex = renderTex.get();
 	UIEx(this).AttachComponent(move(renderTex), {});
 
-	m_scrollBar = ComponentCast<ScrollBar*>(scrollBar.get());
+	m_scrollBar = scrollBar.get();
 	m_scrollBar->ChangeOrigin(Origin::RightTop);
 	m_scrollBar->SetStateFlag(StateFlag::Render, false);
 	m_scrollBar->SetStateFlag(StateFlag::RenderEditable, true);
-	//ChangeSizeY(m_scrollBar, layout.GetSize());
 	UIEx(this).AttachComponent(move(scrollBar), { static_cast<int32_t>(layout.GetSize().x), 0 });
 
 	m_scrollSlider = m_scrollBar->GetScrollSlider();
@@ -252,11 +247,10 @@ void ListArea::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-//?!? 다 정리한 후 UIComponent에서 실제 컴포넌트 이름으로 바꾸자. 지금은 container와 switcher가 충돌된다.
 unique_ptr<ListArea> CreateListArea(const UILayout& layout, 
 	unique_ptr<UIComponent> bgImage,
-	unique_ptr<UIComponent> switcher,
-	unique_ptr<UIComponent> scrollBar)
+	unique_ptr<ImageSwitcher> switcher,
+	unique_ptr<ScrollBar> scrollBar)
 {
 	unique_ptr<ListArea> listArea= make_unique<ListArea>();
 	return CreateIfSetup(move(listArea), layout, move(bgImage), move(switcher), move(scrollBar));

@@ -20,7 +20,6 @@ public:
 
 	bool SetText(const wstring& text);
 	inline const wstring& GetText() const noexcept { return m_text; }
-	bool Setup(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept;
 	bool Setup(const UILayout& layout, const wstring& text, const vector<wstring> bindKeys) noexcept;
 
 protected:
@@ -37,7 +36,6 @@ private:
 	wstring m_text{};
 
 	ITextureController* m_texController;
-	map<wstring, wstring> m_fontFileList;
 	map<wstring, size_t> m_font; //core상태에 따라서 인덱스는 변할수 있기 때문에 저장하지 않는다.
 	vector<TextData> m_lines;
 };

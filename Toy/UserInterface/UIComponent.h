@@ -19,13 +19,11 @@ protected:
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
-	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept { return true; }
-	virtual void ImplementPositionUpdated() noexcept {};
+	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept { return true; } //Binder에서 키값으로 source 얻어올때
+	virtual void ImplementPositionUpdated() noexcept {}; //위치값 업데이트 할때 컴포넌트에서 추가로 설정할게 있다면
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept { return true; }
 	virtual void ImplementRender(ITextureRender*) const {};
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
-	virtual void OnAttached(UIComponent*) {};
-	
 
 	//상속되어지는 함수는 구현한다.
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
@@ -45,7 +43,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	unique_ptr<UIComponent> Clone() const;
 
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수. 로드때나 랜더링 때에는 콜백처럼 불려야 하기 때문이다. 그냥 클라이언트 값을 얻겠다고 함수를 추가하지 말자.)
-	virtual void ProcessRender(ITextureRender* render) override final; //?!? 이 함수 virtual 제거 해야 되지 않을까?
+	virtual void ProcessRender(ITextureRender* render) override final;
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;
@@ -94,7 +92,6 @@ private:
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
 	StateFlag::Type m_stateFlag{ StateFlag::Default };
 	string m_region; //UI에서 네임스페이스 역할을 한다. GetRegionComponent로 찾을 수 있다.
-	
 
 	friend class UIComponentEx;
 	friend class UIHierarchy;

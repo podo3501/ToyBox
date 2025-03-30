@@ -21,7 +21,7 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage, 
-		unique_ptr<UIComponent> container, unique_ptr<UIComponent> scrollBar) noexcept;
+		unique_ptr<ImageSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept;
 	ImageSwitcher* GetPrototypeContainer() noexcept { return m_prototypeContainer; }
 	UIComponent* PrepareContainer();
 	inline UIComponent* GetContainer(unsigned int idx) const noexcept;
@@ -34,7 +34,6 @@ protected:
 	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
-	virtual void OnAttached(UIComponent* parent);
 
 private:
 	void ReloadDatas() noexcept;
@@ -59,5 +58,5 @@ private:
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout,
 	unique_ptr<UIComponent> bgImage,
-	unique_ptr<UIComponent> switcher,
-	unique_ptr<UIComponent> scrollBar);
+	unique_ptr<ImageSwitcher> switcher,
+	unique_ptr<ScrollBar> scrollBar);

@@ -40,24 +40,6 @@ static vector<optional<StateFlag::Type>> GetStateFlagsForDirection(DirectionType
     return {};
 }
 
-static pair<vector<XMUINT2>, vector<XMINT2>> ComputeBoundsFromSources(DirectionType dirType, const vector<Rectangle>& sources) noexcept
-{
-    vector<XMUINT2> srcSizes; //source의 크기로 dest를 만든다.
-    ranges::transform(sources, back_inserter(srcSizes), [](auto& src) { return RectangleToXMUINT2(src); });
-    vector<XMINT2> positions = ExtractStartPosFromSizes(dirType, srcSizes);
-
-    return make_pair(srcSizes, positions);
-}
-
-void ImageGrid3::SetupDetails(const XMUINT2& size) noexcept
-{
-    ChangeSize(size);
-    SetLayout({ size, Origin::LeftTop });
-
-    SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
-    UpdatePositionsManually();
-}
-
 bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
 {
     m_dirType = dirType;
@@ -138,17 +120,6 @@ wstring ImageGrid3::GetFilename() const noexcept
     if (!img1) return L"";
 
     return img1->GetFilename();
-}
-
-bool ImageGrid3::SetFilename(const wstring& filename) noexcept
-{
-    vector<ImageGrid1*> components;
-    ReturnIfFalse(GetImageGridComponents(GetChildComponents(), components));
-
-    for (auto imgGrid1 : components)
-        imgGrid1->SetFilename(filename);
-
-    return true;
 }
 
 SourceDivider ImageGrid3::GetSourceAnd2Divider() const noexcept

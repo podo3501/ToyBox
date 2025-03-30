@@ -7,9 +7,7 @@
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/Utility.h"
 
-using json = nlohmann::json;
-
-bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
+unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
 {
 	JsonFile::WriteComponent(write, filename);
 
@@ -18,10 +16,10 @@ bool WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
 
 	EXPECT_TRUE(*write == *read);
 
-	return true;
+	return move(read);
 }
 
-bool WriteReadTest(unique_ptr<TextureSourceBinder>& write, const wstring& filename)
+bool TestSourceBinderWriteRead(unique_ptr<TextureSourceBinder>& write, const wstring& filename)
 {
 	ReturnIfFalse(write->Save(filename));
 

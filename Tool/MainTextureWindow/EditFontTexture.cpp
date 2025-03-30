@@ -49,9 +49,9 @@ void EditFontTexture::Render()
     const wstring& bindingKey = m_sourceBinder->GetBindingKey(fontFilename);
     m_renameNotifier->EditName("Font Bind Key", WStringToString(bindingKey), [this, &bindingKey, &fontFilename](const string& newKey) {
         wstring wstrNewKey = StringToWString(newKey);
-        if (bindingKey.empty()) return m_sourceBinder->InsertBindingKey(wstrNewKey, TextureFontInfo{ fontFilename });
-        if (wstrNewKey.empty()) return m_sourceBinder->RemoveBindingKey(fontFilename);
-        return m_sourceBinder->ModifyBindingKey(bindingKey, wstrNewKey);
+        if (bindingKey.empty()) return m_sourceBinder->InsertFontKey(wstrNewKey, TextureFontInfo{ fontFilename });
+        if (wstrNewKey.empty()) return m_sourceBinder->RemoveKeyByFilename(fontFilename);
+        return m_sourceBinder->ModifyFontKey(bindingKey, wstrNewKey);
         });
 }
 

@@ -231,7 +231,7 @@ namespace UserInterfaceTest
 	TEST_F(IntegrationTest, TextureSourceBinder)
 	{
 		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
-		EXPECT_TRUE((m_sourceBinder->GetArea("BackImage1", 0) == Rectangle{ 10, 10, 64, 64 })); //?!? 테스트 밖에 함수가 사용되지 않고 있다.
+		EXPECT_TRUE((GetTextureArea(m_sourceBinder.get(), "BackImage1", 0) == Rectangle{10, 10, 64, 64})); //?!? 테스트 밖에 함수가 사용되지 않고 있다.
 		TextureSourceInfo sourceInfo{ filename, ImagePart::One, {{10, 10, 64, 64}} };
 		EXPECT_EQ(m_sourceBinder->GetBindingKey(sourceInfo), "BackImage1");
 
@@ -242,14 +242,14 @@ namespace UserInterfaceTest
 
 		TextureSourceInfo testSourceInfo{ L"TestTexFilename.json", ImagePart::One, {} };
 		TextureFontInfo testFontInfo{ L"TestFontFilename.json" };
-		EXPECT_TRUE(m_sourceBinder->InsertBindingKey(L"Test", testFontInfo));
-		EXPECT_TRUE(m_sourceBinder->InsertBindingKey("Test", testSourceInfo));
-		EXPECT_TRUE(m_sourceBinder->ModifyBindingKey(L"Test", L"NewTest"));
-		EXPECT_TRUE(m_sourceBinder->ModifyBindingKey("Test", "NewTest"));
-		EXPECT_TRUE(m_sourceBinder->RemoveBindingKey(L"TestFontFilename.json"));
-		EXPECT_TRUE(m_sourceBinder->RemoveBindingKey(L"TestTexFilename.json"));
+		EXPECT_TRUE(m_sourceBinder->InsertFontKey(L"Test", testFontInfo));
+		EXPECT_TRUE(m_sourceBinder->InsertTextureKey("Test", testSourceInfo));
+		EXPECT_TRUE(m_sourceBinder->ModifyFontKey(L"Test", L"NewTest"));
+		EXPECT_TRUE(m_sourceBinder->ModifyTextureKey("Test", "NewTest"));
+		EXPECT_TRUE(m_sourceBinder->RemoveKeyByFilename(L"TestFontFilename.json"));
+		EXPECT_TRUE(m_sourceBinder->RemoveKeyByFilename(L"TestTexFilename.json"));
 
-		WriteReadTest(m_sourceBinder);
+		TestSourceBinderWriteRead(m_sourceBinder);
 
 		auto sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
 		m_renderer->LoadTextureBinder(sourceBinder.get());

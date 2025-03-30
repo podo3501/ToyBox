@@ -27,6 +27,7 @@ void ScrollSlider::ReloadDatas() noexcept
 	vector<UIComponent*> componentList = GetChildComponents();
 	m_scrollTrack = ComponentCast<ImageGrid3*>(componentList[0]);
 	m_scrollButton = ComponentCast<ImageSwitcher*>(componentList[1]);
+	m_scrollButton->AddPressCB([this](KeyState keystate) { OnPressCB(keystate); });
 }
 
 bool ScrollSlider::operator==(const UIComponent& rhs) const noexcept

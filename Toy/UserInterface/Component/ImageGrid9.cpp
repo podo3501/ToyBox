@@ -7,20 +7,13 @@
 
 ImageGrid9::~ImageGrid9() = default;
 ImageGrid9::ImageGrid9() = default;
-
 ImageGrid9::ImageGrid9(const ImageGrid9& o) :
 	UIComponent{ o }
-{
-}
+{}
 
 unique_ptr<UIComponent> ImageGrid9::CreateClone() const
 {
 	return unique_ptr<ImageGrid9>(new ImageGrid9(*this));
-}
-
-static inline vector<Rectangle> ExtractSourceRects(const ImageSource& source)
-{
-	return { source.list[0], source.list[3], source.list[6] };
 }
 
 bool ImageGrid9::Setup(const UILayout& layout, const string& bindKey)
@@ -81,16 +74,6 @@ wstring ImageGrid9::GetFilename() const noexcept
 	if (!img3) return L"";
 
 	return img3->GetFilename();
-}
-
-bool ImageGrid9::SetFilename(const wstring& filename) noexcept
-{
-	vector<ImageGrid3*> components;
-	ReturnIfFalse(GetImageGridComponents(GetChildComponents(), components));
-
-	return ranges::all_of(components, [&filename](auto imgGrid3) {
-		return imgGrid3->SetFilename(filename);
-		});
 }
 
 SourceDivider ImageGrid9::GetSourceAnd4Divider() const noexcept

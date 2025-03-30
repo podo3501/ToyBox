@@ -68,13 +68,6 @@ bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 	return true;
 }
 
-void RenderTexture::OnAttached(UIComponent*)
-{
-	UpdatePositionsManually(true);
-	if (m_texController && m_index)
-		m_texController->ModifyRenderTexturePosition(*m_index, GetPosition());
-}
-
 void RenderTexture::ImplementPositionUpdated() noexcept
 {
 	if (m_texController && m_index)

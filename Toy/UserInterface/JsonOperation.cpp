@@ -172,40 +172,17 @@ void JsonOperation::Process(const string& key, wstring& data) noexcept
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-void JsonOperation::Process(const string& key, map<wstring, wstring>& data) noexcept //?!? SourceBinder에서 처리하는 식으로 교체되면 이 함수 삭제
-{
-    auto writeFunc = [&data](auto& j) {
-        for (const auto& font : data)
-            j[WStringToString(font.first)] = WStringToString(font.second);
-        };
-
-    auto readFunc = [&data](const auto& j) {
-        for (const auto& [k, v] : j.items())
-            data.insert(make_pair(StringToWString(k), StringToWString(v)));
-        };
-
-    ProcessImpl(key, writeFunc, readFunc);
-}
-
-void JsonOperation::Process(const string& key, map<InteractState, ImageSource>& datas) noexcept
+void JsonOperation::Process(const string& key, map<InteractState, string>& datas) noexcept
 {
     auto writeFunc = [&datas](auto& j) {
-        for (auto& [k, v] : datas)
-        {
-            JsonOperation jsOp{};
-            v.SerializeIO(jsOp);
-            j[EnumToString(k)] = jsOp.GetWrite();
-        }};
+    for (const auto& pair : datas)
+        j[EnumToString(pair.first)] = pair.second;
+    };
 
     auto readFunc = [&datas](const auto& j) {
-        datas.clear();
-        for (auto& [k, v] : j.items())
-        {
-            ImageSource imgSource{};
-            JsonOperation jsOp{ v };
-            imgSource.SerializeIO(jsOp);
-            datas.emplace(StringToEnum<InteractState>(k), imgSource);
-        }};
+    for (const auto& [k, v] : j.items())
+        datas.emplace(StringToEnum<InteractState>(k), v);
+    };
 
     ProcessImpl(key, writeFunc, readFunc);
 }

@@ -242,11 +242,13 @@
     <ClInclude Include="UserInterface\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation.hpp" />
     <ClInclude Include="UserInterface\Property.h" />
+    <ClInclude Include="UserInterface\TextureSourceBinder\TextureBinderHelper.h" />
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureFontInfo.h" />
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureInfo.h" />
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureLoadBinder.h" />
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureSourceBinder.h" />
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureSourceInfo.h" />
+    <ClInclude Include="UserInterface\UIComponentFactory.h" />
     <ClInclude Include="UserInterface\UIHelperClass.h" />
     <ClInclude Include="UserInterface\UIHierarchy.h" />
     <ClInclude Include="UserInterface\UITransform.h" />
@@ -286,11 +288,13 @@
     <ClCompile Include="UserInterface\EnumUtility.cpp" />
     <ClCompile Include="UserInterface\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation.cpp" />
+    <ClCompile Include="UserInterface\TextureSourceBinder\TextureBinderHelper.cpp" />
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureFontInfo.cpp" />
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureInfo.cpp" />
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureLoadBinder.cpp" />
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureSourceBinder.cpp" />
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureSourceInfo.cpp" />
+    <ClCompile Include="UserInterface\UIComponentFactory.cpp" />
     <ClCompile Include="UserInterface\UIHelperClass.cpp" />
     <ClCompile Include="UserInterface\UIHierarchy.cpp" />
     <ClCompile Include="UserInterface\UITransform.cpp" />

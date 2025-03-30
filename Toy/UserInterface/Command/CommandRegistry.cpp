@@ -276,7 +276,7 @@ bool SetFilenameCommand::SetFilename(const wstring& filename)
 	return visit([this, filename](auto* imgGrid) -> bool {
 		if (imgGrid)
 		{
-			imgGrid->SetFilename(filename);
+			//imgGrid->SetFilename(filename);
 			//return m_renderer->LoadComponent(imgGrid);
 		}
 		return false;

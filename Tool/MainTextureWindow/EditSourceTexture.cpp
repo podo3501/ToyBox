@@ -124,7 +124,7 @@ bool EditSourceTexture::DeleteTextureFile() noexcept
 {
     ReturnIfFalse(IsVaildTextureIndex());
 
-    m_sourceBinder->RemoveBindingKey(m_textureFiles[m_texIndex]->GetFilename());
+    m_sourceBinder->RemoveKeyByFilename(m_textureFiles[m_texIndex]->GetFilename());
     RemoveTexture(m_texIndex);
     SelectTextureFile();
 

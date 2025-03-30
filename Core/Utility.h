@@ -36,17 +36,17 @@ public:
 
 #ifndef ReturnIfFalse
 #define ReturnIfFalse(x)                       \
-{                                                             \
-    if(!x) return false;                          \
-}
+	do{													\
+		if(!(x)) return false;						\
+	} while (0)
 #endif
 
 #ifndef ReturnIfFailed
 #define ReturnIfFailed(x)                                              \
-{                                                                     \
-    if(FAILED(x))                                            \
-        return false;                                                \
-}
+	do{													\
+		if(FAILED(x))                                            \
+			return false;                                                \
+	} while (0)
 #endif
 
 template <typename E>

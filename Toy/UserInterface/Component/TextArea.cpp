@@ -22,7 +22,6 @@ TextArea::TextArea(const TextArea& other) :
 	m_text{ other.m_text },
 	m_bindKeys{ other.m_bindKeys },
 	m_texController{ other.m_texController },
-	m_fontFileList{ other.m_fontFileList },
 	m_font{ other.m_font },
 	m_lines{ other.m_lines }
 {}
@@ -97,17 +96,6 @@ bool TextArea::ImplementChangeSize(const XMUINT2& size) noexcept
 	return ArrangeText(m_text);
 }
 
-bool TextArea::Setup(const wstring& text, const UILayout& layout, const map<wstring, wstring>& fontFileList) noexcept
-{
-	m_text = text;
-	SetLayout(layout);
-	ranges::transform(fontFileList, inserter(m_fontFileList, m_fontFileList.end()), [](const auto& filename) {
-		return make_pair(filename.first, filename.second);
-		});
-
-	return true;
-}
-
 bool TextArea::Setup(const UILayout& layout, const wstring& text, const vector<wstring> bindKeys) noexcept
 {
 	SetLayout(layout);
@@ -121,7 +109,7 @@ bool TextArea::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextu
 {
 	for (const auto& bindKey : m_bindKeys)
 	{
-		auto fontInfoRef = sourceBinder->GetSourceInfo(bindKey);
+		auto fontInfoRef = sourceBinder->GetFontSourceInfo(bindKey);
 		ReturnIfFalse(fontInfoRef);
 
 		const auto& fontInfo = fontInfoRef->get();
@@ -129,7 +117,6 @@ bool TextArea::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextu
 		ReturnIfFalse(curIndex);
 
 		m_font.emplace(bindKey, *curIndex);
-		m_fontFileList.emplace(bindKey, fontInfo.filename);
 	}
 	m_texController = texController;
 

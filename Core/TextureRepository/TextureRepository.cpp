@@ -19,18 +19,7 @@ TextureRepository::TextureRepository(DX::DeviceResources* deviceRes, DescriptorH
     m_sprite{ sprite }
 {}
 
-static TextureResource* FindResourceByFilename(array<unique_ptr<TextureResource>, MAX_DESC>& resources, const wstring& filename)
-{
-    auto find = ranges::find_if(resources, [&filename](const auto& res) {
-        return res && res->GetFilename() == filename;
-        });
 
-    if (find != resources.end()) {
-        return find->get();
-    }
-
-    return nullptr;
-}
 
 void TextureRepository::AddRef(size_t index) noexcept
 {
@@ -41,7 +30,7 @@ template<typename TexResType>
 bool TextureRepository::LoadTextureResource(const wstring& filename, size_t& outIndex,
     function<void(TextureResource*)> postLoadAction)
 {
-    if (auto find = FindResourceByFilename(m_texResources, filename); find)
+    if (auto find = FindTextureResource(filename); find)
     {
         outIndex = find->GetIndex();
         AddRef(outIndex);
@@ -118,9 +107,9 @@ float TextureRepository::GetLineSpacing(size_t index) const noexcept
     return ToType<CFont*>(m_texResources[index].get())->GetLineSpacing();
 }
 
-optional<vector<Rectangle>> TextureRepository::GetTextureAreaList(const wstring& filename, const UINT32& bgColor)
+optional<vector<Rectangle>> TextureRepository::GetTextureAreaList(size_t index, const UINT32& bgColor) 
 {
-    auto find = FindResourceByFilename(m_texResources, filename);
+    auto find = FindTextureResource(index);
     if (!find) return nullopt;
 
     Texture* curTex = static_cast<Texture*>(find);
@@ -128,6 +117,26 @@ optional<vector<Rectangle>> TextureRepository::GetTextureAreaList(const wstring&
     if (!curTex->ExtractTextureAreas(m_deviceResources, bgColor, areaList)) return nullopt;
 
     return areaList;
+}
+
+TextureResource* TextureRepository::FindTextureResource(const wstring& filename) const noexcept
+{
+    auto find = ranges::find_if(m_texResources, [&filename](const auto& res) {
+        return res && res->GetFilename() == filename;
+        });
+
+    if (find != m_texResources.end())
+        return find->get();
+
+    return nullptr;
+}
+
+TextureResource* TextureRepository::FindTextureResource(size_t index) const noexcept
+{
+    if (index < 0 || index >= MAX_DESC) return nullptr;
+    const auto& texRes = m_texResources[index];
+    if (!texRes) return nullptr;
+    return texRes.get();
 }
 
 void TextureRepository::Render(size_t index, const RECT& dest, const RECT* source)
@@ -171,7 +180,7 @@ void TextureRepository::ReleaseTexture(size_t idx) noexcept
     }
         
     m_deviceResources->WaitForGpu();
-    assert(m_texResources[idx]);
+    Assert(m_texResources[idx]);
     m_texResources[idx] = nullptr;
     ReleaseDescriptor(idx);
 }

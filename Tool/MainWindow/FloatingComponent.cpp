@@ -125,7 +125,7 @@ void FloatingComponent::Render()
 
 bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& component, const XMUINT2& size)
 {
-	ReturnIfNullptr(component);
+	ReturnIfFalse(component);
 	m_component = component.get();
 	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(component)));
 	//ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));

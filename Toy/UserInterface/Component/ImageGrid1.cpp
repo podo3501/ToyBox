@@ -53,8 +53,8 @@ void ImageGrid1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureCont
 
 bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController*) noexcept
 {
-	if (m_bindKey.empty()) return true; //?!? 나중에 binder로 다 바꾸면 return false로 바꿔지는지 확인하자.
-	auto sourceInfoRef = sourceBinder->GetSourceInfo(m_bindKey);
+	if (m_bindKey.empty()) return false;
+	auto sourceInfoRef = sourceBinder->GetTextureSourceInfo(m_bindKey);
 	ReturnIfFalse(sourceInfoRef);
 
 	const auto& srcInfo = sourceInfoRef->get();
@@ -72,8 +72,9 @@ static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 }
 
 optional<vector<Rectangle>> ImageGrid1::GetTextureAreaList()
-{	//?!? m_filename 이 멤버 변수를 없애고 TextureSourceBinder에서 파일을 로드해서 인덱스만 넘기면 GetTextureAreaList 이 함수도 이름 말고 인덱스로도 찾을 수 있다.
-	 return m_texController->GetTextureAreaList(GetResourceFullFilename(m_filename), PackRGBA(255, 255, 255, 0));
+{	
+	if (!m_index) return nullopt;
+	return m_texController->GetTextureAreaList(*m_index, PackRGBA(255, 255, 255, 0));
 }
 
 void ImageGrid1::ImplementRender(ITextureRender* render) const
@@ -100,11 +101,6 @@ void ImageGrid1::SetIndexedSource(size_t index, const vector<Rectangle>& source)
 {
 	m_index = index;
 	m_source = source[0];
-}
-
-void ImageGrid1::SetFilenameToLoadInfo(const wstring& filename) noexcept
-{
-	m_filename = filename;
 }
 
 void ImageGrid1::SerializeIO(JsonOperation& operation)

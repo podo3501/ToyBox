@@ -27,7 +27,7 @@ public:
 
     //Texture
     virtual bool CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset) = 0;
-    virtual optional<vector<Rectangle>> GetTextureAreaList(const wstring& filename, const UINT32& bgColor) = 0;
+    virtual optional<vector<Rectangle>> GetTextureAreaList(size_t index, const UINT32& bgColor) = 0;
     virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept = 0;
     virtual bool ModifyRenderTextureSize(size_t index, const XMUINT2& size) = 0;
 

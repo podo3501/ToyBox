@@ -21,8 +21,6 @@ public:
 
 	bool Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
-
-	bool SetFilename(const wstring& filename) noexcept;
 	wstring GetFilename() const noexcept;
 
 	bool SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept;
@@ -40,8 +38,6 @@ protected:
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
-	void SetupDetails(const XMUINT2& size) noexcept;
-
 	DirectionType m_dirType{ DirectionType::Horizontal };
 };
 

@@ -5,10 +5,7 @@
 #include "../../Config.h"
 #include "../../Utility.h"
 
-TextureFontInfo::~TextureFontInfo()
-{
-    Release();
-}
+TextureFontInfo::~TextureFontInfo() = default;
 TextureFontInfo::TextureFontInfo() noexcept = default;
 TextureFontInfo::TextureFontInfo(const TextureFontInfo& other) noexcept :
     filename{ other.filename }

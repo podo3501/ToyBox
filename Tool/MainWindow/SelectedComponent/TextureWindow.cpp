@@ -16,7 +16,8 @@ TextureWindow::TextureWindow(IRenderer* renderer, unique_ptr<SourceExtractor> so
 
 bool TextureWindow::Create(const wstring& filename)
 {
-    m_sourceTexture->SetFilenameToLoadInfo(filename);
+    //?!? LoadTextureBinder를 써서 로딩한후 ImageGrid1에 SetSourceInfo 함수로 연결한다.
+    //m_sourceTexture->SetFilenameToLoadInfo(filename);
     //ReturnIfFalse(m_renderer->LoadComponent(m_sourceTexture.get()));
 
     if (const auto& areaList = m_sourceTexture->GetTextureAreaList(); areaList)

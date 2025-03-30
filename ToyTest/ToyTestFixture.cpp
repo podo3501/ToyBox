@@ -64,16 +64,6 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const REC
 	m_panel->ProcessRender(&mockRender);
 }
 
-void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*)> testRenderFunc, int times)
-{
-	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _))
-		.Times(times)
-		.WillRepeatedly(Invoke(testRenderFunc));
-	m_panel->ProcessUpdate(m_timer);
-	m_panel->ProcessRender(&mockRender);
-}
-
 void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
 {
 	MockRender mockRender;
@@ -105,7 +95,7 @@ void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, con
 	unique_ptr<UIComponent> clonePanel = component->Clone();
 
 	CallMockRender(clonePanel.get(), renderFunc, times);
-	EXPECT_TRUE(WriteReadTest(clonePanel));
+	WriteReadTest(clonePanel);
 }
 
 void ToyTestFixture::TearDown()

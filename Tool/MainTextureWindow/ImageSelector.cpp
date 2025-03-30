@@ -57,7 +57,7 @@ bool ImageSelector::RemoveArea() noexcept
     if (!m_selectedArea) return false;
     const string& bindingKey = m_sourceBinder->GetBindingKey(*m_selectedArea);
     if (bindingKey.empty()) return false;
-    m_sourceBinder->RemoveBindingKey(bindingKey);
+    m_sourceBinder->RemoveTextureKey(bindingKey);
 
     return DeselectArea();
 }
@@ -121,7 +121,7 @@ void ImageSelector::CheckSourcePartition() noexcept
     if (!m_sourceTexture) return;
 
     const XMINT2& pos = InputManager::GetMouse().GetPosition();
-    m_hoveredAreas = m_sourceBinder->GetArea(m_sourceTexture->GetFilename(), m_selectImagePart, pos);
+    m_hoveredAreas = m_sourceBinder->GetAreas(m_sourceTexture->GetFilename(), m_selectImagePart, pos);
     if (!m_hoveredAreas.empty()) return; //먼저 저장돼 있는 것을 찾아보고 없으면 새로운걸 만든다.
 
     if(auto currRectangle = FindAreaFromMousePos(pos); currRectangle)
@@ -223,8 +223,8 @@ void ImageSelector::EditSelectArea()
     }
         
     m_renameNotifier->EditName("Tex Bind Key", bindingKey, [this, &bindingKey](const string& newKey) {
-        if (bindingKey.empty()) return m_sourceBinder->InsertBindingKey(newKey, *m_selectedArea);
+        if (bindingKey.empty()) return m_sourceBinder->InsertTextureKey(newKey, *m_selectedArea);
         if (newKey.empty()) return RemoveArea();
-        return m_sourceBinder->ModifyBindingKey(bindingKey, newKey);
+        return m_sourceBinder->ModifyTextureKey(bindingKey, newKey);
         });
 }
