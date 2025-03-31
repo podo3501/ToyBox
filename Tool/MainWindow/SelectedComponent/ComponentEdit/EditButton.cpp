@@ -6,8 +6,8 @@
 #include "../../EditUtility.h"
 
 EditButton::~EditButton() {};
-EditButton::EditButton(Button* button, CommandList* cmdList) noexcept :
-	EditWindow{ button, cmdList },
+EditButton::EditButton(Button* button, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+	EditWindow{ button, sourceBinder, cmdList },
     m_button{ button }
 {
 }

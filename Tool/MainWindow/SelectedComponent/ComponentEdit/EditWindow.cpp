@@ -18,11 +18,10 @@ enum class OnDrag
     Corner,
 };
 
-EditWindow::~EditWindow()
-{}
-
-EditWindow::EditWindow(UIComponent* component, CommandList* cmdList) noexcept:
+EditWindow::~EditWindow() = default;
+EditWindow::EditWindow(UIComponent* component, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept:
 	m_component{ component },
+    m_sourceBinder{ sourceBinder },
     m_cmdList{ cmdList },
     m_renameNotifier{ make_unique<RenameNotifier>() },
     m_dragState{ OnDrag::Normal }
@@ -176,7 +175,7 @@ void EditWindow::Render(const ImGuiWindow* mainWindow)
 //////////////////////////////////////////////////////////
 
 EditPanel::~EditPanel() = default;
-EditPanel::EditPanel(Panel* panel, CommandList* cmdList) noexcept :
-    EditWindow{ panel, cmdList }
+EditPanel::EditPanel(Panel* panel, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+    EditWindow{ panel, sourceBinder, cmdList }
 {
 }

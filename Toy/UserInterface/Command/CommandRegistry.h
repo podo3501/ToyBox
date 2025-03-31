@@ -132,88 +132,88 @@ private:
 
 //////////////////////////////////////////////////////////////////
 
-class SetSourceCommand : public Command
-{
-public:
-	SetSourceCommand(ImageGrid1* component, const Rectangle& source) noexcept;
+//class SetSourceCommand : public Command
+//{
+//public:
+//	SetSourceCommand(ImageGrid1* component, const Rectangle& source) noexcept;
+//
+//	virtual bool Execute() override;
+//	virtual bool Undo() override;
+//	virtual bool Redo() override;
+//
+//protected:
+//	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSource; }
+//	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+//
+//private:
+//	ImageGrid1* m_imgGrid1;
+//	CommandRecord<Rectangle> m_record;
+//};
 
-	virtual bool Execute() override;
-	virtual bool Undo() override;
-	virtual bool Redo() override;
+//class SetSource39Command : public Command
+//{
+//public:
+//	SetSource39Command(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources) noexcept;
+//
+//	virtual bool Execute() override;
+//	virtual bool Undo() override;
+//	virtual bool Redo() override;
+//
+//protected:
+//	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSource39; }
+//	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+//
+//private:
+//	optional<vector<Rectangle>> GetSources() noexcept;
+//	bool SetSources(const vector<Rectangle>& sources) noexcept;
+//
+//	ImageGrid39Variant m_imgGridVariant;
+//	CommandRecord<vector<Rectangle>> m_record;
+//};
 
-protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSource; }
-	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+//struct IRenderer;
+//class SetFilenameCommand : public Command
+//{
+//public:
+//	SetFilenameCommand(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename) noexcept;
+//
+//	virtual bool Execute() override;
+//	virtual bool Undo() override;
+//	virtual bool Redo() override;
+//
+//protected:
+//	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetFilename; }
+//	virtual bool IsMerge(Command*) noexcept { return false; }
+//
+//private:
+//	wstring GetFilename() const noexcept;
+//	bool SetFilename(const wstring& filename);
+//
+//	ImageGridVariant m_imgGridVariant;
+//	IRenderer* m_renderer;
+//	CommandRecord<wstring> m_record;
+//};
 
-private:
-	ImageGrid1* m_imgGrid1;
-	CommandRecord<Rectangle> m_record;
-};
-
-class SetSource39Command : public Command
-{
-public:
-	SetSource39Command(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources) noexcept;
-
-	virtual bool Execute() override;
-	virtual bool Undo() override;
-	virtual bool Redo() override;
-
-protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSource39; }
-	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
-
-private:
-	optional<vector<Rectangle>> GetSources() noexcept;
-	bool SetSources(const vector<Rectangle>& sources) noexcept;
-
-	ImageGrid39Variant m_imgGridVariant;
-	CommandRecord<vector<Rectangle>> m_record;
-};
-
-struct IRenderer;
-class SetFilenameCommand : public Command
-{
-public:
-	SetFilenameCommand(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename) noexcept;
-
-	virtual bool Execute() override;
-	virtual bool Undo() override;
-	virtual bool Redo() override;
-
-protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetFilename; }
-	virtual bool IsMerge(Command*) noexcept { return false; }
-
-private:
-	wstring GetFilename() const noexcept;
-	bool SetFilename(const wstring& filename);
-
-	ImageGridVariant m_imgGridVariant;
-	IRenderer* m_renderer;
-	CommandRecord<wstring> m_record;
-};
-
-class SetSourceAndDividerCommand : public Command
-{
-public:
-	SetSourceAndDividerCommand(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider) noexcept;
-
-	virtual bool Execute() override;
-	virtual bool Undo() override;
-	virtual bool Redo() override;
-
-protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSourceAndDivider; }
-	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
-
-private:
-	SourceDivider GetSourceAndDivider() const noexcept;
-	bool SetSourceAndDivider(const SourceDivider& srcDivider) noexcept;
-
-	ImageGrid39Variant m_imgGridVariant;
-	CommandRecord<SourceDivider> m_record;
-};
+//class SetSourceAndDividerCommand : public Command
+//{
+//public:
+//	SetSourceAndDividerCommand(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider) noexcept;
+//
+//	virtual bool Execute() override;
+//	virtual bool Undo() override;
+//	virtual bool Redo() override;
+//
+//protected:
+//	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSourceAndDivider; }
+//	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+//
+//private:
+//	SourceDivider GetSourceAndDivider() const noexcept;
+//	bool SetSourceAndDivider(const SourceDivider& srcDivider) noexcept;
+//
+//	ImageGrid39Variant m_imgGridVariant;
+//	CommandRecord<SourceDivider> m_record;
+//};
 
 class TextArea;
 class SetTextCommand : public Command

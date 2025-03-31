@@ -60,12 +60,6 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
@@ -119,6 +113,12 @@
     <ClCompile Include="MainTextureWindow\EditFontTexture.cpp">
       <Filter>MainTextureWindow</Filter>
     </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -151,12 +151,6 @@
       <Filter>MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.h">
@@ -211,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="MainTextureWindow\EditFontTexture.h">
       <Filter>MainTextureWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h">
+      <Filter>MainWindow\SelectedComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

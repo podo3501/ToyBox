@@ -3,8 +3,8 @@
 #include "../Toy/UserInterface/Component/ListArea.h"
 
 EditListArea::~EditListArea() = default;
-EditListArea::EditListArea(ListArea* listArea, IRenderer* renderer, CommandList* cmdList) noexcept :
-	EditWindow{ listArea, cmdList },
+EditListArea::EditListArea(ListArea* listArea, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+	EditWindow{ listArea, sourceBinder, cmdList },
 	m_listArea{ listArea }
 {
 }

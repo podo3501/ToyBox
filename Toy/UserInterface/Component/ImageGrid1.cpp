@@ -59,8 +59,15 @@ bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITex
 
 	const auto& srcInfo = sourceInfoRef->get();
 	SetSourceInfo(srcInfo, nullptr);
-	
+
 	return true;
+}
+
+void ImageGrid1::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+{
+	m_bindKey = key;
+	m_sourceIndex = sourceIndex;
+	SetSourceInfo(sourceInfo, nullptr);
 }
 
 static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)

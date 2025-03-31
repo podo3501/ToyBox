@@ -30,6 +30,7 @@ public:
 	optionalRef<TextureFontInfo> GetFontSourceInfo(const wstring& key) const noexcept;
 
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
+	vector<string> GetTextureKeys(ImagePart imgPart) const noexcept;
 	wstring GetBindingKey(const wstring& fontFilename) const noexcept;
 	vector<wstring> GetTextureFiles() const noexcept;
 

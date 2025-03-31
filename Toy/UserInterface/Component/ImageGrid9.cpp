@@ -40,6 +40,21 @@ bool ImageGrid9::ImplementBindSourceInfo(TextureSourceBinder*, ITextureControlle
 	return true;
 }
 
+const string& ImageGrid9::GetBindKey() const noexcept
+{
+	ImageGrid3* imgGrid3 = ComponentCast<ImageGrid3*>(GetChildComponent(0));
+	return imgGrid3->GetBindKey();
+}
+
+void ImageGrid9::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
+{
+	for (size_t index : views::iota(0u, 3u))
+	{
+		ImageGrid3* imgGrid3 = ComponentCast<ImageGrid3*>(GetChildComponent(index));
+		imgGrid3->ChangeBindKey(key, sourceInfo, index);
+	}
+}
+
 static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
 {
 	vector<Rectangle> srcList;
@@ -66,79 +81,6 @@ bool ImageGrid9::ImplementChangeSize(const XMUINT2& size) noexcept
 	ApplySize(size);
 
 	return true;
-}
-
-wstring ImageGrid9::GetFilename() const noexcept
-{
-	ImageGrid3* img3 = ComponentCast<ImageGrid3*>(GetChildComponent(0));
-	if (!img3) return L"";
-
-	return img3->GetFilename();
-}
-
-SourceDivider ImageGrid9::GetSourceAnd4Divider() const noexcept
-{
-	vector<ImageGrid3*> components;
-	if (!GetImageGridComponents(GetChildComponents(), components)) return {};
-
-	const Rectangle& firstMergedSource = components[0]->GetMergedSource();
-
-	Rectangle mergedSource = firstMergedSource;
-	for (auto imgGrid3 : components)
-		mergedSource = Rectangle::Union(mergedSource, imgGrid3->GetMergedSource());//?!? utility에 CombineRectangles 있음
-
-	SourceDivider srcDivider{};
-	srcDivider.rect = mergedSource;
-
-	//x값으로 2개 Divider를 담는다.
-	auto firstComponent = components[0]->GetSourceAnd2Divider();
-	if (firstComponent.Empty()) return {};
-	srcDivider.list = firstComponent.list;
-
-	//y값으로 2개 Divider를 담는다.
-	const Rectangle& topSource = firstMergedSource;
-	srcDivider.list.insert(srcDivider.list.end(), {
-		topSource.y + topSource.height - mergedSource.y,
-		components[2]->GetMergedSource().y - mergedSource.y
-		});
-
-	return srcDivider;
-}
-
-bool ImageGrid9::SetSources(const vector<Rectangle>& sources) noexcept
-{
-	vector<ImageGrid3*> components;
-	ReturnIfFalse(GetImageGridComponents(GetChildComponents(), components));
-
-	return ranges::all_of(components, [&sources, index = 0](auto component) mutable {
-		vector<Rectangle> rowRects{ sources.begin() + index, sources.begin() + index + 3 }; index += 3;
-		return component->SetSources(rowRects);
-		});
-
-	return true;
-}
-
-bool ImageGrid9::SetSourceAnd4Divider(const SourceDivider& srcDivider) noexcept
-{
-	vector<int> widths{}, heights{};
-	ReturnIfFalse(GetSizeDividedByNine(srcDivider, widths, heights));
-
-	vector<Rectangle> sources = GetSourcesFromArea(srcDivider.rect, widths, heights);
-	if (sources.size() != 9) return false;
-
-	return SetSources(sources);
-}
-
-vector<Rectangle> ImageGrid9::GetSources() const noexcept
-{
-	vector<ImageGrid3*> components;
-	if (!GetImageGridComponents(GetChildComponents(), components)) return {};
-
-	vector<Rectangle> areas;
-	for (auto imgGrid3 : components)
-		ranges::copy(imgGrid3->GetSources(), back_inserter(areas));
-
-	return areas;
 }
 
 unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const string& bindKey)

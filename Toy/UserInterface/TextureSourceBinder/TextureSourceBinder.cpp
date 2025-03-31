@@ -133,6 +133,20 @@ wstring TextureSourceBinder::GetBindingKey(const wstring& fontFilename) const no
     return (it != m_bindingFontTable.end()) ? it->first : L"";
 }
 
+vector<string> TextureSourceBinder::GetTextureKeys(ImagePart imgPart) const noexcept
+{
+    vector<string> imgPartKeys;
+    for (const auto& pair : m_bindingTexTable)
+    {
+        const auto& srcInfo = pair.second;
+        if (srcInfo.imagePart != imgPart) continue;
+        
+        imgPartKeys.emplace_back(pair.first);
+    }
+
+    return imgPartKeys;
+}
+
 optionalRef<TextureSourceInfo> TextureSourceBinder::GetTextureSourceInfo(const string& key) const noexcept
 {
     auto it = m_bindingTexTable.find(key);

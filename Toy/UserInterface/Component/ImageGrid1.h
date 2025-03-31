@@ -22,6 +22,8 @@ public:
 	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
 	void SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept;
 
+	inline const string& GetBindKey() const noexcept { return m_bindKey; }
+	void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex = 0u) noexcept;
 	inline void SetSource(const Rectangle& source) noexcept { m_source = source; }
 	inline const Rectangle& GetSource() const noexcept { return m_source; }
 	inline wstring GetFilename() const noexcept { return m_filename; }
@@ -39,7 +41,7 @@ private:
 
 	ITextureController* m_texController;
 	optional<size_t> m_index; //0값도 인덱스로 사용하기 때문에 optional
-	wstring m_filename;//?!? 사라져야 하는 변수. 지금은 툴과 강력하게 엮여있어서 할수 없다.
+	wstring m_filename;//
 	Rectangle m_source{};
 	UINT64 m_gfxOffset{}; //툴에서 Imgui window 만들때 사용
 };

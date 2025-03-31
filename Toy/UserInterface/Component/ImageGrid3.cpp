@@ -69,6 +69,21 @@ bool ImageGrid3::ImplementBindSourceInfo(TextureSourceBinder*, ITextureControlle
     return true;
 }
 
+const string& ImageGrid3::GetBindKey() const noexcept
+{
+    ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(GetChildComponent(0));
+    return imgGrid1->GetBindKey();
+}
+
+void ImageGrid3::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+{
+    for (size_t index : views::iota(0u, 3u))
+    {
+        ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(GetChildComponent(index));
+        imgGrid1->ChangeBindKey(key, sourceInfo, sourceIndex * 3 + index);
+    }
+}
+
 void ImageGrid3::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
 {
     for (auto idx : views::iota(0u, sources.size()))
@@ -112,80 +127,6 @@ Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
     if(!img1) return {};
 
     return img1->GetSource();
-}
-
-wstring ImageGrid3::GetFilename() const noexcept
-{
-    ImageGrid1* img1 = ComponentCast<ImageGrid1*>(GetChildComponent(0));
-    if (!img1) return L"";
-
-    return img1->GetFilename();
-}
-
-SourceDivider ImageGrid3::GetSourceAnd2Divider() const noexcept
-{
-    vector<ImageGrid1*> components;
-    if (!GetImageGridComponents(GetChildComponents(), components)) return {};
-
-    Rectangle mergedSource = GetMergedSource();
-
-    SourceDivider srcDivider{};
-    srcDivider.rect = mergedSource;
-    const Rectangle& leftSource = components[0]->GetSource();
-    switch (m_dirType) //값 2개와 사각형 하나면 source 사각형 3개를 만들 수 있다.
-    {
-    case DirectionType::Horizontal:
-        srcDivider.list.push_back(leftSource.x + leftSource.width - mergedSource.x);   
-        srcDivider.list.push_back(components[2]->GetSource().x - mergedSource.x);
-        break;
-    case DirectionType::Vertical:
-        srcDivider.list.push_back(leftSource.y + leftSource.height - mergedSource.y);   
-        srcDivider.list.push_back(components[2]->GetSource().y - mergedSource.y);
-        break;
-    }
-    
-    return srcDivider;
-}
-
-bool ImageGrid3::SetSources(const vector<Rectangle>& sources) noexcept
-{
-    vector<ImageGrid1*> components;
-    ReturnIfFalse(GetImageGridComponents(GetChildComponents(), components));
-
-    ranges::for_each(components, [&sources, index = 0](auto component) mutable {
-        component->SetSource(sources[index++]);
-        });
-
-    return true;
-}
-
-Rectangle ImageGrid3::GetMergedSource() const noexcept
-{
-    return CombineRectangles(GetSources());
-}
-
-vector<Rectangle> ImageGrid3::GetSources() const noexcept
-{
-    vector<Rectangle> areas;
-
-    vector<ImageGrid1*> components;
-    if (!GetImageGridComponents(GetChildComponents(), components)) return {};
-
-    for (auto imgGrid1 : components)
-        areas.push_back(imgGrid1->GetSource());
-
-    return areas;
-}
-
-bool ImageGrid3::SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept
-{
-    vector<int> widths{}, heights{};
-    ReturnIfFalse(GetSizeDividedByThree(m_dirType, srcDivider, widths, heights));
-
-    vector<Rectangle> sources = GetSourcesFromArea(srcDivider.rect, widths, heights);
-    if (sources.size() != 3) return false;
-
-    return SetSources(sources);
 }
 
 void ImageGrid3::SerializeIO(JsonOperation& operation)

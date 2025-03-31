@@ -15,7 +15,7 @@ ComponentController::ComponentController(IRenderer* renderer, TextureSourceBinde
 	m_mainWnd{ nullptr },
 	m_cmdList{ make_unique<CommandList>() },
 	m_floater{ make_unique<FloatingComponent>(renderer, sourceBinder, mainWndNam) },
-	m_selector{ make_unique<ComponentSelector>(renderer, m_cmdList.get(), panel) }
+	m_selector{ make_unique<ComponentSelector>(renderer, sourceBinder, m_cmdList.get(), panel) }
 {}
 
 void ComponentController::SetPanel(UIComponent* panel) noexcept

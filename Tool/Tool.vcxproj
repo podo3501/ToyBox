@@ -179,8 +179,18 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\EditWindowFactory.cpp" />
-    <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp" />
-    <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp" />
+    <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Menu\FileTab.cpp" />
     <ClCompile Include="Menu\MenuBar.cpp" />
     <ClCompile Include="Menu\RecentFiles.cpp" />
@@ -224,8 +234,18 @@
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h" />
     <ClInclude Include="MainWindow\SelectedComponent\EditWindowFactory.h" />
-    <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h" />
-    <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h" />
+    <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Menu\FileTab.h" />
     <ClInclude Include="Menu\MenuBar.h" />
     <ClInclude Include="Menu\RecentFiles.h" />

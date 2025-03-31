@@ -6,125 +6,142 @@
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/Utility.h"
 #include "../../EditUtility.h"
 #include "../SourceExtractor.h"
 
-static unique_ptr<TextureWindow> CreateTextureWindow(IRenderer* renderer, 
-    const wstring& filename, UIComponent* component, CommandList* cmdList)
-{
-    unique_ptr<TextureWindow> textureWindow = make_unique<TextureWindow>(renderer,
-        CreateSourceExtractor(renderer, filename, component, cmdList));
-    textureWindow->Create(filename);
+//static unique_ptr<TextureWindow> CreateTextureWindow(IRenderer* renderer, 
+//    const wstring& filename, UIComponent* component, CommandList* cmdList)
+//{
+//    unique_ptr<TextureWindow> textureWindow = make_unique<TextureWindow>(renderer,
+//        CreateSourceExtractor(renderer, filename, component, cmdList));
+//    textureWindow->Create(filename);
+//
+//    return textureWindow;
+//}
+//
+////////////////////////////////////////////////////////
+//
+//EditImageGrid::~EditImageGrid() = default;
+//EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+//    EditWindow{ component, sourceBinder, cmdList },
+//    m_renderer{ renderer }
+//{}
+//
+//void EditImageGrid::UpdateComponent()
+//{
+//    if (!m_textureWindow && !m_filename.empty())
+//    {
+//        m_textureWindow = CreateTextureWindow(m_renderer, m_filename, GetComponent(), GetCommandList());
+//        m_filename.clear();
+//    }
+//
+//    if (!m_textureWindow || !m_textureWindow->IsOpen()) return;
+//
+//    m_textureWindow->Update();
+//}
+//
+//void EditImageGrid::RenderComponent()
+//{
+//    if (m_textureWindow)
+//        m_textureWindow->Render();
+//
+//    RenderComponentEdit();
+//}
+//
+//void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UIComponent* component)
+//{
+//    if (ImGui::Button("Extract Texture Area"))
+//    {
+//        if (!m_textureWindow)
+//            m_filename = filename;
+//        else
+//            m_textureWindow->Open();
+//    }
+//}
 
-    return textureWindow;
+static optional<int> GetTextureIndexOf(const vector<string>& keys, const string& findKey) noexcept
+{
+    auto find = ranges::find_if(keys, [&findKey](const auto& key) { return key == findKey; });
+    if (find == keys.end()) return nullopt;
+
+    return static_cast<int>(distance(keys.begin(), find));
 }
 
-//////////////////////////////////////////////////////
-
-EditImageGrid::~EditImageGrid() = default;
-EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, CommandList* cmdList) noexcept :
-    EditWindow{ component, cmdList },
-    m_renderer{ renderer }
-{}
-
-void EditImageGrid::UpdateComponent()
+static void ChangeKeyFromComboBox(const vector<string>& texKeys, const string& currentKey, function<void(const string&)> OnChangeKey)
 {
-    if (!m_textureWindow && !m_filename.empty())
+    vector<const char*> keys;
+    for (const auto& str : texKeys)
+        keys.push_back(str.c_str());
+
+    static int keyComboIdx = 0;
+    if (auto index = GetTextureIndexOf(texKeys, currentKey); index)
+        keyComboIdx = *index;
+
+    if (ImGui::Combo("Bind Keys", &keyComboIdx, keys.data(), static_cast<int>(keys.size())))
     {
-        m_textureWindow = CreateTextureWindow(m_renderer, m_filename, GetComponent(), GetCommandList());
-        m_filename.clear();
-    }
-
-    if (!m_textureWindow || !m_textureWindow->IsOpen()) return;
-
-    m_textureWindow->Update();
-}
-
-void EditImageGrid::RenderComponent()
-{
-    if (m_textureWindow)
-        m_textureWindow->Render();
-
-    RenderComponentEdit();
-}
-
-void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UIComponent* component)
-{
-    if (ImGui::Button("Extract Textrue Area"))
-    {
-        if (!m_textureWindow)
-            m_filename = filename;
-        else
-            m_textureWindow->Open();
+        const string& curKey = keys[keyComboIdx];
+        OnChangeKey(curKey);
     }
 }
 
 //////////////////////////////////////////////////////
 
 EditImageGrid1::~EditImageGrid1() = default;
-EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer* renderer, CommandList* cmdList) noexcept :
-    EditImageGrid{ imgGrid1, renderer, cmdList },
+EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer*, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+    EditWindow{ imgGrid1, sourceBinder, cmdList },
     m_imageGrid1{ imgGrid1 }
 {}
 
-void EditImageGrid1::RenderComponentEdit()
+void EditImageGrid1::RenderComponent()
 {
-    wstring filename{ m_imageGrid1->GetFilename() };
-    if (EditFilename("Filename", filename))
-        GetCommandList()->SetFilename(m_imageGrid1, GetRenderer(), filename);
+    auto srcBinder = GetTextureSourceBinder();
+    const auto& texKeys = srcBinder->GetTextureKeys(ImagePart::One);
 
-    Rectangle source = m_imageGrid1->GetSource();
-    if (EditRectangle("Source", source))
-        GetCommandList()->SetSource(m_imageGrid1, source);
-
-    ImGui::Spacing();
-    
-    RenderExtractTextureButton(m_imageGrid1->GetFilename(), m_imageGrid1);
+    ChangeKeyFromComboBox(texKeys, m_imageGrid1->GetBindKey(), [this, &srcBinder](const string& curKey) {
+        if (auto infoRef = srcBinder->GetTextureSourceInfo(curKey); infoRef)
+            m_imageGrid1->ChangeBindKey(curKey, *infoRef);
+        });
 }
 
 ////////////////////////////////////////////////
 
 EditImageGrid3::~EditImageGrid3() = default;
-EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer* renderer, CommandList* cmdList) noexcept :
-    EditImageGrid{ imgGrid3, renderer, cmdList },
+EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer*, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+    EditWindow{ imgGrid3, sourceBinder, cmdList },
     m_imageGrid3{ imgGrid3 }
 {}
 
-void EditImageGrid3::RenderComponentEdit()
+void EditImageGrid3::RenderComponent()
 {
-    wstring filename{ m_imageGrid3->GetFilename() };
-    if (EditFilename("Filename", filename))
-        GetCommandList()->SetFilename(m_imageGrid3, GetRenderer(), filename);
-    
-    SourceDivider srcDivider{ m_imageGrid3->GetSourceAnd2Divider() };
-    if (EditSourceAndDivider("Source", "Deviders", srcDivider))
-        GetCommandList()->SetSourceAndDivider(m_imageGrid3, srcDivider);
+    DirectionType dirType = m_imageGrid3->GetDirectionType();
+    ImagePart imgPart = (dirType == DirectionType::Horizontal) ? ImagePart::ThreeH : ImagePart::ThreeV;
 
-    ImGui::Spacing();
+    auto srcBinder = GetTextureSourceBinder();
+    const auto& texKeys = srcBinder->GetTextureKeys(imgPart);
 
-    RenderExtractTextureButton(filename, m_imageGrid3);
+    ChangeKeyFromComboBox(texKeys, m_imageGrid3->GetBindKey(), [this, &srcBinder](const string& curKey) {
+        if (auto infoRef = srcBinder->GetTextureSourceInfo(curKey); infoRef)
+            m_imageGrid3->ChangeBindKey(curKey, *infoRef);
+        });
 }
 
 ////////////////////////////////////////////////
 
 EditImageGrid9::~EditImageGrid9() = default;
-EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer* renderer, CommandList* cmdList) noexcept :
-    EditImageGrid{ imgGrid9, renderer, cmdList },
+EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer*, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+    EditWindow{ imgGrid9, sourceBinder, cmdList },
     m_imageGrid9{ imgGrid9 }
 {}
 
-void EditImageGrid9::RenderComponentEdit()
+void EditImageGrid9::RenderComponent()
 {
-    wstring filename{ m_imageGrid9->GetFilename() };
-    if (EditFilename("Filename", filename))
-        GetCommandList()->SetFilename(m_imageGrid9, GetRenderer(), filename);
-    
-    SourceDivider srcDivider{ m_imageGrid9->GetSourceAnd4Divider() };
-    if (EditSourceAndDivider("Source", "Deviders", srcDivider))
-        GetCommandList()->SetSourceAndDivider(m_imageGrid9, srcDivider);
+    auto srcBinder = GetTextureSourceBinder();
+    const auto& texKeys = srcBinder->GetTextureKeys(ImagePart::Nine);
 
-    ImGui::Spacing();
-
-    RenderExtractTextureButton(filename, m_imageGrid9);
+    ChangeKeyFromComboBox(texKeys, m_imageGrid9->GetBindKey(), [this, &srcBinder](const string& curKey) {
+        if (auto infoRef = srcBinder->GetTextureSourceInfo(curKey); infoRef)
+            m_imageGrid9->ChangeBindKey(curKey, *infoRef);
+        });
 }

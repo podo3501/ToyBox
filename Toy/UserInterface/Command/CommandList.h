@@ -22,10 +22,10 @@ public:
 	bool SetSize(UIComponent* component, const XMUINT2& size);
 	bool RenameRegion(UIComponent* component, const string& region);
 	bool Rename(UIComponent* component, const string& name);
-	bool SetSource(ImageGrid1* imgGrid1, const Rectangle& source);
-	bool SetSources(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources);
-	bool SetFilename(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename);
-	bool SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider);
+	//bool SetSource(ImageGrid1* imgGrid1, const Rectangle& source);
+	//bool SetSources(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources);
+	//bool SetFilename(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename);
+	//bool SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider);
 	bool SetText(TextArea* textArea, const wstring& text);
 
 private:

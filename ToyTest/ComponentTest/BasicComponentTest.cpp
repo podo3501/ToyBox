@@ -198,13 +198,6 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_H_Normal"));
 	}
 
-	static void TestImageGrid3SourceAndDivider_H(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder*)
-	{
-		vector<RECT> expectDest = { { 340, 282, 362, 318 }, { 362, 282, 438, 318 }, {438, 282, 460, 318} };
-		vector<RECT> expectSource = { { 10, 82, 30, 130 }, { 30, 82, 38, 130 }, {38, 82, 58, 130} };
-		TestCoordinates(index, dest, source, expectDest, expectSource);
-	}
-
 	TEST_F(BasicComponentTest, ImageGrid3_Horizontal)
 	{
 		auto [img, imgPtr] = GetPtrs(CreateImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop }, "ScrollButton3_H_Normal"));
@@ -219,15 +212,18 @@ namespace UserInterfaceTest
 
 		CallMockRender(TestImageGrid3ChangeAreaRender_H, 3);
 
-		SourceDivider srcDivider{ imgPtr->GetSourceAnd2Divider() };
+		SourceDivider srcDivider = GetSourceDivider(m_sourceBinder.get(), "ScrollButton3_H_Normal");
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 82, 48, 48 }));
 		EXPECT_THAT(srcDivider.list, ElementsAre(22, 26));
 
 		srcDivider.list.clear();
 		srcDivider.list = { 20, 28 };
-		imgPtr->SetSourceAnd2Divider(srcDivider);
+		EXPECT_TRUE(ModifyTextureSourceInfo(m_sourceBinder.get(), "ScrollButton3_H_Normal", srcDivider));
 
-		CallMockRender(TestImageGrid3SourceAndDivider_H, 3);
+		m_panel = WriteReadTest(m_panel);
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+
+		CallMockRender(TestImageGrid3ChangeAreaRender_H, 3);
 	}
 
 	////////////////////////////////////////////////////////
@@ -244,13 +240,6 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollTrack3_V"));
 	}
 
-	static void TestImageGrid3SourceAndDivider_V(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder*)
-	{
-		vector<RECT> expectDest = { { 382, 240, 418, 250 }, { 382, 250, 418, 350 }, { 382, 350, 418, 360 } };
-		vector<RECT> expectSource = { { 114, 178, 130, 192 }, { 114, 192, 130, 212 }, { 114, 212, 130, 226 } };
-		TestCoordinates(index, dest, source, expectDest, expectSource);
-	}
-
 	TEST_F(BasicComponentTest, ImageGrid3_Vertical)
 	{
 		auto [img3, img3Ptr] = GetPtrs(CreateImageGrid3(DirectionType::Vertical, { {36, 100}, Origin::LeftTop }, "ScrollTrack3_V"));
@@ -263,17 +252,19 @@ namespace UserInterfaceTest
 		img3Ptr->ChangeOrigin(Origin::Center);
 		img3Ptr->ChangeSize({ 36, 120 });
 		CallMockRender(TestImageGrid3ChangeAreaRender_V, 3);
-		WriteReadTest(m_panel);
 
-		SourceDivider srcDivider{ img3Ptr->GetSourceAnd2Divider() };
+		SourceDivider srcDivider = GetSourceDivider(m_sourceBinder.get(), "ScrollTrack3_V");
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 114, 178, 16, 48 }));
 		EXPECT_THAT(srcDivider.list, ElementsAre(10, 38));
 
 		srcDivider.list.clear();
 		srcDivider.list = { 14, 34 };
-		img3Ptr->SetSourceAnd2Divider(srcDivider);
+		EXPECT_TRUE(ModifyTextureSourceInfo(m_sourceBinder.get(), "ScrollTrack3_V", srcDivider));
 
-		CallMockRender(TestImageGrid3SourceAndDivider_V, 3);
+		m_panel = WriteReadTest(m_panel);
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+		
+		CallMockRender(TestImageGrid3ChangeAreaRender_V, 3);
 	}
 
 	////////////////////////////////////////////////////////

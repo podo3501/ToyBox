@@ -46,7 +46,7 @@ namespace UserInterfaceTest
 
 	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder*)
 	{
-		EXPECT_EQ(index, 3); //0, 1은 폰트. 2은 texture 3은 renderTexture이다. 그래서 3이 들어오고
+		EXPECT_EQ(index, 4); //0, 1은 폰트. 2, 3은 texture 4는 renderTexture이다. 그래서 4가 들어오고
 		vector<RECT> expectDest = { { 75, 75, 125, 125 } };
 		vector<RECT> expectSource = { { 0, 0, 50, 50 } };
 		TestCoordinates(2, dest, source, expectDest, expectSource);//값 비교하니까 2을 그냥 넣어줌. 

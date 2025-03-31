@@ -3,6 +3,7 @@
 
 struct ImageSource;
 struct SourceDivider;
+struct TextureSourceInfo;
 class ImageGrid1;
 enum class DirectionType;
 
@@ -20,15 +21,9 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
+	const string& GetBindKey() const noexcept;
+	void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex = 0u) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
-	wstring GetFilename() const noexcept;
-
-	bool SetSourceAnd2Divider(const SourceDivider& srcDivider) noexcept;
-	SourceDivider GetSourceAnd2Divider() const noexcept;
-
-	bool SetSources(const vector<Rectangle>& sources) noexcept;
-	vector<Rectangle> GetSources() const noexcept;
-	Rectangle GetMergedSource() const noexcept;
 	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
 
 protected:

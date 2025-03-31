@@ -2,12 +2,13 @@
 #include "EditWindow.h"
 
 class ScrollBar;
+class TextureSourceBinder;
 class EditScrollBar : public EditWindow
 {
 public:
 	~EditScrollBar();
 	EditScrollBar() = delete;
-	EditScrollBar(ScrollBar* scrollBar, IRenderer* renderer, CommandList* cmdList) noexcept;
+	EditScrollBar(ScrollBar* scrollBar, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept;
 
 private:
 	ScrollBar* m_scrollBar;

@@ -3,6 +3,7 @@
 struct IRenderer;
 class UIComponent;
 class ComponentTooltip;
+class TextureSourceBinder;
 class EditWindow;
 class CommandList;
 
@@ -10,7 +11,7 @@ class ComponentSelector
 {
 public:
 	~ComponentSelector();
-	ComponentSelector(IRenderer* renderer, CommandList* cmdList, UIComponent* panel);
+	ComponentSelector(IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList, UIComponent* panel);
 
 	void SetPanel(UIComponent* panel) noexcept;
 	void Update() noexcept;
@@ -26,6 +27,7 @@ private:
 	bool UpdateEditWindow() noexcept;
 
 	IRenderer* m_renderer;
+	TextureSourceBinder* m_sourceBinder;
 	CommandList* m_cmdList;
 	ImGuiWindow* m_mainWnd;
 	unique_ptr<ComponentTooltip> m_tooltip;

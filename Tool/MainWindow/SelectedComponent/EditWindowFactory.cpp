@@ -23,7 +23,7 @@
 #include "../Toy/UserInterface/Component/ScrollBar.h"
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
 
-using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, CommandList*)>;
+using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, TextureSourceBinder*, CommandList*)>;
 optional<unordered_map<ComponentID, FactoryFunction>> EditWindowFactory::m_factoryMap{ nullopt };
 
 void EditWindowFactory::RegisterFactories()
@@ -49,19 +49,20 @@ void EditWindowFactory::RegisterFactories()
     //UIComponent*, IRenderer*, CommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 }
 
-unique_ptr<EditWindow> EditWindowFactory::Create(UIComponent* component, IRenderer* renderer, CommandList* cmdList)
+unique_ptr<EditWindow> EditWindowFactory::Create(UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList)
 {
     if (!component) return nullptr;
 
     ComponentID id = component->GetTypeID();
     auto it = m_factoryMap->find(id);
     if (it != m_factoryMap->end())
-        return it->second(component, renderer, cmdList);
+        return it->second(component, renderer, sourceBinder, cmdList);
 
     return nullptr;
 }
 
-unique_ptr<EditWindow> EditWindowFactory::CreateEditWindow(UIComponent* component, IRenderer* renderer, CommandList* cmdList)
+unique_ptr<EditWindow> EditWindowFactory::CreateEditWindow(UIComponent* component, 
+    IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList)
 {
-    return Create(component, renderer, cmdList);
+    return Create(component, renderer, sourceBinder, cmdList);
 }

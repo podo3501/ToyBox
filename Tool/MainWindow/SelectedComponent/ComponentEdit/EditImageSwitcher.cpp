@@ -3,8 +3,8 @@
 #include "../Toy/UserInterface/Component/ImageSwitcher.h"
 
 EditImageSwitcher::~EditImageSwitcher() = default;
-EditImageSwitcher::EditImageSwitcher(ImageSwitcher* imageSwitcher, IRenderer* renderer, CommandList* cmdList) noexcept :
-	EditWindow{ imageSwitcher, cmdList },
+EditImageSwitcher::EditImageSwitcher(ImageSwitcher* imageSwitcher, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+	EditWindow{ imageSwitcher, sourceBinder, cmdList },
 	m_imageSwitcher{ imageSwitcher }
 {
 }

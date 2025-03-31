@@ -249,6 +249,8 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_sourceBinder->RemoveKeyByFilename(L"TestFontFilename.json"));
 		EXPECT_TRUE(m_sourceBinder->RemoveKeyByFilename(L"TestTexFilename.json"));
 
+		EXPECT_TRUE(m_sourceBinder->GetTextureKeys(ImagePart::ThreeH).size());
+
 		TestSourceBinderWriteRead(m_sourceBinder);
 
 		auto sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
@@ -283,16 +285,7 @@ namespace UserInterfaceTest
 		cmdList.Rename(img1Ptr, "img1");
 		CaptureSnapshot(cmdList, history);
 
-		cmdList.SetSource(img1Ptr, { 11, 11, 32, 32 }); //원래는{ 10, 10, 64, 64 }
-		CaptureSnapshot(cmdList, history);
-
 		cmdList.DetachComponent(img1Ptr);
-		CaptureSnapshot(cmdList, history);
-
-		cmdList.AttachComponent(m_panel.get(), move(img9), { 200, 210 });
-		SourceDivider srcDivider{ img9Ptr->GetSourceAnd4Divider() };
-		srcDivider.list = { 20, 44, 26, 48 };
-		img9Ptr->SetSourceAnd4Divider(srcDivider);
 		CaptureSnapshot(cmdList, history);
 
 		VerifyUndoRedo(cmdList, history);
