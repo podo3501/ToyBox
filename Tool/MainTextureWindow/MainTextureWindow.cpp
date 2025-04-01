@@ -4,11 +4,11 @@
 #include "EditSourceTexture.h"
 #include "../Utility.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/Component/RenderTexture.h"
-#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
+#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/UserInterface/UIUtility.h"
+#include "../Toy/UserInterface/UIComponent/UIUtility.h"
 
 MainTextureWindow::~MainTextureWindow()
 {

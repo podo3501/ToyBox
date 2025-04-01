@@ -2,9 +2,9 @@
 #include "CommandList.h"
 #include "Command.h"
 #include "CommandRegistry.h"
-#include "../UIComponent.h"
+#include "../UIComponent/UIComponent.h"
 #include "../../Utility.h"
-#include "../UIType.h"
+#include "../UIComponent/UIType.h"
 
 CommandList::~CommandList() = default;
 CommandList::CommandList() = default;

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MenuHelper.h"
-#include "../Toy/UserInterface/EnumUtility.h"
-#include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/UserInterface/UIComponent/EnumUtility.h"
+#include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
 #include "../Config.h"
 
 using namespace Tool;

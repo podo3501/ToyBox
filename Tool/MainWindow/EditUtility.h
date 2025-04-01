@@ -1,5 +1,4 @@
 #pragma once
-#include "../Toy/UserInterface/Property.h"
 
 //edit는 값이 바뀌면 true를 리턴하고 바뀌지 않으면 false를 리턴한다.
 //&가 아닌 const &가 인자로 들어온다면 값이 바뀔수 없으므로 void 함수가 된다.
@@ -32,13 +31,11 @@ struct SourceDivider;
 bool EditPosition(XMINT2& position);
 bool EditSize(XMUINT2& size);
 bool EditRectangle(const string& label, Rectangle& rect);
-bool EditRectangle(const string& label, Property<Rectangle>& rect);
 bool EditRectangleNoLabel(const string& id, Rectangle& rect);
 bool EditCheckbox(const string& label, bool& check);
 bool EditText(const string& label, string& text);
 bool EditText(const string& label, wstring& text);
 bool EditFilename(const string& label, wstring& filename);
-bool EditFilename(const string& label, Property<wstring>& filename);
 bool EditSourceAndDivider(const string& sourceLabel, const string& deviderLabel, SourceDivider& rectDivider);
 
 bool SelectComboItem(const string& label, const vector<string>& items, string& select);

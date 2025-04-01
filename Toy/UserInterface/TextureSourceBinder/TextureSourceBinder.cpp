@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "TextureSourceBinder.h"
-#include "../JsonHelper.h"
+#include "../JsonOperation/JsonHelper.h"
 #include "../../Utility.h"
-#include "../UIUtility.h"
+#include "../UIComponent/UIUtility.h"
 
 TextureSourceBinder::~TextureSourceBinder() = default;
 TextureSourceBinder::TextureSourceBinder()

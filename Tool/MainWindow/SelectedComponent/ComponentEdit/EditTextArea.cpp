@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "EditTextArea.h"
-#include "../Toy/UserInterface/Component/TextArea.h"
+#include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/Utility.h"
 #include "../../EditUtility.h"

@@ -3,7 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
-#include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Dialog.h"

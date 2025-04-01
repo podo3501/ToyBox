@@ -5,7 +5,6 @@
 #include "ToolSystem.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/Component/Dialog.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"

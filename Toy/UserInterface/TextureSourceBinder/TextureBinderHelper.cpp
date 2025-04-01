@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "TextureBinderHelper.h"
 #include "TextureSourceBinder.h"
-#include "../UIUtility.h"
-#include "../UIType.h"
+#include "../UIComponent/UIUtility.h"
+#include "../UIComponent/UIType.h"
 #include "../../Utility.h"
 
 optionalRef<vector<Rectangle>> GetRectangles(TextureSourceBinder* sb, const string& key) noexcept

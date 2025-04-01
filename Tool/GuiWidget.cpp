@@ -2,7 +2,7 @@
 #include "GuiWidget.h"
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/UIComponent.h"
+#include "../Toy/UserInterface/UIComponent/UIComponent.h"
 
 GuiWidget::~GuiWidget()
 {}

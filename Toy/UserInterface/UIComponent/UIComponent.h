@@ -2,7 +2,6 @@
 
 #include "../Include/IComponent.h"
 #include "UILayout.h"
-#include "Property.h"
 #include "UIType.h"
 #include "UITransform.h"
 #include "UIComponentEx.h"

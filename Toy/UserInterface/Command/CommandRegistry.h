@@ -1,7 +1,7 @@
 #pragma once
 #include "Command.h"
 #include "CommandType.h"
-#include "../UIType.h"
+#include "../UIComponent/UIType.h"
 
 class UIComponent;
 

@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "RenderTexture.h"
-#include "../../../Include/IRenderer.h"
-#include "../../Utility.h"
-#include "../JsonOperation.h"
-#include "../../InputManager.h"
+#include "../../../../Include/IRenderer.h"
+#include "../../../Utility.h"
+#include "../../JsonOperation/JsonOperation.h"
+#include "../../../InputManager.h"
 
 RenderTexture::~RenderTexture() 
 { 

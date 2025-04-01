@@ -3,12 +3,12 @@
 #include "ImageGrid.h"
 #include "ImageGrid1.h"
 #include "ImageGrid3.h"
-#include "../TextureSourceBinder/TextureSourceBinder.h"
-#include "../../../Include/IRenderer.h"
-#include "../../InputManager.h"
-#include "../JsonOperation.h"
-#include "../../Utility.h"
-#include "../../Config.h"
+#include "../../TextureSourceBinder/TextureSourceBinder.h"
+#include "../../../../Include/IRenderer.h"
+#include "../../../InputManager.h"
+#include "../../JsonOperation/JsonOperation.h"
+#include "../../../Utility.h"
+#include "../../../Config.h"
 
 using enum InteractState;
 

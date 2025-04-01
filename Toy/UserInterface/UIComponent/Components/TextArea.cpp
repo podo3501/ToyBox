@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "TextArea.h"
-#include "../TextureSourceBinder/TextureSourceBinder.h"
+#include "../../TextureSourceBinder/TextureSourceBinder.h"
 #include "../Include/IRenderer.h"
-#include "../../Utility.h"
-#include "../../Config.h"
+#include "../../../Utility.h"
+#include "../../../Config.h"
 #include "../UIUtility.h"
-#include "../JsonOperation.h"
+#include "../../JsonOperation/JsonOperation.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;

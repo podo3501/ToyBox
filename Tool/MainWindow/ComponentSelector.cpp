@@ -3,7 +3,7 @@
 #include "SelectedComponent/ComponentEdit/EditWindow.h"
 #include "SelectedComponent/ComponentTooltip.h"
 #include "SelectedComponent/EditWindowFactory.h"
-#include "../Toy/UserInterface/UIComponent.h"
+#include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
 #include "../Dialog.h"

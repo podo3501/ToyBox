@@ -2,7 +2,7 @@
 #include "UIUtility.h"
 #include "UIType.h"
 #include "UIComponent.h"
-#include "../Utility.h"
+#include "../../Utility.h"
 
 static inline bool operator==(const DirectX::XMFLOAT4& a, const DirectX::XMFLOAT4& b) noexcept
 {

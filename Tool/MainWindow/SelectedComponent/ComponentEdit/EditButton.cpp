@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Editbutton.h"
-#include "../Toy/UserInterface/UIType.h"
-#include "../Toy/UserInterface/Component/Button.h"
+#include "../Toy/UserInterface/UIComponent/UIType.h"
+#include "../Toy/UserInterface/UIComponent/Components/Button.h"
 #include "../Toy/Utility.h"
 #include "../../EditUtility.h"
 

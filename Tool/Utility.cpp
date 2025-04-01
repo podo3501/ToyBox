@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Utility.h"
 #include "MainWindow/FloatingComponent.h"
-#include "../Toy/UserInterface/UIComponent.h"
+#include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/Utility.h"
 #include "../Toy/InputManager.h"

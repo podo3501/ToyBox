@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "../Utility.h"
+#include "../../Utility.h"
 #include "UIComponent.h"
 #include "../Include/IRenderer.h"
-#include "TextureSourceBinder/TextureSourceBinder.h"
-#include "../Config.h"
+#include "../TextureSourceBinder/TextureSourceBinder.h"
+#include "../../Config.h"
 
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 	m_component{ component }

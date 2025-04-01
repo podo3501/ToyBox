@@ -1,5 +1,5 @@
 #pragma once
-#include "../Toy/UserInterface/UIComponent.h"
+#include "../Toy/UserInterface/UIComponent/UIComponent.h"
 
 struct ITextureLoad;
 class TextureSourceBinder;

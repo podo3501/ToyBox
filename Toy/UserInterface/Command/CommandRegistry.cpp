@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "CommandRegistry.h"
 #include "../../Utility.h"
-#include "../Component/ImageGrid1.h"
-#include "../Component/ImageGrid3.h"
-#include "../Component/ImageGrid9.h"
-#include "../Component/TextArea.h"
+#include "../UIComponent/Components/ImageGrid1.h"
+#include "../UIComponent/Components/ImageGrid3.h"
+#include "../UIComponent/Components/ImageGrid9.h"
+#include "../UIComponent/Components/TextArea.h"
 #include "../Include/IRenderer.h"
 
 AttachComponentCommand::AttachComponentCommand(UIComponent* parent,

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "JsonOperation.h"
-#include "UIComponent.h"
-#include "UIComponentFactory.h"
+#include "../UIComponent/UIComponent.h"
+#include "../UIComponent/UIComponentFactory.h"
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {

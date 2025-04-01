@@ -4,7 +4,7 @@
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
-#include "../Toy/UserInterface/Component/Panel.h"
+#include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/UserInterface/Command/CommandList.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"

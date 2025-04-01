@@ -2,12 +2,12 @@
 #include "../ToyTestFixture.h"
 #include "../IMockRenderer.h"
 #include "../TestHelper.h"
-#include "../Toy/UserInterface/Component/SampleComponent.h"
-#include "../Toy/UserInterface/Component/ScrollBar.h"
-#include "../Toy/UserInterface/Component/ScrollSlider.h"
-#include "../Toy/UserInterface/Component/RenderTexture.h"
-#include "../Toy/UserInterface/Component/ListArea.h"
-#include "../Toy/UserInterface/Component/ImageSwitcher.h"
+#include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "../Toy/UserInterface/UIComponent/Components/ScrollBar.h"
+#include "../Toy/UserInterface/UIComponent/Components/ScrollSlider.h"
+#include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
+#include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
+#include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
 #include "../Toy/InputManager.h"
 
 namespace UserInterfaceTest

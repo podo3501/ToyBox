@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "EditImageSwitcher.h"
-#include "../Toy/UserInterface/Component/ImageSwitcher.h"
+#include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
 
 EditImageSwitcher::~EditImageSwitcher() = default;
 EditImageSwitcher::EditImageSwitcher(ImageSwitcher* imageSwitcher, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :

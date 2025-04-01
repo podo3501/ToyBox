@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "ImageGrid1.h"
-#include "../../../Include/IRenderer.h"
-#include "../../Utility.h"
-#include "../../Config.h"
-#include "../JsonOperation.h"
-#include "../TextureSourceBinder/TextureSourceBinder.h"
+#include "../../../../Include/IRenderer.h"
+#include "../../../Utility.h"
+#include "../../../Config.h"
+#include "../../JsonOperation/JsonOperation.h"
+#include "../../TextureSourceBinder/TextureSourceBinder.h"
 
 ImageGrid1::~ImageGrid1() = default;
 ImageGrid1::ImageGrid1() : 

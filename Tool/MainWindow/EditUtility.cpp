@@ -2,7 +2,7 @@
 #include "EditUtility.h"
 #include "../Toy/Utility.h"
 #include "../Dialog.h"
-#include "../Toy/UserInterface/UIType.h"
+#include "../Toy/UserInterface/UIComponent/UIType.h"
 
 template<typename T>
 static bool EditIntegerFields(vector<pair<const char*, T&>> fields)
@@ -46,19 +46,6 @@ bool EditRectangleNoLabel(const string& id, Rectangle& rect)
     ImGui::PopID();
 
     return modify;
-}
-
-bool EditRectangle(const string& label, Property<Rectangle>& rect)
-{
-    Rectangle curRect = rect.Get();
-
-    if (EditRectangle(label, curRect))
-    {
-        rect.Set(curRect);
-        return true;
-    }
-
-    return false;
 }
 
 bool EditCheckbox(const string& label, bool& check)
@@ -105,18 +92,6 @@ bool EditFilename(const string& label, wstring& filename)
     if (editFilename != filename)
     {
         filename = move(editFilename);
-        return true;
-    }
-
-    return false;
-}
-
-bool EditFilename(const string& label, Property<wstring>& filename)
-{
-    wstring editFilename{ filename };
-    if (EditFilename(label, editFilename))
-    {
-        filename = editFilename;
         return true;
     }
 

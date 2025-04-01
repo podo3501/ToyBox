@@ -2,8 +2,8 @@
 #include "TestHelper.h"
 #include "../Include/IComponent.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/UIComponent.h"
-#include "../Toy/UserInterface/JsonHelper.h"
+#include "../Toy/UserInterface/UIComponent/UIComponent.h"
+#include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/Utility.h"
 

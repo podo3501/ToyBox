@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "ImageGrid3.h"
 #include "ImageGrid1.h"
-#include "../../Utility.h"
+#include "../../../Utility.h"
 #include "../UIUtility.h"
-#include "../JsonOperation.h"
+#include "../../JsonOperation/JsonOperation.h"
 #include "ImageGridHelper.hpp"
 
 ImageGrid3::~ImageGrid3() = default;

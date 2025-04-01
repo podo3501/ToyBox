@@ -5,7 +5,7 @@
 #include "ImageSelector.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureLoadBinder.h"
-#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Dialog.h"
 #include "../Toy/Utility.h"
 

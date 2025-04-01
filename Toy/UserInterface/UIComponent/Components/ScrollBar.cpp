@@ -2,8 +2,8 @@
 #include "ScrollBar.h"
 #include "ScrollSlider.h"
 #include "ImageGrid1.h"
-#include "../JsonOperation.h"
-#include "../../Utility.h"
+#include "../../JsonOperation/JsonOperation.h"
+#include "../../../Utility.h"
 
 ScrollBar::~ScrollBar() = default;
 ScrollBar::ScrollBar() :

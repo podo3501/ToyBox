@@ -17,9 +17,6 @@
     <Filter Include="Resources\Tool">
       <UniqueIdentifier>{556a383a-b07e-4797-8ed9-cefd0861b90d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface\Component">
-      <UniqueIdentifier>{7a324915-d1e7-41df-90b3-c02402ae2760}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources\UI">
       <UniqueIdentifier>{a4ac7f4d-e263-4d15-98c8-4bccb666a2d4}</UniqueIdentifier>
     </Filter>
@@ -31,6 +28,15 @@
     </Filter>
     <Filter Include="UserInterface\TextureSourceBinder">
       <UniqueIdentifier>{ce70d806-37c0-42f5-9a0e-dd3c79ef5026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent">
+      <UniqueIdentifier>{699c8739-a17a-426b-919d-a41c2a0720e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent\Components">
+      <UniqueIdentifier>{38daeccc-4d6c-4764-af27-14352fe2742c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\JsonOperation">
+      <UniqueIdentifier>{020a7932-c2c6-4920-a17c-83730d5afeb3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,67 +51,10 @@
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowProcedure.h" />
-    <ClInclude Include="UserInterface\UIType.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UILayout.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="Locator.h" />
-    <ClInclude Include="UserInterface\UIUtility.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="Config.h" />
-    <ClInclude Include="UserInterface\UIComponent.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UITransform.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\JsonHelper.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\EnumUtility.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="UserInterface\JsonOperation.hpp">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Property.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\Dialog.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ImageGrid1.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ImageGrid3.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ImageGrid9.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ImageGridHelper.hpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\Panel.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\TextArea.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponentEx.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\SampleComponent.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\Command\Command.h">
       <Filter>UserInterface\Command</Filter>
     </ClInclude>
@@ -117,36 +66,6 @@
     </ClInclude>
     <ClInclude Include="UserInterface\Command\CommandType.h">
       <Filter>UserInterface\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIHierarchy.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ListArea.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\Container.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\Button.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\RenderTexture.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIHelperClass.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ScrollSlider.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ScrollBar.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ImageSwitcher.h">
-      <Filter>UserInterface\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Component\ImageGrid.h">
-      <Filter>UserInterface\Component</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureSourceBinder.h">
       <Filter>UserInterface\TextureSourceBinder</Filter>
@@ -163,11 +82,95 @@
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureLoadBinder.h">
       <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponentFactory.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\TextureSourceBinder\TextureBinderHelper.h">
       <Filter>UserInterface\TextureSourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\Button.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\Container.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\Dialog.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid1.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid3.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid9.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ImageGridHelper.hpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ImageSwitcher.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ListArea.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\Panel.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\RenderTexture.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\SampleComponent.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ScrollBar.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ScrollSlider.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\TextArea.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIComponent.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIComponentEx.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIComponentFactory.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIHelperClass.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIHierarchy.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UILayout.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UITransform.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIType.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIUtility.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\EnumUtility.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\JsonOperation\JsonHelper.h">
+      <Filter>UserInterface\JsonOperation</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h">
+      <Filter>UserInterface\JsonOperation</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp">
+      <Filter>UserInterface\JsonOperation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,96 +179,15 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="WindowProcedure.cpp" />
-    <ClCompile Include="UserInterface\UILayout.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIUtility.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="Config.cpp" />
-    <ClCompile Include="UserInterface\UIComponent.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIType.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UITransform.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation_impl.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\JsonHelper.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\EnumUtility.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="UserInterface\Component\Dialog.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\ImageGrid1.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\ImageGrid3.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\ImageGrid9.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\Panel.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\TextArea.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponentEx.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\SampleComponent.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\Command\CommandList.cpp">
       <Filter>UserInterface\Command</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Command\CommandRegistry.cpp">
       <Filter>UserInterface\Command</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIHierarchy.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\ListArea.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\Container.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\Button.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\RenderTexture.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIHelperClass.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\ScrollSlider.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\ScrollBar.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\ImageSwitcher.cpp">
-      <Filter>UserInterface\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Component\ImageGrid.cpp">
-      <Filter>UserInterface\Component</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureSourceBinder.cpp">
       <Filter>UserInterface\TextureSourceBinder</Filter>
@@ -282,11 +204,92 @@
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureLoadBinder.cpp">
       <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponentFactory.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureBinderHelper.cpp">
       <Filter>UserInterface\TextureSourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\Button.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\Container.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\Dialog.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ImageGrid.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ImageGrid1.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ImageGrid3.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ImageGrid9.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ImageSwitcher.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ListArea.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\Panel.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\RenderTexture.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\SampleComponent.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ScrollBar.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ScrollSlider.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\TextArea.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIComponent.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIComponentEx.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIComponentFactory.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIHelperClass.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIHierarchy.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UILayout.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UITransform.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIType.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIUtility.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\EnumUtility.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\JsonOperation\JsonHelper.cpp">
+      <Filter>UserInterface\JsonOperation</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp">
+      <Filter>UserInterface\JsonOperation</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\JsonOperation\JsonOperation_impl.cpp">
+      <Filter>UserInterface\JsonOperation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

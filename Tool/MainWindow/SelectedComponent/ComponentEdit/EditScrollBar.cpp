@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "EditScrollBar.h"
-#include "../Toy/UserInterface/Component/ScrollBar.h"
+#include "../Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 
 EditScrollBar::~EditScrollBar() = default;
 EditScrollBar::EditScrollBar(ScrollBar* scrollBar, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :

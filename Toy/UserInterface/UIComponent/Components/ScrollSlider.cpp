@@ -4,9 +4,9 @@
 #include "ImageGrid3.h"
 #include "ImageSwitcher.h"
 #include "Button.h"
-#include "../../InputManager.h"
-#include "../JsonOperation.h"
-#include "../../Utility.h"
+#include "../../../InputManager.h"
+#include "../../JsonOperation/JsonOperation.h"
+#include "../../../Utility.h"
 
 ScrollSlider::~ScrollSlider() = default;
 ScrollSlider::ScrollSlider() :

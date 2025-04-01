@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "EditScrollSlider.h"
-#include "../Toy/UserInterface/Component/ScrollSlider.h"
+#include "../Toy/UserInterface/UIComponent/Components/ScrollSlider.h"
 
 EditScrollSlider::~EditScrollSlider() = default;
 EditScrollSlider::EditScrollSlider(ScrollSlider* scrollSlider, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :

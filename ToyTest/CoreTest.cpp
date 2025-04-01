@@ -3,9 +3,9 @@
 #include "../Core/Utility.h"
 #include "ToyTestFixture.h"
 #include "../Include/IRenderer.h"
-#include "../Toy/UserInterface/Component/Panel.h"
-#include "../Toy/UserInterface/Component/SampleComponent.h"
-#include "../Toy/UserInterface/Component/ImageGrid1.h"
+#include "../Toy/UserInterface/UIComponent/Components/Panel.h"
+#include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "TestHelper.h"
 
 using ::testing::Pair;

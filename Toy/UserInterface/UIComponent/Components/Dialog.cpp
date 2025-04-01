@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Dialog.h"
-#include "../../Utility.h"
-#include "../JsonOperation.h"
+#include "../../../Utility.h"
+#include "../../JsonOperation/JsonOperation.h"
 
 Dialog::~Dialog() = default;
 Dialog::Dialog()
