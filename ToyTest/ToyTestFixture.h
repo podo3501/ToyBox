@@ -38,12 +38,12 @@ protected:
 class BasicComponentTest : public ToyTestFixture {};
 class ComplexComponentTest : public ToyTestFixture {};
 
-class CommandList;
+class UICommandList;
 class IntegrationTest : public ToyTestFixture 
 {
 protected:
 	bool VerifyClone(unique_ptr<UIComponent> original);
-	void CaptureSnapshot(CommandList& cmdList, vector<unique_ptr<UIComponent>>& history);
-	void VerifyUndoRedo(CommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
+	void CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history);
+	void VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
 };
 class IRendererTest : public ToyTestFixture {};

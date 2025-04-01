@@ -9,11 +9,11 @@ class TextureSourceBinder;
 class EditFontTexture;
 class EditSourceTexture;
 
-class MainTextureWindow : public InnerWindow
+class TextureSourceWindow : public InnerWindow
 {
 public:
-    ~MainTextureWindow();
-    MainTextureWindow(IRenderer* renderer);
+    ~TextureSourceWindow();
+    TextureSourceWindow(IRenderer* renderer);
     virtual void Render(ImGuiIO* io) override;
     virtual bool SaveScene(const wstring& filename) override;
     virtual wstring GetSaveFilename() const noexcept override;

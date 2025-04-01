@@ -59,7 +59,7 @@ namespace Tool
 void IgnoreMouseClick(ImGuiWindow* window);
 
 class UIComponent;
-class CommandList;
+class UICommandList;
 class FloatingComponent;
 
 inline ImColor ToColor(const XMVECTORF32& color, float alpha = 1.f) noexcept {
@@ -70,5 +70,5 @@ inline ImColor ToColor(const XMVECTORF32& color, float alpha = 1.f) noexcept {
 		static_cast<int>(alpha * 255.0f) };
 }
 
-bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept;
+bool AddComponentFromScreenPos(UICommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept;
 wstring ReplaceFileExtension(const wstring& filename, const wstring& newExtension);

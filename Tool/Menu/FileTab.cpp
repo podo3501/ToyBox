@@ -6,7 +6,7 @@
 #include "../Toy/Config.h"
 #include "../ToolSystem.h"
 #include "../MainWindow/MainWindow.h"
-#include "../MainTextureWindow/MainTextureWindow.h"
+#include "../TextureSourceWindow/TextureSourceWindow.h"
 #include "MenuHelper.h"
 #include "RecentFiles.h"
 #include "../Config.h"
@@ -107,7 +107,7 @@ bool FileTab::CreateNewUIFile() noexcept
 
 bool FileTab::CreateNewTextureFile() noexcept
 {
-    auto textureWindow = make_unique<MainTextureWindow>(m_toolSystem->GetRenderer());
+    auto textureWindow = make_unique<TextureSourceWindow>(m_toolSystem->GetRenderer());
     ReturnIfFalse(textureWindow->CreateNew());
 
     m_toolSystem->SetTextureWindow(move(textureWindow));
@@ -143,7 +143,7 @@ bool FileTab::CreateMainWindow()
 
 bool FileTab::CreateTextureWindowFromFile(const wstring& filename)
 {
-    auto textureWindow = make_unique<MainTextureWindow>(m_toolSystem->GetRenderer());
+    auto textureWindow = make_unique<TextureSourceWindow>(m_toolSystem->GetRenderer());
     if (!textureWindow->Create(filename))
     {
         Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to open the texture file. Please check the file path.");
@@ -179,7 +179,7 @@ static optional<bool> CompareFocusOrder(InnerWindow* lhs, InnerWindow* rhs)
 InnerWindow* FileTab::GetFocusWindow() const noexcept //?!? 이건 ToolSystem에 넣자.
 {
     MainWindow* mainWindow = m_toolSystem->GetFocusMainWindow();
-    MainTextureWindow* mainTextureWindow = m_toolSystem->GetFocusMainTextureWindow();
+    TextureSourceWindow* mainTextureWindow = m_toolSystem->GetFocusTextureSourceWindow();
     auto order = CompareFocusOrder(mainWindow, mainTextureWindow);
     if (!order) return nullptr;
     return *order ? static_cast<InnerWindow*>(mainWindow) : static_cast<InnerWindow*>(mainTextureWindow);

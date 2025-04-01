@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "../Include/IRenderer.h"
 #include "EditSourceTexture.h"
-#include "MainTextureWindow.h"
+#include "TextureSourceWindow.h"
 #include "ImageSelector.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureLoadBinder.h"
@@ -17,7 +17,7 @@ enum class PendingAction : int
 };
 
 EditSourceTexture::~EditSourceTexture() = default;
-EditSourceTexture::EditSourceTexture(IRenderer* renderer, MainTextureWindow* textureWindow) :
+EditSourceTexture::EditSourceTexture(IRenderer* renderer, TextureSourceWindow* textureWindow) :
     m_renderer{ renderer },
     m_textureWindow{ textureWindow },
     m_textureLoader{ make_unique<TextureLoadBinder>() },

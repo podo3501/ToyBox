@@ -5,13 +5,13 @@ class UIComponent;
 class ComponentTooltip;
 class TextureSourceBinder;
 class EditWindow;
-class CommandList;
+class UICommandList;
 
 class ComponentSelector
 {
 public:
 	~ComponentSelector();
-	ComponentSelector(IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList, UIComponent* panel);
+	ComponentSelector(IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList, UIComponent* panel);
 
 	void SetPanel(UIComponent* panel) noexcept;
 	void Update() noexcept;
@@ -28,7 +28,7 @@ private:
 
 	IRenderer* m_renderer;
 	TextureSourceBinder* m_sourceBinder;
-	CommandList* m_cmdList;
+	UICommandList* m_cmdList;
 	ImGuiWindow* m_mainWnd;
 	unique_ptr<ComponentTooltip> m_tooltip;
 	unique_ptr<EditWindow> m_editWindow;
@@ -40,7 +40,7 @@ private:
 /////////////////////////////////////////////////////////////////
 
 class FloatingComponent;
-bool AttachSelectedComponent(CommandList* cmdList, ComponentSelector* selector, 
+bool AttachSelectedComponent(UICommandList* cmdList, ComponentSelector* selector, 
 	FloatingComponent* floater, const XMINT2& position) noexcept;
-unique_ptr<UIComponent> DetachSelectedComponent(CommandList* cmdList, 
+unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList, 
 	ComponentSelector* selector) noexcept;

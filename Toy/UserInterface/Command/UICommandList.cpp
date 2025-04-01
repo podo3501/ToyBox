@@ -1,15 +1,15 @@
 #include "pch.h"
-#include "CommandList.h"
+#include "UICommandList.h"
 #include "Command.h"
 #include "CommandRegistry.h"
 #include "../UIComponent/UIComponent.h"
 #include "../../Utility.h"
 #include "../UIComponent/UIType.h"
 
-CommandList::~CommandList() = default;
-CommandList::CommandList() = default;
+UICommandList::~UICommandList() = default;
+UICommandList::UICommandList() = default;
 
-bool CommandList::Undo() noexcept
+bool UICommandList::Undo() noexcept
 {
 	if (m_index < 0) return true;
 
@@ -26,7 +26,7 @@ bool CommandList::Undo() noexcept
 	return true;
 }
 
-bool CommandList::Redo() noexcept
+bool UICommandList::Redo() noexcept
 {
 	if (m_index + 1 >= static_cast<int>(m_commandList.size())) return true;
 
@@ -43,7 +43,7 @@ bool CommandList::Redo() noexcept
 	return true;
 }
 
-unique_ptr<Command> CommandList::TryMergeCommand(unique_ptr<Command> cmd) noexcept
+unique_ptr<Command> UICommandList::TryMergeCommand(unique_ptr<Command> cmd) noexcept
 {
 	if (m_commandList.empty()) return cmd;
 
@@ -51,7 +51,7 @@ unique_ptr<Command> CommandList::TryMergeCommand(unique_ptr<Command> cmd) noexce
 	return preCmd->Merge(move(cmd));
 }
 
-void CommandList::AddOrMergeCommand(unique_ptr<Command> command) noexcept
+void UICommandList::AddOrMergeCommand(unique_ptr<Command> command) noexcept
 {
 	if (m_index < static_cast<int>(m_commandList.size()) - 1)
 		m_commandList.resize(m_index + 1);
@@ -66,7 +66,7 @@ void CommandList::AddOrMergeCommand(unique_ptr<Command> command) noexcept
 }
 
 template <typename CommandType, typename... ParamTypes>
-bool CommandList::ApplyCommand(ParamTypes&&... params)
+bool UICommandList::ApplyCommand(ParamTypes&&... params)
 {
 	unique_ptr<Command> command = make_unique<CommandType>(forward<ParamTypes>(params)...);
 	ReturnIfFalse(command->Execute());
@@ -75,7 +75,7 @@ bool CommandList::ApplyCommand(ParamTypes&&... params)
 	return true;
 }
 
-unique_ptr<UIComponent> CommandList::AttachComponent(UIComponent* addable, 
+unique_ptr<UIComponent> UICommandList::AttachComponent(UIComponent* addable, 
 	unique_ptr<UIComponent> component, const XMINT2& relativePos)
 {
 	unique_ptr<Command> command = make_unique<AttachComponentCommand>(addable, move(component), relativePos);
@@ -89,7 +89,7 @@ unique_ptr<UIComponent> CommandList::AttachComponent(UIComponent* addable,
 	return nullptr;
 }
 
-pair<unique_ptr<UIComponent>, UIComponent*> CommandList::DetachComponent(UIComponent* detach)
+pair<unique_ptr<UIComponent>, UIComponent*> UICommandList::DetachComponent(UIComponent* detach)
 {
 	unique_ptr<Command> command = make_unique<DetachComponentCommand>(detach);
 	command->Execute();
@@ -102,48 +102,48 @@ pair<unique_ptr<UIComponent>, UIComponent*> CommandList::DetachComponent(UICompo
 	return { move(detached), parent };
 }
 
-bool CommandList::SetRelativePosition(UIComponent* component, const XMINT2& relativePos)
+bool UICommandList::SetRelativePosition(UIComponent* component, const XMINT2& relativePos)
 {
 	return ApplyCommand<SetRelativePositionCommand>(component, relativePos);
 }
 
-bool CommandList::SetSize(UIComponent* component, const XMUINT2& size)
+bool UICommandList::SetSize(UIComponent* component, const XMUINT2& size)
 {
 	return ApplyCommand<SetSizeCommand>(component, size);
 }
 
-bool CommandList::RenameRegion(UIComponent* component, const string& region)
+bool UICommandList::RenameRegion(UIComponent* component, const string& region)
 {
 	return ApplyCommand<RenameRegionCommand>(component, region);
 }
 
-bool CommandList::Rename(UIComponent* component, const string& name)
+bool UICommandList::Rename(UIComponent* component, const string& name)
 {
 	return ApplyCommand<RenameCommand>(component, name);
 }
 
-//bool CommandList::SetSource(ImageGrid1* imgGrid1, const Rectangle& source)
+//bool UICommandList::SetSource(ImageGrid1* imgGrid1, const Rectangle& source)
 //{
 //	return ApplyCommand<SetSourceCommand>(imgGrid1, source);
 //}
 ////Variant를 안쓰고 그냥 UIComponent* 로 받아서 처리할려고 했는데 별반 다르지 않았다.
 ////오히려 아무 Component가 들어오는 인상을 주기 때문에 그걸 걸러내는 추가적인 작업만 생긴다.
-//bool CommandList::SetSources(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources)
+//bool UICommandList::SetSources(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources)
 //{
 //	return ApplyCommand<SetSource39Command>(imgGridVariant, sources);
 //}
 
-//bool CommandList::SetFilename(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename)
+//bool UICommandList::SetFilename(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename)
 //{
 //	return ApplyCommand<SetFilenameCommand>(imgGridVariant, renderer, filename);
 //}
 
-//bool CommandList::SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider)
+//bool UICommandList::SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider)
 //{
 //	return ApplyCommand<SetSourceAndDividerCommand>(imgGridVariant, srcDivider);
 //}
 
-bool CommandList::SetText(TextArea* textArea, const wstring& text)
+bool UICommandList::SetText(TextArea* textArea, const wstring& text)
 {
 	return ApplyCommand<SetTextCommand>(textArea, text);
 }

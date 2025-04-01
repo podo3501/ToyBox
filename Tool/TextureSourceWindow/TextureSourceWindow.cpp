@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "MainTextureWindow.h"
+#include "TextureSourceWindow.h"
 #include "EditFontTexture.h"
 #include "EditSourceTexture.h"
 #include "../Utility.h"
@@ -10,12 +10,12 @@
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/UIComponent/UIUtility.h"
 
-MainTextureWindow::~MainTextureWindow()
+TextureSourceWindow::~TextureSourceWindow()
 {
     m_renderer->RemoveImguiComponent(this);
 }
 
-MainTextureWindow::MainTextureWindow(IRenderer* renderer) :
+TextureSourceWindow::TextureSourceWindow(IRenderer* renderer) :
     InnerWindow{ "empty" },
     m_renderer{ renderer },
     m_sourceTexture{ nullptr },
@@ -25,7 +25,7 @@ MainTextureWindow::MainTextureWindow(IRenderer* renderer) :
     m_renderer->AddImguiComponent(this);
 }
 
-bool MainTextureWindow::CreateNew()
+bool TextureSourceWindow::CreateNew()
 {
     m_sourceBinder = CreateSourceBinder();
     ReturnIfFalse(m_sourceBinder);
@@ -36,13 +36,13 @@ bool MainTextureWindow::CreateNew()
     return true;
 }
 
-void MainTextureWindow::SetTexture(ImageGrid1* texture) noexcept 
+void TextureSourceWindow::SetTexture(ImageGrid1* texture) noexcept 
 { 
     m_sourceTexture = texture;
     (texture) ? SetName(WStringToString(texture->GetFilename())) : SetName("empty");
 }
 
-bool MainTextureWindow::Create(const wstring& filename)
+bool TextureSourceWindow::Create(const wstring& filename)
 {
     m_sourceBinder = CreateSourceBinder(filename);
     ReturnIfFalse(m_sourceBinder);
@@ -53,7 +53,7 @@ bool MainTextureWindow::Create(const wstring& filename)
     return true;
 }
 
-void MainTextureWindow::Update()
+void TextureSourceWindow::Update()
 {
     if (!m_window) return;
     SetMouseStartOffset(m_window);
@@ -62,13 +62,13 @@ void MainTextureWindow::Update()
     m_editSourceTexture->Update();
 }
 
-ImVec2 MainTextureWindow::GetWindowSize() const noexcept
+ImVec2 TextureSourceWindow::GetWindowSize() const noexcept
 {
     if (!m_sourceTexture) return ImVec2{ 512, 512 };
     return XMUINT2ToImVec2(m_sourceTexture->GetSize());
 }
 
-void MainTextureWindow::Render(ImGuiIO* io)
+void TextureSourceWindow::Render(ImGuiIO* io)
 {
     if (!m_isOpen) return;
 
@@ -92,7 +92,7 @@ void MainTextureWindow::Render(ImGuiIO* io)
     ImGui::End();
 }
 
-void MainTextureWindow::RenderSourceWindow()
+void TextureSourceWindow::RenderSourceWindow()
 {
     string wndName = string("Texture Source Window");
     ImGui::Begin(wndName.c_str(), nullptr, ImGuiWindowFlags_NoFocusOnAppearing);
@@ -106,12 +106,12 @@ void MainTextureWindow::RenderSourceWindow()
     ImGui::End();
 }
 
-bool MainTextureWindow::SaveScene(const wstring& filename)
+bool TextureSourceWindow::SaveScene(const wstring& filename)
 {
     return m_sourceBinder->Save(filename);
 }
 
-wstring MainTextureWindow::GetSaveFilename() const noexcept
+wstring TextureSourceWindow::GetSaveFilename() const noexcept
 {
     return m_sourceBinder->GetJsonFilename();
 }

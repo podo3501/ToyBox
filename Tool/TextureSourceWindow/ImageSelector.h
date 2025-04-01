@@ -1,7 +1,7 @@
 #pragma once
 
 enum class ImagePart;
-class MainTextureWindow;
+class TextureSourceWindow;
 class TextureSourceBinder;
 struct TextureSourceInfo;
 class ImageGrid1;
@@ -10,7 +10,7 @@ class ImageSelector
 {
 public:
 	~ImageSelector();
-	ImageSelector(MainTextureWindow* textureWindow);
+	ImageSelector(TextureSourceWindow* textureWindow);
 
 	void Update();
 	void Render();
@@ -33,7 +33,7 @@ private:
 
 	ImageGrid1* m_sourceTexture;
 	TextureSourceBinder* m_sourceBinder;
-	MainTextureWindow* m_textureWindow;
+	TextureSourceWindow* m_textureWindow;
 	unique_ptr<RenameNotifier> m_renameNotifier;
 	ImagePart m_selectImagePart;
 	vector<Rectangle> m_areaList; //자동으로 찾아놓은 구역들

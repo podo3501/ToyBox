@@ -158,10 +158,6 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="HelperClass.cpp" />
     <ClCompile Include="InnerWindow.cpp" />
-    <ClCompile Include="MainTextureWindow\EditFontTexture.cpp" />
-    <ClCompile Include="MainTextureWindow\EditSourceTexture.cpp" />
-    <ClCompile Include="MainTextureWindow\ImageSelector.cpp" />
-    <ClCompile Include="MainTextureWindow\MainTextureWindow.cpp" />
     <ClCompile Include="MainWindow\ComponentController.cpp" />
     <ClCompile Include="MainWindow\ComponentSelector.cpp" />
     <ClCompile Include="MainWindow\EditUtility.cpp" />
@@ -196,6 +192,10 @@
     <ClCompile Include="Menu\RecentFiles.cpp" />
     <ClCompile Include="Menu\MenuHelper.cpp" />
     <ClCompile Include="Dialog.cpp" />
+    <ClCompile Include="TextureSourceWindow\EditFontTexture.cpp" />
+    <ClCompile Include="TextureSourceWindow\EditSourceTexture.cpp" />
+    <ClCompile Include="TextureSourceWindow\ImageSelector.cpp" />
+    <ClCompile Include="TextureSourceWindow\TextureSourceWindow.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="GuiWidget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -218,10 +218,6 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="HelperClass.h" />
     <ClInclude Include="InnerWindow.h" />
-    <ClInclude Include="MainTextureWindow\EditFontTexture.h" />
-    <ClInclude Include="MainTextureWindow\EditSourceTexture.h" />
-    <ClInclude Include="MainTextureWindow\ImageSelector.h" />
-    <ClInclude Include="MainTextureWindow\MainTextureWindow.h" />
     <ClInclude Include="MainWindow\ComponentController.h" />
     <ClInclude Include="MainWindow\ComponentSelector.h" />
     <ClInclude Include="MainWindow\EditUtility.h" />
@@ -256,6 +252,10 @@
     <ClInclude Include="Menu\RecentFiles.h" />
     <ClInclude Include="Menu\MenuHelper.h" />
     <ClInclude Include="Dialog.h" />
+    <ClInclude Include="TextureSourceWindow\EditFontTexture.h" />
+    <ClInclude Include="TextureSourceWindow\EditSourceTexture.h" />
+    <ClInclude Include="TextureSourceWindow\ImageSelector.h" />
+    <ClInclude Include="TextureSourceWindow\TextureSourceWindow.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="GuiWidget.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

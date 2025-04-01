@@ -8,7 +8,7 @@ class EditTextArea : public EditWindow
 public:
 	~EditTextArea();
 	EditTextArea() = delete;
-	EditTextArea(TextArea* textArea, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept;
+	EditTextArea(TextArea* textArea, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept;
 
 protected:
 	virtual void RenderComponent() override;

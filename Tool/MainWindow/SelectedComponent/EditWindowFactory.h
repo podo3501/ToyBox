@@ -4,22 +4,22 @@ struct IRenderer;
 class TextureSourceBinder;
 class EditWindow;
 class UIComponent;
-class CommandList;
+class UICommandList;
 enum class ComponentID;
 
 class EditWindowFactory 
 {
-    using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, TextureSourceBinder*, CommandList*)>;
+    using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, TextureSourceBinder*, UICommandList*)>;
 
 public:
     static void RegisterFactories();
     static unique_ptr<EditWindow> CreateEditWindow(UIComponent* component, 
-        IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList);
+        IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList);
 
 private:
     static inline void Register(ComponentID id, FactoryFunction factory) noexcept { (*m_factoryMap)[id] = factory; }
     static unique_ptr<EditWindow> Create(UIComponent* component, 
-        IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList);
+        IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList);
 
     template <typename EditType, typename ComponentType, typename... Args>
     static unique_ptr<EditWindow> CreateEdit(UIComponent* component, Args&&... args)
@@ -30,7 +30,7 @@ private:
     template <typename EditType, typename ComponentType>
     static void RegisterEditWindow(ComponentID id)
     {
-        Register(id, [](UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) {
+        Register(id, [](UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList) {
             return CreateEdit<EditType, ComponentType>(component, sourceBinder, cmdList);
             });
     }
@@ -38,7 +38,7 @@ private:
     template <typename EditType, typename ComponentType>
     static void RegisterEditWindowWithRenderer(ComponentID id)
     {
-        Register(id, [](UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) {
+        Register(id, [](UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList) {
             return CreateEdit<EditType, ComponentType>(component, renderer, sourceBinder, cmdList);
             });
     }

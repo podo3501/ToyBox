@@ -58,7 +58,7 @@
     <ClInclude Include="UserInterface\Command\Command.h">
       <Filter>UserInterface\Command</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\Command\CommandList.h">
+    <ClInclude Include="UserInterface\Command\UICommandList.h">
       <Filter>UserInterface\Command</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\Command\CommandRegistry.h">
@@ -183,7 +183,7 @@
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="UserInterface\Command\CommandList.cpp">
+    <ClCompile Include="UserInterface\Command\UICommandList.cpp">
       <Filter>UserInterface\Command</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\Command\CommandRegistry.cpp">

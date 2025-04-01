@@ -8,7 +8,7 @@ class EditScrollSlider : public EditWindow
 public:
 	~EditScrollSlider();
 	EditScrollSlider() = delete;
-	EditScrollSlider(ScrollSlider* scrollSlider, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept;
+	EditScrollSlider(ScrollSlider* scrollSlider, IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept;
 
 private:
 	ScrollSlider* m_scrollSlider;

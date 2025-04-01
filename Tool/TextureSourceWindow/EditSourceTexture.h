@@ -7,7 +7,7 @@ class ImageGrid1;
 struct TextureSourceInfo;
 class TextureLoadBinder;
 class TextureSourceBinder;
-class MainTextureWindow;
+class TextureSourceWindow;
 class RenameNotifier;
 class ImageSelector;
 
@@ -15,7 +15,7 @@ class EditSourceTexture
 {
 public:
     ~EditSourceTexture();
-    EditSourceTexture(IRenderer* renderer, MainTextureWindow* textureWindow);
+    EditSourceTexture(IRenderer* renderer, TextureSourceWindow* textureWindow);
 
     void Update() noexcept;
     void Render();
@@ -36,7 +36,7 @@ private:
     void RenderTextureList();
     
     IRenderer* m_renderer;
-    MainTextureWindow* m_textureWindow;
+    TextureSourceWindow* m_textureWindow;
     unique_ptr<TextureLoadBinder> m_textureLoader;
     TextureSourceBinder* m_sourceBinder;
     unique_ptr<ImageSelector> m_imageSelector;

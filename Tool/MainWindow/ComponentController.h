@@ -5,7 +5,7 @@ class TextureSourceBinder;
 class UIComponent;
 class FloatingComponent;
 class ComponentSelector;
-class CommandList;
+class UICommandList;
 
 class ComponentController
 {
@@ -30,7 +30,7 @@ private:
 	bool CheckRedoComponent() noexcept;
 
 	ImGuiWindow* m_mainWnd;
-	unique_ptr<CommandList> m_cmdList;
+	unique_ptr<UICommandList> m_cmdList;
 	unique_ptr<FloatingComponent> m_floater;
 	unique_ptr<ComponentSelector> m_selector;
 	bool m_active{ true };

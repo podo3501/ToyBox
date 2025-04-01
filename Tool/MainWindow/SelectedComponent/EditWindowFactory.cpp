@@ -23,7 +23,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
 
-using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, TextureSourceBinder*, CommandList*)>;
+using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, TextureSourceBinder*, UICommandList*)>;
 optional<unordered_map<ComponentID, FactoryFunction>> EditWindowFactory::m_factoryMap{ nullopt };
 
 void EditWindowFactory::RegisterFactories()
@@ -36,7 +36,7 @@ void EditWindowFactory::RegisterFactories()
     RegisterEditWindow<EditButton, Button*>(ComponentID::Button);
     RegisterEditWindow<EditTextArea, TextArea*>(ComponentID::TextArea);
     RegisterEditWindow<EditContainer, Container*>(ComponentID::Container);
-    //UIComponent*, CommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
+    //UIComponent*, UICommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 
     RegisterEditWindowWithRenderer<EditImageGrid1, ImageGrid1*>(ComponentID::ImageGrid1);
     RegisterEditWindowWithRenderer<EditImageGrid3, ImageGrid3*>(ComponentID::ImageGrid3);
@@ -46,10 +46,10 @@ void EditWindowFactory::RegisterFactories()
     RegisterEditWindowWithRenderer<EditScrollSlider, ScrollSlider*>(ComponentID::ScrollSlider);
     RegisterEditWindowWithRenderer<EditScrollBar, ScrollBar*>(ComponentID::ScrollBar);
     RegisterEditWindowWithRenderer<EditImageSwitcher, ImageSwitcher*>(ComponentID::ImageSwitcher);
-    //UIComponent*, IRenderer*, CommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
+    //UIComponent*, IRenderer*, UICommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 }
 
-unique_ptr<EditWindow> EditWindowFactory::Create(UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList)
+unique_ptr<EditWindow> EditWindowFactory::Create(UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList)
 {
     if (!component) return nullptr;
 
@@ -62,7 +62,7 @@ unique_ptr<EditWindow> EditWindowFactory::Create(UIComponent* component, IRender
 }
 
 unique_ptr<EditWindow> EditWindowFactory::CreateEditWindow(UIComponent* component, 
-    IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList)
+    IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList)
 {
     return Create(component, renderer, sourceBinder, cmdList);
 }

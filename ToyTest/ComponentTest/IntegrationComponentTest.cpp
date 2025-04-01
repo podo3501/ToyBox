@@ -9,7 +9,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
-#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureLoadBinder.h"
 #include "../TestHelper.h"
@@ -259,10 +259,15 @@ namespace UserInterfaceTest
 		EXPECT_EQ(*m_sourceBinder, *sourceBinder);
 	}
 
-	//////////////////////////////////////////////////////////
-	TEST_F(IntegrationTest, UndoRedo)
+	TEST_F(IntegrationTest, TextureSourceBinderUndoRedo)
 	{
-		CommandList cmdList;
+
+	}
+
+	//////////////////////////////////////////////////////////
+	TEST_F(IntegrationTest, UserInterfaceUndoRedo)
+	{
+		UICommandList cmdList;
 		vector<unique_ptr<UIComponent>> history;
 		UIComponent* panel = m_panel.get();
 		CaptureSnapshot(cmdList, history);

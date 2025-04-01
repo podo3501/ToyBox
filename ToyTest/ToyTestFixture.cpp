@@ -5,7 +5,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -122,12 +122,12 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 	return CompareUniquePtr(original, clone);
 }
 
-void IntegrationTest::CaptureSnapshot(CommandList& cmdList, vector<unique_ptr<UIComponent>>& history)
+void IntegrationTest::CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history)
 {
 	history.emplace_back(m_panel->Clone());
 }
 
-void IntegrationTest::VerifyUndoRedo(CommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
+void IntegrationTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
 {
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
 		cmdList.Undo();

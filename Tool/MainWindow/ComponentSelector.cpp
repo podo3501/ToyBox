@@ -8,11 +8,11 @@
 #include "../Toy/Utility.h"
 #include "../Dialog.h"
 #include "../Utility.h"
-#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList.h"
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, 
-	TextureSourceBinder* sourceBinder, CommandList* cmdList, UIComponent* panel) :
+	TextureSourceBinder* sourceBinder, UICommandList* cmdList, UIComponent* panel) :
 	m_renderer{ renderer },
 	m_sourceBinder{ sourceBinder },
 	m_cmdList{ cmdList },
@@ -120,7 +120,7 @@ void ComponentSelector::RepeatedSelection(const vector<UIComponent*>& componentL
 	SetComponent(componentList[idx]);
 }
 
-bool AttachSelectedComponent(CommandList* cmdList, ComponentSelector* selector, FloatingComponent* floater,
+bool AttachSelectedComponent(UICommandList* cmdList, ComponentSelector* selector, FloatingComponent* floater,
 	const XMINT2& position) noexcept
 {
 	UIComponent* selectComponent = selector->GetComponent();
@@ -135,7 +135,7 @@ bool AttachSelectedComponent(CommandList* cmdList, ComponentSelector* selector, 
 	return true;
 }
 
-unique_ptr<UIComponent> DetachSelectedComponent(CommandList* cmdList, ComponentSelector* selector) noexcept
+unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList, ComponentSelector* selector) noexcept
 {
 	UIComponent* selectComponent = selector->GetComponent();
 	if (!selectComponent) return nullptr;

@@ -2,7 +2,7 @@
 #include "Utility.h"
 #include "MainWindow/FloatingComponent.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
-#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList.h"
 #include "../Toy/Utility.h"
 #include "../Toy/InputManager.h"
 
@@ -87,7 +87,7 @@ void DrawRectangles(const ImGuiWindow* window, const vector<Rectangle>& rects,
 		});
 }
 
-bool AddComponentFromScreenPos(CommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept
+bool AddComponentFromScreenPos(UICommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept
 {
 	const XMINT2& comPos = addable->GetPosition();
 	XMINT2 relativePos = pos - comPos;

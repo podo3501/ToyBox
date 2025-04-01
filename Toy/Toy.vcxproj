@@ -218,7 +218,7 @@
     <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="UserInterface\Command\Command.h" />
-    <ClInclude Include="UserInterface\Command\CommandList.h" />
+    <ClInclude Include="UserInterface\Command\UICommandList.h" />
     <ClInclude Include="UserInterface\Command\CommandRegistry.h" />
     <ClInclude Include="UserInterface\Command\CommandType.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonHelper.h" />
@@ -267,7 +267,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
-    <ClCompile Include="UserInterface\Command\CommandList.cpp" />
+    <ClCompile Include="UserInterface\Command\UICommandList.cpp" />
     <ClCompile Include="UserInterface\Command\CommandRegistry.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp" />

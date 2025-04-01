@@ -1,7 +1,7 @@
 #pragma once
 
 struct IRenderer;
-class CommandList;
+class UICommandList;
 class UIComponent;
 class TextureSourceBinder;
 class RenameNotifier;
@@ -15,7 +15,7 @@ class EditWindow
 {
 public:
 	EditWindow() = delete;
-	EditWindow(UIComponent* component, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept;
+	EditWindow(UIComponent* component, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept;
 	virtual ~EditWindow();
 	
 	void Update(bool mainWndFocus);
@@ -27,7 +27,7 @@ protected:
 	virtual void UpdateComponent() {};
 	virtual void RenderComponent() {};
 
-	inline CommandList* GetCommandList() const noexcept { return m_cmdList; }
+	inline UICommandList* GetUICommandList() const noexcept { return m_cmdList; }
 	inline UIComponent* GetComponent() const noexcept { return m_component; }
 	inline TextureSourceBinder* GetTextureSourceBinder() const noexcept { return m_sourceBinder; }
 
@@ -39,7 +39,7 @@ private:
 
 	UIComponent* m_component;
 	TextureSourceBinder* m_sourceBinder;
-	CommandList* m_cmdList;
+	UICommandList* m_cmdList;
 	unique_ptr<RenameNotifier> m_renameNotifier;
 	bool m_visible{ true };
 	OnDrag m_dragState;
@@ -51,7 +51,7 @@ class EditPanel : public EditWindow
 public:
 	~EditPanel();
 	EditPanel() = delete;
-	EditPanel(Panel* panel, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept;
+	EditPanel(Panel* panel, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept;
 	//virtual void SetComponent(UIComponent* component);
 	//virtual void Render();
 

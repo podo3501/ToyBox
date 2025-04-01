@@ -5,14 +5,14 @@
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid3.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
-#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/Utility.h"
 #include "../../EditUtility.h"
 #include "../SourceExtractor.h"
 
 //static unique_ptr<TextureWindow> CreateTextureWindow(IRenderer* renderer, 
-//    const wstring& filename, UIComponent* component, CommandList* cmdList)
+//    const wstring& filename, UIComponent* component, UICommandList* cmdList)
 //{
 //    unique_ptr<TextureWindow> textureWindow = make_unique<TextureWindow>(renderer,
 //        CreateSourceExtractor(renderer, filename, component, cmdList));
@@ -24,7 +24,7 @@
 ////////////////////////////////////////////////////////
 //
 //EditImageGrid::~EditImageGrid() = default;
-//EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+//EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
 //    EditWindow{ component, sourceBinder, cmdList },
 //    m_renderer{ renderer }
 //{}
@@ -33,7 +33,7 @@
 //{
 //    if (!m_textureWindow && !m_filename.empty())
 //    {
-//        m_textureWindow = CreateTextureWindow(m_renderer, m_filename, GetComponent(), GetCommandList());
+//        m_textureWindow = CreateTextureWindow(m_renderer, m_filename, GetComponent(), GetUICommandList());
 //        m_filename.clear();
 //    }
 //
@@ -89,7 +89,7 @@ static void ChangeKeyFromComboBox(const vector<string>& texKeys, const string& c
 //////////////////////////////////////////////////////
 
 EditImageGrid1::~EditImageGrid1() = default;
-EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer*, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer*, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
     EditWindow{ imgGrid1, sourceBinder, cmdList },
     m_imageGrid1{ imgGrid1 }
 {}
@@ -108,7 +108,7 @@ void EditImageGrid1::RenderComponent()
 ////////////////////////////////////////////////
 
 EditImageGrid3::~EditImageGrid3() = default;
-EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer*, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer*, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
     EditWindow{ imgGrid3, sourceBinder, cmdList },
     m_imageGrid3{ imgGrid3 }
 {}
@@ -130,7 +130,7 @@ void EditImageGrid3::RenderComponent()
 ////////////////////////////////////////////////
 
 EditImageGrid9::~EditImageGrid9() = default;
-EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer*, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer*, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
     EditWindow{ imgGrid9, sourceBinder, cmdList },
     m_imageGrid9{ imgGrid9 }
 {}

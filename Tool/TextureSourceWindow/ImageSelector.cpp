@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ImageSelector.h"
-#include "MainTextureWindow.h"
+#include "TextureSourceWindow.h"
 #include "../MainWindow/EditUtility.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
@@ -11,7 +11,7 @@
 #include "../HelperClass.h"
 
 ImageSelector::~ImageSelector() = default;
-ImageSelector::ImageSelector(MainTextureWindow* textureWindow) :
+ImageSelector::ImageSelector(TextureSourceWindow* textureWindow) :
     m_sourceTexture{ nullptr },
     m_sourceBinder{ nullptr },
     m_textureWindow{ textureWindow },

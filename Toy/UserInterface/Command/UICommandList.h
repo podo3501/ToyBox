@@ -7,11 +7,11 @@ class UIComponent;
 class TextArea;
 struct SourceDivider;
 
-class CommandList
+class UICommandList
 {
 public:
-	~CommandList();
-	CommandList();
+	~UICommandList();
+	UICommandList();
 
 	bool Undo() noexcept;
 	bool Redo() noexcept;

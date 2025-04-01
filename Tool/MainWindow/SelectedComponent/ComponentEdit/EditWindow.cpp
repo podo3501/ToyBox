@@ -3,7 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList.h"
 #include "../Toy/InputManager.h"
 #include "../../EditUtility.h"
 #include "../../../HelperClass.h"
@@ -19,7 +19,7 @@ enum class OnDrag
 };
 
 EditWindow::~EditWindow() = default;
-EditWindow::EditWindow(UIComponent* component, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept:
+EditWindow::EditWindow(UIComponent* component, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept:
 	m_component{ component },
     m_sourceBinder{ sourceBinder },
     m_cmdList{ cmdList },
@@ -175,7 +175,7 @@ void EditWindow::Render(const ImGuiWindow* mainWindow)
 //////////////////////////////////////////////////////////
 
 EditPanel::~EditPanel() = default;
-EditPanel::EditPanel(Panel* panel, TextureSourceBinder* sourceBinder, CommandList* cmdList) noexcept :
+EditPanel::EditPanel(Panel* panel, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
     EditWindow{ panel, sourceBinder, cmdList }
 {
 }

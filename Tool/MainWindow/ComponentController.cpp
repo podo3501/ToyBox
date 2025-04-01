@@ -5,7 +5,7 @@
 #include "ComponentSelector.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList.h"
 #include "../Dialog.h"
 #include "../Utility.h"
 
@@ -13,7 +13,7 @@ ComponentController::~ComponentController() = default;
 ComponentController::ComponentController(IRenderer* renderer, TextureSourceBinder* sourceBinder,
 	UIComponent* panel, const string& mainWndNam) noexcept :
 	m_mainWnd{ nullptr },
-	m_cmdList{ make_unique<CommandList>() },
+	m_cmdList{ make_unique<UICommandList>() },
 	m_floater{ make_unique<FloatingComponent>(renderer, sourceBinder, mainWndNam) },
 	m_selector{ make_unique<ComponentSelector>(renderer, sourceBinder, m_cmdList.get(), panel) }
 {}
