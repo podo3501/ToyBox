@@ -38,6 +38,12 @@
     <Filter Include="UserInterface\JsonOperation">
       <UniqueIdentifier>{020a7932-c2c6-4920-a17c-83730d5afeb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserInterface\Command\UICommandList">
+      <UniqueIdentifier>{de39c0e5-0931-4d4a-9551-cd7c988bb33c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\Command\TexSrcCommandList">
+      <UniqueIdentifier>{64301718-dc02-4106-9111-62b494bbd9ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -56,12 +62,6 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="UserInterface\Command\Command.h">
-      <Filter>UserInterface\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\UICommandList.h">
-      <Filter>UserInterface\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\CommandRegistry.h">
       <Filter>UserInterface\Command</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\Command\CommandType.h">
@@ -172,6 +172,21 @@
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp">
       <Filter>UserInterface\JsonOperation</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\Command\CommandList.h">
+      <Filter>UserInterface\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Command\UICommandList\UICommandList.h">
+      <Filter>UserInterface\Command\UICommandList</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandList.h">
+      <Filter>UserInterface\Command\TexSrcCommandList</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandRegistry.h">
+      <Filter>UserInterface\Command\TexSrcCommandList</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Command\UICommandList\UICommandRegistry.h">
+      <Filter>UserInterface\Command\UICommandList</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -183,12 +198,6 @@
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="UserInterface\Command\UICommandList.cpp">
-      <Filter>UserInterface\Command</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Command\CommandRegistry.cpp">
-      <Filter>UserInterface\Command</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\TextureSourceBinder\TextureSourceBinder.cpp">
       <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClCompile>
@@ -290,6 +299,18 @@
     </ClCompile>
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation_impl.cpp">
       <Filter>UserInterface\JsonOperation</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Command\UICommandList\UICommandList.cpp">
+      <Filter>UserInterface\Command\UICommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandList.cpp">
+      <Filter>UserInterface\Command\TexSrcCommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandRegistry.cpp">
+      <Filter>UserInterface\Command\TexSrcCommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Command\UICommandList\UICommandRegistry.cpp">
+      <Filter>UserInterface\Command\UICommandList</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

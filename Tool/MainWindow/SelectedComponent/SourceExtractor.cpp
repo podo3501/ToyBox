@@ -5,7 +5,7 @@
 #include "../Toy/UserInterface/Component/ImageGrid1.h"
 #include "../Toy/UserInterface/Component/ImageGrid3.h"
 #include "../Toy/UserInterface/Component/ImageGrid9.h"
-#include "../Toy/UserInterface/Command/CommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList.h"
 #include "../Toy/InputManager.h"
 #include "../../Utility.h"
 #include "../Toy/Config.h"

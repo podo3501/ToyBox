@@ -1,57 +1,40 @@
 #pragma once
 
-class UIComponent;
-
-enum class CommandID : int
-{
-	AttachComponent,
-	DetachComponent,
-	SetRelativePosition,
-	SetSize,
-	SetRegion,
-	Rename,
-	SetSource,
-	SetSource39,
-	SetFilename,
-	SetSourceAndDivider,
-	SetText,
-	Unknown
-};
-
+template <typename TID, typename TargetType>
 class Command
 {
 public:
-	virtual ~Command() = default;
-	
-	virtual bool Execute() = 0;
-	virtual bool Undo() = 0; //Undo와 Redo는 false를 리턴할 가능성이 별로 없다. 하지만 리소스가 삭제되었다거나 해서 false가 나올수 있다.
-	virtual bool Redo() = 0;
-	virtual unique_ptr<Command> Merge(unique_ptr<Command> other) noexcept;
+    virtual ~Command() = default;
+
+    virtual bool Execute() = 0;
+    virtual bool Undo() = 0;
+    virtual bool Redo() = 0;
+    unique_ptr<Command> Merge(unique_ptr<Command> other) noexcept
+    {
+        if (!other || !IsMerge(other.get()))
+            return other;
+
+        PostMerge(move(other));
+        return nullptr;
+    }
 
 protected:
-	Command(UIComponent* component) : m_component{ component } {} //자식을 통하지 않고서는 객체의 생성을 할 수 없다.
-	virtual CommandID GetTypeID() const noexcept = 0;
+    explicit Command(TargetType* target)
+        : m_target{ target }
+    {}
+    virtual TID GetTypeID() const noexcept = 0;
+    virtual bool IsMerge(Command<TID, TargetType>* other) noexcept
+    {
+        return other
+            && GetTypeID() == other->GetTypeID()
+            && m_target == other->m_target;
+    }
+    virtual void PostMerge(unique_ptr<Command<TID, TargetType>>) noexcept {}
 
-	virtual bool IsMerge(Command* other) noexcept;
-	virtual void PostMerge(unique_ptr<Command>) noexcept {};
-	inline UIComponent* GetComponent() noexcept { return m_component; }
-	
+    TargetType* GetTarget() noexcept { return m_target; }
+
 private:
-	UIComponent* m_component;
+    TargetType* m_target;
 };
 
-inline unique_ptr<Command> Command::Merge(unique_ptr<Command> other) noexcept
-{
-	if (!IsMerge(other.get())) return other;
-
-	PostMerge(move(other));
-	return nullptr;
-}
-
-inline bool Command::IsMerge(Command* other) noexcept
-{
-	if (GetTypeID() != other->GetTypeID()) return false;
-	if (m_component != other->m_component) return false;
-
-	return true;
-}
+#include "CommandType.h"

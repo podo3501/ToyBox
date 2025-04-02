@@ -1,22 +1,10 @@
 #pragma once
-#include "Command.h"
-#include "CommandType.h"
-#include "../UIComponent/UIType.h"
+#include "../Command.h"
+#include "../CommandType.h"
+#include "../../UIComponent/UIType.h"
 
 class UIComponent;
-
-template <typename T>
-class CommandRecord
-{
-public:
-	CommandRecord(const T& curr) noexcept : current{ curr } {}
-	CommandRecord(T&& curr) noexcept : current(move(curr)) {}
-
-	T current{};
-	T previous{};
-};
-
-class AttachComponentCommand : public Command
+class AttachComponentCommand : public UICommand
 {
 public:
 	AttachComponentCommand(UIComponent* parent, unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
@@ -28,8 +16,8 @@ public:
 	unique_ptr<UIComponent> GetFailureResult() noexcept;
 
 protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::AttachComponent; }
-	virtual bool IsMerge(Command*) noexcept { return false; }
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::AttachComponent; }
+	virtual bool IsMerge(UICommand*) noexcept { return false; }
 
 private:
 	UIComponent* m_parent;
@@ -39,7 +27,7 @@ private:
 	unique_ptr<UIComponent> m_failureResult;
 };
 
-class DetachComponentCommand : public Command
+class DetachComponentCommand : public UICommand
 {
 public:
 	DetachComponentCommand(UIComponent* detach) noexcept;
@@ -51,8 +39,8 @@ public:
 	pair<unique_ptr<UIComponent>, UIComponent*> GetResult() noexcept;
 
 protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::DetachComponent; }
-	virtual bool IsMerge(Command*) noexcept { return false; }
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::DetachComponent; }
+	virtual bool IsMerge(UICommand*) noexcept { return false; }
 
 private:
 	UIComponent* m_detach;
@@ -62,7 +50,7 @@ private:
 	pair<unique_ptr<UIComponent>, UIComponent*> m_result;
 };
 
-class SetRelativePositionCommand : public Command
+class SetRelativePositionCommand : public UICommand
 {
 public:
 	SetRelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept;
@@ -72,14 +60,14 @@ public:
 	virtual bool Redo() override;
 
 protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetRelativePosition; }
-	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::SetRelativePosition; }
+	virtual void PostMerge(unique_ptr<UICommand> other) noexcept override;
 
 private:
 	CommandRecord<XMINT2> m_record;
 };
 
-class SetSizeCommand : public Command
+class SetSizeCommand : public UICommand
 {
 public:
 	SetSizeCommand(UIComponent* component, const XMUINT2& size) noexcept;
@@ -89,14 +77,14 @@ public:
 	virtual bool Redo() override;
 
 protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetSize; }
-	virtual void PostMerge(unique_ptr<Command> other) noexcept override;
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::SetSize; }
+	virtual void PostMerge(unique_ptr<UICommand> other) noexcept override;
 
 private:
 	CommandRecord<XMUINT2> m_record;
 };
 
-class RenameRegionCommand : public Command
+class RenameRegionCommand : public UICommand
 {
 public:
 	RenameRegionCommand(UIComponent* component, const string& region) noexcept;
@@ -106,14 +94,14 @@ public:
 	virtual bool Redo() override;
 
 protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetRegion; }
-	virtual bool IsMerge(Command*) noexcept { return false; }
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::SetRegion; }
+	virtual bool IsMerge(UICommand*) noexcept { return false; }
 
 private:
 	CommandRecord<string> m_record;
 };
 
-class RenameCommand : public Command
+class RenameCommand : public UICommand
 {
 public:
 	RenameCommand(UIComponent* component, const string& name) noexcept;
@@ -123,8 +111,8 @@ public:
 	virtual bool Redo() override;
 
 protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::Rename; }
-	virtual bool IsMerge(Command*) noexcept { return false; }
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::Rename; }
+	virtual bool IsMerge(UICommand*) noexcept { return false; }
 
 private:
 	CommandRecord<string> m_record;
@@ -216,7 +204,7 @@ private:
 //};
 
 class TextArea;
-class SetTextCommand : public Command
+class SetTextCommand : public UICommand
 {
 public:
 	SetTextCommand(TextArea* textArea, const wstring& text) noexcept;
@@ -226,8 +214,8 @@ public:
 	virtual bool Redo() override;
 
 protected:
-	virtual CommandID GetTypeID() const noexcept override { return CommandID::SetText; }
-	virtual bool IsMerge(Command*) noexcept { return false; }
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::SetText; }
+	virtual bool IsMerge(UICommand*) noexcept { return false; }
 
 private:
 	CommandRecord<wstring> m_record;

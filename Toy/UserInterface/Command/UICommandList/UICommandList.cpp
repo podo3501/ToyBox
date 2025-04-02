@@ -1,84 +1,17 @@
 #include "pch.h"
 #include "UICommandList.h"
-#include "Command.h"
-#include "CommandRegistry.h"
-#include "../UIComponent/UIComponent.h"
-#include "../../Utility.h"
-#include "../UIComponent/UIType.h"
+#include "UICommandRegistry.h"
+#include "../../UIComponent/UIComponent.h"
+#include "../../../Utility.h"
+#include "../../UIComponent/UIType.h"
 
 UICommandList::~UICommandList() = default;
 UICommandList::UICommandList() = default;
 
-bool UICommandList::Undo() noexcept
-{
-	if (m_index < 0) return true;
-
-	auto& cmd = m_commandList[m_index];
-	auto result = cmd->Undo();
-	
-	if (!result)
-	{
-		AssertMsg(false, "Undo함수는 실행하는 것을 돌리는 것이기 때문에 실패해서는 안된다.");
-		return result;
-	}
-
-	m_index--;
-	return true;
-}
-
-bool UICommandList::Redo() noexcept
-{
-	if (m_index + 1 >= static_cast<int>(m_commandList.size())) return true;
-
-	auto& cmd = m_commandList[m_index + 1];
-	auto result = cmd->Redo();
-
-	if (!result)
-	{
-		AssertMsg(false, "Redo함수는 실행했던 것을 다시 실행하는 것이기 때문에 실패해서는 안된다.");
-		return result;
-	}
-
-	m_index++;
-	return true;
-}
-
-unique_ptr<Command> UICommandList::TryMergeCommand(unique_ptr<Command> cmd) noexcept
-{
-	if (m_commandList.empty()) return cmd;
-
-	auto& preCmd = m_commandList.back();
-	return preCmd->Merge(move(cmd));
-}
-
-void UICommandList::AddOrMergeCommand(unique_ptr<Command> command) noexcept
-{
-	if (m_index < static_cast<int>(m_commandList.size()) - 1)
-		m_commandList.resize(m_index + 1);
-
-	//Merge를 시도하고 실패하면 command는 다시 돌려준다. 
-	// 아니면 IsMerge를 불러줘야 하는데 최대한 public 함수를 안 내놓는게 좋은 코딩법이다.
-	command = TryMergeCommand(move(command));
-	if (!command) return;
-
-	m_commandList.emplace_back(move(command));
-	m_index++;
-}
-
-template <typename CommandType, typename... ParamTypes>
-bool UICommandList::ApplyCommand(ParamTypes&&... params)
-{
-	unique_ptr<Command> command = make_unique<CommandType>(forward<ParamTypes>(params)...);
-	ReturnIfFalse(command->Execute());
-
-	AddOrMergeCommand(move(command));
-	return true;
-}
-
 unique_ptr<UIComponent> UICommandList::AttachComponent(UIComponent* addable, 
 	unique_ptr<UIComponent> component, const XMINT2& relativePos)
 {
-	unique_ptr<Command> command = make_unique<AttachComponentCommand>(addable, move(component), relativePos);
+	unique_ptr<UICommand> command = make_unique<AttachComponentCommand>(addable, move(component), relativePos);
 	if (!command->Execute())
 	{
 		auto attachCmd = static_cast<AttachComponentCommand*>(command.get());
@@ -91,7 +24,7 @@ unique_ptr<UIComponent> UICommandList::AttachComponent(UIComponent* addable,
 
 pair<unique_ptr<UIComponent>, UIComponent*> UICommandList::DetachComponent(UIComponent* detach)
 {
-	unique_ptr<Command> command = make_unique<DetachComponentCommand>(detach);
+	unique_ptr<UICommand> command = make_unique<DetachComponentCommand>(detach);
 	command->Execute();
 	
 	auto detachCmd = static_cast<DetachComponentCommand*>(command.get());

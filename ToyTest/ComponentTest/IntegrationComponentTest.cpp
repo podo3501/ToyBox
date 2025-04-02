@@ -9,9 +9,10 @@
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
-#include "../Toy/UserInterface/Command/UICommandList.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureLoadBinder.h"
+#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
+#include "../Toy/UserInterface/Command/TexSrcCommandList/TexSrcCommandList.h"
 #include "../TestHelper.h"
 
 namespace UserInterfaceTest
@@ -242,10 +243,10 @@ namespace UserInterfaceTest
 
 		TextureSourceInfo testSourceInfo{ L"TestTexFilename.json", ImagePart::One, {} };
 		TextureFontInfo testFontInfo{ L"TestFontFilename.json" };
-		EXPECT_TRUE(m_sourceBinder->InsertFontKey(L"Test", testFontInfo));
-		EXPECT_TRUE(m_sourceBinder->InsertTextureKey("Test", testSourceInfo));
-		EXPECT_TRUE(m_sourceBinder->ModifyFontKey(L"Test", L"NewTest"));
-		EXPECT_TRUE(m_sourceBinder->ModifyTextureKey("Test", "NewTest"));
+		EXPECT_TRUE(m_sourceBinder->AddFontKey(L"Test", testFontInfo));
+		EXPECT_TRUE(m_sourceBinder->AddTextureKey("Test", testSourceInfo));
+		EXPECT_TRUE(m_sourceBinder->RenameFontKey(L"Test", L"NewTest"));
+		EXPECT_TRUE(m_sourceBinder->RenameTextureKey("Test", "NewTest"));
 		EXPECT_TRUE(m_sourceBinder->RemoveKeyByFilename(L"TestFontFilename.json"));
 		EXPECT_TRUE(m_sourceBinder->RemoveKeyByFilename(L"TestTexFilename.json"));
 
@@ -261,7 +262,14 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, TextureSourceBinderUndoRedo)
 	{
+		TexSrcCommandList cmdList;
+		vector<unique_ptr<TextureSourceBinder>> history;
+		CaptureSnapshot(cmdList, history);
 
+		cmdList.AddFontKey(m_sourceBinder.get(), L"TestFontKey", TextureFontInfo{ L"TestFontKey.spritefont" });
+		CaptureSnapshot(cmdList, history);
+
+		VerifyUndoRedo(cmdList, history);
 	}
 
 	//////////////////////////////////////////////////////////

@@ -8,7 +8,7 @@
 #include "../Toy/Utility.h"
 #include "../Dialog.h"
 #include "../Utility.h"
-#include "../Toy/UserInterface/Command/UICommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, 

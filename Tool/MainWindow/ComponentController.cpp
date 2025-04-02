@@ -5,7 +5,7 @@
 #include "ComponentSelector.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/UserInterface/Command/UICommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Dialog.h"
 #include "../Utility.h"
 

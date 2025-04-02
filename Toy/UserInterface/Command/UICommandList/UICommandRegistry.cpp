@@ -1,15 +1,15 @@
 #include "pch.h"
-#include "CommandRegistry.h"
-#include "../../Utility.h"
-#include "../UIComponent/Components/ImageGrid1.h"
-#include "../UIComponent/Components/ImageGrid3.h"
-#include "../UIComponent/Components/ImageGrid9.h"
-#include "../UIComponent/Components/TextArea.h"
+#include "UICommandRegistry.h"
+#include "../../../Utility.h"
+#include "../../UIComponent/Components/ImageGrid1.h"
+#include "../../UIComponent/Components/ImageGrid3.h"
+#include "../../UIComponent/Components/ImageGrid9.h"
+#include "../../UIComponent/Components/TextArea.h"
 #include "../Include/IRenderer.h"
 
 AttachComponentCommand::AttachComponentCommand(UIComponent* parent,
 	unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept :
-	Command{ nullptr }, 
+	UICommand{ nullptr },
 	m_parent{ parent },
 	m_attach{ move(component) },
 	m_pos{ relativePos },
@@ -47,7 +47,7 @@ unique_ptr<UIComponent> AttachComponentCommand::GetFailureResult() noexcept
 //////////////////////////////////////////////////////////////////
 
 DetachComponentCommand::DetachComponentCommand(UIComponent* detach) noexcept :
-	Command{ nullptr },
+	UICommand{ nullptr },
 	m_detach{ detach },
 	m_component{ nullptr },
 	m_parent{ nullptr },
@@ -100,22 +100,22 @@ pair<unique_ptr<UIComponent>, UIComponent*> DetachComponentCommand::GetResult() 
 //////////////////////////////////////////////////////////////////
 
 SetRelativePositionCommand::SetRelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept :
-	Command{ component }, m_record{ relativePos }
+	UICommand{ component }, m_record{ relativePos }
 {}
 
 bool SetRelativePositionCommand::Execute()
 {
-	const auto& prevPos = GetComponent()->GetRelativePosition();
+	const auto& prevPos = GetTarget()->GetRelativePosition();
 	m_record.previous = prevPos;
-	ReturnIfFalse(GetComponent()->SetRelativePosition(m_record.current));
+	ReturnIfFalse(GetTarget()->SetRelativePosition(m_record.current));
 
 	return true;
 }
 
-bool SetRelativePositionCommand::Undo() { return GetComponent()->SetRelativePosition(m_record.previous); }
-bool SetRelativePositionCommand::Redo() { return GetComponent()->SetRelativePosition(m_record.current); }
+bool SetRelativePositionCommand::Undo() { return GetTarget()->SetRelativePosition(m_record.previous); }
+bool SetRelativePositionCommand::Redo() { return GetTarget()->SetRelativePosition(m_record.current); }
 
-void SetRelativePositionCommand::PostMerge(unique_ptr<Command> other) noexcept
+void SetRelativePositionCommand::PostMerge(unique_ptr<UICommand> other) noexcept
 {
 	auto otherCmd = static_cast<SetRelativePositionCommand*>(other.get());
 	m_record.current = otherCmd->m_record.current;
@@ -124,19 +124,19 @@ void SetRelativePositionCommand::PostMerge(unique_ptr<Command> other) noexcept
 //////////////////////////////////////////////////////////////////
 
 SetSizeCommand::SetSizeCommand(UIComponent* component, const XMUINT2& size) noexcept :
-	Command{ component }, m_record{ size }
+	UICommand{ component }, m_record{ size }
 {}
 
 bool SetSizeCommand::Execute()
 {
-	m_record.previous = GetComponent()->GetSize();
-	return GetComponent()->ChangeSize(m_record.current);
+	m_record.previous = GetTarget()->GetSize();
+	return GetTarget()->ChangeSize(m_record.current);
 }
 
-bool SetSizeCommand::Undo() { return GetComponent()->ChangeSize(m_record.previous); }
-bool SetSizeCommand::Redo() { return GetComponent()->ChangeSize(m_record.current); }
+bool SetSizeCommand::Undo() { return GetTarget()->ChangeSize(m_record.previous); }
+bool SetSizeCommand::Redo() { return GetTarget()->ChangeSize(m_record.current); }
 
-void SetSizeCommand::PostMerge(unique_ptr<Command> other) noexcept
+void SetSizeCommand::PostMerge(unique_ptr<UICommand> other) noexcept
 {
 	auto otherCmd = static_cast<SetSizeCommand*>(other.get());
 	m_record.current = otherCmd->m_record.current;
@@ -145,33 +145,33 @@ void SetSizeCommand::PostMerge(unique_ptr<Command> other) noexcept
 //////////////////////////////////////////////////////////////////
 
 RenameRegionCommand::RenameRegionCommand(UIComponent* component, const string& region) noexcept :
-	Command{ component }, m_record{ region }
+	UICommand{ component }, m_record{ region }
 {}
 
 bool RenameRegionCommand::Execute()
 {
-	m_record.previous = GetComponent()->GetRegion();
-	GetComponent()->RenameRegion(m_record.current);
+	m_record.previous = GetTarget()->GetRegion();
+	GetTarget()->RenameRegion(m_record.current);
 	return true;
 }
 
-bool RenameRegionCommand::Undo() { GetComponent()->RenameRegion(m_record.previous); return true; }
-bool RenameRegionCommand::Redo() { GetComponent()->RenameRegion(m_record.current); return true; }
+bool RenameRegionCommand::Undo() { GetTarget()->RenameRegion(m_record.previous); return true; }
+bool RenameRegionCommand::Redo() { GetTarget()->RenameRegion(m_record.current); return true; }
 
 //////////////////////////////////////////////////////////////////
 
 RenameCommand::RenameCommand(UIComponent* component, const string& name) noexcept :
-	Command{ component }, m_record{ name }
+	UICommand{ component }, m_record{ name }
 {}
 
 bool RenameCommand::Execute()
 {
-	m_record.previous = GetComponent()->GetName();
-	return GetComponent()->Rename(m_record.current);
+	m_record.previous = GetTarget()->GetName();
+	return GetTarget()->Rename(m_record.current);
 }
 
-bool RenameCommand::Undo() { return GetComponent()->Rename(m_record.previous); }
-bool RenameCommand::Redo() { return GetComponent()->Rename(m_record.current); }
+bool RenameCommand::Undo() { return GetTarget()->Rename(m_record.previous); }
+bool RenameCommand::Redo() { return GetTarget()->Rename(m_record.current); }
 
 //////////////////////////////////////////////////////////////////
 
@@ -344,7 +344,7 @@ namespace {
 //////////////////////////////////////////////////////////////////
 
 SetTextCommand::SetTextCommand(TextArea* textArea, const wstring& text) noexcept :
-	Command{ textArea },
+	UICommand{ textArea },
 	m_textArea{ textArea },
 	m_record{ text }
 {}

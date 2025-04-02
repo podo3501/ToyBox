@@ -45,7 +45,7 @@ bool TextureSourceBinder::Save(const wstring& jsonFilename)
 }
 
 template <typename MapType, typename KeyType, typename Valuetype>
-static bool InsertBindingImpl(MapType& bindingTable, const KeyType& bindingKey, const Valuetype& value) noexcept
+static bool AddBindingImpl(MapType& bindingTable, const KeyType& bindingKey, const Valuetype& value) noexcept
 {
     if (bindingKey.empty()) return true;
 
@@ -59,37 +59,20 @@ static bool InsertBindingImpl(MapType& bindingTable, const KeyType& bindingKey, 
     return true;
 }
 
-bool TextureSourceBinder::InsertFontKey(const wstring& bindingKey, const TextureFontInfo& fontInfo) noexcept
+bool TextureSourceBinder::AddFontKey(const wstring& bindingKey, const TextureFontInfo& fontInfo) noexcept
 {
-    return InsertBindingImpl(m_bindingFontTable, bindingKey, fontInfo);
+    return AddBindingImpl(m_bindingFontTable, bindingKey, fontInfo);
 }
 
-bool TextureSourceBinder::InsertTextureKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept
+bool TextureSourceBinder::AddTextureKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept
 {
-    return InsertBindingImpl(m_bindingTexTable, bindingKey, sourceAreas);
+    return AddBindingImpl(m_bindingTexTable, bindingKey, sourceAreas);
 }
 
-template <typename MapType, typename KeyType>
-static bool ModifyBindingImpl(MapType& bindingTable, const KeyType& preKey, const KeyType& newKey) noexcept
+void TextureSourceBinder::RemoveFontKey(const wstring& bindingKey) noexcept
 {
-    if (auto it = bindingTable.find(newKey); it != bindingTable.end()) return false;
-    if (auto it = bindingTable.find(preKey); it != bindingTable.end())
-    {
-        auto value = move(it->second);
-        bindingTable.erase(it);
-        bindingTable.emplace(newKey, move(value));
-    }
-    return true;
-}
-
-bool TextureSourceBinder::ModifyFontKey(const wstring& preKey, const wstring& newKey) noexcept
-{
-    return ModifyBindingImpl(m_bindingFontTable, preKey, newKey);
-}
-
-bool TextureSourceBinder::ModifyTextureKey(const string& preKey, const string& newKey) noexcept
-{
-    return ModifyBindingImpl(m_bindingTexTable, preKey, newKey);
+    if (auto it = m_bindingFontTable.find(bindingKey); it != m_bindingFontTable.end())
+        m_bindingFontTable.erase(it);
 }
 
 void TextureSourceBinder::RemoveTextureKey(const string& bindingKey) noexcept
@@ -109,6 +92,29 @@ bool TextureSourceBinder::RemoveKeyByFilename(const wstring& filename) noexcept
         });
 
     return true;
+}
+
+template <typename MapType, typename KeyType>
+static bool RenameBindingImpl(MapType& bindingTable, const KeyType& preKey, const KeyType& newKey) noexcept
+{
+    if (auto it = bindingTable.find(newKey); it != bindingTable.end()) return false;
+    if (auto it = bindingTable.find(preKey); it != bindingTable.end())
+    {
+        auto value = move(it->second);
+        bindingTable.erase(it);
+        bindingTable.emplace(newKey, move(value));
+    }
+    return true;
+}
+
+bool TextureSourceBinder::RenameFontKey(const wstring& preKey, const wstring& newKey) noexcept
+{
+    return RenameBindingImpl(m_bindingFontTable, preKey, newKey);
+}
+
+bool TextureSourceBinder::RenameTextureKey(const string& preKey, const string& newKey) noexcept
+{
+    return RenameBindingImpl(m_bindingTexTable, preKey, newKey);
 }
 
 vector<wstring> TextureSourceBinder::GetTextureFiles() const noexcept

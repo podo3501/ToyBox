@@ -5,7 +5,7 @@ class UIComponent;
 class ImageGrid1;
 class ImageGrid3;
 class ImageGrid9;
-class CommandList;
+class UICommandList;
 
 class SourceExtractor
 {
@@ -20,7 +20,7 @@ public:
     inline void SetTextureAreaList(const vector<Rectangle>& areaList) noexcept { m_areaList = areaList; }
 
 protected:
-    SourceExtractor(IRenderer* renderer, const wstring& filename, CommandList* cmdList) noexcept;
+    SourceExtractor(IRenderer* renderer, const wstring& filename, UICommandList* cmdList) noexcept;
     Rectangle FindRectangleFromMousePosition() const noexcept;
 
     virtual void UpdateProcess() {};
@@ -29,12 +29,12 @@ protected:
     inline const wstring& GetFilename() const noexcept { return m_filename; }
     inline IRenderer* GetRenderer() const noexcept { return m_renderer; }
     inline ImGuiWindow* GetWindow() const noexcept { return m_window; }
-    inline CommandList* GetCommandList() const noexcept { return m_cmdList; }
+    inline UICommandList* GetCommandList() const noexcept { return m_cmdList; }
 
 private:
     IRenderer* m_renderer;
     wstring m_filename;
-    CommandList* m_cmdList;
+    UICommandList* m_cmdList;
     ImGuiWindow* m_window;
 
     vector<Rectangle> m_areaList;
@@ -45,7 +45,7 @@ class ImageGrid1Extractor : public SourceExtractor
 public:
     ~ImageGrid1Extractor();
     ImageGrid1Extractor() = delete;
-    ImageGrid1Extractor(IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1, CommandList* cmdList) noexcept;
+    ImageGrid1Extractor(IRenderer* renderer, const wstring& filename, ImageGrid1* imgGrid1, UICommandList* cmdList) noexcept;
 
 protected:
     virtual void UpdateProcess() override;
@@ -61,7 +61,7 @@ class ImageGrid3Extractor : public SourceExtractor
 public:
     ~ImageGrid3Extractor();
     ImageGrid3Extractor() = delete;
-    ImageGrid3Extractor(IRenderer* renderer, const wstring& filename, ImageGrid3* imgGrid3, CommandList* cmdList) noexcept;
+    ImageGrid3Extractor(IRenderer* renderer, const wstring& filename, ImageGrid3* imgGrid3, UICommandList* cmdList) noexcept;
 
 protected:
     virtual void UpdateProcess() override;
@@ -77,7 +77,7 @@ class ImageGrid9Extractor : public SourceExtractor
 public:
     ~ImageGrid9Extractor();
     ImageGrid9Extractor() = delete;
-    ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9, CommandList* cmdList) noexcept;
+    ImageGrid9Extractor(IRenderer* renderer, const wstring& filename, ImageGrid9* imgGrid9, UICommandList* cmdList) noexcept;
 
 protected:
     virtual void UpdateProcess() override;
@@ -89,4 +89,4 @@ private:
 };
 
 unique_ptr<SourceExtractor> CreateSourceExtractor(IRenderer* renderer,
-    const wstring& filename, UIComponent* component, CommandList* cmdList);
+    const wstring& filename, UIComponent* component, UICommandList* cmdList);

@@ -76,5 +76,5 @@ bool ModifyTextureSourceInfo(TextureSourceBinder* sb, const string& key, const S
     srcInfo.sources = GetSources(srcInfo.imagePart, srcDivider);
 
     sb->RemoveTextureKey(key);
-    return sb->InsertTextureKey(key, srcInfo);
+    return sb->AddTextureKey(key, srcInfo);
 }

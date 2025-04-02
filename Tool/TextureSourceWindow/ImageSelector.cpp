@@ -223,8 +223,8 @@ void ImageSelector::EditSelectArea()
     }
         
     m_renameNotifier->EditName("Tex Bind Key", bindingKey, [this, &bindingKey](const string& newKey) {
-        if (bindingKey.empty()) return m_sourceBinder->InsertTextureKey(newKey, *m_selectedArea);
+        if (bindingKey.empty()) return m_sourceBinder->AddTextureKey(newKey, *m_selectedArea);
         if (newKey.empty()) return RemoveArea();
-        return m_sourceBinder->ModifyTextureKey(bindingKey, newKey);
+        return m_sourceBinder->RenameTextureKey(bindingKey, newKey);
         });
 }

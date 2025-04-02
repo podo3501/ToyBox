@@ -39,11 +39,14 @@ class BasicComponentTest : public ToyTestFixture {};
 class ComplexComponentTest : public ToyTestFixture {};
 
 class UICommandList;
+class TexSrcCommandList;
 class IntegrationTest : public ToyTestFixture 
 {
 protected:
 	bool VerifyClone(unique_ptr<UIComponent> original);
 	void CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history);
+	void CaptureSnapshot(TexSrcCommandList& cmdList, vector<unique_ptr<TextureSourceBinder>>& history);
 	void VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
+	void VerifyUndoRedo(TexSrcCommandList& cmdList, const vector<unique_ptr<TextureSourceBinder>>& history);
 };
 class IRendererTest : public ToyTestFixture {};

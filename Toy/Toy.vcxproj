@@ -218,9 +218,12 @@
     <ClInclude Include="GameMainLoop.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="UserInterface\Command\Command.h" />
-    <ClInclude Include="UserInterface\Command\UICommandList.h" />
-    <ClInclude Include="UserInterface\Command\CommandRegistry.h" />
+    <ClInclude Include="UserInterface\Command\CommandList.h" />
     <ClInclude Include="UserInterface\Command\CommandType.h" />
+    <ClInclude Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandList.h" />
+    <ClInclude Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandRegistry.h" />
+    <ClInclude Include="UserInterface\Command\UICommandList\UICommandList.h" />
+    <ClInclude Include="UserInterface\Command\UICommandList\UICommandRegistry.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonHelper.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp" />
@@ -267,8 +270,10 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
-    <ClCompile Include="UserInterface\Command\UICommandList.cpp" />
-    <ClCompile Include="UserInterface\Command\CommandRegistry.cpp" />
+    <ClCompile Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandList.cpp" />
+    <ClCompile Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandRegistry.cpp" />
+    <ClCompile Include="UserInterface\Command\UICommandList\UICommandList.cpp" />
+    <ClCompile Include="UserInterface\Command\UICommandList\UICommandRegistry.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation_impl.cpp" />

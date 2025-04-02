@@ -5,7 +5,8 @@
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/Command/UICommandList.h"
+#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
+#include "../Toy/UserInterface/Command/TexSrcCommandList/TexSrcCommandList.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -127,6 +128,11 @@ void IntegrationTest::CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<
 	history.emplace_back(m_panel->Clone());
 }
 
+void IntegrationTest::CaptureSnapshot(TexSrcCommandList& cmdList, vector<unique_ptr<TextureSourceBinder>>& history)
+{
+	history.emplace_back(make_unique<TextureSourceBinder>(*m_sourceBinder));
+}
+
 void IntegrationTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
 {
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
@@ -139,3 +145,17 @@ void IntegrationTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique
 		EXPECT_TRUE(CompareUniquePtr(m_panel, snapshot));
 		});
 }
+
+void IntegrationTest::VerifyUndoRedo(TexSrcCommandList& cmdList, const vector<unique_ptr<TextureSourceBinder>>& history)
+{
+	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
+		cmdList.Undo();
+		EXPECT_TRUE(CompareUniquePtr(m_sourceBinder, snapshot));
+		});
+
+	for_each(history.begin() + 1, history.end(), [&](const auto& snapshot) {
+		cmdList.Redo();
+		EXPECT_TRUE(CompareUniquePtr(m_sourceBinder, snapshot));
+		});
+}
+
