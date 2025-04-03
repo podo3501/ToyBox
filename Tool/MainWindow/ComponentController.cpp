@@ -10,12 +10,12 @@
 #include "../Utility.h"
 
 ComponentController::~ComponentController() = default;
-ComponentController::ComponentController(IRenderer* renderer, TextureSourceBinder* sourceBinder,
+ComponentController::ComponentController(IRenderer* renderer, TextureResourceBinder* resBinder,
 	UIComponent* panel, const string& mainWndNam) noexcept :
 	m_mainWnd{ nullptr },
 	m_cmdList{ make_unique<UICommandList>() },
-	m_floater{ make_unique<FloatingComponent>(renderer, sourceBinder, mainWndNam) },
-	m_selector{ make_unique<ComponentSelector>(renderer, sourceBinder, m_cmdList.get(), panel) }
+	m_floater{ make_unique<FloatingComponent>(renderer, resBinder, mainWndNam) },
+	m_selector{ make_unique<ComponentSelector>(renderer, resBinder, m_cmdList.get(), panel) }
 {}
 
 void ComponentController::SetPanel(UIComponent* panel) noexcept

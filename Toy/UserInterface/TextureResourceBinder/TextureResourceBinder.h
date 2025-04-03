@@ -7,12 +7,12 @@
 enum class ImagePart : int;
 struct ITextureLoad;
 class JsonOperation;
-class TextureSourceBinder : public ITextureBinder
+class TextureResourceBinder : public ITextureBinder
 {
 public:
-	~TextureSourceBinder();
-	TextureSourceBinder();
-	bool operator==(const TextureSourceBinder& o) const noexcept;
+	~TextureResourceBinder();
+	TextureResourceBinder();
+	bool operator==(const TextureResourceBinder& o) const noexcept;
 
 	virtual bool LoadResources(ITextureLoad* load) override;
 
@@ -48,4 +48,4 @@ private:
 	unordered_map<string, TextureSourceInfo> m_bindingTexTable;
 };
 
-unique_ptr<TextureSourceBinder> CreateSourceBinder(const wstring& jsonFilename = L"");
+unique_ptr<TextureResourceBinder> CreateSourceBinder(const wstring& jsonFilename = L"");

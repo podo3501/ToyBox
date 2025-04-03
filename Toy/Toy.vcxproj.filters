@@ -26,9 +26,6 @@
     <Filter Include="UserInterface\Command">
       <UniqueIdentifier>{8095bd22-dd9e-443e-ac7d-edbdc3d9bae5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface\TextureSourceBinder">
-      <UniqueIdentifier>{ce70d806-37c0-42f5-9a0e-dd3c79ef5026}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UserInterface\UIComponent">
       <UniqueIdentifier>{699c8739-a17a-426b-919d-a41c2a0720e0}</UniqueIdentifier>
     </Filter>
@@ -41,8 +38,11 @@
     <Filter Include="UserInterface\Command\UICommandList">
       <UniqueIdentifier>{de39c0e5-0931-4d4a-9551-cd7c988bb33c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface\Command\TexSrcCommandList">
-      <UniqueIdentifier>{64301718-dc02-4106-9111-62b494bbd9ec}</UniqueIdentifier>
+    <Filter Include="UserInterface\TextureResourceBinder">
+      <UniqueIdentifier>{ad970e99-99e5-45d5-9313-ad0034f6e4dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\Command\TexResCommandList">
+      <UniqueIdentifier>{a3e5db05-a9d1-43c1-ab9f-521e59c11b04}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,24 +66,6 @@
     </ClInclude>
     <ClInclude Include="UserInterface\Command\CommandType.h">
       <Filter>UserInterface\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\TextureSourceBinder\TextureSourceBinder.h">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\TextureSourceBinder\TextureSourceInfo.h">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\TextureSourceBinder\TextureFontInfo.h">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\TextureSourceBinder\TextureInfo.h">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\TextureSourceBinder\TextureLoadBinder.h">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\TextureSourceBinder\TextureBinderHelper.h">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\Button.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
@@ -178,14 +160,32 @@
     <ClInclude Include="UserInterface\Command\UICommandList\UICommandList.h">
       <Filter>UserInterface\Command\UICommandList</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandList.h">
-      <Filter>UserInterface\Command\TexSrcCommandList</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandRegistry.h">
-      <Filter>UserInterface\Command\TexSrcCommandList</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\Command\UICommandList\UICommandRegistry.h">
       <Filter>UserInterface\Command\UICommandList</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureBinderHelper.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureFontInfo.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureInfo.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinder.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinder.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureSourceInfo.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Command\TexResCommandList\TexResCommandList.h">
+      <Filter>UserInterface\Command\TexResCommandList</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.h">
+      <Filter>UserInterface\Command\TexResCommandList</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -198,24 +198,6 @@
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="UserInterface\TextureSourceBinder\TextureSourceBinder.cpp">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\TextureSourceBinder\TextureSourceInfo.cpp">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\TextureSourceBinder\TextureFontInfo.cpp">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\TextureSourceBinder\TextureInfo.cpp">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\TextureSourceBinder\TextureLoadBinder.cpp">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\TextureSourceBinder\TextureBinderHelper.cpp">
-      <Filter>UserInterface\TextureSourceBinder</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\Button.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
@@ -303,14 +285,32 @@
     <ClCompile Include="UserInterface\Command\UICommandList\UICommandList.cpp">
       <Filter>UserInterface\Command\UICommandList</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandList.cpp">
-      <Filter>UserInterface\Command\TexSrcCommandList</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Command\TexSrcCommandList\TexSrcCommandRegistry.cpp">
-      <Filter>UserInterface\Command\TexSrcCommandList</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\Command\UICommandList\UICommandRegistry.cpp">
       <Filter>UserInterface\Command\UICommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureBinderHelper.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureFontInfo.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureInfo.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinder.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinder.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureSourceInfo.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandList.cpp">
+      <Filter>UserInterface\Command\TexResCommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.cpp">
+      <Filter>UserInterface\Command\TexResCommandList</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

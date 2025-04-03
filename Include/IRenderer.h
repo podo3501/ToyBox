@@ -12,7 +12,7 @@ public:
     virtual bool LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize, UINT64* outGfxMemOffset) = 0;
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) = 0;
     virtual void ReleaseTexture(size_t idx) noexcept = 0;
-    virtual void AddRef(size_t index) noexcept = 0; //Clone했을때 refcount를 맞추어 주기위해 사용하는 함수인데, TextureSourceBinder는 Clone할 필요가 없기 때문에 잘 안쓰일 가능성이 있다.
+    virtual void AddRef(size_t index) noexcept = 0; //Clone했을때 refcount를 맞추어 주기위해 사용하는 함수인데, TextureResourceBinder는 Clone할 필요가 없기 때문에 잘 안쓰일 가능성이 있다.
 };
 
 //데이터를 얻어올때 사용하는 인터페이스

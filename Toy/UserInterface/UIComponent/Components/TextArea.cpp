@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TextArea.h"
-#include "../../TextureSourceBinder/TextureSourceBinder.h"
+#include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "../Include/IRenderer.h"
 #include "../../../Utility.h"
 #include "../../../Config.h"
@@ -105,11 +105,11 @@ bool TextArea::Setup(const UILayout& layout, const wstring& text, const vector<w
 	return true;
 }
 
-bool TextArea::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept
+bool TextArea::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
 {
 	for (const auto& bindKey : m_bindKeys)
 	{
-		auto fontInfoRef = sourceBinder->GetTextureFontInfo(bindKey);
+		auto fontInfoRef = resBinder->GetTextureFontInfo(bindKey);
 		ReturnIfFalse(fontInfoRef);
 
 		const auto& fontInfo = fontInfoRef->get();

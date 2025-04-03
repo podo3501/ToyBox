@@ -25,8 +25,8 @@
     <ClCompile Include="UserInterfaceTest\UndoRedoTest.cpp">
       <Filter>UserInterfaceTest</Filter>
     </ClCompile>
-    <ClCompile Include="TextureSourceBinderTest\TextureSourceBinderTest.cpp">
-      <Filter>TextureSourceBinderTest</Filter>
+    <ClCompile Include="TextureResourceBinderTest\TextureResourceBinderTest.cpp">
+      <Filter>TextureResourceBinderTest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,7 +54,7 @@
     <Filter Include="UserInterfaceTest">
       <UniqueIdentifier>{199ab388-f9e5-450b-a195-7b017ca0e336}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TextureSourceBinderTest">
+    <Filter Include="TextureResourceBinderTest">
       <UniqueIdentifier>{e3c60e9c-8593-4b4b-8775-7254584619de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

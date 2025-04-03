@@ -3,10 +3,10 @@
 #include "../Include/IRenderer.h"
 #include "../Toy/Window.h"
 #include "../Toy/Config.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "../Toy/UserInterface/Command/TexSrcCommandList/TexSrcCommandList.h"
+#include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -34,32 +34,32 @@ void ToyTestFixture::SetUp()
 	InputManager::Initialize(hwnd);
 	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
 	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
-	m_sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
-	m_renderer->LoadTextureBinder(m_sourceBinder.get());
+	m_resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
+	m_renderer->LoadTextureBinder(m_resBinder.get());
 }
 
 using ::testing::_;
 using ::testing::Invoke;
 
-void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times)
+void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times)
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke([this, testRenderFunc](size_t index, const RECT& dest, const RECT* source) {
-		testRenderFunc(index, dest, source, m_sourceBinder.get());
+		testRenderFunc(index, dest, source, m_resBinder.get());
 			}));
 	component->ProcessUpdate(m_timer);
 	component->ProcessRender(&mockRender);
 }
 
-void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times)
+void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times)
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke([this, testRenderFunc](size_t index, const RECT& dest, const RECT* source) {
-		testRenderFunc(index, dest, source, m_sourceBinder.get());
+		testRenderFunc(index, dest, source, m_resBinder.get());
 			}));
 	m_panel->ProcessUpdate(m_timer);
 	m_panel->ProcessRender(&mockRender);
@@ -91,7 +91,7 @@ void ToyTestFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 	mouseTracker.Update(state);
 }
 
-void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> renderFunc, int times)
+void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> renderFunc, int times)
 {
 	unique_ptr<UIComponent> clonePanel = component->Clone();
 
@@ -105,7 +105,7 @@ void ToyTestFixture::TearDown()
 	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
 	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.
 	m_panel.reset();
-	m_sourceBinder.reset();
+	m_resBinder.reset();
 	m_renderer.reset();
 	m_window.reset();
 
@@ -117,20 +117,20 @@ void ToyTestFixture::TearDown()
 bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 {
 	if (!original) return false;
-	EXPECT_TRUE(original->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+	EXPECT_TRUE(original->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 	auto clone = original->Clone();
 
 	return CompareUniquePtr(original, clone);
 }
 
 void UndoRedoTest::CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history)
-{
+{//?!?cmdList 이게 필요?
 	history.emplace_back(m_panel->Clone());
 }
 
-void UndoRedoTest::CaptureSnapshot(TexSrcCommandList& cmdList, vector<unique_ptr<TextureSourceBinder>>& history)
+void UndoRedoTest::CaptureSnapshot(TexResCommandList& cmdList, vector<unique_ptr<TextureResourceBinder>>& history)
 {
-	history.emplace_back(make_unique<TextureSourceBinder>(*m_sourceBinder));
+	history.emplace_back(make_unique<TextureResourceBinder>(*m_resBinder));
 }
 
 void UndoRedoTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
@@ -146,16 +146,16 @@ void UndoRedoTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_pt
 		});
 }
 
-void UndoRedoTest::VerifyUndoRedo(TexSrcCommandList& cmdList, const vector<unique_ptr<TextureSourceBinder>>& history)
+void UndoRedoTest::VerifyUndoRedo(TexResCommandList& cmdList, const vector<unique_ptr<TextureResourceBinder>>& history)
 {
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
 		cmdList.Undo();
-		EXPECT_TRUE(CompareUniquePtr(m_sourceBinder, snapshot));
+		EXPECT_TRUE(CompareUniquePtr(m_resBinder, snapshot));
 		});
 
 	for_each(history.begin() + 1, history.end(), [&](const auto& snapshot) {
 		cmdList.Redo();
-		EXPECT_TRUE(CompareUniquePtr(m_sourceBinder, snapshot));
+		EXPECT_TRUE(CompareUniquePtr(m_resBinder, snapshot));
 		});
 }
 

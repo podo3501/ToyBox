@@ -2,7 +2,8 @@
 
 enum class ImagePart;
 class TextureSourceWindow;
-class TextureSourceBinder;
+class TextureResourceBinder;
+class TexResCommandList;
 struct TextureSourceInfo;
 class ImageGrid1;
 class RenameNotifier;
@@ -15,7 +16,7 @@ public:
 	void Update();
 	void Render();
 	void SetTexture(ImageGrid1* grid) noexcept;
-	void SetSourceBinder(TextureSourceBinder* sourceBinder) noexcept { m_sourceBinder = sourceBinder; }
+	void SetBinderAndCmdList(TextureResourceBinder* resBinder, TexResCommandList* cmdList) noexcept;
 
 private:
 	void CheckSourcePartition() noexcept;
@@ -32,7 +33,8 @@ private:
 	
 
 	ImageGrid1* m_sourceTexture;
-	TextureSourceBinder* m_sourceBinder;
+	TextureResourceBinder* m_resBinder;
+	TexResCommandList* m_cmdList;
 	TextureSourceWindow* m_textureWindow;
 	unique_ptr<RenameNotifier> m_renameNotifier;
 	ImagePart m_selectImagePart;

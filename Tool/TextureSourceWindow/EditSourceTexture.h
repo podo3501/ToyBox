@@ -6,7 +6,8 @@ struct IRenderer;
 class ImageGrid1;
 struct TextureSourceInfo;
 class TextureLoadBinder;
-class TextureSourceBinder;
+class TextureResourceBinder;
+class TexResCommandList;
 class TextureSourceWindow;
 class RenameNotifier;
 class ImageSelector;
@@ -19,7 +20,7 @@ public:
 
     void Update() noexcept;
     void Render();
-    bool SetSourceBinder(TextureSourceBinder* sourceBinder) noexcept;
+    bool SetBinderAndCmdList(TextureResourceBinder* resBinder, TexResCommandList* cmdList) noexcept;
 
 private:
     inline bool IsVaildTextureIndex() const noexcept { return m_texIndex >= 0 && m_texIndex < m_textureFiles.size(); }
@@ -38,7 +39,8 @@ private:
     IRenderer* m_renderer;
     TextureSourceWindow* m_textureWindow;
     unique_ptr<TextureLoadBinder> m_textureLoader;
-    TextureSourceBinder* m_sourceBinder;
+    TextureResourceBinder* m_resBinder;
+    TexResCommandList* m_cmdList;
     unique_ptr<ImageSelector> m_imageSelector;
     int m_texIndex{ -1 };
     vector<unique_ptr<ImageGrid1>> m_textureFiles;

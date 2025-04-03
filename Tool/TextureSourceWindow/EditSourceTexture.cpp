@@ -3,8 +3,8 @@
 #include "EditSourceTexture.h"
 #include "TextureSourceWindow.h"
 #include "ImageSelector.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureLoadBinder.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Dialog.h"
 #include "../Toy/Utility.h"
@@ -21,7 +21,8 @@ EditSourceTexture::EditSourceTexture(IRenderer* renderer, TextureSourceWindow* t
     m_renderer{ renderer },
     m_textureWindow{ textureWindow },
     m_textureLoader{ make_unique<TextureLoadBinder>() },
-    m_sourceBinder{ nullptr },
+    m_resBinder{ nullptr },
+    m_cmdList{ nullptr },
     m_imageSelector{ make_unique<ImageSelector>(textureWindow) }
 {}
 
@@ -45,12 +46,13 @@ bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
     return true;
 }
 
-bool EditSourceTexture::SetSourceBinder(TextureSourceBinder* sourceBinder) noexcept
+bool EditSourceTexture::SetBinderAndCmdList(TextureResourceBinder* resBinder, TexResCommandList* cmdList) noexcept
 {
-    m_sourceBinder = sourceBinder;
-    m_imageSelector->SetSourceBinder(sourceBinder);
+    m_resBinder = resBinder;
+    m_cmdList = cmdList;
+    m_imageSelector->SetBinderAndCmdList(resBinder, m_cmdList);
     
-    const auto& texFiles = m_sourceBinder->GetTextureFiles();
+    const auto& texFiles = m_resBinder->GetTextureFiles();
     if (texFiles.empty()) return true;
 
     for (auto& texFile : texFiles)
@@ -124,7 +126,7 @@ bool EditSourceTexture::DeleteTextureFile() noexcept
 {
     ReturnIfFalse(IsVaildTextureIndex());
 
-    m_sourceBinder->RemoveKeyByFilename(m_textureFiles[m_texIndex]->GetFilename());
+    m_resBinder->RemoveKeyByFilename(m_textureFiles[m_texIndex]->GetFilename());
     RemoveTexture(m_texIndex);
     SelectTextureFile();
 

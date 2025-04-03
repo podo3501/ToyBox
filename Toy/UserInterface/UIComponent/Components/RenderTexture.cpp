@@ -75,7 +75,7 @@ void RenderTexture::ImplementPositionUpdated() noexcept
 }
 
 //?!? rendertexture를 등록하는 것을 bind를 통해서 넣으면 텍스쳐 관리를 한군데에 몰아서 할 수 있을꺼 같은데.
-bool RenderTexture::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController* texController) noexcept
+bool RenderTexture::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController* texController) noexcept
 {
 	Release(); //데이터가 존재하면 지운다.
 	

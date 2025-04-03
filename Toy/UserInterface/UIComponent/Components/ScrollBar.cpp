@@ -68,7 +68,7 @@ bool ScrollBar::ChangeSliderSize(const XMUINT2& size) noexcept
 	return m_scrollSlider->ChangeSize({ size.x - m_scrollPadding, size.y - m_scrollPadding });
 }
 
-bool ScrollBar::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+bool ScrollBar::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	const auto& size = m_scrollBackground->GetSize();
 	ChangeSliderSize(size);

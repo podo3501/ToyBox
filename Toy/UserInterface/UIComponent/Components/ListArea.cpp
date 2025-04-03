@@ -96,7 +96,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	return true;
 }
 
-bool ListArea::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+bool ListArea::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	ChangeSizeY(m_scrollBar, GetSize());
 	return true;

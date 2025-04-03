@@ -32,7 +32,7 @@ public:
 protected:
 	ImageGrid1(const ImageGrid1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override; //Binder가 로딩을 다 하고 여기서 값만 연결한다.
+	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override; //Binder가 로딩을 다 하고 여기서 값만 연결한다.
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:

@@ -12,12 +12,12 @@
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Utility.h"
 
-FloatingComponent::FloatingComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, const string& mainWndName) noexcept :
+FloatingComponent::FloatingComponent(IRenderer* renderer, TextureResourceBinder* resBinder, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
-	m_sourceBinder{ sourceBinder },
+	m_resBinder{ resBinder },
 	m_name{ "PopupMenu_" + mainWndName },
 	m_component{ nullptr }
 {}
@@ -129,7 +129,7 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 	m_component = component.get();
 	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(component)));
 	//ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
-	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_sourceBinder, m_renderer->GetTextureController()));
+	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_resBinder, m_renderer->GetTextureController()));
 
 	return true;
 }

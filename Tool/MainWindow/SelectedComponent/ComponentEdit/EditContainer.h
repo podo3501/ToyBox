@@ -1,14 +1,14 @@
 #pragma once
 #include "EditWindow.h"
 
-class TextureSourceBinder;
+class TextureResourceBinder;
 class Container;
 class EditContainer : public EditWindow
 {
 public:
 	~EditContainer();
 	EditContainer() = delete;
-	EditContainer(Container* container, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept;
+	EditContainer(Container* container, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
 
 protected:
 	virtual void RenderComponent() override;

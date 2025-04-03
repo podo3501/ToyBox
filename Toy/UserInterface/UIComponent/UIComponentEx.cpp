@@ -2,7 +2,7 @@
 #include "../../Utility.h"
 #include "UIComponent.h"
 #include "../Include/IRenderer.h"
-#include "../TextureSourceBinder/TextureSourceBinder.h"
+#include "../TextureResourceBinder/TextureResourceBinder.h"
 #include "../../Config.h"
 
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :

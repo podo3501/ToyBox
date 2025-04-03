@@ -1,12 +1,4 @@
 #pragma once
-#include<variant>
-
-class ImageGrid1;
-class ImageGrid3;
-class ImageGrid9;
-
-using ImageGridVariant = std::variant<ImageGrid1*, ImageGrid3*, ImageGrid9*>;
-using ImageGrid39Variant = std::variant<ImageGrid3*, ImageGrid9*>;
 
 enum class UICommandID : int
 {
@@ -26,7 +18,7 @@ enum class UICommandID : int
 class UIComponent;
 using UICommand = Command<UICommandID, UIComponent>;
 
-enum class TexSrcCommandID : int
+enum class TexResCommandID : int
 {
 	AddFontKey,
 	RemoveFontKey,
@@ -38,8 +30,8 @@ enum class TexSrcCommandID : int
 	ModifyTexSrcInfo,
 	Unknown
 };
-class TextureSourceBinder;
-using TexSrcCommand = Command<TexSrcCommandID, TextureSourceBinder>;
+class TextureResourceBinder;
+using TexResCommand = Command<TexResCommandID, TextureResourceBinder>;
 
 template <typename T>
 class CommandRecord

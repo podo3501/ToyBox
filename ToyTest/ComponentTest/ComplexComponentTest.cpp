@@ -17,11 +17,11 @@ namespace UserInterfaceTest
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({ { 150, 120 }, Origin::Center }));
 		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, listAreaPtr);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
 		EXPECT_TRUE(UIEx(m_panel).IsPositionUpdated());
 
-		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), m_sourceBinder.get(), listAreaPtr, 5));
+		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), m_resBinder.get(), listAreaPtr, 5));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 
@@ -44,7 +44,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder*)
+	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder*)
 	{
 		EXPECT_EQ(index, 4); //0, 1은 폰트. 2, 3은 texture 4는 renderTexture이다. 그래서 4가 들어오고
 		vector<RECT> expectDest = { { 75, 75, 125, 125 } };
@@ -59,12 +59,12 @@ namespace UserInterfaceTest
 		auto [renderTex, renderTexPtr] = GetPtrs(CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(switcher)));
 		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, renderTexPtr);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
 		CallMockRender(TestRenderTexture, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
 
 		auto clone = renderTexPtr->Clone();
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 	}
 
 	////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ namespace UserInterfaceTest
 		auto [scrollBar, scrollBarPtr] = GetPtrs(CreateSampleScrollBar({ {16, 200}, Origin::LeftTop }));
 		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
 		m_panel = WriteReadTest(m_panel, scrollBarPtr);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		uint32_t viewArea = 500;
 		uint32_t contentSize = 2000;
@@ -82,14 +82,14 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 	}
 
-	static void TestScrollSlide(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
+	static void TestScrollSlide(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { 
 			{ 92, 100, 108, 110 }, { 92, 110, 108, 290 }, { 92, 290, 108, 300 },
 			{ 92, 175, 108, 182 }, { 92, 182, 108, 218 }, { 92, 218, 108, 225 } };
 
-		vector<RECT> expectSource{ GetSources(sb, "ScrollTrack3_V") };
-		vector<RECT> expectSource2{ GetSources(sb, "ScrollButton3_V_Normal") };
+		vector<RECT> expectSource{ GetSources(rb, "ScrollTrack3_V") };
+		vector<RECT> expectSource2{ GetSources(rb, "ScrollButton3_V_Normal") };
 		expectSource.insert(expectSource.end(), expectSource2.begin(), expectSource2.end());
 		TestCoordinates(index, dest, source, expectDest, expectSource);
 	}
@@ -99,7 +99,7 @@ namespace UserInterfaceTest
 		auto [scrollSlider, scrollSliderPtr] = GetPtrs(CreateSampleScrollSlider(DirectionType::Vertical, { { 16, 200 }, Origin::Center }));
 		UIEx(m_panel).AttachComponent(move(scrollSlider), { 100, 200 });
 		m_panel = WriteReadTest(m_panel, scrollSliderPtr);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		testing::MockFunction<void(float)> mockOnScrollChanged;
 		scrollSliderPtr->AddScrollChangedCB(mockOnScrollChanged.AsStdFunction());
@@ -121,10 +121,10 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-		static void TestSwitcher_Scroll(size_t index, const RECT& dest, const RECT* source, TextureSourceBinder* sb)
+		static void TestSwitcher_Scroll(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
-		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_V_Pressed"));
+		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollButton3_V_Pressed"));
 	}
 
 	TEST_F(ComplexComponentTest, Switcher_Scroll)
@@ -133,7 +133,7 @@ namespace UserInterfaceTest
 			ImagePart::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, switcherPtr);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		testing::MockFunction<void(KeyState)> mockOnPress;
 		switcherPtr->AddPressCB(mockOnPress.AsStdFunction());

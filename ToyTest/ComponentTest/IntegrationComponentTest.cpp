@@ -101,14 +101,14 @@ namespace UserInterfaceTest
 	{
 		auto img9_0 = CreateImageGrid9({ {220, 190}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(img9_0), { 80, 60 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel->ProcessUpdate(m_timer);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), {0, 0}) == 1);
 		EXPECT_EQ(CheckComponentCount(m_panel.get(), { 100, 100 }), 4);
 
 		auto img9_1 = CreateImageGrid9({ {221, 191}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(img9_1), { 88, 66 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel->ProcessUpdate(m_timer);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 180, 160 }) == 7);
 	}
@@ -120,7 +120,7 @@ namespace UserInterfaceTest
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		UIEx(panel).AttachComponent(move(img9), { 40, 30 });
 		UIEx(m_panel).AttachComponent(move(panel), { 400, 300 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_sourceBinder.get(), nullptr));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel->ProcessUpdate(m_timer);
 
 		UIComponent* component = UIEx(m_panel).FindComponent("ImageGrid1_4");

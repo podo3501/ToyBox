@@ -29,7 +29,7 @@ public:
 protected:
 	ImageGrid3(const ImageGrid3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept override;
+	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:

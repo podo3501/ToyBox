@@ -6,7 +6,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid3.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/Utility.h"
 #include "../../EditUtility.h"
 #include "../SourceExtractor.h"
@@ -24,8 +24,8 @@
 ////////////////////////////////////////////////////////
 //
 //EditImageGrid::~EditImageGrid() = default;
-//EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
-//    EditWindow{ component, sourceBinder, cmdList },
+//EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, TextureResourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
+//    EditWindow{ component, resBinder, cmdList },
 //    m_renderer{ renderer }
 //{}
 //
@@ -89,18 +89,18 @@ static void ChangeKeyFromComboBox(const vector<string>& texKeys, const string& c
 //////////////////////////////////////////////////////
 
 EditImageGrid1::~EditImageGrid1() = default;
-EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer*, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
-    EditWindow{ imgGrid1, sourceBinder, cmdList },
+EditImageGrid1::EditImageGrid1(ImageGrid1* imgGrid1, IRenderer*, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
+    EditWindow{ imgGrid1, resBinder, cmdList },
     m_imageGrid1{ imgGrid1 }
 {}
 
 void EditImageGrid1::RenderComponent()
 {
-    auto srcBinder = GetTextureSourceBinder();
-    const auto& texKeys = srcBinder->GetTextureKeys(ImagePart::One);
+    auto resBinder = GetTextureResourceBinder();
+    const auto& texKeys = resBinder->GetTextureKeys(ImagePart::One);
 
-    ChangeKeyFromComboBox(texKeys, m_imageGrid1->GetBindKey(), [this, &srcBinder](const string& curKey) {
-        if (auto infoRef = srcBinder->GetTextureSourceInfo(curKey); infoRef)
+    ChangeKeyFromComboBox(texKeys, m_imageGrid1->GetBindKey(), [this, &resBinder](const string& curKey) {
+        if (auto infoRef = resBinder->GetTextureSourceInfo(curKey); infoRef)
             m_imageGrid1->ChangeBindKey(curKey, *infoRef);
         });
 }
@@ -108,8 +108,8 @@ void EditImageGrid1::RenderComponent()
 ////////////////////////////////////////////////
 
 EditImageGrid3::~EditImageGrid3() = default;
-EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer*, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
-    EditWindow{ imgGrid3, sourceBinder, cmdList },
+EditImageGrid3::EditImageGrid3(ImageGrid3* imgGrid3, IRenderer*, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
+    EditWindow{ imgGrid3, resBinder, cmdList },
     m_imageGrid3{ imgGrid3 }
 {}
 
@@ -118,7 +118,7 @@ void EditImageGrid3::RenderComponent()
     DirectionType dirType = m_imageGrid3->GetDirectionType();
     ImagePart imgPart = (dirType == DirectionType::Horizontal) ? ImagePart::ThreeH : ImagePart::ThreeV;
 
-    auto srcBinder = GetTextureSourceBinder();
+    auto srcBinder = GetTextureResourceBinder();
     const auto& texKeys = srcBinder->GetTextureKeys(imgPart);
 
     ChangeKeyFromComboBox(texKeys, m_imageGrid3->GetBindKey(), [this, &srcBinder](const string& curKey) {
@@ -130,18 +130,18 @@ void EditImageGrid3::RenderComponent()
 ////////////////////////////////////////////////
 
 EditImageGrid9::~EditImageGrid9() = default;
-EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer*, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
-    EditWindow{ imgGrid9, sourceBinder, cmdList },
+EditImageGrid9::EditImageGrid9(ImageGrid9* imgGrid9, IRenderer*, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
+    EditWindow{ imgGrid9, resBinder, cmdList },
     m_imageGrid9{ imgGrid9 }
 {}
 
 void EditImageGrid9::RenderComponent()
 {
-    auto srcBinder = GetTextureSourceBinder();
-    const auto& texKeys = srcBinder->GetTextureKeys(ImagePart::Nine);
+    auto resBinder = GetTextureResourceBinder();
+    const auto& texKeys = resBinder->GetTextureKeys(ImagePart::Nine);
 
-    ChangeKeyFromComboBox(texKeys, m_imageGrid9->GetBindKey(), [this, &srcBinder](const string& curKey) {
-        if (auto infoRef = srcBinder->GetTextureSourceInfo(curKey); infoRef)
+    ChangeKeyFromComboBox(texKeys, m_imageGrid9->GetBindKey(), [this, &resBinder](const string& curKey) {
+        if (auto infoRef = resBinder->GetTextureSourceInfo(curKey); infoRef)
             m_imageGrid9->ChangeBindKey(curKey, *infoRef);
         });
 }

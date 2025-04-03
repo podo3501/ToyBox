@@ -7,7 +7,7 @@
 #include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/StepTimer.h"
 
@@ -21,11 +21,11 @@ MainWindow::~MainWindow()
 MainWindow::MainWindow(IRenderer* renderer) :
 	InnerWindow{ "Main Window " + to_string(m_mainWindowIndex++) },
 	m_renderer{ renderer },
-	m_sourceBinder{ CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json") },
+	m_resBinder{ CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json") },
 	m_panel{ nullptr }
 {
 	m_renderer->AddImguiComponent(this);
-	m_renderer->LoadTextureBinder(m_sourceBinder.get());
+	m_renderer->LoadTextureBinder(m_resBinder.get());
 }
 
 ImVec2 MainWindow::GetPanelSize() const noexcept
@@ -38,11 +38,11 @@ bool MainWindow::SetupProperty(unique_ptr<Panel>&& panel)
 	//AddRenderComponent가 없는것은 main 화면에서 보여주는게 아니라 TextureRendering해서 보여주는거기 때문에 Render에 연결시키지 않는다.
 	m_panel = panel.get();
 	m_panel->RenameRegion("MainRegionEntry");
-	m_controller = make_unique<ComponentController>(m_renderer, m_sourceBinder.get(), m_panel, GetName());
+	m_controller = make_unique<ComponentController>(m_renderer, m_resBinder.get(), m_panel, GetName());
 
 	const auto& size = m_panel->GetSize();
 	m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(panel));
-	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
 	ToggleToolMode();
 	m_isOpen = true;

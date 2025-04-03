@@ -11,7 +11,7 @@
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "UserInterface/UIComponent/Components/RenderTexture.h"
 #include "UserInterface/UIComponent/Components/ImageSwitcher.h"
-#include "UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -54,8 +54,8 @@ bool GameMainLoop::AttachComponentToPanel(unique_ptr<UIComponent> component, con
 
 bool GameMainLoop::LoadResources()
 {
-    m_sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
-    m_renderer->LoadTextureBinder(m_sourceBinder.get());
+    m_resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
+    m_renderer->LoadTextureBinder(m_resBinder.get());
 
     AttachComponentToPanel(CreateImageSwitcher({ {32, 32}, Origin::Center }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal), { 100, 100 });
     AttachComponentToPanel(CreateImageSwitcher({ {180, 48}, Origin::Center }, ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 300 });
@@ -64,9 +64,9 @@ bool GameMainLoop::LoadResources()
     AttachComponentToPanel(CreateTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>", bindFontKeys), { 160, 420 });
     AttachComponentToPanel(CreateImageGrid9({ {210, 150}, Origin::LeftTop }, "BackImage9"), { 400, 300 });
     AttachComponentToPanel(CreateSampleListArea({ {200, 170}, Origin::Center }), { 600, 200 });
-    ReturnIfFalse(m_gamePanel->BindTextureSourceInfo(m_sourceBinder.get(), m_renderer->GetTextureController()));
+    ReturnIfFalse(m_gamePanel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
-    MakeSampleListAreaData(m_renderer, m_sourceBinder.get(), UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 16);
+    MakeSampleListAreaData(m_renderer, m_resBinder.get(), UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 16);
     
     return true;
 }

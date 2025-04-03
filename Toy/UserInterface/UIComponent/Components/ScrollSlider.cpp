@@ -66,7 +66,7 @@ bool ScrollSlider::Setup(const UILayout& layout,
 	return true;
 }
 
-bool ScrollSlider::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+bool ScrollSlider::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	SetScrollContainerSize(0.5f);	//±âº»°ª
 	return true;

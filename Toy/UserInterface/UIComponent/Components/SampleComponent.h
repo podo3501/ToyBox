@@ -6,7 +6,7 @@ class UILayout;
 class ListArea;
 class ScrollBar;
 class ScrollSlider;
-class TextureSourceBinder;
+class TextureResourceBinder;
 enum class InteractState;
 enum class DirectionType;
 
@@ -18,4 +18,4 @@ unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const U
 unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout);
 unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout);
 
-bool MakeSampleListAreaData(IRenderer* renderer, TextureSourceBinder* sb, ListArea* listArea, int itemCount);
+bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, ListArea* listArea, int itemCount);

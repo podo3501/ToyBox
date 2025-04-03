@@ -95,12 +95,12 @@ unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 	return CreateListArea(layout, move(listBackImage), move(switcher), move(scrollBar));
 }
 
-bool MakeSampleListAreaData(IRenderer* renderer, TextureSourceBinder* sb, ListArea* listArea, int itemCount)
+bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
 {
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateTextArea({ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(sb, renderer->GetTextureController()));
+	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, renderer->GetTextureController()));
 
 	protoTextArea->Rename("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();

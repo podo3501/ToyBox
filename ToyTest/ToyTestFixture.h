@@ -3,7 +3,7 @@
 
 class Window;
 class UIComponent;
-class TextureSourceBinder;
+class TextureResourceBinder;
 struct IRenderer;
 struct IComponent;
 
@@ -13,12 +13,12 @@ public:
 	ToyTestFixture();
 	~ToyTestFixture();
 
-	void CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times);
-	void CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> testRenderFunc, int times);
+	void CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times);
+	void CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times);
 	void CallMockRender(function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc);
 	void CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc);
 
-	void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureSourceBinder*)> renderFunc, int times);
+	void CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> renderFunc, int times);
 	void MockMouseInput(int mouseX, int mouseY, bool leftButton = false);
 
 protected:
@@ -29,7 +29,7 @@ protected:
 	unique_ptr<IRenderer> m_renderer;
 	DX::StepTimer m_timer;
 	unique_ptr<UIComponent> m_panel;
-	unique_ptr<TextureSourceBinder> m_sourceBinder;
+	unique_ptr<TextureResourceBinder> m_resBinder;
 };
 
 //비주얼 스튜디오 테스트 탐색기에 계층구조 표시하기 위해서 Fixture를 상속받아서 함.
@@ -40,20 +40,20 @@ class BasicComponentTest : public ToyTestFixture {};
 class ComplexComponentTest : public ToyTestFixture {};
 
 class UICommandList;
-class TexSrcCommandList;
+class TexResCommandList;
 class IntegrationTest : public ToyTestFixture 
 {
 protected:
 	bool VerifyClone(unique_ptr<UIComponent> original);
 };
-class TextureSourceBinderTest : public ToyTestFixture {};
+class TextureResourceBinderTest : public ToyTestFixture {};
 class UndoRedoTest : public ToyTestFixture
 {
 protected:
 	void CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history);
-	void CaptureSnapshot(TexSrcCommandList& cmdList, vector<unique_ptr<TextureSourceBinder>>& history);
+	void CaptureSnapshot(TexResCommandList& cmdList, vector<unique_ptr<TextureResourceBinder>>& history);
 	void VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
-	void VerifyUndoRedo(TexSrcCommandList& cmdList, const vector<unique_ptr<TextureSourceBinder>>& history);
+	void VerifyUndoRedo(TexResCommandList& cmdList, const vector<unique_ptr<TextureResourceBinder>>& history);
 
 	template <typename cmdListType, typename History, typename Func>
 	void ExecuteAndCapture(cmdListType& cmdList, History& history, Func&& func)

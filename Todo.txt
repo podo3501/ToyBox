@@ -83,30 +83,30 @@
 --컨테이너에 그림을 올려서 테스트 할려고 하는 순간, 버튼에 이미지를 올렸을 경우 hovered가 되면 
     자식 컨테이너는 보이지 않게 된다. 컴포넌트가 normal, hover, pressed가 다 따로 있기 때문인데 하나로 만들고
     이미지만 교체 하는 식으로 바꿔야 함. 그래서 ImageChanger 컴포넌트를 만들예정
---TextureWindow를 main처럼 창 상단에서 열게 해서 source를 이름과 매칭시키는 클래스(TextureSourceBinder) 작성
+--TextureWindow를 main처럼 창 상단에서 열게 해서 source를 이름과 매칭시키는 클래스(TextureResourceBinder) 작성
     툴작업
     json으로 로드 세이브 되는지 확인
     1차 마무리 했다면 tdd코드에서 좌표 확인 하는 부분 수정
 --extureSourceBinder에서 source 위치를 옮긴후 저장할때 버그.
     그 이미지가 선택되었다 라고 해서 이미지에서 수정하는 식으로 코드를 짜는 것을 추천
     버그 수정후에 파일을 저장하고 테스트 코드를 한단계씩 바꿔간다. ImageGrid3 할 차례
-    현재는 TDD가 작동하지 않는다 TextureSourceBinder 읽을때 안에 파일 형식이 달라서 오류생김
+    현재는 TDD가 작동하지 않는다 TextureResourceBinder 읽을때 안에 파일 형식이 달라서 오류생김
     이름을 먼저 정하면 선택할 수 있게 되고 선택이 가능하면 source 관련 수치가 바뀔 수 있도록 수정
     insert와 modify로 나누면 될꺼 같기도 하고.
---TextureSourceBinder Vertical작업
---TextureSourceBinder에 저장되어있는 구역들 툴에서 볼수 있게끔 작업
---툴에서 TextureSourceBinder 키로 저장하게끔 수정
+--TextureResourceBinder Vertical작업
+--TextureResourceBinder에 저장되어있는 구역들 툴에서 볼수 있게끔 작업
+--툴에서 TextureResourceBinder 키로 저장하게끔 수정
 --툴에서 editwindow쪽 수정 필요
 --3이미지 9이미지 늘릴때 안늘어나는 이미지 가로 세로 lock 걸고 이미지 조정하는 걸로 수정
---TextureSourceBinder도 TDD 작성 및 리팩토링
---m_index를 컴포넌트들이 가지고 있는데 이것을 TextureSourceBinder가 가지는 방식도 고려
+--TextureResourceBinder도 TDD 작성 및 리팩토링
+--m_index를 컴포넌트들이 가지고 있는데 이것을 TextureResourceBinder가 가지는 방식도 고려
 --기존의 TDD에 좌표로 하드코딩 돼 있는 부분 TextrueSourceBinder로 수정
     바꾸는 중에 m_index도 셋팅 하게끔 바꾸는데 그러다 보니 bind부분과 post부분이 겹치게 되어서 
     한꺼번에 바꿔야 해서 img1 했고, 이전에는 반쪽만 했는데 switcher부터는 다 해야한다.
 --리팩토링 및 TDD 수정
-    기존의 Image컴포넌트들도 TextureSourceBinder 사용하게 수정
+    기존의 Image컴포넌트들도 TextureResourceBinder 사용하게 수정
     ImageGrid1이 텍스쳐 파일을 로딩하기도 하는데, 이 부분을 Binder로 옮기고 Component는 직접적으로 로딩 하는 부분을 없애자.
---TextureSourceBinder 함수 정리
+--TextureResourceBinder 함수 정리
     ImageSwitcher 저장 로드시 버그 수정
 --Image9, 3에 divider 삭제
 --TextureWindow 및 SourceExtractor 삭제

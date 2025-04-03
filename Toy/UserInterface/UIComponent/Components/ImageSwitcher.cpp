@@ -3,7 +3,7 @@
 #include "ImageGrid.h"
 #include "ImageGrid1.h"
 #include "ImageGrid3.h"
-#include "../../TextureSourceBinder/TextureSourceBinder.h"
+#include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "../../../../Include/IRenderer.h"
 #include "../../../InputManager.h"
 #include "../../JsonOperation/JsonOperation.h"
@@ -78,11 +78,11 @@ void ImageSwitcher::ClearInteraction() noexcept
 		SetState(InteractState::Normal);
 }
 
-bool ImageSwitcher::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController*) noexcept
+bool ImageSwitcher::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
 {
 	for (const auto& pair : m_stateKeys)
 	{
-		auto sourceInfoRef = sourceBinder->GetTextureSourceInfo(pair.second);
+		auto sourceInfoRef = resBinder->GetTextureSourceInfo(pair.second);
 		ReturnIfFalse(sourceInfoRef);
 
 		const auto& srcInfo = sourceInfoRef->get();

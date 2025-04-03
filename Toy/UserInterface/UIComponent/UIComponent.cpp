@@ -69,10 +69,10 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 	return clone;
 }
 
-bool UIComponent::BindTextureSourceInfo(TextureSourceBinder* sourceBinder, ITextureController* texController) noexcept
+bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
 {
-	ReturnIfFalse(ForEachChildPostUntilFail([sourceBinder, texController](UIComponent* component) {
-		bool result = component->ImplementBindSourceInfo(sourceBinder, texController);
+	ReturnIfFalse(ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
+		bool result = component->ImplementBindSourceInfo(resBinder, texController);
 		Assert(result);
 		return result;
 		}));

@@ -2,13 +2,13 @@
 #include "EditWindow.h"
 
 class TextArea;
-class TextureSourceBinder;
+class TextureResourceBinder;
 class EditTextArea : public EditWindow
 {
 public:
 	~EditTextArea();
 	EditTextArea() = delete;
-	EditTextArea(TextArea* textArea, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept;
+	EditTextArea(TextArea* textArea, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
 
 protected:
 	virtual void RenderComponent() override;

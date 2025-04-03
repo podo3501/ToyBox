@@ -42,7 +42,7 @@ bool Container::operator==(const UIComponent& rhs) const noexcept
 		});
 }
 
-bool Container::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+bool Container::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	SetState(Normal);
 	return true;

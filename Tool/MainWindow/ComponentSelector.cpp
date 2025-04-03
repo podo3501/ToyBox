@@ -12,9 +12,9 @@
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, 
-	TextureSourceBinder* sourceBinder, UICommandList* cmdList, UIComponent* panel) :
+	TextureResourceBinder* resBinder, UICommandList* cmdList, UIComponent* panel) :
 	m_renderer{ renderer },
-	m_sourceBinder{ sourceBinder },
+	m_resBinder{ resBinder },
 	m_cmdList{ cmdList },
 	m_mainWnd{ nullptr },
 	m_tooltip{ make_unique<ComponentTooltip>(panel) },
@@ -40,7 +40,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 		return;
 	}
 
-	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_renderer, m_sourceBinder, m_cmdList);
+	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_renderer, m_resBinder, m_cmdList);
 
 	m_component = component;
 	m_tooltip->SetComponent(component);

@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "TexSrcCommandRegistry.h"
+#include "TexResCommandRegistry.h"
 #include "../Include/IRenderer.h"
 #include "../../../Utility.h"
-#include "../../TextureSourceBinder/TextureSourceBinder.h"
+#include "../../TextureResourceBinder/TextureResourceBinder.h"
 
-AddFontKeyCommand::AddFontKeyCommand(TextureSourceBinder* sb, const wstring& key, const TextureFontInfo& info) noexcept :
-	TexSrcCommand{ sb }, m_key{ key }, m_record{ info }
+AddFontKeyCommand::AddFontKeyCommand(TextureResourceBinder* rb, const wstring& key, const TextureFontInfo& info) noexcept :
+	TexResCommand{ rb }, m_key{ key }, m_record{ info }
 {}
 bool AddFontKeyCommand::Execute()
 {
@@ -18,8 +18,8 @@ bool AddFontKeyCommand::Redo() { return GetTarget()->AddFontKey(m_key, m_record.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-RemoveFontKeyCommand::RemoveFontKeyCommand(TextureSourceBinder* sb, const wstring& key) noexcept :
-	TexSrcCommand{ sb }, m_key{ key }
+RemoveFontKeyCommand::RemoveFontKeyCommand(TextureResourceBinder* rb, const wstring& key) noexcept :
+	TexResCommand{ rb }, m_key{ key }
 {
 }
 bool RemoveFontKeyCommand::Execute()
@@ -36,8 +36,8 @@ bool RemoveFontKeyCommand::Redo() { GetTarget()->RemoveFontKey(m_key); return tr
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-AddTextureKeyCommand::AddTextureKeyCommand(TextureSourceBinder* sb, const string& key, const TextureSourceInfo& info) noexcept :
-	TexSrcCommand{ sb }, m_key{ key }, m_record{ info }
+AddTextureKeyCommand::AddTextureKeyCommand(TextureResourceBinder* rb, const string& key, const TextureSourceInfo& info) noexcept :
+	TexResCommand{ rb }, m_key{ key }, m_record{ info }
 {}
 bool AddTextureKeyCommand::Execute()
 {
@@ -50,8 +50,8 @@ bool AddTextureKeyCommand::Redo() { return GetTarget()->AddTextureKey(m_key, m_r
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-RemoveTextureKeyCommand::RemoveTextureKeyCommand(TextureSourceBinder* sb, const string& key) noexcept :
-	TexSrcCommand{ sb }, m_key{ key }
+RemoveTextureKeyCommand::RemoveTextureKeyCommand(TextureResourceBinder* rb, const string& key) noexcept :
+	TexResCommand{ rb }, m_key{ key }
 {}
 bool RemoveTextureKeyCommand::Execute()
 {
@@ -67,8 +67,8 @@ bool RemoveTextureKeyCommand::Redo() { GetTarget()->RemoveTextureKey(m_key); ret
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-RemoveKeyByFilenameCommand::RemoveKeyByFilenameCommand(TextureSourceBinder* sb, const wstring& filename) noexcept :
-	TexSrcCommand{ sb }, m_filename{ filename }
+RemoveKeyByFilenameCommand::RemoveKeyByFilenameCommand(TextureResourceBinder* rb, const wstring& filename) noexcept :
+	TexResCommand{ rb }, m_filename{ filename }
 {}
 
 bool RemoveKeyByFilenameCommand::Execute()
@@ -96,8 +96,8 @@ bool RemoveKeyByFilenameCommand::Redo() { return GetTarget()->RemoveKeyByFilenam
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-RenameFontKeyCommand::RenameFontKeyCommand(TextureSourceBinder* sb, const wstring& preKey, const wstring& newKey) noexcept :
-	TexSrcCommand{ sb }, m_record{ pair(preKey, newKey) }
+RenameFontKeyCommand::RenameFontKeyCommand(TextureResourceBinder* rb, const wstring& preKey, const wstring& newKey) noexcept :
+	TexResCommand{ rb }, m_record{ pair(preKey, newKey) }
 {}
 bool RenameFontKeyCommand::Execute()
 {
@@ -109,8 +109,8 @@ bool RenameFontKeyCommand::Redo() { return GetTarget()->RenameFontKey(m_record.c
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-RenameTextureKeyCommand::RenameTextureKeyCommand(TextureSourceBinder* sb, const string& preKey, const string& newKey) noexcept :
-	TexSrcCommand{ sb }, m_record{ pair(preKey, newKey) }
+RenameTextureKeyCommand::RenameTextureKeyCommand(TextureResourceBinder* rb, const string& preKey, const string& newKey) noexcept :
+	TexResCommand{ rb }, m_record{ pair(preKey, newKey) }
 {}
 bool RenameTextureKeyCommand::Execute()
 {
@@ -122,8 +122,8 @@ bool RenameTextureKeyCommand::Redo() { return GetTarget()->RenameTextureKey(m_re
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ModifyTexSrcInfoCommand::ModifyTexSrcInfoCommand(TextureSourceBinder* sb, const string& key, const TextureSourceInfo& info) noexcept :
-	TexSrcCommand{ sb }, m_key{ key }, m_record { info }
+ModifyTexSrcInfoCommand::ModifyTexSrcInfoCommand(TextureResourceBinder* rb, const string& key, const TextureSourceInfo& info) noexcept :
+	TexResCommand{ rb }, m_key{ key }, m_record { info }
 {}
 bool ModifyTexSrcInfoCommand::Execute()
 {
@@ -136,7 +136,7 @@ bool ModifyTexSrcInfoCommand::Execute()
 bool ModifyTexSrcInfoCommand::Undo() { return GetTarget()->ModifyTextureSourceInfo(m_key, m_record.previous); }
 bool ModifyTexSrcInfoCommand::Redo() { return GetTarget()->ModifyTextureSourceInfo(m_key, m_record.current); }
 
-void ModifyTexSrcInfoCommand::PostMerge(unique_ptr<TexSrcCommand> other) noexcept
+void ModifyTexSrcInfoCommand::PostMerge(unique_ptr<TexResCommand> other) noexcept
 {
 	auto otherCmd = static_cast<ModifyTexSrcInfoCommand*>(other.get());
 	m_record.current = otherCmd->m_record.current;

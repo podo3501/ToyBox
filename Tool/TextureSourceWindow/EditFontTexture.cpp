@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "EditFontTexture.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
-#include "../Toy/UserInterface/Command/TexSrcCommandList/TexSrcCommandList.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../HelperClass.h"
 
 EditFontTexture::~EditFontTexture() = default;
 EditFontTexture::EditFontTexture() :
-    m_sourceBinder{ nullptr },
+    m_resBinder{ nullptr },
     m_cmdList{ nullptr },
     m_renameNotifier{ make_unique<RenameNotifier>() }
 {}
@@ -48,18 +48,18 @@ void EditFontTexture::Render()
     ImGui::ListBox("Font List", &m_fontIndex, fontFiles.data(), static_cast<int>(fontFiles.size()), 4);
 
     const wstring& fontFilename = GetSelectFontFile();
-    const wstring& bindingKey = m_sourceBinder->GetFontKey(fontFilename);
+    const wstring& bindingKey = m_resBinder->GetFontKey(fontFilename);
     m_renameNotifier->EditName("Font Bind Key", WStringToString(bindingKey), [this, &bindingKey, &fontFilename](const string& newKey) {
         wstring wstrNewKey = StringToWString(newKey);
-        if (bindingKey.empty()) return m_cmdList->AddFontKey(m_sourceBinder, wstrNewKey, TextureFontInfo{ fontFilename });
-        if (wstrNewKey.empty()) return m_sourceBinder->RemoveKeyByFilename(fontFilename);
-        return m_sourceBinder->RenameFontKey(bindingKey, wstrNewKey);
+        if (bindingKey.empty()) return m_cmdList->AddFontKey(m_resBinder, wstrNewKey, TextureFontInfo{ fontFilename });
+        if (wstrNewKey.empty()) return m_resBinder->RemoveKeyByFilename(fontFilename);
+        return m_resBinder->RenameFontKey(bindingKey, wstrNewKey);
         });
 }
 
-bool EditFontTexture::SetSourceBinder(TextureSourceBinder* sourceBinder, TexSrcCommandList* cmdList) noexcept
+bool EditFontTexture::SetBinderAndCmdList(TextureResourceBinder* resBinder, TexResCommandList* cmdList) noexcept
 {
-	m_sourceBinder = sourceBinder;
+	m_resBinder = resBinder;
     m_cmdList = cmdList;
     return true;
 }

@@ -3,7 +3,7 @@
 #include "TextureSourceWindow.h"
 #include "../MainWindow/EditUtility.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/UIComponent/UIUtility.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
@@ -13,7 +13,7 @@
 ImageSelector::~ImageSelector() = default;
 ImageSelector::ImageSelector(TextureSourceWindow* textureWindow) :
     m_sourceTexture{ nullptr },
-    m_sourceBinder{ nullptr },
+    m_resBinder{ nullptr },
     m_textureWindow{ textureWindow },
     m_renameNotifier{ make_unique<RenameNotifier>() },
     m_selectImagePart{ ImagePart::One }
@@ -32,6 +32,12 @@ void ImageSelector::SetTexture(ImageGrid1* texture) noexcept
         m_areaList = *areaList;
 
     DeselectArea();
+}
+
+void ImageSelector::SetBinderAndCmdList(TextureResourceBinder* resBinder, TexResCommandList* cmdList) noexcept
+{
+    m_resBinder = resBinder;
+    m_cmdList = cmdList;
 }
 
 void ImageSelector::Update()
@@ -55,9 +61,9 @@ bool ImageSelector::DeselectArea() noexcept
 bool ImageSelector::RemoveArea() noexcept
 {
     if (!m_selectedArea) return false;
-    const string& bindingKey = m_sourceBinder->GetBindingKey(*m_selectedArea);
+    const string& bindingKey = m_resBinder->GetBindingKey(*m_selectedArea);
     if (bindingKey.empty()) return false;
-    m_sourceBinder->RemoveTextureKey(bindingKey);
+    m_resBinder->RemoveTextureKey(bindingKey);
 
     return DeselectArea();
 }
@@ -121,7 +127,7 @@ void ImageSelector::CheckSourcePartition() noexcept
     if (!m_sourceTexture) return;
 
     const XMINT2& pos = InputManager::GetMouse().GetPosition();
-    m_hoveredAreas = m_sourceBinder->GetAreas(m_sourceTexture->GetFilename(), m_selectImagePart, pos);
+    m_hoveredAreas = m_resBinder->GetAreas(m_sourceTexture->GetFilename(), m_selectImagePart, pos);
     if (!m_hoveredAreas.empty()) return; //먼저 저장돼 있는 것을 찾아보고 없으면 새로운걸 만든다.
 
     if(auto currRectangle = FindAreaFromMousePos(pos); currRectangle)
@@ -165,7 +171,7 @@ void ImageSelector::RenderSelectedArea() const
 void ImageSelector::RenderLabeledAreas() const
 {
     if (!m_sourceTexture) return;
-    vector<TextureSourceInfo> sourceInfos = m_sourceBinder->GetAreas(m_sourceTexture->GetFilename(), m_selectImagePart);
+    vector<TextureSourceInfo> sourceInfos = m_resBinder->GetAreas(m_sourceTexture->GetFilename(), m_selectImagePart);
     for (auto& info : sourceInfos)
         DrawRectangles(m_textureWindow->GetWindow(), info.sources, ToColor(Colors::Blue));
 }
@@ -174,17 +180,17 @@ void ImageSelector::EditSelectArea()
 {
     if (!m_selectedArea) return;
 
-    const string& bindingKey = m_sourceBinder->GetBindingKey(*m_selectedArea);
+    const string& bindingKey = m_resBinder->GetBindingKey(*m_selectedArea);
     SourceDivider sourceDivider = GetSourceDivider(*m_selectedArea);
     if (EditSourceAndDivider("Source Area", "Deviders", sourceDivider))
     {
         m_selectedArea->sources = GetSources(m_selectImagePart, sourceDivider);
-        if (!bindingKey.empty()) m_sourceBinder->ModifyTextureSourceInfo(bindingKey, *m_selectedArea);
+        if (!bindingKey.empty()) m_resBinder->ModifyTextureSourceInfo(bindingKey, *m_selectedArea);
     }
         
     m_renameNotifier->EditName("Tex Bind Key", bindingKey, [this, &bindingKey](const string& newKey) {
-        if (bindingKey.empty()) return m_sourceBinder->AddTextureKey(newKey, *m_selectedArea);
+        if (bindingKey.empty()) return m_resBinder->AddTextureKey(newKey, *m_selectedArea);
         if (newKey.empty()) return RemoveArea();
-        return m_sourceBinder->RenameTextureKey(bindingKey, newKey);
+        return m_resBinder->RenameTextureKey(bindingKey, newKey);
         });
 }

@@ -1,21 +1,21 @@
 #include "pch.h"
-#include "TextureSourceBinder.h"
+#include "TextureResourceBinder.h"
 #include "../JsonOperation/JsonHelper.h"
 #include "../../Utility.h"
 #include "../UIComponent/UIUtility.h"
 
-TextureSourceBinder::~TextureSourceBinder() = default;
-TextureSourceBinder::TextureSourceBinder()
+TextureResourceBinder::~TextureResourceBinder() = default;
+TextureResourceBinder::TextureResourceBinder()
 {}
 
-bool TextureSourceBinder::operator==(const TextureSourceBinder& o) const noexcept
+bool TextureResourceBinder::operator==(const TextureResourceBinder& o) const noexcept
 {
     ReturnIfFalse(tie(m_bindingFontTable, m_bindingTexTable) == tie(o.m_bindingFontTable, o.m_bindingTexTable));
 
     return true;
 }
 
-bool TextureSourceBinder::LoadResources(ITextureLoad* load)
+bool TextureResourceBinder::LoadResources(ITextureLoad* load)
 {
     bool fontResult = ranges::all_of(m_bindingFontTable, [load](auto& pair) {
         return pair.second.LoadResource(load);
@@ -28,7 +28,7 @@ bool TextureSourceBinder::LoadResources(ITextureLoad* load)
     return (fontResult && texResult);
 }
 
-bool TextureSourceBinder::Load(const wstring& jsonFilename)
+bool TextureResourceBinder::Load(const wstring& jsonFilename)
 {
     ReturnIfFalse(JsonFile::Read(jsonFilename, *this));
     m_jsonFilename = jsonFilename;
@@ -36,7 +36,7 @@ bool TextureSourceBinder::Load(const wstring& jsonFilename)
     return true;
 }
 
-bool TextureSourceBinder::Save(const wstring& jsonFilename)
+bool TextureResourceBinder::Save(const wstring& jsonFilename)
 {
     ReturnIfFalse(JsonFile::Write(*this, jsonFilename));
     m_jsonFilename = jsonFilename;
@@ -59,17 +59,17 @@ static bool AddBindingImpl(MapType& bindingTable, const KeyType& bindingKey, con
     return true;
 }
 
-bool TextureSourceBinder::AddFontKey(const wstring& bindingKey, const TextureFontInfo& fontInfo) noexcept
+bool TextureResourceBinder::AddFontKey(const wstring& bindingKey, const TextureFontInfo& fontInfo) noexcept
 {
     return AddBindingImpl(m_bindingFontTable, bindingKey, fontInfo);
 }
 
-bool TextureSourceBinder::AddTextureKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept
+bool TextureResourceBinder::AddTextureKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept
 {
     return AddBindingImpl(m_bindingTexTable, bindingKey, sourceAreas);
 }
 
-bool TextureSourceBinder::ModifyTextureSourceInfo(const string& bindKey, const TextureSourceInfo& sourceInfo) noexcept
+bool TextureResourceBinder::ModifyTextureSourceInfo(const string& bindKey, const TextureSourceInfo& sourceInfo) noexcept
 {
     auto it = m_bindingTexTable.find(bindKey);
     if (it == m_bindingTexTable.end()) return false;
@@ -78,19 +78,19 @@ bool TextureSourceBinder::ModifyTextureSourceInfo(const string& bindKey, const T
     return true;
 }
 
-void TextureSourceBinder::RemoveFontKey(const wstring& bindingKey) noexcept
+void TextureResourceBinder::RemoveFontKey(const wstring& bindingKey) noexcept
 {
     if (auto it = m_bindingFontTable.find(bindingKey); it != m_bindingFontTable.end())
         m_bindingFontTable.erase(it);
 }
 
-void TextureSourceBinder::RemoveTextureKey(const string& bindingKey) noexcept
+void TextureResourceBinder::RemoveTextureKey(const string& bindingKey) noexcept
 {
     if (auto it = m_bindingTexTable.find(bindingKey); it != m_bindingTexTable.end())
         m_bindingTexTable.erase(it);
 }
 
-bool TextureSourceBinder::RemoveKeyByFilename(const wstring& filename) noexcept
+bool TextureResourceBinder::RemoveKeyByFilename(const wstring& filename) noexcept
 {
     erase_if(m_bindingTexTable, [&filename](const auto& pair) {
         return pair.second.filename == filename;
@@ -116,17 +116,17 @@ static bool RenameBindingImpl(MapType& bindingTable, const KeyType& preKey, cons
     return true;
 }
 
-bool TextureSourceBinder::RenameFontKey(const wstring& preKey, const wstring& newKey) noexcept
+bool TextureResourceBinder::RenameFontKey(const wstring& preKey, const wstring& newKey) noexcept
 {
     return RenameBindingImpl(m_bindingFontTable, preKey, newKey);
 }
 
-bool TextureSourceBinder::RenameTextureKey(const string& preKey, const string& newKey) noexcept
+bool TextureResourceBinder::RenameTextureKey(const string& preKey, const string& newKey) noexcept
 {
     return RenameBindingImpl(m_bindingTexTable, preKey, newKey);
 }
 
-vector<wstring> TextureSourceBinder::GetTextureFiles() const noexcept
+vector<wstring> TextureResourceBinder::GetTextureFiles() const noexcept
 {
     unordered_set<wstring> seenFilenames;
 
@@ -136,19 +136,19 @@ vector<wstring> TextureSourceBinder::GetTextureFiles() const noexcept
     return vector<wstring>(seenFilenames.begin(), seenFilenames.end());
 }
 
-string TextureSourceBinder::GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept
+string TextureResourceBinder::GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept
 {
     auto it = ranges::find_if(m_bindingTexTable, [&](const auto& pair) { return pair.second == sourceAreas; });
     return (it != m_bindingTexTable.end()) ? it->first : "";
 }
 
-wstring TextureSourceBinder::GetFontKey(const wstring& fontFilename) const noexcept
+wstring TextureResourceBinder::GetFontKey(const wstring& fontFilename) const noexcept
 {
     auto it = ranges::find_if(m_bindingFontTable, [&](const auto& pair) { return pair.second.filename == fontFilename; });
     return (it != m_bindingFontTable.end()) ? it->first : L"";
 }
 
-vector<string> TextureSourceBinder::GetTextureKeys(ImagePart imgPart) const noexcept
+vector<string> TextureResourceBinder::GetTextureKeys(ImagePart imgPart) const noexcept
 {
     vector<string> keys;
     for (const auto& pair : m_bindingTexTable)
@@ -162,7 +162,7 @@ vector<string> TextureSourceBinder::GetTextureKeys(ImagePart imgPart) const noex
     return keys;
 }
 
-vector<string> TextureSourceBinder::GetTextureKeys(const wstring& filename) const noexcept
+vector<string> TextureResourceBinder::GetTextureKeys(const wstring& filename) const noexcept
 {
     vector<string> keys;
     for (const auto& pair : m_bindingTexTable)//?!? 두함수가 같은데 algorithm으로 하는 방법 잇을껄
@@ -176,7 +176,7 @@ vector<string> TextureSourceBinder::GetTextureKeys(const wstring& filename) cons
     return keys;
 }
 
-optionalRef<TextureSourceInfo> TextureSourceBinder::GetTextureSourceInfo(const string& key) const noexcept
+optionalRef<TextureSourceInfo> TextureResourceBinder::GetTextureSourceInfo(const string& key) const noexcept
 {
     auto it = m_bindingTexTable.find(key);
     if (it == m_bindingTexTable.end()) return nullopt;
@@ -184,7 +184,7 @@ optionalRef<TextureSourceInfo> TextureSourceBinder::GetTextureSourceInfo(const s
     return cref(it->second);
 }
 
-optionalRef<TextureFontInfo> TextureSourceBinder::GetTextureFontInfo(const wstring& key) const noexcept
+optionalRef<TextureFontInfo> TextureResourceBinder::GetTextureFontInfo(const wstring& key) const noexcept
 {
     auto it = m_bindingFontTable.find(key);
     if (it == m_bindingFontTable.end()) return nullopt;
@@ -193,7 +193,7 @@ optionalRef<TextureFontInfo> TextureSourceBinder::GetTextureFontInfo(const wstri
 }
 
 //?!? 파생된 함수들은 멤버 함수로 만들지 말고 GetSourceInfo을 사용해서 유틸리티 함수를 만들어 사용하자.
-vector<Rectangle> TextureSourceBinder::GetAreas(const wstring& filename, ImagePart imgPart, const XMINT2& position) const noexcept
+vector<Rectangle> TextureResourceBinder::GetAreas(const wstring& filename, ImagePart imgPart, const XMINT2& position) const noexcept
 {
     for (const auto& entry : m_bindingTexTable) {
         const TextureSourceInfo& sourceInfo = entry.second;
@@ -206,7 +206,7 @@ vector<Rectangle> TextureSourceBinder::GetAreas(const wstring& filename, ImagePa
     return {};
 }
 
-vector<TextureSourceInfo> TextureSourceBinder::GetAreas(const wstring& filename, ImagePart part) const noexcept
+vector<TextureSourceInfo> TextureResourceBinder::GetAreas(const wstring& filename, ImagePart part) const noexcept
 {
     vector<TextureSourceInfo> filteredTextures;
     for (const auto& entry : m_bindingTexTable) {
@@ -217,7 +217,7 @@ vector<TextureSourceInfo> TextureSourceBinder::GetAreas(const wstring& filename,
     return filteredTextures;
 }
 
-void TextureSourceBinder::SerializeIO(JsonOperation& operation)
+void TextureResourceBinder::SerializeIO(JsonOperation& operation)
 {
     operation.Process("BindingFontTable", m_bindingFontTable);
     operation.Process("BindingTexTable", m_bindingTexTable);
@@ -225,10 +225,10 @@ void TextureSourceBinder::SerializeIO(JsonOperation& operation)
 
 /////////////////////////////////////////////////////////////////////////
 
-unique_ptr<TextureSourceBinder> CreateSourceBinder(const wstring& jsonFilename)
+unique_ptr<TextureResourceBinder> CreateSourceBinder(const wstring& jsonFilename)
 {
-    auto sourceBinder = make_unique<TextureSourceBinder>();
-    if (jsonFilename.empty()) return move(sourceBinder);
+    auto resBinder = make_unique<TextureResourceBinder>();
+    if (jsonFilename.empty()) return move(resBinder);
 
-    return sourceBinder->Load(jsonFilename) ? move(sourceBinder) : nullptr;
+    return resBinder->Load(jsonFilename) ? move(resBinder) : nullptr;
 }

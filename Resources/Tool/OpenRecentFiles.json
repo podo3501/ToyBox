@@ -4,7 +4,7 @@
         "UI/SampleTexture/SampleTextureBinder.json",
         "UI/Texture/ExtractTexture.json",
         "UI/SampleTexture/SampleTextureBinder_SaveTest.json",
-        "UI/Texture/TextureSourceBinder.json",
+        "UI/Texture/TextureResourceBinder.json",
         "",
         "UI/Texture/test.json",
         "D:\\ProgrammingStudy\\ToyBox\\Resources\\UI\\Texture\\ExtractTexture.json",

@@ -32,7 +32,7 @@ bool ImageGrid9::Setup(const UILayout& layout, const string& bindKey)
 	return true;
 }
 
-bool ImageGrid9::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+bool ImageGrid9::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	ChangeSize(GetSize(), true);
 	UpdatePositionsManually();

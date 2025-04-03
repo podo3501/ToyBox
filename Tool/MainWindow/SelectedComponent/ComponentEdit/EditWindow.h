@@ -3,7 +3,7 @@
 struct IRenderer;
 class UICommandList;
 class UIComponent;
-class TextureSourceBinder;
+class TextureResourceBinder;
 class RenameNotifier;
 class MouseTracker;
 enum class OnDrag;
@@ -15,7 +15,7 @@ class EditWindow
 {
 public:
 	EditWindow() = delete;
-	EditWindow(UIComponent* component, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept;
+	EditWindow(UIComponent* component, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
 	virtual ~EditWindow();
 	
 	void Update(bool mainWndFocus);
@@ -29,7 +29,7 @@ protected:
 
 	inline UICommandList* GetUICommandList() const noexcept { return m_cmdList; }
 	inline UIComponent* GetComponent() const noexcept { return m_component; }
-	inline TextureSourceBinder* GetTextureSourceBinder() const noexcept { return m_sourceBinder; }
+	inline TextureResourceBinder* GetTextureResourceBinder() const noexcept { return m_resBinder; }
 
 private:
 	void RenderCommon();
@@ -38,7 +38,7 @@ private:
 	void ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept;
 
 	UIComponent* m_component;
-	TextureSourceBinder* m_sourceBinder;
+	TextureResourceBinder* m_resBinder;
 	UICommandList* m_cmdList;
 	unique_ptr<RenameNotifier> m_renameNotifier;
 	bool m_visible{ true };
@@ -51,7 +51,7 @@ class EditPanel : public EditWindow
 public:
 	~EditPanel();
 	EditPanel() = delete;
-	EditPanel(Panel* panel, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept;
+	EditPanel(Panel* panel, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
 	//virtual void SetComponent(UIComponent* component);
 	//virtual void Render();
 

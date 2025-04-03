@@ -6,8 +6,8 @@
 #include "../../EditUtility.h"
 
 EditTextArea::~EditTextArea() = default;
-EditTextArea::EditTextArea(TextArea* textArea, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
-	EditWindow{ textArea, sourceBinder, cmdList },
+EditTextArea::EditTextArea(TextArea* textArea, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
+	EditWindow{ textArea, resBinder, cmdList },
 	m_textArea{ textArea }
 {}
 

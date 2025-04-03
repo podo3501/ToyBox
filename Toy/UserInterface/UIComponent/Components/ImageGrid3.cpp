@@ -58,7 +58,7 @@ bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const stri
     return true;
 }
 
-bool ImageGrid3::ImplementBindSourceInfo(TextureSourceBinder*, ITextureController*) noexcept
+bool ImageGrid3::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
     if (GetSize() == XMUINT2{}) //ImageGrid9을 만들면 초기 크기값이 0로 설정 돼 있다.
         SetSize(UIEx(this).GetTotalChildSize());

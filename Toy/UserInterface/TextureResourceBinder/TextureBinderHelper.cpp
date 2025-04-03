@@ -1,25 +1,25 @@
 #include "pch.h"
 #include "TextureBinderHelper.h"
-#include "TextureSourceBinder.h"
+#include "TextureResourceBinder.h"
 #include "../UIComponent/UIUtility.h"
 #include "../UIComponent/UIType.h"
 #include "../../Utility.h"
 
-optionalRef<vector<Rectangle>> GetRectangles(TextureSourceBinder* sb, const string& key) noexcept
+optionalRef<vector<Rectangle>> GetRectangles(TextureResourceBinder* rb, const string& key) noexcept
 {
-    if (auto infoRef = sb->GetTextureSourceInfo(key); infoRef) return cref(infoRef->get().sources);
+    if (auto infoRef = rb->GetTextureSourceInfo(key); infoRef) return cref(infoRef->get().sources);
     return nullopt;
 }
 
-Rectangle GetTextureArea(TextureSourceBinder* sb, const string& key, int index) noexcept
+Rectangle GetTextureArea(TextureResourceBinder* rb, const string& key, int index) noexcept
 {
-    if (auto infoRef = sb->GetTextureSourceInfo(key); infoRef) return infoRef->get().GetSource(index);
+    if (auto infoRef = rb->GetTextureSourceInfo(key); infoRef) return infoRef->get().GetSource(index);
     return {};
 }
 
-SourceDivider GetSourceDivider(TextureSourceBinder* sb, const string& key) noexcept
+SourceDivider GetSourceDivider(TextureResourceBinder* rb, const string& key) noexcept
 {
-    auto infoRef = sb->GetTextureSourceInfo(key);
+    auto infoRef = rb->GetTextureSourceInfo(key);
     if (!infoRef) return {};
     
     return GetSourceDivider(infoRef->get());
@@ -50,24 +50,24 @@ SourceDivider GetSourceDivider(const TextureSourceInfo& sourceInfo) noexcept
     return srcDivider;
 }
 
-pair<wstring, TextureFontInfo> GetTextureFontInfo(TextureSourceBinder* sb, const wstring& filename) noexcept
+pair<wstring, TextureFontInfo> GetTextureFontInfo(TextureResourceBinder* rb, const wstring& filename) noexcept
 {
-    const auto& key = sb->GetFontKey(filename);
+    const auto& key = rb->GetFontKey(filename);
     if (key.empty()) return {};
 
-    const auto& infoRef = sb->GetTextureFontInfo(key);
+    const auto& infoRef = rb->GetTextureFontInfo(key);
     return pair{ key, infoRef->get() };
 }
 
-vector<pair<string, TextureSourceInfo>> GetTextureSourceInfo(TextureSourceBinder* sb, const wstring& filename) noexcept
+vector<pair<string, TextureSourceInfo>> GetTextureSourceInfo(TextureResourceBinder* rb, const wstring& filename) noexcept
 {
     vector<pair<string, TextureSourceInfo>> result;
     
-    vector<string> keys = sb->GetTextureKeys(filename);
+    vector<string> keys = rb->GetTextureKeys(filename);
     if (keys.empty()) return result;
 
-    ranges::transform(keys, back_inserter(result), [sb](const auto& key) {
-        const auto& infoRef = sb->GetTextureSourceInfo(key);
+    ranges::transform(keys, back_inserter(result), [rb](const auto& key) {
+        const auto& infoRef = rb->GetTextureSourceInfo(key);
         return pair{ key, infoRef->get() };
         });
 

@@ -2,7 +2,7 @@
 
 struct IRenderer;
 class UIComponent;
-class TextureSourceBinder;
+class TextureResourceBinder;
 
 //UIComponent클래스에서 public에 관한 것들만 여기에서 정의한다. 
 // 함수가 UIComponent에 private함수를 을 써야 한다면 이 클래스에서 정의한다.

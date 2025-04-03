@@ -4,7 +4,7 @@
 #include "../../../Utility.h"
 #include "../../../Config.h"
 #include "../../JsonOperation/JsonOperation.h"
-#include "../../TextureSourceBinder/TextureSourceBinder.h"
+#include "../../TextureResourceBinder/TextureResourceBinder.h"
 
 ImageGrid1::~ImageGrid1() = default;
 ImageGrid1::ImageGrid1() : 
@@ -51,10 +51,10 @@ void ImageGrid1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureCont
 		SetSize(RectangleToXMUINT2(m_source));
 }
 
-bool ImageGrid1::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextureController*) noexcept
+bool ImageGrid1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
 {
 	if (m_bindKey.empty()) return false;
-	auto sourceInfoRef = sourceBinder->GetTextureSourceInfo(m_bindKey);
+	auto sourceInfoRef = resBinder->GetTextureSourceInfo(m_bindKey);
 	ReturnIfFalse(sourceInfoRef);
 
 	const auto& srcInfo = sourceInfoRef->get();

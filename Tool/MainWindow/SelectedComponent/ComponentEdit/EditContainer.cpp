@@ -4,8 +4,8 @@
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 
 EditContainer::~EditContainer() = default;
-EditContainer::EditContainer(Container* textArea, TextureSourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
-	EditWindow{ textArea, sourceBinder, cmdList },
+EditContainer::EditContainer(Container* textArea, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
+	EditWindow{ textArea, resBinder, cmdList },
 	m_container{ nullptr }
 {
 }

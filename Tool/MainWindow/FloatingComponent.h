@@ -1,7 +1,7 @@
 #pragma once
 
 struct IRenderer;
-class TextureSourceBinder;
+class TextureResourceBinder;
 class RenderTexture;
 class UIComponent;
 class MouseTracker;
@@ -21,7 +21,7 @@ class FloatingComponent
 	};
 
 public:
-	FloatingComponent(IRenderer* renderer, TextureSourceBinder* sourceBinder, const string& mainWndName) noexcept;
+	FloatingComponent(IRenderer* renderer, TextureResourceBinder* resBinder, const string& mainWndName) noexcept;
 	~FloatingComponent();
 	bool IsComponent() const noexcept;
 	unique_ptr<UIComponent> GetComponent() noexcept;
@@ -39,7 +39,7 @@ private:
 	void DrawMakeComponent();
 
 	IRenderer* m_renderer;
-	TextureSourceBinder* m_sourceBinder;
+	TextureResourceBinder* m_resBinder;
 	unique_ptr<RenderTexture> m_renderTex;
 	string m_name;
 	UIComponent* m_component;

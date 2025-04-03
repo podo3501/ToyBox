@@ -4,7 +4,7 @@
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/Utility.h"
 
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
@@ -19,11 +19,11 @@ unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstr
 	return move(read);
 }
 
-bool TestSourceBinderWriteRead(unique_ptr<TextureSourceBinder>& write, const wstring& filename)
+bool TestSourceBinderWriteRead(unique_ptr<TextureResourceBinder>& write, const wstring& filename)
 {
 	ReturnIfFalse(write->Save(filename));
 
-	unique_ptr<TextureSourceBinder> read = make_unique<TextureSourceBinder>();
+	unique_ptr<TextureResourceBinder> read = make_unique<TextureResourceBinder>();
 	ReturnIfFalse(read->Load(filename));
 
 	EXPECT_TRUE(*write == *read);
@@ -51,9 +51,9 @@ void TestCoordinates(size_t index, const RECT& dest, const RECT* source,
 	EXPECT_TRUE(result);
 }
 
-vector<RECT> GetSources(TextureSourceBinder* sourceBinder, const string& key) noexcept
+vector<RECT> GetSources(TextureResourceBinder* resBinder, const string& key) noexcept
 {
-	const auto& rectangles = GetRectangles(sourceBinder, key);
+	const auto& rectangles = GetRectangles(resBinder, key);
 	if (!rectangles) return {};
 
 	return RectanglesToRects(rectangles->get());

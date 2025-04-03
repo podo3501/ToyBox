@@ -2,7 +2,7 @@
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 
 struct ITextureLoad;
-class TextureSourceBinder;
+class TextureResourceBinder;
 
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
 
@@ -15,7 +15,7 @@ unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, T& compone
 	return move(read);
 }
 
-bool TestSourceBinderWriteRead(unique_ptr<TextureSourceBinder>& sourceBinder, const wstring& filename = L"Test/Data/RWSourceBinderTest.json");
+bool TestSourceBinderWriteRead(unique_ptr<TextureResourceBinder>& resBinder, const wstring& filename = L"Test/Data/RWSourceBinderTest.json");
 
 class TestComponent : public UIComponent
 {
@@ -33,4 +33,4 @@ private:
 
 void TestCoordinates(size_t index, const RECT& dest, const RECT* source,
 	const vector<RECT>& expDests, const vector<RECT>& expSrcs) noexcept;
-vector<RECT> GetSources(TextureSourceBinder* sourceBinder, const string& key) noexcept;
+vector<RECT> GetSources(TextureResourceBinder* resBinder, const string& key) noexcept;
