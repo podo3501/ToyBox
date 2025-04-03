@@ -50,7 +50,31 @@ SourceDivider GetSourceDivider(const TextureSourceInfo& sourceInfo) noexcept
     return srcDivider;
 }
 
-static vector<Rectangle> GetSources(ImagePart imgPart, const SourceDivider& sourceDivider) noexcept
+pair<wstring, TextureFontInfo> GetTextureFontInfo(TextureSourceBinder* sb, const wstring& filename) noexcept
+{
+    const auto& key = sb->GetFontKey(filename);
+    if (key.empty()) return {};
+
+    const auto& infoRef = sb->GetTextureFontInfo(key);
+    return pair{ key, infoRef->get() };
+}
+
+vector<pair<string, TextureSourceInfo>> GetTextureSourceInfo(TextureSourceBinder* sb, const wstring& filename) noexcept
+{
+    vector<pair<string, TextureSourceInfo>> result;
+    
+    vector<string> keys = sb->GetTextureKeys(filename);
+    if (keys.empty()) return result;
+
+    ranges::transform(keys, back_inserter(result), [sb](const auto& key) {
+        const auto& infoRef = sb->GetTextureSourceInfo(key);
+        return pair{ key, infoRef->get() };
+        });
+
+    return result;
+}
+
+vector<Rectangle> GetSources(ImagePart imgPart, const SourceDivider& sourceDivider) noexcept
 {
     if (imgPart == ImagePart::One) return { sourceDivider.rect };
 
@@ -65,16 +89,4 @@ static vector<Rectangle> GetSources(ImagePart imgPart, const SourceDivider& sour
     }
 
     return success ? GetSourcesFromArea(sourceDivider.rect, widths, heights) : vector<Rectangle>{};
-}
-
-bool ModifyTextureSourceInfo(TextureSourceBinder* sb, const string& key, const SourceDivider& srcDivider) noexcept
-{
-    auto infoRef = sb->GetTextureSourceInfo(key);
-    ReturnIfFalse(infoRef);
-
-    TextureSourceInfo srcInfo{ infoRef->get() };
-    srcInfo.sources = GetSources(srcInfo.imagePart, srcDivider);
-
-    sb->RemoveTextureKey(key);
-    return sb->AddTextureKey(key, srcInfo);
 }

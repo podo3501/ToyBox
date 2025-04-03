@@ -35,6 +35,7 @@ protected:
 //비주얼 스튜디오 테스트 탐색기에 계층구조 표시하기 위해서 Fixture를 상속받아서 함.
 //namespace 중첩으로는 계층구조로 나타나지 않음. a::b 이런식으로 나타남. 즉, 묶음으로 테스트 하기 어려움
 
+class IRendererTest : public ToyTestFixture {};
 class BasicComponentTest : public ToyTestFixture {};
 class ComplexComponentTest : public ToyTestFixture {};
 
@@ -44,9 +45,20 @@ class IntegrationTest : public ToyTestFixture
 {
 protected:
 	bool VerifyClone(unique_ptr<UIComponent> original);
+};
+class TextureSourceBinderTest : public ToyTestFixture {};
+class UndoRedoTest : public ToyTestFixture
+{
+protected:
 	void CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history);
 	void CaptureSnapshot(TexSrcCommandList& cmdList, vector<unique_ptr<TextureSourceBinder>>& history);
 	void VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
 	void VerifyUndoRedo(TexSrcCommandList& cmdList, const vector<unique_ptr<TextureSourceBinder>>& history);
+
+	template <typename cmdListType, typename History, typename Func>
+	void ExecuteAndCapture(cmdListType& cmdList, History& history, Func&& func)
+	{
+		func();
+		CaptureSnapshot(cmdList, history);
+	}
 };
-class IRendererTest : public ToyTestFixture {};

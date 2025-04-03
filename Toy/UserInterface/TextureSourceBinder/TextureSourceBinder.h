@@ -21,6 +21,7 @@ public:
 	inline const wstring& GetJsonFilename() const noexcept { return m_jsonFilename; }
 	bool AddFontKey(const wstring& bindingKey, const TextureFontInfo& fontInfo) noexcept;
 	bool AddTextureKey(const string& bindingKey, const TextureSourceInfo& sourceAreas) noexcept;
+	bool ModifyTextureSourceInfo(const string& bindKey, const TextureSourceInfo& sourceInfo) noexcept;
 	void RemoveFontKey(const wstring& bindingKey) noexcept;
 	void RemoveTextureKey(const string& bindingKey) noexcept;
 	bool RemoveKeyByFilename(const wstring& filename) noexcept;
@@ -29,16 +30,16 @@ public:
 	bool RenameTextureKey(const string& preKey, const string& newKey) noexcept;
 	
 	optionalRef<TextureSourceInfo> GetTextureSourceInfo(const string& key) const noexcept;
-	optionalRef<TextureFontInfo> GetFontSourceInfo(const wstring& key) const noexcept;
+	optionalRef<TextureFontInfo> GetTextureFontInfo(const wstring& key) const noexcept;
 
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
 	vector<string> GetTextureKeys(ImagePart imgPart) const noexcept;
-	wstring GetBindingKey(const wstring& fontFilename) const noexcept;
+	vector<string> GetTextureKeys(const wstring& filename) const noexcept;
+	wstring GetFontKey(const wstring& fontFilename) const noexcept;
 	vector<wstring> GetTextureFiles() const noexcept;
 
 	vector<Rectangle> GetAreas(const wstring& filename, ImagePart imgPart, const XMINT2& position) const noexcept;
 	vector<TextureSourceInfo> GetAreas(const wstring& filename, ImagePart part) const noexcept;
-	bool SetSourceInfo(const string& bindKey, const TextureSourceInfo& sourceInfo) noexcept;
 	void SerializeIO(JsonOperation& operation);
 
 private:

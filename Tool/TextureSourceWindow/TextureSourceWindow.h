@@ -6,6 +6,7 @@ class RenderTexture;
 class ImageGrid1;
 class MainSourceExtractor;
 class TextureSourceBinder;
+class TexSrcCommandList;
 class EditFontTexture;
 class EditSourceTexture;
 
@@ -33,6 +34,7 @@ private:
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<TextureSourceBinder> m_sourceBinder;
+    unique_ptr<TexSrcCommandList> m_cmdList;
     unique_ptr<RenderTexture> m_renderTex; //InnerWindow를 그리는 텍스쳐
     ImageGrid1* m_sourceTexture; //작업할 텍스쳐
     unique_ptr<EditFontTexture> m_editFontTexture;

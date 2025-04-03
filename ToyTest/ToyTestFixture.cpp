@@ -123,17 +123,17 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 	return CompareUniquePtr(original, clone);
 }
 
-void IntegrationTest::CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history)
+void UndoRedoTest::CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history)
 {
 	history.emplace_back(m_panel->Clone());
 }
 
-void IntegrationTest::CaptureSnapshot(TexSrcCommandList& cmdList, vector<unique_ptr<TextureSourceBinder>>& history)
+void UndoRedoTest::CaptureSnapshot(TexSrcCommandList& cmdList, vector<unique_ptr<TextureSourceBinder>>& history)
 {
 	history.emplace_back(make_unique<TextureSourceBinder>(*m_sourceBinder));
 }
 
-void IntegrationTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
+void UndoRedoTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
 {
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
 		cmdList.Undo();
@@ -146,7 +146,7 @@ void IntegrationTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique
 		});
 }
 
-void IntegrationTest::VerifyUndoRedo(TexSrcCommandList& cmdList, const vector<unique_ptr<TextureSourceBinder>>& history)
+void UndoRedoTest::VerifyUndoRedo(TexSrcCommandList& cmdList, const vector<unique_ptr<TextureSourceBinder>>& history)
 {
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
 		cmdList.Undo();

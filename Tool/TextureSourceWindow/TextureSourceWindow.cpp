@@ -7,6 +7,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
+#include "../Toy/UserInterface/Command/TexSrcCommandList/TexSrcCommandList.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/UIComponent/UIUtility.h"
 
@@ -29,8 +30,9 @@ bool TextureSourceWindow::CreateNew()
 {
     m_sourceBinder = CreateSourceBinder();
     ReturnIfFalse(m_sourceBinder);
+    m_cmdList = make_unique<TexSrcCommandList>();
 
-    m_editFontTexture->SetSourceBinder(m_sourceBinder.get());
+    m_editFontTexture->SetSourceBinder(m_sourceBinder.get(), m_cmdList.get());
     m_editSourceTexture->SetSourceBinder(m_sourceBinder.get());
     m_isOpen = true;
     return true;
@@ -47,7 +49,7 @@ bool TextureSourceWindow::Create(const wstring& filename)
     m_sourceBinder = CreateSourceBinder(filename);
     ReturnIfFalse(m_sourceBinder);
 
-    m_editFontTexture->SetSourceBinder(m_sourceBinder.get());
+    m_editFontTexture->SetSourceBinder(m_sourceBinder.get(), m_cmdList.get());
     m_editSourceTexture->SetSourceBinder(m_sourceBinder.get());
     m_isOpen = true;
     return true;

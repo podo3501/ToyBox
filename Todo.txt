@@ -112,10 +112,11 @@
 --TextureWindow 및 SourceExtractor 삭제
 --UI 파일들 폴더에 넣고 정리
 --TextureMainWindow리팩토링 및 이름 수정
+--Binder Undo 만들기 
 
 @툴에서 source를 keyBinder로 바꾸는 방식으로 수정
-        Binder Undo 만들기 
-        UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
+    툴에서 Undo 할수 있게끔 추가 
+    UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
 
 @툴에서 리스트 할 수 있게끔
     ImageSwitcher editWindow 작업

@@ -170,56 +170,16 @@ void ImageSelector::RenderLabeledAreas() const
         DrawRectangles(m_textureWindow->GetWindow(), info.sources, ToColor(Colors::Blue));
 }
 
-static SourceDivider GetSourceDivider(ImagePart imgPart, TextureSourceInfo* sourceInfo) noexcept
-{
-    const vector<Rectangle>& sources = sourceInfo->sources;
-    Rectangle mergedSource = CombineRectangles(sources);
-
-    SourceDivider srcDivider{ mergedSource };
-    if (imgPart == ImagePart::One) return srcDivider;
-
-    const Rectangle& leftSource = sources[0];
-    const int leftX = leftSource.width;
-    const int rightX = sources[2].x - mergedSource.x;
-    const int top = leftSource.height;
-    const int bottom = sources[(sources.size() == 3) ? 2 : 6].y - mergedSource.y;
-
-    switch (imgPart)
-    {
-    case ImagePart::ThreeH: srcDivider.list = { leftX, rightX }; break;
-    case ImagePart::ThreeV: srcDivider.list = { top, bottom }; break;
-    case ImagePart::Nine: srcDivider.list = { leftX, rightX, top, bottom }; break;
-    }
-    return srcDivider;
-}
-
-static vector<Rectangle> GetSources(ImagePart imgPart, const SourceDivider& sourceDivider) noexcept
-{
-    if (imgPart == ImagePart::One) return { sourceDivider.rect };
-
-    vector<int> widths{}, heights{};
-    bool success = false;
-    switch (imgPart)
-    {
-    case ImagePart::ThreeH: success = GetSizeDividedByThree(DirectionType::Horizontal, sourceDivider, widths, heights); break;
-    case ImagePart::ThreeV: success = GetSizeDividedByThree(DirectionType::Vertical, sourceDivider, widths, heights); break;
-    case ImagePart::Nine: success = GetSizeDividedByNine(sourceDivider, widths, heights); break;
-    default: return {};
-    }
-
-    return success ? GetSourcesFromArea(sourceDivider.rect, widths, heights) : vector<Rectangle>{};
-}
-
 void ImageSelector::EditSelectArea()
 {
     if (!m_selectedArea) return;
 
     const string& bindingKey = m_sourceBinder->GetBindingKey(*m_selectedArea);
-    SourceDivider sourceDivider = GetSourceDivider(m_selectImagePart, m_selectedArea.get());
+    SourceDivider sourceDivider = GetSourceDivider(*m_selectedArea);
     if (EditSourceAndDivider("Source Area", "Deviders", sourceDivider))
     {
         m_selectedArea->sources = GetSources(m_selectImagePart, sourceDivider);
-        m_sourceBinder->SetSourceInfo(bindingKey, *m_selectedArea);
+        if (!bindingKey.empty()) m_sourceBinder->ModifyTextureSourceInfo(bindingKey, *m_selectedArea);
     }
         
     m_renameNotifier->EditName("Tex Bind Key", bindingKey, [this, &bindingKey](const string& newKey) {

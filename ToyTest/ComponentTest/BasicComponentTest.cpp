@@ -198,6 +198,17 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, expectDest, GetSources(sb, "ScrollButton3_H_Normal"));
 	}
 
+	static bool ModifyTextureSourceInfo(TextureSourceBinder* sb, const string& key, const SourceDivider& srcDivider) noexcept
+	{
+		auto infoRef = sb->GetTextureSourceInfo(key);
+		if (!infoRef) return false;
+
+		TextureSourceInfo srcInfo{ infoRef->get() };
+		srcInfo.sources = GetSources(srcInfo.imagePart, srcDivider);
+
+		return sb->ModifyTextureSourceInfo(key, srcInfo);
+	}
+
 	TEST_F(BasicComponentTest, ImageGrid3_Horizontal)
 	{
 		auto [img, imgPtr] = GetPtrs(CreateImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop }, "ScrollButton3_H_Normal"));

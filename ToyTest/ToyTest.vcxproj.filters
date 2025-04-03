@@ -22,6 +22,12 @@
     <ClCompile Include="ComponentTest\IntegrationComponentTest.cpp">
       <Filter>ComponentTest</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterfaceTest\UndoRedoTest.cpp">
+      <Filter>UserInterfaceTest</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureSourceBinderTest\TextureSourceBinderTest.cpp">
+      <Filter>TextureSourceBinderTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />
@@ -44,6 +50,12 @@
     </Filter>
     <Filter Include="ComponentTest">
       <UniqueIdentifier>{e41c47f8-ef45-4072-97e0-377ca418d8cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterfaceTest">
+      <UniqueIdentifier>{199ab388-f9e5-450b-a195-7b017ca0e336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TextureSourceBinderTest">
+      <UniqueIdentifier>{e3c60e9c-8593-4b4b-8775-7254584619de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

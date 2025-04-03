@@ -69,6 +69,15 @@ bool TextureSourceBinder::AddTextureKey(const string& bindingKey, const TextureS
     return AddBindingImpl(m_bindingTexTable, bindingKey, sourceAreas);
 }
 
+bool TextureSourceBinder::ModifyTextureSourceInfo(const string& bindKey, const TextureSourceInfo& sourceInfo) noexcept
+{
+    auto it = m_bindingTexTable.find(bindKey);
+    if (it == m_bindingTexTable.end()) return false;
+
+    it->second = sourceInfo;
+    return true;
+}
+
 void TextureSourceBinder::RemoveFontKey(const wstring& bindingKey) noexcept
 {
     if (auto it = m_bindingFontTable.find(bindingKey); it != m_bindingFontTable.end())
@@ -133,7 +142,7 @@ string TextureSourceBinder::GetBindingKey(const TextureSourceInfo& sourceAreas) 
     return (it != m_bindingTexTable.end()) ? it->first : "";
 }
 
-wstring TextureSourceBinder::GetBindingKey(const wstring& fontFilename) const noexcept
+wstring TextureSourceBinder::GetFontKey(const wstring& fontFilename) const noexcept
 {
     auto it = ranges::find_if(m_bindingFontTable, [&](const auto& pair) { return pair.second.filename == fontFilename; });
     return (it != m_bindingFontTable.end()) ? it->first : L"";
@@ -141,16 +150,30 @@ wstring TextureSourceBinder::GetBindingKey(const wstring& fontFilename) const no
 
 vector<string> TextureSourceBinder::GetTextureKeys(ImagePart imgPart) const noexcept
 {
-    vector<string> imgPartKeys;
+    vector<string> keys;
     for (const auto& pair : m_bindingTexTable)
     {
         const auto& srcInfo = pair.second;
         if (srcInfo.imagePart != imgPart) continue;
         
-        imgPartKeys.emplace_back(pair.first);
+        keys.emplace_back(pair.first);
     }
 
-    return imgPartKeys;
+    return keys;
+}
+
+vector<string> TextureSourceBinder::GetTextureKeys(const wstring& filename) const noexcept
+{
+    vector<string> keys;
+    for (const auto& pair : m_bindingTexTable)//?!? 두함수가 같은데 algorithm으로 하는 방법 잇을껄
+    {
+        const auto& srcInfo = pair.second;
+        if (srcInfo.filename != filename) continue;
+
+        keys.emplace_back(pair.first);
+    }
+
+    return keys;
 }
 
 optionalRef<TextureSourceInfo> TextureSourceBinder::GetTextureSourceInfo(const string& key) const noexcept
@@ -161,7 +184,7 @@ optionalRef<TextureSourceInfo> TextureSourceBinder::GetTextureSourceInfo(const s
     return cref(it->second);
 }
 
-optionalRef<TextureFontInfo> TextureSourceBinder::GetFontSourceInfo(const wstring& key) const noexcept
+optionalRef<TextureFontInfo> TextureSourceBinder::GetTextureFontInfo(const wstring& key) const noexcept
 {
     auto it = m_bindingFontTable.find(key);
     if (it == m_bindingFontTable.end()) return nullopt;
@@ -192,15 +215,6 @@ vector<TextureSourceInfo> TextureSourceBinder::GetAreas(const wstring& filename,
             filteredTextures.push_back(sourceInfo);
     }
     return filteredTextures;
-}
-
-bool TextureSourceBinder::SetSourceInfo(const string& bindKey, const TextureSourceInfo& sourceInfo) noexcept
-{
-    auto it = m_bindingTexTable.find(bindKey);
-    if (it == m_bindingTexTable.end()) return false;
-
-    it->second = sourceInfo;
-    return true;
 }
 
 void TextureSourceBinder::SerializeIO(JsonOperation& operation)

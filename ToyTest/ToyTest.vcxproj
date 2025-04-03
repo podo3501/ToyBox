@@ -138,6 +138,7 @@
     <ClCompile Include="PracticeTest.cpp" />
     <ClCompile Include="PracticeTest_Pattern.cpp" />
     <ClCompile Include="TestHelper.cpp" />
+    <ClCompile Include="TextureSourceBinderTest\TextureSourceBinderTest.cpp" />
     <ClCompile Include="ToolTest.cpp" />
     <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -148,6 +149,7 @@
     </ClCompile>
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="ToyTestFixture.cpp" />
+    <ClCompile Include="UserInterfaceTest\UndoRedoTest.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>

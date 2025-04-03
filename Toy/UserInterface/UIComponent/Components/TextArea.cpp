@@ -109,7 +109,7 @@ bool TextArea::ImplementBindSourceInfo(TextureSourceBinder* sourceBinder, ITextu
 {
 	for (const auto& bindKey : m_bindKeys)
 	{
-		auto fontInfoRef = sourceBinder->GetFontSourceInfo(bindKey);
+		auto fontInfoRef = sourceBinder->GetTextureFontInfo(bindKey);
 		ReturnIfFalse(fontInfoRef);
 
 		const auto& fontInfo = fontInfoRef->get();

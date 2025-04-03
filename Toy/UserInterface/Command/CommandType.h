@@ -29,6 +29,13 @@ using UICommand = Command<UICommandID, UIComponent>;
 enum class TexSrcCommandID : int
 {
 	AddFontKey,
+	RemoveFontKey,
+	AddTextureKey,
+	RemoveTextureKey,
+	RemoveKeyByFilename,
+	RenameFontKey,
+	RenameTextureKey,
+	ModifyTexSrcInfo,
 	Unknown
 };
 class TextureSourceBinder;
@@ -38,6 +45,7 @@ template <typename T>
 class CommandRecord
 {
 public:
+	CommandRecord() noexcept = default;
 	CommandRecord(const T& curr) noexcept : current{ curr } {}
 	CommandRecord(T&& curr) noexcept : current(move(curr)) {}
 

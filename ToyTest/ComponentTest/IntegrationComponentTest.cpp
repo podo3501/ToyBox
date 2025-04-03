@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "../ToyTestFixture.h"
-#include "../IMockRenderer.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid3.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
@@ -9,11 +8,6 @@
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureSourceBinder.h"
-#include "../Toy/UserInterface/TextureSourceBinder/TextureLoadBinder.h"
-#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "../Toy/UserInterface/Command/TexSrcCommandList/TexSrcCommandList.h"
-#include "../TestHelper.h"
 
 namespace UserInterfaceTest
 {
@@ -206,101 +200,5 @@ namespace UserInterfaceTest
 		auto newImg9 = CreateImageGrid9({ {220, 190}, Origin::LeftTop }, "BackImage9");
 		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
-	}
-
-	//////////////////////////////////////////////////////////
-
-	static void TestLoadTextureFromFile(IRenderer* renderer, TextureLoadBinder* loadBinder, const wstring& filename)
-	{
-		loadBinder->AddTexture(filename);
-		renderer->LoadTextureBinder(loadBinder);
-		auto sourceInfo = loadBinder->GetSourceInfo(filename);
-		EXPECT_TRUE(sourceInfo);
-	}
-
-	TEST_F(IntegrationTest, TextureLoadBinder)
-	{
-		auto loadBinder = make_unique<TextureLoadBinder>();
-
-		const wstring& sampleFilename = L"UI/SampleTexture/Sample_0.png";
-		TestLoadTextureFromFile(m_renderer.get(), loadBinder.get(), sampleFilename);
-
-		const wstring& optionFilename = L"UI/SampleTexture/Option.png";
-		TestLoadTextureFromFile(m_renderer.get(), loadBinder.get(), optionFilename);
-	}
-
-	TEST_F(IntegrationTest, TextureSourceBinder)
-	{
-		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
-		EXPECT_TRUE((GetTextureArea(m_sourceBinder.get(), "BackImage1", 0) == Rectangle{10, 10, 64, 64})); //?!? 테스트 밖에 함수가 사용되지 않고 있다.
-		TextureSourceInfo sourceInfo{ filename, ImagePart::One, {{10, 10, 64, 64}} };
-		EXPECT_EQ(m_sourceBinder->GetBindingKey(sourceInfo), "BackImage1");
-
-		vector<TextureSourceInfo> horzAreas = m_sourceBinder->GetAreas(filename, ImagePart::ThreeH);
-		EXPECT_TRUE(!horzAreas.empty() && horzAreas[0].sources.size() == 3);
-		vector<TextureSourceInfo> vertAreas = m_sourceBinder->GetAreas(filename, ImagePart::ThreeV);
-		EXPECT_NE(horzAreas.size(), vertAreas.size());
-
-		TextureSourceInfo testSourceInfo{ L"TestTexFilename.json", ImagePart::One, {} };
-		TextureFontInfo testFontInfo{ L"TestFontFilename.json" };
-		EXPECT_TRUE(m_sourceBinder->AddFontKey(L"Test", testFontInfo));
-		EXPECT_TRUE(m_sourceBinder->AddTextureKey("Test", testSourceInfo));
-		EXPECT_TRUE(m_sourceBinder->RenameFontKey(L"Test", L"NewTest"));
-		EXPECT_TRUE(m_sourceBinder->RenameTextureKey("Test", "NewTest"));
-		EXPECT_TRUE(m_sourceBinder->RemoveKeyByFilename(L"TestFontFilename.json"));
-		EXPECT_TRUE(m_sourceBinder->RemoveKeyByFilename(L"TestTexFilename.json"));
-
-		EXPECT_TRUE(m_sourceBinder->GetTextureKeys(ImagePart::ThreeH).size());
-
-		TestSourceBinderWriteRead(m_sourceBinder);
-
-		auto sourceBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
-		m_renderer->LoadTextureBinder(sourceBinder.get());
-		
-		EXPECT_EQ(*m_sourceBinder, *sourceBinder);
-	}
-
-	TEST_F(IntegrationTest, TextureSourceBinderUndoRedo)
-	{
-		TexSrcCommandList cmdList;
-		vector<unique_ptr<TextureSourceBinder>> history;
-		CaptureSnapshot(cmdList, history);
-
-		cmdList.AddFontKey(m_sourceBinder.get(), L"TestFontKey", TextureFontInfo{ L"TestFontKey.spritefont" });
-		CaptureSnapshot(cmdList, history);
-
-		VerifyUndoRedo(cmdList, history);
-	}
-
-	//////////////////////////////////////////////////////////
-	TEST_F(IntegrationTest, UserInterfaceUndoRedo)
-	{
-		UICommandList cmdList;
-		vector<unique_ptr<UIComponent>> history;
-		UIComponent* panel = m_panel.get();
-		CaptureSnapshot(cmdList, history);
-
-		auto [img9, img9Ptr] = GetPtrs(CreateImageGrid9({ {170, 120}, Origin::Center }, "BackImage9"));
-		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
-
-		cmdList.AttachComponent(m_panel.get(), move(img1), { 111, 222 });
-		CaptureSnapshot(cmdList, history);
-
-		cmdList.SetRelativePosition(img1Ptr, { 123, 234 });
-		CaptureSnapshot(cmdList, history);
-
-		cmdList.SetSize(img1Ptr, { 32, 32 });
-		CaptureSnapshot(cmdList, history);
-
-		cmdList.RenameRegion(img1Ptr, "region");
-		CaptureSnapshot(cmdList, history);
-
-		cmdList.Rename(img1Ptr, "img1");
-		CaptureSnapshot(cmdList, history);
-
-		cmdList.DetachComponent(img1Ptr);
-		CaptureSnapshot(cmdList, history);
-
-		VerifyUndoRedo(cmdList, history);
 	}
 }
