@@ -123,12 +123,12 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 	return CompareUniquePtr(original, clone);
 }
 
-void UndoRedoTest::CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history)
-{//?!?cmdList 이게 필요?
+void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<UIComponent>>& history)
+{
 	history.emplace_back(m_panel->Clone());
 }
 
-void UndoRedoTest::CaptureSnapshot(TexResCommandList& cmdList, vector<unique_ptr<TextureResourceBinder>>& history)
+void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<TextureResourceBinder>>& history)
 {
 	history.emplace_back(make_unique<TextureResourceBinder>(*m_resBinder));
 }

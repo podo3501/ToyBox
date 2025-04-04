@@ -1,7 +1,6 @@
 #pragma once
 #include "../UIComponent.h"
 
-struct ImageSource;
 struct SourceDivider;
 struct TextureSourceInfo;
 class ImageGrid3;

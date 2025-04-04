@@ -22,8 +22,8 @@
     <Filter Include="Resources\UI\Texture">
       <UniqueIdentifier>{5ddbd022-ae6b-4d12-a581-545377146d5e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TextureSourceWindow">
-      <UniqueIdentifier>{0575b7f4-4f55-439d-82f1-8478226e5f0f}</UniqueIdentifier>
+    <Filter Include="TextureResBinderWindow">
+      <UniqueIdentifier>{2258dd6b-41ac-48be-9557-7490df5b0238}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,17 +107,17 @@
     <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClCompile>
-    <ClCompile Include="TextureSourceWindow\EditFontTexture.cpp">
-      <Filter>TextureSourceWindow</Filter>
+    <ClCompile Include="TextureResBinderWindow\EditFontTexture.cpp">
+      <Filter>TextureResBinderWindow</Filter>
     </ClCompile>
-    <ClCompile Include="TextureSourceWindow\EditSourceTexture.cpp">
-      <Filter>TextureSourceWindow</Filter>
+    <ClCompile Include="TextureResBinderWindow\EditSourceTexture.cpp">
+      <Filter>TextureResBinderWindow</Filter>
     </ClCompile>
-    <ClCompile Include="TextureSourceWindow\ImageSelector.cpp">
-      <Filter>TextureSourceWindow</Filter>
+    <ClCompile Include="TextureResBinderWindow\ImageSelector.cpp">
+      <Filter>TextureResBinderWindow</Filter>
     </ClCompile>
-    <ClCompile Include="TextureSourceWindow\TextureSourceWindow.cpp">
-      <Filter>TextureSourceWindow</Filter>
+    <ClCompile Include="TextureResBinderWindow\TextureResBinderWindow.cpp">
+      <Filter>TextureResBinderWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,17 +200,17 @@
     <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClInclude>
-    <ClInclude Include="TextureSourceWindow\EditFontTexture.h">
-      <Filter>TextureSourceWindow</Filter>
+    <ClInclude Include="TextureResBinderWindow\EditFontTexture.h">
+      <Filter>TextureResBinderWindow</Filter>
     </ClInclude>
-    <ClInclude Include="TextureSourceWindow\EditSourceTexture.h">
-      <Filter>TextureSourceWindow</Filter>
+    <ClInclude Include="TextureResBinderWindow\EditSourceTexture.h">
+      <Filter>TextureResBinderWindow</Filter>
     </ClInclude>
-    <ClInclude Include="TextureSourceWindow\ImageSelector.h">
-      <Filter>TextureSourceWindow</Filter>
+    <ClInclude Include="TextureResBinderWindow\ImageSelector.h">
+      <Filter>TextureResBinderWindow</Filter>
     </ClInclude>
-    <ClInclude Include="TextureSourceWindow\TextureSourceWindow.h">
-      <Filter>TextureSourceWindow</Filter>
+    <ClInclude Include="TextureResBinderWindow\TextureResBinderWindow.h">
+      <Filter>TextureResBinderWindow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,42 +3,31 @@
 #include "TexResCommandRegistry.h"
 #include "../../../Utility.h"
 
-bool TexResCommandList::AddFontKey(TextureResourceBinder* rb, const wstring& key, const TextureFontInfo& info) 
-{
-	return ApplyCommand<AddFontKeyCommand>(rb, key, info);
-}
+TexResCommandList::~TexResCommandList() = default;
+TexResCommandList::TexResCommandList(TextureResourceBinder* resBinder) noexcept :
+	m_resBinder{ resBinder }
+{}
 
-bool TexResCommandList::RemoveFontKey(TextureResourceBinder* rb, const wstring& key)
-{
-	return ApplyCommand<RemoveFontKeyCommand>(rb, key);
-}
+bool TexResCommandList::AddFontKey(const wstring& key, const TextureFontInfo& info) 
+{ return ApplyCommand<AddFontKeyCommand>(m_resBinder, key, info); }
 
-bool TexResCommandList::AddTextureKey(TextureResourceBinder* rb, const string& key, const TextureSourceInfo& info)
-{
-	return ApplyCommand<AddTextureKeyCommand>(rb, key, info);
-}
+bool TexResCommandList::RemoveFontKey(const wstring& key)
+{ return ApplyCommand<RemoveFontKeyCommand>(m_resBinder, key); }
 
-bool TexResCommandList::RemoveTextureKey(TextureResourceBinder* rb, const string& key)
-{
-	return ApplyCommand<RemoveTextureKeyCommand>(rb, key);
-}
+bool TexResCommandList::AddTextureKey(const string& key, const TextureSourceInfo& info)
+{ return ApplyCommand<AddTextureKeyCommand>(m_resBinder, key, info); }
 
-bool TexResCommandList::RemoveKeyByFilename(TextureResourceBinder* rb, const wstring& filename)
-{
-	return ApplyCommand<RemoveKeyByFilenameCommand>(rb, filename);
-}
+bool TexResCommandList::RemoveTextureKey(const string& key)
+{ return ApplyCommand<RemoveTextureKeyCommand>(m_resBinder, key); }
 
-bool TexResCommandList::RenameFontKey(TextureResourceBinder* rb, const wstring& preKey, const wstring& newKey)
-{
-	return ApplyCommand<RenameFontKeyCommand>(rb, preKey, newKey);
-}
+bool TexResCommandList::RemoveKeyByFilename(const wstring& filename)
+{ return ApplyCommand<RemoveKeyByFilenameCommand>(m_resBinder, filename); }
 
-bool TexResCommandList::RenameTextureKey(TextureResourceBinder* rb, const string& preKey, const string& newKey)
-{
-	return ApplyCommand<RenameTextureKeyCommand>(rb, preKey, newKey);
-}
+bool TexResCommandList::RenameFontKey(const wstring& preKey, const wstring& newKey)
+{ return ApplyCommand<RenameFontKeyCommand>(m_resBinder, preKey, newKey); }
 
-bool TexResCommandList::ModifyTextureSourceInfo(TextureResourceBinder* rb, const string& key, const TextureSourceInfo& info)
-{
-	return ApplyCommand<ModifyTexSrcInfoCommand>(rb, key, info);
-}
+bool TexResCommandList::RenameTextureKey(const string& preKey, const string& newKey)
+{ return ApplyCommand<RenameTextureKeyCommand>(m_resBinder, preKey, newKey); }
+
+bool TexResCommandList::ModifyTextureSourceInfo(const string& key, const TextureSourceInfo& info)
+{ return ApplyCommand<ModifyTexSrcInfoCommand>(m_resBinder, key, info); }

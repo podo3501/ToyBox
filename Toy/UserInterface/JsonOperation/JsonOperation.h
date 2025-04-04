@@ -5,7 +5,6 @@ class Property;
 class UIComponent;
 class Scene;
 class UITransform;
-struct ImageSource;
 struct TextureSourceInfo;
 struct TextureFontInfo;
 enum class Origin;//enum은 컨셉에 추가만 하면 된다.

@@ -1,8 +1,7 @@
 #pragma once
 
 enum class ImagePart;
-class TextureSourceWindow;
-class TextureResourceBinder;
+class TextureResBinderWindow;
 class TexResCommandList;
 struct TextureSourceInfo;
 class ImageGrid1;
@@ -11,18 +10,18 @@ class ImageSelector
 {
 public:
 	~ImageSelector();
-	ImageSelector(TextureSourceWindow* textureWindow);
+	ImageSelector(TextureResBinderWindow* textureWindow);
 
 	void Update();
 	void Render();
 	void SetTexture(ImageGrid1* grid) noexcept;
-	void SetBinderAndCmdList(TextureResourceBinder* resBinder, TexResCommandList* cmdList) noexcept;
+	void SetCommandList(TexResCommandList* cmdList) noexcept { m_cmdList = cmdList; }
+	bool DeselectArea() noexcept;
 
 private:
 	void CheckSourcePartition() noexcept;
 	void CheckSelectArea() noexcept;
 	void SelectArea() noexcept;	
-	bool DeselectArea() noexcept;
 	bool RemoveArea() noexcept;
 	optional<Rectangle> FindAreaFromMousePos(const XMINT2& pos) const noexcept;
 	void SelectImagePart();
@@ -33,9 +32,8 @@ private:
 	
 
 	ImageGrid1* m_sourceTexture;
-	TextureResourceBinder* m_resBinder;
 	TexResCommandList* m_cmdList;
-	TextureSourceWindow* m_textureWindow;
+	TextureResBinderWindow* m_textureWindow;
 	unique_ptr<RenameNotifier> m_renameNotifier;
 	ImagePart m_selectImagePart;
 	vector<Rectangle> m_areaList; //자동으로 찾아놓은 구역들

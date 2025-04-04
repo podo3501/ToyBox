@@ -2,7 +2,6 @@
 #include "ImageGrid.h"
 
 struct IRenderer;
-struct ImageSource;
 struct TextureSourceInfo;
 namespace DX { class StepTimer; }
 

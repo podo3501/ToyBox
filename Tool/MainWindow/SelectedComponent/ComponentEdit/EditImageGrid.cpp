@@ -11,56 +11,6 @@
 #include "../../EditUtility.h"
 #include "../SourceExtractor.h"
 
-//static unique_ptr<TextureWindow> CreateTextureWindow(IRenderer* renderer, 
-//    const wstring& filename, UIComponent* component, UICommandList* cmdList)
-//{
-//    unique_ptr<TextureWindow> textureWindow = make_unique<TextureWindow>(renderer,
-//        CreateSourceExtractor(renderer, filename, component, cmdList));
-//    textureWindow->Create(filename);
-//
-//    return textureWindow;
-//}
-//
-////////////////////////////////////////////////////////
-//
-//EditImageGrid::~EditImageGrid() = default;
-//EditImageGrid::EditImageGrid(UIComponent* component, IRenderer* renderer, TextureResourceBinder* sourceBinder, UICommandList* cmdList) noexcept :
-//    EditWindow{ component, resBinder, cmdList },
-//    m_renderer{ renderer }
-//{}
-//
-//void EditImageGrid::UpdateComponent()
-//{
-//    if (!m_textureWindow && !m_filename.empty())
-//    {
-//        m_textureWindow = CreateTextureWindow(m_renderer, m_filename, GetComponent(), GetUICommandList());
-//        m_filename.clear();
-//    }
-//
-//    if (!m_textureWindow || !m_textureWindow->IsOpen()) return;
-//
-//    m_textureWindow->Update();
-//}
-//
-//void EditImageGrid::RenderComponent()
-//{
-//    if (m_textureWindow)
-//        m_textureWindow->Render();
-//
-//    RenderComponentEdit();
-//}
-//
-//void EditImageGrid::RenderExtractTextureButton(const wstring& filename, UIComponent* component)
-//{
-//    if (ImGui::Button("Extract Texture Area"))
-//    {
-//        if (!m_textureWindow)
-//            m_filename = filename;
-//        else
-//            m_textureWindow->Open();
-//    }
-//}
-
 static optional<int> GetTextureIndexOf(const vector<string>& keys, const string& findKey) noexcept
 {
     auto find = ranges::find_if(keys, [&findKey](const auto& key) { return key == findKey; });

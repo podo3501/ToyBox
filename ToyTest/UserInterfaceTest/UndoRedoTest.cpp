@@ -12,20 +12,19 @@ namespace UserInterfaceTest
 {
 	TEST_F(UndoRedoTest, TextureResourceBinder)
 	{
-		TexResCommandList c;
 		vector<unique_ptr<TextureResourceBinder>> h;
-		const auto& rb = m_resBinder.get();
+		TexResCommandList c(m_resBinder.get());
 
-		CaptureSnapshot(c, h);
-		ExecuteAndCapture(c, h, [&] { c.AddFontKey(rb, L"TestFontKey", TextureFontInfo{ L"TestFontKey.spritefont" }); });
-		ExecuteAndCapture(c, h, [&] { c.AddTextureKey(rb, "TestTexKey", TextureSourceInfo{ L"TestTexture.png" }); });
-		ExecuteAndCapture(c, h, [&] { c.AddTextureKey(rb, "RemoveByFile", TextureSourceInfo{ L"RemoveByFile.png" }); });
-		ExecuteAndCapture(c, h, [&] { c.RemoveKeyByFilename(rb, L"RemoveByFile.png"); });
-		ExecuteAndCapture(c, h, [&] { c.ModifyTextureSourceInfo(rb, "TestTexKey", TextureSourceInfo{ L"RenameTexture.png" }); });
-		ExecuteAndCapture(c, h, [&] { c.RenameFontKey(rb, L"TestFontKey", L"NewTestFontKey"); });
-		ExecuteAndCapture(c, h, [&] { c.RenameTextureKey(rb, "TestTexKey", "NewTestTexKey"); });
-		ExecuteAndCapture(c, h, [&] { c.RemoveTextureKey(rb, "NewTestTexKey"); });
-		ExecuteAndCapture(c, h, [&] { c.RemoveFontKey(rb, L"NewTestFontKey"); });
+		CaptureSnapshot(h);
+		ExecuteAndCapture(h, [&] { c.AddFontKey(L"TestFontKey", TextureFontInfo{ L"TestFontKey.spritefont" }); });
+		ExecuteAndCapture(h, [&] { c.AddTextureKey("TestTexKey", TextureSourceInfo{ L"TestTexture.png" }); });
+		ExecuteAndCapture(h, [&] { c.AddTextureKey("RemoveByFile", TextureSourceInfo{ L"RemoveByFile.png" }); });
+		ExecuteAndCapture(h, [&] { c.RemoveKeyByFilename(L"RemoveByFile.png"); });
+		ExecuteAndCapture(h, [&] { c.ModifyTextureSourceInfo("TestTexKey", TextureSourceInfo{ L"RenameTexture.png" }); });
+		ExecuteAndCapture(h, [&] { c.RenameFontKey(L"TestFontKey", L"NewTestFontKey"); });
+		ExecuteAndCapture(h, [&] { c.RenameTextureKey("TestTexKey", "NewTestTexKey"); });
+		ExecuteAndCapture(h, [&] { c.RemoveTextureKey("NewTestTexKey"); });
+		ExecuteAndCapture(h, [&] { c.RemoveFontKey(L"NewTestFontKey"); });
 		VerifyUndoRedo(c, h);
 	}
 
@@ -37,13 +36,13 @@ namespace UserInterfaceTest
 		UIComponent* panel = m_panel.get();
 		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
 
-		CaptureSnapshot(c, h);
-		ExecuteAndCapture(c, h, [&] { c.AttachComponent(panel, move(img1), { 111, 222 }); });
-		ExecuteAndCapture(c, h, [&] { c.SetRelativePosition(img1Ptr, { 123, 234 }); });
-		ExecuteAndCapture(c, h, [&] { c.SetSize(img1Ptr, { 32, 32 }); });
-		ExecuteAndCapture(c, h, [&] { c.RenameRegion(img1Ptr, "region"); });
-		ExecuteAndCapture(c, h, [&] { c.Rename(img1Ptr, "img1"); });
-		ExecuteAndCapture(c, h, [&] { c.DetachComponent(img1Ptr); });
+		CaptureSnapshot(h);
+		ExecuteAndCapture(h, [&] { c.AttachComponent(panel, move(img1), { 111, 222 }); });
+		ExecuteAndCapture(h, [&] { c.SetRelativePosition(img1Ptr, { 123, 234 }); });
+		ExecuteAndCapture(h, [&] { c.SetSize(img1Ptr, { 32, 32 }); });
+		ExecuteAndCapture(h, [&] { c.RenameRegion(img1Ptr, "region"); });
+		ExecuteAndCapture(h, [&] { c.Rename(img1Ptr, "img1"); });
+		ExecuteAndCapture(h, [&] { c.DetachComponent(img1Ptr); });
 		VerifyUndoRedo(c, h);
 	}
 }

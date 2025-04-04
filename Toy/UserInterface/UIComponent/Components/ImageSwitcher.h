@@ -2,6 +2,7 @@
 #include "../UIComponent.h"
 
 enum class KeyState;
+struct TextureSourceInfo;
 class ImageGrid;
 namespace DX { class StepTimer; }
 class ImageSwitcher : public UIComponent
@@ -36,7 +37,7 @@ private:
 	map<InteractState, string> m_stateKeys;
 	BehaviorMode m_behaviorMode{ BehaviorMode::Normal };
 
-	map<InteractState, ImageSource> m_sources; //?!?저장항목에서 삭제
+	map<InteractState, TextureSourceInfo> m_sources;
 	map<InteractState, size_t> m_indexes;
 	ImageGrid* m_image;
 	optional<InteractState> m_state;

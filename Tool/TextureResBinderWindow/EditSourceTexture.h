@@ -1,14 +1,11 @@
 #pragma once
 
-enum class ImagePart;
 enum class PendingAction;
 struct IRenderer;
 class ImageGrid1;
-struct TextureSourceInfo;
 class TextureLoadBinder;
-class TextureResourceBinder;
 class TexResCommandList;
-class TextureSourceWindow;
+class TextureResBinderWindow;
 class RenameNotifier;
 class ImageSelector;
 
@@ -16,11 +13,12 @@ class EditSourceTexture
 {
 public:
     ~EditSourceTexture();
-    EditSourceTexture(IRenderer* renderer, TextureSourceWindow* textureWindow);
+    EditSourceTexture(IRenderer* renderer, TextureResBinderWindow* textureWindow);
 
     void Update() noexcept;
     void Render();
-    bool SetBinderAndCmdList(TextureResourceBinder* resBinder, TexResCommandList* cmdList) noexcept;
+    bool SetCommandList(TexResCommandList* cmdList) noexcept;
+    void CheckTextureByUndoRedo();
 
 private:
     inline bool IsVaildTextureIndex() const noexcept { return m_texIndex >= 0 && m_texIndex < m_textureFiles.size(); }
@@ -29,6 +27,7 @@ private:
     bool LoadTextureFile();
     void AddTexture(unique_ptr<ImageGrid1> texture) noexcept;
     void RemoveTexture(int textureIdx) noexcept;
+    void RemoveTexture(const wstring& filename) noexcept;
     void ApplyTexture(ImageGrid1* tex) const noexcept;
     bool DeleteTextureFile() noexcept;
     void SelectDefaultTextureFile() noexcept;
@@ -37,9 +36,8 @@ private:
     void RenderTextureList();
     
     IRenderer* m_renderer;
-    TextureSourceWindow* m_textureWindow;
+    TextureResBinderWindow* m_textureWindow;
     unique_ptr<TextureLoadBinder> m_textureLoader;
-    TextureResourceBinder* m_resBinder;
     TexResCommandList* m_cmdList;
     unique_ptr<ImageSelector> m_imageSelector;
     int m_texIndex{ -1 };

@@ -6,7 +6,7 @@
 #include "../Toy/Config.h"
 #include "../ToolSystem.h"
 #include "../MainWindow/MainWindow.h"
-#include "../TextureSourceWindow/TextureSourceWindow.h"
+#include "../TextureResBinderWindow/TextureResBinderWindow.h"
 #include "MenuHelper.h"
 #include "RecentFiles.h"
 #include "../Config.h"
@@ -77,7 +77,7 @@ bool FileTab::Excute()
     switch (m_currentAction.value())
     {
     case NewUIFile: result = CreateNewUIFile();  break;
-    case NewTextureFile: result = CreateNewTextureFile(); break;
+    case NewTextureFile: result = CreateTextureResBinderWindow(); break;
     case OpenUIFile: result = CreateMainWindow(); break;
     case OpenTextureFile: result = CreateTextureWindow(); break;
     case OpenRecent: result = m_recentFiles->OpenFile(*this); break;
@@ -105,12 +105,17 @@ bool FileTab::CreateNewUIFile() noexcept
     return true;
 }
 
-bool FileTab::CreateNewTextureFile() noexcept
+bool FileTab::CreateTextureResBinderWindow(const wstring& filename)
 {
-    auto textureWindow = make_unique<TextureSourceWindow>(m_toolSystem->GetRenderer());
-    ReturnIfFalse(textureWindow->CreateNew());
+    auto textureWindow = make_unique<TextureResBinderWindow>(m_toolSystem->GetRenderer());
+    if (!textureWindow->Create(filename))
+    {
+        Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to create Texture Resource Binder Widnow");
+        return false;
+    }
 
     m_toolSystem->SetTextureWindow(move(textureWindow));
+
     return true;
 }
 
@@ -141,27 +146,13 @@ bool FileTab::CreateMainWindow()
     return true;
 }
 
-bool FileTab::CreateTextureWindowFromFile(const wstring& filename)
-{
-    auto textureWindow = make_unique<TextureSourceWindow>(m_toolSystem->GetRenderer());
-    if (!textureWindow->Create(filename))
-    {
-        Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to open the texture file. Please check the file path.");
-        return false;
-    }
-
-    m_toolSystem->SetTextureWindow(move(textureWindow));
-
-    return true;
-}
-
 bool FileTab::CreateTextureWindow()
 {
     wstring relativePath{};
     GetRelativePathFromDialog(relativePath);
     if (relativePath.empty()) return true;
 
-    return CreateTextureWindowFromFile(relativePath);
+    return CreateTextureResBinderWindow(relativePath);
 }
 
 static optional<bool> CompareFocusOrder(InnerWindow* lhs, InnerWindow* rhs)
@@ -179,7 +170,7 @@ static optional<bool> CompareFocusOrder(InnerWindow* lhs, InnerWindow* rhs)
 InnerWindow* FileTab::GetFocusWindow() const noexcept //?!? 이건 ToolSystem에 넣자.
 {
     MainWindow* mainWindow = m_toolSystem->GetFocusMainWindow();
-    TextureSourceWindow* mainTextureWindow = m_toolSystem->GetFocusTextureSourceWindow();
+    TextureResBinderWindow* mainTextureWindow = m_toolSystem->GetFocusTextureResBinderWindow();
     auto order = CompareFocusOrder(mainWindow, mainTextureWindow);
     if (!order) return nullptr;
     return *order ? static_cast<InnerWindow*>(mainWindow) : static_cast<InnerWindow*>(mainTextureWindow);

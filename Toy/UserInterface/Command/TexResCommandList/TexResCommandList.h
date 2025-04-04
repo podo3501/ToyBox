@@ -8,19 +8,24 @@ class TextureResourceBinder;
 class TexResCommandList : public CommandList<TexResCommand>
 {
 public:
-	~TexResCommandList() = default;
-	TexResCommandList() = default;
+	~TexResCommandList();
+	TexResCommandList() = delete;
+	explicit TexResCommandList(TextureResourceBinder* resBinder) noexcept;
 
-	bool AddFontKey(TextureResourceBinder* rb, const wstring& bindingKey, const TextureFontInfo& fontInfo);
-	bool RemoveFontKey(TextureResourceBinder* rb, const wstring& key);
+	bool AddFontKey(const wstring& bindingKey, const TextureFontInfo& fontInfo);
+	bool RemoveFontKey(const wstring& key);
 
-	bool AddTextureKey(TextureResourceBinder* rb, const string& key, const TextureSourceInfo& info);
-	bool RemoveTextureKey(TextureResourceBinder* rb, const string& key);
+	bool AddTextureKey(const string& key, const TextureSourceInfo& info);
+	bool RemoveTextureKey(const string& key);
 
-	bool RemoveKeyByFilename(TextureResourceBinder* rb, const wstring& filename);
+	bool RemoveKeyByFilename(const wstring& filename);
 
-	bool RenameFontKey(TextureResourceBinder* rb, const wstring& preKey, const wstring& newKey);
-	bool RenameTextureKey(TextureResourceBinder* rb, const string& preKey, const string& newKey);
+	bool RenameFontKey(const wstring& preKey, const wstring& newKey);
+	bool RenameTextureKey(const string& preKey, const string& newKey);
 
-	bool ModifyTextureSourceInfo(TextureResourceBinder* rb, const string& key, const TextureSourceInfo& info);
+	bool ModifyTextureSourceInfo(const string& key, const TextureSourceInfo& info);
+	inline TextureResourceBinder* GetReceiver() const noexcept { return m_resBinder; }
+
+private:
+	TextureResourceBinder* m_resBinder;
 };

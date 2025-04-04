@@ -211,7 +211,7 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, ImageGrid3_Horizontal)
 	{
-		auto [img, imgPtr] = GetPtrs(CreateImageGrid3(DirectionType::Horizontal, { {100, 36}, Origin::LeftTop }, "ScrollButton3_H_Normal"));
+		auto [img, imgPtr] = GetPtrs(CreateImageGrid3({ {100, 36}, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal"));
 		UIEx(m_panel).AttachComponent(move(img), {400, 300});
 		m_panel = WriteReadTest(m_panel, imgPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -253,7 +253,7 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, ImageGrid3_Vertical)
 	{
-		auto [img3, img3Ptr] = GetPtrs(CreateImageGrid3(DirectionType::Vertical, { {36, 100}, Origin::LeftTop }, "ScrollTrack3_V"));
+		auto [img3, img3Ptr] = GetPtrs(CreateImageGrid3({ {36, 100}, Origin::LeftTop }, DirectionType::Vertical, "ScrollTrack3_V"));
 		UIEx(m_panel).AttachComponent(move(img3), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img3Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));

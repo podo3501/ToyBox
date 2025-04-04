@@ -47,7 +47,7 @@ map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(const XMUINT2& si
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dirType, const XMUINT2& size, const string& bindKey)
 {
 	return GetComponentKeyMap(size, bindKey,
-		[dirType](UILayout& layout, const string& key) { return CreateImageGrid3(dirType, layout, key); });
+		[dirType](UILayout& layout, const string& key) { return CreateImageGrid3(layout, dirType, key); });
 }
 
 static inline ImagePart DirTypeToImgPart(DirectionType dirType) noexcept
@@ -65,7 +65,7 @@ unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const U
 	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
 		
 	return CreateScrollSlider(layout,
-		CreateImageGrid3(dirType, gridLayout, "ScrollTrack3_V"), //?!? dirType, gridLayout 두 인자 자리를 서로 바꿔야 겠다.
+		CreateImageGrid3(gridLayout, dirType, "ScrollTrack3_V"),
 		CreateImageSwitcher(gridLayout, DirTypeToImgPart(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 }
 

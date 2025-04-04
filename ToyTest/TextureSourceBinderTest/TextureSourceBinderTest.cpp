@@ -14,9 +14,9 @@ namespace UserInterfaceTest
 		TextureSourceInfo sourceInfo{ filename, ImagePart::One, {{10, 10, 64, 64}} };
 		EXPECT_EQ(m_resBinder->GetBindingKey(sourceInfo), "BackImage1");
 
-		vector<TextureSourceInfo> horzAreas = m_resBinder->GetAreas(filename, ImagePart::ThreeH);
+		vector<TextureSourceInfo> horzAreas = GetAreas(m_resBinder.get(), filename, ImagePart::ThreeH);
 		EXPECT_TRUE(!horzAreas.empty() && horzAreas[0].sources.size() == 3);
-		vector<TextureSourceInfo> vertAreas = m_resBinder->GetAreas(filename, ImagePart::ThreeV);
+		vector<TextureSourceInfo> vertAreas = GetAreas(m_resBinder.get(), filename, ImagePart::ThreeV);
 		EXPECT_NE(horzAreas.size(), vertAreas.size());
 
 		TextureSourceInfo testSourceInfo{ L"TestTexFilename.json", ImagePart::One, {} };

@@ -61,7 +61,7 @@ bool FloatingComponent::Excute()
 	switch (m_currentAction.value())
 	{
 	case ImageGrid1: result = LoadComponent(CreateImageGrid1({ { 64, 64 }, Origin::LeftTop }, "BackImage1")); break;
-	case ImageGrid3: result = LoadComponent(CreateImageGrid3(DirectionType::Horizontal, { { 48, 48 }, Origin::LeftTop }, "ScrollButton3_H_Normal")); break;
+	case ImageGrid3: result = LoadComponent(CreateImageGrid3({ { 48, 48 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")); break;
 	case ImageGrid9: result = LoadComponent(CreateImageGrid9({ { 170, 120 }, Origin::LeftTop }, "BackImage9")); break;
 	case ImageSwitcher1: result = LoadComponent(CreateImageSwitcher({ { 32, 32 }, Origin::LeftTop }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)); break;
 	case ImageSwitcher3: result = LoadComponent(CreateImageSwitcher({ { 100, 48 }, Origin::LeftTop }, ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal)); break;

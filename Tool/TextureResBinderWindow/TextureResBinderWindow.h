@@ -10,17 +10,16 @@ class TexResCommandList;
 class EditFontTexture;
 class EditSourceTexture;
 
-class TextureSourceWindow : public InnerWindow
+class TextureResBinderWindow : public InnerWindow
 {
 public:
-    ~TextureSourceWindow();
-    TextureSourceWindow(IRenderer* renderer);
+    ~TextureResBinderWindow();
+    TextureResBinderWindow(IRenderer* renderer);
     virtual void Render(ImGuiIO* io) override;
     virtual bool SaveScene(const wstring& filename) override;
     virtual wstring GetSaveFilename() const noexcept override;
     
-    bool Create(const wstring& filename); //Json파일
-    bool CreateNew();
+    bool Create(const wstring& filename = L""); //Json파일
     void SetTexture(ImageGrid1* texture) noexcept;
     void Update();
     bool IsOpen() const noexcept { return m_isOpen; }
@@ -28,8 +27,9 @@ public:
     ImGuiWindow* GetWindow() noexcept { return m_window; }
 
 private:
+    bool CheckUndoRedo();
     ImVec2 GetWindowSize() const noexcept;
-    void RenderSourceWindow();
+    void RenderResourceWindow();
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };

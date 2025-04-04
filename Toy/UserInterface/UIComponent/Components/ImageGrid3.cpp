@@ -40,10 +40,10 @@ static vector<optional<StateFlag::Type>> GetStateFlagsForDirection(DirectionType
     return {};
 }
 
-bool ImageGrid3::Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
+bool ImageGrid3::Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept
 {
-    m_dirType = dirType;
     SetLayout({ layout.GetSize(), Origin::LeftTop });
+    m_dirType = dirType;
 
     vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
     for (size_t idx : views::iota(0, 3)) //bindKey를 조회할 수 없어 빈 내용의 자식들을 생성한다.
@@ -136,8 +136,8 @@ void ImageGrid3::SerializeIO(JsonOperation& operation)
 }
 
 //?!? component를 넣는 식으로 바꾸자. 함수 인자를 계속해서 전달할 필요는 없으니까.
-unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex)
+unique_ptr<ImageGrid3> CreateImageGrid3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex)
 {
     auto grid3 = make_unique<ImageGrid3>();
-    return CreateIfSetup(move(grid3), dirType, layout, bindKey, sourceIndex);
+    return CreateIfSetup(move(grid3), layout, dirType, bindKey, sourceIndex);
 }

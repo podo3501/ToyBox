@@ -1,30 +1,6 @@
 #pragma once
 #include "EditWindow.h"
 
-//class TextureWindow;
-//class TextureResourceBinder;
-//class EditImageGrid : public EditWindow
-//{
-//public:
-//	~EditImageGrid();
-//	EditImageGrid() = delete;
-//
-//	virtual void UpdateComponent() override;
-//	virtual void RenderComponent() override;
-//
-//protected:
-//	EditImageGrid(UIComponent* component, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
-//	virtual void RenderComponentEdit() {};
-//
-//	void RenderExtractTextureButton(const wstring& filename, UIComponent* component);
-//	inline IRenderer* GetRenderer() const noexcept { return m_renderer; }
-//
-//private:
-//	IRenderer* m_renderer;
-//	wstring m_filename;
-//	unique_ptr<TextureWindow> m_textureWindow;
-//};
-
 class TextureResourceBinder;
 class ImageGrid1;
 class EditImageGrid1 : public EditWindow

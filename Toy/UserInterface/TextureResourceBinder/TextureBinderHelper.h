@@ -13,4 +13,7 @@ SourceDivider GetSourceDivider(TextureResourceBinder* rb, const string& key) noe
 SourceDivider GetSourceDivider(const TextureSourceInfo& sourceInfo) noexcept;
 pair<wstring, TextureFontInfo> GetTextureFontInfo(TextureResourceBinder* rb, const wstring& filename) noexcept;
 vector<pair<string, TextureSourceInfo>> GetTextureSourceInfo(TextureResourceBinder* rb, const wstring& filename) noexcept;
+vector<TextureSourceInfo> GetAreas(TextureResourceBinder* rb, const wstring& filename, ImagePart part) noexcept;
+vector<Rectangle> GetAreas(TextureResourceBinder* rb, const wstring& filename, ImagePart imgPart, const XMINT2& position) noexcept;
+
 vector<Rectangle> GetSources(ImagePart imgPart, const SourceDivider& sourceDivider) noexcept;

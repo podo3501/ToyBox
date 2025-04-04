@@ -23,7 +23,7 @@ bool ImageGrid9::Setup(const UILayout& layout, const string& bindKey)
 	vector<optional<StateFlag::Type>> stateFlags{ StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
 	for (size_t idx : views::iota(0, 3))
 	{
-		auto grid3 = CreateImageGrid3(DirectionType::Horizontal, { {}, Origin::LeftTop }, bindKey, idx);
+		auto grid3 = CreateImageGrid3({ {}, Origin::LeftTop }, DirectionType::Horizontal, bindKey, idx);
 		if (auto flag = stateFlags[idx]; flag) grid3->SetStateFlag(*flag, true);
 		UIEx(this).AttachComponent(move(grid3), {});
 	}

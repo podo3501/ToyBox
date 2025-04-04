@@ -53,8 +53,8 @@ static unique_ptr<ImageGrid> CreateImageGrid(const UILayout& layout, ImagePart i
 	UILayout ltLayout({ layout.GetSize(), Origin::LeftTop});
 	switch (imgPart)	{
 	case ImagePart::One: return CreateImageGrid1(ltLayout, bindKey);
-	case ImagePart::ThreeH: return CreateImageGrid3(DirectionType::Horizontal, ltLayout, bindKey);
-	case ImagePart::ThreeV: return CreateImageGrid3(DirectionType::Vertical, ltLayout, bindKey);
+	case ImagePart::ThreeH: return CreateImageGrid3(ltLayout, DirectionType::Horizontal, bindKey);
+	case ImagePart::ThreeV: return CreateImageGrid3(ltLayout, DirectionType::Vertical, bindKey);
 	default: return nullptr;
 	}
 }
@@ -90,7 +90,7 @@ bool ImageSwitcher::ImplementBindSourceInfo(TextureResourceBinder* resBinder, IT
 		ReturnIfFalse(curIndex);
 
 		m_indexes.emplace(pair.first, *curIndex);
-		m_sources.emplace(pair.first, ImageSource{ srcInfo.filename, srcInfo.sources });
+		m_sources.emplace(pair.first, srcInfo);
 	}
 	SetState(Normal);
 
@@ -150,7 +150,7 @@ void ImageSwitcher::SetState(InteractState state) noexcept
 {
 	if (m_state == state) return;
 
-	m_image->SetIndexedSource(m_indexes[state], m_sources[state].list);
+	m_image->SetIndexedSource(m_indexes[state], m_sources[state].sources);
 	m_state = state;
 }
 

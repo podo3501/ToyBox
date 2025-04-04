@@ -192,10 +192,10 @@
     <ClCompile Include="Menu\RecentFiles.cpp" />
     <ClCompile Include="Menu\MenuHelper.cpp" />
     <ClCompile Include="Dialog.cpp" />
-    <ClCompile Include="TextureSourceWindow\EditFontTexture.cpp" />
-    <ClCompile Include="TextureSourceWindow\EditSourceTexture.cpp" />
-    <ClCompile Include="TextureSourceWindow\ImageSelector.cpp" />
-    <ClCompile Include="TextureSourceWindow\TextureSourceWindow.cpp" />
+    <ClCompile Include="TextureResBinderWindow\EditFontTexture.cpp" />
+    <ClCompile Include="TextureResBinderWindow\EditSourceTexture.cpp" />
+    <ClCompile Include="TextureResBinderWindow\ImageSelector.cpp" />
+    <ClCompile Include="TextureResBinderWindow\TextureResBinderWindow.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="GuiWidget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -252,10 +252,10 @@
     <ClInclude Include="Menu\RecentFiles.h" />
     <ClInclude Include="Menu\MenuHelper.h" />
     <ClInclude Include="Dialog.h" />
-    <ClInclude Include="TextureSourceWindow\EditFontTexture.h" />
-    <ClInclude Include="TextureSourceWindow\EditSourceTexture.h" />
-    <ClInclude Include="TextureSourceWindow\ImageSelector.h" />
-    <ClInclude Include="TextureSourceWindow\TextureSourceWindow.h" />
+    <ClInclude Include="TextureResBinderWindow\EditFontTexture.h" />
+    <ClInclude Include="TextureResBinderWindow\EditSourceTexture.h" />
+    <ClInclude Include="TextureResBinderWindow\ImageSelector.h" />
+    <ClInclude Include="TextureResBinderWindow\TextureResBinderWindow.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="GuiWidget.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

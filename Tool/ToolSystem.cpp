@@ -4,7 +4,7 @@
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"
 #include "MainWindow/MainWindow.h"
-#include "TextureSourceWindow/TextureSourceWindow.h"
+#include "TextureResBinderWindow/TextureResBinderWindow.h"
 #include "Menu/MenuBar.h"
 #include "Dialog.h"
 #include "Config.h"
@@ -23,7 +23,7 @@ void ToolSystem::SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept
     m_mainWindows.emplace_back(move(mainWindow));
 }
 
-void ToolSystem::SetTextureWindow(unique_ptr<TextureSourceWindow> textureWindow) noexcept
+void ToolSystem::SetTextureWindow(unique_ptr<TextureResBinderWindow> textureWindow) noexcept
 {
     m_textureWindows.emplace_back(move(textureWindow));
 }
@@ -50,7 +50,7 @@ MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
     return GetFocusWindow(m_mainWindows);
 }
 
-TextureSourceWindow* ToolSystem::GetFocusTextureSourceWindow() const noexcept
+TextureResBinderWindow* ToolSystem::GetFocusTextureResBinderWindow() const noexcept
 {
     return GetFocusWindow(m_textureWindows);
 }

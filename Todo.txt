@@ -112,15 +112,16 @@
 --TextureWindow 및 SourceExtractor 삭제
 --UI 파일들 폴더에 넣고 정리
 --TextureMainWindow리팩토링 및 이름 수정
---Binder Undo 만들기 
-
-@툴에서 source를 keyBinder로 바꾸는 방식으로 수정
-    툴에서 Undo 할수 있게끔 추가 
-    UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
+--Binder Undo 만들기
+--Binder에서 현재 텍스쳐에서 등록돼 있는 키들을 전부 표시해주는 거. 
+--툴에서 Undo 할수 있게끔 추가 
+--리팩토링 미흡한게 있는지 확인    
 
 @툴에서 리스트 할 수 있게끔
     ImageSwitcher editWindow 작업
 
+
+@UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔
 @이미지가 커지면 마지막 줄은 알파값이 늘어나서 밑에 그림이랑 블랜딩돼서 1pixel 이상하게 보이는거 수정(그래픽을 수정하든지 1픽셀 작게 잡든지)

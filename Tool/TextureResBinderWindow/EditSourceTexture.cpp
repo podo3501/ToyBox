@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "../Include/IRenderer.h"
 #include "EditSourceTexture.h"
-#include "TextureSourceWindow.h"
+#include "TextureResBinderWindow.h"
 #include "ImageSelector.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
+#include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Dialog.h"
 #include "../Toy/Utility.h"
@@ -17,11 +18,10 @@ enum class PendingAction : int
 };
 
 EditSourceTexture::~EditSourceTexture() = default;
-EditSourceTexture::EditSourceTexture(IRenderer* renderer, TextureSourceWindow* textureWindow) :
+EditSourceTexture::EditSourceTexture(IRenderer* renderer, TextureResBinderWindow* textureWindow) :
     m_renderer{ renderer },
     m_textureWindow{ textureWindow },
     m_textureLoader{ make_unique<TextureLoadBinder>() },
-    m_resBinder{ nullptr },
     m_cmdList{ nullptr },
     m_imageSelector{ make_unique<ImageSelector>(textureWindow) }
 {}
@@ -46,13 +46,13 @@ bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
     return true;
 }
 
-bool EditSourceTexture::SetBinderAndCmdList(TextureResourceBinder* resBinder, TexResCommandList* cmdList) noexcept
+bool EditSourceTexture::SetCommandList(TexResCommandList* cmdList) noexcept
 {
-    m_resBinder = resBinder;
     m_cmdList = cmdList;
-    m_imageSelector->SetBinderAndCmdList(resBinder, m_cmdList);
+    m_imageSelector->SetCommandList(m_cmdList);
     
-    const auto& texFiles = m_resBinder->GetTextureFiles();
+    auto binder = m_cmdList->GetReceiver();
+    const auto& texFiles = binder->GetTextureFiles();
     if (texFiles.empty()) return true;
 
     for (auto& texFile : texFiles)
@@ -90,6 +90,28 @@ bool EditSourceTexture::ExecuteAction() noexcept
     return result;
 }
 
+void EditSourceTexture::CheckTextureByUndoRedo()
+{
+    m_imageSelector->DeselectArea();
+
+    vector<wstring> toolFiles;
+    for (auto& texFile : m_textureFiles) toolFiles.emplace_back(texFile->GetFilename());
+    auto binder = m_cmdList->GetReceiver();
+    auto binderFiles = binder->GetTextureFiles();
+
+    for (const auto& filename : toolFiles)
+    {
+        if (ranges::find(binderFiles, filename) == binderFiles.end())
+            RemoveTexture(filename);
+    }
+
+    for (const auto& filename : binderFiles)
+    {
+        if (ranges::find(toolFiles, filename) == toolFiles.end())
+            LoadTextureFromFile(filename);
+    }
+}
+
 void EditSourceTexture::Update() noexcept
 {
     ExecuteAction();
@@ -117,16 +139,26 @@ void EditSourceTexture::AddTexture(unique_ptr<ImageGrid1> texture) noexcept
 
 void EditSourceTexture::RemoveTexture(int textureIdx) noexcept
 {
-    m_textureFiles.erase(m_textureFiles.begin() + m_texIndex);
+    m_textureFiles.erase(m_textureFiles.begin() + textureIdx);
     m_texIndex = m_textureFiles.size() ? 0 : -1; 
     SelectTextureFile();
+}
+
+void EditSourceTexture::RemoveTexture(const wstring& filename) noexcept
+{
+    auto it = ranges::find_if(m_textureFiles, [&filename](const auto& tex) {
+        return tex->GetFilename() == filename;
+        });
+
+    if (it != m_textureFiles.end())
+        RemoveTexture(static_cast<int>(distance(m_textureFiles.begin(), it)));
 }
 
 bool EditSourceTexture::DeleteTextureFile() noexcept
 {
     ReturnIfFalse(IsVaildTextureIndex());
 
-    m_resBinder->RemoveKeyByFilename(m_textureFiles[m_texIndex]->GetFilename());
+    m_cmdList->RemoveKeyByFilename(m_textureFiles[m_texIndex]->GetFilename());
     RemoveTexture(m_texIndex);
     SelectTextureFile();
 

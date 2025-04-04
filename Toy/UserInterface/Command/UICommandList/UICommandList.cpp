@@ -36,24 +36,19 @@ pair<unique_ptr<UIComponent>, UIComponent*> UICommandList::DetachComponent(UICom
 }
 
 bool UICommandList::SetRelativePosition(UIComponent* component, const XMINT2& relativePos)
-{
-	return ApplyCommand<SetRelativePositionCommand>(component, relativePos);
-}
+{ return ApplyCommand<SetRelativePositionCommand>(component, relativePos); }
 
 bool UICommandList::SetSize(UIComponent* component, const XMUINT2& size)
-{
-	return ApplyCommand<SetSizeCommand>(component, size);
-}
+{ return ApplyCommand<SetSizeCommand>(component, size); }
 
 bool UICommandList::RenameRegion(UIComponent* component, const string& region)
-{
-	return ApplyCommand<RenameRegionCommand>(component, region);
-}
+{ return ApplyCommand<RenameRegionCommand>(component, region); }
 
 bool UICommandList::Rename(UIComponent* component, const string& name)
-{
-	return ApplyCommand<RenameCommand>(component, name);
-}
+{ return ApplyCommand<RenameCommand>(component, name); }
+
+bool UICommandList::SetText(TextArea* textArea, const wstring& text)
+{ return ApplyCommand<SetTextCommand>(textArea, text); }
 
 //bool UICommandList::SetSource(ImageGrid1* imgGrid1, const Rectangle& source)
 //{
@@ -75,8 +70,3 @@ bool UICommandList::Rename(UIComponent* component, const string& name)
 //{
 //	return ApplyCommand<SetSourceAndDividerCommand>(imgGridVariant, srcDivider);
 //}
-
-bool UICommandList::SetText(TextArea* textArea, const wstring& text)
-{
-	return ApplyCommand<SetTextCommand>(textArea, text);
-}

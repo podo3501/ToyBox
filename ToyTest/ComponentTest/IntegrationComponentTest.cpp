@@ -53,7 +53,7 @@ namespace UserInterfaceTest
 	TEST_F(IntegrationTest, Clone)
 	{
 		EXPECT_TRUE(VerifyClone(CreateImageGrid1({ {220, 190}, Origin::LeftTop }, "BackImage1")));
-		EXPECT_TRUE(VerifyClone(CreateImageGrid3(DirectionType::Horizontal, { { 100, 36 }, Origin::LeftTop }, "ScrollButton3_H_Normal")));
+		EXPECT_TRUE(VerifyClone(CreateImageGrid3({ { 100, 36 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")));
 		EXPECT_TRUE(VerifyClone(CreateImageGrid9({ { 220, 190 }, Origin::LeftTop }, "BackImage9")));
 		vector<wstring> bindFontKeys{ L"Hangle", L"English" };
 		EXPECT_TRUE(VerifyClone(CreateTextArea({ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>", bindFontKeys)));

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "TextureSourceWindow.h"
+#include "TextureResBinderWindow.h"
 #include "EditFontTexture.h"
 #include "EditSourceTexture.h"
 #include "../Utility.h"
@@ -11,12 +11,12 @@
 #include "../Toy/InputManager.h"
 #include "../Toy/UserInterface/UIComponent/UIUtility.h"
 
-TextureSourceWindow::~TextureSourceWindow()
+TextureResBinderWindow::~TextureResBinderWindow()
 {
     m_renderer->RemoveImguiComponent(this);
 }
 
-TextureSourceWindow::TextureSourceWindow(IRenderer* renderer) :
+TextureResBinderWindow::TextureResBinderWindow(IRenderer* renderer) :
     InnerWindow{ "empty" },
     m_renderer{ renderer },
     m_sourceTexture{ nullptr },
@@ -26,51 +26,62 @@ TextureSourceWindow::TextureSourceWindow(IRenderer* renderer) :
     m_renderer->AddImguiComponent(this);
 }
 
-bool TextureSourceWindow::CreateNew()
-{
-    m_resBinder = CreateSourceBinder();
-    ReturnIfFalse(m_resBinder);
-    m_cmdList = make_unique<TexResCommandList>();
-
-    m_editFontTexture->SetBinderAndCmdList(m_resBinder.get(), m_cmdList.get());
-    m_editSourceTexture->SetBinderAndCmdList(m_resBinder.get(), m_cmdList.get());
-    m_isOpen = true;
-    return true;
-}
-
-void TextureSourceWindow::SetTexture(ImageGrid1* texture) noexcept 
+void TextureResBinderWindow::SetTexture(ImageGrid1* texture) noexcept 
 { 
     m_sourceTexture = texture;
     (texture) ? SetName(WStringToString(texture->GetFilename())) : SetName("empty");
 }
 
-bool TextureSourceWindow::Create(const wstring& filename)
+bool TextureResBinderWindow::Create(const wstring& filename)
 {
     m_resBinder = CreateSourceBinder(filename);
     ReturnIfFalse(m_resBinder);
+    m_cmdList = make_unique<TexResCommandList>(m_resBinder.get());
 
-    m_editFontTexture->SetBinderAndCmdList(m_resBinder.get(), m_cmdList.get());
-    m_editSourceTexture->SetBinderAndCmdList(m_resBinder.get(), m_cmdList.get());
+    m_editFontTexture->SetCommandList(m_cmdList.get());
+    m_editSourceTexture->SetCommandList(m_cmdList.get());
     m_isOpen = true;
     return true;
 }
 
-void TextureSourceWindow::Update()
+static bool CheckUndo(TexResCommandList* cmdList)
+{
+    if (!IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
+    return cmdList->Undo();
+}
+
+static bool CheckRedo(TexResCommandList* cmdList)
+{
+    if (!IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
+    return cmdList->Redo();
+}
+
+bool TextureResBinderWindow::CheckUndoRedo()
+{
+    auto result = CheckUndo(m_cmdList.get()) || CheckRedo(m_cmdList.get());
+    ReturnIfFalse(result);
+
+    m_editSourceTexture->CheckTextureByUndoRedo();
+    return true;
+}
+
+void TextureResBinderWindow::Update()
 {
     if (!m_window) return;
     SetMouseStartOffset(m_window);
 
+    CheckUndoRedo();
     m_editFontTexture->Update();
     m_editSourceTexture->Update();
 }
 
-ImVec2 TextureSourceWindow::GetWindowSize() const noexcept
+ImVec2 TextureResBinderWindow::GetWindowSize() const noexcept
 {
     if (!m_sourceTexture) return ImVec2{ 512, 512 };
     return XMUINT2ToImVec2(m_sourceTexture->GetSize());
 }
 
-void TextureSourceWindow::Render(ImGuiIO* io)
+void TextureResBinderWindow::Render(ImGuiIO* io)
 {
     if (!m_isOpen) return;
 
@@ -90,13 +101,13 @@ void TextureSourceWindow::Render(ImGuiIO* io)
     }
 
     IgnoreMouseClick(m_window);
-    RenderSourceWindow();
+    RenderResourceWindow();
     ImGui::End();
 }
 
-void TextureSourceWindow::RenderSourceWindow()
+void TextureResBinderWindow::RenderResourceWindow()
 {
-    string wndName = string("Texture Source Window");
+    string wndName = string("Texture Resource Window");
     ImGui::Begin(wndName.c_str(), nullptr, ImGuiWindowFlags_NoFocusOnAppearing);
 
     m_editFontTexture->Render();
@@ -108,12 +119,12 @@ void TextureSourceWindow::RenderSourceWindow()
     ImGui::End();
 }
 
-bool TextureSourceWindow::SaveScene(const wstring& filename)
+bool TextureResBinderWindow::SaveScene(const wstring& filename)
 {
     return m_resBinder->Save(filename);
 }
 
-wstring TextureSourceWindow::GetSaveFilename() const noexcept
+wstring TextureResBinderWindow::GetSaveFilename() const noexcept
 {
     return m_resBinder->GetJsonFilename();
 }

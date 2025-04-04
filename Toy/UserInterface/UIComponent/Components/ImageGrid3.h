@@ -1,7 +1,6 @@
 #pragma once
 #include "ImageGrid.h"
 
-struct ImageSource;
 struct SourceDivider;
 struct TextureSourceInfo;
 class ImageGrid1;
@@ -20,7 +19,7 @@ public:
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
+	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;
 	const string& GetBindKey() const noexcept;
 	void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex = 0u) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
@@ -36,4 +35,4 @@ private:
 	DirectionType m_dirType{ DirectionType::Horizontal };
 };
 
-unique_ptr<ImageGrid3> CreateImageGrid3(DirectionType dirType, const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);
+unique_ptr<ImageGrid3> CreateImageGrid3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);

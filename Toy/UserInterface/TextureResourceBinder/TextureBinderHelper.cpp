@@ -74,6 +74,31 @@ vector<pair<string, TextureSourceInfo>> GetTextureSourceInfo(TextureResourceBind
     return result;
 }
 
+vector<TextureSourceInfo> GetAreas(TextureResourceBinder* rb, const wstring& filename, ImagePart part) noexcept
+{
+    const auto& areas = rb->GetTotalAreas(filename);
+
+    vector<TextureSourceInfo> filtered;
+    filtered.reserve(areas.size());
+    ranges::copy_if(areas, std::back_inserter(filtered), [part](const TextureSourceInfo& area) { 
+        return area.imagePart == part; 
+        });
+
+    return filtered;
+}
+
+vector<Rectangle> GetAreas(TextureResourceBinder* rb, const wstring& filename, ImagePart part, const XMINT2& position) noexcept
+{
+    const auto& areas = rb->GetTotalAreas(filename);
+
+    auto it = ranges::find_if(areas, [part, &position](const TextureSourceInfo& area) {
+        return (area.imagePart == part) && IsContains(area.sources, position);
+        });
+    if (it == areas.end()) return {};
+
+    return it->sources;
+}
+
 vector<Rectangle> GetSources(ImagePart imgPart, const SourceDivider& sourceDivider) noexcept
 {
     if (imgPart == ImagePart::One) return { sourceDivider.rect };

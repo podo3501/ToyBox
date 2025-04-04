@@ -176,15 +176,6 @@ enum class DirectionType
 
 /////////////////////////////////////////////////////////////// 
 
-class JsonOperation;
-struct ImageSource //?!? TextureSourceInfo와 비슷하게 생겼음. 합칠수도 있음
-{
-	bool operator==(const ImageSource& o) const noexcept { return tie(filename, list) == tie(o.filename, o.list); }
-	void SerializeIO(JsonOperation& operation);
-	wstring filename{};
-	vector<Rectangle> list;
-};
-
 struct SourceDivider
 {
 	SourceDivider() = default;

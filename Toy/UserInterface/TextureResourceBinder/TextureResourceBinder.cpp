@@ -44,8 +44,7 @@ bool TextureResourceBinder::Save(const wstring& jsonFilename)
     return true;
 }
 
-template <typename MapType, typename KeyType, typename Valuetype>
-static bool AddBindingImpl(MapType& bindingTable, const KeyType& bindingKey, const Valuetype& value) noexcept
+static bool AddBindingImpl(auto& bindingTable, const auto& bindingKey, const auto& value) noexcept
 {
     if (bindingKey.empty()) return true;
 
@@ -103,8 +102,7 @@ bool TextureResourceBinder::RemoveKeyByFilename(const wstring& filename) noexcep
     return true;
 }
 
-template <typename MapType, typename KeyType>
-static bool RenameBindingImpl(MapType& bindingTable, const KeyType& preKey, const KeyType& newKey) noexcept
+static bool RenameBindingImpl(auto& bindingTable, const auto& preKey, const auto& newKey) noexcept
 {
     if (auto it = bindingTable.find(newKey); it != bindingTable.end()) return false;
     if (auto it = bindingTable.find(preKey); it != bindingTable.end())
@@ -148,32 +146,26 @@ wstring TextureResourceBinder::GetFontKey(const wstring& fontFilename) const noe
     return (it != m_bindingFontTable.end()) ? it->first : L"";
 }
 
-vector<string> TextureResourceBinder::GetTextureKeys(ImagePart imgPart) const noexcept
+static vector<string> FilterTextureKeys(const auto& bindTexTable, auto predicate) noexcept
 {
     vector<string> keys;
-    for (const auto& pair : m_bindingTexTable)
-    {
-        const auto& srcInfo = pair.second;
-        if (srcInfo.imagePart != imgPart) continue;
-        
-        keys.emplace_back(pair.first);
-    }
+    keys.reserve(bindTexTable.size());
 
+    for (const auto& pair : bindTexTable)
+        if (predicate(pair.second))
+            keys.emplace_back(pair.first);
+    
     return keys;
+}
+
+vector<string> TextureResourceBinder::GetTextureKeys(ImagePart imgPart) const noexcept
+{
+    return FilterTextureKeys(m_bindingTexTable, [imgPart](const TextureSourceInfo& info) { return info.imagePart == imgPart; });
 }
 
 vector<string> TextureResourceBinder::GetTextureKeys(const wstring& filename) const noexcept
 {
-    vector<string> keys;
-    for (const auto& pair : m_bindingTexTable)//?!? 두함수가 같은데 algorithm으로 하는 방법 잇을껄
-    {
-        const auto& srcInfo = pair.second;
-        if (srcInfo.filename != filename) continue;
-
-        keys.emplace_back(pair.first);
-    }
-
-    return keys;
+    return FilterTextureKeys(m_bindingTexTable, [&filename](const TextureSourceInfo& info) { return info.filename == filename; });
 }
 
 optionalRef<TextureSourceInfo> TextureResourceBinder::GetTextureSourceInfo(const string& key) const noexcept
@@ -192,28 +184,14 @@ optionalRef<TextureFontInfo> TextureResourceBinder::GetTextureFontInfo(const wst
     return cref(it->second);
 }
 
-//?!? 파생된 함수들은 멤버 함수로 만들지 말고 GetSourceInfo을 사용해서 유틸리티 함수를 만들어 사용하자.
-vector<Rectangle> TextureResourceBinder::GetAreas(const wstring& filename, ImagePart imgPart, const XMINT2& position) const noexcept
-{
-    for (const auto& entry : m_bindingTexTable) {
-        const TextureSourceInfo& sourceInfo = entry.second;
-        if (sourceInfo.filename != filename) continue;
-        if (sourceInfo.imagePart != imgPart) continue;
-        if (!IsContains(sourceInfo.sources, position)) continue;
-        
-        return sourceInfo.sources;
-    }
-    return {};
-}
-
-vector<TextureSourceInfo> TextureResourceBinder::GetAreas(const wstring& filename, ImagePart part) const noexcept
+vector<TextureSourceInfo> TextureResourceBinder::GetTotalAreas(const wstring& filename) const noexcept
 {
     vector<TextureSourceInfo> filteredTextures;
     for (const auto& entry : m_bindingTexTable) {
         const TextureSourceInfo& sourceInfo = entry.second;
-        if (sourceInfo.filename == filename && sourceInfo.imagePart == part)
-            filteredTextures.push_back(sourceInfo);
+        if (sourceInfo.filename == filename) filteredTextures.push_back(sourceInfo);
     }
+
     return filteredTextures;
 }
 

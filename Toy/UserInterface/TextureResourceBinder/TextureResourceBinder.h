@@ -38,8 +38,7 @@ public:
 	wstring GetFontKey(const wstring& fontFilename) const noexcept;
 	vector<wstring> GetTextureFiles() const noexcept;
 
-	vector<Rectangle> GetAreas(const wstring& filename, ImagePart imgPart, const XMINT2& position) const noexcept;
-	vector<TextureSourceInfo> GetAreas(const wstring& filename, ImagePart part) const noexcept;
+	vector<TextureSourceInfo> GetTotalAreas(const wstring& filename) const noexcept;
 	void SerializeIO(JsonOperation& operation);
 
 private:

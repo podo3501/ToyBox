@@ -50,15 +50,15 @@ class TextureResourceBinderTest : public ToyTestFixture {};
 class UndoRedoTest : public ToyTestFixture
 {
 protected:
-	void CaptureSnapshot(UICommandList& cmdList, vector<unique_ptr<UIComponent>>& history);
-	void CaptureSnapshot(TexResCommandList& cmdList, vector<unique_ptr<TextureResourceBinder>>& history);
+	void CaptureSnapshot(vector<unique_ptr<UIComponent>>& history);
+	void CaptureSnapshot(vector<unique_ptr<TextureResourceBinder>>& history);
 	void VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
 	void VerifyUndoRedo(TexResCommandList& cmdList, const vector<unique_ptr<TextureResourceBinder>>& history);
 
-	template <typename cmdListType, typename History, typename Func>
-	void ExecuteAndCapture(cmdListType& cmdList, History& history, Func&& func)
+	template <typename History, typename Func>
+	void ExecuteAndCapture(History& history, Func&& func)
 	{
 		func();
-		CaptureSnapshot(cmdList, history);
+		CaptureSnapshot(history);
 	}
 };
