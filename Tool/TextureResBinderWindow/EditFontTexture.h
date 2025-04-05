@@ -2,6 +2,7 @@
 
 enum class PendingAction;
 class TexResCommandList;
+class EditListBox;
 class RenameNotifier;
 class EditFontTexture
 {
@@ -20,5 +21,6 @@ private:
 	TexResCommandList* m_cmdList;
 	vector<wstring> m_fontFiles;
 	int m_fontIndex{ -1 };
+	unique_ptr<EditListBox> m_listboxFont;
 	unique_ptr<RenameNotifier> m_renameNotifier;
 };

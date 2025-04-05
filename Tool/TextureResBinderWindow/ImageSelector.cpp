@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ImageSelector.h"
 #include "TextureResBinderWindow.h"
-#include "../MainWindow/EditUtility.h"
+#include "EditUtility/EditUtility.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"

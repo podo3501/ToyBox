@@ -1,5 +1,5 @@
 #pragma once
-
+#include "EditClass.h"
 //edit는 값이 바뀌면 true를 리턴하고 바뀌지 않으면 false를 리턴한다.
 //&가 아닌 const &가 인자로 들어온다면 값이 바뀔수 없으므로 void 함수가 된다.
 

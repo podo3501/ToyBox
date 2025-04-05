@@ -11,12 +11,6 @@ optionalRef<vector<Rectangle>> GetRectangles(TextureResourceBinder* rb, const st
     return nullopt;
 }
 
-Rectangle GetTextureArea(TextureResourceBinder* rb, const string& key, int index) noexcept
-{
-    if (auto infoRef = rb->GetTextureSourceInfo(key); infoRef) return infoRef->get().GetSource(index);
-    return {};
-}
-
 SourceDivider GetSourceDivider(TextureResourceBinder* rb, const string& key) noexcept
 {
     auto infoRef = rb->GetTextureSourceInfo(key);

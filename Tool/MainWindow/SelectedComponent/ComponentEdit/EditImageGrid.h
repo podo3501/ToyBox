@@ -1,6 +1,7 @@
 #pragma once
 #include "EditWindow.h"
 
+class EditCombo;
 class TextureResourceBinder;
 class ImageGrid1;
 class EditImageGrid1 : public EditWindow
@@ -15,6 +16,7 @@ protected:
 
 private:
 	ImageGrid1* m_imageGrid1;
+	unique_ptr<EditCombo> m_combo;
 };
 
 class ImageGrid3;
@@ -30,6 +32,7 @@ protected:
 
 private:
 	ImageGrid3* m_imageGrid3;
+	unique_ptr<EditCombo> m_combo;
 };
 
 class ImageGrid9;
@@ -45,4 +48,5 @@ protected:
 
 private:
 	ImageGrid9* m_imageGrid9;
+	unique_ptr<EditCombo> m_combo;
 };

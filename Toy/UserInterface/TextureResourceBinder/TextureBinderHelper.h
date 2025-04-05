@@ -8,7 +8,6 @@ struct TextureSourceInfo;
 class TextureResourceBinder;
 
 optionalRef<vector<Rectangle>> GetRectangles(TextureResourceBinder* rb, const string& key) noexcept;
-Rectangle GetTextureArea(TextureResourceBinder* rb, const string& key, int index) noexcept;
 SourceDivider GetSourceDivider(TextureResourceBinder* rb, const string& key) noexcept;
 SourceDivider GetSourceDivider(const TextureSourceInfo& sourceInfo) noexcept;
 pair<wstring, TextureFontInfo> GetTextureFontInfo(TextureResourceBinder* rb, const wstring& filename) noexcept;

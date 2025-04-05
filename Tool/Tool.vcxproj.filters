@@ -25,13 +25,15 @@
     <Filter Include="TextureResBinderWindow">
       <UniqueIdentifier>{2258dd6b-41ac-48be-9557-7490df5b0238}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EditUtility">
+      <UniqueIdentifier>{8f00648d-decb-47c6-9bf8-d21969fa5ca2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="ToolMainLoop.cpp" />
     <ClCompile Include="TestImgui.cpp" />
-    <ClCompile Include="GuiWidget.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="Menu\MenuBar.cpp">
@@ -52,9 +54,6 @@
       <Filter>MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow\FloatingComponent.cpp">
-      <Filter>MainWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindow\EditUtility.cpp">
       <Filter>MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp">
@@ -101,12 +100,6 @@
     </ClCompile>
     <ClCompile Include="HelperClass.cpp" />
     <ClCompile Include="InnerWindow.cpp" />
-    <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClCompile>
     <ClCompile Include="TextureResBinderWindow\EditFontTexture.cpp">
       <Filter>TextureResBinderWindow</Filter>
     </ClCompile>
@@ -119,12 +112,17 @@
     <ClCompile Include="TextureResBinderWindow\TextureResBinderWindow.cpp">
       <Filter>TextureResBinderWindow</Filter>
     </ClCompile>
+    <ClCompile Include="EditUtility\EditUtility.cpp">
+      <Filter>EditUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="EditUtility\EditClass.cpp">
+      <Filter>EditUtility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToolMainLoop.h" />
     <ClInclude Include="TestImgui.h" />
-    <ClInclude Include="GuiWidget.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="Dialog.h" />
     <ClInclude Include="Menu\MenuBar.h">
@@ -145,9 +143,6 @@
       <Filter>MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\FloatingComponent.h">
-      <Filter>MainWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow\EditUtility.h">
       <Filter>MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h">
@@ -194,12 +189,6 @@
     </ClInclude>
     <ClInclude Include="HelperClass.h" />
     <ClInclude Include="InnerWindow.h" />
-    <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h">
-      <Filter>MainWindow\SelectedComponent</Filter>
-    </ClInclude>
     <ClInclude Include="TextureResBinderWindow\EditFontTexture.h">
       <Filter>TextureResBinderWindow</Filter>
     </ClInclude>
@@ -211,6 +200,12 @@
     </ClInclude>
     <ClInclude Include="TextureResBinderWindow\TextureResBinderWindow.h">
       <Filter>TextureResBinderWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="EditUtility\EditUtility.h">
+      <Filter>EditUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="EditUtility\EditClass.h">
+      <Filter>EditUtility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

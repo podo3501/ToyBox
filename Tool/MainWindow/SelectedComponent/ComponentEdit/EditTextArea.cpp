@@ -3,7 +3,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/Utility.h"
-#include "../../EditUtility.h"
+#include "EditUtility/EditUtility.h"
 
 EditTextArea::~EditTextArea() = default;
 EditTextArea::EditTextArea(TextArea* textArea, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :

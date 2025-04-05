@@ -7,6 +7,7 @@
 #include "../Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
+#include "EditUtility/EditUtility.h"
 #include "../Dialog.h"
 #include "../Toy/Utility.h"
 
@@ -23,7 +24,8 @@ EditSourceTexture::EditSourceTexture(IRenderer* renderer, TextureResBinderWindow
     m_textureWindow{ textureWindow },
     m_textureLoader{ make_unique<TextureLoadBinder>() },
     m_cmdList{ nullptr },
-    m_imageSelector{ make_unique<ImageSelector>(textureWindow) }
+    m_imageSelector{ make_unique<ImageSelector>(textureWindow) },
+    m_listboxTexture{ make_unique<EditListBox>("Texture List", 4) }
 {}
 
 void EditSourceTexture::ApplyTexture(ImageGrid1* tex) const noexcept
@@ -177,14 +179,6 @@ void EditSourceTexture::SelectDefaultTextureFile() noexcept
     SelectTextureFile();
 }
 
-bool EditSourceTexture::SelectTextureFile() noexcept
-{
-    auto curTex = IsVaildTextureIndex() ? m_textureFiles[m_texIndex].get() : nullptr;
-    ApplyTexture(curTex);
-
-    return true;
-}
-
 static vector<string> GetTextureFiles(const vector<unique_ptr<ImageGrid1>>& texFiles) noexcept
 {
     vector<string> strList;
@@ -193,16 +187,24 @@ static vector<string> GetTextureFiles(const vector<unique_ptr<ImageGrid1>>& texF
     return strList;
 }
 
+bool EditSourceTexture::SelectTextureFile() noexcept
+{
+    auto curTex = IsVaildTextureIndex() ? m_textureFiles[m_texIndex].get() : nullptr;
+    ApplyTexture(curTex);
+    m_listboxTexture->SetItems(GetTextureFiles(m_textureFiles));
+    m_listboxTexture->SetIndex(m_texIndex);
+
+    return true;
+}
+
 void EditSourceTexture::RenderTextureList()
 {
     ImVec2 btnSize{ 130, 22 };
     if (ImGui::Button("Add Texture File", btnSize)) m_pendingAction = PendingAction::LoadTextureFile; ImGui::SameLine();
     if (ImGui::Button("Delete Texture File", btnSize)) m_pendingAction = PendingAction::DeleteTextureFile;
 
-    auto strFileList = GetTextureFiles(m_textureFiles); //?!? 매프레임 실행될텐데...
-    vector<const char*> texFiles; //const char*은 값을 저장하는게 아니라 포인터를 저장하기 때문에 strFileList가 없어지면 글자가 깨진다.
-    for (auto& str : strFileList)
-        texFiles.emplace_back(str.c_str());
-    if (ImGui::ListBox("Texture List", &m_texIndex, texFiles.data(), static_cast<int>(texFiles.size()), 4))
+    m_listboxTexture->Render([this](int index) {
+        m_texIndex = index;
         m_pendingAction = PendingAction::SelectTextureFile;
+        });
 }

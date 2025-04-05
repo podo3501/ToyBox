@@ -3,7 +3,6 @@
 
 class MainWindow;
 class TextureResBinderWindow;
-class GuiWidget;
 
 namespace DX
 {
@@ -47,5 +46,4 @@ private:
 
     vector<unique_ptr<MainWindow>> m_mainWindows;
     vector<unique_ptr<TextureResBinderWindow>> m_textureWindows;
-    unique_ptr<GuiWidget> m_guiWidget;
 };

@@ -156,11 +156,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="EditUtility\EditClass.cpp" />
+    <ClCompile Include="EditUtility\EditUtility.cpp" />
     <ClCompile Include="HelperClass.cpp" />
     <ClCompile Include="InnerWindow.cpp" />
     <ClCompile Include="MainWindow\ComponentController.cpp" />
     <ClCompile Include="MainWindow\ComponentSelector.cpp" />
-    <ClCompile Include="MainWindow\EditUtility.cpp" />
     <ClCompile Include="MainWindow\MainWindow.cpp" />
     <ClCompile Include="MainWindow\FloatingComponent.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.cpp" />
@@ -175,18 +176,6 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\EditWindowFactory.cpp" />
-    <ClCompile Include="MainWindow\SelectedComponent\SourceExtractor.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\TextureWindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Menu\FileTab.cpp" />
     <ClCompile Include="Menu\MenuBar.cpp" />
     <ClCompile Include="Menu\RecentFiles.cpp" />
@@ -197,12 +186,6 @@
     <ClCompile Include="TextureResBinderWindow\ImageSelector.cpp" />
     <ClCompile Include="TextureResBinderWindow\TextureResBinderWindow.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
-    <ClCompile Include="GuiWidget.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="TestImgui.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -216,11 +199,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="EditUtility\EditClass.h" />
+    <ClInclude Include="EditUtility\EditUtility.h" />
     <ClInclude Include="HelperClass.h" />
     <ClInclude Include="InnerWindow.h" />
     <ClInclude Include="MainWindow\ComponentController.h" />
     <ClInclude Include="MainWindow\ComponentSelector.h" />
-    <ClInclude Include="MainWindow\EditUtility.h" />
     <ClInclude Include="MainWindow\MainWindow.h" />
     <ClInclude Include="MainWindow\FloatingComponent.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.h" />
@@ -235,18 +219,6 @@
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h" />
     <ClInclude Include="MainWindow\SelectedComponent\EditWindowFactory.h" />
-    <ClInclude Include="MainWindow\SelectedComponent\SourceExtractor.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\TextureWindow.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Menu\FileTab.h" />
     <ClInclude Include="Menu\MenuBar.h" />
     <ClInclude Include="Menu\RecentFiles.h" />
@@ -257,12 +229,6 @@
     <ClInclude Include="TextureResBinderWindow\ImageSelector.h" />
     <ClInclude Include="TextureResBinderWindow\TextureResBinderWindow.h" />
     <ClInclude Include="ToolSystem.h" />
-    <ClInclude Include="GuiWidget.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="TestImgui.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToolMainLoop.h" />

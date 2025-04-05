@@ -10,7 +10,6 @@ namespace UserInterfaceTest
 	TEST_F(TextureResourceBinderTest, BasicOperations)
 	{
 		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
-		EXPECT_TRUE((GetTextureArea(m_resBinder.get(), "BackImage1", 0) == Rectangle{ 10, 10, 64, 64 })); //?!? 테스트 밖에 함수가 사용되지 않고 있다.
 		TextureSourceInfo sourceInfo{ filename, ImagePart::One, {{10, 10, 64, 64}} };
 		EXPECT_EQ(m_resBinder->GetBindingKey(sourceInfo), "BackImage1");
 

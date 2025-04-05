@@ -3,7 +3,7 @@
 #include "../Toy/UserInterface/UIComponent/UIType.h"
 #include "../Toy/UserInterface/UIComponent/Components/Button.h"
 #include "../Toy/Utility.h"
-#include "../../EditUtility.h"
+#include "EditUtility/EditUtility.h"
 
 EditButton::~EditButton() {};
 EditButton::EditButton(Button* button, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :

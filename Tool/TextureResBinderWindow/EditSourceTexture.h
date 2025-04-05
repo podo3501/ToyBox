@@ -6,6 +6,7 @@ class ImageGrid1;
 class TextureLoadBinder;
 class TexResCommandList;
 class TextureResBinderWindow;
+class EditListBox;
 class RenameNotifier;
 class ImageSelector;
 
@@ -41,6 +42,7 @@ private:
     TexResCommandList* m_cmdList;
     unique_ptr<ImageSelector> m_imageSelector;
     int m_texIndex{ -1 };
+    unique_ptr<EditListBox> m_listboxTexture;
     vector<unique_ptr<ImageGrid1>> m_textureFiles;
     optional<PendingAction> m_pendingAction;
 };

@@ -116,10 +116,12 @@
 --Binder에서 현재 텍스쳐에서 등록돼 있는 키들을 전부 표시해주는 거. 
 --툴에서 Undo 할수 있게끔 추가 
 --리팩토링 미흡한게 있는지 확인    
+--imgui list도 utility class 작업
 
 @툴에서 리스트 할 수 있게끔
     ImageSwitcher editWindow 작업
-
+    ImageSwitcher에 ImageGrid1<->ImageGrid3 변환이 되게끔 작업. 
+    만약 이 기능이 없다면 리스트 컴포넌트는 Sample을 엄청나게 많이 만들어야 한다.
 
 @UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
 @콤보박스 컴포넌트 만들기

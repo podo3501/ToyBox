@@ -5,10 +5,12 @@
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "../HelperClass.h"
+#include "EditUtility/EditUtility.h"
 
 EditFontTexture::~EditFontTexture() = default;
 EditFontTexture::EditFontTexture() :
     m_cmdList{ nullptr },
+    m_listboxFont{ make_unique<EditListBox>("Font Bind Key", 4) },
     m_renameNotifier{ make_unique<RenameNotifier>() }
 {}
 
@@ -23,10 +25,20 @@ static vector<wstring> GetSpriteFontFiles(const wstring& folderPath)
     return spriteFontFiles;
 }
 
+static vector<string> GetFontFiles(const auto& fontFiles) noexcept
+{
+    vector<string> strFileList;
+    ranges::transform(fontFiles, back_inserter(strFileList), WStringToString);
+    return strFileList;
+}
+
 void EditFontTexture::Update() noexcept
 {
-    if(m_fontFiles.empty())
+    if (m_fontFiles.empty())
+    {
         m_fontFiles = GetSpriteFontFiles(GetResourcePath() + GetResourceFontPath());
+        m_listboxFont->SetItems(GetFontFiles(m_fontFiles));
+    }
 }
 
 wstring EditFontTexture::GetSelectFontFile() const noexcept
@@ -39,12 +51,7 @@ wstring EditFontTexture::GetSelectFontFile() const noexcept
 //키를 다 지워주는 기능이 필요
 void EditFontTexture::Render()
 {
-    vector<string> strFileList;
-    ranges::transform(m_fontFiles, back_inserter(strFileList), WStringToString);
-    vector<const char*> fontFiles; //const char*은 값을 저장하는게 아니라 포인터를 저장하기 때문에 strFileList가 없어지면 글자가 깨진다.
-    for (auto& str : strFileList)
-        fontFiles.emplace_back(str.c_str());
-    ImGui::ListBox("Font List", &m_fontIndex, fontFiles.data(), static_cast<int>(fontFiles.size()), 4);
+    m_listboxFont->Render([this](int index) { m_fontIndex = index; });
 
     auto binder = m_cmdList->GetReceiver();
     const wstring& fontFilename = GetSelectFontFile();
