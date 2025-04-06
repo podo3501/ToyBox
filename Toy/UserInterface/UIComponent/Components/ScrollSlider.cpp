@@ -138,7 +138,7 @@ void ScrollSlider::SetScrollContainerSize(float ratio) noexcept
 {
 	DirectionType dirType = m_scrollTrack->GetDirectionType();
 	const auto& area = m_scrollTrack->GetArea();
-	XMUINT2 ratioSize = RectangleToXMUINT2(area);
+	XMUINT2 ratioSize = GetSizeFromRectangle(area);
 
 	switch (dirType) {
 	case DirectionType::Horizontal: ratioSize.x = static_cast<uint32_t>(area.width * ratio); break;

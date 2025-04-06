@@ -20,6 +20,7 @@ public:
 	optional<vector<Rectangle>> GetTextureAreaList();
 	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
 	void SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept;
+	bool FitToTextureSource() noexcept;
 
 	inline const string& GetBindKey() const noexcept { return m_bindKey; }
 	void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex = 0u) noexcept;

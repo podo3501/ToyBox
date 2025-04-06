@@ -231,18 +231,6 @@ vector<Rectangle> GetSourcesFromArea(const Rectangle& area, const vector<int>& w
 	return areas;
 }
 
-Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept
-{
-	if (rectangles.empty())
-		return {};
-
-	Rectangle result = rectangles[0];
-	for (const Rectangle& rect : rectangles)
-		result = Rectangle::Union(result, rect);
-
-	return result;
-}
-
 bool IsContains(const vector<Rectangle>& rectangles, const XMINT2& position) noexcept
 {
 	const Rectangle& combinedRect = CombineRectangles(rectangles);

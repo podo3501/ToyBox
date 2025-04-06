@@ -61,7 +61,7 @@ bool ImageGrid3::Setup(const UILayout& layout, DirectionType dirType, const stri
 bool ImageGrid3::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
     if (GetSize() == XMUINT2{}) //ImageGrid9을 만들면 초기 크기값이 0로 설정 돼 있다.
-        SetSize(UIEx(this).GetTotalChildSize());
+        SetSize(UIEx(this).GetChildrenBoundsSize());
     else
         ChangeSize(GetSize(), true);
     UpdatePositionsManually();
@@ -75,22 +75,30 @@ const string& ImageGrid3::GetBindKey() const noexcept
     return imgGrid1->GetBindKey();
 }
 
-void ImageGrid3::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+bool ImageGrid3::ForEachImageGrid1(predicate<ImageGrid1*, size_t> auto&& each)
 {
     for (size_t index : views::iota(0u, 3u))
     {
         ImageGrid1* imgGrid1 = ComponentCast<ImageGrid1*>(GetChildComponent(index));
-        imgGrid1->ChangeBindKey(key, sourceInfo, sourceIndex * 3 + index);
+        if (!each(imgGrid1, index)) return false;
     }
+    return true;
+}
+
+void ImageGrid3::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+{
+    ForEachImageGrid1([&key, &sourceInfo, sourceIndex](ImageGrid1* img1, size_t index) {
+        img1->ChangeBindKey(key, sourceInfo, sourceIndex * 3 + index);
+        return true;
+        });
 }
 
 void ImageGrid3::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
 {
-    for (auto idx : views::iota(0u, sources.size()))
-    {
-        if (auto img1 = ComponentCast<ImageGrid1*>(GetChildComponent(idx)); img1)
-            img1->SetIndexedSource(index, { sources[idx] });
-    }
+    ForEachImageGrid1([index, &sources](ImageGrid1* img1, size_t idx) {
+        img1->SetIndexedSource(index, { sources[idx] });
+        return true;
+        });
 }
 
 static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
@@ -119,6 +127,24 @@ bool ImageGrid3::ImplementChangeSize(const XMUINT2& size) noexcept
     ApplySize(size);
     
     return true;
+}
+
+bool ImageGrid3::FitToTextureSource() noexcept
+{
+    XMUINT2 totalSize{};
+    auto result = ForEachImageGrid1([&totalSize, this](ImageGrid1* img1, size_t) {
+        if (!img1->FitToTextureSource()) return false;
+        const XMUINT2 size = GetSizeFromRectangle(img1->GetArea());
+
+        switch (m_dirType) {
+        case DirectionType::Horizontal: totalSize.x += size.x; totalSize.y = max(totalSize.y, size.y); break;
+        case DirectionType::Vertical: totalSize.y += size.y; totalSize.x = max(totalSize.x, size.x); break;
+        }
+        return true;
+        });
+    ReturnIfFalse(result);
+
+    return ChangeSize(totalSize);
 }
 
 Rectangle ImageGrid3::GetFirstComponentSource() const noexcept

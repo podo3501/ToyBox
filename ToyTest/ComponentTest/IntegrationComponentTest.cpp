@@ -44,10 +44,10 @@ namespace UserInterfaceTest
 		UIEx(m_panel).AttachComponent(move(img1), { 100, 100 });
 		m_panel->ProcessUpdate(m_timer);
 
-		EXPECT_EQ(UIEx(img1Ptr).GetTotalChildSize(), XMUINT2(210, 110));
+		EXPECT_EQ(UIEx(img1Ptr).GetChildrenBoundsSize(), XMUINT2(210, 110));
 		auto [detached, parent] = UIEx(img1Ptr).DetachComponent();
 		detached->ProcessUpdate(m_timer);
-		EXPECT_EQ(UIEx(detached).GetTotalChildSize(), XMUINT2(210, 110));
+		EXPECT_EQ(UIEx(detached).GetChildrenBoundsSize(), XMUINT2(210, 110));
 	}
 
 	TEST_F(IntegrationTest, Clone)

@@ -36,7 +36,6 @@ bool IsBiggerThanSource(DirectionType dirType, const XMUINT2& size, const vector
 //하나의 사각형과 두개의 점이 있을때 3개의 사각형을 찾는 함수
 vector<Rectangle> GetSourcesFromArea(
 	const Rectangle& area, const vector<int>& widths, const vector<int>& heights) noexcept;
-Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept;
 bool IsContains(const vector<Rectangle>& rectangles, const XMINT2& position) noexcept;
 bool GetSizeDividedByThree(DirectionType type, const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights) noexcept;
 bool GetSizeDividedByNine(const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights) noexcept;

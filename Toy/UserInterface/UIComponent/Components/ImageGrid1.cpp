@@ -48,7 +48,17 @@ void ImageGrid1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureCont
 	m_texController = texController;
 
 	if (GetSize() == XMUINT2{}) //사이즈가 없다면 source 사이즈로 초기화 한다.
-		SetSize(RectangleToXMUINT2(m_source));
+		SetSize(GetSizeFromRectangle(m_source));
+}
+
+bool ImageGrid1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
+{
+	if (bindKey.empty()) return false;
+	SetLayout(layout);
+	m_bindKey = bindKey;
+	m_sourceIndex = sourceIndex;
+
+	return true;
 }
 
 bool ImageGrid1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
@@ -94,20 +104,18 @@ void ImageGrid1::ImplementRender(ITextureRender* render) const
 	render->Render(*m_index, destination, &source);
 }
 
-bool ImageGrid1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
-{
-	if (bindKey.empty()) return false;
-	SetLayout(layout);
-	m_bindKey = bindKey;
-	m_sourceIndex = sourceIndex;
-
-	return true;
-}
-
 void ImageGrid1::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept
 {
 	m_index = index;
 	m_source = source[0];
+}
+
+bool ImageGrid1::FitToTextureSource() noexcept
+{
+	if (m_source.IsEmpty()) return false;
+
+	SetSize(GetSizeFromRectangle(m_source));
+	return true;
 }
 
 void ImageGrid1::SerializeIO(JsonOperation& operation)

@@ -177,7 +177,7 @@ inline Rectangle XMUINT2ToRectangle(const XMUINT2& size) {
 	};
 }
 
-inline XMUINT2 RectangleToXMUINT2(const Rectangle& rect) { return XMUINT2(rect.width, rect.height); }
+inline XMUINT2 GetSizeFromRectangle(const Rectangle& rect) { return XMUINT2(rect.width, rect.height); }
 
 inline bool Contains(const Rectangle& rect, const XMINT2& pos) noexcept
 {
@@ -205,3 +205,5 @@ inline vector<RECT> RectanglesToRects(const vector<Rectangle>& rectangles) noexc
 	ranges::transform(rectangles, rects.begin(), RectangleToRect);
 	return rects;
 }
+
+Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept;

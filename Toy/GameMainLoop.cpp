@@ -38,7 +38,7 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 
 bool GameMainLoop::InitializeDerived()
 {
-    UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
+    UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
     m_gamePanel = CreateRootPanel("Main", layout, m_renderer);
 
     return true;

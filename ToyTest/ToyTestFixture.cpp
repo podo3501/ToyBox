@@ -32,7 +32,7 @@ void ToyTestFixture::SetUp()
 	InitializeConfig(L"Resources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 	InputManager::Initialize(hwnd);
-	UILayout layout{ RectangleToXMUINT2(GetRectResolution()), Origin::LeftTop };
+	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
 	m_resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
 	m_renderer->LoadTextureBinder(m_resBinder.get());

@@ -48,7 +48,7 @@ unique_ptr<UIComponent> FloatingComponent::GetComponent() noexcept
 
 void FloatingComponent::SetComponent(unique_ptr<UIComponent> component) noexcept
 {
-	LoadComponentInternal(move(component), UIEx(component).GetTotalChildSize());
+	LoadComponentInternal(move(component), UIEx(component).GetChildrenBoundsSize());
 }
 
 bool FloatingComponent::Excute()
@@ -141,5 +141,5 @@ bool FloatingComponent::LoadComponent(unique_ptr<UIComponent> component)
 
 bool FloatingComponent::ComponentToFloating(unique_ptr<UIComponent>&& component)
 {
-	return LoadComponentInternal(move(component), UIEx(component).GetTotalChildSize());
+	return LoadComponentInternal(move(component), UIEx(component).GetChildrenBoundsSize());
 }

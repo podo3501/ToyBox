@@ -106,25 +106,17 @@ vector<UIComponent*> UIComponentEx::GetComponents(const XMINT2& pos) noexcept
 	return findList;
 }
 
-Rectangle UIComponentEx::GetTotalChildSize(const UIComponent* component) noexcept
+XMUINT2 UIComponentEx::GetChildrenBoundsSize() const noexcept
 {
-	if (component == nullptr) return {};
+	if (m_component == nullptr) return {};
 
-	Rectangle totalArea{ component->GetArea() }; //초기값을 지정하지 않으면 0, 0 부터 시작하는 큰 사각형이 union된다.
-	component->ForEachChildConst([&totalArea](const UIComponent* child) {
+	Rectangle totalArea{ m_component->GetArea() }; //초기값을 지정하지 않으면 0, 0 부터 시작하는 큰 사각형이 union된다.
+	m_component->ForEachChildConst([&totalArea](const UIComponent* child) {
 		const auto& area = child->GetArea();
 		totalArea = Rectangle::Union(totalArea, area);
 		});
 
-	return totalArea;
-}
-
-XMUINT2 UIComponentEx::GetTotalChildSize() noexcept
-{
-	const Rectangle& totalRectangle = GetTotalChildSize(m_component);
-	return {
-		static_cast<uint32_t>(totalRectangle.width),
-		static_cast<uint32_t>(totalRectangle.height) };
+	return GetSizeFromRectangle(totalArea);
 }
 
 bool UIComponentEx::IsPositionUpdated() const noexcept

@@ -10,6 +10,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "../Toy/Utility.h"
 
 using testing::ElementsAre;
 
@@ -160,6 +161,11 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "BackImage1"));
 	}
 
+	static inline XMUINT2 GetSizeFromRectangles(const vector<Rectangle>& rectangles) noexcept
+	{
+		return GetSizeFromRectangle(CombineRectangles(rectangles));
+	}
+
 	TEST_F(BasicComponentTest, ImageGrid1)
 	{
 		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
@@ -182,6 +188,10 @@ namespace UserInterfaceTest
 		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
 		img1Ptr->ChangeSize({ 128, 128 });
 		CallMockRender(TestImageGrid1Render, 1);
+
+		img1Ptr->FitToTextureSource();
+		auto rectRef = GetRectangles(m_resBinder.get(), "BackImage1");
+		EXPECT_EQ(img1Ptr->GetSize(), GetSizeFromRectangles(rectRef->get()));
 	}
 
 	////////////////////////////////////////////////////////
@@ -235,6 +245,11 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		CallMockRender(TestImageGrid3ChangeAreaRender_H, 3);
+		
+		ImageGrid3* img3 = UIEx(m_panel).FindComponent<ImageGrid3*>("ImageGrid3_0");
+		EXPECT_TRUE(img3->FitToTextureSource());
+		auto rectRef = GetRectangles(m_resBinder.get(), "ScrollButton3_H_Normal");
+		EXPECT_EQ(img3->GetSize(), GetSizeFromRectangles(rectRef->get()));
 	}
 
 	////////////////////////////////////////////////////////
