@@ -2,7 +2,6 @@
 
 #include "../Include/IComponent.h"
 #include "UILayout.h"
-#include "UIType.h"
 #include "UITransform.h"
 #include "UIComponentEx.h"
 #include "UIHierarchy.h"
@@ -26,7 +25,7 @@ protected:
 
 	//상속되어지는 함수는 구현한다.
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
-	bool ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
+	bool ChangePosition(size_t index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	vector<UIComponent*> GetChildComponents() const noexcept;
 	UIComponent* GetChildComponent(size_t index) const noexcept;
 	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;

@@ -7,7 +7,6 @@
 #include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
 #include "../Toy/UserInterface/UIComponent/Components/Container.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/Utility.h"
@@ -16,6 +15,11 @@ using testing::ElementsAre;
 
 namespace UserInterfaceTest
 {
+	static inline XMUINT2 GetSizeFromRectangles(const vector<Rectangle>& rectangles) noexcept
+	{
+		return GetSizeFromRectangle(CombineRectangles(rectangles));
+	}
+
 	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 144, 104, 176, 136 } };
@@ -28,19 +32,6 @@ namespace UserInterfaceTest
 		auto container = CreateContainer(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal);
 		UIEx(m_panel).AttachComponent(move(container), { 160, 120 });
 		WriteReadTest(m_panel);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-
-		MockMouseInput(144, 120, true);	//Pressed
-		CallMockRender(TestButton_ImageGrid1Render, 1);
-	}
-
-	////////////////////////////////////////////////////////////////
-
-	TEST_F(BasicComponentTest, ImageSwitcher_ImageGrid1)
-	{
-		auto switcher = CreateImageSwitcher({ {32, 32}, Origin::Center }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
-		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
-		m_panel = WriteReadTest(m_panel);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		MockMouseInput(144, 120, true);	//Pressed
@@ -82,26 +73,6 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, ImageSwitcher_ImageGrid3_H)
-	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({{100, 48}, Origin::Center},
-			ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
-		m_panel = WriteReadTest(m_panel, switcherPtr);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-
-		MockMouseInput(110, 96);	//Hover
-		CallMockRender(TestButton_ImageGrid3Render_H, 3);
-
-		switcherPtr->ChangeSize({ 150, 48 });
-		MockMouseInput(0, 0);	//Normal
-		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_H, 3);
-
-		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_H, 3);
-	}
-
-	////////////////////////////////////////////////////////////////
-
 	static void TestButton_ImageGrid3Render_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
@@ -133,37 +104,12 @@ namespace UserInterfaceTest
 		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_V, 3);
 	}
 
-	////////////////////////////////////////////////////////////////
-
-	TEST_F(BasicComponentTest, ImageSwitcher_ImageGrid3_V)
-	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({ {48, 100}, Origin::Center },
-			ImagePart::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
-		m_panel = WriteReadTest(m_panel, switcherPtr);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-
-		MockMouseInput(77, 51);	//Hover
-		CallMockRender(TestButton_ImageGrid3Render_V, 3);
-
-		switcherPtr->ChangeSize({ 48, 150 });
-		MockMouseInput(0, 0);	//Normal
-		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_V, 3);
-
-		//CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_V, 3);
-	}
-
 	////////////////////////////////////////////////////////
 
 	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 368, 268, 432, 332 } };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "BackImage1"));
-	}
-
-	static inline XMUINT2 GetSizeFromRectangles(const vector<Rectangle>& rectangles) noexcept
-	{
-		return GetSizeFromRectangle(CombineRectangles(rectangles));
 	}
 
 	TEST_F(BasicComponentTest, ImageGrid1)
@@ -268,8 +214,8 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, ImageGrid3_Vertical)
 	{
-		auto [img3, img3Ptr] = GetPtrs(CreateImageGrid3({ {36, 100}, Origin::LeftTop }, DirectionType::Vertical, "ScrollTrack3_V"));
-		UIEx(m_panel).AttachComponent(move(img3), { 400, 300 });
+		auto [img, img3Ptr] = GetPtrs(CreateImageGrid3({ {36, 100}, Origin::LeftTop }, DirectionType::Vertical, "ScrollTrack3_V"));
+		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img3Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
@@ -291,6 +237,11 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		
 		CallMockRender(TestImageGrid3ChangeAreaRender_V, 3);
+
+		ImageGrid3* img3 = UIEx(m_panel).FindComponent<ImageGrid3*>("ImageGrid3_0");
+		EXPECT_TRUE(img3->FitToTextureSource());
+		auto rectRef = GetRectangles(m_resBinder.get(), "ScrollTrack3_V");
+		EXPECT_EQ(img3->GetSize(), GetSizeFromRectangles(rectRef->get()));
 	}
 
 	////////////////////////////////////////////////////////
@@ -334,13 +285,18 @@ namespace UserInterfaceTest
 		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34, 36, 38));
 
 		srcDivider.list.clear();
-		srcDivider.list = { 20, 44, 26, 48 };
+		srcDivider.list = { 20, 44, 30, 40 };
 		EXPECT_TRUE(ModifyTextureSourceInfo(m_resBinder.get(), "BackImage9", srcDivider));
 
 		m_panel = WriteReadTest(m_panel);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		CallMockRender(TestImageGrid9ChangeAreaRender, 9);
+
+		ImageGrid9* img9 = UIEx(m_panel).FindComponent<ImageGrid9*>("ImageGrid9_0");
+		EXPECT_TRUE(img9->FitToTextureSource());
+		auto rectRef = GetRectangles(m_resBinder.get(), "BackImage9");
+		EXPECT_EQ(img9->GetSize(), GetSizeFromRectangles(rectRef->get()));
 	}
 
 	////////////////////////////////////////////////////////

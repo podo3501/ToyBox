@@ -20,7 +20,7 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;
-	bool FitToTextureSource() noexcept;
+	bool FitToTextureSource() noexcept override;
 	const string& GetBindKey() const noexcept;
 	void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex = 0u) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
@@ -34,6 +34,8 @@ protected:
 
 private:
 	bool ForEachImageGrid1(predicate<ImageGrid1*, size_t> auto&& each);
+	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
+	bool ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept;
 
 	DirectionType m_dirType{ DirectionType::Horizontal };
 };

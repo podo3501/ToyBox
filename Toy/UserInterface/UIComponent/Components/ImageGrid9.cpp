@@ -8,7 +8,7 @@
 ImageGrid9::~ImageGrid9() = default;
 ImageGrid9::ImageGrid9() = default;
 ImageGrid9::ImageGrid9(const ImageGrid9& o) :
-	UIComponent{ o }
+	ImageGrid{ o }
 {}
 
 unique_ptr<UIComponent> ImageGrid9::CreateClone() const
@@ -40,6 +40,36 @@ bool ImageGrid9::ImplementBindSourceInfo(TextureResourceBinder*, ITextureControl
 	return true;
 }
 
+bool ImageGrid9::ForEachImageGrid3(predicate<ImageGrid3*, size_t> auto&& each)
+{
+	for (size_t index : views::iota(0u, 3u))
+	{
+		ImageGrid3* imgGrid3 = ComponentCast<ImageGrid3*>(GetChildComponent(index));
+		if (!each(imgGrid3, index)) return false;
+	}
+	return true;
+}
+
+bool ImageGrid9::FitToTextureSource() noexcept
+{
+	XMUINT2 totalSize{};
+	vector<XMUINT2> sizes{};
+	auto result = ForEachImageGrid3([&totalSize, &sizes, this](ImageGrid3* img3, size_t) {
+		ReturnIfFalse(img3->FitToTextureSource());
+		const XMUINT2 size = GetSizeFromRectangle(img3->GetArea());
+		sizes.emplace_back(size);
+
+		totalSize.y += size.y; 
+		totalSize.x = max(totalSize.x, size.x);
+		return true;
+		});
+	ReturnIfFalse(result);
+	ReturnIfFalse(ApplyPositions(totalSize, sizes));
+
+	SetSize(totalSize);
+	return true;
+}
+
 const string& ImageGrid9::GetBindKey() const noexcept
 {
 	ImageGrid3* imgGrid3 = ComponentCast<ImageGrid3*>(GetChildComponent(0));
@@ -48,11 +78,10 @@ const string& ImageGrid9::GetBindKey() const noexcept
 
 void ImageGrid9::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
 {
-	for (size_t index : views::iota(0u, 3u))
-	{
-		ImageGrid3* imgGrid3 = ComponentCast<ImageGrid3*>(GetChildComponent(index));
-		imgGrid3->ChangeBindKey(key, sourceInfo, index);
-	}
+	ForEachImageGrid3([&key, &sourceInfo](ImageGrid3* img3, size_t index) {
+		img3->ChangeBindKey(key, sourceInfo, index);
+		return true;
+		});
 }
 
 static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
@@ -65,6 +94,23 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
 	return srcList;
 }
 
+bool ImageGrid9::ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept
+{
+	ReturnIfFalse(ForEachImageGrid3([this, &sizes](ImageGrid3* img3, size_t index) {
+		return img3->ChangeSize(sizes[index]);
+		}));
+	return true;
+}
+
+bool ImageGrid9::ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept
+{
+	vector<XMINT2> positions = ExtractStartPosFromSizes(DirectionType::Vertical, sizes);
+	ReturnIfFalse(ForEachImageGrid3([this, &size, &positions](ImageGrid3*, size_t index) {
+		return ChangePosition(index, size, positions[index]);
+		}));
+	return true;
+}
+
 bool ImageGrid9::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
@@ -72,12 +118,8 @@ bool ImageGrid9::ImplementChangeSize(const XMUINT2& size) noexcept
 	ReturnIfFalse(IsBiggerThanSource(DirectionType::Vertical, size, list));
 
 	vector<XMUINT2> sizes = StretchSize(DirectionType::Vertical, size, components);
-	vector<XMINT2> positions = ExtractStartPosFromSizes(DirectionType::Vertical, sizes);
-	for (auto idx : views::iota(0u, components.size()))
-	{
-		ChangePosition(idx, size, positions[idx]);
-		ReturnIfFalse(components[idx]->ChangeSize(sizes[idx]));
-	}
+	ReturnIfFalse(ApplyStretchSize(sizes));
+	ReturnIfFalse(ApplyPositions(size, sizes));
 	ApplySize(size);
 
 	return true;

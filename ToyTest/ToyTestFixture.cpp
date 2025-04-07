@@ -7,6 +7,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -121,6 +122,19 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 	auto clone = original->Clone();
 
 	return CompareUniquePtr(original, clone);
+}
+
+static inline XMUINT2 GetSizeFromRectangles(const vector<Rectangle>& rectangles) noexcept
+{
+	return GetSizeFromRectangle(CombineRectangles(rectangles));
+}
+
+void ImageSwitcherComponentTest::FitToTextureSourceTest(const string& bindingKey)
+{
+	ImageSwitcher* imgSwitcher = UIEx(m_panel).FindComponent<ImageSwitcher*>("ImageSwitcher_0");
+	EXPECT_TRUE(imgSwitcher->FitToTextureSource());
+	auto rectRef = GetRectangles(m_resBinder.get(), bindingKey);
+	EXPECT_EQ(imgSwitcher->GetSize(), GetSizeFromRectangles(rectRef->get()));
 }
 
 void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<UIComponent>>& history)

@@ -20,6 +20,7 @@ public:
 		const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	void ClearInteraction() noexcept;
+	bool FitToTextureSource() noexcept;
 
 protected:
 	ImageSwitcher(const ImageSwitcher& o);

@@ -39,36 +39,6 @@ UIComponent* UIHierarchy<UIComponent>::GetParentRegionRoot() noexcept
 	return m_parent->GetRegionRoot();
 }
 
-void UIHierarchy<UIComponent>::ForEachChild(function<void(UIComponent*)> func) noexcept
-{
-	func(GetThis());
-	for (auto& child : m_children)
-	{
-		if (child)
-			child->ForEachChild(func);
-	}
-}
-
-bool UIHierarchy<UIComponent>::ForEachChildUntilFail(function<bool(UIComponent*)> func) noexcept
-{
-	ReturnIfFalse(func(GetThis()));
-
-	for (auto& child : m_children) 
-		if (child) ReturnIfFalse(child->ForEachChildUntilFail(func));
-
-	return true;
-}
-
-bool UIHierarchy<UIComponent>::ForEachChildPostUntilFail(function<bool(UIComponent*)> func) noexcept
-{
-	for (auto& child : m_children)
-		if (child) ReturnIfFalse(child->ForEachChildPostUntilFail(func));
-
-	ReturnIfFalse(func(GetThis()));
-
-	return true;
-}
-
 void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> func) noexcept
 {
 	if (func(GetThis()) == CResult::SkipChildren)
@@ -78,16 +48,6 @@ void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> 
 	{
 		if (child)
 			child->ForEachChildBool(func);
-	}
-}
-
-void UIHierarchy<UIComponent>::ForEachChildConst(function<void(const UIComponent*)> func) const noexcept
-{
-	func(static_cast<const UIComponent*>(this));
-	for (const auto& child : m_children)
-	{
-		if (child)
-			child->ForEachChildConst(func);
 	}
 }
 

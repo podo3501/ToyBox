@@ -25,8 +25,9 @@
     <ClCompile Include="UserInterfaceTest\UndoRedoTest.cpp">
       <Filter>UserInterfaceTest</Filter>
     </ClCompile>
-    <ClCompile Include="TextureResourceBinderTest\TextureResourceBinderTest.cpp">
-      <Filter>TextureResourceBinderTest</Filter>
+    <ClCompile Include="TextureSourceBinderTest\TextureSourceBinderTest.cpp" />
+    <ClCompile Include="ComponentTest\ImageSwitcherComponentTest.cpp">
+      <Filter>ComponentTest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -37,6 +37,11 @@ protected:
 
 class IRendererTest : public ToyTestFixture {};
 class BasicComponentTest : public ToyTestFixture {};
+class ImageSwitcherComponentTest : public ToyTestFixture 
+{
+public:
+	void FitToTextureSourceTest(const string& bindingKey);
+};
 class ComplexComponentTest : public ToyTestFixture {};
 
 class UICommandList;

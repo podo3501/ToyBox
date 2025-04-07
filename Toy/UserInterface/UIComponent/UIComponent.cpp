@@ -166,7 +166,7 @@ bool UIComponent::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 	return ImplementChangeSize(lockedSize);
 }
 
-bool UIComponent::ChangePosition(int index, const XMUINT2& size, const XMINT2& relativePos) noexcept
+bool UIComponent::ChangePosition(size_t index, const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
 	if (index >= m_children.size()) return false;
 	GetTransform(m_children[index].get()).SetRelativePosition(size, relativePos);

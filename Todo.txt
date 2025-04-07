@@ -117,14 +117,14 @@
 --툴에서 Undo 할수 있게끔 추가 
 --리팩토링 미흡한게 있는지 확인    
 --imgui list도 utility class 작업
+--TDD쪽 imageSwitcher 리팩토링
+--FitToTextureSource 함수 만들기
+--invocable(predicate)을 uicomponent의 loop 에도 적용
 
 @툴에서 리스트 할 수 있게끔
     ImageSwitcher editWindow 작업
     ImageSwitcher에 ImageGrid1<->ImageGrid3 변환이 되게끔 작업. 
     만약 이 기능이 없다면 리스트 컴포넌트는 Sample을 엄청나게 많이 만들어야 한다.
-    FitToTextureSource 함수 만들기. 
-    invocable(predicate)을 uicomponent의 loop 에도 적용
-    DirectionType를  없애고 ImagePart만 사용하게끔 수정
 
 @UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
 @콤보박스 컴포넌트 만들기

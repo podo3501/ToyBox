@@ -146,6 +146,14 @@ bool ImageSwitcher::ImplementChangeSize(const XMUINT2& size) noexcept
 	return UIComponent::ImplementChangeSize(size);
 }
 
+bool ImageSwitcher::FitToTextureSource() noexcept
+{
+	ReturnIfFalse(m_image->FitToTextureSource());
+	SetSize(m_image->GetSize());
+
+	return true; 
+}
+
 void ImageSwitcher::SetState(InteractState state) noexcept
 {
 	if (m_state == state) return;

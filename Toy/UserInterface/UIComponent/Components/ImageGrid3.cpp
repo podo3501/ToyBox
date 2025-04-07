@@ -111,19 +111,32 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
     return srcList;
 }
 
+bool ImageGrid3::ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept
+{
+    ReturnIfFalse(ForEachImageGrid1([this, &sizes](ImageGrid1* img1, size_t index) {
+        return img1->ChangeSize(sizes[index]);
+        }));
+    return true;
+}
+
+bool ImageGrid3::ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept
+{
+    vector<XMINT2> positions = ExtractStartPosFromSizes(m_dirType, sizes);
+    ReturnIfFalse(ForEachImageGrid1([this, &size, &positions](ImageGrid1*, size_t index) {
+        return ChangePosition(index, size, positions[index]);
+        }));
+    return true;
+}
+
 bool ImageGrid3::ImplementChangeSize(const XMUINT2& size) noexcept
 {
     const vector<UIComponent*> components = GetChildComponents();
     vector<Rectangle> list = GetSourceList(components);
     ReturnIfFalse(IsBiggerThanSource(m_dirType, size, list));
 
-    vector<XMUINT2> sizes = StretchSize(m_dirType, size, components);
-    vector<XMINT2> positions = ExtractStartPosFromSizes(m_dirType, sizes);
-    for (auto idx : views::iota(0u, components.size()))
-    {
-        ChangePosition(idx, size, positions[idx]);
-        ReturnIfFalse(components[idx]->ChangeSize(sizes[idx]));
-    }
+    vector<XMUINT2> sizes = StretchSize(m_dirType, size, GetChildComponents());
+    ReturnIfFalse(ApplyStretchSize(sizes));
+    ReturnIfFalse(ApplyPositions(size, sizes));
     ApplySize(size);
     
     return true;
@@ -132,19 +145,22 @@ bool ImageGrid3::ImplementChangeSize(const XMUINT2& size) noexcept
 bool ImageGrid3::FitToTextureSource() noexcept
 {
     XMUINT2 totalSize{};
-    auto result = ForEachImageGrid1([&totalSize, this](ImageGrid1* img1, size_t) {
-        if (!img1->FitToTextureSource()) return false;
+    vector<XMUINT2> sizes{};
+    auto result = ForEachImageGrid1([&totalSize, &sizes, this](ImageGrid1* img1, size_t) {
+        ReturnIfFalse(img1->FitToTextureSource());
         const XMUINT2 size = GetSizeFromRectangle(img1->GetArea());
-
+        sizes.emplace_back(size);
         switch (m_dirType) {
         case DirectionType::Horizontal: totalSize.x += size.x; totalSize.y = max(totalSize.y, size.y); break;
         case DirectionType::Vertical: totalSize.y += size.y; totalSize.x = max(totalSize.x, size.x); break;
         }
         return true;
         });
-    ReturnIfFalse(result);
+    ReturnIfFalse(result); //result 변수를 써서 ReturnIfFalse를 한 이유는 람다에 디버깅(브레이크 포인터)이 안되기 때문이다.
+    ReturnIfFalse(ApplyPositions(totalSize, sizes));
 
-    return ChangeSize(totalSize);
+    SetSize(totalSize);
+    return true;
 }
 
 Rectangle ImageGrid3::GetFirstComponentSource() const noexcept
