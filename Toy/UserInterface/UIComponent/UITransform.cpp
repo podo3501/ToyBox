@@ -2,7 +2,7 @@
 #include "UITransform.h"
 #include "UILayout.h"
 #include "../JsonOperation/JsonOperation.h"
-#include "../../Utility.h"
+#include "Utility.h"
 
 UITransform::UITransform() = default;
 bool UITransform::operator==(const UITransform& o) const noexcept

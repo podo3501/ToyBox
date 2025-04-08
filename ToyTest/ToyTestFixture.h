@@ -39,7 +39,7 @@ class IRendererTest : public ToyTestFixture {};
 class BasicComponentTest : public ToyTestFixture {};
 class ImageSwitcherComponentTest : public ToyTestFixture 
 {
-public:
+protected:
 	void FitToTextureSourceTest(const string& bindingKey);
 };
 class ComplexComponentTest : public ToyTestFixture {};

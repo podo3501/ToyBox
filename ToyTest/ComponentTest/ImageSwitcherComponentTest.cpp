@@ -94,4 +94,46 @@ namespace UserInterfaceTest
 
 		FitToTextureSourceTest("ScrollButton3_V_Normal");
 	}
+
+	////////////////////////////////////////////////////////////////
+
+	static void TestImageSwitcher9(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	{
+		vector<RECT> expectDest = {
+			{ 50, 50, 60, 60 }, { 60, 50, 140, 60 }, { 140, 50, 150, 60 },
+			{ 50, 60, 60, 140 }, { 60, 60, 140, 140 }, { 140, 60, 150, 140 },
+			{ 50, 140, 60, 150 }, { 60, 140, 140, 150 }, { 140, 140, 150, 150 } };
+		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ListBackground9_Hovered"));
+	}
+
+	static void TestImageSwitcher9_ChangeSize(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	{
+		vector<RECT> expectDest = {
+			{ 25, 25, 35, 35 }, { 35, 25, 165, 35 }, { 165, 25, 175, 35 },
+			{ 25, 35, 35, 165 }, { 35, 35, 165, 165 }, { 165, 35, 175, 165 },
+			{ 25, 165, 35, 175 }, { 35, 165, 165, 175 }, { 165, 165, 175, 175 } };
+		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ListBackground9_Normal"));
+	}
+		
+	TEST_F(ImageSwitcherComponentTest, ImageSwitcher_ImageGrid9)
+	{
+		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({ {100, 100}, Origin::Center },
+			ImagePart::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr)); //ImageGrid9일때에는 두번 하는 이유는 sourceInfo에서 크기를 알려줘야 한다.
+
+		m_panel = WriteReadTest(m_panel, switcherPtr);
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+
+		MockMouseInput(51, 51);	//Hover
+		CallMockRender(TestImageSwitcher9, 9);
+
+		switcherPtr->ChangeSize({ 150, 150 });
+		MockMouseInput(0, 0);	//Normal
+		CallMockRender(TestImageSwitcher9_ChangeSize, 9);
+
+		CloneTest(m_panel.get(), TestImageSwitcher9_ChangeSize, 9);
+
+		FitToTextureSourceTest("ListBackground9_Normal");
+	}
 }

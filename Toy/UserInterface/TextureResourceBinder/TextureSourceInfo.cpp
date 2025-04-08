@@ -2,8 +2,8 @@
 #include "TextureSourceInfo.h"
 #include "../Include/IRenderer.h"
 #include "../JsonOperation/JsonHelper.h"
-#include "../../Config.h"
-#include "../../Utility.h"
+#include "Config.h"
+#include "Utility.h"
 #include "../UIComponent/UIType.h"
 
 TextureSourceInfo::~TextureSourceInfo() = default;

@@ -3,12 +3,12 @@
 #include "ImageGrid.h"
 #include "ImageGrid1.h"
 #include "ImageGrid3.h"
+#include "ImageGrid9.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
-#include "../../../../Include/IRenderer.h"
-#include "../../../InputManager.h"
+#include "../Include/IRenderer.h"
+#include "InputManager.h"
 #include "../../JsonOperation/JsonOperation.h"
-#include "../../../Utility.h"
-#include "../../../Config.h"
+#include "Utility.h"
 
 using enum InteractState;
 
@@ -55,8 +55,9 @@ static unique_ptr<ImageGrid> CreateImageGrid(const UILayout& layout, ImagePart i
 	case ImagePart::One: return CreateImageGrid1(ltLayout, bindKey);
 	case ImagePart::ThreeH: return CreateImageGrid3(ltLayout, DirectionType::Horizontal, bindKey);
 	case ImagePart::ThreeV: return CreateImageGrid3(ltLayout, DirectionType::Vertical, bindKey);
-	default: return nullptr;
+	case ImagePart::Nine: return CreateImageGrid9(ltLayout, bindKey);
 	}
+	return nullptr;
 }
 
 bool ImageSwitcher::Setup(const UILayout& layout, ImagePart imgPart,

@@ -2,7 +2,7 @@
 #include "UIHierarchy.h"
 #include "UIComponent.h"
 #include "UIComponentEx.h"
-#include "../../Utility.h"
+#include "Utility.h"
 
 UIComponent* UIHierarchy<UIComponent>::GetThis() noexcept
 {

@@ -2,8 +2,8 @@
 #include "UICommandList.h"
 #include "UICommandRegistry.h"
 #include "../../UIComponent/UIComponent.h"
-#include "../../../Utility.h"
 #include "../../UIComponent/UIType.h"
+#include "Utility.h"
 
 UICommandList::~UICommandList() = default;
 UICommandList::UICommandList() = default;

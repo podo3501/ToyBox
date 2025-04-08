@@ -13,6 +13,7 @@ public:
 
 	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid9; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
+	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept override;
 
 	bool Setup(const UILayout& layout, const string& bindKey);
 	void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept;

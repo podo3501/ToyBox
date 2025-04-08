@@ -3,7 +3,7 @@
 #include "ScrollSlider.h"
 #include "ImageGrid1.h"
 #include "../../JsonOperation/JsonOperation.h"
-#include "../../../Utility.h"
+#include "Utility.h"
 
 ScrollBar::~ScrollBar() = default;
 ScrollBar::ScrollBar() :

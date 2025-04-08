@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "UILayout.h"
 #include "UIType.h"
-#include "../../Config.h"
-#include "../../Utility.h"
+#include "Utility.h"
 #include "../JsonOperation/JsonOperation.h"
 
 UILayout::~UILayout() = default;

@@ -2,8 +2,8 @@
 #include "TextureFontInfo.h"
 #include "../Include/IRenderer.h"
 #include "../JsonOperation/JsonHelper.h"
-#include "../../Config.h"
-#include "../../Utility.h"
+#include "Config.h"
+#include "Utility.h"
 
 TextureFontInfo::~TextureFontInfo() = default;
 TextureFontInfo::TextureFontInfo() noexcept = default;

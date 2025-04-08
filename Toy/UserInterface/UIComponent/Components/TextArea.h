@@ -3,7 +3,6 @@
 
 struct ITextureController;
 struct IRenderer;
-class UILayout;
 struct TextData;
 namespace DX { class StepTimer; }
 

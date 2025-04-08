@@ -240,7 +240,6 @@
     <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid1.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid3.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid9.h" />
-    <ClInclude Include="UserInterface\UIComponent\Components\ImageGridHelper.hpp" />
     <ClInclude Include="UserInterface\UIComponent\Components\ImageSwitcher.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ListArea.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\Panel.h" />

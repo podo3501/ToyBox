@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "UICommandRegistry.h"
-#include "../../../Utility.h"
+#include "Utility.h"
 #include "../../UIComponent/Components/ImageGrid1.h"
 #include "../../UIComponent/Components/ImageGrid3.h"
 #include "../../UIComponent/Components/ImageGrid9.h"

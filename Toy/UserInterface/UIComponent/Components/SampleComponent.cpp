@@ -10,7 +10,7 @@
 #include "ScrollBar.h"
 #include "ScrollSlider.h"
 #include "ImageSwitcher.h"
-#include "../../../Utility.h"
+#include "Utility.h"
 
 map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept
 {

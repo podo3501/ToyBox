@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "ImageGrid1.h"
-#include "../../../../Include/IRenderer.h"
-#include "../../../Utility.h"
-#include "../../../Config.h"
+#include "../Include/IRenderer.h"
+#include "Utility.h"
 #include "../../JsonOperation/JsonOperation.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 

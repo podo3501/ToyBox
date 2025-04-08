@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "ImageGrid9.h"
 #include "ImageGrid3.h"
-#include "../../../Utility.h"
+#include "Utility.h"
 #include "../UIUtility.h"
-#include "ImageGridHelper.hpp"
 
 ImageGrid9::~ImageGrid9() = default;
 ImageGrid9::ImageGrid9() = default;
@@ -80,6 +79,14 @@ void ImageGrid9::ChangeBindKey(const string& key, const TextureSourceInfo& sourc
 {
 	ForEachImageGrid3([&key, &sourceInfo](ImageGrid3* img3, size_t index) {
 		img3->ChangeBindKey(key, sourceInfo, index);
+		return true;
+		});
+}
+
+void ImageGrid9::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
+{
+	ForEachImageGrid3([index, &sources](ImageGrid3* img3, size_t idx) {
+		img3->SetIndexedSource(index, { sources[idx * 3 + 0], sources[idx * 3 + 1], sources[idx * 3 + 2] });
 		return true;
 		});
 }

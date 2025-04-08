@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TextureResourceBinder.h"
 #include "../JsonOperation/JsonHelper.h"
-#include "../../Utility.h"
+#include "Utility.h"
 #include "../UIComponent/UIUtility.h"
 
 TextureResourceBinder::~TextureResourceBinder() = default;

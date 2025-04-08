@@ -88,9 +88,6 @@
     <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid9.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ImageGridHelper.hpp">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\ImageSwitcher.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>

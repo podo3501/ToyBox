@@ -1,10 +1,8 @@
 ﻿#include "pch.h"
 #include "UIComponent.h"
 #include "../../Utility.h"
-#include "../../InputManager.h"
 #include "../JsonOperation/JsonOperation.h"
-#include "StepTimer.h"
-#include "../../Config.h"
+#include "Config.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :

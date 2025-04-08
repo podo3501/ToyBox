@@ -3,7 +3,7 @@
 #include "TextureResourceBinder.h"
 #include "../UIComponent/UIUtility.h"
 #include "../UIComponent/UIType.h"
-#include "../../Utility.h"
+#include "Utility.h"
 
 optionalRef<vector<Rectangle>> GetRectangles(TextureResourceBinder* rb, const string& key) noexcept
 {

@@ -20,6 +20,21 @@ namespace UserInterfaceTest
 		return GetSizeFromRectangle(CombineRectangles(rectangles));
 	}
 
+	template<typename T>
+	void FitToTextureSourceTest(UIComponent* panel,
+		const string& componentName, const string& rectResourceName, TextureResourceBinder* resBinder)
+	{
+		T imageGrid = UIEx(panel).FindComponent<T>(componentName);
+		EXPECT_NE(imageGrid, nullptr);
+
+		EXPECT_TRUE(imageGrid->FitToTextureSource());
+
+		auto rectRef = GetRectangles(resBinder, rectResourceName);
+		EXPECT_NE(rectRef, nullopt);
+
+		EXPECT_EQ(imageGrid->GetSize(), GetSizeFromRectangles(rectRef->get()));
+	}
+
 	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 144, 104, 176, 136 } };
@@ -114,8 +129,8 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, ImageGrid1)
 	{
-		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
-		UIEx(m_panel).AttachComponent(move(img1), { 400, 300 });
+		auto [img, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
+		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img1Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		CallMockRender(TestImageGrid1Render, 1);
@@ -135,9 +150,7 @@ namespace UserInterfaceTest
 		img1Ptr->ChangeSize({ 128, 128 });
 		CallMockRender(TestImageGrid1Render, 1);
 
-		img1Ptr->FitToTextureSource();
-		auto rectRef = GetRectangles(m_resBinder.get(), "BackImage1");
-		EXPECT_EQ(img1Ptr->GetSize(), GetSizeFromRectangles(rectRef->get()));
+		FitToTextureSourceTest<ImageGrid1*>(m_panel.get(), "ImageGrid1_0", "BackImage1", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
@@ -192,10 +205,7 @@ namespace UserInterfaceTest
 
 		CallMockRender(TestImageGrid3ChangeAreaRender_H, 3);
 		
-		ImageGrid3* img3 = UIEx(m_panel).FindComponent<ImageGrid3*>("ImageGrid3_0");
-		EXPECT_TRUE(img3->FitToTextureSource());
-		auto rectRef = GetRectangles(m_resBinder.get(), "ScrollButton3_H_Normal");
-		EXPECT_EQ(img3->GetSize(), GetSizeFromRectangles(rectRef->get()));
+		FitToTextureSourceTest<ImageGrid3*>(m_panel.get(), "ImageGrid3_0", "ScrollButton3_H_Normal", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
@@ -238,10 +248,7 @@ namespace UserInterfaceTest
 		
 		CallMockRender(TestImageGrid3ChangeAreaRender_V, 3);
 
-		ImageGrid3* img3 = UIEx(m_panel).FindComponent<ImageGrid3*>("ImageGrid3_0");
-		EXPECT_TRUE(img3->FitToTextureSource());
-		auto rectRef = GetRectangles(m_resBinder.get(), "ScrollTrack3_V");
-		EXPECT_EQ(img3->GetSize(), GetSizeFromRectangles(rectRef->get()));
+		FitToTextureSourceTest<ImageGrid3*>(m_panel.get(), "ImageGrid3_0", "ScrollTrack3_V", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
@@ -293,10 +300,7 @@ namespace UserInterfaceTest
 
 		CallMockRender(TestImageGrid9ChangeAreaRender, 9);
 
-		ImageGrid9* img9 = UIEx(m_panel).FindComponent<ImageGrid9*>("ImageGrid9_0");
-		EXPECT_TRUE(img9->FitToTextureSource());
-		auto rectRef = GetRectangles(m_resBinder.get(), "BackImage9");
-		EXPECT_EQ(img9->GetSize(), GetSizeFromRectangles(rectRef->get()));
+		FitToTextureSourceTest<ImageGrid9*>(m_panel.get(), "ImageGrid9_0", "BackImage9", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
