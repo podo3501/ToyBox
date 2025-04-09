@@ -10,15 +10,15 @@ namespace UserInterfaceTest
 	TEST_F(TextureResourceBinderTest, BasicOperations)
 	{
 		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
-		TextureSourceInfo sourceInfo{ filename, ImagePart::One, {{10, 10, 64, 64}} };
+		TextureSourceInfo sourceInfo{ filename, TextureSlice::One, {{10, 10, 64, 64}} };
 		EXPECT_EQ(m_resBinder->GetBindingKey(sourceInfo), "BackImage1");
 
-		vector<TextureSourceInfo> horzAreas = GetAreas(m_resBinder.get(), filename, ImagePart::ThreeH);
+		vector<TextureSourceInfo> horzAreas = GetAreas(m_resBinder.get(), filename, TextureSlice::ThreeH);
 		EXPECT_TRUE(!horzAreas.empty() && horzAreas[0].sources.size() == 3);
-		vector<TextureSourceInfo> vertAreas = GetAreas(m_resBinder.get(), filename, ImagePart::ThreeV);
+		vector<TextureSourceInfo> vertAreas = GetAreas(m_resBinder.get(), filename, TextureSlice::ThreeV);
 		EXPECT_NE(horzAreas.size(), vertAreas.size());
 
-		TextureSourceInfo testSourceInfo{ L"TestTexFilename.json", ImagePart::One, {} };
+		TextureSourceInfo testSourceInfo{ L"TestTexFilename.json", TextureSlice::One, {} };
 		TextureFontInfo testFontInfo{ L"TestFontFilename.json" };
 		EXPECT_TRUE(m_resBinder->AddFontKey(L"Test", testFontInfo));
 		EXPECT_TRUE(m_resBinder->AddTextureKey("Test", testSourceInfo));
@@ -27,7 +27,7 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_resBinder->RemoveKeyByFilename(L"TestFontFilename.json"));
 		EXPECT_TRUE(m_resBinder->RemoveKeyByFilename(L"TestTexFilename.json"));
 
-		EXPECT_TRUE(m_resBinder->GetTextureKeys(ImagePart::ThreeH).size());
+		EXPECT_TRUE(m_resBinder->GetTextureKeys(TextureSlice::ThreeH).size());
 
 		TestSourceBinderWriteRead(m_resBinder);
 

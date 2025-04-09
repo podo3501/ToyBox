@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "../ToyTestFixture.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid3.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture3.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture9.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
@@ -34,15 +34,15 @@ namespace UserInterfaceTest
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;
 		UIComponent* panel = m_panel.get();
-		auto [img1, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
+		auto [tex1, tex1Ptr] = GetPtrs(CreatePatchTexture1({ {64, 64}, Origin::Center }, "BackImage1"));
 
 		CaptureSnapshot(h);
-		ExecuteAndCapture(h, [&] { c.AttachComponent(panel, move(img1), { 111, 222 }); });
-		ExecuteAndCapture(h, [&] { c.SetRelativePosition(img1Ptr, { 123, 234 }); });
-		ExecuteAndCapture(h, [&] { c.SetSize(img1Ptr, { 32, 32 }); });
-		ExecuteAndCapture(h, [&] { c.RenameRegion(img1Ptr, "region"); });
-		ExecuteAndCapture(h, [&] { c.Rename(img1Ptr, "img1"); });
-		ExecuteAndCapture(h, [&] { c.DetachComponent(img1Ptr); });
+		ExecuteAndCapture(h, [&] { c.AttachComponent(panel, move(tex1), { 111, 222 }); });
+		ExecuteAndCapture(h, [&] { c.SetRelativePosition(tex1Ptr, { 123, 234 }); });
+		ExecuteAndCapture(h, [&] { c.SetSize(tex1Ptr, { 32, 32 }); });
+		ExecuteAndCapture(h, [&] { c.RenameRegion(tex1Ptr, "region"); });
+		ExecuteAndCapture(h, [&] { c.Rename(tex1Ptr, "tex1"); });
+		ExecuteAndCapture(h, [&] { c.DetachComponent(tex1Ptr); });
 		VerifyUndoRedo(c, h);
 	}
 }

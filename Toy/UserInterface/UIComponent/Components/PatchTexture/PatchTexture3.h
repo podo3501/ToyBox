@@ -1,19 +1,19 @@
 #pragma once
-#include "ImageGrid.h"
+#include "PatchTexture.h"
 
 struct SourceDivider;
 struct TextureSourceInfo;
-class ImageGrid1;
+class PatchTexture1;
 enum class DirectionType;
 
-class ImageGrid3 : public ImageGrid
+class PatchTexture3 : public PatchTexture
 {
 public:
-	~ImageGrid3();
-	ImageGrid3();
-	ImageGrid3(DirectionType dirType);
+	~PatchTexture3();
+	PatchTexture3();
+	PatchTexture3(DirectionType dirType);
 
-	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid3; }
+	static ComponentID GetTypeStatic() { return ComponentID::PatchTexture3; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept override;
@@ -27,17 +27,17 @@ public:
 	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
 
 protected:
-	ImageGrid3(const ImageGrid3& o);
+	PatchTexture3(const PatchTexture3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
-	bool ForEachImageGrid1(predicate<ImageGrid1*, size_t> auto&& each);
+	bool ForEachPatchTexture1(predicate<PatchTexture1*, size_t> auto&& each);
 	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
 	bool ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept;
 
 	DirectionType m_dirType{ DirectionType::Horizontal };
 };
 
-unique_ptr<ImageGrid3> CreateImageGrid3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);
+unique_ptr<PatchTexture3> CreatePatchTexture3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);

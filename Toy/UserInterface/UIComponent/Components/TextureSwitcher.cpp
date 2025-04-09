@@ -1,9 +1,6 @@
 #include "pch.h"
-#include "ImageSwitcher.h"
-#include "ImageGrid.h"
-#include "ImageGrid1.h"
-#include "ImageGrid3.h"
-#include "ImageGrid9.h"
+#include "TextureSwitcher.h"
+#include "PatchTexture/PatchTexture.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "../Include/IRenderer.h"
 #include "InputManager.h"
@@ -12,74 +9,62 @@
 
 using enum InteractState;
 
-ImageSwitcher::~ImageSwitcher() = default;
-ImageSwitcher::ImageSwitcher() :
-	m_image{ nullptr }
+TextureSwitcher::~TextureSwitcher() = default;
+TextureSwitcher::TextureSwitcher() :
+	m_patchTex{ nullptr }
 {}
 
-ImageSwitcher::ImageSwitcher(const ImageSwitcher& o) :
+TextureSwitcher::TextureSwitcher(const TextureSwitcher& o) :
 	UIComponent{ o },
 	m_stateKeys{ o.m_stateKeys },
 	m_behaviorMode{ o.m_behaviorMode },
 	m_sources{ o.m_sources },
 	m_indexes{ o.m_indexes },
-	m_image{ nullptr },
+	m_patchTex{ nullptr },
 	m_state{ o.m_state }
 {
 	ReloadDatas();
 }
 
-void ImageSwitcher::ReloadDatas() noexcept
+void TextureSwitcher::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_image = static_cast<ImageGrid*>(componentList[0]);
+	m_patchTex = static_cast<PatchTexture*>(componentList[0]);
 }
 
-unique_ptr<UIComponent> ImageSwitcher::CreateClone() const
+unique_ptr<UIComponent> TextureSwitcher::CreateClone() const
 {
-	return unique_ptr<ImageSwitcher>(new ImageSwitcher(*this));
+	return unique_ptr<TextureSwitcher>(new TextureSwitcher(*this));
 }
 
-bool ImageSwitcher::operator==(const UIComponent& rhs) const noexcept
+bool TextureSwitcher::operator==(const UIComponent& rhs) const noexcept
 {
 	ReturnIfFalse(UIComponent::operator==(rhs));
-	const ImageSwitcher* o = static_cast<const ImageSwitcher*>(&rhs);
+	const TextureSwitcher* o = static_cast<const TextureSwitcher*>(&rhs);
 
 	return tie(m_stateKeys, m_behaviorMode) == tie(o->m_stateKeys, o->m_behaviorMode);
 }
 
-static unique_ptr<ImageGrid> CreateImageGrid(const UILayout& layout, ImagePart imgPart, const string& bindKey)
-{
-	UILayout ltLayout({ layout.GetSize(), Origin::LeftTop});
-	switch (imgPart)	{
-	case ImagePart::One: return CreateImageGrid1(ltLayout, bindKey);
-	case ImagePart::ThreeH: return CreateImageGrid3(ltLayout, DirectionType::Horizontal, bindKey);
-	case ImagePart::ThreeV: return CreateImageGrid3(ltLayout, DirectionType::Vertical, bindKey);
-	case ImagePart::Nine: return CreateImageGrid9(ltLayout, bindKey);
-	}
-	return nullptr;
-}
-
-bool ImageSwitcher::Setup(const UILayout& layout, ImagePart imgPart,
+bool TextureSwitcher::Setup(const UILayout& layout, TextureSlice texSlice,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
 {
 	SetLayout(layout);
-	unique_ptr<ImageGrid> img = nullptr;
-	tie(img, m_image) = GetPtrs(CreateImageGrid(layout, imgPart, stateKeys.at(InteractState::Normal)));
-	UIEx(this).AttachComponent(move(img), {});
+	unique_ptr<PatchTexture> pTex = nullptr;
+	tie(pTex, m_patchTex) = GetPtrs(CreatePatchTexture(layout, texSlice, stateKeys.at(InteractState::Normal)));
+	UIEx(this).AttachComponent(move(pTex), {});
 	m_stateKeys = stateKeys;
 	m_behaviorMode = behaviorMode;
 
 	return true;
 }
 
-void ImageSwitcher::ClearInteraction() noexcept
+void TextureSwitcher::ClearInteraction() noexcept
 {
 	if (m_state && m_state == InteractState::Hovered)
 		SetState(InteractState::Normal);
 }
 
-bool ImageSwitcher::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
+bool TextureSwitcher::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
 {
 	for (const auto& pair : m_stateKeys)
 	{
@@ -98,7 +83,7 @@ bool ImageSwitcher::ImplementBindSourceInfo(TextureResourceBinder* resBinder, IT
 	return true;
 }
 
-void ImageSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
+void TextureSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
 {
 	if (!Contains(GetArea(), InputManager::GetMouse().GetPosition()))
 	{
@@ -110,7 +95,7 @@ void ImageSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
 }
 
 //마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)
-void ImageSwitcher::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept
+void TextureSwitcher::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept
 {
 	if (m_state == Pressed && isHeld) //Pressed가 계속 되고 있다면 리턴한다.
 	{
@@ -123,7 +108,7 @@ void ImageSwitcher::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept
 	if (m_state == Pressed && isPressed) m_onPressCB(KeyState::Pressed);
 }
 
-bool ImageSwitcher::ImplementUpdate(const DX::StepTimer&) noexcept
+bool TextureSwitcher::ImplementUpdate(const DX::StepTimer&) noexcept
 {
 	if (!m_state.has_value()) return true; //로드 하지 않았다면 값이 셋팅되지 않는다.
 	//이 두값이 이전프레임과 비교해서 달라졌다면 실행하게 한다면 좀 더 빠르게 된다.
@@ -139,7 +124,7 @@ bool ImageSwitcher::ImplementUpdate(const DX::StepTimer&) noexcept
 	return true;
 }
 
-bool ImageSwitcher::ImplementChangeSize(const XMUINT2& size) noexcept
+bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	ReturnIfFalse(ranges::all_of(GetChildComponents(), [&size](const auto& component) {
 		return component->ChangeSize(size);
@@ -147,23 +132,23 @@ bool ImageSwitcher::ImplementChangeSize(const XMUINT2& size) noexcept
 	return UIComponent::ImplementChangeSize(size);
 }
 
-bool ImageSwitcher::FitToTextureSource() noexcept
+bool TextureSwitcher::FitToTextureSource() noexcept
 {
-	ReturnIfFalse(m_image->FitToTextureSource());
-	SetSize(m_image->GetSize());
+	ReturnIfFalse(m_patchTex->FitToTextureSource());
+	SetSize(m_patchTex->GetSize());
 
 	return true; 
 }
 
-void ImageSwitcher::SetState(InteractState state) noexcept
+void TextureSwitcher::SetState(InteractState state) noexcept
 {
 	if (m_state == state) return;
 
-	m_image->SetIndexedSource(m_indexes[state], m_sources[state].sources);
+	m_patchTex->SetIndexedSource(m_indexes[state], m_sources[state].sources);
 	m_state = state;
 }
 
-void ImageSwitcher::SerializeIO(JsonOperation& operation)
+void TextureSwitcher::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
 	operation.Process("StateKey", m_stateKeys);
@@ -173,9 +158,9 @@ void ImageSwitcher::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<ImageSwitcher> CreateImageSwitcher(const UILayout& layout, ImagePart imgPart,
+unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, TextureSlice texSlice,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
 {
-	unique_ptr<ImageSwitcher> switcher = make_unique<ImageSwitcher>();
-	return CreateIfSetup(move(switcher), layout, imgPart, stateKeys, behaviorMode);
+	unique_ptr<TextureSwitcher> switcher = make_unique<TextureSwitcher>();
+	return CreateIfSetup(move(switcher), layout, texSlice, stateKeys, behaviorMode);
 }

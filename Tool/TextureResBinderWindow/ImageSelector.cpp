@@ -2,7 +2,7 @@
 #include "ImageSelector.h"
 #include "TextureResBinderWindow.h"
 #include "EditUtility/EditUtility.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/UserInterface/UIComponent/UIUtility.h"
@@ -17,19 +17,19 @@ ImageSelector::ImageSelector(TextureResBinderWindow* textureWindow) :
     m_cmdList{ nullptr },
     m_textureWindow{ textureWindow },
     m_renameNotifier{ make_unique<RenameNotifier>() },
-    m_selectImagePart{ ImagePart::One }
+    m_selectImagePart{ TextureSlice::One }
 {}
 
-void ImageSelector::SetTexture(ImageGrid1* texture) noexcept
+void ImageSelector::SetTexture(PatchTexture1* pTex1) noexcept
 {
-    m_sourceTexture = texture;
-    if (!texture)
+    m_sourceTexture = pTex1;
+    if (!pTex1)
     {
         m_areaList = {};
         return;
     }
 
-    if (const auto& areaList = texture->GetTextureAreaList(); areaList)
+    if (const auto& areaList = pTex1->GetTextureAreaList(); areaList)
         m_areaList = *areaList;
 
     DeselectArea();
@@ -111,12 +111,12 @@ static vector<Rectangle> GenerateSourceAreas(const Rectangle& area, DivideType d
     return GetSourcesFromArea(area, widths, heights);
 }
 
-static inline DivideType ImagePartToDivideType(ImagePart imgPart) noexcept
+static inline DivideType ImagePartToDivideType(TextureSlice texSlice) noexcept
 {
-    return imgPart == ImagePart::One ? DivideType::None :
-           imgPart == ImagePart::ThreeH ? DivideType::X :
-           imgPart == ImagePart::ThreeV ? DivideType::Y :
-           imgPart == ImagePart::Nine ? DivideType::XY : DivideType::None;
+    return texSlice == TextureSlice::One ? DivideType::None :
+           texSlice == TextureSlice::ThreeH ? DivideType::X :
+           texSlice == TextureSlice::ThreeV ? DivideType::Y :
+           texSlice == TextureSlice::Nine ? DivideType::XY : DivideType::None;
 }
 
 void ImageSelector::CheckSourcePartition() noexcept
@@ -146,10 +146,10 @@ void ImageSelector::SelectImagePart()
 
     static int selected{ 0 };
     int pre{ selected };
-    if (ImGui::RadioButton("1 Part", &selected, 0)) m_selectImagePart = ImagePart::One; ImGui::SameLine();
-    if (ImGui::RadioButton("3H Part", &selected, 1)) m_selectImagePart = ImagePart::ThreeH; ImGui::SameLine();
-    if (ImGui::RadioButton("3V Part", &selected, 2)) m_selectImagePart = ImagePart::ThreeV; ImGui::SameLine();
-    if (ImGui::RadioButton("9 Part", &selected, 3)) m_selectImagePart = ImagePart::Nine;
+    if (ImGui::RadioButton("1 Part", &selected, 0)) m_selectImagePart = TextureSlice::One; ImGui::SameLine();
+    if (ImGui::RadioButton("3H Part", &selected, 1)) m_selectImagePart = TextureSlice::ThreeH; ImGui::SameLine();
+    if (ImGui::RadioButton("3V Part", &selected, 2)) m_selectImagePart = TextureSlice::ThreeV; ImGui::SameLine();
+    if (ImGui::RadioButton("9 Part", &selected, 3)) m_selectImagePart = TextureSlice::Nine;
     if (pre != selected) DeselectArea();
 }
 

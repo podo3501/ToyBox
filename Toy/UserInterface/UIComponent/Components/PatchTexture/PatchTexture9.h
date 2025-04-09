@@ -1,17 +1,17 @@
 #pragma once
-#include "ImageGrid.h"
+#include "PatchTexture.h"
 
 struct SourceDivider;
 struct TextureSourceInfo;
-class ImageGrid3;
+class PatchTexture3;
 
-class ImageGrid9 : public ImageGrid
+class PatchTexture9 : public PatchTexture
 {
 public:
-	~ImageGrid9();
-	ImageGrid9();
+	~PatchTexture9();
+	PatchTexture9();
 
-	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid9; }
+	static ComponentID GetTypeStatic() { return ComponentID::PatchTexture9; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept override;
 
@@ -21,15 +21,15 @@ public:
 	const string& GetBindKey() const noexcept;
 
 protected:
-	ImageGrid9(const ImageGrid9& o);
+	PatchTexture9(const PatchTexture9& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
-	bool ForEachImageGrid3(predicate<ImageGrid3*, size_t> auto&& each);
+	bool ForEachPatchTexture3(predicate<PatchTexture3*, size_t> auto&& each);
 	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
 	bool ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept;
 };
 
-unique_ptr<ImageGrid9> CreateImageGrid9(const UILayout& layout, const string& bindKey);
+unique_ptr<PatchTexture9> CreatePatchTexture9(const UILayout& layout, const string& bindKey);

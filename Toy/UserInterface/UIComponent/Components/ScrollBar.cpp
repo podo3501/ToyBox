@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ScrollBar.h"
 #include "ScrollSlider.h"
-#include "ImageGrid1.h"
+#include "PatchTexture/PatchTexture1.h"
 #include "../../JsonOperation/JsonOperation.h"
 #include "Utility.h"
 
@@ -23,7 +23,7 @@ ScrollBar::ScrollBar(const ScrollBar& other) :
 void ScrollBar::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_scrollBackground = ComponentCast<ImageGrid1*>(componentList[0]);
+	m_scrollBackground = ComponentCast<PatchTexture1*>(componentList[0]);
 	m_scrollSlider = ComponentCast<ScrollSlider*>(componentList[1]);
 }
 
@@ -49,7 +49,7 @@ bool ScrollBar::Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBack
 {
 	SetLayout(layout);
 
-	m_scrollBackground = ComponentCast<ImageGrid1*>(scrollBackground.get());
+	m_scrollBackground = ComponentCast<PatchTexture1*>(scrollBackground.get());
 	UIEx(this).AttachComponent(move(scrollBackground), {});
 
 	const auto& size = m_scrollBackground->GetSize();

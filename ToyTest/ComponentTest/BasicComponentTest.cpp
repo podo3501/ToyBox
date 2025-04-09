@@ -2,9 +2,9 @@
 #include "../ToyTestFixture.h"
 #include "../IMockRenderer.h"
 #include "../TestHelper.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid3.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture3.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture9.h"
 #include "../Toy/UserInterface/UIComponent/Components/Container.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
@@ -24,24 +24,24 @@ namespace UserInterfaceTest
 	void FitToTextureSourceTest(UIComponent* panel,
 		const string& componentName, const string& rectResourceName, TextureResourceBinder* resBinder)
 	{
-		T imageGrid = UIEx(panel).FindComponent<T>(componentName);
-		EXPECT_NE(imageGrid, nullptr);
+		T patchTex = UIEx(panel).FindComponent<T>(componentName);
+		EXPECT_NE(patchTex, nullptr);
 
-		EXPECT_TRUE(imageGrid->FitToTextureSource());
+		EXPECT_TRUE(patchTex->FitToTextureSource());
 
 		auto rectRef = GetRectangles(resBinder, rectResourceName);
 		EXPECT_NE(rectRef, nullopt);
 
-		EXPECT_EQ(imageGrid->GetSize(), GetSizeFromRectangles(rectRef->get()));
+		EXPECT_EQ(patchTex->GetSize(), GetSizeFromRectangles(rectRef->get()));
 	}
 
-	static void TestButton_ImageGrid1Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestButton_PatchTexture1Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 144, 104, 176, 136 } };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ExitButton1_Pressed"));
 	}
 
-	TEST_F(BasicComponentTest, Container_ImageGrid1)
+	TEST_F(BasicComponentTest, Container_PatchTexture1)
 	{
 		UILayout layout{ {32, 32}, Origin::Center };
 		auto container = CreateContainer(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal);
@@ -50,24 +50,24 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		MockMouseInput(144, 120, true);	//Pressed
-		CallMockRender(TestButton_ImageGrid1Render, 1);
+		CallMockRender(TestButton_PatchTexture1Render, 1);
 	}
 
 	////////////////////////////////////////////////////////////////
 
-	static void TestButton_ImageGrid3Render_H(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestButton_PatchTexture3Render_H(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollButton3_H_Hovered"));
 	}
 
-	static void TestButton_ImageGrid3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestButton_PatchTexture3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollButton3_H_Normal"));
 	}
 
-	TEST_F(BasicComponentTest, Container_ImageGrid3_Horizontal)
+	TEST_F(BasicComponentTest, Container_PatchTexture3_Horizontal)
 	{
 		UILayout layout{ {100, 48}, Origin::Center };
 		auto [container, containerBtr] = GetPtrs(CreateContainer(layout, 
@@ -77,30 +77,30 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		MockMouseInput(110, 96);	//Hover
-		CallMockRender(TestButton_ImageGrid3Render_H, 3);
+		CallMockRender(TestButton_PatchTexture3Render_H, 3);
 
 		containerBtr->ChangeSize({ 150, 48 });
 		MockMouseInput(0, 0);	//Normal
-		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_H, 3);
+		CallMockRender(TestButton_PatchTexture3ChangeAreaRender_H, 3);
 
-		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_H, 3);
+		CloneTest(m_panel.get(), TestButton_PatchTexture3ChangeAreaRender_H, 3);
 	}
 
 	////////////////////////////////////////////////////////////////
 
-	static void TestButton_ImageGrid3Render_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestButton_PatchTexture3Render_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollButton3_V_Hovered"));
 	}
 
-	static void TestButton_ImageGrid3ChangeAreaRender_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestButton_PatchTexture3ChangeAreaRender_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollButton3_V_Normal"));
 	}
 
-	TEST_F(BasicComponentTest, Container_ImageGrid3_Vertical)
+	TEST_F(BasicComponentTest, Container_PatchTexture3_Vertical)
 	{
 		UILayout layout{ {48, 100}, Origin::Center };
 		auto [container, containerPtr] = GetPtrs(CreateContainer(layout, 
@@ -110,58 +110,58 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		MockMouseInput(77, 51);	//Hover
-		CallMockRender(TestButton_ImageGrid3Render_V, 3);
+		CallMockRender(TestButton_PatchTexture3Render_V, 3);
 
 		containerPtr->ChangeSize({ 48, 150 });
 		MockMouseInput(0, 0);	//Normal
-		CallMockRender(TestButton_ImageGrid3ChangeAreaRender_V, 3);		
+		CallMockRender(TestButton_PatchTexture3ChangeAreaRender_V, 3);		
 
-		CloneTest(m_panel.get(), TestButton_ImageGrid3ChangeAreaRender_V, 3);
+		CloneTest(m_panel.get(), TestButton_PatchTexture3ChangeAreaRender_V, 3);
 	}
 
 	////////////////////////////////////////////////////////
 
-	static void TestImageGrid1Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestPatchTexture1Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 368, 268, 432, 332 } };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "BackImage1"));
 	}
 
-	TEST_F(BasicComponentTest, ImageGrid1)
+	TEST_F(BasicComponentTest, PatchTexture1)
 	{
-		auto [img, img1Ptr] = GetPtrs(CreateImageGrid1({ {64, 64}, Origin::Center }, "BackImage1"));
-		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
+		auto [tex, img1Ptr] = GetPtrs(CreatePatchTexture1({ {64, 64}, Origin::Center }, "BackImage1"));
+		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img1Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-		CallMockRender(TestImageGrid1Render, 1);
+		CallMockRender(TestPatchTexture1Render, 1);
 
 		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
 		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, false);
 		img1Ptr->ChangeSize({ 128, 64 });
-		CallMockRender(TestImageGrid1Render, 1);
+		CallMockRender(TestPatchTexture1Render, 1);
 
 		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, false);
 		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
 		img1Ptr->ChangeSize({ 64, 128 });
-		CallMockRender(TestImageGrid1Render, 1);
+		CallMockRender(TestPatchTexture1Render, 1);
 
 		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
 		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
 		img1Ptr->ChangeSize({ 128, 128 });
-		CallMockRender(TestImageGrid1Render, 1);
+		CallMockRender(TestPatchTexture1Render, 1);
 
-		FitToTextureSourceTest<ImageGrid1*>(m_panel.get(), "ImageGrid1_0", "BackImage1", m_resBinder.get());
+		FitToTextureSourceTest<PatchTexture1*>(m_panel.get(), "PatchTexture1_0", "BackImage1", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
 
-	static void TestImageGrid3Render_H(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestPatchTexture3Render_H(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 400, 300, 422, 336 }, { 422, 300, 478, 336 }, {478, 300, 500, 336} };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollButton3_H_Normal"));
 	}
 
-	static void TestImageGrid3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestPatchTexture3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 340, 282, 362, 318 }, { 362, 282, 438, 318 }, {438, 282, 460, 318} };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollButton3_H_Normal"));
@@ -173,24 +173,24 @@ namespace UserInterfaceTest
 		if (!infoRef) return false;
 
 		TextureSourceInfo srcInfo{ infoRef->get() };
-		srcInfo.sources = GetSources(srcInfo.imagePart, srcDivider);
+		srcInfo.sources = GetSources(srcInfo.texSlice, srcDivider);
 
 		return rb->ModifyTextureSourceInfo(key, srcInfo);
 	}
 
-	TEST_F(BasicComponentTest, ImageGrid3_Horizontal)
+	TEST_F(BasicComponentTest, PatchTexture3_Horizontal)
 	{
-		auto [img, imgPtr] = GetPtrs(CreateImageGrid3({ {100, 36}, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal"));
-		UIEx(m_panel).AttachComponent(move(img), {400, 300});
-		m_panel = WriteReadTest(m_panel, imgPtr);
+		auto [tex, texPtr] = GetPtrs(CreatePatchTexture3({ {100, 36}, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal"));
+		UIEx(m_panel).AttachComponent(move(tex), {400, 300});
+		m_panel = WriteReadTest(m_panel, texPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
-		CallMockRender(TestImageGrid3Render_H, 3);
+		CallMockRender(TestPatchTexture3Render_H, 3);
 
-		imgPtr->ChangeOrigin(Origin::Center);
-		imgPtr->ChangeSize({ 120, 36 });
+		texPtr->ChangeOrigin(Origin::Center);
+		texPtr->ChangeSize({ 120, 36 });
 
-		CallMockRender(TestImageGrid3ChangeAreaRender_H, 3);
+		CallMockRender(TestPatchTexture3ChangeAreaRender_H, 3);
 
 		SourceDivider srcDivider = GetSourceDivider(m_resBinder.get(), "ScrollButton3_H_Normal");
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 82, 48, 48 }));
@@ -203,37 +203,37 @@ namespace UserInterfaceTest
 		m_panel = WriteReadTest(m_panel);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
-		CallMockRender(TestImageGrid3ChangeAreaRender_H, 3);
+		CallMockRender(TestPatchTexture3ChangeAreaRender_H, 3);
 		
-		FitToTextureSourceTest<ImageGrid3*>(m_panel.get(), "ImageGrid3_0", "ScrollButton3_H_Normal", m_resBinder.get());
+		FitToTextureSourceTest<PatchTexture3*>(m_panel.get(), "PatchTexture3_0", "ScrollButton3_H_Normal", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
 
-	static void TestImageGrid3Render_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestPatchTexture3Render_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 400, 300, 436, 310 }, { 400, 310, 436, 390 }, { 400, 390, 436, 400 } };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollTrack3_V"));
 	}
 
-	static void TestImageGrid3ChangeAreaRender_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestPatchTexture3ChangeAreaRender_V(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { { 382, 240, 418, 250 }, { 382, 250, 418, 350 }, { 382, 350, 418, 360 } };
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollTrack3_V"));
 	}
 
-	TEST_F(BasicComponentTest, ImageGrid3_Vertical)
+	TEST_F(BasicComponentTest, PatchTexture3_Vertical)
 	{
-		auto [img, img3Ptr] = GetPtrs(CreateImageGrid3({ {36, 100}, Origin::LeftTop }, DirectionType::Vertical, "ScrollTrack3_V"));
-		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
+		auto [tex, img3Ptr] = GetPtrs(CreatePatchTexture3({ {36, 100}, Origin::LeftTop }, DirectionType::Vertical, "ScrollTrack3_V"));
+		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img3Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
-		CallMockRender(TestImageGrid3Render_V, 3);
+		CallMockRender(TestPatchTexture3Render_V, 3);
 
 		img3Ptr->ChangeOrigin(Origin::Center);
 		img3Ptr->ChangeSize({ 36, 120 });
-		CallMockRender(TestImageGrid3ChangeAreaRender_V, 3);
+		CallMockRender(TestPatchTexture3ChangeAreaRender_V, 3);
 
 		SourceDivider srcDivider = GetSourceDivider(m_resBinder.get(), "ScrollTrack3_V");
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 114, 178, 16, 48 }));
@@ -246,14 +246,14 @@ namespace UserInterfaceTest
 		m_panel = WriteReadTest(m_panel);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		
-		CallMockRender(TestImageGrid3ChangeAreaRender_V, 3);
+		CallMockRender(TestPatchTexture3ChangeAreaRender_V, 3);
 
-		FitToTextureSourceTest<ImageGrid3*>(m_panel.get(), "ImageGrid3_0", "ScrollTrack3_V", m_resBinder.get());
+		FitToTextureSourceTest<PatchTexture3*>(m_panel.get(), "PatchTexture3_0", "ScrollTrack3_V", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
 
-	static void TestImageGrid9Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestPatchTexture9Render(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = {
 			{ 400, 300, 430, 336 }, { 430, 300, 540, 336 }, {540, 300, 570, 336},
@@ -262,7 +262,7 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "BackImage9"));
 	}
 
-	static void TestImageGrid9ChangeAreaRender(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestPatchTexture9ChangeAreaRender(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = {
 			{ 310, 225, 340, 261 }, { 340, 225, 460, 261 }, {460, 225, 490, 261},
@@ -271,21 +271,21 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "BackImage9"));
 	}
 
-	TEST_F(BasicComponentTest, ImageGrid9)
+	TEST_F(BasicComponentTest, PatchTexture9)
 	{
-		auto [img, imgPtr] = GetPtrs(CreateImageGrid9({ {170, 120}, Origin::LeftTop }, "BackImage9"));
-		UIEx(m_panel).AttachComponent(move(img), { 400, 300 });
+		auto [tex, texPtr] = GetPtrs(CreatePatchTexture9({ {170, 120}, Origin::LeftTop }, "BackImage9"));
+		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
-		m_panel = WriteReadTest(m_panel, imgPtr);
+		m_panel = WriteReadTest(m_panel, texPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
-		CallMockRender(TestImageGrid9Render, 9);
+		CallMockRender(TestPatchTexture9Render, 9);
 
-		imgPtr->ChangeOrigin(Origin::Center);
-		imgPtr->ChangeSize({ 180, 150 });
+		texPtr->ChangeOrigin(Origin::Center);
+		texPtr->ChangeSize({ 180, 150 });
 
-		CallMockRender(TestImageGrid9ChangeAreaRender, 9);
+		CallMockRender(TestPatchTexture9ChangeAreaRender, 9);
 		
 		SourceDivider srcDivider = GetSourceDivider(m_resBinder.get(), "BackImage9");
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 64 }));
@@ -298,9 +298,9 @@ namespace UserInterfaceTest
 		m_panel = WriteReadTest(m_panel);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
-		CallMockRender(TestImageGrid9ChangeAreaRender, 9);
+		CallMockRender(TestPatchTexture9ChangeAreaRender, 9);
 
-		FitToTextureSourceTest<ImageGrid9*>(m_panel.get(), "ImageGrid9_0", "BackImage9", m_resBinder.get());
+		FitToTextureSourceTest<PatchTexture9*>(m_panel.get(), "PatchTexture9_0", "BackImage9", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@
 #include "TextureFontInfo.h"
 #include "TextureBinderHelper.h"
 
-enum class ImagePart : int;
+enum class TextureSlice : int;
 struct ITextureLoad;
 class JsonOperation;
 class TextureResourceBinder : public ITextureBinder
@@ -33,7 +33,7 @@ public:
 	optionalRef<TextureFontInfo> GetTextureFontInfo(const wstring& key) const noexcept;
 
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
-	vector<string> GetTextureKeys(ImagePart imgPart) const noexcept;
+	vector<string> GetTextureKeys(TextureSlice texSlice) const noexcept;
 	vector<string> GetTextureKeys(const wstring& filename) const noexcept;
 	wstring GetFontKey(const wstring& fontFilename) const noexcept;
 	vector<wstring> GetTextureFiles() const noexcept;

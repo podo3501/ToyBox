@@ -7,11 +7,11 @@
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/Button.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid3.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture3.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture9.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
+#include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Utility.h"
 
@@ -60,11 +60,11 @@ bool FloatingComponent::Excute()
 	using enum MakeComponent;
 	switch (m_currentAction.value())
 	{
-	case ImageGrid1: result = LoadComponent(CreateImageGrid1({ { 64, 64 }, Origin::LeftTop }, "BackImage1")); break;
-	case ImageGrid3: result = LoadComponent(CreateImageGrid3({ { 48, 48 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")); break;
-	case ImageGrid9: result = LoadComponent(CreateImageGrid9({ { 170, 120 }, Origin::LeftTop }, "BackImage9")); break;
-	case ImageSwitcher1: result = LoadComponent(CreateImageSwitcher({ { 32, 32 }, Origin::LeftTop }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)); break;
-	case ImageSwitcher3: result = LoadComponent(CreateImageSwitcher({ { 100, 48 }, Origin::LeftTop }, ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal)); break;
+	case PatchTexture1: result = LoadComponent(CreatePatchTexture1({ { 64, 64 }, Origin::LeftTop }, "BackImage1")); break;
+	case PatchTexture3: result = LoadComponent(CreatePatchTexture3({ { 48, 48 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")); break;
+	case PatchTexture9: result = LoadComponent(CreatePatchTexture9({ { 170, 120 }, Origin::LeftTop }, "BackImage9")); break;
+	case TextureSwitcher1: result = LoadComponent(CreateTextureSwitcher({ { 32, 32 }, Origin::LeftTop }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)); break;
+	case TextureSwitcher3: result = LoadComponent(CreateTextureSwitcher({ { 100, 48 }, Origin::LeftTop }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal)); break;
 	case Text: result = LoadComponent(CreateTextArea(UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
 	case ListArea: result = LoadComponent(CreateSampleListArea({ { 200, 170 }, Origin::LeftTop })); break;
 	}
@@ -111,11 +111,11 @@ void FloatingComponent::Render()
 	m_isActive = true;
 
 	using enum MakeComponent;
-	if (ImGui::MenuItem("Image Grid 1")) m_currentAction = ImageGrid1;
-	if (ImGui::MenuItem("Image Grid 3")) m_currentAction = ImageGrid3;
-	if (ImGui::MenuItem("Image Grid 9")) m_currentAction = ImageGrid9;
-	if (ImGui::MenuItem("Image Switcher 1")) m_currentAction = ImageSwitcher1;
-	if (ImGui::MenuItem("Image Switcher 3")) m_currentAction = ImageSwitcher3;
+	if (ImGui::MenuItem("Patch Texture 1")) m_currentAction = PatchTexture1;
+	if (ImGui::MenuItem("Patch Texture 3")) m_currentAction = PatchTexture3;
+	if (ImGui::MenuItem("Patch Texture 9")) m_currentAction = PatchTexture9;
+	if (ImGui::MenuItem("Texture Switcher 1")) m_currentAction = TextureSwitcher1;
+	if (ImGui::MenuItem("Texture Switcher 3")) m_currentAction = TextureSwitcher3;
 	if (ImGui::MenuItem("Text")) m_currentAction = Text;
 	if (ImGui::MenuItem("ListArea")) m_currentAction = ListArea;
 	if (ImGui::MenuItem("Close")) {}

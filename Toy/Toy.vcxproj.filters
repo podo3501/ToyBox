@@ -44,6 +44,9 @@
     <Filter Include="UserInterface\Command\TexResCommandList">
       <UniqueIdentifier>{a3e5db05-a9d1-43c1-ab9f-521e59c11b04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserInterface\UIComponent\Components\PatchTexture">
+      <UniqueIdentifier>{a66eb273-6dfc-452e-9c11-241024693edb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -76,19 +79,7 @@
     <ClInclude Include="UserInterface\UIComponent\Components\Dialog.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid.h">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid1.h">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid3.h">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ImageGrid9.h">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ImageSwitcher.h">
+    <ClInclude Include="UserInterface\UIComponent\Components\TextureSwitcher.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\ListArea.h">
@@ -184,6 +175,18 @@
     <ClInclude Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.h">
       <Filter>UserInterface\Command\TexResCommandList</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture1.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture3.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture9.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -204,19 +207,7 @@
     <ClCompile Include="UserInterface\UIComponent\Components\Dialog.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\ImageGrid.cpp">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\ImageGrid1.cpp">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\ImageGrid3.cpp">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\ImageGrid9.cpp">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\ImageSwitcher.cpp">
+    <ClCompile Include="UserInterface\UIComponent\Components\TextureSwitcher.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\ListArea.cpp">
@@ -308,6 +299,18 @@
     </ClCompile>
     <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.cpp">
       <Filter>UserInterface\Command\TexResCommandList</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture1.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture3.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture9.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

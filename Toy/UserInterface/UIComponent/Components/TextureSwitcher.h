@@ -3,27 +3,27 @@
 
 enum class KeyState;
 struct TextureSourceInfo;
-class ImageGrid;
+class PatchTexture;
 namespace DX { class StepTimer; }
-class ImageSwitcher : public UIComponent
+class TextureSwitcher : public UIComponent
 {
 public:
-	~ImageSwitcher();
-	ImageSwitcher();
+	~TextureSwitcher();
+	TextureSwitcher();
 
-	static ComponentID GetTypeStatic() { return ComponentID::ImageSwitcher; }
+	static ComponentID GetTypeStatic() { return ComponentID::TextureSwitcher; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, ImagePart imgPart, 
+	bool Setup(const UILayout& layout, TextureSlice texSlice, 
 		const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	void ClearInteraction() noexcept;
 	bool FitToTextureSource() noexcept;
 
 protected:
-	ImageSwitcher(const ImageSwitcher& o);
+	TextureSwitcher(const TextureSwitcher& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
@@ -40,10 +40,10 @@ private:
 
 	map<InteractState, TextureSourceInfo> m_sources;
 	map<InteractState, size_t> m_indexes;
-	ImageGrid* m_image;
+	PatchTexture* m_patchTex;
 	optional<InteractState> m_state;
 	function<void(KeyState)> m_onPressCB;
 };
 
-unique_ptr<ImageSwitcher> CreateImageSwitcher(const UILayout& layout, ImagePart imgPart,
+unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, TextureSlice texSlice,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);

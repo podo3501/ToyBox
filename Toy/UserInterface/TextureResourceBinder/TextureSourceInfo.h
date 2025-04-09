@@ -1,7 +1,7 @@
 #pragma once
 #include "TextureInfo.h"
 
-enum class ImagePart : int;
+enum class TextureSlice : int;
 struct ITextureLoad;
 class JsonOperation;
 struct TextureSourceInfo : public TextureInfo
@@ -11,7 +11,7 @@ struct TextureSourceInfo : public TextureInfo
 	TextureSourceInfo(const TextureSourceInfo&) = default; //stl container를 쓴다면 기본 복사 생성자가 생성되어서 원하지 않는 값 복사가 일어날 수 있다.
 	TextureSourceInfo(TextureSourceInfo&&) = default;//emplace할때 복사생성자만 있으면 이동이 안됨.
 	explicit TextureSourceInfo(const wstring& _filename) noexcept;
-	TextureSourceInfo(const wstring& _filename, ImagePart _imagePart, const vector<Rectangle>& _sources) noexcept;
+	TextureSourceInfo(const wstring& _filename, TextureSlice _texSlice, const vector<Rectangle>& _sources) noexcept;
 	TextureSourceInfo& operator=(const TextureSourceInfo&) = default;
 	bool operator==(const TextureSourceInfo& o) const noexcept;
 
@@ -23,6 +23,6 @@ struct TextureSourceInfo : public TextureInfo
 	using TextureInfo::GetGfxOffset;
 
 	wstring filename;
-	ImagePart imagePart;
+	TextureSlice texSlice;
 	vector<Rectangle> sources;
 };

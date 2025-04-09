@@ -7,10 +7,10 @@
 #include "UserInterface/UIComponent/Components/ListArea.h"
 #include "UserInterface/UIComponent/Components/Button.h"
 #include "UserInterface/UIComponent/Components/TextArea.h"
-#include "UserInterface/UIComponent/Components/ImageGrid9.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTexture9.h"
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "UserInterface/UIComponent/Components/RenderTexture.h"
-#include "UserInterface/UIComponent/Components/ImageSwitcher.h"
+#include "UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 
 #ifdef __clang__
@@ -57,12 +57,12 @@ bool GameMainLoop::LoadResources()
     m_resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
     m_renderer->LoadTextureBinder(m_resBinder.get());
 
-    AttachComponentToPanel(CreateImageSwitcher({ {32, 32}, Origin::Center }, ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal), { 100, 100 });
-    AttachComponentToPanel(CreateImageSwitcher({ {180, 48}, Origin::Center }, ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 300 });
-    AttachComponentToPanel(CreateImageSwitcher({ {180, 48}, Origin::Center }, ImagePart::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 240 });
+    AttachComponentToPanel(CreateTextureSwitcher({ {32, 32}, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal), { 100, 100 });
+    AttachComponentToPanel(CreateTextureSwitcher({ {180, 48}, Origin::Center }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 300 });
+    AttachComponentToPanel(CreateTextureSwitcher({ {180, 48}, Origin::Center }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 240 });
     vector<wstring> bindFontKeys{ L"English", L"Hangle" };
     AttachComponentToPanel(CreateTextArea({ {250, 120}, Origin::Center }, L"<Hangle>테스트 입니다!</Hangle> <English><Red>Test!</Red></English>", bindFontKeys), { 160, 420 });
-    AttachComponentToPanel(CreateImageGrid9({ {210, 150}, Origin::LeftTop }, "BackImage9"), { 400, 300 });
+    AttachComponentToPanel(CreatePatchTexture9({ {210, 150}, Origin::LeftTop }, "BackImage9"), { 400, 300 });
     AttachComponentToPanel(CreateSampleListArea({ {200, 170}, Origin::Center }), { 600, 200 });
     ReturnIfFalse(m_gamePanel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 

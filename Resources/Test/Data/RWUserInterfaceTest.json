@@ -24,8 +24,8 @@
         "Children": [
             {
                 "Child": {
-                    "Type": "ImageSwitcher",
-                    "Name": "ImageSwitcher_0",
+                    "Type": "TextureSwitcher",
+                    "Name": "TextureSwitcher_0",
                     "Layout": {
                         "Size": {
                             "x": 16,
@@ -48,8 +48,8 @@
                     "Children": [
                         {
                             "Child": {
-                                "Type": "ImageGrid3",
-                                "Name": "ImageGrid3_0",
+                                "Type": "PatchTexture3",
+                                "Name": "PatchTexture3_0",
                                 "Layout": {
                                     "Size": {
                                         "x": 16,
@@ -72,8 +72,8 @@
                                 "Children": [
                                     {
                                         "Child": {
-                                            "Type": "ImageGrid1",
-                                            "Name": "ImageGrid1_0",
+                                            "Type": "PatchTexture1",
+                                            "Name": "PatchTexture1_0",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 0,
@@ -100,8 +100,8 @@
                                     },
                                     {
                                         "Child": {
-                                            "Type": "ImageGrid1",
-                                            "Name": "ImageGrid1_1",
+                                            "Type": "PatchTexture1",
+                                            "Name": "PatchTexture1_1",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 0,
@@ -128,8 +128,8 @@
                                     },
                                     {
                                         "Child": {
-                                            "Type": "ImageGrid1",
-                                            "Name": "ImageGrid1_2",
+                                            "Type": "PatchTexture1",
+                                            "Name": "PatchTexture1_2",
                                             "Layout": {
                                                 "Size": {
                                                     "x": 0,

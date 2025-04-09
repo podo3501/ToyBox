@@ -158,9 +158,9 @@ static vector<string> FilterTextureKeys(const auto& bindTexTable, auto predicate
     return keys;
 }
 
-vector<string> TextureResourceBinder::GetTextureKeys(ImagePart imgPart) const noexcept
+vector<string> TextureResourceBinder::GetTextureKeys(TextureSlice texSlice) const noexcept
 {
-    return FilterTextureKeys(m_bindingTexTable, [imgPart](const TextureSourceInfo& info) { return info.imagePart == imgPart; });
+    return FilterTextureKeys(m_bindingTexTable, [texSlice](const TextureSourceInfo& info) { return info.texSlice == texSlice; });
 }
 
 vector<string> TextureResourceBinder::GetTextureKeys(const wstring& filename) const noexcept

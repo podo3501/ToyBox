@@ -11,11 +11,11 @@ class FloatingComponent
 {
 	enum class MakeComponent
 	{
-		ImageGrid1,
-		ImageGrid3,
-		ImageGrid9,
-		ImageSwitcher1,
-		ImageSwitcher3,
+		PatchTexture1,
+		PatchTexture3,
+		PatchTexture9,
+		TextureSwitcher1,
+		TextureSwitcher3,
 		Text,
 		ListArea
 	};

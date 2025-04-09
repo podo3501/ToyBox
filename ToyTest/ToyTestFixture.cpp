@@ -7,7 +7,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
+#include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -129,12 +129,12 @@ static inline XMUINT2 GetSizeFromRectangles(const vector<Rectangle>& rectangles)
 	return GetSizeFromRectangle(CombineRectangles(rectangles));
 }
 
-void ImageSwitcherComponentTest::FitToTextureSourceTest(const string& bindingKey)
+void TextureSwitcherComponentTest::FitToTextureSourceTest(const string& bindingKey)
 {
-	ImageSwitcher* imgSwitcher = UIEx(m_panel).FindComponent<ImageSwitcher*>("ImageSwitcher_0");
-	EXPECT_TRUE(imgSwitcher->FitToTextureSource());
+	TextureSwitcher* texSwitcher = UIEx(m_panel).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
+	EXPECT_TRUE(texSwitcher->FitToTextureSource());
 	auto rectRef = GetRectangles(m_resBinder.get(), bindingKey);
-	EXPECT_EQ(imgSwitcher->GetSize(), GetSizeFromRectangles(rectRef->get()));
+	EXPECT_EQ(texSwitcher->GetSize(), GetSizeFromRectangles(rectRef->get()));
 }
 
 void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<UIComponent>>& history)

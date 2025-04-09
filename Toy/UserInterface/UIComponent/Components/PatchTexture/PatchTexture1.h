@@ -1,17 +1,17 @@
 #pragma once
-#include "ImageGrid.h"
+#include "PatchTexture.h"
 
 struct IRenderer;
 struct TextureSourceInfo;
 namespace DX { class StepTimer; }
 
-class ImageGrid1 : public ImageGrid
+class PatchTexture1 : public PatchTexture
 {
 public:
-	~ImageGrid1();
-	ImageGrid1();
+	~PatchTexture1();
+	PatchTexture1();
 
-	static ComponentID GetTypeStatic() { return ComponentID::ImageGrid1; }
+	static ComponentID GetTypeStatic() { return ComponentID::PatchTexture1; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
@@ -30,7 +30,7 @@ public:
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 
 protected:
-	ImageGrid1(const ImageGrid1& other);
+	PatchTexture1(const PatchTexture1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override; //Binder가 로딩을 다 하고 여기서 값만 연결한다.
 	virtual void ImplementRender(ITextureRender* render) const override;
@@ -46,4 +46,4 @@ private:
 	UINT64 m_gfxOffset{}; //툴에서 Imgui window 만들때 사용
 };
 
-unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);
+unique_ptr<PatchTexture1> CreatePatchTexture1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);

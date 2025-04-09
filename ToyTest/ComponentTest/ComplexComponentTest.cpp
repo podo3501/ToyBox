@@ -7,7 +7,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/ScrollSlider.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
+#include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "../Toy/InputManager.h"
 
 namespace UserInterfaceTest
@@ -35,7 +35,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 60));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 
-		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<ImageSwitcher*>("ImageSwitcher_0");
+		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
 		EXPECT_EQ(scrollContainerPtr->GetSize().y, 27); //(60 - 6) * (60 / 120) ÃÑ slider ±æÀÌ(-padding)¿¡ º¸¿©ÁÙ ÄÁÅÙÃ÷ ºñ·ÊÇØ¼­ Å©±âÁ¶Á¤°ª 
 
 		listAreaPtr->ClearContainers();
@@ -54,8 +54,8 @@ namespace UserInterfaceTest
 
 	TEST_F(ComplexComponentTest, RenderTexture)
 	{
-		auto switcher = CreateImageSwitcher({ {32, 32}, Origin::Center }, 
-			ImagePart::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
+		auto switcher = CreateTextureSwitcher({ {32, 32}, Origin::Center }, 
+			TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
 		auto [renderTex, renderTexPtr] = GetPtrs(CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(switcher)));
 		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, renderTexPtr);
@@ -129,8 +129,8 @@ namespace UserInterfaceTest
 
 	TEST_F(ComplexComponentTest, Switcher_Scroll)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateImageSwitcher({ {16, 100}, Origin::Center },
-			ImagePart::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
+		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {16, 100}, Origin::Center },
+			TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, switcherPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));

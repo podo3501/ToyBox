@@ -1,7 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
-class ImageGrid1;
+class PatchTexture1;
 class ScrollSlider;
 
 class ScrollBar : public UIComponent
@@ -30,7 +30,7 @@ private:
 	inline bool ChangeSliderSize(const XMUINT2& size) noexcept;
 	bool ToolUpdateScrollView() noexcept;
 
-	ImageGrid1* m_scrollBackground;
+	PatchTexture1* m_scrollBackground;
 	ScrollSlider* m_scrollSlider;
 	uint32_t m_scrollPadding{ 0 };
 };

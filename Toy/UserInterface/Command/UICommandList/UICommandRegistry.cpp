@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "UICommandRegistry.h"
 #include "Utility.h"
-#include "../../UIComponent/Components/ImageGrid1.h"
-#include "../../UIComponent/Components/ImageGrid3.h"
-#include "../../UIComponent/Components/ImageGrid9.h"
+#include "../../UIComponent/Components/PatchTexture/PatchTexture1.h"
+#include "../../UIComponent/Components/PatchTexture/PatchTexture3.h"
+#include "../../UIComponent/Components/PatchTexture/PatchTexture9.h"
 #include "../../UIComponent/Components/TextArea.h"
 #include "../Include/IRenderer.h"
 
@@ -175,14 +175,14 @@ bool RenameCommand::Redo() { return GetTarget()->Rename(m_record.current); }
 
 //////////////////////////////////////////////////////////////////
 
-namespace {
-	//variant안에 값들은 UIComponent에서 상속 받은 것이라서 visit로 값을 하나 빼와서 캐스팅 한다.
-	//get<UIComponent*>는 되지 않았다. 컴파일 타임에는 모르기 때문에 ImageGrid1* 이렇게 넣어야만 가져올 수 있다.
-	template<typename Child>
-	UIComponent* ExtractUIComponent(const Child& imgGridVariant) noexcept {
-		return std::visit([](auto* imgGrid) -> UIComponent* { return imgGrid; }, imgGridVariant);
-	}
-}
+//namespace {
+//	//variant안에 값들은 UIComponent에서 상속 받은 것이라서 visit로 값을 하나 빼와서 캐스팅 한다.
+//	//get<UIComponent*>는 되지 않았다. 컴파일 타임에는 모르기 때문에 ImageGrid1* 이렇게 넣어야만 가져올 수 있다.
+//	template<typename Child>
+//	UIComponent* ExtractUIComponent(const Child& imgGridVariant) noexcept {
+//		return std::visit([](auto* imgGrid) -> UIComponent* { return imgGrid; }, imgGridVariant);
+//	}
+//}
 
 //SetSourceCommand::SetSourceCommand(ImageGrid1* imageGrid1, const Rectangle& source) noexcept :
 //	Command{ imageGrid1 },

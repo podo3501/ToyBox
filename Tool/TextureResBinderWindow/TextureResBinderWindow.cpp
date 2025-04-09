@@ -5,7 +5,7 @@
 #include "../Utility.h"
 #include "../Toy/Utility.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/InputManager.h"
@@ -26,10 +26,10 @@ TextureResBinderWindow::TextureResBinderWindow(IRenderer* renderer) :
     m_renderer->AddImguiComponent(this);
 }
 
-void TextureResBinderWindow::SetTexture(ImageGrid1* texture) noexcept 
+void TextureResBinderWindow::SetTexture(PatchTexture1* pTex1) noexcept 
 { 
-    m_sourceTexture = texture;
-    (texture) ? SetName(WStringToString(texture->GetFilename())) : SetName("empty");
+    m_sourceTexture = pTex1;
+    (pTex1) ? SetName(WStringToString(pTex1->GetFilename())) : SetName("empty");
 }
 
 bool TextureResBinderWindow::Create(const wstring& filename)

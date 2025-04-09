@@ -4,7 +4,7 @@
 #include "RenderTexture.h"
 #include "ScrollBar.h"
 #include "ScrollSlider.h"
-#include "ImageSwitcher.h"
+#include "TextureSwitcher.h"
 #include "InputManager.h"
 #include "Utility.h"
 #include "StepTimer.h"
@@ -32,7 +32,7 @@ ListArea::ListArea(const ListArea& o) noexcept :
 void ListArea::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_prototypeContainer = ComponentCast<ImageSwitcher*>(componentList[0]);
+	m_prototypeContainer = ComponentCast<TextureSwitcher*>(componentList[0]);
 	m_renderTex = ComponentCast<RenderTexture*>(componentList[1]);
 	m_bgImage = m_renderTex->GetRenderedComponent();
 	m_scrollBar = ComponentCast<ScrollBar*>(componentList[2]);
@@ -60,7 +60,7 @@ bool ListArea::operator==(const UIComponent& rhs) const noexcept
 }
 
 bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
-	unique_ptr<ImageSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept
+	unique_ptr<TextureSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept
 {
 	SetLayout(layout);
 	UILayout partLayout{ layout.GetSize(), Origin::LeftTop }; //속성들은 정렬하지 않는다.
@@ -219,7 +219,7 @@ void ListArea::CheckMouseInteraction() noexcept
 
 	for (auto& container : m_containers)
 	{
-		if (ImageSwitcher* cur = ComponentCast<ImageSwitcher*>(container); cur)
+		if (TextureSwitcher* cur = ComponentCast<TextureSwitcher*>(container); cur)
 			cur->ClearInteraction();
 	}
 }
@@ -249,7 +249,7 @@ void ListArea::SerializeIO(JsonOperation& operation)
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout, 
 	unique_ptr<UIComponent> bgImage,
-	unique_ptr<ImageSwitcher> switcher,
+	unique_ptr<TextureSwitcher> switcher,
 	unique_ptr<ScrollBar> scrollBar)
 {
 	unique_ptr<ListArea> listArea= make_unique<ListArea>();

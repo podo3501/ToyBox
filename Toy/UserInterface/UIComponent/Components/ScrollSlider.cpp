@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "ScrollSlider.h"
-#include "ImageGrid1.h"
-#include "ImageGrid3.h"
-#include "ImageSwitcher.h"
+#include "PatchTexture/PatchTexture1.h"
+#include "PatchTexture/PatchTexture3.h"
+#include "TextureSwitcher.h"
 #include "Button.h"
 #include "InputManager.h"
 #include "../../JsonOperation/JsonOperation.h"
@@ -25,8 +25,8 @@ ScrollSlider::ScrollSlider(const ScrollSlider& other) :
 void ScrollSlider::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_scrollTrack = ComponentCast<ImageGrid3*>(componentList[0]);
-	m_scrollButton = ComponentCast<ImageSwitcher*>(componentList[1]);
+	m_scrollTrack = ComponentCast<PatchTexture3*>(componentList[0]);
+	m_scrollButton = ComponentCast<TextureSwitcher*>(componentList[1]);
 	m_scrollButton->AddPressCB([this](KeyState keystate) { OnPressCB(keystate); });
 }
 
@@ -47,8 +47,8 @@ unique_ptr<UIComponent> ScrollSlider::CreateClone() const
 }
 
 bool ScrollSlider::Setup(const UILayout& layout,
-	unique_ptr<ImageGrid3> scrollTrack, 
-	unique_ptr<ImageSwitcher> scrollButton)
+	unique_ptr<PatchTexture3> scrollTrack,
+	unique_ptr<TextureSwitcher> scrollButton)
 {
 	SetLayout(layout);
 
@@ -172,8 +172,8 @@ void ScrollSlider::SetEnableWheel(bool enable) noexcept
 }
 
 unique_ptr<ScrollSlider> CreateScrollSlider(const UILayout& layout,
-	unique_ptr<ImageGrid3> scrollTrack,
-	unique_ptr<ImageSwitcher> scrollButton)
+	unique_ptr<PatchTexture3> scrollTrack,
+	unique_ptr<TextureSwitcher> scrollButton)
 {
 	unique_ptr<ScrollSlider> scrollSlider = make_unique<ScrollSlider>();
 	return CreateIfSetup(move(scrollSlider), layout, move(scrollTrack), move(scrollButton));

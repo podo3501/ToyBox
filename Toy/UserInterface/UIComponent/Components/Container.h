@@ -16,7 +16,7 @@ public:
 
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	bool Setup(const UILayout& layout, 
-		map<InteractState, unique_ptr<UIComponent>> imgGridList, BehaviorMode behaviorMode) noexcept;
+		map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode) noexcept;
 	void ClearInteraction() noexcept;
 	const optional<InteractState>& GetState() const noexcept { return m_state; }
 
@@ -34,11 +34,11 @@ private:
 	void NormalMode(bool isPressed, bool isHeld) noexcept;
 	void HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept;
 
-	map<InteractState, UIComponent*> m_images;
+	map<InteractState, UIComponent*> m_textures;
 	optional<InteractState> m_state;
 
 	BehaviorMode m_behaviorMode{ BehaviorMode::Normal };
 	function<void(KeyState)> m_onPressCB;
 };
 
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> imgGridList, BehaviorMode behaviorMode);
+unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode);

@@ -10,7 +10,7 @@
     "BindingTexTable": {
         "ListBackground1_Normal": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 0,
+            "TextureSlice": 0,
             "Sources": [
                 {
                     "0": {
@@ -24,7 +24,7 @@
         },
         "ExitButton1_Normal": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 0,
+            "TextureSlice": 0,
             "Sources": [
                 {
                     "0": {
@@ -38,7 +38,7 @@
         },
         "BackImage9": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 3,
+            "TextureSlice": 3,
             "Sources": [
                 {
                     "0": {
@@ -116,7 +116,7 @@
         },
         "BackImage1": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 0,
+            "TextureSlice": 0,
             "Sources": [
                 {
                     "0": {
@@ -130,7 +130,7 @@
         },
         "ListBackground1_Hovered": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 0,
+            "TextureSlice": 0,
             "Sources": [
                 {
                     "0": {
@@ -144,7 +144,7 @@
         },
         "ExitButton1_Hovered": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 0,
+            "TextureSlice": 0,
             "Sources": [
                 {
                     "0": {
@@ -158,7 +158,7 @@
         },
         "ExitButton1_Pressed": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 0,
+            "TextureSlice": 0,
             "Sources": [
                 {
                     "0": {
@@ -172,7 +172,7 @@
         },
         "ListBackImage1": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 0,
+            "TextureSlice": 0,
             "Sources": [
                 {
                     "0": {
@@ -186,7 +186,7 @@
         },
         "ListBackground1_Pressed": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 0,
+            "TextureSlice": 0,
             "Sources": [
                 {
                     "0": {
@@ -200,7 +200,7 @@
         },
         "ListBackground9_Hovered": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 3,
+            "TextureSlice": 3,
             "Sources": [
                 {
                     "0": {
@@ -278,7 +278,7 @@
         },
         "ListBackground9_Normal": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 3,
+            "TextureSlice": 3,
             "Sources": [
                 {
                     "0": {
@@ -356,7 +356,7 @@
         },
         "ListBackground9_Pressed": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 3,
+            "TextureSlice": 3,
             "Sources": [
                 {
                     "0": {
@@ -434,7 +434,7 @@
         },
         "OptionImage9": {
             "Filename": "UI/SampleTexture/Option.png",
-            "ImagePart": 3,
+            "TextureSlice": 3,
             "Sources": [
                 {
                     "0": {
@@ -512,7 +512,7 @@
         },
         "ScrollButton3_H_Hovered": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 1,
+            "TextureSlice": 1,
             "Sources": [
                 {
                     "0": {
@@ -542,7 +542,7 @@
         },
         "ScrollButton3_H_Normal": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 1,
+            "TextureSlice": 1,
             "Sources": [
                 {
                     "0": {
@@ -572,7 +572,7 @@
         },
         "ScrollButton3_H_Pressed": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 1,
+            "TextureSlice": 1,
             "Sources": [
                 {
                     "0": {
@@ -602,7 +602,7 @@
         },
         "ScrollButton3_V_Hovered": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 2,
+            "TextureSlice": 2,
             "Sources": [
                 {
                     "0": {
@@ -632,7 +632,7 @@
         },
         "ScrollButton3_V_Normal": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 2,
+            "TextureSlice": 2,
             "Sources": [
                 {
                     "0": {
@@ -662,7 +662,7 @@
         },
         "ScrollButton3_V_Pressed": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 2,
+            "TextureSlice": 2,
             "Sources": [
                 {
                     "0": {
@@ -692,7 +692,7 @@
         },
         "ScrollTrack3_V": {
             "Filename": "UI/SampleTexture/Sample_0.png",
-            "ImagePart": 2,
+            "TextureSlice": 2,
             "Sources": [
                 {
                     "0": {

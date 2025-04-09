@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "EditWindowFactory.h"
-#include "ComponentEdit/EditImageGrid.h"
+#include "ComponentEdit/EditPatchTexture.h"
 #include "ComponentEdit/EditButton.h"
 #include "ComponentEdit/EditTextArea.h"
 #include "ComponentEdit/EditContainer.h"
@@ -8,12 +8,12 @@
 #include "ComponentEdit/EditListArea.h"
 #include "ComponentEdit/EditScrollSlider.h"
 #include "ComponentEdit/EditScrollBar.h"
-#include "ComponentEdit/EditImageSwitcher.h"
+#include "ComponentEdit/EditTextureSwitcher.h"
 #include "../Toy/UserInterface/UIComponent/UIType.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid1.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid3.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageGrid9.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture3.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture9.h"
 #include "../Toy/UserInterface/UIComponent/Components/Button.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
@@ -21,7 +21,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ScrollSlider.h"
 #include "../Toy/UserInterface/UIComponent/Components/ScrollBar.h"
-#include "../Toy/UserInterface/UIComponent/Components/ImageSwitcher.h"
+#include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 
 using FactoryFunction = function<unique_ptr<EditWindow>(UIComponent*, IRenderer*, TextureResourceBinder*, UICommandList*)>;
 optional<unordered_map<ComponentID, FactoryFunction>> EditWindowFactory::m_factoryMap{ nullopt };
@@ -38,14 +38,14 @@ void EditWindowFactory::RegisterFactories()
     RegisterEditWindow<EditContainer, Container*>(ComponentID::Container);
     //UIComponent*, UICommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 
-    RegisterEditWindowWithRenderer<EditImageGrid1, ImageGrid1*>(ComponentID::ImageGrid1);
-    RegisterEditWindowWithRenderer<EditImageGrid3, ImageGrid3*>(ComponentID::ImageGrid3);
-    RegisterEditWindowWithRenderer<EditImageGrid9, ImageGrid9*>(ComponentID::ImageGrid9);
+    RegisterEditWindowWithRenderer<EditPatchTexture1, PatchTexture1*>(ComponentID::PatchTexture1);
+    RegisterEditWindowWithRenderer<EditPatchTexture3, PatchTexture3*>(ComponentID::PatchTexture3);
+    RegisterEditWindowWithRenderer<EditPatchTexture9, PatchTexture9*>(ComponentID::PatchTexture9);
     RegisterEditWindowWithRenderer<EditRenderTexture, RenderTexture*>(ComponentID::RenderTexture);
     RegisterEditWindowWithRenderer<EditListArea, ListArea*>(ComponentID::ListArea);
     RegisterEditWindowWithRenderer<EditScrollSlider, ScrollSlider*>(ComponentID::ScrollSlider);
     RegisterEditWindowWithRenderer<EditScrollBar, ScrollBar*>(ComponentID::ScrollBar);
-    RegisterEditWindowWithRenderer<EditImageSwitcher, ImageSwitcher*>(ComponentID::ImageSwitcher);
+    RegisterEditWindowWithRenderer<EditTextureSwitcher, TextureSwitcher*>(ComponentID::TextureSwitcher);
     //UIComponent*, IRenderer*, UICommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 }
 

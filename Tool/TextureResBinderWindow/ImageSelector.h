@@ -1,10 +1,10 @@
 #pragma once
 
-enum class ImagePart;
+enum class TextureSlice;
 class TextureResBinderWindow;
 class TexResCommandList;
 struct TextureSourceInfo;
-class ImageGrid1;
+class PatchTexture1;
 class RenameNotifier;
 class ImageSelector
 {
@@ -14,7 +14,7 @@ public:
 
 	void Update();
 	void Render();
-	void SetTexture(ImageGrid1* grid) noexcept;
+	void SetTexture(PatchTexture1* pTex1) noexcept;
 	void SetCommandList(TexResCommandList* cmdList) noexcept { m_cmdList = cmdList; }
 	bool DeselectArea() noexcept;
 
@@ -31,11 +31,11 @@ private:
 	void RenderLabeledAreas() const;
 	
 
-	ImageGrid1* m_sourceTexture;
+	PatchTexture1* m_sourceTexture;
 	TexResCommandList* m_cmdList;
 	TextureResBinderWindow* m_textureWindow;
 	unique_ptr<RenameNotifier> m_renameNotifier;
-	ImagePart m_selectImagePart;
+	TextureSlice m_selectImagePart;
 	vector<Rectangle> m_areaList; //자동으로 찾아놓은 구역들
 	vector<Rectangle> m_hoveredAreas{}; //마우스를 갖대댔을때의 구역들
 	unique_ptr<TextureSourceInfo> m_selectedArea;

@@ -1,17 +1,17 @@
 #include "pch.h"
-#include "ImageGrid1.h"
+#include "PatchTexture1.h"
 #include "../Include/IRenderer.h"
 #include "Utility.h"
-#include "../../JsonOperation/JsonOperation.h"
-#include "../../TextureResourceBinder/TextureResourceBinder.h"
+#include "../../../JsonOperation/JsonOperation.h"
+#include "../../../TextureResourceBinder/TextureResourceBinder.h"
 
-ImageGrid1::~ImageGrid1() = default;
-ImageGrid1::ImageGrid1() : 
+PatchTexture1::~PatchTexture1() = default;
+PatchTexture1::PatchTexture1() : 
 	m_texController{ nullptr }
 {}
 
-ImageGrid1::ImageGrid1(const ImageGrid1& o) :
-	ImageGrid{ o },
+PatchTexture1::PatchTexture1(const PatchTexture1& o) :
+	PatchTexture{ o },
 	m_bindKey{ o.m_bindKey },
 	m_sourceIndex{ o.m_sourceIndex },
 	m_texController{ o.m_texController },
@@ -21,15 +21,15 @@ ImageGrid1::ImageGrid1(const ImageGrid1& o) :
 	m_gfxOffset{ o.m_gfxOffset }
 {}
 
-unique_ptr<UIComponent> ImageGrid1::CreateClone() const
+unique_ptr<UIComponent> PatchTexture1::CreateClone() const
 {
-	return unique_ptr<ImageGrid1>(new ImageGrid1(*this));
+	return unique_ptr<PatchTexture1>(new PatchTexture1(*this));
 }
 
-bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
+bool PatchTexture1::operator==(const UIComponent& rhs) const noexcept
 {
 	ReturnIfFalse(UIComponent::operator==(rhs));
-	const ImageGrid1* o = static_cast<const ImageGrid1*>(&rhs);
+	const PatchTexture1* o = static_cast<const PatchTexture1*>(&rhs);
 
 	auto result = tie(m_bindKey, m_sourceIndex) == tie(o->m_bindKey, o->m_sourceIndex);
 	assert(result);
@@ -37,7 +37,7 @@ bool ImageGrid1::operator==(const UIComponent& rhs) const noexcept
 	return result;
 }
 
-void ImageGrid1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
+void PatchTexture1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
 {
 	m_filename = sourceInfo.filename;
 	m_index = sourceInfo.GetIndex();
@@ -50,7 +50,7 @@ void ImageGrid1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureCont
 		SetSize(GetSizeFromRectangle(m_source));
 }
 
-bool ImageGrid1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
+bool PatchTexture1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
 {
 	if (bindKey.empty()) return false;
 	SetLayout(layout);
@@ -60,7 +60,7 @@ bool ImageGrid1::Setup(const UILayout& layout, const string& bindKey, size_t sou
 	return true;
 }
 
-bool ImageGrid1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
+bool PatchTexture1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
 {
 	if (m_bindKey.empty()) return false;
 	auto sourceInfoRef = resBinder->GetTextureSourceInfo(m_bindKey);
@@ -72,7 +72,7 @@ bool ImageGrid1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, IText
 	return true;
 }
 
-void ImageGrid1::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+void PatchTexture1::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
 {
 	m_bindKey = key;
 	m_sourceIndex = sourceIndex;
@@ -87,13 +87,13 @@ static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 		(static_cast<UINT32>(r));
 }
 
-optional<vector<Rectangle>> ImageGrid1::GetTextureAreaList()
+optional<vector<Rectangle>> PatchTexture1::GetTextureAreaList()
 {	
 	if (!m_index) return nullopt;
 	return m_texController->GetTextureAreaList(*m_index, PackRGBA(255, 255, 255, 0));
 }
 
-void ImageGrid1::ImplementRender(ITextureRender* render) const
+void PatchTexture1::ImplementRender(ITextureRender* render) const
 {
 	const auto& position = GetPosition();
 	const auto& size = GetSize();
@@ -103,13 +103,13 @@ void ImageGrid1::ImplementRender(ITextureRender* render) const
 	render->Render(*m_index, destination, &source);
 }
 
-void ImageGrid1::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept
+void PatchTexture1::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept
 {
 	m_index = index;
 	m_source = source[0];
 }
 
-bool ImageGrid1::FitToTextureSource() noexcept
+bool PatchTexture1::FitToTextureSource() noexcept
 {
 	if (m_source.IsEmpty()) return false;
 
@@ -117,15 +117,15 @@ bool ImageGrid1::FitToTextureSource() noexcept
 	return true;
 }
 
-void ImageGrid1::SerializeIO(JsonOperation& operation)
+void PatchTexture1::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
 	operation.Process("BindKey", m_bindKey);
 	operation.Process("SourceIndex", m_sourceIndex);
 }
 
-unique_ptr<ImageGrid1> CreateImageGrid1(const UILayout& layout, const string& bindKey, size_t sourceIndex)
+unique_ptr<PatchTexture1> CreatePatchTexture1(const UILayout& layout, const string& bindKey, size_t sourceIndex)
 {
-	auto grid1 = make_unique<ImageGrid1>();
-	return CreateIfSetup(move(grid1), layout, bindKey, sourceIndex);
+	auto patchTex1 = make_unique<PatchTexture1>();
+	return CreateIfSetup(move(patchTex1), layout, bindKey, sourceIndex);
 }

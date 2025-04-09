@@ -3,13 +3,13 @@
 #include "../Include/IRenderer.h"
 #include "../UIComponent.h"
 #include "../UILayout.h"
-#include "ImageGrid1.h"
-#include "ImageGrid3.h"
+#include "PatchTexture/PatchTexture1.h"
+#include "PatchTexture/PatchTexture3.h"
 #include "TextArea.h"
 #include "ListArea.h"
 #include "ScrollBar.h"
 #include "ScrollSlider.h"
-#include "ImageSwitcher.h"
+#include "TextureSwitcher.h"
 #include "Utility.h"
 
 map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept
@@ -41,22 +41,22 @@ static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(const XMUINT2& size, const string& bindKey)
 {
 	return GetComponentKeyMap(size, bindKey,
-		[](UILayout& layout, const string& key) { return CreateImageGrid1(layout, key); });
+		[](UILayout& layout, const string& key) { return CreatePatchTexture1(layout, key); });
 }
 
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dirType, const XMUINT2& size, const string& bindKey)
 {
 	return GetComponentKeyMap(size, bindKey,
-		[dirType](UILayout& layout, const string& key) { return CreateImageGrid3(layout, dirType, key); });
+		[dirType](UILayout& layout, const string& key) { return CreatePatchTexture3(layout, dirType, key); });
 }
 
-static inline ImagePart DirTypeToImgPart(DirectionType dirType) noexcept
+static inline TextureSlice DirTypeToImgPart(DirectionType dirType) noexcept
 {
 	switch (dirType)
 	{
-	case DirectionType::Horizontal: return ImagePart::ThreeH;
-	case DirectionType::Vertical: return ImagePart::ThreeV;
-	default: return ImagePart::ThreeH;
+	case DirectionType::Horizontal: return TextureSlice::ThreeH;
+	case DirectionType::Vertical: return TextureSlice::ThreeV;
+	default: return TextureSlice::ThreeH;
 	}
 }
 
@@ -65,8 +65,8 @@ unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const U
 	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
 		
 	return CreateScrollSlider(layout,
-		CreateImageGrid3(gridLayout, dirType, "ScrollTrack3_V"),
-		CreateImageSwitcher(gridLayout, DirTypeToImgPart(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
+		CreatePatchTexture3(gridLayout, dirType, "ScrollTrack3_V"),
+		CreateTextureSwitcher(gridLayout, DirTypeToImgPart(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 }
 
 unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)
@@ -76,20 +76,20 @@ unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)
 	UILayout sliderLayout({ layout.GetSize() - padding, Origin::LeftTop });
 
 	return CreateScrollBar(layout,
-		CreateImageGrid1(bgLayout, "ListBackground1_Normal"),
+		CreatePatchTexture1(bgLayout, "ListBackground1_Normal"),
 		CreateSampleScrollSlider(DirectionType::Vertical, sliderLayout));
 }
 
 unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 {
 	UILayout backImgLayout{ layout.GetSize(), Origin::LeftTop };
-	auto listBackImage = CreateImageGrid1(backImgLayout, "ListBackImage1");
+	auto listBackImage = CreatePatchTexture1(backImgLayout, "ListBackImage1");
 
 	UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
 	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);
 
 	UILayout switcherLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
-	auto switcher = CreateImageSwitcher(switcherLayout, ImagePart::One,
+	auto switcher = CreateTextureSwitcher(switcherLayout, TextureSlice::One,
 		GetStateKeyMap("ListBackground1"), BehaviorMode::Normal);
 
 	return CreateListArea(layout, move(listBackImage), move(switcher), move(scrollBar));

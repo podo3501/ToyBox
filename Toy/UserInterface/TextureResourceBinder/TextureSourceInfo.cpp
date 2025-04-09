@@ -8,24 +8,24 @@
 
 TextureSourceInfo::~TextureSourceInfo() = default;
 TextureSourceInfo::TextureSourceInfo() noexcept :
-    imagePart{ ImagePart::One }
+    texSlice{ TextureSlice::One }
 {}
 
-TextureSourceInfo::TextureSourceInfo(const wstring& _filename, ImagePart _imagePart, const vector<Rectangle>& _sources) noexcept :
+TextureSourceInfo::TextureSourceInfo(const wstring& _filename, TextureSlice _texSlice, const vector<Rectangle>& _sources) noexcept :
     filename{ _filename },
-    imagePart{ _imagePart },
+    texSlice{ _texSlice },
     sources{ _sources }
 {}
 
 TextureSourceInfo::TextureSourceInfo(const wstring& _filename) noexcept :
     filename{ _filename },
-    imagePart{ ImagePart::One },
+    texSlice{ TextureSlice::One },
     sources{}
 {}
 
 bool TextureSourceInfo::operator==(const TextureSourceInfo& o) const noexcept
 {
-    return (tie(filename, imagePart, sources) == tie(o.filename, o.imagePart, o.sources));
+    return (tie(filename, texSlice, sources) == tie(o.filename, o.texSlice, o.sources));
 }
 
 bool TextureSourceInfo::LoadResource(ITextureLoad* load)
@@ -42,7 +42,7 @@ bool TextureSourceInfo::LoadResource(ITextureLoad* load)
     SetGfxOffset(gfxOffset);
     SetTextureLoader(load);
 
-    if (imagePart == ImagePart::One && sources.empty())
+    if (texSlice == TextureSlice::One && sources.empty())
         sources.emplace_back(Rectangle{ 0, 0, static_cast<long>(texSize.x), static_cast<long>(texSize.y) });
 
     return true;
@@ -51,6 +51,6 @@ bool TextureSourceInfo::LoadResource(ITextureLoad* load)
 void TextureSourceInfo::SerializeIO(JsonOperation& operation)
 {
     operation.Process("Filename", filename);
-    operation.Process("ImagePart", imagePart);
+    operation.Process("TextureSlice", texSlice);
     operation.Process("Sources", sources);
 }

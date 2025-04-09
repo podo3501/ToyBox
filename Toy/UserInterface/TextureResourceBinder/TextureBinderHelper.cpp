@@ -21,12 +21,12 @@ SourceDivider GetSourceDivider(TextureResourceBinder* rb, const string& key) noe
 
 SourceDivider GetSourceDivider(const TextureSourceInfo& sourceInfo) noexcept
 {
-    ImagePart imgPart = sourceInfo.imagePart;
+    TextureSlice texSlice = sourceInfo.texSlice;
     const vector<Rectangle>& sources = sourceInfo.sources;
     Rectangle mergedSource = CombineRectangles(sources);
     
     SourceDivider srcDivider{ mergedSource };
-    if (imgPart == ImagePart::One) return srcDivider;
+    if (texSlice == TextureSlice::One) return srcDivider;
 
     const Rectangle& leftSource = sources[0];
     const int leftX = leftSource.width;
@@ -34,11 +34,11 @@ SourceDivider GetSourceDivider(const TextureSourceInfo& sourceInfo) noexcept
     const int top = leftSource.height;
     const int bottom = sources[(sources.size() == 3) ? 2 : 6].y - mergedSource.y;
 
-    switch (imgPart)
+    switch (texSlice)
     {
-    case ImagePart::ThreeH: srcDivider.list = { leftX, rightX }; break;
-    case ImagePart::ThreeV: srcDivider.list = { top, bottom }; break;
-    case ImagePart::Nine: srcDivider.list = { leftX, rightX, top, bottom }; break;
+    case TextureSlice::ThreeH: srcDivider.list = { leftX, rightX }; break;
+    case TextureSlice::ThreeV: srcDivider.list = { top, bottom }; break;
+    case TextureSlice::Nine: srcDivider.list = { leftX, rightX, top, bottom }; break;
     }
 
     return srcDivider;
@@ -68,42 +68,42 @@ vector<pair<string, TextureSourceInfo>> GetTextureSourceInfo(TextureResourceBind
     return result;
 }
 
-vector<TextureSourceInfo> GetAreas(TextureResourceBinder* rb, const wstring& filename, ImagePart part) noexcept
+vector<TextureSourceInfo> GetAreas(TextureResourceBinder* rb, const wstring& filename, TextureSlice part) noexcept
 {
     const auto& areas = rb->GetTotalAreas(filename);
 
     vector<TextureSourceInfo> filtered;
     filtered.reserve(areas.size());
     ranges::copy_if(areas, std::back_inserter(filtered), [part](const TextureSourceInfo& area) { 
-        return area.imagePart == part; 
+        return area.texSlice == part;
         });
 
     return filtered;
 }
 
-vector<Rectangle> GetAreas(TextureResourceBinder* rb, const wstring& filename, ImagePart part, const XMINT2& position) noexcept
+vector<Rectangle> GetAreas(TextureResourceBinder* rb, const wstring& filename, TextureSlice part, const XMINT2& position) noexcept
 {
     const auto& areas = rb->GetTotalAreas(filename);
 
     auto it = ranges::find_if(areas, [part, &position](const TextureSourceInfo& area) {
-        return (area.imagePart == part) && IsContains(area.sources, position);
+        return (area.texSlice == part) && IsContains(area.sources, position);
         });
     if (it == areas.end()) return {};
 
     return it->sources;
 }
 
-vector<Rectangle> GetSources(ImagePart imgPart, const SourceDivider& sourceDivider) noexcept
+vector<Rectangle> GetSources(TextureSlice texSlice, const SourceDivider& sourceDivider) noexcept
 {
-    if (imgPart == ImagePart::One) return { sourceDivider.rect };
+    if (texSlice == TextureSlice::One) return { sourceDivider.rect };
 
     vector<int> widths{}, heights{};
     bool success = false;
-    switch (imgPart)
+    switch (texSlice)
     {
-    case ImagePart::ThreeH: success = GetSizeDividedByThree(DirectionType::Horizontal, sourceDivider, widths, heights); break;
-    case ImagePart::ThreeV: success = GetSizeDividedByThree(DirectionType::Vertical, sourceDivider, widths, heights); break;
-    case ImagePart::Nine: success = GetSizeDividedByNine(sourceDivider, widths, heights); break;
+    case TextureSlice::ThreeH: success = GetSizeDividedByThree(DirectionType::Horizontal, sourceDivider, widths, heights); break;
+    case TextureSlice::ThreeV: success = GetSizeDividedByThree(DirectionType::Vertical, sourceDivider, widths, heights); break;
+    case TextureSlice::Nine: success = GetSizeDividedByNine(sourceDivider, widths, heights); break;
     default: return {};
     }
 

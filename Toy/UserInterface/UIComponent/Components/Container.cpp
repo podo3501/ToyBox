@@ -21,9 +21,9 @@ Container::Container(const Container& o) :
 void Container::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_images.emplace(Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
-	m_images.emplace(Hovered, componentList[1]);
-	m_images.emplace(Pressed, componentList[2]);
+	m_textures.emplace(Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
+	m_textures.emplace(Hovered, componentList[1]);
+	m_textures.emplace(Pressed, componentList[2]);
 }
 
 unique_ptr<UIComponent> Container::CreateClone() const
@@ -36,9 +36,9 @@ bool Container::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const Container* o = static_cast<const Container*>(&rhs);
 
-	return std::all_of(m_images.begin(), m_images.end(), [o](const auto& pair) {
+	return ranges::all_of(m_textures, [o](const auto& pair) {
 		auto state = pair.first;
-		return pair.second->GetName() == o->m_images.at(state)->GetName();
+		return pair.second->GetName() == o->m_textures.at(state)->GetName();
 		});
 }
 
@@ -64,7 +64,7 @@ bool Container::ImplementChangeSize(const XMUINT2& size) noexcept
 
 void Container::AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept
 {
-	m_images.emplace(state, component.get());
+	m_textures.emplace(state, component.get());
 	UIEx(this).AttachComponent(move(component), {});
 }
 
@@ -74,28 +74,28 @@ inline static void SetActiveStateFlag(bool condition, UIComponent* component) no
 }
 
 bool Container::Setup(const UILayout& layout, 
-	map<InteractState, unique_ptr<UIComponent>> imgGridList, BehaviorMode behaviorMode) noexcept
+	map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode) noexcept
 {
 	SetLayout(layout);
 	m_behaviorMode = behaviorMode;
 
-	for (auto& imgGrid : imgGridList)
+	for (auto& pTex : patchTexList)
 	{
-		SetActiveStateFlag(imgGrid.first == Normal, imgGrid.second.get());
-		AttachComponent(imgGrid.first, move(imgGrid.second));
+		SetActiveStateFlag(pTex.first == Normal, pTex.second.get());
+		AttachComponent(pTex.first, move(pTex.second));
 	}
 
 	return true;
 }
 
-void Container::SetState(InteractState state) noexcept
+void Container::SetState(InteractState curState) noexcept
 {
-	if (m_state == state) return;
+	if (m_state == curState) return;
 
-	for (auto& [imgState, image] : m_images)
-		SetActiveStateFlag(imgState == state, image);
+	for (auto& [state, tex] : m_textures)
+		SetActiveStateFlag(state == curState, tex);
 
-	m_state = state;
+	m_state = curState;
 }
 
 void Container::NormalMode(bool isPressed, bool isHeld) noexcept
@@ -147,10 +147,10 @@ void Container::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> imgGridList, BehaviorMode behaviorMode)
+unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode)
 {
-	if (imgGridList.size() != 3) return nullptr;
+	if (patchTexList.size() != 3) return nullptr;
 
 	unique_ptr<Container> container = make_unique<Container>();
-	return CreateIfSetup(move(container), layout, move(imgGridList), behaviorMode);
+	return CreateIfSetup(move(container), layout, move(patchTexList), behaviorMode);
 }

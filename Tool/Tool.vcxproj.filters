@@ -59,7 +59,7 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.cpp">
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow\ComponentSelector.cpp">
@@ -92,7 +92,7 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditImageSwitcher.cpp">
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditTextureSwitcher.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\EditWindowFactory.cpp">
@@ -148,7 +148,7 @@
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditImageGrid.h">
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\ComponentSelector.h">
@@ -181,7 +181,7 @@
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditImageSwitcher.h">
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditTextureSwitcher.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\EditWindowFactory.h">
