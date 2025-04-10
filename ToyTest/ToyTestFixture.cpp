@@ -42,13 +42,14 @@ void ToyTestFixture::SetUp()
 using ::testing::_;
 using ::testing::Invoke;
 
-void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times)
+void ToyTestFixture::CallMockRender(UIComponent* component, function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc, 
+	const string& bindKey, int times)
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(times)
-		.WillRepeatedly(Invoke([this, testRenderFunc](size_t index, const RECT& dest, const RECT* source) {
-		testRenderFunc(index, dest, source, m_resBinder.get());
+		.WillRepeatedly(Invoke([this, testRenderFunc, &bindKey](size_t index, const RECT& dest, const RECT* source) {
+		testRenderFunc(index, dest, source, GetSources(m_resBinder.get(), bindKey));
 			}));
 	component->ProcessUpdate(m_timer);
 	component->ProcessRender(&mockRender);
@@ -61,6 +62,19 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const REC
 		.Times(times)
 		.WillRepeatedly(Invoke([this, testRenderFunc](size_t index, const RECT& dest, const RECT* source) {
 		testRenderFunc(index, dest, source, m_resBinder.get());
+			}));
+	m_panel->ProcessUpdate(m_timer);
+	m_panel->ProcessRender(&mockRender);
+}
+
+void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc, 
+	const string& bindKey, int times)
+{
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, Render(_, _, _))
+		.Times(times)
+		.WillRepeatedly(Invoke([this, testRenderFunc, &bindKey](size_t index, const RECT& dest, const RECT* source) {
+		testRenderFunc(index, dest, source, GetSources(m_resBinder.get(), bindKey));
 			}));
 	m_panel->ProcessUpdate(m_timer);
 	m_panel->ProcessRender(&mockRender);
@@ -92,11 +106,12 @@ void ToyTestFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 	mouseTracker.Update(state);
 }
 
-void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> renderFunc, int times)
+void ToyTestFixture::CloneTest(UIComponent* component, function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> renderFunc, 
+	const string& bindKey, int times)
 {
 	unique_ptr<UIComponent> clonePanel = component->Clone();
 
-	CallMockRender(clonePanel.get(), renderFunc, times);
+	CallMockRender(clonePanel.get(), renderFunc, bindKey, times);
 	WriteReadTest(clonePanel);
 }
 

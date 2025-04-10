@@ -21,6 +21,7 @@ public:
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	void ClearInteraction() noexcept;
 	bool FitToTextureSource() noexcept;
+	bool ChangeStateKey(TextureResourceBinder* resBinder, InteractState state, const string& bindKey) noexcept;
 
 protected:
 	TextureSwitcher(const TextureSwitcher& o);
@@ -30,9 +31,11 @@ protected:
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
+	bool SetSourceInfo(TextureResourceBinder* resBinder, InteractState state, const string& bindKey) noexcept;
 	void ReloadDatas() noexcept;
 	void NormalMode(bool isPressed, bool isHeld) noexcept;
 	void HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept;
+	inline void ChangeState(InteractState state) noexcept { if (m_state != state) SetState(state); }
 	void SetState(InteractState state) noexcept;
 
 	map<InteractState, string> m_stateKeys;

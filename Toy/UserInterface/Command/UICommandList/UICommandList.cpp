@@ -49,24 +49,3 @@ bool UICommandList::Rename(UIComponent* component, const string& name)
 
 bool UICommandList::SetText(TextArea* textArea, const wstring& text)
 { return ApplyCommand<SetTextCommand>(textArea, text); }
-
-//bool UICommandList::SetSource(ImageGrid1* imgGrid1, const Rectangle& source)
-//{
-//	return ApplyCommand<SetSourceCommand>(imgGrid1, source);
-//}
-////Variant를 안쓰고 그냥 UIComponent* 로 받아서 처리할려고 했는데 별반 다르지 않았다.
-////오히려 아무 Component가 들어오는 인상을 주기 때문에 그걸 걸러내는 추가적인 작업만 생긴다.
-//bool UICommandList::SetSources(const ImageGrid39Variant& imgGridVariant, const vector<Rectangle>& sources)
-//{
-//	return ApplyCommand<SetSource39Command>(imgGridVariant, sources);
-//}
-
-//bool UICommandList::SetFilename(const ImageGridVariant& imgGridVariant, IRenderer* renderer, const wstring& filename)
-//{
-//	return ApplyCommand<SetFilenameCommand>(imgGridVariant, renderer, filename);
-//}
-
-//bool UICommandList::SetSourceAndDivider(const ImageGrid39Variant& imgGridVariant, const SourceDivider& srcDivider)
-//{
-//	return ApplyCommand<SetSourceAndDividerCommand>(imgGridVariant, srcDivider);
-//}

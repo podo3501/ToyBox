@@ -44,7 +44,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder*)
+	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source, const vector<RECT>&)
 	{
 		EXPECT_EQ(index, 4); //0, 1은 폰트. 2, 3은 texture 4는 renderTexture이다. 그래서 4가 들어오고
 		vector<RECT> expectDest = { { 75, 75, 125, 125 } };
@@ -61,7 +61,7 @@ namespace UserInterfaceTest
 		m_panel = WriteReadTest(m_panel, renderTexPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
-		CallMockRender(TestRenderTexture, 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
+		CallMockRender(TestRenderTexture, "", 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
 
 		auto clone = renderTexPtr->Clone();
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
@@ -121,10 +121,10 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-		static void TestSwitcher_Scroll(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+		static void TestSwitcher_Scroll(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& resources)
 	{
 		vector<RECT> expectDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
-		TestCoordinates(index, dest, source, expectDest, GetSources(rb, "ScrollButton3_V_Pressed"));
+		TestCoordinates(index, dest, source, expectDest, resources);
 	}
 
 	TEST_F(ComplexComponentTest, Switcher_Scroll)
@@ -142,9 +142,9 @@ namespace UserInterfaceTest
 		EXPECT_CALL(mockOnPress, Call(KeyState::Held)).Times(1);
 
 		MockMouseInput(100, 100, true); //Pressed
-		CallMockRender(TestSwitcher_Scroll, 3);
+		CallMockRender(TestSwitcher_Scroll, "ScrollButton3_V_Pressed", 3);
 
 		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Pressed가 되어야한다.
-		CallMockRender(TestSwitcher_Scroll, 3);
+		CallMockRender(TestSwitcher_Scroll, "ScrollButton3_V_Pressed", 3);
 	}
 }

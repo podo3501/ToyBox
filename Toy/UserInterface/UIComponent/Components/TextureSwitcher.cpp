@@ -61,24 +61,41 @@ bool TextureSwitcher::Setup(const UILayout& layout, TextureSlice texSlice,
 void TextureSwitcher::ClearInteraction() noexcept
 {
 	if (m_state && m_state == InteractState::Hovered)
-		SetState(InteractState::Normal);
+		ChangeState(InteractState::Normal);
+}
+
+bool TextureSwitcher::SetSourceInfo(TextureResourceBinder* resBinder, InteractState state, const string& bindKey) noexcept
+{
+	auto sourceInfoRef = resBinder->GetTextureSourceInfo(bindKey);
+	ReturnIfFalse(sourceInfoRef);
+
+	const auto& srcInfo = sourceInfoRef->get();
+	auto curIndex = srcInfo.GetIndex();
+	ReturnIfFalse(curIndex);
+
+	m_indexes.insert_or_assign(state, *curIndex);
+	m_sources.insert_or_assign(state, srcInfo);
+
+	return true;
 }
 
 bool TextureSwitcher::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
 {
 	for (const auto& pair : m_stateKeys)
-	{
-		auto sourceInfoRef = resBinder->GetTextureSourceInfo(pair.second);
-		ReturnIfFalse(sourceInfoRef);
+		SetSourceInfo(resBinder, pair.first, pair.second);
+	ChangeState(Normal);
 
-		const auto& srcInfo = sourceInfoRef->get();
-		auto curIndex = srcInfo.GetIndex();
-		ReturnIfFalse(curIndex);
+	return true;
+}
 
-		m_indexes.emplace(pair.first, *curIndex);
-		m_sources.emplace(pair.first, srcInfo);
-	}
-	SetState(Normal);
+bool TextureSwitcher::ChangeStateKey(TextureResourceBinder* resBinder, InteractState state, const string& bindKey) noexcept
+{
+	auto it = m_stateKeys.find(state);
+	if (it == m_stateKeys.end()) return false;
+
+	it->second = bindKey;
+	SetSourceInfo(resBinder, state, bindKey);
+	if(m_state == state) SetState(state);
 
 	return true;
 }
@@ -87,11 +104,11 @@ void TextureSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
 {
 	if (!Contains(GetArea(), InputManager::GetMouse().GetPosition()))
 	{
-		SetState(Normal);
+		ChangeState(Normal);
 		return;
 	}
 
-	SetState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hovered);
+	ChangeState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hovered);
 }
 
 //마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)
@@ -142,8 +159,6 @@ bool TextureSwitcher::FitToTextureSource() noexcept
 
 void TextureSwitcher::SetState(InteractState state) noexcept
 {
-	if (m_state == state) return;
-
 	m_patchTex->SetIndexedSource(m_indexes[state], m_sources[state].sources);
 	m_state = state;
 }
