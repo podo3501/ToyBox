@@ -15,15 +15,17 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
+	//PatchTexture
+	virtual bool FitToTextureSource() noexcept override;
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
+	virtual void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept override;
 
 	optional<vector<Rectangle>> GetTextureAreaList();
 	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
 	void SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept;
-	bool FitToTextureSource() noexcept override;
+	void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept;
 
 	inline const string& GetBindKey() const noexcept { return m_bindKey; }
-	void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex = 0u) noexcept;
 	inline void SetSource(const Rectangle& source) noexcept { m_source = source; }
 	inline const Rectangle& GetSource() const noexcept { return m_source; }
 	inline wstring GetFilename() const noexcept { return m_filename; }

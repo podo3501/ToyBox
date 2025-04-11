@@ -121,6 +121,7 @@
 --FitToTextureSource 함수 만들기
 --invocable(predicate)을 uicomponent의 loop 에도 적용
 
+@EditPatchTexture 작성중. editPathTexture작성할때 상속을 해서 윗단에 만들어 놓는게 한번만 만들고 좋기 때문에.
 @툴에서 콤보박스 할 수 있게끔
 @툴에서 리스트 할 수 있게끔
     ImageSwitcher editWindow 작업

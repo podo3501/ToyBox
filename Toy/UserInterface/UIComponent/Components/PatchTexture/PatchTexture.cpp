@@ -6,10 +6,19 @@
 
 PatchTexture::~PatchTexture() = default;
 PatchTexture::PatchTexture() = default;
-
-PatchTexture::PatchTexture(const PatchTexture& other) :
-	UIComponent{ other }
+PatchTexture::PatchTexture(TextureSlice texSlice) noexcept :
+	m_texSlice{ texSlice }
 {}
+
+PatchTexture::PatchTexture(const PatchTexture& other) noexcept :
+	UIComponent{ other },
+	m_texSlice{ other.m_texSlice }
+{}
+
+void PatchTexture::SetTextureSlice(TextureSlice texSlice) noexcept
+{
+	m_texSlice = texSlice;
+}
 
 //////////////////////////////////////////////////////////
 

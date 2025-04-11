@@ -6,11 +6,7 @@
 #include "../../../JsonOperation/JsonOperation.h"
 
 PatchTexture3::~PatchTexture3() = default;
-PatchTexture3::PatchTexture3() = default;
-PatchTexture3::PatchTexture3(DirectionType dirType) :
-    m_dirType{ dirType }
-{}
-
+PatchTexture3::PatchTexture3() noexcept = default;
 PatchTexture3::PatchTexture3(const PatchTexture3& o) :
     PatchTexture{ o },
     m_dirType{ o.m_dirType }
@@ -39,10 +35,16 @@ static vector<optional<StateFlag::Type>> GetStateFlagsForDirection(DirectionType
     return {};
 }
 
+void PatchTexture3::SetDirectionType(DirectionType dirType) noexcept
+{
+    m_dirType = dirType;
+    SetTextureSlice(DirTypeToTextureSlice(dirType));
+}
+
 bool PatchTexture3::Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept
 {
     SetLayout({ layout.GetSize(), Origin::LeftTop });
-    m_dirType = dirType;
+    SetDirectionType(dirType);
 
     vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
     for (size_t idx : views::iota(0, 3)) //bindKey를 조회할 수 없어 빈 내용의 자식들을 생성한다.
@@ -84,10 +86,15 @@ bool PatchTexture3::ForEachPatchTexture1(predicate<PatchTexture1*, size_t> auto&
     return true;
 }
 
-void PatchTexture3::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+void PatchTexture3::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
+{
+    ChangeBindKeyWithIndex(key, sourceInfo, 0);
+}
+
+void PatchTexture3::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
 {
     ForEachPatchTexture1([&key, &sourceInfo, sourceIndex](PatchTexture1* tex1, size_t index) {
-        tex1->ChangeBindKey(key, sourceInfo, sourceIndex * 3 + index);
+        tex1->ChangeBindKeyWithIndex(key, sourceInfo, sourceIndex * 3 + index);
         return true;
         });
 }

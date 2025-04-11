@@ -5,8 +5,11 @@
 #include "../../UIUtility.h"
 
 PatchTexture9::~PatchTexture9() = default;
-PatchTexture9::PatchTexture9() = default;
-PatchTexture9::PatchTexture9(const PatchTexture9& o) :
+PatchTexture9::PatchTexture9() noexcept :
+	PatchTexture{ TextureSlice::Nine }
+{}
+
+PatchTexture9::PatchTexture9(const PatchTexture9& o) noexcept :
 	PatchTexture{ o }
 {}
 
@@ -78,7 +81,7 @@ const string& PatchTexture9::GetBindKey() const noexcept
 void PatchTexture9::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
 {
 	ForEachPatchTexture3([&key, &sourceInfo](PatchTexture3* tex3, size_t index) {
-		tex3->ChangeBindKey(key, sourceInfo, index);
+		tex3->ChangeBindKeyWithIndex(key, sourceInfo, index);
 		return true;
 		});
 }

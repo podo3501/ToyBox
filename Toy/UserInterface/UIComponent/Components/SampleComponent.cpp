@@ -50,23 +50,13 @@ map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dir
 		[dirType](UILayout& layout, const string& key) { return CreatePatchTexture3(layout, dirType, key); });
 }
 
-static inline TextureSlice DirTypeToImgPart(DirectionType dirType) noexcept
-{
-	switch (dirType)
-	{
-	case DirectionType::Horizontal: return TextureSlice::ThreeH;
-	case DirectionType::Vertical: return TextureSlice::ThreeV;
-	default: return TextureSlice::ThreeH;
-	}
-}
-
 unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const UILayout& layout)
 {
 	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
 		
 	return CreateScrollSlider(layout,
 		CreatePatchTexture3(gridLayout, dirType, "ScrollTrack3_V"),
-		CreateTextureSwitcher(gridLayout, DirTypeToImgPart(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
+		CreateTextureSwitcher(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 }
 
 unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)

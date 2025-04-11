@@ -121,12 +121,6 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-		static void TestSwitcher_Scroll(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& resources)
-	{
-		vector<RECT> expectDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
-		TestCoordinates(index, dest, source, expectDest, resources);
-	}
-
 	TEST_F(ComplexComponentTest, Switcher_Scroll)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {16, 100}, Origin::Center },
@@ -142,9 +136,10 @@ namespace UserInterfaceTest
 		EXPECT_CALL(mockOnPress, Call(KeyState::Held)).Times(1);
 
 		MockMouseInput(100, 100, true); //Pressed
-		CallMockRender(TestSwitcher_Scroll, "ScrollButton3_V_Pressed", 3);
+		vector<RECT> exDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
+		TestMockRender(exDest, "ScrollButton3_V_Pressed");
 
 		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Pressed가 되어야한다.
-		CallMockRender(TestSwitcher_Scroll, "ScrollButton3_V_Pressed", 3);
+		TestMockRender(exDest, "ScrollButton3_V_Pressed");
 	}
 }

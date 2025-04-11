@@ -8,12 +8,6 @@
 
 namespace UserInterfaceTest
 {
-	static void TestButton_PatchTexture1Render(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& sources)
-	{
-		vector<RECT> expectDest = { { 144, 104, 176, 136 } };
-		TestCoordinates(index, dest, source, expectDest, sources);
-	}
-
 	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTexture1)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {32, 32}, Origin::Center }, 
@@ -23,27 +17,16 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		MockMouseInput(144, 120, true);	//Pressed
-		CallMockRender(TestButton_PatchTexture1Render, "ExitButton1_Pressed", 1);
+		vector<RECT> exDest = { { 144, 104, 176, 136 } };
+		TestMockRender(exDest, "ExitButton1_Pressed");
 
 		EXPECT_TRUE(switcherPtr->ChangeStateKey(m_resBinder.get(), InteractState::Pressed, "ListBackground1_Normal"));
-		CallMockRender(TestButton_PatchTexture1Render, "ListBackground1_Normal", 1);
+		TestMockRender(exDest, "ListBackground1_Normal");
 		
 		FitToTextureSourceTest("ListBackground1_Normal");
 	}
 
 	////////////////////////////////////////////////////////////////
-
-	static void TestButton_PatchTexture3Render_H(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& sources)
-	{
-		vector<RECT> expectDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
-		TestCoordinates(index, dest, source, expectDest, sources);
-	}
-
-	static void TestButton_PatchTexture3ChangeAreaRender_H(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& sources)
-	{
-		vector<RECT> expectDest = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
-		TestCoordinates(index, dest, source, expectDest, sources);
-	}
 
 	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTexture3_H)
 	{
@@ -54,33 +37,23 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		MockMouseInput(110, 96);	//Hover
-		CallMockRender(TestButton_PatchTexture3Render_H, "ScrollButton3_H_Hovered", 3);
+		vector<RECT> exDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
+		TestMockRender(exDest, "ScrollButton3_H_Hovered");
 
 		switcherPtr->ChangeSize({ 150, 48 });
 		MockMouseInput(0, 0);	//Normal
-		CallMockRender(TestButton_PatchTexture3ChangeAreaRender_H, "ScrollButton3_H_Normal", 3);
+		vector<RECT> exChangeSize = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
+		TestMockRender(exChangeSize, "ScrollButton3_H_Normal");
 
-		CloneTest(m_panel.get(), TestButton_PatchTexture3ChangeAreaRender_H, "ScrollButton3_H_Normal", 3);
+		CloneTest(exChangeSize, "ScrollButton3_H_Normal");
 
 		EXPECT_TRUE(switcherPtr->ChangeStateKey(m_resBinder.get(), InteractState::Normal, "ScrollButton3_H_Hovered"));
-		CallMockRender(TestButton_PatchTexture3ChangeAreaRender_H, "ScrollButton3_H_Hovered", 3);
+		TestMockRender(exChangeSize, "ScrollButton3_H_Hovered");
 
 		FitToTextureSourceTest("ScrollButton3_H_Hovered");
 	}
 
 	////////////////////////////////////////////////////////////////
-
-	static void TestButton_PatchTexture3Render_V(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& resources)
-	{
-		vector<RECT> expectDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
-		TestCoordinates(index, dest, source, expectDest, resources);
-	}
-
-	static void TestButton_PatchTexture3ChangeAreaRender_V(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& resources)
-	{
-		vector<RECT> expectDest = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
-		TestCoordinates(index, dest, source, expectDest, resources);
-	}
 
 	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTexture3_V)
 	{
@@ -91,36 +64,20 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		MockMouseInput(77, 51);	//Hover
-		CallMockRender(TestButton_PatchTexture3Render_V, "ScrollButton3_V_Hovered", 3);
+		vector<RECT> exDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
+		TestMockRender(exDest, "ScrollButton3_V_Hovered");
 
 		switcherPtr->ChangeSize({ 48, 150 });
 		MockMouseInput(0, 0);	//Normal
-		CallMockRender(TestButton_PatchTexture3ChangeAreaRender_V, "ScrollButton3_V_Normal", 3);
+		vector<RECT> exDestChange = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
+		TestMockRender(exDestChange, "ScrollButton3_V_Normal");
 
-		CloneTest(m_panel.get(), TestButton_PatchTexture3ChangeAreaRender_V, "ScrollButton3_V_Normal", 3);
+		CloneTest(exDestChange, "ScrollButton3_V_Normal");
 
 		FitToTextureSourceTest("ScrollButton3_V_Normal");
 	}
 
 	////////////////////////////////////////////////////////////////
-
-	static void TestTextureSwitcher9(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& resources)
-	{
-		vector<RECT> expectDest = {
-			{ 50, 50, 60, 60 }, { 60, 50, 140, 60 }, { 140, 50, 150, 60 },
-			{ 50, 60, 60, 140 }, { 60, 60, 140, 140 }, { 140, 60, 150, 140 },
-			{ 50, 140, 60, 150 }, { 60, 140, 140, 150 }, { 140, 140, 150, 150 } };
-		TestCoordinates(index, dest, source, expectDest, resources);
-	}
-
-	static void TestTextureSwitcher9_ChangeSize(size_t index, const RECT& dest, const RECT* source, const vector<RECT>& resources)
-	{
-		vector<RECT> expectDest = {
-			{ 25, 25, 35, 35 }, { 35, 25, 165, 35 }, { 165, 25, 175, 35 },
-			{ 25, 35, 35, 165 }, { 35, 35, 165, 165 }, { 165, 35, 175, 165 },
-			{ 25, 165, 35, 175 }, { 35, 165, 165, 175 }, { 165, 165, 175, 175 } };
-		TestCoordinates(index, dest, source, expectDest, resources);
-	}
 		
 	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTexture9)
 	{
@@ -133,13 +90,21 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
 		MockMouseInput(51, 51);	//Hover
-		CallMockRender(TestTextureSwitcher9, "ListBackground9_Hovered", 9);
+		vector<RECT> exDest = {
+			{ 50, 50, 60, 60 }, { 60, 50, 140, 60 }, { 140, 50, 150, 60 },
+			{ 50, 60, 60, 140 }, { 60, 60, 140, 140 }, { 140, 60, 150, 140 },
+			{ 50, 140, 60, 150 }, { 60, 140, 140, 150 }, { 140, 140, 150, 150 } };
+		TestMockRender(exDest, "ListBackground9_Hovered");
 
 		switcherPtr->ChangeSize({ 150, 150 });
 		MockMouseInput(0, 0);	//Normal
-		CallMockRender(TestTextureSwitcher9_ChangeSize, "ListBackground9_Normal", 9);
+		vector<RECT> exDestChange = {
+			{ 25, 25, 35, 35 }, { 35, 25, 165, 35 }, { 165, 25, 175, 35 },
+			{ 25, 35, 35, 165 }, { 35, 35, 165, 165 }, { 165, 35, 175, 165 },
+			{ 25, 165, 35, 175 }, { 35, 165, 165, 175 }, { 165, 165, 175, 175 } };
+		TestMockRender(exDestChange, "ListBackground9_Normal");
 
-		CloneTest(m_panel.get(), TestTextureSwitcher9_ChangeSize, "ListBackground9_Normal", 9);
+		CloneTest(exDestChange, "ListBackground9_Normal");
 
 		FitToTextureSourceTest("ListBackground9_Normal");
 	}

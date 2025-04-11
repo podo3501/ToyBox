@@ -7,6 +7,7 @@
 
 PatchTexture1::~PatchTexture1() = default;
 PatchTexture1::PatchTexture1() : 
+	PatchTexture{ TextureSlice::One },
 	m_texController{ nullptr }
 {}
 
@@ -72,7 +73,12 @@ bool PatchTexture1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, IT
 	return true;
 }
 
-void PatchTexture1::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+void PatchTexture1::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
+{
+	ChangeBindKeyWithIndex(key, sourceInfo, 0);
+}
+
+void PatchTexture1::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
 {
 	m_bindKey = key;
 	m_sourceIndex = sourceIndex;

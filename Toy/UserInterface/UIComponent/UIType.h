@@ -174,6 +174,8 @@ enum class DirectionType
 	Vertical
 };
 
+TextureSlice DirTypeToTextureSlice(DirectionType dirType) noexcept;
+
 /////////////////////////////////////////////////////////////// 
 
 struct SourceDivider
