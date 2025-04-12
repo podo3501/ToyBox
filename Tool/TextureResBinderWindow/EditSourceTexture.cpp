@@ -192,7 +192,7 @@ bool EditSourceTexture::SelectTextureFile() noexcept
     auto curTex = IsVaildTextureIndex() ? m_textureFiles[m_texIndex].get() : nullptr;
     ApplyTexture(curTex);
     m_listboxTexture->SetItems(GetTextureFiles(m_textureFiles));
-    m_listboxTexture->SetIndex(m_texIndex);
+    m_listboxTexture->SelectItem(m_texIndex);
 
     return true;
 }

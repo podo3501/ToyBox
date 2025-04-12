@@ -15,6 +15,14 @@ void EditCombo::Render(function<void(const string&)> OnChangeKey)
 		OnChangeKey(m_keys[m_index]);
 }
 
+void EditCombo::SelectItem(const string& key) noexcept
+{
+	auto it = ranges::find(m_keyStorage, key);
+	if (it == m_keyStorage.end()) return;
+
+	m_index = static_cast<int>(distance(m_keyStorage.begin(), it));
+}
+
 /////////////////////////////////////////////////////////////////////
 
 EditListBox::~EditListBox() = default;

@@ -13,12 +13,26 @@
 EditPatchTexture::~EditPatchTexture() = default;
 EditPatchTexture::EditPatchTexture(PatchTexture* patchTex, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
     EditWindow{ patchTex, resBinder, cmdList },
-    m_patchTex{ patchTex },
-    m_combo{ make_unique<EditCombo>("Bind Keys", resBinder->GetTextureKeys(patchTex->GetTextureSlice())) }
+    m_patchTex{ patchTex }
 {}
+
+void EditPatchTexture::SetupComponent() noexcept
+{
+    auto& curKey = m_patchTex->GetBindKey();
+    if (curKey.empty()) return;
+
+    auto resBinder = GetTextureResourceBinder();
+    const auto& keys = resBinder->GetTextureKeys(m_patchTex->GetTextureSlice());
+    if(ranges::find(keys, curKey) == keys.end()) return;
+
+    m_combo = make_unique<EditCombo>("Bind Keys", keys);
+    m_combo->SelectItem(curKey);
+}
 
 void EditPatchTexture::RenderComponent()
 {
+    if (!m_combo) return;
+
     if (ImGui::Button("Fit to Texture Size"))
         m_patchTex->FitToTextureSource();
 
@@ -33,8 +47,7 @@ void EditPatchTexture::RenderComponent()
 
 EditPatchTexture1::~EditPatchTexture1() = default;
 EditPatchTexture1::EditPatchTexture1(PatchTexture1* patchTex1, IRenderer*, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
-    EditPatchTexture{ patchTex1, resBinder, cmdList },
-    m_patchTex1{ patchTex1 }
+    EditPatchTexture{ patchTex1, resBinder, cmdList }
 {}
 
 ////////////////////////////////////////////////

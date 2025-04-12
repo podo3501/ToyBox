@@ -18,12 +18,14 @@ public:
 	EditWindow(UIComponent* component, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
 	virtual ~EditWindow();
 	
+	void Setup();
 	void Update(bool mainWndFocus);
 	void Render(const ImGuiWindow* mainWindow);
 	inline bool IsVisible() const noexcept { return m_visible; };
 	bool IsUpdateSizeOnDrag() const noexcept;
 
 protected:
+	virtual void SetupComponent() {};
 	virtual void UpdateComponent() {};
 	virtual void RenderComponent() {};
 

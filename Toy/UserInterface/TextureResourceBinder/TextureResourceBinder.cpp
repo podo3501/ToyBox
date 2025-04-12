@@ -168,6 +168,13 @@ vector<string> TextureResourceBinder::GetTextureKeys(const wstring& filename) co
     return FilterTextureKeys(m_bindingTexTable, [&filename](const TextureSourceInfo& info) { return info.filename == filename; });
 }
 
+vector<string> TextureResourceBinder::GetTextureAllKeys() const noexcept
+{
+    vector<string> keys;
+    ranges::copy(m_bindingTexTable | views::keys, back_inserter(keys));
+    return keys;
+}
+
 optionalRef<TextureSourceInfo> TextureResourceBinder::GetTextureSourceInfo(const string& key) const noexcept
 {
     auto it = m_bindingTexTable.find(key);

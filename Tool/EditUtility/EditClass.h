@@ -8,10 +8,11 @@ public:
 	~EditCombo();
 	EditCombo(const string& name, const vector<string> keys) noexcept;
 	void Render(function<void(const string&)> OnChangeKey);
+	void SelectItem(const string& key) noexcept;
 
 private:
 	string m_name;
-	int m_index{ 0 };
+	int m_index{ -1 };
 	vector<string> m_keyStorage;
 	vector<const char*> m_keys;
 };
@@ -23,7 +24,7 @@ public:
 	~EditListBox();
 	explicit EditListBox(const string& name, int maxVisibleItems) noexcept;
 	void SetItems(const vector<string>& items) noexcept;
-	inline void SetIndex(int index) noexcept { m_index = index; }
+	inline void SelectItem(int index) noexcept { m_index = index; }
 	void Render(function<void(int)> OnChangeItem);
 
 private:

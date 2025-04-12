@@ -35,6 +35,7 @@ public:
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
 	vector<string> GetTextureKeys(TextureSlice texSlice) const noexcept;
 	vector<string> GetTextureKeys(const wstring& filename) const noexcept;
+	vector<string> GetTextureAllKeys() const noexcept;
 	wstring GetFontKey(const wstring& fontFilename) const noexcept;
 	vector<wstring> GetTextureFiles() const noexcept;
 

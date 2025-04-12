@@ -95,6 +95,7 @@
                                             "StateFlag": 359,
                                             "Children": [],
                                             "BindKey": "ScrollButton3_V_Normal",
+                                            "WithoutBindKey": false,
                                             "SourceIndex": 0
                                         }
                                     },
@@ -123,6 +124,7 @@
                                             "StateFlag": 103,
                                             "Children": [],
                                             "BindKey": "ScrollButton3_V_Normal",
+                                            "WithoutBindKey": false,
                                             "SourceIndex": 1
                                         }
                                     },
@@ -151,6 +153,7 @@
                                             "StateFlag": 359,
                                             "Children": [],
                                             "BindKey": "ScrollButton3_V_Normal",
+                                            "WithoutBindKey": false,
                                             "SourceIndex": 2
                                         }
                                     }

@@ -15,6 +15,13 @@ protected:
 	virtual void RenderComponent() override;
 
 private:
+	void RenderStateCombo();
+	void RenderKeyCombo();
+	void RenderFitToTextureButton();
+	void SelectKeyComboItem();
+
+
 	TextureSwitcher* m_texSwitcher;
-	unique_ptr<EditCombo> m_combo;
+	unique_ptr<EditCombo> m_stateCombo;
+	unique_ptr<EditCombo> m_keyCombo;
 };

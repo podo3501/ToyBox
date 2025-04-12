@@ -73,6 +73,7 @@ bool TextureSwitcher::SetSourceInfo(TextureResourceBinder* resBinder, InteractSt
 	auto curIndex = srcInfo.GetIndex();
 	ReturnIfFalse(curIndex);
 
+	//바로 indexedSource 입력하는게 아니라 binder와 키값과 인덱스를 넘겨줘서 PatchTexture 내용까지 다 바꿔야 하지 않을까?
 	m_indexes.insert_or_assign(state, *curIndex);
 	m_sources.insert_or_assign(state, srcInfo);
 
@@ -88,14 +89,14 @@ bool TextureSwitcher::ImplementBindSourceInfo(TextureResourceBinder* resBinder, 
 	return true;
 }
 
-bool TextureSwitcher::ChangeStateKey(TextureResourceBinder* resBinder, InteractState state, const string& bindKey) noexcept
+bool TextureSwitcher::ChangeBindKey(TextureResourceBinder* resBinder, const string& bindKey) noexcept
 {
-	auto it = m_stateKeys.find(state);
-	if (it == m_stateKeys.end()) return false;
-
+	if (!m_state) return false;
+	auto it = m_stateKeys.find(*m_state);
 	it->second = bindKey;
-	SetSourceInfo(resBinder, state, bindKey);
-	if(m_state == state) SetState(state);
+
+	SetSourceInfo(resBinder, *m_state, bindKey);
+	SetState(*m_state);
 
 	return true;
 }
@@ -149,6 +150,15 @@ bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size) noexcept
 	return UIComponent::ImplementChangeSize(size);
 }
 
+optionalRef<string> TextureSwitcher::GetBindKey() const noexcept
+{
+	if (!m_state) return nullopt;
+	auto it = m_stateKeys.find(*m_state);
+	if (it == m_stateKeys.end()) return nullopt;
+
+	return cref(it->second);
+}
+
 bool TextureSwitcher::FitToTextureSource() noexcept
 {
 	ReturnIfFalse(m_patchTex->FitToTextureSource());
@@ -158,7 +168,7 @@ bool TextureSwitcher::FitToTextureSource() noexcept
 }
 
 void TextureSwitcher::SetState(InteractState state) noexcept
-{
+{	
 	m_patchTex->SetIndexedSource(m_indexes[state], m_sources[state].sources);
 	m_state = state;
 }

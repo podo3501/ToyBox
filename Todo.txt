@@ -120,11 +120,12 @@
 --TDD쪽 imageSwitcher 리팩토링
 --FitToTextureSource 함수 만들기
 --invocable(predicate)을 uicomponent의 loop 에도 적용
+--EditPatchTexture 작성중. editPathTexture작성할때 상속을 해서 윗단에 만들어 놓는게 한번만 만들고 좋기 때문에.
+--TextureSwitcher 툴 작업
 
-@EditPatchTexture 작성중. editPathTexture작성할때 상속을 해서 윗단에 만들어 놓는게 한번만 만들고 좋기 때문에.
 @툴에서 콤보박스 할 수 있게끔
 @툴에서 리스트 할 수 있게끔
-    ImageSwitcher editWindow 작업
+    
 
 @UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
 @콤보박스 컴포넌트 만들기

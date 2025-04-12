@@ -17,9 +17,9 @@ public:
 	virtual bool FitToTextureSource() noexcept override;
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept override;
 	virtual void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept override;
+	virtual const string& GetBindKey() const noexcept override;
 
 	bool Setup(const UILayout& layout, const string& bindKey);
-	const string& GetBindKey() const noexcept;
 
 protected:
 	PatchTexture9(const PatchTexture9& o) noexcept;

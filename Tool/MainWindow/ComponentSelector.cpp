@@ -41,6 +41,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 	}
 
 	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_renderer, m_resBinder, m_cmdList);
+	if (m_editWindow) m_editWindow->Setup();
 
 	m_component = component;
 	m_tooltip->SetComponent(component);

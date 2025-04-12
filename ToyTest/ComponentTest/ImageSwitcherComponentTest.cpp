@@ -2,6 +2,7 @@
 #include "../ToyTestFixture.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../TestHelper.h"
 #include "../Toy/Utility.h"
@@ -19,8 +20,11 @@ namespace UserInterfaceTest
 		MockMouseInput(144, 120, true);	//Pressed
 		vector<RECT> exDest = { { 144, 104, 176, 136 } };
 		TestMockRender(exDest, "ExitButton1_Pressed");
+		EXPECT_EQ(*switcherPtr->GetState(), InteractState::Pressed);
 
-		EXPECT_TRUE(switcherPtr->ChangeStateKey(m_resBinder.get(), InteractState::Pressed, "ListBackground1_Normal"));
+		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ListBackground1_Normal"));
+		auto pTex = switcherPtr->GetPatchTexture();
+		EXPECT_TRUE(pTex->GetBindKey().empty());
 		TestMockRender(exDest, "ListBackground1_Normal");
 		
 		FitToTextureSourceTest("ListBackground1_Normal");
@@ -47,7 +51,7 @@ namespace UserInterfaceTest
 
 		CloneTest(exChangeSize, "ScrollButton3_H_Normal");
 
-		EXPECT_TRUE(switcherPtr->ChangeStateKey(m_resBinder.get(), InteractState::Normal, "ScrollButton3_H_Hovered"));
+		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_H_Hovered"));
 		TestMockRender(exChangeSize, "ScrollButton3_H_Hovered");
 
 		FitToTextureSourceTest("ScrollButton3_H_Hovered");

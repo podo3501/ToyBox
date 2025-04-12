@@ -27,6 +27,11 @@ EditWindow::EditWindow(UIComponent* component, TextureResourceBinder* resBinder,
     m_dragState{ OnDrag::Normal }
 {}
 
+void EditWindow::Setup()
+{
+    SetupComponent();
+}
+
 static vector<pair<Rectangle, OnDrag>> GenerateResizeZone(
     const Rectangle& rect, long padding) noexcept
 {

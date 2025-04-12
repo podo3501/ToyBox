@@ -12,9 +12,9 @@ public:
 	EditPatchTexture(PatchTexture* patchTex, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
 
 protected:
+	virtual void SetupComponent() noexcept;
 	virtual void RenderComponent() override;
 
-private:
 	unique_ptr<EditCombo> m_combo;
 	PatchTexture* m_patchTex;
 };
@@ -28,9 +28,6 @@ public:
 	~EditPatchTexture1();
 	EditPatchTexture1() = delete;
 	EditPatchTexture1(PatchTexture1* patchTex1, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
-
-private:
-	PatchTexture1* m_patchTex1;
 };
 
 class PatchTexture3;

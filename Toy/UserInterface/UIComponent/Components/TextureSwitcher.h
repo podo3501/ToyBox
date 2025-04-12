@@ -1,5 +1,6 @@
 #pragma once
 #include "../UIComponent.h"
+#include "../Include/TypeAliases.h"
 
 enum class KeyState;
 struct TextureSourceInfo;
@@ -21,7 +22,11 @@ public:
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	void ClearInteraction() noexcept;
 	bool FitToTextureSource() noexcept;
-	bool ChangeStateKey(TextureResourceBinder* resBinder, InteractState state, const string& bindKey) noexcept;
+	inline void ChangeState(InteractState state) noexcept { if (m_state != state) SetState(state); }
+	bool ChangeBindKey(TextureResourceBinder* resBinder, const string& bindKey) noexcept;
+	inline optional<InteractState> GetState() const noexcept 	{ return m_state; }
+	inline PatchTexture* GetPatchTexture() const noexcept { return m_patchTex; }
+	optionalRef<string> GetBindKey() const noexcept;
 
 protected:
 	TextureSwitcher(const TextureSwitcher& o);
@@ -35,7 +40,6 @@ private:
 	void ReloadDatas() noexcept;
 	void NormalMode(bool isPressed, bool isHeld) noexcept;
 	void HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept;
-	inline void ChangeState(InteractState state) noexcept { if (m_state != state) SetState(state); }
 	void SetState(InteractState state) noexcept;
 
 	map<InteractState, string> m_stateKeys;
