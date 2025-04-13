@@ -121,10 +121,12 @@ int32_t ListArea::GetContainerHeight() const noexcept
 	return height;
 }
 
-void ListArea::UpdateScrollBar() noexcept
+bool ListArea::UpdateScrollBar() noexcept
 {
 	bool isActiveChange = m_scrollBar->UpdateScrollView(m_renderTex->GetSize().y, GetContainerHeight());
-	if (isActiveChange) ResizeContainerForScrollbar();
+	if (isActiveChange) 
+		return ResizeContainerForScrollbar();
+	return true;
 }
 
 XMUINT2 ListArea::GetUsableContentSize() const noexcept
@@ -136,12 +138,12 @@ XMUINT2 ListArea::GetUsableContentSize() const noexcept
 	return usableSize;
 }
 
-void ListArea::ResizeContainerForScrollbar() noexcept
+bool ListArea::ResizeContainerForScrollbar() noexcept
 {
 	XMUINT2 usableSize(GetUsableContentSize());
-	
 	for (auto container : m_containers)
-		container->ChangeSize(usableSize);
+		ReturnIfFalse(container->ChangeSize(usableSize));
+	return  true;
 }
 
 UIComponent* ListArea::PrepareContainer()
@@ -153,10 +155,10 @@ UIComponent* ListArea::PrepareContainer()
 	cloneContainerPtr->SetStateFlag(StateFlag::Active, true);
 	cloneContainerPtr->SetStateFlag(StateFlag::RenderEditable, false);
 	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
-	cloneContainerPtr->ChangeSize(GetUsableContentSize());
+	if(!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
 	m_containers.emplace_back(cloneContainerPtr);
 
-	UpdateScrollBar();
+	if(!UpdateScrollBar()) return nullptr;
 
 	return cloneContainerPtr;
 }

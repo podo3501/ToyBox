@@ -28,7 +28,7 @@ XMINT2 UITransform::GetUpdatedPosition(const UILayout& layout, const XMINT2& par
 
 void UITransform::SetRelativePosition(const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
-	m_ratio = { 
+	m_ratio = (size == XMUINT2{}) ? Vector2{ 0.f, 0.f } : Vector2{
 		static_cast<float>(relativePos.x) / static_cast<float>(size.x),
 		static_cast<float>(relativePos.y) / static_cast<float>(size.y) };
 	m_relativePosition = relativePos;

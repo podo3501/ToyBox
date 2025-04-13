@@ -78,9 +78,9 @@ unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 	UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
 	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);
 
-	UILayout switcherLayout({ { layout.GetSize().x, 30 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 30
-	auto switcher = CreateTextureSwitcher(switcherLayout, TextureSlice::One,
-		GetStateKeyMap("ListBackground1"), BehaviorMode::Normal);
+	UILayout switcherLayout({ { layout.GetSize().x, 32 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 32
+	auto switcher = CreateTextureSwitcher(switcherLayout, TextureSlice::Nine,
+		GetStateKeyMap("ListBackground9"), BehaviorMode::Normal);
 
 	return CreateListArea(layout, move(listBackImage), move(switcher), move(scrollBar));
 }

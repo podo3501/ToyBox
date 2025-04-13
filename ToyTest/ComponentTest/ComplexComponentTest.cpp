@@ -14,10 +14,11 @@ namespace UserInterfaceTest
 {
 	TEST_F(ComplexComponentTest, ListArea)
 	{
-		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({ { 150, 120 }, Origin::Center }));
+		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({ { 150, 128 }, Origin::Center }));
 		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, listAreaPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
+
 		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
 		EXPECT_TRUE(UIEx(m_panel).IsPositionUpdated());
 
@@ -31,12 +32,12 @@ namespace UserInterfaceTest
 		EXPECT_NE(preSizeX, curSizeX);
 
 		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
-		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 60 }));
-		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 60));
+		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
+		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 
 		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
-		EXPECT_EQ(scrollContainerPtr->GetSize().y, 27); //(60 - 6) * (60 / 120) ÃÑ slider ±æÀÌ(-padding)¿¡ º¸¿©ÁÙ ÄÁÅÙÃ÷ ºñ·ÊÇØ¼­ Å©±âÁ¶Á¤°ª 
+		EXPECT_EQ(scrollContainerPtr->GetSize().y, 29); //(64 - 6) * (60 / 120) ÃÑ slider ±æÀÌ(-padding)¿¡ º¸¿©ÁÙ ÄÁÅÙÃ÷ ºñ·ÊÇØ¼­ Å©±âÁ¶Á¤°ª 
 
 		listAreaPtr->ClearContainers();
 		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));

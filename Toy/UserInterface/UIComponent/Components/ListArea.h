@@ -37,8 +37,8 @@ protected:
 
 private:
 	void ReloadDatas() noexcept;
-	void ResizeContainerForScrollbar() noexcept;
-	void UpdateScrollBar() noexcept;
+	bool ResizeContainerForScrollbar() noexcept;
+	bool UpdateScrollBar() noexcept;
 	XMUINT2 GetUsableContentSize() const noexcept;
 	void UpdateContainersScroll(const DX::StepTimer& timer) noexcept;
 	void ScrollContainers(const DX::StepTimer& timer) noexcept;

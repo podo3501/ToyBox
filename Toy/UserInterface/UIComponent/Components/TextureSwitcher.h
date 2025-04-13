@@ -52,5 +52,9 @@ private:
 	function<void(KeyState)> m_onPressCB;
 };
 
+//create
 unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, TextureSlice texSlice,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
+
+//utility
+TextureSlice GetTextureSlice(TextureSwitcher* switcher) noexcept;

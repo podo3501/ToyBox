@@ -144,9 +144,10 @@ bool TextureSwitcher::ImplementUpdate(const DX::StepTimer&) noexcept
 
 bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size) noexcept
 {
-	ReturnIfFalse(ranges::all_of(GetChildComponents(), [&size](const auto& component) {
+	bool allChange = ranges::all_of(GetChildComponents(), [&size](const auto& component) {
 		return component->ChangeSize(size);
-		}));
+		});
+	ReturnIfFalse(allChange);
 	return UIComponent::ImplementChangeSize(size);
 }
 
@@ -183,9 +184,19 @@ void TextureSwitcher::SerializeIO(JsonOperation& operation)
 	ReloadDatas();
 }
 
+//////////////////////////////////////////////////////
+
+//create
 unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, TextureSlice texSlice,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
 {
 	unique_ptr<TextureSwitcher> switcher = make_unique<TextureSwitcher>();
 	return CreateIfSetup(move(switcher), layout, texSlice, stateKeys, behaviorMode);
 }
+
+//utility
+TextureSlice GetTextureSlice(TextureSwitcher* switcher) noexcept
+{
+	return switcher->GetPatchTexture()->GetTextureSlice();
+}
+
