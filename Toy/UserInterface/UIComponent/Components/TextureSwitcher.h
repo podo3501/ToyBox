@@ -58,3 +58,4 @@ unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, Textur
 
 //utility
 TextureSlice GetTextureSlice(TextureSwitcher* switcher) noexcept;
+const string& GetBindKey(TextureSwitcher* switcher) noexcept;

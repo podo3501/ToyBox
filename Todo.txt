@@ -123,12 +123,14 @@
 --EditPatchTexture 작성중. editPathTexture작성할때 상속을 해서 윗단에 만들어 놓는게 한번만 만들고 좋기 때문에.
 --TextureSwitcher 툴 작업
 --컨테이너는 Patch9로
+--EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr)); 9Tex에서 왜 이거 2번 쓰는지. 1번만 써도 되게끔 수정할 수 있는지
 
 @툴에서 콤보박스 할 수 있게끔
 @툴에서 리스트 할 수 있게끔
     스크롤바 바탕없애기
     컨테이너 간격 셋팅
-    @EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr)); 9Tex에서 왜 이거 2번 쓰는지. 1번만 써도 되게끔 수정할 수 있는지
+    switcher만들때 slice type없어도 될꺼 같은데
+    patchTextureLite를 만들어서 bindKey가 없는 버전 만들기. 다른 로직 때문에 생각하는게 복잡해져서 따로 구현해야겠다.
 
 @UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
 @콤보박스 컴포넌트 만들기

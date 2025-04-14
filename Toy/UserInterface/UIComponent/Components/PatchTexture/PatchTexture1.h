@@ -51,4 +51,4 @@ private:
 };
 
 unique_ptr<PatchTexture1> CreatePatchTexture1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);
-unique_ptr<PatchTexture1> CreateUnboundPatchTexture1(const UILayout& layout);
+unique_ptr<PatchTexture1> CreatePatchTexture1Lite(const UILayout& layout);

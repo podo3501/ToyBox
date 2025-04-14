@@ -47,6 +47,9 @@
     <Filter Include="UserInterface\UIComponent\Components\PatchTexture">
       <UniqueIdentifier>{a66eb273-6dfc-452e-9c11-241024693edb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserInterface\UIComponent\Components\PatchTextureLite">
+      <UniqueIdentifier>{1b102aaa-2f48-4bc1-ad3e-4b1d541cfe7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -187,6 +190,12 @@
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture9.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite1.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -311,6 +320,12 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture9.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite1.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

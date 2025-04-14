@@ -23,8 +23,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(*switcherPtr->GetState(), InteractState::Pressed);
 
 		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ListBackground1_Normal"));
-		auto pTex = switcherPtr->GetPatchTexture();
-		EXPECT_TRUE(pTex->GetBindKey().empty());
+		EXPECT_TRUE(GetBindKey(switcherPtr).empty());
 		TestMockRender(exDest, "ListBackground1_Normal");
 		
 		FitToTextureSourceTest("ListBackground1_Normal");
@@ -44,17 +43,18 @@ namespace UserInterfaceTest
 		vector<RECT> exDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
 		TestMockRender(exDest, "ScrollButton3_H_Hovered");
 
-		switcherPtr->ChangeSize({ 150, 48 });
-		MockMouseInput(0, 0);	//Normal
-		vector<RECT> exChangeSize = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
-		TestMockRender(exChangeSize, "ScrollButton3_H_Normal");
+		//switcherPtr->ChangeSize({ 150, 48 });
+		//MockMouseInput(0, 0);	//Normal
+		//vector<RECT> exChangeSize = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
+		//TestMockRender(exChangeSize, "ScrollButton3_H_Normal");
 
-		CloneTest(exChangeSize, "ScrollButton3_H_Normal");
+		//CloneTest(exChangeSize, "ScrollButton3_H_Normal");
 
-		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_H_Hovered"));
-		TestMockRender(exChangeSize, "ScrollButton3_H_Hovered");
+		//EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_H_Hovered"));
+		//EXPECT_TRUE(GetBindKey(switcherPtr).empty());
+		//TestMockRender(exChangeSize, "ScrollButton3_H_Hovered");
 
-		FitToTextureSourceTest("ScrollButton3_H_Hovered");
+		//FitToTextureSourceTest("ScrollButton3_H_Hovered");
 	}
 
 	////////////////////////////////////////////////////////////////

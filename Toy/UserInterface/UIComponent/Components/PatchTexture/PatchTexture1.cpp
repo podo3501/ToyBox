@@ -147,7 +147,7 @@ unique_ptr<PatchTexture1> CreatePatchTexture1(const UILayout& layout, const stri
 	return CreateIfSetup(move(patchTex1), layout, bindKey, sourceIndex);
 }
 
-unique_ptr<PatchTexture1> CreateUnboundPatchTexture1(const UILayout& layout)
+unique_ptr<PatchTexture1> CreatePatchTexture1Lite(const UILayout& layout)
 {
 	auto patchTex1 = make_unique<PatchTexture1>();
 	if (!patchTex1->SetupWithoutBindKey(layout)) return nullptr;

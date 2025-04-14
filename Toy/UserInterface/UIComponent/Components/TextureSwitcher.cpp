@@ -195,8 +195,7 @@ unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, Textur
 }
 
 //utility
-TextureSlice GetTextureSlice(TextureSwitcher* switcher) noexcept
-{
-	return switcher->GetPatchTexture()->GetTextureSlice();
-}
+static inline PatchTexture* GetPTex(TextureSwitcher* s) noexcept { return s->GetPatchTexture(); }
+TextureSlice GetTextureSlice(TextureSwitcher* s) noexcept { return GetPTex(s)->GetTextureSlice(); }
+const string& GetBindKey(TextureSwitcher* s) noexcept { return GetPTex(s)->GetBindKey(); }
 

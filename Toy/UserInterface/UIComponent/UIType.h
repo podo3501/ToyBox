@@ -5,6 +5,7 @@ enum class ComponentID : int
 {
 	Panel,
 	PatchTexture1,
+	//PatchTexture1Lite,
 	PatchTexture3,
 	PatchTexture9,
 	Button,
@@ -27,6 +28,7 @@ constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<Com
 	return { {
 		{ "Panel" },
 		{ "PatchTexture1" },
+		//{ "PatchTexture1Lite" },
 		{ "PatchTexture3" },
 		{ "PatchTexture9" },
 		{ "Button" },

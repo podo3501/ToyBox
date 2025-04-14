@@ -123,7 +123,7 @@ bool PatchTexture9::ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) 
 
 bool PatchTexture9::ImplementChangeSize(const XMUINT2& size) noexcept
 {
-	const vector<UIComponent*> components = GetChildComponents();//?!? 여기서 사이즈 조절이 안된다.
+	const vector<UIComponent*> components = GetChildComponents();
 	vector<Rectangle> list = GetSourceList(components);
 	ReturnIfFalse(IsBiggerThanSource(DirectionType::Vertical, size, list));
 

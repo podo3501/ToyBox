@@ -26,8 +26,9 @@ unique_ptr<PatchTexture> CreatePatchTexture(const UILayout& layout, TextureSlice
 {
 	UILayout ltLayout({ layout.GetSize(), Origin::LeftTop });
 	switch (texSlice) {
-	case TextureSlice::One: return CreateUnboundPatchTexture1(ltLayout);
+	case TextureSlice::One: return CreatePatchTexture1Lite(ltLayout);
 	case TextureSlice::ThreeH: return CreatePatchTexture3(ltLayout, DirectionType::Horizontal, bindKey);
+	//case TextureSlice::ThreeH: return CreateUnboundPatchTexture3(ltLayout, DirectionType::Horizontal);
 	case TextureSlice::ThreeV: return CreatePatchTexture3(ltLayout, DirectionType::Vertical, bindKey);
 	case TextureSlice::Nine: return CreatePatchTexture9(ltLayout, bindKey);
 	}

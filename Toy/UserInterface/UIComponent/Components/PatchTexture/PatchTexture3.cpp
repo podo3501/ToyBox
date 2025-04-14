@@ -59,6 +59,23 @@ bool PatchTexture3::Setup(const UILayout& layout, DirectionType dirType, const s
     return true;
 }
 
+bool PatchTexture3::SetupWithoutBindKey(const UILayout& layout, DirectionType dirType) noexcept
+{
+    SetLayout({ layout.GetSize(), Origin::LeftTop });
+    SetDirectionType(dirType);
+
+    vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
+    for (size_t idx : views::iota(0, 3))
+    {
+        auto tex1 = CreatePatchTexture1Lite({ {}, Origin::LeftTop });
+        if (auto flag = stateFlags[idx]; flag) tex1->SetStateFlag(*flag, true);
+        UIEx(this).AttachComponent(move(tex1), {});
+    }
+    SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+
+    return true;
+}
+
 bool PatchTexture3::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
     if (GetSize() == XMUINT2{}) //PatchTexture9을 만들면 초기 크기값이 0로 설정 돼 있다.
@@ -140,6 +157,7 @@ bool PatchTexture3::ImplementChangeSize(const XMUINT2& size) noexcept
     vector<Rectangle> list = GetSourceList(components);
     ReturnIfFalse(IsBiggerThanSource(m_dirType, size, list));
 
+    //여기서  자식들의 기본 사이즈가 없어서 stretch가 되지 않았다.
     vector<XMUINT2> sizes = StretchSize(m_dirType, size, GetChildComponents());
     ReturnIfFalse(ApplyStretchSize(sizes));
     ReturnIfFalse(ApplyPositions(size, sizes));
@@ -183,9 +201,18 @@ void PatchTexture3::SerializeIO(JsonOperation& operation)
     operation.Process("DirectionType", m_dirType);
 }
 
-//?!? component를 넣는 식으로 바꾸자. 함수 인자를 계속해서 전달할 필요는 없으니까.
 unique_ptr<PatchTexture3> CreatePatchTexture3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex)
 {
     auto patchTex3 = make_unique<PatchTexture3>();
     return CreateIfSetup(move(patchTex3), layout, dirType, bindKey, sourceIndex);
 }
+
+unique_ptr<PatchTexture3> CreateUnboundPatchTexture3(const UILayout& layout, DirectionType dirType)
+{
+    auto patchTex3 = make_unique<PatchTexture3>();
+    if (!patchTex3->SetupWithoutBindKey(layout, dirType)) return nullptr;
+
+    return move(patchTex3);
+}
+
+
