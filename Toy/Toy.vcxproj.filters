@@ -196,6 +196,9 @@
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite.h">
       <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite3.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -325,6 +328,9 @@
       <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite3.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
     </ClCompile>
   </ItemGroup>

@@ -28,19 +28,19 @@
                     "Name": "TextureSwitcher_0",
                     "Layout": {
                         "Size": {
-                            "x": 16,
-                            "y": 100
+                            "x": 32,
+                            "y": 32
                         },
                         "Origin": "Center"
                     },
                     "Transform": {
                         "Ratio": {
-                            "x": 0.125,
-                            "y": 0.166667
+                            "x": 0.2,
+                            "y": 0.2
                         },
                         "RelativePosition": {
-                            "x": 100,
-                            "y": 100
+                            "x": 160,
+                            "y": 120
                         }
                     },
                     "Region": "",
@@ -48,12 +48,12 @@
                     "Children": [
                         {
                             "Child": {
-                                "Type": "PatchTexture3",
-                                "Name": "PatchTexture3_0",
+                                "Type": "PatchTextureLite1",
+                                "Name": "PatchTextureLite1_0",
                                 "Layout": {
                                     "Size": {
-                                        "x": 16,
-                                        "y": 100
+                                        "x": 0,
+                                        "y": 0
                                     },
                                     "Origin": "LeftTop"
                                 },
@@ -68,106 +68,17 @@
                                     }
                                 },
                                 "Region": "",
-                                "StateFlag": 7,
-                                "Children": [
-                                    {
-                                        "Child": {
-                                            "Type": "PatchTexture1",
-                                            "Name": "PatchTexture1_0",
-                                            "Layout": {
-                                                "Size": {
-                                                    "x": 0,
-                                                    "y": 0
-                                                },
-                                                "Origin": "LeftTop"
-                                            },
-                                            "Transform": {
-                                                "Ratio": {
-                                                    "x": 0.0,
-                                                    "y": 0.0
-                                                },
-                                                "RelativePosition": {
-                                                    "x": 0,
-                                                    "y": 0
-                                                }
-                                            },
-                                            "Region": "",
-                                            "StateFlag": 359,
-                                            "Children": [],
-                                            "BindKey": "ScrollButton3_V_Normal",
-                                            "WithoutBindKey": false,
-                                            "SourceIndex": 0
-                                        }
-                                    },
-                                    {
-                                        "Child": {
-                                            "Type": "PatchTexture1",
-                                            "Name": "PatchTexture1_1",
-                                            "Layout": {
-                                                "Size": {
-                                                    "x": 0,
-                                                    "y": 0
-                                                },
-                                                "Origin": "LeftTop"
-                                            },
-                                            "Transform": {
-                                                "Ratio": {
-                                                    "x": 0.0,
-                                                    "y": 0.0
-                                                },
-                                                "RelativePosition": {
-                                                    "x": 0,
-                                                    "y": 0
-                                                }
-                                            },
-                                            "Region": "",
-                                            "StateFlag": 103,
-                                            "Children": [],
-                                            "BindKey": "ScrollButton3_V_Normal",
-                                            "WithoutBindKey": false,
-                                            "SourceIndex": 1
-                                        }
-                                    },
-                                    {
-                                        "Child": {
-                                            "Type": "PatchTexture1",
-                                            "Name": "PatchTexture1_2",
-                                            "Layout": {
-                                                "Size": {
-                                                    "x": 0,
-                                                    "y": 0
-                                                },
-                                                "Origin": "LeftTop"
-                                            },
-                                            "Transform": {
-                                                "Ratio": {
-                                                    "x": 0.0,
-                                                    "y": 0.0
-                                                },
-                                                "RelativePosition": {
-                                                    "x": 0,
-                                                    "y": 0
-                                                }
-                                            },
-                                            "Region": "",
-                                            "StateFlag": 359,
-                                            "Children": [],
-                                            "BindKey": "ScrollButton3_V_Normal",
-                                            "WithoutBindKey": false,
-                                            "SourceIndex": 2
-                                        }
-                                    }
-                                ],
-                                "DirectionType": 1
+                                "StateFlag": 103,
+                                "Children": []
                             }
                         }
                     ],
                     "StateKey": {
-                        "Normal": "ScrollButton3_V_Normal",
-                        "Hovered": "ScrollButton3_V_Hovered",
-                        "Pressed": "ScrollButton3_V_Pressed"
+                        "Normal": "ExitButton1_Normal",
+                        "Hovered": "ExitButton1_Hovered",
+                        "Pressed": "ExitButton1_Pressed"
                     },
-                    "BehaviorMode": 1
+                    "BehaviorMode": 0
                 }
             }
         ]

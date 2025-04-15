@@ -63,7 +63,7 @@ bool PatchTexture1::Setup(const UILayout& layout, const string& bindKey, size_t 
 	return true;
 }
 
-bool PatchTexture1::SetupWithoutBindKey(const UILayout& layout)  noexcept
+bool PatchTexture1::SetupWithoutBindKey(const UILayout& layout) noexcept
 {
 	SetLayout(layout);
 	m_withoutBindKey = true;

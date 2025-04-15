@@ -145,6 +145,16 @@ bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept
 	return tagStack.empty(); // 태그가 남아 있으면 false
 }
 
+vector<optional<StateFlag::Type>> GetStateFlagsForDirection(DirectionType dirType) noexcept
+{
+	switch (dirType)
+	{
+	case DirectionType::Horizontal: return { StateFlag::X_SizeLocked, nullopt, StateFlag::X_SizeLocked };
+	case DirectionType::Vertical: return { StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
+	}
+	return {};
+}
+
 vector<XMUINT2> StretchSize(DirectionType dirType, const XMUINT2& size, const vector<UIComponent*>& components) noexcept
 {
 	vector<XMUINT2> sizes;

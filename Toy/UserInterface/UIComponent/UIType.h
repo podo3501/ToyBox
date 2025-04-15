@@ -5,9 +5,10 @@ enum class ComponentID : int
 {
 	Panel,
 	PatchTexture1,
-	//PatchTexture1Lite,
 	PatchTexture3,
 	PatchTexture9,
+	PatchTextureLite1,
+	PatchTextureLite3,
 	Button,
 	TextArea,
 	Dialog,
@@ -21,16 +22,17 @@ enum class ComponentID : int
 };
 
 template<>
-constexpr size_t EnumSize<ComponentID>() { return 14; }
+constexpr size_t EnumSize<ComponentID>() { return 16; }
 
 template<>
 constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<ComponentID>()> {
 	return { {
 		{ "Panel" },
 		{ "PatchTexture1" },
-		//{ "PatchTexture1Lite" },
 		{ "PatchTexture3" },
 		{ "PatchTexture9" },
+		{ "PatchTextureLite1" },
+		{ "PatchTextureLite3" },
 		{ "Button" },
 		{ "TextArea" },
 		{ "Dialog" },

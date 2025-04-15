@@ -3,6 +3,7 @@
 struct SourceDivider;
 class UIComponent;
 enum class DirectionType;
+namespace StateFlag { enum Type : int; }
 
 struct TextData
 {
@@ -30,6 +31,7 @@ private:
 //L"<Hangle><Red>Å×½ºÆ®, </Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>()</English>"
 bool Parser(const wstring& context, TextProperty& outTextProperty) noexcept;
 
+vector<optional<StateFlag::Type>> GetStateFlagsForDirection(DirectionType dirType) noexcept;
 vector<XMUINT2> StretchSize(DirectionType dirType, const XMUINT2& size, const vector<UIComponent*>& components) noexcept;
 vector<XMINT2> ExtractStartPosFromSizes(DirectionType dirType, const vector<XMUINT2>& sizes) noexcept;
 bool IsBiggerThanSource(DirectionType dirType, const XMUINT2& size, const vector<Rectangle>& list);

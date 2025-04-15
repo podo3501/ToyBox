@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TextureSwitcher.h"
-#include "PatchTexture/PatchTexture.h"
+//#include "PatchTexture/PatchTexture.h"
+#include "PatchTextureLite/PatchTextureLite.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "../Include/IRenderer.h"
 #include "InputManager.h"
@@ -11,7 +12,8 @@ using enum InteractState;
 
 TextureSwitcher::~TextureSwitcher() = default;
 TextureSwitcher::TextureSwitcher() :
-	m_patchTex{ nullptr }
+	//m_patchTex{ nullptr }
+	m_patchTexL{ nullptr }
 {}
 
 TextureSwitcher::TextureSwitcher(const TextureSwitcher& o) :
@@ -20,7 +22,8 @@ TextureSwitcher::TextureSwitcher(const TextureSwitcher& o) :
 	m_behaviorMode{ o.m_behaviorMode },
 	m_sources{ o.m_sources },
 	m_indexes{ o.m_indexes },
-	m_patchTex{ nullptr },
+	//m_patchTex{ nullptr },
+	m_patchTexL{ nullptr },
 	m_state{ o.m_state }
 {
 	ReloadDatas();
@@ -29,7 +32,8 @@ TextureSwitcher::TextureSwitcher(const TextureSwitcher& o) :
 void TextureSwitcher::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_patchTex = static_cast<PatchTexture*>(componentList[0]);
+	//m_patchTex = static_cast<PatchTexture*>(componentList[0]);
+	m_patchTexL = static_cast<PatchTextureLite*>(componentList[0]);
 }
 
 unique_ptr<UIComponent> TextureSwitcher::CreateClone() const
@@ -49,9 +53,9 @@ bool TextureSwitcher::Setup(const UILayout& layout, TextureSlice texSlice,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
 {
 	SetLayout(layout);
-	unique_ptr<PatchTexture> pTex = nullptr;
-	tie(pTex, m_patchTex) = GetPtrs(CreatePatchTexture(layout, texSlice, stateKeys.at(InteractState::Normal)));
-	UIEx(this).AttachComponent(move(pTex), {});
+	unique_ptr<PatchTextureLite> pTexL = nullptr;
+	tie(pTexL, m_patchTexL) = GetPtrs(CreatePatchTextureLite(texSlice));
+	UIEx(this).AttachComponent(move(pTexL), {});
 	m_stateKeys = stateKeys;
 	m_behaviorMode = behaviorMode;
 
@@ -80,13 +84,29 @@ bool TextureSwitcher::SetSourceInfo(TextureResourceBinder* resBinder, InteractSt
 	return true;
 }
 
+bool TextureSwitcher::SetupDefaults() noexcept
+{
+	InteractState defaultState = Normal;
+
+	auto it = m_sources.find(defaultState);
+	if (it == m_sources.end()) return false;
+
+	const auto& srcInfo = it->second;
+	const auto optIndex = srcInfo.GetIndex();
+	ReturnIfFalse(optIndex);
+
+	ReturnIfFalse(m_patchTexL->SetupLayout(*optIndex, srcInfo.sources, GetSize()));
+	m_state = defaultState;
+
+	return true;
+}
+
 bool TextureSwitcher::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
 {
 	for (const auto& pair : m_stateKeys)
-		SetSourceInfo(resBinder, pair.first, pair.second);
-	ChangeState(Normal);
+		ReturnIfFalse(SetSourceInfo(resBinder, pair.first, pair.second));	
 
-	return true;
+	return SetupDefaults();
 }
 
 bool TextureSwitcher::ChangeBindKey(TextureResourceBinder* resBinder, const string& bindKey) noexcept
@@ -162,15 +182,15 @@ optionalRef<string> TextureSwitcher::GetBindKey() const noexcept
 
 bool TextureSwitcher::FitToTextureSource() noexcept
 {
-	ReturnIfFalse(m_patchTex->FitToTextureSource());
-	SetSize(m_patchTex->GetSize());
+	ReturnIfFalse(m_patchTexL->FitToTextureSource());
+	SetSize(m_patchTexL->GetSize());
 
 	return true; 
 }
 
 void TextureSwitcher::SetState(InteractState state) noexcept
 {	
-	m_patchTex->SetIndexedSource(m_indexes[state], m_sources[state].sources);
+	m_patchTexL->SetIndexedSource(m_indexes[state], m_sources[state].sources);
 	m_state = state;
 }
 
@@ -195,7 +215,5 @@ unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, Textur
 }
 
 //utility
-static inline PatchTexture* GetPTex(TextureSwitcher* s) noexcept { return s->GetPatchTexture(); }
-TextureSlice GetTextureSlice(TextureSwitcher* s) noexcept { return GetPTex(s)->GetTextureSlice(); }
-const string& GetBindKey(TextureSwitcher* s) noexcept { return GetPTex(s)->GetBindKey(); }
-
+static inline PatchTextureLite* GetPTexL(TextureSwitcher* s) noexcept { return s->GetPatchTextureLite(); }
+optional<TextureSlice> GetTextureSlice(TextureSwitcher* s) noexcept { return GetPTexL(s)->GetTextureSlice(); }

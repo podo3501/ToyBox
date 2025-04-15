@@ -18,9 +18,12 @@ EditTextureSwitcher::EditTextureSwitcher(TextureSwitcher* texSwitcher, IRenderer
 
 	if (auto bindKey = texSwitcher->GetBindKey(); bindKey)
 	{
-		const auto& keys = resBinder->GetTextureKeys(GetTextureSlice(texSwitcher));
-		m_keyCombo = make_unique<EditCombo>("Bind Keys", keys);
-		m_keyCombo->SelectItem(*bindKey);
+		if (auto curSlice = GetTextureSlice(texSwitcher); curSlice)
+		{
+			const auto& keys = resBinder->GetTextureKeys(*curSlice);
+			m_keyCombo = make_unique<EditCombo>("Bind Keys", keys);
+			m_keyCombo->SelectItem(*bindKey);
+		}
 	}
 }
 

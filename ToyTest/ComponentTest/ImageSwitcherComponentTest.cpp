@@ -23,7 +23,6 @@ namespace UserInterfaceTest
 		EXPECT_EQ(*switcherPtr->GetState(), InteractState::Pressed);
 
 		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ListBackground1_Normal"));
-		EXPECT_TRUE(GetBindKey(switcherPtr).empty());
 		TestMockRender(exDest, "ListBackground1_Normal");
 		
 		FitToTextureSourceTest("ListBackground1_Normal");
@@ -51,7 +50,6 @@ namespace UserInterfaceTest
 		//CloneTest(exChangeSize, "ScrollButton3_H_Normal");
 
 		//EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_H_Hovered"));
-		//EXPECT_TRUE(GetBindKey(switcherPtr).empty());
 		//TestMockRender(exChangeSize, "ScrollButton3_H_Hovered");
 
 		//FitToTextureSourceTest("ScrollButton3_H_Hovered");

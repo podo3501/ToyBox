@@ -25,16 +25,6 @@ bool PatchTexture3::operator==(const UIComponent& rhs) const noexcept
     return(tie(m_dirType) == tie(o->m_dirType));
 }
 
-static vector<optional<StateFlag::Type>> GetStateFlagsForDirection(DirectionType dirType) noexcept
-{
-    switch (dirType)
-    {
-    case DirectionType::Horizontal: return { StateFlag::X_SizeLocked, nullopt, StateFlag::X_SizeLocked };
-    case DirectionType::Vertical: return { StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
-    }
-    return {};
-}
-
 void PatchTexture3::SetDirectionType(DirectionType dirType) noexcept
 {
     m_dirType = dirType;
