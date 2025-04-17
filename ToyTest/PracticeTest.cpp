@@ -217,6 +217,35 @@ namespace Practice
 		return rectangles;
 	}
 
+	class Derived;
+	// CRTP를 사용하여 정적 다형성 구현
+	template <typename Derived>
+	class Base {
+	public:
+		void call() {
+			// Derived 타입의 메서드를 호출하는 방식
+			static_cast<Derived*>(this)->hello();
+		}
+	};
+
+	// Base를 상속받은 클래스
+	class Derived : public Base<Derived> 
+	{
+	protected:
+		void hello() const {
+			std::cout << "Hello from Derived class!" << std::endl;
+		}
+
+	private:
+		friend class Base<Derived>; // 이제 Base<Derived>는 hello()에 접근 가능
+	};
+
+	TEST(CPP, CRTP)
+	{
+		Derived d;
+		d.call();
+	}
+
 	TEST(Algorithm, FindRectangles)
 	{
 		int image[IMAGE_HEIGHT][IMAGE_WIDTH] = 

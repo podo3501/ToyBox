@@ -72,7 +72,7 @@ bool PatchTexture3::ImplementBindSourceInfo(TextureResourceBinder*, ITextureCont
         SetSize(UIEx(this).GetChildrenBoundsSize());
     else
         ChangeSize(GetSize(), true);
-    UpdatePositionsManually();
+    UpdatePositionsManually(); //?!? 이게 필요할까 모르겠네
 
     return true;
 }

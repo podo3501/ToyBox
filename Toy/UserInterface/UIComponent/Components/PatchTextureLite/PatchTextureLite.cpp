@@ -19,9 +19,7 @@ unique_ptr<PatchTextureLite> CreatePatchTextureLite(TextureSlice texSlice)
 	switch (texSlice) {
 	case TextureSlice::One: return make_unique<PatchTextureLite1>();
 	case TextureSlice::ThreeH: return make_unique<PatchTextureLite3>(DirectionType::Horizontal);
-	//case TextureSlice::ThreeH: return CreatePatchTexture3(ltLayout, DirectionType::Horizontal, bindKey);
-	//	//case TextureSlice::ThreeH: return CreateUnboundPatchTexture3(ltLayout, DirectionType::Horizontal);
-	//case TextureSlice::ThreeV: return CreatePatchTexture3(ltLayout, DirectionType::Vertical, bindKey);
+	case TextureSlice::ThreeV: return make_unique<PatchTextureLite3>(DirectionType::Vertical);
 	//case TextureSlice::Nine: return CreatePatchTexture9(ltLayout, bindKey);
 	}
 	return nullptr;

@@ -1,5 +1,6 @@
 #pragma once
 #include "PatchTextureLite.h"
+#include "../PatchTexture/PatchTextureCoord.h"
 
 class PatchTextureLite1 : public PatchTextureLite
 {
@@ -11,17 +12,16 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	//PatchTextureLite
 	virtual bool SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size) override;
-	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
-	virtual bool FitToTextureSource() noexcept override;
+	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override { m_coord.SetIndexedSource(index, source); }
+	virtual bool FitToTextureSource() noexcept override { return m_coord.FitToTextureSource(); }
 
-	bool Setup() noexcept;
+	inline const Rectangle& GetSource() const noexcept { return m_coord.GetSource(); }
 
 protected:
 	PatchTextureLite1(const PatchTextureLite1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual void ImplementRender(ITextureRender* render) const override;
+	virtual void ImplementRender(ITextureRender* render) const override { m_coord.Render(render); }
 
 private:
-	optional<size_t> m_index; //텍스쳐 인덱스. 0값도 인덱스로 사용하기 때문에 optional
-	Rectangle m_source{};
+	PatchTextureCoord m_coord{ this };
 };

@@ -207,8 +207,6 @@ namespace UserInterfaceTest
 	{
 		auto [tex, texPtr] = GetPtrs(CreatePatchTexture9({ {170, 120}, Origin::LeftTop }, "BackImage9"));
 		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
-		//EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-
 		m_panel = WriteReadTest(m_panel, texPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 

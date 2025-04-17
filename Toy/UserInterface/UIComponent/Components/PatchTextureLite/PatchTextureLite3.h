@@ -11,6 +11,8 @@ public:
 
 	static ComponentID GetTypeStatic() { return ComponentID::PatchTextureLite3; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
+	virtual bool operator==(const UIComponent& rhs) const noexcept override;
+	virtual void SerializeIO(JsonOperation& operation) override;
 	//PatchTextureLite
 	virtual bool SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size) override;
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
@@ -19,9 +21,11 @@ public:
 protected:
 	PatchTextureLite3(const PatchTextureLite3& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
+	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
 	bool ForEachTex(predicate<PatchTextureLite1*, size_t> auto&& each);
+	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
 	bool ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept;
 
 	DirectionType m_dirType{ DirectionType::Horizontal };

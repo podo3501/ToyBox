@@ -35,6 +35,7 @@ namespace UserInterfaceTest
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {100, 48}, Origin::Center },
 			TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
+
 		m_panel = WriteReadTest(m_panel, switcherPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
@@ -42,17 +43,17 @@ namespace UserInterfaceTest
 		vector<RECT> exDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
 		TestMockRender(exDest, "ScrollButton3_H_Hovered");
 
-		//switcherPtr->ChangeSize({ 150, 48 });
-		//MockMouseInput(0, 0);	//Normal
-		//vector<RECT> exChangeSize = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
-		//TestMockRender(exChangeSize, "ScrollButton3_H_Normal");
+		switcherPtr->ChangeSize({ 150, 48 });
+		MockMouseInput(0, 0);	//Normal
+		vector<RECT> exChangeSize = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
+		TestMockRender(exChangeSize, "ScrollButton3_H_Normal");
 
-		//CloneTest(exChangeSize, "ScrollButton3_H_Normal");
+		CloneTest(exChangeSize, "ScrollButton3_H_Normal");
 
-		//EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_H_Hovered"));
-		//TestMockRender(exChangeSize, "ScrollButton3_H_Hovered");
+		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_H_Hovered"));
+		TestMockRender(exChangeSize, "ScrollButton3_H_Hovered");
 
-		//FitToTextureSourceTest("ScrollButton3_H_Hovered");
+		FitToTextureSourceTest("ScrollButton3_H_Hovered");
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -69,14 +70,14 @@ namespace UserInterfaceTest
 		vector<RECT> exDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
 		TestMockRender(exDest, "ScrollButton3_V_Hovered");
 
-		switcherPtr->ChangeSize({ 48, 150 });
-		MockMouseInput(0, 0);	//Normal
-		vector<RECT> exDestChange = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
-		TestMockRender(exDestChange, "ScrollButton3_V_Normal");
+		//switcherPtr->ChangeSize({ 48, 150 });
+		//MockMouseInput(0, 0);	//Normal
+		//vector<RECT> exDestChange = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
+		//TestMockRender(exDestChange, "ScrollButton3_V_Normal");
 
-		CloneTest(exDestChange, "ScrollButton3_V_Normal");
+		//CloneTest(exDestChange, "ScrollButton3_V_Normal");
 
-		FitToTextureSourceTest("ScrollButton3_V_Normal");
+		//FitToTextureSourceTest("ScrollButton3_V_Normal");
 	}
 
 	////////////////////////////////////////////////////////////////

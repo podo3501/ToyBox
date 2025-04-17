@@ -1,5 +1,7 @@
 #pragma once
 #include "PatchTexture.h"
+#include "PatchTextureImpl1.h"
+#include "PatchTextureCoord.h"
 
 struct IRenderer;
 struct TextureSourceInfo;
@@ -16,10 +18,10 @@ public:
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 	//PatchTexture
-	virtual bool FitToTextureSource() noexcept override;
-	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
 	virtual void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept override;
 	virtual const string& GetBindKey() const noexcept override { return m_bindKey; }
+	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override { m_coord.SetIndexedSource(index, source); }
+	virtual bool FitToTextureSource() noexcept override { return m_coord.FitToTextureSource(); }
 
 	optional<vector<Rectangle>> GetTextureAreaList();
 	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
@@ -27,8 +29,7 @@ public:
 	void SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept;
 	void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept;
 
-	inline void SetSource(const Rectangle& source) noexcept { m_source = source; }
-	inline const Rectangle& GetSource() const noexcept { return m_source; }
+	inline const Rectangle& GetSource() const noexcept { return m_coord.GetSource(); }
 	inline wstring GetFilename() const noexcept { return m_filename; }
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 
@@ -36,7 +37,7 @@ protected:
 	PatchTexture1(const PatchTexture1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override; //Binder가 로딩을 다 하고 여기서 값만 연결한다.
-	virtual void ImplementRender(ITextureRender* render) const override;
+	virtual void ImplementRender(ITextureRender* render) const override { m_coord.Render(render); }
 
 private:
 	string m_bindKey;
@@ -44,10 +45,9 @@ private:
 	size_t m_sourceIndex{ 0 }; //1, 3, 9 Patch 일때 몇번째 인지 기록하는 인덱스. 1 Patch 일때에는 0값.
 
 	ITextureController* m_texController;
-	optional<size_t> m_index; //텍스쳐 인덱스. 0값도 인덱스로 사용하기 때문에 optional
-	wstring m_filename;//
-	Rectangle m_source{};
+	wstring m_filename;
 	UINT64 m_gfxOffset{}; //툴에서 Imgui window 만들때 사용
+	PatchTextureCoord m_coord{ this };
 };
 
 unique_ptr<PatchTexture1> CreatePatchTexture1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);

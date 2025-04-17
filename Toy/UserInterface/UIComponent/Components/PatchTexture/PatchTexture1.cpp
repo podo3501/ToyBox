@@ -17,10 +17,9 @@ PatchTexture1::PatchTexture1(const PatchTexture1& o) :
 	m_withoutBindKey{ o.m_withoutBindKey },
 	m_sourceIndex{ o.m_sourceIndex },
 	m_texController{ o.m_texController },
-	m_index{ o.m_index },
 	m_filename{ o.m_filename },
-	m_source{ o.m_source },
-	m_gfxOffset{ o.m_gfxOffset }
+	m_gfxOffset{ o.m_gfxOffset },
+	m_coord{ o.m_coord }
 {}
 
 unique_ptr<UIComponent> PatchTexture1::CreateClone() const
@@ -43,14 +42,13 @@ bool PatchTexture1::operator==(const UIComponent& rhs) const noexcept
 void PatchTexture1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
 {
 	m_filename = sourceInfo.filename;
-	m_index = sourceInfo.GetIndex();
-	m_source = sourceInfo.GetSource(m_sourceIndex);
+	SetIndexedSource(*sourceInfo.GetIndex(), { sourceInfo.GetSource(m_sourceIndex) });
 	if (auto gfxOffset = sourceInfo.GetGfxOffset(); gfxOffset)
 		m_gfxOffset = *gfxOffset;
 	m_texController = texController;
 
 	if (GetSize() == XMUINT2{}) //사이즈가 없다면 source 사이즈로 초기화 한다.
-		SetSize(GetSizeFromRectangle(m_source));
+		FitToTextureSource();
 }
 
 bool PatchTexture1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
@@ -105,32 +103,9 @@ static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 
 optional<vector<Rectangle>> PatchTexture1::GetTextureAreaList()
 {	
-	if (!m_index) return nullopt;
-	return m_texController->GetTextureAreaList(*m_index, PackRGBA(255, 255, 255, 0));
-}
-
-void PatchTexture1::ImplementRender(ITextureRender* render) const
-{
-	const auto& position = GetPosition();
-	const auto& size = GetSize();
-	Rectangle destination(position.x, position.y, size.x, size.y);
-
-	RECT source = RectangleToRect(m_source);
-	render->Render(*m_index, destination, &source);
-}
-
-void PatchTexture1::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept
-{
-	m_index = index;
-	m_source = source[0];
-}
-
-bool PatchTexture1::FitToTextureSource() noexcept
-{
-	if (m_source.IsEmpty()) return false;
-
-	SetSize(GetSizeFromRectangle(m_source));
-	return true;
+	if (auto index = m_coord.GetIndex(); index)
+		return m_texController->GetTextureAreaList(*index, PackRGBA(255, 255, 255, 0));
+	return nullopt;
 }
 
 void PatchTexture1::SerializeIO(JsonOperation& operation)
