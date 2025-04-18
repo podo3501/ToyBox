@@ -239,7 +239,8 @@
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite1.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite3.h" />
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl1.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite9.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\TextureSwitcher.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ListArea.h" />
@@ -293,7 +294,8 @@
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite1.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite3.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl1.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite9.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\TextureSwitcher.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\ListArea.cpp" />

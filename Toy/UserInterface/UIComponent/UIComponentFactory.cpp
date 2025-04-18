@@ -6,6 +6,7 @@
 #include "Components/PatchTexture/PatchTexture9.h"
 #include "Components/PatchTextureLite/PatchTextureLite1.h"
 #include "Components/PatchTextureLite/PatchTextureLite3.h"
+#include "Components/PatchTextureLite/PatchTextureLite9.h"
 #include "Components/Button.h"
 #include "Components/TextArea.h"
 #include "Components/Dialog.h"
@@ -26,6 +27,7 @@ constexpr FactoryFunc ComponentFactory[] = //enum의 값과 일치가 되어야 한다. 아�
     []() -> unique_ptr<UIComponent> { return make_unique<PatchTexture9>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureLite1>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureLite3>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureLite9>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<Button>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<TextArea>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<Dialog>(); },

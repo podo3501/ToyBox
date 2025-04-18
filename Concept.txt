@@ -220,3 +220,21 @@ PatchTexture1과 PatchTextureLite1은 비슷하게 작동하기 때문에 비슷
 는 것은 안되었기 때문에 friend 키워드를 사용할 수 밖에 없었다. 그렇다면 간단한 composition으로 해보고 안될
 때에는 template로 하는 방식을 시용하고 CRTP는  코드  디버깅 및 코드 짜는데 있어서 혼란을 주기 때문에 사용하
 지 않기로 했다.
+
+PatchTexture3 부분을 만들때 PatchTexture9, Lite 등등에 통합적으로 사용되는 클래스 impl을 할려고 했을때, protected
+함수를 사용할 수 없는 문제가 있었다. 이들은 서로 다르기 때문에 UIComponent를 사용해서 만들었는데 protected
+를 사용하려면 UIComponent에 friend를 쓰거나 CRTP를 사용해야 했는데 CRTP를 사용하면 헤더에 정의를 해야하는
+단점(헤더들의 의존관계가 폭증함)이 있기 때문에 CRTP가 꺼려진다. CRTP를 쓴다고 해도 friend를 사용해야 한다. 단,
+friend class impl<MyClass> 이렇게 되기 때문에 friend가 자기 클래스로 한정된다.
+
+crtp하는 클래스는  헤더에 인클루드를 걸지 않고 그 crtp를 부르는 cpp코드에 인클루드를 하면 되기 때문에 굳이 헤더
+파일에 인클루드를 안해도 되는 이점이 존재하지만, 단점은 이 클래스에서 필요한 파일이 뭔지는 모르게 된다. 그리고
+개발하는 사람이 사용하는 cpp쪽에서 인클루드를 해줘야 하지만, crtp클래스에서 인클루드 할 것은 뻔한 이치이기 
+때문에 주석으로 잘 써놔야 한다.
+
+이번에는 PatchTextureBase클래스를 만들어(원래도 만들어야한다) 그 베이스 클래스에 friend 를 사용해서 protected
+함수를  사용하는 방식을 사용했다. UIComponent에서 friend를 사용할 수는 없고, base클래스에서 friend로 impl을 
+한다고 한다면  impl이 구현부라는 것을 인지하기 때문에 friend가 용납 가능할 수 있다. 물론 friend 클래스를 잘못 이용할
+여지가 있기 때문에 둘중에 하나를 고르라고 한다면 이번처럼 간단한 경우에는 friend로 하고 더 복잡하고 좀 더 유연
+하게 처리 하려면 crtp(이건 변환이 특정 클래스까지 변환되기 때문에 특정 클래스의 함수까지도 사용할 수 있다)를  사용
+하는 게 맞다고  생각한다.

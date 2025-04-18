@@ -6,10 +6,10 @@ class PatchTextureCoord
 {
 public:
 	~PatchTextureCoord();
-	PatchTextureCoord() = delete;
-	explicit PatchTextureCoord(UIComponent* component) noexcept;
+	PatchTextureCoord() noexcept;
 	PatchTextureCoord(const PatchTextureCoord& o) noexcept;
 
+	void SetOwner(UIComponent* component) noexcept { m_component = component; }
 	void Render(ITextureRender* render) const;
 	void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept;
 	bool FitToTextureSource() noexcept;

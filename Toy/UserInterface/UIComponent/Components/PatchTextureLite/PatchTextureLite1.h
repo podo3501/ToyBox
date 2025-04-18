@@ -23,5 +23,5 @@ protected:
 	virtual void ImplementRender(ITextureRender* render) const override { m_coord.Render(render); }
 
 private:
-	PatchTextureCoord m_coord{ this };
+	PatchTextureCoord m_coord;
 };

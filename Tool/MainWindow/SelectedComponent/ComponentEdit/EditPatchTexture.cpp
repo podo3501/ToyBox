@@ -22,11 +22,14 @@ void EditPatchTexture::SetupComponent() noexcept
     if (curKey.empty()) return;
 
     auto resBinder = GetTextureResourceBinder();
-    const auto& keys = resBinder->GetTextureKeys(m_patchTex->GetTextureSlice());
-    if(ranges::find(keys, curKey) == keys.end()) return;
+    if (auto opSlice = m_patchTex->GetTextureSlice(); opSlice)
+    {
+        const auto& keys = resBinder->GetTextureKeys(*opSlice);
+        if (ranges::find(keys, curKey) == keys.end()) return;
 
-    m_combo = make_unique<EditCombo>("Bind Keys", keys);
-    m_combo->SelectItem(curKey);
+        m_combo = make_unique<EditCombo>("Bind Keys", keys);
+        m_combo->SelectItem(curKey);
+    }
 }
 
 void EditPatchTexture::RenderComponent()

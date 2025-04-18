@@ -5,11 +5,12 @@
 #include "Utility.h"
 
 PatchTextureCoord::~PatchTextureCoord() = default;
-PatchTextureCoord::PatchTextureCoord(UIComponent* component) noexcept :
-	m_component{ component }
+PatchTextureCoord::PatchTextureCoord() noexcept :
+	m_component{ nullptr }
 {}
 
 PatchTextureCoord::PatchTextureCoord(const PatchTextureCoord& o) noexcept :
+	m_component{ nullptr },
 	m_index{ o.m_index },
 	m_source{ o.m_source }
 {}

@@ -4,21 +4,24 @@
 #include "PatchTexture3.h"
 #include "PatchTexture9.h"
 
-PatchTexture::~PatchTexture() = default;
-PatchTexture::PatchTexture() = default;
-PatchTexture::PatchTexture(TextureSlice texSlice) noexcept :
+PatchTextureBase::~PatchTextureBase() = default;
+PatchTextureBase::PatchTextureBase() = default;
+PatchTextureBase::PatchTextureBase(TextureSlice texSlice) noexcept :
 	m_texSlice{ texSlice }
 {}
 
-PatchTexture::PatchTexture(const PatchTexture& other) noexcept :
+PatchTextureBase::PatchTextureBase(const PatchTextureBase& other) noexcept :
 	UIComponent{ other },
 	m_texSlice{ other.m_texSlice }
 {}
 
-void PatchTexture::SetTextureSlice(TextureSlice texSlice) noexcept
-{
-	m_texSlice = texSlice;
-}
+//////////////////////////////////////////////////////////
+
+PatchTexture::~PatchTexture() = default;
+PatchTexture::PatchTexture() = default;
+PatchTexture::PatchTexture(const PatchTexture& other) noexcept :
+	PatchTextureBase{ other }
+{}
 
 //////////////////////////////////////////////////////////
 
@@ -26,9 +29,8 @@ unique_ptr<PatchTexture> CreatePatchTexture(const UILayout& layout, TextureSlice
 {
 	UILayout ltLayout({ layout.GetSize(), Origin::LeftTop });
 	switch (texSlice) {
-	case TextureSlice::One: return CreatePatchTexture1Lite(ltLayout);
+	case TextureSlice::One: return CreatePatchTexture1(ltLayout, bindKey);
 	case TextureSlice::ThreeH: return CreatePatchTexture3(ltLayout, DirectionType::Horizontal, bindKey);
-	//case TextureSlice::ThreeH: return CreateUnboundPatchTexture3(ltLayout, DirectionType::Horizontal);
 	case TextureSlice::ThreeV: return CreatePatchTexture3(ltLayout, DirectionType::Vertical, bindKey);
 	case TextureSlice::Nine: return CreatePatchTexture9(ltLayout, bindKey);
 	}

@@ -1,6 +1,5 @@
 #pragma once
 #include "PatchTexture.h"
-#include "PatchTextureImpl1.h"
 #include "PatchTextureCoord.h"
 
 struct IRenderer;
@@ -25,7 +24,6 @@ public:
 
 	optional<vector<Rectangle>> GetTextureAreaList();
 	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
-	bool SetupWithoutBindKey(const UILayout& layout)  noexcept;
 	void SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept;
 	void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept;
 
@@ -41,14 +39,12 @@ protected:
 
 private:
 	string m_bindKey;
-	bool m_withoutBindKey{ false };
 	size_t m_sourceIndex{ 0 }; //1, 3, 9 Patch 일때 몇번째 인지 기록하는 인덱스. 1 Patch 일때에는 0값.
 
 	ITextureController* m_texController;
 	wstring m_filename;
 	UINT64 m_gfxOffset{}; //툴에서 Imgui window 만들때 사용
-	PatchTextureCoord m_coord{ this };
+	PatchTextureCoord m_coord;
 };
 
 unique_ptr<PatchTexture1> CreatePatchTexture1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);
-unique_ptr<PatchTexture1> CreatePatchTexture1Lite(const UILayout& layout);

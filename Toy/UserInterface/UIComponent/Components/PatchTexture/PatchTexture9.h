@@ -1,7 +1,6 @@
 #pragma once
 #include "PatchTexture.h"
 
-struct SourceDivider;
 struct TextureSourceInfo;
 class PatchTexture3;
 

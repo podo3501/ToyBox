@@ -1,18 +1,19 @@
 #include "pch.h"
 #include "PatchTextureLite1.h"
-#include "../Include/IRenderer.h"
-#include "Utility.h"
-#include "../../../TextureResourceBinder/TextureResourceBinder.h"
 
 PatchTextureLite1::~PatchTextureLite1() = default;
 PatchTextureLite1::PatchTextureLite1() :
 	PatchTextureLite{ TextureSlice::One }
-{}
+{
+	m_coord.SetOwner(this);
+}
 
 PatchTextureLite1::PatchTextureLite1(const PatchTextureLite1& o) :
 	PatchTextureLite{ o },
 	m_coord{ o.m_coord }
-{}
+{
+	m_coord.SetOwner(this); //생성될때 PatchTextureCoord m_coord{ this }; 를 실행하지 않기 때문에 명시적으로 넣어준다.
+}
 
 unique_ptr<UIComponent> PatchTextureLite1::CreateClone() const
 {

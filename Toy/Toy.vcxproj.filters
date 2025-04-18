@@ -199,11 +199,14 @@
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite3.h">
       <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl1.h">
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite9.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -339,11 +342,14 @@
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite3.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl1.cpp">
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite9.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

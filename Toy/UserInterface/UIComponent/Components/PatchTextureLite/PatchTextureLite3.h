@@ -1,12 +1,13 @@
 #pragma once
 #include "PatchTextureLite.h"
+#include "../PatchTexture/PatchTextureImpl.h"
 
 class PatchTextureLite1;
 class PatchTextureLite3 : public PatchTextureLite
 {
 public:
 	~PatchTextureLite3();
-	PatchTextureLite3();
+	PatchTextureLite3() noexcept;
 	explicit PatchTextureLite3(DirectionType dirType) noexcept;
 
 	static ComponentID GetTypeStatic() { return ComponentID::PatchTextureLite3; }
@@ -18,15 +19,13 @@ public:
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
 	virtual bool FitToTextureSource() noexcept override;
 
+	Rectangle GetFirstComponentSource() const noexcept;
+
 protected:
 	PatchTextureLite3(const PatchTextureLite3& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
-	bool ForEachTex(predicate<PatchTextureLite1*, size_t> auto&& each);
-	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
-	bool ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept;
-
-	DirectionType m_dirType{ DirectionType::Horizontal };
+	PatchTextureImpl m_impl;
 };

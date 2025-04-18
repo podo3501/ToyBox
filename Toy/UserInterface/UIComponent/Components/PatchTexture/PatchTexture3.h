@@ -1,7 +1,7 @@
 #pragma once
 #include "PatchTexture.h"
+#include "PatchTextureImpl.h"
 
-struct SourceDivider;
 struct TextureSourceInfo;
 class PatchTexture1;
 enum class DirectionType;
@@ -23,10 +23,9 @@ public:
 	virtual const string& GetBindKey() const noexcept override;
 
 	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;
-	bool SetupWithoutBindKey(const UILayout& layout, DirectionType dirType) noexcept;
 	void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
-	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
+	inline DirectionType GetDirectionType() const noexcept { return m_impl.GetDirectionType(); }
 
 protected:
 	PatchTexture3(const PatchTexture3& o);
@@ -37,11 +36,8 @@ protected:
 private:
 	bool ForEachPatchTexture1(predicate<PatchTexture1*, size_t> auto&& each);
 	void SetDirectionType(DirectionType dirType) noexcept;
-	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
-	bool ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept;
 
-	DirectionType m_dirType{ DirectionType::Horizontal };
+	PatchTextureImpl m_impl;
 };
 
 unique_ptr<PatchTexture3> CreatePatchTexture3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);
-unique_ptr<PatchTexture3> CreateUnboundPatchTexture3(const UILayout& layout, DirectionType dirType);

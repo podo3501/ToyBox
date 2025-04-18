@@ -23,7 +23,7 @@ bool PatchTexture9::Setup(const UILayout& layout, const string& bindKey)
 	SetLayout(layout);
 
 	vector<optional<StateFlag::Type>> stateFlags{ StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
-	for (size_t idx : views::iota(0, 3))
+	for (size_t idx : views::iota(0u, 3u))
 	{
 		auto tex1 = CreatePatchTexture3({ {}, Origin::LeftTop }, DirectionType::Horizontal, bindKey, idx);
 		if (auto flag = stateFlags[idx]; flag) tex1->SetStateFlag(*flag, true);
