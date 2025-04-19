@@ -6,7 +6,7 @@
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "EditUtility/EditUtility.h"
 #include "../Dialog.h"
 #include "../Toy/Utility.h"
@@ -28,7 +28,7 @@ EditSourceTexture::EditSourceTexture(IRenderer* renderer, TextureResBinderWindow
     m_listboxTexture{ make_unique<EditListBox>("Texture List", 4) }
 {}
 
-void EditSourceTexture::ApplyTexture(PatchTexture1* tex) const noexcept
+void EditSourceTexture::ApplyTexture(PatchTextureStd1* tex) const noexcept
 {
     m_textureWindow->SetTexture(tex);
     m_imageSelector->SetTexture(tex);
@@ -41,7 +41,7 @@ bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
     auto sourceInfo = m_textureLoader->GetSourceInfo(filename);
     ReturnIfFalse(sourceInfo);
 
-    unique_ptr<PatchTexture1> texture = make_unique<PatchTexture1>();
+    unique_ptr<PatchTextureStd1> texture = make_unique<PatchTextureStd1>();
     texture->SetSourceInfo(*sourceInfo, m_renderer->GetTextureController());
     AddTexture(move(texture));
 
@@ -132,7 +132,7 @@ bool EditSourceTexture::IsLoadedTexture(const wstring& filename) const noexcept
     return (it != m_textureFiles.end()) ? true : false;
 }
 
-void EditSourceTexture::AddTexture(unique_ptr<PatchTexture1> texture) noexcept
+void EditSourceTexture::AddTexture(unique_ptr<PatchTextureStd1> texture) noexcept
 {
     m_textureFiles.emplace_back(move(texture));
     m_texIndex = static_cast<int>(m_textureFiles.size() - 1);
@@ -179,7 +179,7 @@ void EditSourceTexture::SelectDefaultTextureFile() noexcept
     SelectTextureFile();
 }
 
-static vector<string> GetTextureFiles(const vector<unique_ptr<PatchTexture1>>& texFiles) noexcept
+static vector<string> GetTextureFiles(const vector<unique_ptr<PatchTextureStd1>>& texFiles) noexcept
 {
     vector<string> strList;
     for (auto& ws : texFiles)

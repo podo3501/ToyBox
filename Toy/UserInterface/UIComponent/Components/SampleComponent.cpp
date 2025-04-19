@@ -3,8 +3,8 @@
 #include "../Include/IRenderer.h"
 #include "../UIComponent.h"
 #include "../UILayout.h"
-#include "PatchTexture/PatchTexture1.h"
-#include "PatchTexture/PatchTexture3.h"
+#include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextArea.h"
 #include "ListArea.h"
 #include "ScrollBar.h"
@@ -22,7 +22,7 @@ map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept
 
 static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 	const XMUINT2& size, const string& bindKey,
-	function<unique_ptr<UIComponent>(UILayout&, const string&)> createFunc)
+	function<unique_ptr<UIComponent>(UILayout&, const string&)> CreatePatchTextureFn)
 {
 	UILayout layout{ size, Origin::LeftTop };
 	map<InteractState, unique_ptr<UIComponent>> components;
@@ -30,7 +30,7 @@ static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 	const auto& stateKeys = GetStateKeyMap(bindKey);
 	for (const auto& pair : stateKeys)
 	{
-		auto component = createFunc(layout, pair.second);
+		auto component = CreatePatchTextureFn(layout, pair.second);
 		if (!component) return {}; // 실패 시 빈 맵 반환
 
 		components.emplace(pair.first, move(component));
@@ -41,13 +41,13 @@ static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(const XMUINT2& size, const string& bindKey)
 {
 	return GetComponentKeyMap(size, bindKey,
-		[](UILayout& layout, const string& key) { return CreatePatchTexture1(layout, key); });
+		[](UILayout& layout, const string& key) { return CreatePatchTextureStd1(layout, key); });
 }
 
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dirType, const XMUINT2& size, const string& bindKey)
 {
 	return GetComponentKeyMap(size, bindKey,
-		[dirType](UILayout& layout, const string& key) { return CreatePatchTexture3(layout, dirType, key); });
+		[dirType](UILayout& layout, const string& key) { return CreatePatchTextureStd3(layout, dirType, key); });
 }
 
 unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const UILayout& layout)
@@ -55,7 +55,7 @@ unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const U
 	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
 		
 	return CreateScrollSlider(layout,
-		CreatePatchTexture3(gridLayout, dirType, "ScrollTrack3_V"),
+		CreatePatchTextureStd3(gridLayout, dirType, "ScrollTrack3_V"),
 		CreateTextureSwitcher(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 }
 
@@ -66,14 +66,14 @@ unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)
 	UILayout sliderLayout({ layout.GetSize() - padding, Origin::LeftTop });
 
 	return CreateScrollBar(layout,
-		CreatePatchTexture1(bgLayout, "ListBackground1_Normal"),
+		CreatePatchTextureStd1(bgLayout, "ListBackground1_Normal"),
 		CreateSampleScrollSlider(DirectionType::Vertical, sliderLayout));
 }
 
 unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 {
 	UILayout backImgLayout{ layout.GetSize(), Origin::LeftTop };
-	auto listBackImage = CreatePatchTexture1(backImgLayout, "ListBackImage1");
+	auto listBackImage = CreatePatchTextureStd1(backImgLayout, "ListBackImage1");
 
 	UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
 	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);

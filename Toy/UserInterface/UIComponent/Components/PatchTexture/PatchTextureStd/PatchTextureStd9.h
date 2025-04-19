@@ -1,17 +1,17 @@
 #pragma once
-#include "PatchTexture.h"
-#include "PatchTextureImpl.h"
+#include "PatchTextureStd.h"
+#include "../PatchTextureImpl.h"
 
 struct TextureSourceInfo;
-class PatchTexture3;
+class PatchTextureStd3;
 
-class PatchTexture9 : public PatchTexture
+class PatchTextureStd9 : public PatchTextureStd
 {
 public:
-	~PatchTexture9();
-	PatchTexture9() noexcept;
+	~PatchTextureStd9();
+	PatchTextureStd9() noexcept;
 
-	static ComponentID GetTypeStatic() { return ComponentID::PatchTexture9; }
+	static ComponentID GetTypeStatic() { return ComponentID::PatchTextureStd9; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	//PatchTexture
 	virtual bool FitToTextureSource() noexcept override;
@@ -22,7 +22,7 @@ public:
 	bool Setup(const UILayout& layout, const string& bindKey);
 
 protected:
-	PatchTexture9(const PatchTexture9& o) noexcept;
+	PatchTextureStd9(const PatchTextureStd9& o) noexcept;
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
@@ -31,4 +31,4 @@ private:
 	PatchTextureImpl m_impl;
 };
 
-unique_ptr<PatchTexture9> CreatePatchTexture9(const UILayout& layout, const string& bindKey);
+unique_ptr<PatchTextureStd9> CreatePatchTextureStd9(const UILayout& layout, const string& bindKey);

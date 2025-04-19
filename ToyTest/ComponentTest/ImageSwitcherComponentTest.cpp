@@ -4,18 +4,21 @@
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "../TestHelper.h"
 #include "../Toy/Utility.h"
 
 namespace UserInterfaceTest
 {
-	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTexture1)
+	static inline PatchTextureLite* GetPatchTextureLite(TextureSwitcher* switcherPtr) noexcept { return switcherPtr->GetPatchTextureLite(); }
+	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite1)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {32, 32}, Origin::Center }, 
 			TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
 		m_panel = WriteReadTest(m_panel, switcherPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::One);
 
 		MockMouseInput(144, 120, true);	//Pressed
 		vector<RECT> exDest = { { 144, 104, 176, 136 } };
@@ -30,13 +33,14 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTexture3_H)
+	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite3_H)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {100, 48}, Origin::Center },
 			TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
 		m_panel = WriteReadTest(m_panel, switcherPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::ThreeH);
 
 		MockMouseInput(110, 96);	//Hover
 		vector<RECT> exDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
@@ -57,13 +61,14 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTexture3_V)
+	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite3_V)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {48, 100}, Origin::Center },
 			TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, switcherPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::ThreeV);
 
 		MockMouseInput(77, 51);	//Hover
 		vector<RECT> exDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
@@ -80,13 +85,14 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 		
-	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTexture9)
+	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite9)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {100, 100}, Origin::Center },
 			TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, switcherPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::Nine);
 
 		MockMouseInput(51, 51);	//Hover
 		vector<RECT> exDest = {

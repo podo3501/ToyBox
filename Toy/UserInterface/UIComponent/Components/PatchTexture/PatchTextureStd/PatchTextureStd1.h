@@ -1,18 +1,18 @@
 #pragma once
-#include "PatchTexture.h"
-#include "PatchTextureCoord.h"
+#include "PatchTextureStd.h"
+#include "../PatchTextureCoord.h"
 
 struct IRenderer;
 struct TextureSourceInfo;
 namespace DX { class StepTimer; }
 
-class PatchTexture1 : public PatchTexture
+class PatchTextureStd1 : public PatchTextureStd
 {
 public:
-	~PatchTexture1();
-	PatchTexture1();
+	~PatchTextureStd1();
+	PatchTextureStd1();
 
-	static ComponentID GetTypeStatic() { return ComponentID::PatchTexture1; }
+	static ComponentID GetTypeStatic() { return ComponentID::PatchTextureStd1; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
@@ -32,7 +32,7 @@ public:
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 
 protected:
-	PatchTexture1(const PatchTexture1& other);
+	PatchTextureStd1(const PatchTextureStd1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override; //Binder가 로딩을 다 하고 여기서 값만 연결한다.
 	virtual void ImplementRender(ITextureRender* render) const override { m_coord.Render(render); }
@@ -47,4 +47,4 @@ private:
 	PatchTextureCoord m_coord;
 };
 
-unique_ptr<PatchTexture1> CreatePatchTexture1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);
+unique_ptr<PatchTextureStd1> CreatePatchTextureStd1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);

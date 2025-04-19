@@ -47,8 +47,11 @@
     <Filter Include="UserInterface\UIComponent\Components\PatchTexture">
       <UniqueIdentifier>{a66eb273-6dfc-452e-9c11-241024693edb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface\UIComponent\Components\PatchTextureLite">
-      <UniqueIdentifier>{1b102aaa-2f48-4bc1-ad3e-4b1d541cfe7d}</UniqueIdentifier>
+    <Filter Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite">
+      <UniqueIdentifier>{0c3579d6-674e-4e2f-978a-56d8bc3de56e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd">
+      <UniqueIdentifier>{7a3c1d34-9d41-408e-8ecf-951fb5069abf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -181,32 +184,35 @@
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture1.h">
-      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture3.h">
-      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture9.h">
-      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite1.h">
-      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite.h">
-      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite3.h">
-      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite9.h">
-      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite9.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd1.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd9.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -324,32 +330,35 @@
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture1.cpp">
-      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture3.cpp">
-      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture9.cpp">
-      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite1.cpp">
-      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite.cpp">
-      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite3.cpp">
-      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTextureLite\PatchTextureLite9.cpp">
-      <Filter>UserInterface\UIComponent\Components\PatchTextureLite</Filter>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite9.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd1.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd9.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

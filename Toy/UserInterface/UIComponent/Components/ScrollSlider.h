@@ -3,7 +3,7 @@
 #include "../UIHelperClass.h"
 
 enum class KeyState;
-class PatchTexture3;
+class PatchTextureStd3;
 class TextureSwitcher;
 class Container;
 
@@ -19,7 +19,7 @@ public:
 
 	void AddScrollChangedCB(function<void(float)> callback) { m_onScrollChangedCB = callback; }
 	bool Setup(const UILayout& layout, 
-		unique_ptr<PatchTexture3> scrollTrack,
+		unique_ptr<PatchTextureStd3> scrollTrack,
 		unique_ptr<TextureSwitcher> scrollButton);
 	void SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept;
 	void SetPositionRatio(float positionRatio) noexcept;
@@ -39,7 +39,7 @@ private:
 	inline ReturnType GetMaxScrollRange() const noexcept;
 	void OnPressCB(KeyState keyState);
 
-	PatchTexture3* m_scrollTrack;
+	PatchTextureStd3* m_scrollTrack;
 	TextureSwitcher* m_scrollButton;
 	BoundedValue m_bounded;
 	bool m_isWheelEnabled{ false };
@@ -49,5 +49,5 @@ private:
 };
 
 unique_ptr<ScrollSlider> CreateScrollSlider(const UILayout& layout,
-	unique_ptr<PatchTexture3> scrollTrack,
+	unique_ptr<PatchTextureStd3> scrollTrack,
 	unique_ptr<TextureSwitcher> scrollButton);

@@ -201,20 +201,20 @@ bool IsBiggerThanSource(DirectionType dirType, const XMUINT2& size, const vector
 {
 	uint32_t sizeValue{ 0 };
 	uint32_t sourceSum{ 0 };
-	function<int(uint32_t, const Rectangle&)> accumulator;
+	function<int(uint32_t, const Rectangle&)> AccumulatorFn;
 
 	switch (dirType) {
 	case DirectionType::Horizontal:
-		accumulator = [](uint32_t sum, const Rectangle& rect) { return sum + rect.width; };
+		AccumulatorFn = [](uint32_t sum, const Rectangle& rect) { return sum + rect.width; };
 		sizeValue = size.x;
 		break;
 	case DirectionType::Vertical:
-		accumulator = [](uint32_t sum, const Rectangle& rect) { return sum + rect.height; };
+		AccumulatorFn = [](uint32_t sum, const Rectangle& rect) { return sum + rect.height; };
 		sizeValue = size.y;
 		break;
 	}
 
-	sourceSum = accumulate(list.begin(), list.end(), 0, accumulator);
+	sourceSum = accumulate(list.begin(), list.end(), 0, AccumulatorFn);
 	return sourceSum <= sizeValue;
 }
 

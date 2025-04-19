@@ -1,20 +1,21 @@
 #include "pch.h"
-#include "PatchTexture1.h"
+#include "PatchTextureStd1.h"
 #include "../Include/IRenderer.h"
 #include "Utility.h"
-#include "../../../JsonOperation/JsonOperation.h"
-#include "../../../TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/UIComponent/UIUtility.h"
+#include "UserInterface/JsonOperation/JsonOperation.h"
 
-PatchTexture1::~PatchTexture1() = default;
-PatchTexture1::PatchTexture1() : 
-	PatchTexture{ TextureSlice::One },
+PatchTextureStd1::~PatchTextureStd1() = default;
+PatchTextureStd1::PatchTextureStd1() : 
+	PatchTextureStd{ TextureSlice::One },
 	m_texController{ nullptr }
 {
 	m_coord.SetOwner(this);
 }
 
-PatchTexture1::PatchTexture1(const PatchTexture1& o) :
-	PatchTexture{ o },
+PatchTextureStd1::PatchTextureStd1(const PatchTextureStd1& o) :
+	PatchTextureStd{ o },
 	m_bindKey{ o.m_bindKey },
 	m_sourceIndex{ o.m_sourceIndex },
 	m_texController{ o.m_texController },
@@ -25,15 +26,15 @@ PatchTexture1::PatchTexture1(const PatchTexture1& o) :
 	m_coord.SetOwner(this);
 }
 
-unique_ptr<UIComponent> PatchTexture1::CreateClone() const
+unique_ptr<UIComponent> PatchTextureStd1::CreateClone() const
 {
-	return unique_ptr<PatchTexture1>(new PatchTexture1(*this));
+	return unique_ptr<PatchTextureStd1>(new PatchTextureStd1(*this));
 }
 
-bool PatchTexture1::operator==(const UIComponent& rhs) const noexcept
+bool PatchTextureStd1::operator==(const UIComponent& rhs) const noexcept
 {
 	ReturnIfFalse(UIComponent::operator==(rhs));
-	const PatchTexture1* o = static_cast<const PatchTexture1*>(&rhs);
+	const PatchTextureStd1* o = static_cast<const PatchTextureStd1*>(&rhs);
 
 	auto result = (tie(m_bindKey, m_sourceIndex) == tie(o->m_bindKey, o->m_sourceIndex));
 	Assert(result);
@@ -41,7 +42,7 @@ bool PatchTexture1::operator==(const UIComponent& rhs) const noexcept
 	return result;
 }
 
-void PatchTexture1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
+void PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
 {
 	m_filename = sourceInfo.filename;
 	SetIndexedSource(*sourceInfo.GetIndex(), { sourceInfo.GetSource(m_sourceIndex) });
@@ -53,7 +54,7 @@ void PatchTexture1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureC
 		FitToTextureSource();
 }
 
-bool PatchTexture1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
+bool PatchTextureStd1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
 {
 	if (bindKey.empty()) return false;
 	SetLayout(layout);
@@ -63,7 +64,7 @@ bool PatchTexture1::Setup(const UILayout& layout, const string& bindKey, size_t 
 	return true;
 }
 
-bool PatchTexture1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
+bool PatchTextureStd1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
 {
 	if (m_bindKey.empty()) return false; 
 	auto sourceInfoRef = resBinder->GetTextureSourceInfo(m_bindKey);
@@ -75,12 +76,12 @@ bool PatchTexture1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, IT
 	return true;
 }
 
-void PatchTexture1::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
+void PatchTextureStd1::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
 {
 	ChangeBindKeyWithIndex(key, sourceInfo, 0);
 }
 
-void PatchTexture1::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+void PatchTextureStd1::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
 {
 	m_bindKey = key;
 	m_sourceIndex = sourceIndex;
@@ -95,22 +96,22 @@ static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)
 		(static_cast<UINT32>(r));
 }
 
-optional<vector<Rectangle>> PatchTexture1::GetTextureAreaList()
+optional<vector<Rectangle>> PatchTextureStd1::GetTextureAreaList()
 {	
 	if (auto index = m_coord.GetIndex(); index)
 		return m_texController->GetTextureAreaList(*index, PackRGBA(255, 255, 255, 0));
 	return nullopt;
 }
 
-void PatchTexture1::SerializeIO(JsonOperation& operation)
+void PatchTextureStd1::SerializeIO(JsonOperation& operation)
 {
 	UIComponent::SerializeIO(operation);
 	operation.Process("BindKey", m_bindKey);
 	operation.Process("SourceIndex", m_sourceIndex);
 }
 
-unique_ptr<PatchTexture1> CreatePatchTexture1(const UILayout& layout, const string& bindKey, size_t sourceIndex)
+unique_ptr<PatchTextureStd1> CreatePatchTextureStd1(const UILayout& layout, const string& bindKey, size_t sourceIndex)
 {
-	auto patchTex1 = make_unique<PatchTexture1>();
+	auto patchTex1 = make_unique<PatchTextureStd1>();
 	return CreateIfSetup(move(patchTex1), layout, bindKey, sourceIndex);
 }

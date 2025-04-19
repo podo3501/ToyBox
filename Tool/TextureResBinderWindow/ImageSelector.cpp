@@ -2,7 +2,7 @@
 #include "ImageSelector.h"
 #include "TextureResBinderWindow.h"
 #include "EditUtility/EditUtility.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/UserInterface/UIComponent/UIUtility.h"
@@ -20,7 +20,7 @@ ImageSelector::ImageSelector(TextureResBinderWindow* textureWindow) :
     m_selectImagePart{ TextureSlice::One }
 {}
 
-void ImageSelector::SetTexture(PatchTexture1* pTex1) noexcept
+void ImageSelector::SetTexture(PatchTextureStd1* pTex1) noexcept
 {
     m_sourceTexture = pTex1;
     if (!pTex1)

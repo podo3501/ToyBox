@@ -1,18 +1,16 @@
 #include "pch.h"
 #include "TextureSwitcher.h"
-//#include "PatchTexture/PatchTexture.h"
-#include "PatchTextureLite/PatchTextureLite.h"
+#include "PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "../Include/IRenderer.h"
 #include "InputManager.h"
-#include "../../JsonOperation/JsonOperation.h"
+#include "UserInterface/JsonOperation/JsonOperation.h"
 #include "Utility.h"
 
 using enum InteractState;
 
 TextureSwitcher::~TextureSwitcher() = default;
 TextureSwitcher::TextureSwitcher() :
-	//m_patchTex{ nullptr }
 	m_patchTexL{ nullptr }
 {}
 
@@ -22,7 +20,6 @@ TextureSwitcher::TextureSwitcher(const TextureSwitcher& o) :
 	m_behaviorMode{ o.m_behaviorMode },
 	m_sources{ o.m_sources },
 	m_indexes{ o.m_indexes },
-	//m_patchTex{ nullptr },
 	m_patchTexL{ nullptr },
 	m_state{ o.m_state }
 {
@@ -32,7 +29,6 @@ TextureSwitcher::TextureSwitcher(const TextureSwitcher& o) :
 void TextureSwitcher::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	//m_patchTex = static_cast<PatchTexture*>(componentList[0]);
 	m_patchTexL = static_cast<PatchTextureLite*>(componentList[0]);
 }
 

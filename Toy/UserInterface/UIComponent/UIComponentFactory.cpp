@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "UIComponentFactory.h"
 #include "Components/Panel.h"
-#include "Components/PatchTexture/PatchTexture1.h"
-#include "Components/PatchTexture/PatchTexture3.h"
-#include "Components/PatchTexture/PatchTexture9.h"
-#include "Components/PatchTextureLite/PatchTextureLite1.h"
-#include "Components/PatchTextureLite/PatchTextureLite3.h"
-#include "Components/PatchTextureLite/PatchTextureLite9.h"
+#include "Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
+#include "Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
+#include "Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
+#include "Components/PatchTexture/PatchTextureLite/PatchTextureLite3.h"
+#include "Components/PatchTexture/PatchTextureLite/PatchTextureLite9.h"
 #include "Components/Button.h"
 #include "Components/TextArea.h"
 #include "Components/Dialog.h"
@@ -22,9 +22,9 @@ using FactoryFunc = unique_ptr<UIComponent>(*)();   //constexpr을 쓰기 때문에 fu
 constexpr FactoryFunc ComponentFactory[] = //enum의 값과 일치가 되어야 한다. 아니면 if로 해야 한다.
 {
     []() -> unique_ptr<UIComponent> { return make_unique<Panel>(); },
-    []() -> unique_ptr<UIComponent> { return make_unique<PatchTexture1>(); },
-    []() -> unique_ptr<UIComponent> { return make_unique<PatchTexture3>(); },
-    []() -> unique_ptr<UIComponent> { return make_unique<PatchTexture9>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureStd1>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureStd3>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureStd9>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureLite1>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureLite3>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<PatchTextureLite9>(); },

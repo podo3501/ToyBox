@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "UICommandRegistry.h"
 #include "Utility.h"
-#include "../../UIComponent/Components/PatchTexture/PatchTexture1.h"
-#include "../../UIComponent/Components/PatchTexture/PatchTexture3.h"
-#include "../../UIComponent/Components/PatchTexture/PatchTexture9.h"
+#include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
+#include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
 #include "../../UIComponent/Components/TextArea.h"
 #include "../Include/IRenderer.h"
 

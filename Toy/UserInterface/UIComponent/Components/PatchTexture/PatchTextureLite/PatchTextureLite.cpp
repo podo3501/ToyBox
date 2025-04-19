@@ -7,7 +7,7 @@
 PatchTextureLite::~PatchTextureLite() = default;
 PatchTextureLite::PatchTextureLite() = default;
 PatchTextureLite::PatchTextureLite(const PatchTextureLite& other) noexcept :
-	PatchTextureBase{ other }
+	PatchTexture{ other }
 {}
 
 unique_ptr<PatchTextureLite> CreatePatchTextureLite(TextureSlice texSlice)

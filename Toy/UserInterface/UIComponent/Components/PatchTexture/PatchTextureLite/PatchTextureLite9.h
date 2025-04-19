@@ -1,6 +1,6 @@
 #pragma once
 #include "PatchTextureLite.h"
-#include "../PatchTexture/PatchTextureImpl.h"
+#include "../PatchTextureImpl.h"
 
 class PatchTextureLite3;
 class PatchTextureLite9 : public PatchTextureLite

@@ -4,7 +4,7 @@ enum class TextureSlice;
 class TextureResBinderWindow;
 class TexResCommandList;
 struct TextureSourceInfo;
-class PatchTexture1;
+class PatchTextureStd1;
 class RenameNotifier;
 class ImageSelector
 {
@@ -14,7 +14,7 @@ public:
 
 	void Update();
 	void Render();
-	void SetTexture(PatchTexture1* pTex1) noexcept;
+	void SetTexture(PatchTextureStd1* pTex1) noexcept;
 	void SetCommandList(TexResCommandList* cmdList) noexcept { m_cmdList = cmdList; }
 	bool DeselectArea() noexcept;
 
@@ -31,7 +31,7 @@ private:
 	void RenderLabeledAreas() const;
 	
 
-	PatchTexture1* m_sourceTexture;
+	PatchTextureStd1* m_sourceTexture;
 	TexResCommandList* m_cmdList;
 	TextureResBinderWindow* m_textureWindow;
 	unique_ptr<RenameNotifier> m_renameNotifier;

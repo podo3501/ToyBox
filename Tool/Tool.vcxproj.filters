@@ -59,7 +59,7 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture.cpp">
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTextureStd.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow\ComponentSelector.cpp">
@@ -148,7 +148,7 @@
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h">
       <Filter>MainWindow\SelectedComponent</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture.h">
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTextureStd.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\ComponentSelector.h">

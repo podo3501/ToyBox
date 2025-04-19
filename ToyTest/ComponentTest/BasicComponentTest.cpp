@@ -2,9 +2,9 @@
 #include "../ToyTestFixture.h"
 #include "../IMockRenderer.h"
 #include "../TestHelper.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture3.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture9.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
 #include "../Toy/UserInterface/UIComponent/Components/Container.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
@@ -35,7 +35,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(patchTex->GetSize(), GetSizeFromRectangles(rectRef->get()));
 	}
 
-	TEST_F(BasicComponentTest, Container_PatchTexture1)
+	TEST_F(BasicComponentTest, Container_PatchTextureStd1)
 	{
 		UILayout layout{ {32, 32}, Origin::Center };
 		auto container = CreateContainer(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal);
@@ -50,7 +50,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, Container_PatchTexture3_Horizontal)
+	TEST_F(BasicComponentTest, Container_PatchTextureStd3_Horizontal)
 	{
 		UILayout layout{ {100, 48}, Origin::Center };
 		auto [container, containerBtr] = GetPtrs(CreateContainer(layout, 
@@ -73,7 +73,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, Container_PatchTexture3_Vertical)
+	TEST_F(BasicComponentTest, Container_PatchTextureStd3_Vertical)
 	{
 		UILayout layout{ {48, 100}, Origin::Center };
 		auto [container, containerPtr] = GetPtrs(CreateContainer(layout, 
@@ -96,12 +96,13 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, PatchTexture1)
+	TEST_F(BasicComponentTest, PatchTextureStd1)
 	{
-		auto [tex, img1Ptr] = GetPtrs(CreatePatchTexture1({ {64, 64}, Origin::Center }, "BackImage1"));
+		auto [tex, img1Ptr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::Center }, "BackImage1"));
 		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img1Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_EQ(*img1Ptr->GetTextureSlice(), TextureSlice::One);
 		vector<RECT> exDest = { { 368, 268, 432, 332 } };
 		TestMockRender(exDest, "BackImage1");
 
@@ -120,7 +121,7 @@ namespace UserInterfaceTest
 		img1Ptr->ChangeSize({ 128, 128 });
 		TestMockRender(exDest, "BackImage1");
 
-		FitToTextureSourceTest<PatchTexture1*>(m_panel.get(), "PatchTexture1_0", "BackImage1", m_resBinder.get());
+		FitToTextureSourceTest<PatchTextureStd1*>(m_panel.get(), "PatchTextureStd1_0", "BackImage1", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
@@ -136,12 +137,13 @@ namespace UserInterfaceTest
 		return rb->ModifyTextureSourceInfo(key, srcInfo);
 	}
 
-	TEST_F(BasicComponentTest, PatchTexture3_Horizontal)
+	TEST_F(BasicComponentTest, PatchTextureStd3_Horizontal)
 	{
-		auto [tex, texPtr] = GetPtrs(CreatePatchTexture3({ {100, 36}, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal"));
+		auto [tex, texPtr] = GetPtrs(CreatePatchTextureStd3({ {100, 36}, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal"));
 		UIEx(m_panel).AttachComponent(move(tex), {400, 300});
 		m_panel = WriteReadTest(m_panel, texPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_EQ(*texPtr->GetTextureSlice(), TextureSlice::ThreeH);
 
 		vector<RECT> exDest = { { 400, 300, 422, 336 }, { 422, 300, 478, 336 }, {478, 300, 500, 336} };
 		TestMockRender(exDest, "ScrollButton3_H_Normal");
@@ -165,17 +167,18 @@ namespace UserInterfaceTest
 
 		TestMockRender(exDestChange, "ScrollButton3_H_Normal");
 		
-		FitToTextureSourceTest<PatchTexture3*>(m_panel.get(), "PatchTexture3_0", "ScrollButton3_H_Normal", m_resBinder.get());
+		FitToTextureSourceTest<PatchTextureStd3*>(m_panel.get(), "PatchTextureStd3_0", "ScrollButton3_H_Normal", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, PatchTexture3_Vertical)
+	TEST_F(BasicComponentTest, PatchTextureStd3_Vertical)
 	{
-		auto [tex, img3Ptr] = GetPtrs(CreatePatchTexture3({ {36, 100}, Origin::LeftTop }, DirectionType::Vertical, "ScrollTrack3_V"));
+		auto [tex, img3Ptr] = GetPtrs(CreatePatchTextureStd3({ {36, 100}, Origin::LeftTop }, DirectionType::Vertical, "ScrollTrack3_V"));
 		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img3Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_EQ(*img3Ptr->GetTextureSlice(), TextureSlice::ThreeV);
 
 		vector<RECT> exDest = { { 400, 300, 436, 310 }, { 400, 310, 436, 390 }, { 400, 390, 436, 400 } };
 		TestMockRender(exDest, "ScrollTrack3_V");
@@ -198,17 +201,18 @@ namespace UserInterfaceTest
 		
 		TestMockRender(exDestChange, "ScrollTrack3_V");
 
-		FitToTextureSourceTest<PatchTexture3*>(m_panel.get(), "PatchTexture3_0", "ScrollTrack3_V", m_resBinder.get());
+		FitToTextureSourceTest<PatchTextureStd3*>(m_panel.get(), "PatchTextureStd3_0", "ScrollTrack3_V", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, PatchTexture9)
+	TEST_F(BasicComponentTest, PatchTextureStd9)
 	{
-		auto [tex, texPtr] = GetPtrs(CreatePatchTexture9({ {170, 120}, Origin::LeftTop }, "BackImage9"));
+		auto [tex, texPtr] = GetPtrs(CreatePatchTextureStd9({ {170, 120}, Origin::LeftTop }, "BackImage9"));
 		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, texPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_EQ(*texPtr->GetTextureSlice(), TextureSlice::Nine);
 
 		vector<RECT> exDest = {
 			{ 400, 300, 430, 336 }, { 430, 300, 540, 336 }, {540, 300, 570, 336},
@@ -238,7 +242,7 @@ namespace UserInterfaceTest
 
 		TestMockRender(exDestChange, "BackImage9");
 
-		FitToTextureSourceTest<PatchTexture9*>(m_panel.get(), "PatchTexture9_0", "BackImage9", m_resBinder.get());
+		FitToTextureSourceTest<PatchTextureStd9*>(m_panel.get(), "PatchTextureStd9_0", "BackImage9", m_resBinder.get());
 	}
 
 	////////////////////////////////////////////////////////

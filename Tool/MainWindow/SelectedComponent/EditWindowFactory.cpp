@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "EditWindowFactory.h"
-#include "ComponentEdit/EditPatchTexture.h"
+#include "ComponentEdit/EditPatchTextureStd.h"
 #include "ComponentEdit/EditButton.h"
 #include "ComponentEdit/EditTextArea.h"
 #include "ComponentEdit/EditContainer.h"
@@ -11,9 +11,9 @@
 #include "ComponentEdit/EditTextureSwitcher.h"
 #include "../Toy/UserInterface/UIComponent/UIType.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture3.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture9.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
 #include "../Toy/UserInterface/UIComponent/Components/Button.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
@@ -38,9 +38,9 @@ void EditWindowFactory::RegisterFactories()
     RegisterEditWindow<EditContainer, Container*>(ComponentID::Container);
     //UIComponent*, UICommandList*가 인자로 들어가는 새로운 EditWindow는 여기서 추가
 
-    RegisterEditWindowWithRenderer<EditPatchTexture1, PatchTexture1*>(ComponentID::PatchTexture1);
-    RegisterEditWindowWithRenderer<EditPatchTexture3, PatchTexture3*>(ComponentID::PatchTexture3);
-    RegisterEditWindowWithRenderer<EditPatchTexture9, PatchTexture9*>(ComponentID::PatchTexture9);
+    RegisterEditWindowWithRenderer<EditPatchTextureStd1, PatchTextureStd1*>(ComponentID::PatchTextureStd1);
+    RegisterEditWindowWithRenderer<EditPatchTextureStd3, PatchTextureStd3*>(ComponentID::PatchTextureStd3);
+    RegisterEditWindowWithRenderer<EditPatchTextureStd9, PatchTextureStd9*>(ComponentID::PatchTextureStd9);
     RegisterEditWindowWithRenderer<EditRenderTexture, RenderTexture*>(ComponentID::RenderTexture);
     RegisterEditWindowWithRenderer<EditListArea, ListArea*>(ComponentID::ListArea);
     RegisterEditWindowWithRenderer<EditScrollSlider, ScrollSlider*>(ComponentID::ScrollSlider);

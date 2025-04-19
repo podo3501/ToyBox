@@ -39,20 +39,20 @@ UIComponent* UIHierarchy<UIComponent>::GetParentRegionRoot() noexcept
 	return m_parent->GetRegionRoot();
 }
 
-void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> func) noexcept
+void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> Func) noexcept
 {
-	if (func(GetThis()) == CResult::SkipChildren)
+	if (Func(GetThis()) == CResult::SkipChildren)
 		return;
 
 	for (auto& child : m_children)
 	{
 		if (child)
-			child->ForEachChildBool(func);
+			child->ForEachChildBool(Func);
 	}
 }
 
 //함수 이름을 렌더링과 관련되게 지어야겠다. 렌더링 전용으로 사용하게끔
-void UIHierarchy<UIComponent>::ForEachChildBFS(StateFlag::Type flag, function<void(UIComponent*)> func) noexcept
+void UIHierarchy<UIComponent>::ForEachChildBFS(StateFlag::Type flag, function<void(UIComponent*)> Func) noexcept
 {
 	queue<UIComponent*> cQueue;
 	auto PushChild = [&cQueue, flag](UIComponent* c) { if (c->HasStateFlag(flag)) cQueue.push(c); };
@@ -64,7 +64,7 @@ void UIHierarchy<UIComponent>::ForEachChildBFS(StateFlag::Type flag, function<vo
 		UIComponent* current = cQueue.front();
 		cQueue.pop();
 
-		func(current);
+		Func(current);
 		if (current->HasStateFlag(StateFlag::RenderTexture)) continue;
 
 		for (const auto& child : current->m_children)

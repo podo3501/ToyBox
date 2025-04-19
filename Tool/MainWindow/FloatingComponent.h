@@ -11,9 +11,9 @@ class FloatingComponent
 {
 	enum class MakeComponent
 	{
-		PatchTexture1,
-		PatchTexture3,
-		PatchTexture9,
+		PatchTextureStd1,
+		PatchTextureStd3,
+		PatchTextureStd9,
 		TextureSwitcher1,
 		TextureSwitcher3,
 		Text,

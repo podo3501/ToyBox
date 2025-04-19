@@ -2,7 +2,7 @@
 
 enum class PendingAction;
 struct IRenderer;
-class PatchTexture1;
+class PatchTextureStd1;
 class TextureLoadBinder;
 class TexResCommandList;
 class TextureResBinderWindow;
@@ -26,10 +26,10 @@ private:
     bool IsLoadedTexture(const wstring& filename) const noexcept;
     bool LoadTextureFromFile(const wstring& filename);
     bool LoadTextureFile();
-    void AddTexture(unique_ptr<PatchTexture1> texture) noexcept;
+    void AddTexture(unique_ptr<PatchTextureStd1> texture) noexcept;
     void RemoveTexture(int textureIdx) noexcept;
     void RemoveTexture(const wstring& filename) noexcept;
-    void ApplyTexture(PatchTexture1* tex) const noexcept;
+    void ApplyTexture(PatchTextureStd1* tex) const noexcept;
     bool DeleteTextureFile() noexcept;
     void SelectDefaultTextureFile() noexcept;
     bool SelectTextureFile() noexcept;
@@ -43,6 +43,6 @@ private:
     unique_ptr<ImageSelector> m_imageSelector;
     int m_texIndex{ -1 };
     unique_ptr<EditListBox> m_listboxTexture;
-    vector<unique_ptr<PatchTexture1>> m_textureFiles;
+    vector<unique_ptr<PatchTextureStd1>> m_textureFiles;
     optional<PendingAction> m_pendingAction;
 };

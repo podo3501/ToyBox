@@ -1,18 +1,18 @@
 #pragma once
-#include "PatchTexture.h"
-#include "PatchTextureImpl.h"
+#include "PatchTextureStd.h"
+#include "../PatchTextureImpl.h"
 
 struct TextureSourceInfo;
-class PatchTexture1;
+class PatchTextureStd1;
 enum class DirectionType;
 
-class PatchTexture3 : public PatchTexture
+class PatchTextureStd3 : public PatchTextureStd
 {
 public:
-	~PatchTexture3();
-	PatchTexture3() noexcept;
+	~PatchTextureStd3();
+	PatchTextureStd3() noexcept;
 
-	static ComponentID GetTypeStatic() { return ComponentID::PatchTexture3; }
+	static ComponentID GetTypeStatic() { return ComponentID::PatchTextureStd3; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
@@ -28,7 +28,7 @@ public:
 	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
 
 protected:
-	PatchTexture3(const PatchTexture3& o);
+	PatchTextureStd3(const PatchTextureStd3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
@@ -40,4 +40,4 @@ private:
 	PatchTextureImpl m_impl;
 };
 
-unique_ptr<PatchTexture3> CreatePatchTexture3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);
+unique_ptr<PatchTextureStd3> CreatePatchTextureStd3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);

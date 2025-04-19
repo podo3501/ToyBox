@@ -2,7 +2,7 @@
 #include "PatchTextureLite9.h"
 #include "PatchTextureLite3.h"
 #include "Utility.h"
-#include "../../UIUtility.h"
+#include "UserInterface/UIComponent/UIUtility.h"
 
 PatchTextureLite9::~PatchTextureLite9() = default;
 PatchTextureLite9::PatchTextureLite9() noexcept :
@@ -31,7 +31,7 @@ bool PatchTextureLite9::SetupLayout(size_t index, const vector<Rectangle>& sourc
 	{
 		unique_ptr<PatchTextureLite> tex = make_unique<PatchTextureLite3>();
 		if (auto flag = stateFlags[idx]; flag) tex->SetStateFlag(*flag, true);
-		ReturnIfFalse(tex->SetupLayout(index, { sources[idx * 3 + 0], sources[idx * 3 + 1], sources[idx * 3 + 2] }));
+		ReturnIfFalse(tex->SetupLayout(index, GetTripleAt(sources, idx)));
 		UIEx(this).AttachComponent(move(tex), {});
 	}
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
@@ -48,25 +48,13 @@ bool PatchTextureLite9::FitToTextureSource() noexcept
 
 void PatchTextureLite9::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
 {
-	m_impl.SetIndexedSource(index, sources, [&sources](size_t idx) {
-		return vector<Rectangle>{ sources[idx * 3 + 0], sources[idx * 3 + 1], sources[idx * 3 + 2] };
-		});
-}
-
-static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
-{
-	vector<Rectangle> srcList;
-	ranges::transform(components, back_inserter(srcList), [](auto component) {
-		PatchTextureLite3* tex = ComponentCast<PatchTextureLite3*>(component);
-		return tex->GetFirstComponentSource();
-		});
-	return srcList;
+	m_impl.SetIndexedSource(index, sources, [&sources](size_t idx) { return GetTripleAt(sources, idx); });
 }
 
 bool PatchTextureLite9::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
-	vector<Rectangle> list = GetSourceList(components);
+	auto list = GetSourceList<PatchTextureLite3>(components, &PatchTextureLite3::GetFirstComponentSource);
 	ReturnIfFalse(IsBiggerThanSource(DirectionType::Vertical, size, list));
 
 	return m_impl.ChangeSize(DirectionType::Vertical, size, components);

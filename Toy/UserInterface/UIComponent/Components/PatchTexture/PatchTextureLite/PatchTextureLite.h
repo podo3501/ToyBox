@@ -1,8 +1,8 @@
 #pragma once
-#include "../PatchTexture/PatchTexture.h"
+#include "../PatchTexture.h"
 
 struct TextureSourceInfo;
-class PatchTextureLite : public PatchTextureBase
+class PatchTextureLite : public PatchTexture
 {
 public:
 	~PatchTextureLite();	
@@ -11,7 +11,7 @@ public:
 	virtual bool FitToTextureSource() noexcept = 0;
 
 protected:
-	using PatchTextureBase::PatchTextureBase;
+	using PatchTexture::PatchTexture;
 	PatchTextureLite();
 	PatchTextureLite(const PatchTextureLite& other) noexcept;
 };

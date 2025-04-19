@@ -4,7 +4,6 @@
 
 enum class KeyState;
 struct TextureSourceInfo;
-//class PatchTexture;
 class PatchTextureLite;
 namespace DX { class StepTimer; }
 class TextureSwitcher : public UIComponent
@@ -26,7 +25,6 @@ public:
 	inline void ChangeState(InteractState state) noexcept { if (m_state != state) SetState(state); }
 	bool ChangeBindKey(TextureResourceBinder* resBinder, const string& bindKey) noexcept;
 	inline optional<InteractState> GetState() const noexcept 	{ return m_state; }
-	//inline PatchTexture* GetPatchTexture() const noexcept { return m_patchTex; }
 	inline PatchTextureLite* GetPatchTextureLite() const noexcept { return m_patchTexL; }
 	optionalRef<string> GetBindKey() const noexcept;
 
@@ -50,7 +48,6 @@ private:
 
 	map<InteractState, TextureSourceInfo> m_sources;
 	map<InteractState, size_t> m_indexes;
-	//PatchTexture* m_patchTex;
 	PatchTextureLite* m_patchTexL;
 	optional<InteractState> m_state;
 	function<void(KeyState)> m_onPressCB;

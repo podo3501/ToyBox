@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "../ToyTestFixture.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture1.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture3.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture9.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
@@ -34,7 +32,7 @@ namespace UserInterfaceTest
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;
 		UIComponent* panel = m_panel.get();
-		auto [tex1, tex1Ptr] = GetPtrs(CreatePatchTexture1({ {64, 64}, Origin::Center }, "BackImage1"));
+		auto [tex1, tex1Ptr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::Center }, "BackImage1"));
 
 		CaptureSnapshot(h);
 		ExecuteAndCapture(h, [&] { c.AttachComponent(panel, move(tex1), { 111, 222 }); });

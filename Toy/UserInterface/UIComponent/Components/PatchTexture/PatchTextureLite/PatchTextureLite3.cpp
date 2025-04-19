@@ -2,8 +2,8 @@
 #include "PatchTextureLite3.h"
 #include "PatchTextureLite1.h"
 #include "Utility.h"
-#include "../../UIUtility.h"
-#include "../../../JsonOperation/JsonOperation.h"
+#include "UserInterface/UIComponent/UIUtility.h"
+#include "UserInterface/JsonOperation/JsonOperation.h"
 
 PatchTextureLite3::~PatchTextureLite3() = default;
 PatchTextureLite3::PatchTextureLite3() noexcept :
@@ -73,20 +73,10 @@ void PatchTextureLite3::SetIndexedSource(size_t index, const vector<Rectangle>& 
 		});
 }
 
-static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) noexcept
-{
-	vector<Rectangle> srcList;
-	ranges::transform(components, back_inserter(srcList), [](auto component) {
-		PatchTextureLite1* tex = ComponentCast<PatchTextureLite1*>(component);
-		return tex->GetSource();
-		});
-	return srcList;
-}
-
 bool PatchTextureLite3::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
-	vector<Rectangle> list = GetSourceList(components);
+	auto list = GetSourceList<PatchTextureLite1>(components, &PatchTextureLite1::GetSource);
 	ReturnIfFalse(IsBiggerThanSource(m_dirType, size, list));
 
 	return m_impl.ChangeSize(m_dirType, size, components);

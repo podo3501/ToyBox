@@ -4,9 +4,9 @@
 enum class ComponentID : int
 {
 	Panel,
-	PatchTexture1,
-	PatchTexture3,
-	PatchTexture9,
+	PatchTextureStd1,
+	PatchTextureStd3,
+	PatchTextureStd9,
 	PatchTextureLite1,
 	PatchTextureLite3,
 	PatchTextureLite9,
@@ -29,9 +29,9 @@ template<>
 constexpr auto EnumToStringMap<ComponentID>() -> array<const char*, EnumSize<ComponentID>()> {
 	return { {
 		{ "Panel" },
-		{ "PatchTexture1" },
-		{ "PatchTexture3" },
-		{ "PatchTexture9" },
+		{ "PatchTextureStd1" },
+		{ "PatchTextureStd3" },
+		{ "PatchTextureStd9" },
 		{ "PatchTextureLite1" },
 		{ "PatchTextureLite3" },
 		{ "PatchTextureLite9" },

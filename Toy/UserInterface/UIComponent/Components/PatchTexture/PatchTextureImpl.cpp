@@ -1,31 +1,29 @@
 #include "pch.h"
 #include "PatchTextureImpl.h"
-#include "../Include/IRenderer.h"
-#include "../PatchTexture/PatchTexture1.h"
+#include "PatchTexture.h"
 #include "Utility.h"
-#include "../../UIUtility.h"
-#include "../../../JsonOperation/JsonOperation.h"
+#include "UserInterface/UIComponent/UIUtility.h"
 
 PatchTextureImpl::~PatchTextureImpl() = default;
 PatchTextureImpl::PatchTextureImpl() noexcept :
 	m_component{ nullptr }
 {}
 
-bool PatchTextureImpl::ForEachTexture(predicate<PatchTextureBase*, size_t> auto&& each)
+bool PatchTextureImpl::ForEachTexture(predicate<PatchTexture*, size_t> auto&& each)
 {
 	const auto& components = m_component->GetChildComponents();
 	size_t size = components.size();
 	ReturnIfFalse(size >= 3);
 
 	for (size_t n : views::iota(0u, size))
-		if (!each(static_cast<PatchTextureBase*>(components[n]), n)) return false;
+		if (!each(static_cast<PatchTexture*>(components[n]), n)) return false;
 
 	return true;
 }
 
 bool PatchTextureImpl::ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept
 {
-	ReturnIfFalse(ForEachTexture([this, &sizes](PatchTextureBase* tex, size_t index) {
+	ReturnIfFalse(ForEachTexture([this, &sizes](PatchTexture* tex, size_t index) {
 		return tex->ChangeSize(sizes[index]);
 		}));
 	return true;
@@ -34,7 +32,7 @@ bool PatchTextureImpl::ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept
 bool PatchTextureImpl::ApplyPositions(DirectionType dirType, const XMUINT2& size, const vector<XMUINT2>& sizes) noexcept
 {
 	vector<XMINT2> positions = ExtractStartPosFromSizes(dirType, sizes);
-	ReturnIfFalse(ForEachTexture([this, &size, &positions](PatchTextureBase*, size_t index) {
+	ReturnIfFalse(ForEachTexture([this, &size, &positions](PatchTexture*, size_t index) {
 		return m_component->ChangePosition(index, size, positions[index]);
 		}));
 	return true;
@@ -53,7 +51,7 @@ bool PatchTextureImpl::ChangeSize(DirectionType dirType, const XMUINT2& size, co
 void PatchTextureImpl::SetIndexedSource( size_t index, const vector<Rectangle>& sources,
 	function<vector<Rectangle>(size_t idx)> SourceSelectorFn) noexcept
 {
-	ForEachTexture([index, &sources, &SourceSelectorFn](PatchTextureBase* tex, size_t idx) {
+	ForEachTexture([index, &sources, &SourceSelectorFn](PatchTexture* tex, size_t idx) {
 		tex->SetIndexedSource(index, SourceSelectorFn(idx));
 		return true;
 		});
@@ -63,7 +61,7 @@ bool PatchTextureImpl::FitToTextureSource(DirectionType dirType, function<void(c
 {
 	XMUINT2 totalSize{};
 	vector<XMUINT2> sizes{};
-	auto result = ForEachTexture([&totalSize, &sizes, AccumulateSizeFn](PatchTextureBase* tex, size_t) {
+	auto result = ForEachTexture([&totalSize, &sizes, AccumulateSizeFn](PatchTexture* tex, size_t) {
 		ReturnIfFalse(tex->FitToTextureSource());
 		const XMUINT2 size = GetSizeFromRectangle(tex->GetArea());
 		sizes.emplace_back(size);
