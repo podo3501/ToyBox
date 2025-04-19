@@ -35,7 +35,6 @@ namespace UserInterfaceTest
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {100, 48}, Origin::Center },
 			TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
-
 		m_panel = WriteReadTest(m_panel, switcherPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
@@ -76,7 +75,6 @@ namespace UserInterfaceTest
 		TestMockRender(exDestChange, "ScrollButton3_V_Normal");
 
 		CloneTest(exDestChange, "ScrollButton3_V_Normal");
-
 		FitToTextureSourceTest("ScrollButton3_V_Normal");
 	}
 
@@ -87,28 +85,25 @@ namespace UserInterfaceTest
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {100, 100}, Origin::Center },
 			TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr)); //PatchTexture9일때에는 두번 하는 이유는 sourceInfo에서 크기를 알려줘야 한다.
-
 		m_panel = WriteReadTest(m_panel, switcherPtr);
-		//EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
-		//MockMouseInput(51, 51);	//Hover
-		//vector<RECT> exDest = {
-		//	{ 50, 50, 60, 60 }, { 60, 50, 140, 60 }, { 140, 50, 150, 60 },
-		//	{ 50, 60, 60, 140 }, { 60, 60, 140, 140 }, { 140, 60, 150, 140 },
-		//	{ 50, 140, 60, 150 }, { 60, 140, 140, 150 }, { 140, 140, 150, 150 } };
-		//TestMockRender(exDest, "ListBackground9_Hovered");
+		MockMouseInput(51, 51);	//Hover
+		vector<RECT> exDest = {
+			{ 50, 50, 60, 60 }, { 60, 50, 140, 60 }, { 140, 50, 150, 60 },
+			{ 50, 60, 60, 140 }, { 60, 60, 140, 140 }, { 140, 60, 150, 140 },
+			{ 50, 140, 60, 150 }, { 60, 140, 140, 150 }, { 140, 140, 150, 150 } };
+		TestMockRender(exDest, "ListBackground9_Hovered");
 
-		//switcherPtr->ChangeSize({ 150, 150 });
-		//MockMouseInput(0, 0);	//Normal
-		//vector<RECT> exDestChange = {
-		//	{ 25, 25, 35, 35 }, { 35, 25, 165, 35 }, { 165, 25, 175, 35 },
-		//	{ 25, 35, 35, 165 }, { 35, 35, 165, 165 }, { 165, 35, 175, 165 },
-		//	{ 25, 165, 35, 175 }, { 35, 165, 165, 175 }, { 165, 165, 175, 175 } };
-		//TestMockRender(exDestChange, "ListBackground9_Normal");
+		switcherPtr->ChangeSize({ 150, 150 });
+		MockMouseInput(0, 0);	//Normal
+		vector<RECT> exDestChange = {
+			{ 25, 25, 35, 35 }, { 35, 25, 165, 35 }, { 165, 25, 175, 35 },
+			{ 25, 35, 35, 165 }, { 35, 35, 165, 165 }, { 165, 35, 175, 165 },
+			{ 25, 165, 35, 175 }, { 35, 165, 165, 175 }, { 165, 165, 175, 175 } };
+		TestMockRender(exDestChange, "ListBackground9_Normal");
 
-		//CloneTest(exDestChange, "ListBackground9_Normal");
-
-		//FitToTextureSourceTest("ListBackground9_Normal");
+		CloneTest(exDestChange, "ListBackground9_Normal");
+		FitToTextureSourceTest("ListBackground9_Normal");
 	}
 }

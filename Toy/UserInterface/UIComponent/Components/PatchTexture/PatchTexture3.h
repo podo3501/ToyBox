@@ -25,7 +25,7 @@ public:
 	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;
 	void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept;
 	Rectangle GetFirstComponentSource() const noexcept;
-	inline DirectionType GetDirectionType() const noexcept { return m_impl.GetDirectionType(); }
+	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
 
 protected:
 	PatchTexture3(const PatchTexture3& o);
@@ -34,9 +34,9 @@ protected:
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
-	bool ForEachPatchTexture1(predicate<PatchTexture1*, size_t> auto&& each);
 	void SetDirectionType(DirectionType dirType) noexcept;
 
+	DirectionType m_dirType;
 	PatchTextureImpl m_impl;
 };
 

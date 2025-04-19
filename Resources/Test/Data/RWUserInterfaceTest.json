@@ -28,8 +28,8 @@
                     "Name": "TextureSwitcher_0",
                     "Layout": {
                         "Size": {
-                            "x": 48,
-                            "y": 150
+                            "x": 16,
+                            "y": 100
                         },
                         "Origin": "Center"
                     },
@@ -52,8 +52,8 @@
                                 "Name": "PatchTextureLite3_0",
                                 "Layout": {
                                     "Size": {
-                                        "x": 48,
-                                        "y": 150
+                                        "x": 0,
+                                        "y": 0
                                     },
                                     "Origin": "LeftTop"
                                 },
@@ -68,87 +68,8 @@
                                     }
                                 },
                                 "Region": "",
-                                "StateFlag": 7,
-                                "Children": [
-                                    {
-                                        "Child": {
-                                            "Type": "PatchTextureLite1",
-                                            "Name": "PatchTextureLite1_0",
-                                            "Layout": {
-                                                "Size": {
-                                                    "x": 48,
-                                                    "y": 7
-                                                },
-                                                "Origin": "LeftTop"
-                                            },
-                                            "Transform": {
-                                                "Ratio": {
-                                                    "x": 0.0,
-                                                    "y": 0.0
-                                                },
-                                                "RelativePosition": {
-                                                    "x": 0,
-                                                    "y": 0
-                                                }
-                                            },
-                                            "Region": "",
-                                            "StateFlag": 359,
-                                            "Children": []
-                                        }
-                                    },
-                                    {
-                                        "Child": {
-                                            "Type": "PatchTextureLite1",
-                                            "Name": "PatchTextureLite1_1",
-                                            "Layout": {
-                                                "Size": {
-                                                    "x": 48,
-                                                    "y": 136
-                                                },
-                                                "Origin": "LeftTop"
-                                            },
-                                            "Transform": {
-                                                "Ratio": {
-                                                    "x": 0.0,
-                                                    "y": 0.046667
-                                                },
-                                                "RelativePosition": {
-                                                    "x": 0,
-                                                    "y": 7
-                                                }
-                                            },
-                                            "Region": "",
-                                            "StateFlag": 103,
-                                            "Children": []
-                                        }
-                                    },
-                                    {
-                                        "Child": {
-                                            "Type": "PatchTextureLite1",
-                                            "Name": "PatchTextureLite1_2",
-                                            "Layout": {
-                                                "Size": {
-                                                    "x": 48,
-                                                    "y": 7
-                                                },
-                                                "Origin": "LeftTop"
-                                            },
-                                            "Transform": {
-                                                "Ratio": {
-                                                    "x": 0.0,
-                                                    "y": 0.953333
-                                                },
-                                                "RelativePosition": {
-                                                    "x": 0,
-                                                    "y": 143
-                                                }
-                                            },
-                                            "Region": "",
-                                            "StateFlag": 359,
-                                            "Children": []
-                                        }
-                                    }
-                                ],
+                                "StateFlag": 103,
+                                "Children": [],
                                 "DirectionType": 1
                             }
                         }
@@ -158,7 +79,7 @@
                         "Hovered": "ScrollButton3_V_Hovered",
                         "Pressed": "ScrollButton3_V_Pressed"
                     },
-                    "BehaviorMode": 0
+                    "BehaviorMode": 1
                 }
             }
         ]

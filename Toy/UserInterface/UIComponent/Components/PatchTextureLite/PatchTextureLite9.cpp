@@ -7,11 +7,15 @@
 PatchTextureLite9::~PatchTextureLite9() = default;
 PatchTextureLite9::PatchTextureLite9() noexcept :
 	PatchTextureLite{ TextureSlice::Nine }
-{}
+{
+	m_impl.SetOwner(this);
+}
 
 PatchTextureLite9::PatchTextureLite9(const PatchTextureLite9& o) noexcept :
 	PatchTextureLite{ o }
-{}
+{
+	m_impl.SetOwner(this);
+}
 
 unique_ptr<UIComponent> PatchTextureLite9::CreateClone() const
 {
@@ -22,8 +26,7 @@ bool PatchTextureLite9::SetupLayout(size_t index, const vector<Rectangle>& sourc
 {
 	ReturnIfFalse(sources.size() == 9);
 
-	//vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_impl.GetDirectionType()); //?!?나중에 이 함수를 사용하는 걸로 바꾸자
-	vector<optional<StateFlag::Type>> stateFlags{ StateFlag::Y_SizeLocked, nullopt, StateFlag::Y_SizeLocked };
+	vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(DirectionType::Vertical);
 	for (auto idx : views::iota(0u, 3u))
 	{
 		unique_ptr<PatchTextureLite> tex = make_unique<PatchTextureLite3>();
@@ -35,41 +38,18 @@ bool PatchTextureLite9::SetupLayout(size_t index, const vector<Rectangle>& sourc
 	return ChangeSize(size, true);
 }
 
-bool PatchTextureLite9::ForEachPatchTextureLite3(predicate<PatchTextureLite3*, size_t> auto&& each)
-{
-	for (size_t index : views::iota(0u, 3u))
-	{
-		PatchTextureLite3* patchTexL3 = ComponentCast<PatchTextureLite3*>(GetChildComponent(index));
-		if (!each(patchTexL3, index)) return false;
-	}
-	return true;
-}
-
 bool PatchTextureLite9::FitToTextureSource() noexcept
 {
-	XMUINT2 totalSize{};
-	vector<XMUINT2> sizes{};
-	auto result = ForEachPatchTextureLite3([&totalSize, &sizes, this](PatchTextureLite3* tex3, size_t) {
-		ReturnIfFalse(tex3->FitToTextureSource());
-		const XMUINT2 size = GetSizeFromRectangle(tex3->GetArea());
-		sizes.emplace_back(size);
-
+	return m_impl.FitToTextureSource(DirectionType::Vertical, [this](const XMUINT2& size, XMUINT2& totalSize) {
 		totalSize.y += size.y;
 		totalSize.x = max(totalSize.x, size.x);
-		return true;
 		});
-	ReturnIfFalse(result);
-	ReturnIfFalse(ApplyPositions(totalSize, sizes));
-
-	SetSize(totalSize);
-	return true;
 }
 
 void PatchTextureLite9::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
 {
-	ForEachPatchTextureLite3([index, &sources](PatchTextureLite3* tex3, size_t idx) {
-		tex3->SetIndexedSource(index, { sources[idx * 3 + 0], sources[idx * 3 + 1], sources[idx * 3 + 2] });
-		return true;
+	m_impl.SetIndexedSource(index, sources, [&sources](size_t idx) {
+		return vector<Rectangle>{ sources[idx * 3 + 0], sources[idx * 3 + 1], sources[idx * 3 + 2] };
 		});
 }
 
@@ -83,33 +63,11 @@ static vector<Rectangle> GetSourceList(const vector<UIComponent*>& components) n
 	return srcList;
 }
 
-bool PatchTextureLite9::ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept
-{
-	ReturnIfFalse(ForEachPatchTextureLite3([this, &sizes](PatchTextureLite3* tex3, size_t index) {
-		return tex3->ChangeSize(sizes[index]);
-		}));
-	return true;
-}
-
-bool PatchTextureLite9::ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept
-{
-	vector<XMINT2> positions = ExtractStartPosFromSizes(DirectionType::Vertical, sizes);
-	ReturnIfFalse(ForEachPatchTextureLite3([this, &size, &positions](PatchTextureLite3*, size_t index) {
-		return ChangePosition(index, size, positions[index]);
-		}));
-	return true;
-}
-
 bool PatchTextureLite9::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
 	vector<Rectangle> list = GetSourceList(components);
 	ReturnIfFalse(IsBiggerThanSource(DirectionType::Vertical, size, list));
 
-	vector<XMUINT2> sizes = StretchSize(DirectionType::Vertical, size, components);
-	ReturnIfFalse(ApplyStretchSize(sizes));
-	ReturnIfFalse(ApplyPositions(size, sizes));
-	ApplySize(size);
-
-	return true;
+	return m_impl.ChangeSize(DirectionType::Vertical, size, components);
 }

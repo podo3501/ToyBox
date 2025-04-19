@@ -19,7 +19,7 @@ protected:
 	inline void SetTextureSlice(TextureSlice texSlice) noexcept { m_texSlice = texSlice; }
 
 private:
-	optional<TextureSlice> m_texSlice{ nullopt };
+	optional<TextureSlice> m_texSlice{ nullopt }; //?!? 이 변수는 저장하지 않았기 때문에 문제가 될 수 있다.
 
 	friend class PatchTextureImpl;
 };

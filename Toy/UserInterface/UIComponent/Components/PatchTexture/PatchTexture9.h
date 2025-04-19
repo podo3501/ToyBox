@@ -1,5 +1,6 @@
 #pragma once
 #include "PatchTexture.h"
+#include "PatchTextureImpl.h"
 
 struct TextureSourceInfo;
 class PatchTexture3;
@@ -27,9 +28,7 @@ protected:
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
-	bool ForEachPatchTexture3(predicate<PatchTexture3*, size_t> auto&& each);
-	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
-	bool ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept;
+	PatchTextureImpl m_impl;
 };
 
 unique_ptr<PatchTexture9> CreatePatchTexture9(const UILayout& layout, const string& bindKey);

@@ -1,5 +1,6 @@
 #pragma once
 #include "PatchTextureLite.h"
+#include "../PatchTexture/PatchTextureImpl.h"
 
 class PatchTextureLite3;
 class PatchTextureLite9 : public PatchTextureLite
@@ -21,7 +22,5 @@ protected:
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
-	bool ForEachPatchTextureLite3(predicate<PatchTextureLite3*, size_t> auto&& each);
-	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
-	bool ApplyPositions(const XMUINT2& size, vector<XMUINT2>& sizes) noexcept;
+	PatchTextureImpl m_impl;
 };

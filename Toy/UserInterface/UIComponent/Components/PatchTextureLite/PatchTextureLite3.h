@@ -3,6 +3,8 @@
 #include "../PatchTexture/PatchTextureImpl.h"
 
 class PatchTextureLite1;
+enum class DirectionType;
+
 class PatchTextureLite3 : public PatchTextureLite
 {
 public:
@@ -27,5 +29,8 @@ protected:
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
 
 private:
+	void SetDirectionType(DirectionType dirType) noexcept;
+
+	DirectionType m_dirType;
 	PatchTextureImpl m_impl;
 };
