@@ -16,7 +16,9 @@ namespace UserInterfaceTest
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {32, 32}, Origin::Center }, 
 			TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel = WriteReadTest(m_panel, switcherPtr);
+
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::One);
 
@@ -38,7 +40,9 @@ namespace UserInterfaceTest
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {100, 48}, Origin::Center },
 			TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel = WriteReadTest(m_panel, switcherPtr);
+
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::ThreeH);
 
@@ -66,7 +70,9 @@ namespace UserInterfaceTest
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {48, 100}, Origin::Center },
 			TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel = WriteReadTest(m_panel, switcherPtr);
+
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::ThreeV);
 
@@ -90,7 +96,9 @@ namespace UserInterfaceTest
 		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {100, 100}, Origin::Center },
 			TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel = WriteReadTest(m_panel, switcherPtr);
+
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::Nine);
 

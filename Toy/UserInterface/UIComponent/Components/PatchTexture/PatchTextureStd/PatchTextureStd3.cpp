@@ -86,13 +86,6 @@ void PatchTextureStd3::ChangeBindKeyWithIndex(const string& key, const TextureSo
     }
 }
 
-void PatchTextureStd3::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
-{
-    m_impl.SetIndexedSource(index, sources, [&sources](size_t idx) {
-        return vector<Rectangle>{ sources[idx] };
-        });
-}
-
 bool PatchTextureStd3::ImplementChangeSize(const XMUINT2& size) noexcept
 {
     const vector<UIComponent*> components = GetChildComponents();

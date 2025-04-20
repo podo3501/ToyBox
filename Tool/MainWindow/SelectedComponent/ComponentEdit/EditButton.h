@@ -8,7 +8,7 @@ class EditButton : public EditWindow
 public:
 	~EditButton();
 	EditButton() = delete;
-	EditButton(Button* button, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditButton(Button* button, UICommandList* cmdList) noexcept;
 
 protected:
 	virtual void RenderComponent() override;

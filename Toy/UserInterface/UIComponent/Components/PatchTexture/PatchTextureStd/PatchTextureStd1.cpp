@@ -45,7 +45,7 @@ bool PatchTextureStd1::operator==(const UIComponent& rhs) const noexcept
 void PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
 {
 	m_filename = sourceInfo.filename;
-	SetIndexedSource(*sourceInfo.GetIndex(), { sourceInfo.GetSource(m_sourceIndex) });
+	m_coord.SetIndexedSource(*sourceInfo.GetIndex(), { sourceInfo.GetSource(m_sourceIndex) });
 	if (auto gfxOffset = sourceInfo.GetGfxOffset(); gfxOffset)
 		m_gfxOffset = *gfxOffset;
 	m_texController = texController;

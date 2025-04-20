@@ -3,7 +3,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 
 EditRenderTexture::~EditRenderTexture() = default;
-EditRenderTexture::EditRenderTexture(RenderTexture* renderTexture, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
-	EditWindow{ renderTexture, resBinder, cmdList },
+EditRenderTexture::EditRenderTexture(RenderTexture* renderTexture, UICommandList* cmdList) noexcept :
+	EditWindow{ renderTexture, cmdList },
 	m_renderTexture{ renderTexture }
 {}

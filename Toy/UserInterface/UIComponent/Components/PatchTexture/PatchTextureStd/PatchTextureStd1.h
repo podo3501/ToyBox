@@ -19,7 +19,6 @@ public:
 	//PatchTexture
 	virtual void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept override;
 	virtual const string& GetBindKey() const noexcept override { return m_bindKey; }
-	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override { m_coord.SetIndexedSource(index, source); }
 	virtual bool FitToTextureSource() noexcept override { return m_coord.FitToTextureSource(); }
 
 	optional<vector<Rectangle>> GetTextureAreaList();

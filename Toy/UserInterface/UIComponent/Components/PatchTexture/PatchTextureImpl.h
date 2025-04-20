@@ -3,7 +3,6 @@
 class PatchTexture;
 class UIComponent;
 enum class DirectionType;
-
 class PatchTextureImpl
 {
 public:
@@ -19,7 +18,8 @@ public:
 private:
 	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;
 	bool ApplyPositions(DirectionType dirType, const XMUINT2& size, const vector<XMUINT2>& sizes) noexcept;
-	bool ForEachTexture(predicate<PatchTexture*, size_t> auto&& each);
+	template<typename T, predicate<T*, size_t> Func>
+	bool ForEach(Func&& each);
 
 	PatchTexture* m_component;
 };

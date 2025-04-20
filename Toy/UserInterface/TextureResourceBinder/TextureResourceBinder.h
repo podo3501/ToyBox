@@ -1,6 +1,6 @@
 #pragma once
 #include "../Include/ITextureBinder.h"
-#include "TextureSourceInfo.h" //TextureSourceInfo가 클래스로 바뀐다면 전방선언으로 바꾸는게 더 좋지 않을까 ?!?
+#include "TextureSourceInfo.h"
 #include "TextureFontInfo.h"
 #include "TextureBinderHelper.h"
 

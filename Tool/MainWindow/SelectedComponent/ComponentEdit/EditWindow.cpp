@@ -19,9 +19,8 @@ enum class OnDrag
 };
 
 EditWindow::~EditWindow() = default;
-EditWindow::EditWindow(UIComponent* component, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept:
+EditWindow::EditWindow(UIComponent* component, UICommandList* cmdList) noexcept:
 	m_component{ component },
-    m_resBinder{ resBinder },
     m_cmdList{ cmdList },
     m_renameNotifier{ make_unique<RenameNotifier>() },
     m_dragState{ OnDrag::Normal }
@@ -180,7 +179,7 @@ void EditWindow::Render(const ImGuiWindow* mainWindow)
 //////////////////////////////////////////////////////////
 
 EditPanel::~EditPanel() = default;
-EditPanel::EditPanel(Panel* panel, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
-    EditWindow{ panel, resBinder, cmdList }
+EditPanel::EditPanel(Panel* panel, UICommandList* cmdList) noexcept :
+    EditWindow{ panel, cmdList }
 {
 }

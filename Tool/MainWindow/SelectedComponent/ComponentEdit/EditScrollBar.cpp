@@ -3,8 +3,8 @@
 #include "../Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 
 EditScrollBar::~EditScrollBar() = default;
-EditScrollBar::EditScrollBar(ScrollBar* scrollBar, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
-	EditWindow{ scrollBar, resBinder, cmdList },
+EditScrollBar::EditScrollBar(ScrollBar* scrollBar, UICommandList* cmdList) noexcept :
+	EditWindow{ scrollBar, cmdList },
 	m_scrollBar{ scrollBar }
 {
 }

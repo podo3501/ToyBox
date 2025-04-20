@@ -8,7 +8,7 @@ class EditContainer : public EditWindow
 public:
 	~EditContainer();
 	EditContainer() = delete;
-	EditContainer(Container* container, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditContainer(Container* container, UICommandList* cmdList) noexcept;
 
 protected:
 	virtual void RenderComponent() override;

@@ -124,22 +124,19 @@
 --TextureSwitcher 툴 작업
 --컨테이너는 Patch9로
 --EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr)); 9Tex에서 왜 이거 2번 쓰는지. 1번만 써도 되게끔 수정할 수 있는지
+--patchTextureLite를 만들어서 bindKey가 없는 버전 만들기. 다른 로직 때문에 생각하는게 복잡해져서 따로 구현해야겠다.
+--이미지 좌표에 고유 이름 시스템(binder)
+--Image를 Texture로 바꿔야 하지 않을까?
 
-@툴에서 콤보박스 할 수 있게끔
 @툴에서 리스트 할 수 있게끔
     스크롤바 바탕없애기
     컨테이너 간격 셋팅
-    switcher만들때 slice type없어도 될꺼 같은데
-    patchTextureLite를 만들어서 bindKey가 없는 버전 만들기. 다른 로직 때문에 생각하는게 복잡해져서 따로 구현해야겠다.
 
-@UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔
+@UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력
 @이미지가 커지면 마지막 줄은 알파값이 늘어나서 밑에 그림이랑 블랜딩돼서 1pixel 이상하게 보이는거 수정(그래픽을 수정하든지 1픽셀 작게 잡든지)
-@ImageGrid1에서 이미지를 바꾸는 부분 테스트
-@이미지 좌표에 고유 이름 시스템
 @sprite->Draw 할때 Rect 값을 lefttop이 아니라 rightTop으로 주고 사이즈를 bottomLeft로 하면 어떻게 출력될까?
-@Image를 Texture로 바꿔야 하지 않을까?
 
 콤보 Component 구현
 툴 위젯 쓰기 편하게 바꾸기.

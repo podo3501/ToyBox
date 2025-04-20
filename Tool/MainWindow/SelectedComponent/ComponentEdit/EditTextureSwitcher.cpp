@@ -6,9 +6,10 @@
 #include "EditUtility/EditUtility.h"
 
 EditTextureSwitcher::~EditTextureSwitcher() = default;
-EditTextureSwitcher::EditTextureSwitcher(TextureSwitcher* texSwitcher, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
-	EditWindow{ texSwitcher, resBinder, cmdList },
-	m_texSwitcher{ texSwitcher }
+EditTextureSwitcher::EditTextureSwitcher(TextureSwitcher* texSwitcher, UICommandList* cmdList, TextureResourceBinder* resBinder) noexcept :
+	EditWindow{ texSwitcher, cmdList },
+	m_texSwitcher{ texSwitcher },
+	m_resBinder{ resBinder }
 {
 	if (auto state = m_texSwitcher->GetState(); state)
 	{
@@ -20,7 +21,7 @@ EditTextureSwitcher::EditTextureSwitcher(TextureSwitcher* texSwitcher, IRenderer
 	{
 		if (auto curSlice = GetTextureSlice(texSwitcher); curSlice)
 		{
-			const auto& keys = resBinder->GetTextureKeys(*curSlice);
+			const auto& keys = m_resBinder->GetTextureKeys(*curSlice);
 			m_keyCombo = make_unique<EditCombo>("Bind Keys", keys);
 			m_keyCombo->SelectItem(*bindKey);
 		}
@@ -55,7 +56,7 @@ void EditTextureSwitcher::RenderKeyCombo()
 	if (!m_keyCombo) return;
 
 	m_keyCombo->Render([this](const std::string& key) {
-		m_texSwitcher->ChangeBindKey(GetTextureResourceBinder(), key);
+		m_texSwitcher->ChangeBindKey(m_resBinder, key);
 		});
 }
 

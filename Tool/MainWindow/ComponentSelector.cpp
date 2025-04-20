@@ -40,7 +40,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 		return;
 	}
 
-	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_renderer, m_resBinder, m_cmdList);
+	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_cmdList, m_resBinder);
 	if (m_editWindow) m_editWindow->Setup();
 
 	m_component = component;

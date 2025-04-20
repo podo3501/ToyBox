@@ -6,8 +6,8 @@
 #include "EditUtility/EditUtility.h"
 
 EditButton::~EditButton() {};
-EditButton::EditButton(Button* button, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept :
-	EditWindow{ button, resBinder, cmdList },
+EditButton::EditButton(Button* button, UICommandList* cmdList) noexcept :
+	EditWindow{ button, cmdList },
     m_button{ button }
 {
 }

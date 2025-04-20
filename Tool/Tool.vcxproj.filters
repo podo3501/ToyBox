@@ -28,6 +28,9 @@
     <Filter Include="EditUtility">
       <UniqueIdentifier>{8f00648d-decb-47c6-9bf8-d21969fa5ca2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture">
+      <UniqueIdentifier>{fbfdb82a-342c-4fd5-b645-0aa28e6248ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp" />
@@ -58,9 +61,6 @@
     </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\ComponentTooltip.cpp">
       <Filter>MainWindow\SelectedComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTextureStd.cpp">
-      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow\ComponentSelector.cpp">
       <Filter>MainWindow</Filter>
@@ -118,6 +118,15 @@
     <ClCompile Include="EditUtility\EditClass.cpp">
       <Filter>EditUtility</Filter>
     </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTextureStd.cpp">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTextureLite.cpp">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTexture.cpp">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -147,9 +156,6 @@
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentTooltip.h">
       <Filter>MainWindow\SelectedComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTextureStd.h">
-      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\ComponentSelector.h">
       <Filter>MainWindow</Filter>
@@ -206,6 +212,15 @@
     </ClInclude>
     <ClInclude Include="EditUtility\EditClass.h">
       <Filter>EditUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTextureStd.h">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTextureLite.h">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTexture.h">
+      <Filter>MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

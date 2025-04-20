@@ -166,7 +166,9 @@
     <ClCompile Include="MainWindow\FloatingComponent.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditContainer.cpp" />
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTextureStd.cpp" />
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTexture.cpp" />
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTextureLite.cpp" />
+    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTextureStd.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditTextureSwitcher.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditListArea.cpp" />
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditRenderTexture.cpp" />
@@ -209,7 +211,9 @@
     <ClInclude Include="MainWindow\FloatingComponent.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditButton.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditContainer.h" />
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTextureStd.h" />
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTexture.h" />
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTextureLite.h" />
+    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditPatchTexture\EditPatchTextureStd.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditTextureSwitcher.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditListArea.h" />
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditRenderTexture.h" />

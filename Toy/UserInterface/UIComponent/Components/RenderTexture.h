@@ -1,7 +1,6 @@
 #pragma once
 #include "../UIComponent.h"
 
-struct IRenderer;
 namespace DX { class StepTimer; }
 
 class RenderTexture : public UIComponent

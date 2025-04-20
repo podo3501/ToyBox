@@ -8,7 +8,7 @@ class EditScrollBar : public EditWindow
 public:
 	~EditScrollBar();
 	EditScrollBar() = delete;
-	EditScrollBar(ScrollBar* scrollBar, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditScrollBar(ScrollBar* scrollBar, UICommandList* cmdList) noexcept;
 
 private:
 	ScrollBar* m_scrollBar;

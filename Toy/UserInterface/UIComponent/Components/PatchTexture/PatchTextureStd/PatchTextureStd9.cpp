@@ -66,11 +66,6 @@ void PatchTextureStd9::ChangeBindKey(const string& key, const TextureSourceInfo&
 	}
 }
 
-void PatchTextureStd9::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
-{
-	m_impl.SetIndexedSource(index, sources, [&sources](size_t idx) { return GetTripleAt(sources, idx); });
-}
-
 bool PatchTextureStd9::ImplementChangeSize(const XMUINT2& size) noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();

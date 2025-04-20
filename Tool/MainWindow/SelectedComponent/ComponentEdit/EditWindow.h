@@ -15,7 +15,7 @@ class EditWindow
 {
 public:
 	EditWindow() = delete;
-	EditWindow(UIComponent* component, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditWindow(UIComponent* component, UICommandList* cmdList) noexcept;
 	virtual ~EditWindow();
 	
 	void Setup();
@@ -31,7 +31,6 @@ protected:
 
 	inline UICommandList* GetUICommandList() const noexcept { return m_cmdList; }
 	inline UIComponent* GetComponent() const noexcept { return m_component; }
-	inline TextureResourceBinder* GetTextureResourceBinder() const noexcept { return m_resBinder; }
 
 private:
 	void RenderCommon();
@@ -40,7 +39,6 @@ private:
 	void ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept;
 
 	UIComponent* m_component;
-	TextureResourceBinder* m_resBinder;
 	UICommandList* m_cmdList;
 	unique_ptr<RenameNotifier> m_renameNotifier;
 	bool m_visible{ true };
@@ -53,7 +51,7 @@ class EditPanel : public EditWindow
 public:
 	~EditPanel();
 	EditPanel() = delete;
-	EditPanel(Panel* panel, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditPanel(Panel* panel, UICommandList* cmdList) noexcept;
 	//virtual void SetComponent(UIComponent* component);
 	//virtual void Render();
 

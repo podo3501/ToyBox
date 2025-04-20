@@ -1,22 +1,23 @@
 #pragma once
-#include "EditWindow.h"
+#include "EditPatchTexture.h"
 
 class EditCombo;
 class TextureResourceBinder;
 class PatchTextureStd;
-class EditPatchTextureStd : public EditWindow
+class EditPatchTextureStd : public EditPatchTexture
 {
 public:
 	~EditPatchTextureStd();
 	EditPatchTextureStd() = delete;
-	EditPatchTextureStd(PatchTextureStd* patchTex, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditPatchTextureStd(PatchTextureStd* patchTex, UICommandList* cmdList, TextureResourceBinder* resBinder) noexcept;
 
 protected:
 	virtual void SetupComponent() noexcept;
 	virtual void RenderComponent() override;
 
-	unique_ptr<EditCombo> m_combo;
+	TextureResourceBinder* m_resBinder;
 	PatchTextureStd* m_patchTex;
+	unique_ptr<EditCombo> m_combo;
 };
 
 ////////////////////////////////////////////////
@@ -27,7 +28,7 @@ class EditPatchTextureStd1 : public EditPatchTextureStd
 public:
 	~EditPatchTextureStd1();
 	EditPatchTextureStd1() = delete;
-	EditPatchTextureStd1(PatchTextureStd1* patchTex1, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditPatchTextureStd1(PatchTextureStd1* patchTex1, UICommandList* cmdList, TextureResourceBinder* resBinder) noexcept;
 };
 
 class PatchTextureStd3;
@@ -36,7 +37,7 @@ class EditPatchTextureStd3 : public EditPatchTextureStd
 public:
 	~EditPatchTextureStd3();
 	EditPatchTextureStd3() = delete;
-	EditPatchTextureStd3(PatchTextureStd3* patchTex3, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditPatchTextureStd3(PatchTextureStd3* patchTex3, UICommandList* cmdList, TextureResourceBinder* resBinder) noexcept;
 
 private:
 	PatchTextureStd3* m_patchTex3;
@@ -48,7 +49,7 @@ class EditPatchTextureStd9 : public EditPatchTextureStd
 public:
 	~EditPatchTextureStd9();
 	EditPatchTextureStd9() = delete;
-	EditPatchTextureStd9(PatchTextureStd9* patchTex9, IRenderer* renderer, TextureResourceBinder* resBinder, UICommandList* cmdList) noexcept;
+	EditPatchTextureStd9(PatchTextureStd9* patchTex9, UICommandList* cmdList, TextureResourceBinder* resBinder) noexcept;
 
 private:
 	PatchTextureStd9* m_patchTex9;
