@@ -53,7 +53,7 @@ void TestCoordinates(size_t index, const RECT& dest, const RECT* source,
 
 vector<RECT> GetSources(TextureResourceBinder* resBinder, const string& key) noexcept
 {
-	const auto& rectangles = GetRectangles(resBinder, key);
+	const auto& rectangles = GetSourcesOfBindKey(resBinder, key);
 	if (!rectangles) return {};
 
 	return RectanglesToRects(rectangles->get());

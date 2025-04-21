@@ -5,10 +5,18 @@
 #include "../UIComponent/UIType.h"
 #include "Utility.h"
 
-optionalRef<vector<Rectangle>> GetRectangles(TextureResourceBinder* rb, const string& key) noexcept
+optionalRef<vector<Rectangle>> GetSourcesOfBindKey(TextureResourceBinder* rb, const string& key) noexcept
 {
     if (auto infoRef = rb->GetTextureSourceInfo(key); infoRef) return cref(infoRef->get().sources);
     return nullopt;
+}
+
+XMUINT2 GetSizeOfBindKey(TextureResourceBinder* rb, const string& key) noexcept
+{
+    auto sourcesRef = GetSourcesOfBindKey(rb, key);
+    if (!sourcesRef) return {};
+    
+    return GetSizeFromRectangle(CombineRectangles(sourcesRef->get()));
 }
 
 SourceDivider GetSourceDivider(TextureResourceBinder* rb, const string& key) noexcept

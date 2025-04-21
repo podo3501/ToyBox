@@ -33,6 +33,7 @@ void PatchTextureCoord::SetIndexedSource(size_t index, const vector<Rectangle>& 
 
 bool PatchTextureCoord::FitToTextureSource() noexcept
 {
+	Assert(!m_source.IsEmpty()); //좌표가 없는건데 아마 로딩하고나서 Bind를 안해 줬거나 생성시 안해줬거나 attach가 안돼서 bind가 안됐을 가능성이 있다.
 	if (m_source.IsEmpty()) return false;
 
 	m_component->SetSize(GetSizeFromRectangle(m_source));

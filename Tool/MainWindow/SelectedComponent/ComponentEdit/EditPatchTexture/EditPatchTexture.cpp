@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "EditPatchTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
+#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 
 EditPatchTexture::~EditPatchTexture() = default;
 EditPatchTexture::EditPatchTexture(PatchTexture* patchTex, UICommandList* cmdList) noexcept :
@@ -11,5 +12,8 @@ EditPatchTexture::EditPatchTexture(PatchTexture* patchTex, UICommandList* cmdLis
 void EditPatchTexture::RenderComponent()
 {
 	if (ImGui::Button("Fit to Texture Size"))
-		m_patchTex->FitToTextureSource();
+	{
+		auto cmdList = GetUICommandList();
+		cmdList->FitToTextureSource(m_patchTex);
+	}
 }

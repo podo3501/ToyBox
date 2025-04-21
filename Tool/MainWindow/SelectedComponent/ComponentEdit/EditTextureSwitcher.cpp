@@ -3,6 +3,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "EditUtility/EditUtility.h"
 
 EditTextureSwitcher::~EditTextureSwitcher() = default;
@@ -17,21 +18,21 @@ EditTextureSwitcher::EditTextureSwitcher(TextureSwitcher* texSwitcher, UICommand
 		m_stateCombo->SelectItem(EnumToString(*state));
 	}
 
-	if (auto bindKey = texSwitcher->GetBindKey(); bindKey)
+	if (auto bindKey = texSwitcher->GetBindKey(); !bindKey.empty())
 	{
 		if (auto curSlice = GetTextureSlice(texSwitcher); curSlice)
 		{
 			const auto& keys = m_resBinder->GetTextureKeys(*curSlice);
 			m_keyCombo = make_unique<EditCombo>("Bind Keys", keys);
-			m_keyCombo->SelectItem(*bindKey);
+			m_keyCombo->SelectItem(bindKey);
 		}
 	}
 }
 
 void EditTextureSwitcher::SelectKeyComboItem()
 {
-	if (auto bindKey = m_texSwitcher->GetBindKey(); bindKey)
-		m_keyCombo->SelectItem(*bindKey);
+	if (auto bindKey = m_texSwitcher->GetBindKey(); !bindKey.empty())
+		m_keyCombo->SelectItem(bindKey);
 }
 
 void EditTextureSwitcher::RenderComponent()
@@ -56,7 +57,8 @@ void EditTextureSwitcher::RenderKeyCombo()
 	if (!m_keyCombo) return;
 
 	m_keyCombo->Render([this](const std::string& key) {
-		m_texSwitcher->ChangeBindKey(m_resBinder, key);
+		auto cmdList = GetUICommandList();
+		cmdList->ChangeBindKey(m_texSwitcher, m_resBinder, key);
 		});
 }
 
@@ -65,6 +67,9 @@ void EditTextureSwitcher::RenderFitToTextureButton()
 	if (m_stateCombo && m_keyCombo)
 	{
 		if (ImGui::Button("Fit to Texture Size"))
-			m_texSwitcher->FitToTextureSource();
+		{
+			auto cmdList = GetUICommandList();
+			cmdList->FitToTextureSource(m_texSwitcher);
+		}
 	}
 }

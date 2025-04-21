@@ -49,3 +49,15 @@ bool UICommandList::Rename(UIComponent* component, const string& name)
 
 bool UICommandList::SetText(TextArea* textArea, const wstring& text)
 { return ApplyCommand<SetTextCommand>(textArea, text); }
+
+bool UICommandList::FitToTextureSource(PatchTexture* patchTex)
+{ return ApplyCommand<FitToTextureSourceCommand>(patchTex); }
+
+bool UICommandList::FitToTextureSource(TextureSwitcher* texSwitcher)
+{ return ApplyCommand<FitToTextureSourceCommand>(texSwitcher); }
+
+bool UICommandList::ChangeBindKey(PatchTextureStd* patchTexStd, TextureResourceBinder* resBinder, const string& key)
+{ return ApplyCommand<ChangeBindKeyCommand>(patchTexStd, resBinder, key); }
+
+bool UICommandList::ChangeBindKey(TextureSwitcher* texSwitcher, TextureResourceBinder* resBinder, const string& key)
+{ return ApplyCommand<ChangeBindKeyCommand>(texSwitcher, resBinder, key); }

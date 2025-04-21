@@ -13,6 +13,10 @@ enum class UICommandID : int
 	SetFilename,
 	SetSourceAndDivider,
 	SetText,
+	FitToTextureSource,
+	FitToTextureSourceTS,
+	ChangeBindKey,
+	ChangeBindKeyTS,
 	Unknown
 };
 class UIComponent;

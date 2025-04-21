@@ -15,7 +15,7 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	//PatchTexture
 	virtual bool FitToTextureSource() noexcept override;
-	virtual void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept override;
+	virtual bool ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept override;
 	virtual const string& GetBindKey() const noexcept override;
 
 	bool Setup(const UILayout& layout, const string& bindKey);

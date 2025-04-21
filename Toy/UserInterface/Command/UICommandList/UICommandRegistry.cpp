@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "UICommandRegistry.h"
 #include "Utility.h"
+#include "../../UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
+#include "../../UIComponent/Components/TextureSwitcher.h"
 #include "../../UIComponent/Components/TextArea.h"
 #include "../Include/IRenderer.h"
 
@@ -189,3 +191,72 @@ bool SetTextCommand::Execute()
 
 bool SetTextCommand::Undo() { return m_textArea->SetText(m_record.previous); }
 bool SetTextCommand::Redo() { return m_textArea->SetText(m_record.current); }
+
+//////////////////////////////////////////////////////////////////
+
+FitToTextureSourceCommand::FitToTextureSourceCommand(PatchTexture* patchTex) noexcept :
+	UICommand{ patchTex },
+	m_commandID{ UICommandID::FitToTextureSource }
+{}
+
+FitToTextureSourceCommand::FitToTextureSourceCommand(TextureSwitcher* texSwitcher) noexcept :
+	UICommand{ texSwitcher },
+	m_commandID{ UICommandID::FitToTextureSourceTS }
+{}
+
+template<typename FuncT>
+bool FitToTextureSourceCommand::WithTarget(FuncT&& Func)
+{
+	switch (m_commandID) {
+	case UICommandID::FitToTextureSource: return Func(static_cast<PatchTexture*>(GetTarget()));
+	case UICommandID::FitToTextureSourceTS: return Func(static_cast<TextureSwitcher*>(GetTarget()));
+	default: return false;
+	}
+}
+
+bool FitToTextureSourceCommand::Execute()
+{
+	return WithTarget([this](auto* target) {
+		m_size = target->GetSize();
+		return target->FitToTextureSource();
+		});
+}
+
+bool FitToTextureSourceCommand::Undo() { return WithTarget([this](auto* t) { return t->ChangeSize(m_size); }); }
+bool FitToTextureSourceCommand::Redo() { return WithTarget([](auto* t) { return t->FitToTextureSource(); }); }
+
+//////////////////////////////////////////////////////////////////
+
+ChangeBindKeyCommand::ChangeBindKeyCommand(PatchTextureStd* patchTexStd, TextureResourceBinder* resBinder, const string& key) noexcept :
+	UICommand{ patchTexStd },
+	m_commandID{ UICommandID::ChangeBindKey },
+	m_resBinder{ resBinder },
+	m_record{ key }
+{}
+
+ChangeBindKeyCommand::ChangeBindKeyCommand(TextureSwitcher* texSwitcher, TextureResourceBinder* resBinder, const string& key) noexcept :
+	UICommand{ texSwitcher },
+	m_commandID{ UICommandID::ChangeBindKeyTS },
+	m_resBinder{ resBinder },
+	m_record{ key }
+{}
+
+template<typename FuncT>
+bool ChangeBindKeyCommand::WithTarget(FuncT&& Func)
+{
+	switch (m_commandID) {
+	case UICommandID::ChangeBindKey: return Func(static_cast<PatchTextureStd*>(GetTarget()));
+	case UICommandID::ChangeBindKeyTS: return Func(static_cast<TextureSwitcher*>(GetTarget()));
+	default: return false;
+	}
+}
+
+bool ChangeBindKeyCommand::Execute()
+{
+	return WithTarget([this](auto* target) {
+		m_record.previous = target->GetBindKey();
+		return target->ChangeBindKey(m_resBinder, m_record.current);
+		});
+}
+bool ChangeBindKeyCommand::Undo() { return WithTarget([this](auto* t) { return t->ChangeBindKey(m_resBinder, m_record.previous); }); }
+bool ChangeBindKeyCommand::Redo() { return WithTarget([this](auto* t) { return t->ChangeBindKey(m_resBinder, m_record.current); }); }

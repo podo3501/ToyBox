@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "PatchTextureStd9.h"
 #include "PatchTextureStd3.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Utility.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 
@@ -57,13 +58,18 @@ const string& PatchTextureStd9::GetBindKey() const noexcept
 	return patchTex3->GetBindKey();
 }
 
-void PatchTextureStd9::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
+bool PatchTextureStd9::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
 {
+	auto infoRef = resBinder->GetTextureSourceInfo(key);
+	ReturnIfFalse(infoRef);
+
 	for (size_t index : views::iota(0u, 3u))
 	{
 		PatchTextureStd3* tex3 = ComponentCast<PatchTextureStd3*>(GetChildComponent(index));
-		tex3->ChangeBindKeyWithIndex(key, sourceInfo, index);
+		tex3->ChangeBindKeyWithIndex(key, *infoRef, index);
 	}
+
+	return true;
 }
 
 bool PatchTextureStd9::ImplementChangeSize(const XMUINT2& size) noexcept

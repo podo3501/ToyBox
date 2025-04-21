@@ -9,7 +9,7 @@ PatchTextureImpl::~PatchTextureImpl() = default;
 PatchTextureImpl::PatchTextureImpl() noexcept :
 	m_component{ nullptr }
 {}
-
+//?!? 이걸 조금 변형하면 utility에 foreach를 넣고 리스트들을 돌면서 특정 component로 형변환 해서 넘겨주는 거 만들수도 있겠다.
 template<typename T, predicate<T*, size_t> Func>
 bool PatchTextureImpl::ForEach(Func&& each)
 {

@@ -18,7 +18,7 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 	//PatchTexture
 	virtual bool FitToTextureSource() noexcept override;
-	virtual void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept override;
+	virtual bool ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept override;
 	virtual const string& GetBindKey() const noexcept override;
 
 	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;

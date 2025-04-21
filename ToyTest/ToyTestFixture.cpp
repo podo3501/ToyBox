@@ -138,17 +138,11 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 	return CompareUniquePtr(original, clone);
 }
 
-static inline XMUINT2 GetSizeFromRectangles(const vector<Rectangle>& rectangles) noexcept
-{
-	return GetSizeFromRectangle(CombineRectangles(rectangles));
-}
-
 void TextureSwitcherComponentTest::FitToTextureSourceTest(const string& bindingKey)
 {
 	TextureSwitcher* texSwitcher = UIEx(m_panel).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
 	EXPECT_TRUE(texSwitcher->FitToTextureSource());
-	auto rectRef = GetRectangles(m_resBinder.get(), bindingKey);
-	EXPECT_EQ(texSwitcher->GetSize(), GetSizeFromRectangles(rectRef->get()));
+	EXPECT_EQ(texSwitcher->GetSize(), GetSizeOfBindKey(m_resBinder.get(), bindingKey));
 }
 
 void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<UIComponent>>& history)

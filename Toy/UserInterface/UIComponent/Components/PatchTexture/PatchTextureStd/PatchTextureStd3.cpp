@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "PatchTextureStd3.h"
 #include "PatchTextureStd1.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Utility.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
@@ -72,9 +73,15 @@ const string& PatchTextureStd3::GetBindKey() const noexcept
     return patchTex1->GetBindKey();
 }
 
-void PatchTextureStd3::ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept
+bool PatchTextureStd3::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
 {
-    ChangeBindKeyWithIndex(key, sourceInfo, 0);
+    if (auto infoRef = resBinder->GetTextureSourceInfo(key); infoRef)
+    {
+        ChangeBindKeyWithIndex(key, *infoRef, 0);
+        return true;
+    }
+
+    return false;
 }
 
 void PatchTextureStd3::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept

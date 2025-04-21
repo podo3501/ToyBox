@@ -26,7 +26,7 @@ public:
 	bool ChangeBindKey(TextureResourceBinder* resBinder, const string& bindKey) noexcept;
 	inline optional<InteractState> GetState() const noexcept 	{ return m_state; }
 	inline PatchTextureLite* GetPatchTextureLite() const noexcept { return m_patchTexL; }
-	optionalRef<string> GetBindKey() const noexcept;
+	string GetBindKey() const noexcept;
 
 protected:
 	TextureSwitcher(const TextureSwitcher& o);

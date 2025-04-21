@@ -6,6 +6,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/Utility.h"
 #include "EditUtility/EditUtility.h"
 
@@ -34,11 +35,11 @@ void EditPatchTextureStd::SetupComponent() noexcept
 void EditPatchTextureStd::RenderComponent()
 {
     EditPatchTexture::RenderComponent();
-
+    
     if (!m_combo) return;
     m_combo->Render([this](const string& curKey) {
-        if (auto infoRef = m_resBinder->GetTextureSourceInfo(curKey); infoRef)
-            m_patchTex->ChangeBindKey(curKey, *infoRef);
+        auto cmdList = GetUICommandList();
+        cmdList->ChangeBindKey(m_patchTex, m_resBinder, curKey);
         });
 }
 

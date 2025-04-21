@@ -17,7 +17,7 @@ public:
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 	//PatchTexture
-	virtual void ChangeBindKey(const string& key, const TextureSourceInfo& sourceInfo) noexcept override;
+	virtual bool ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept override;
 	virtual const string& GetBindKey() const noexcept override { return m_bindKey; }
 	virtual bool FitToTextureSource() noexcept override { return m_coord.FitToTextureSource(); }
 

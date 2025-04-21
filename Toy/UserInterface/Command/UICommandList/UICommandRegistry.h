@@ -133,6 +133,55 @@ protected:
 	virtual bool IsMerge(UICommand*) noexcept { return false; }
 
 private:
+	TextArea* m_textArea; //UIComponent* 가 아닌 이상은 template 상속일때 문제가 되어서 변수를 두었다. 나중에 해결할 수 있는지 봐도 좋을 것이다.
 	CommandRecord<wstring> m_record;
-	TextArea* m_textArea;
+};
+
+class PatchTexture;
+class TextureSwitcher;
+class FitToTextureSourceCommand : public UICommand
+{
+public:
+	FitToTextureSourceCommand(PatchTexture* patchTex) noexcept;
+	FitToTextureSourceCommand(TextureSwitcher* texSwitcher) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual UICommandID GetTypeID() const noexcept override { return m_commandID; }
+	virtual bool IsMerge(UICommand*) noexcept { return false; }
+
+private:
+	template<typename FuncT>
+	bool WithTarget(FuncT&& Func);
+
+	UICommandID m_commandID{ UICommandID::Unknown };
+	XMUINT2 m_size{};
+};
+
+class PatchTextureStd;
+class TextureResourceBinder;
+class ChangeBindKeyCommand : public UICommand
+{
+public:
+	ChangeBindKeyCommand(PatchTextureStd* patchTexStd, TextureResourceBinder* resBinder, const string& key) noexcept;
+	ChangeBindKeyCommand(TextureSwitcher* texSwitcher, TextureResourceBinder* resBinder, const string& key) noexcept;
+
+	virtual bool Execute() override;
+	virtual bool Undo() override;
+	virtual bool Redo() override;
+
+protected:
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::Unknown; }
+	virtual bool IsMerge(UICommand*) noexcept { return false; }
+
+private:
+	template<typename FuncT>
+	bool WithTarget(FuncT&& Func);
+
+	UICommandID m_commandID{ UICommandID::Unknown };
+	TextureResourceBinder* m_resBinder;
+	CommandRecord<string> m_record;
 };

@@ -15,11 +15,6 @@ using testing::ElementsAre;
 
 namespace UserInterfaceTest
 {
-	static inline XMUINT2 GetSizeFromRectangles(const vector<Rectangle>& rectangles) noexcept
-	{
-		return GetSizeFromRectangle(CombineRectangles(rectangles));
-	}
-
 	template<typename T>
 	void FitToTextureSourceTest(UIComponent* panel,
 		const string& componentName, const string& rectResourceName, TextureResourceBinder* resBinder)
@@ -28,11 +23,7 @@ namespace UserInterfaceTest
 		EXPECT_NE(patchTex, nullptr);
 
 		EXPECT_TRUE(patchTex->FitToTextureSource());
-
-		auto rectRef = GetRectangles(resBinder, rectResourceName);
-		EXPECT_NE(rectRef, nullopt);
-
-		EXPECT_EQ(patchTex->GetSize(), GetSizeFromRectangles(rectRef->get()));
+		EXPECT_EQ(patchTex->GetSize(), GetSizeOfBindKey(resBinder, rectResourceName));
 	}
 
 	TEST_F(BasicComponentTest, Container_PatchTextureStd1)
