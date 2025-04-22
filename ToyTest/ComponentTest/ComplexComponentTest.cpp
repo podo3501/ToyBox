@@ -19,25 +19,25 @@ namespace UserInterfaceTest
 		m_panel = WriteReadTest(m_panel, listAreaPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
-		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
+		auto scrollSliderPtr = UIEx(listAreaPtr).FindComponent<ScrollSlider*>("ScrollSlider_0");
 		EXPECT_TRUE(UIEx(m_panel).IsPositionUpdated());
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), m_resBinder.get(), listAreaPtr, 5));
-		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_TRUE(scrollSliderPtr->HasStateFlag(StateFlag::Active));
 		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 
 		listAreaPtr->RemoveContainer(0);
-		EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_FALSE(scrollSliderPtr->HasStateFlag(StateFlag::Active));
 		auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 		EXPECT_NE(preSizeX, curSizeX);
 
 		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
 		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
 		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
-		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_TRUE(scrollSliderPtr->HasStateFlag(StateFlag::Active));
 
 		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
-		EXPECT_EQ(scrollContainerPtr->GetSize().y, 29); //(64 - 6) * (60 / 120) 총 slider 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
+		EXPECT_EQ(scrollContainerPtr->GetSize().y, 32); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 slider 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
 
 		listAreaPtr->ClearContainers();
 		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
@@ -50,7 +50,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(index, 4); //0, 1은 폰트. 2, 3은 texture 4는 renderTexture이다. 그래서 4가 들어오고
 		vector<RECT> expectDest = { { 75, 75, 125, 125 } };
 		vector<RECT> expectSource = { { 0, 0, 50, 50 } };
-		TestCoordinates(2, dest, source, expectDest, expectSource);//값 비교하니까 2을 그냥 넣어줌. 
+		TestCoordinates(2, dest, source, 2, expectDest, expectSource);//값 비교하니까 2을 그냥 넣어줌. 
 	}
 
 	TEST_F(ComplexComponentTest, RenderTexture)
@@ -92,7 +92,7 @@ namespace UserInterfaceTest
 		vector<RECT> expectSource{ GetSources(rb, "ScrollTrack3_V") };
 		vector<RECT> expectSource2{ GetSources(rb, "ScrollButton3_V_Normal") };
 		expectSource.insert(expectSource.end(), expectSource2.begin(), expectSource2.end());
-		TestCoordinates(index, dest, source, expectDest, expectSource);
+		TestCoordinates(index, dest, source, 2, expectDest, expectSource);
 	}
 
 	TEST_F(ComplexComponentTest, ScrollSlider)
@@ -109,6 +109,7 @@ namespace UserInterfaceTest
 		uint32_t contentSize = 2000;
 		scrollSliderPtr->SetViewContent(viewArea, contentSize);
 		scrollSliderPtr->SetPositionRatio(0.5f);
+		EXPECT_TRUE(scrollSliderPtr->HasStateFlag(StateFlag::Active));
 		CallMockRender(TestScrollSlide, 6);
 
 		EXPECT_CALL(mockOnScrollChanged, Call(testing::FloatEq(85.f / 150.f))).Times(1);
@@ -138,9 +139,9 @@ namespace UserInterfaceTest
 
 		MockMouseInput(100, 100, true); //Pressed
 		vector<RECT> exDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
-		TestMockRender(exDest, "ScrollButton3_V_Pressed");
+		TestMockRender(2, exDest, "ScrollButton3_V_Pressed");
 
 		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Pressed가 되어야한다.
-		TestMockRender(exDest, "ScrollButton3_V_Pressed");
+		TestMockRender(2, exDest, "ScrollButton3_V_Pressed");
 	}
 }

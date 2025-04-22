@@ -24,14 +24,14 @@ namespace UserInterfaceTest
 
 		MockMouseInput(144, 120, true);	//Pressed
 		vector<RECT> exDest = { { 135, 95, 185, 145 } };
-		TestMockRender(exDest, "ExitButton1_Pressed");
+		TestMockRender(2, exDest, "ExitButton1_Pressed");
 		EXPECT_EQ(*switcherPtr->GetState(), InteractState::Pressed);
 
 		FitToTextureSourceTest("ExitButton1_Pressed");
 
 		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ListBackground1_Normal"));
 		vector<RECT> exChangeKey = { { 144, 104, 176, 136 } };
-		TestMockRender(exChangeKey, "ListBackground1_Normal");
+		TestMockRender(2, exChangeKey, "ListBackground1_Normal");
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -49,19 +49,19 @@ namespace UserInterfaceTest
 
 		MockMouseInput(110, 96);	//Hover
 		vector<RECT> exDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, { 188, 96, 210, 144 } };
-		TestMockRender(exDest, "ScrollButton3_H_Hovered");
+		TestMockRender(2, exDest, "ScrollButton3_H_Hovered");
 
 		switcherPtr->ChangeSize({ 150, 48 });
 		MockMouseInput(0, 0);	//Normal
 		vector<RECT> exChangeSize = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, { 213, 96, 235, 144 } };
-		TestMockRender(exChangeSize, "ScrollButton3_H_Normal");
+		TestMockRender(2, exChangeSize, "ScrollButton3_H_Normal");
 
 		CloneTest(exChangeSize, "ScrollButton3_H_Normal");
 		FitToTextureSourceTest("ScrollButton3_H_Normal");
 
 		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_H_Hovered"));
 		vector<RECT> exChangeKey = { { 136, 96, 158, 144 }, { 158, 96, 162, 144 }, { 162, 96, 184, 144 } };
-		TestMockRender(exChangeKey, "ScrollButton3_H_Hovered");
+		TestMockRender(2, exChangeKey, "ScrollButton3_H_Hovered");
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -79,19 +79,19 @@ namespace UserInterfaceTest
 
 		MockMouseInput(77, 51);	//Hover
 		vector<RECT> exDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
-		TestMockRender(exDest, "ScrollButton3_V_Hovered");
+		TestMockRender(2, exDest, "ScrollButton3_V_Hovered");
 
 		switcherPtr->ChangeSize({ 48, 150 });
 		MockMouseInput(0, 0);	//Normal
 		vector<RECT> exDestChange = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
-		TestMockRender(exDestChange, "ScrollButton3_V_Normal");
+		TestMockRender(2, exDestChange, "ScrollButton3_V_Normal");
 
 		CloneTest(exDestChange, "ScrollButton3_V_Normal");
 		FitToTextureSourceTest("ScrollButton3_V_Normal");
 
 		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_V_Hovered"));
 		vector<RECT> exChangeKey = { { 92, 92, 108, 99 }, { 92, 99, 108, 101 }, { 92, 101, 108, 108 } };
-		TestMockRender(exChangeKey, "ScrollButton3_V_Hovered");
+		TestMockRender(2, exChangeKey, "ScrollButton3_V_Hovered");
 	}
 
 	////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ namespace UserInterfaceTest
 			{ 50, 50, 60, 60 }, { 60, 50, 140, 60 }, { 140, 50, 150, 60 },
 			{ 50, 60, 60, 140 }, { 60, 60, 140, 140 }, { 140, 60, 150, 140 },
 			{ 50, 140, 60, 150 }, { 60, 140, 140, 150 }, { 140, 140, 150, 150 } };
-		TestMockRender(exDest, "ListBackground9_Hovered");
+		TestMockRender(2, exDest, "ListBackground9_Hovered");
 
 		switcherPtr->ChangeSize({ 150, 150 });
 		MockMouseInput(0, 0);	//Normal
@@ -120,16 +120,16 @@ namespace UserInterfaceTest
 			{ 25, 25, 35, 35 }, { 35, 25, 165, 35 }, { 165, 25, 175, 35 },
 			{ 25, 35, 35, 165 }, { 35, 35, 165, 165 }, { 165, 35, 175, 165 },
 			{ 25, 165, 35, 175 }, { 35, 165, 165, 175 }, { 165, 165, 175, 175 } };
-		TestMockRender(exDestChange, "ListBackground9_Normal");
+		TestMockRender(2, exDestChange, "ListBackground9_Normal");
 
 		CloneTest(exDestChange, "ListBackground9_Normal");
 		FitToTextureSourceTest("ListBackground9_Normal");
 
-		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "BackImage9"));
+		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "OptionImage9"));
 		vector<RECT> exChangeKey = {
-			{ 25, 25, 35, 35 }, { 35, 25, 165, 35 }, { 165, 25, 175, 35 },
-			{ 25, 35, 35, 165 }, { 35, 35, 165, 165 }, { 165, 35, 175, 165 },
-			{ 25, 165, 35, 175 }, { 35, 165, 165, 175 }, { 165, 165, 175, 175 } };
-		TestMockRender(exChangeKey, "BackImage9");
+			{ 23, 40, 43, 70 }, { 43, 40, 158, 70 }, { 158, 40, 178, 70 },
+			{ 23, 70, 43, 142 }, { 43, 70, 158, 142 }, { 158, 70, 178, 142 },
+			{ 23, 142, 43, 161 }, { 43, 142, 158, 161 }, { 158, 142, 178, 161 } };
+		TestMockRender(3, exChangeKey, "OptionImage9");
 	}
 }

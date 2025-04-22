@@ -21,6 +21,7 @@ public:
 	bool Setup(const UILayout& layout, 
 		unique_ptr<PatchTextureStd3> scrollTrack,
 		unique_ptr<TextureSwitcher> scrollButton);
+	bool UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept;
 	void SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept;
 	void SetPositionRatio(float positionRatio) noexcept;
 	void SetEnableWheel(bool enable) noexcept;
@@ -34,6 +35,7 @@ protected:
 
 private:
 	void ReloadDatas() noexcept;
+	bool ToolUpdateScrollView() noexcept;
 	void SetScrollContainerSize(float ratio) noexcept;
 	template<typename ReturnType>
 	inline ReturnType GetMaxScrollRange() const noexcept;

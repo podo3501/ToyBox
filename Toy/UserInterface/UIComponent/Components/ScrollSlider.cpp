@@ -134,6 +134,21 @@ bool ScrollSlider::ImplementChangeSize(const XMUINT2& size) noexcept
 	return UIComponent::ImplementChangeSize(size);
 }
 
+bool ScrollSlider::ToolUpdateScrollView() noexcept
+{
+	SetViewContent(1, 2);
+	return false;
+}
+
+bool ScrollSlider::UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept
+{
+	if (IsToolMode(this)) return ToolUpdateScrollView();
+
+	bool isChange = SetStateFlag(StateFlag::Active, contentSize > viewArea); //?!? 이 줄 SetViewContent 안으로
+	SetViewContent(viewArea, contentSize);
+	return isChange;
+}
+
 void ScrollSlider::SetScrollContainerSize(float ratio) noexcept
 {
 	DirectionType dirType = m_scrollTrack->GetDirectionType();

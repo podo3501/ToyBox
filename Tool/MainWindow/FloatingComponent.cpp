@@ -65,7 +65,8 @@ bool FloatingComponent::Excute()
 	case PatchTextureStd9: result = LoadComponent(CreatePatchTextureStd9({ { 170, 120 }, Origin::LeftTop }, "BackImage9")); break;
 	case TextureSwitcher1: result = LoadComponent(CreateTextureSwitcher({ { 32, 32 }, Origin::LeftTop }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)); break;
 	case TextureSwitcher3: result = LoadComponent(CreateTextureSwitcher({ { 100, 48 }, Origin::LeftTop }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal)); break;
-	case Text: result = LoadComponent(CreateTextArea(UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
+	case TextureSwitcher9: result = LoadComponent(CreateTextureSwitcher({ { 100, 100 }, Origin::LeftTop }, TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal)); break;
+	case TextArea: result = LoadComponent(CreateTextArea(UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
 	case ListArea: result = LoadComponent(CreateSampleListArea({ { 200, 170 }, Origin::LeftTop })); break;
 	}
 	m_currentAction.reset(); // 상태 초기화
@@ -116,8 +117,9 @@ void FloatingComponent::Render()
 	if (ImGui::MenuItem("Patch Texture Standard 9")) m_currentAction = PatchTextureStd9;
 	if (ImGui::MenuItem("Texture Switcher 1")) m_currentAction = TextureSwitcher1;
 	if (ImGui::MenuItem("Texture Switcher 3")) m_currentAction = TextureSwitcher3;
-	if (ImGui::MenuItem("Text")) m_currentAction = Text;
-	if (ImGui::MenuItem("ListArea")) m_currentAction = ListArea;
+	if (ImGui::MenuItem("Texture Switcher 9")) m_currentAction = TextureSwitcher9;
+	if (ImGui::MenuItem("Text Area")) m_currentAction = TextArea;
+	if (ImGui::MenuItem("List Area")) m_currentAction = ListArea;
 	if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();

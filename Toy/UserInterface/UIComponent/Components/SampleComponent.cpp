@@ -75,14 +75,17 @@ unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 	UILayout backImgLayout{ layout.GetSize(), Origin::LeftTop };
 	auto listBackImage = CreatePatchTextureStd1(backImgLayout, "ListBackImage1");
 
-	UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
-	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);
+	UILayout scrollSliderLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
+	auto scrollSlider = CreateSampleScrollSlider(DirectionType::Vertical, scrollSliderLayout);
+
+	/*UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
+	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);*/
 
 	UILayout switcherLayout({ { layout.GetSize().x, 32 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 32
 	auto switcher = CreateTextureSwitcher(switcherLayout, TextureSlice::Nine,
 		GetStateKeyMap("ListBackground9"), BehaviorMode::Normal);
 
-	return CreateListArea(layout, move(listBackImage), move(switcher), move(scrollBar));
+	return CreateListArea(layout, move(listBackImage), move(switcher), move(scrollSlider));
 }
 
 bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
@@ -94,6 +97,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, List
 
 	protoTextArea->Rename("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
+	//?!? 붙일때 PatchTextureLite1_4에 항상 붙기 때문에 여기를 함수를 통해서 붙이도록 하자.
 	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 5, 2 });
 	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
 

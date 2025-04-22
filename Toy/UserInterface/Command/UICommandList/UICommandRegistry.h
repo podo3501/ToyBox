@@ -183,5 +183,6 @@ private:
 
 	UICommandID m_commandID{ UICommandID::Unknown };
 	TextureResourceBinder* m_resBinder;
+	XMUINT2 m_prevSize{};
 	CommandRecord<string> m_record;
 };

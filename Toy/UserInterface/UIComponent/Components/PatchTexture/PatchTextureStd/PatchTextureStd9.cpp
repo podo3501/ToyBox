@@ -69,7 +69,7 @@ bool PatchTextureStd9::ChangeBindKey(TextureResourceBinder* resBinder, const str
 		tex3->ChangeBindKeyWithIndex(key, *infoRef, index);
 	}
 
-	return true;
+	return FitToTextureSource();
 }
 
 bool PatchTextureStd9::ImplementChangeSize(const XMUINT2& size) noexcept

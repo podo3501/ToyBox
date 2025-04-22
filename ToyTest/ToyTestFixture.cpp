@@ -67,13 +67,13 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const REC
 	m_panel->ProcessRender(&mockRender);
 }
 
-void ToyTestFixture::TestMockRender(const vector<RECT>& expectDest, const string& bindKey, UIComponent* component)
+void ToyTestFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, const string& bindKey, UIComponent* component)
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(static_cast<int>(expectDest.size()))
-		.WillRepeatedly(Invoke([this, &expectDest, &bindKey](size_t index, const RECT& dest, const RECT* source) {
-		TestCoordinates(index, dest, source, expectDest, GetSources(m_resBinder.get(), bindKey));
+		.WillRepeatedly(Invoke([this, expIndex, &expectDest, &bindKey](size_t index, const RECT& dest, const RECT* source) {
+		TestCoordinates(index, dest, source, expIndex, expectDest, GetSources(m_resBinder.get(), bindKey));
 			}));
 	UIComponent* curComponent = (component) ? component : m_panel.get();
 	curComponent->ProcessUpdate(m_timer);
@@ -110,7 +110,7 @@ void ToyTestFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 void ToyTestFixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey)
 {
 	unique_ptr<UIComponent> clonePanel = m_panel->Clone();
-	TestMockRender(expectDest, bindKey, clonePanel.get());
+	TestMockRender(2, expectDest, bindKey, clonePanel.get());
 	WriteReadTest(clonePanel);
 }
 

@@ -16,7 +16,8 @@ class FloatingComponent
 		PatchTextureStd9,
 		TextureSwitcher1,
 		TextureSwitcher3,
-		Text,
+		TextureSwitcher9,
+		TextArea,
 		ListArea
 	};
 

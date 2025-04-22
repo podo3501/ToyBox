@@ -27,6 +27,17 @@ TextureInfo::TextureInfo(TextureInfo&& other) noexcept :
     AddRef();
 }
 
+//stl은 기본이 대입 복사인데, 이때는 생성자가 호출이 안되므로 생성자에서 처리한 게 있다면 여기서도 해 줘야 한다.
+TextureInfo& TextureInfo::operator=(const TextureInfo& o) noexcept
+{
+    Release(); //기존의 텍스쳐를 릴리즈하고
+    tie(m_texLoader, m_index, m_gfxOffset) = tie(o.m_texLoader, o.m_index, o.m_gfxOffset);
+
+    AddRef(); //새로운 텍스쳐를 Add 한다.
+    return *this;
+}
+
+
 void TextureInfo::AddRef() noexcept
 {
     if (m_texLoader && m_index)

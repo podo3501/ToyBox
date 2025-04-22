@@ -255,8 +255,15 @@ bool ChangeBindKeyCommand::Execute()
 {
 	return WithTarget([this](auto* target) {
 		m_record.previous = target->GetBindKey();
+		m_prevSize = target->GetSize();
 		return target->ChangeBindKey(m_resBinder, m_record.current);
 		});
 }
-bool ChangeBindKeyCommand::Undo() { return WithTarget([this](auto* t) { return t->ChangeBindKey(m_resBinder, m_record.previous); }); }
+
+bool ChangeBindKeyCommand::Undo() {
+	return WithTarget([this](auto* t) { 
+		ReturnIfFalse(t->ChangeBindKey(m_resBinder, m_record.previous));
+		return t->ChangeSize(m_prevSize);
+		}); 
+}
 bool ChangeBindKeyCommand::Redo() { return WithTarget([this](auto* t) { return t->ChangeBindKey(m_resBinder, m_record.current); }); }

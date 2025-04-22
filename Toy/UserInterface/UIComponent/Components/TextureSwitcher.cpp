@@ -113,7 +113,7 @@ bool TextureSwitcher::ChangeBindKey(TextureResourceBinder* resBinder, const stri
 
 	SetSourceInfo(resBinder, *m_state, bindKey);
 	SetState(*m_state);
-	return ImplementChangeSize(GetSizeOfBindKey(resBinder, bindKey)); //Lock을 안 걸고 강제로 업데이트 하기 위해서.
+	return FitToTextureSource();
 }
 
 void TextureSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept

@@ -81,7 +81,7 @@ bool PatchTextureStd1::ChangeBindKey(TextureResourceBinder* resBinder, const str
 	if (auto infoRef = resBinder->GetTextureSourceInfo(key); infoRef)
 	{
 		ChangeBindKeyWithIndex(key, *infoRef, 0);
-		return true;
+		return FitToTextureSource();
 	}
 
 	return false;

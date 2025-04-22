@@ -32,5 +32,5 @@ private:
 };
 
 void TestCoordinates(size_t index, const RECT& dest, const RECT* source,
-	const vector<RECT>& expDests, const vector<RECT>& expSrcs) noexcept;
+	size_t expIndex, const vector<RECT>& expDests, const vector<RECT>& expSrcs) noexcept;
 vector<RECT> GetSources(TextureResourceBinder* resBinder, const string& key) noexcept;

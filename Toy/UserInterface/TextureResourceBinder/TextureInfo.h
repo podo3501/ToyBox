@@ -8,7 +8,7 @@ public:
 	TextureInfo() noexcept;
 	TextureInfo(const TextureInfo& other) noexcept;
 	TextureInfo(TextureInfo&& other) noexcept;
-	TextureInfo& operator=(const TextureInfo&) = default;
+	TextureInfo& operator=(const TextureInfo&) noexcept;
 	inline optional<size_t> GetIndex() const noexcept { return m_index; }
 	inline optional<size_t> GetGfxOffset() const noexcept { return m_gfxOffset; }
 

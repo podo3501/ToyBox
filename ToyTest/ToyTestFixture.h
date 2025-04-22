@@ -16,7 +16,7 @@ public:
 	void CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times);
 	void CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc,
 		const string& bindKey, int times);
-	void TestMockRender(const vector<RECT>& expectDest, const string& bindKey, UIComponent* component = nullptr);
+	void TestMockRender(int expIndex, const vector<RECT>& expectDest, const string& bindKey, UIComponent* component = nullptr);
 
 	//TextArea
 	void CallMockRender(function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc);
