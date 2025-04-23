@@ -6,7 +6,6 @@ class PatchTextureStd : public PatchTexture
 {
 public:
 	~PatchTextureStd();
-	virtual bool FitToTextureSource() noexcept = 0;
 	virtual bool ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept = 0;
 	virtual const string& GetBindKey() const noexcept = 0;
 

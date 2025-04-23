@@ -7,6 +7,7 @@
 
 PatchTextureLite3::~PatchTextureLite3() = default;
 PatchTextureLite3::PatchTextureLite3() noexcept :
+	PatchTextureLite{ TextureSlice::ThreeH },
 	m_dirType{ DirectionType::Horizontal }
 {
 	m_impl.SetOwner(this);
@@ -73,22 +74,10 @@ void PatchTextureLite3::SetIndexedSource(size_t index, const vector<Rectangle>& 
 		});
 }
 
-bool PatchTextureLite3::ImplementChangeSize(const XMUINT2& size) noexcept
+vector<Rectangle> PatchTextureLite3::GetChildSourceList() const noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
-	auto list = GetSourceList<PatchTextureLite1>(components, &PatchTextureLite1::GetSource);
-	ReturnIfFalse(IsBiggerThanSource(m_dirType, size, list));
-
-	return m_impl.ChangeSize(m_dirType, size, components);
-}
-
-bool PatchTextureLite3::FitToTextureSource() noexcept
-{
-	return m_impl.FitToTextureSource(m_dirType, [this](const XMUINT2& size, XMUINT2& totalSize) {
-		switch (m_dirType) {
-		case DirectionType::Horizontal: totalSize.x += size.x; totalSize.y = max(totalSize.y, size.y); break;
-		case DirectionType::Vertical: totalSize.y += size.y; totalSize.x = max(totalSize.x, size.x); break;
-		}});
+	return GetSourceList<PatchTextureLite1>(components, &PatchTextureLite1::GetSource);
 }
 
 Rectangle PatchTextureLite3::GetFirstComponentSource() const noexcept

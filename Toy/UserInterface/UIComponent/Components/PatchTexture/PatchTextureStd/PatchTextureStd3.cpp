@@ -8,17 +8,14 @@
 
 PatchTextureStd3::~PatchTextureStd3() = default;
 PatchTextureStd3::PatchTextureStd3() noexcept :
+    PatchTextureStd{ TextureSlice::ThreeH },
     m_dirType{ DirectionType::Horizontal }
-{
-    m_impl.SetOwner(this);
-}
+{}
 
 PatchTextureStd3::PatchTextureStd3(const PatchTextureStd3& o) :
     PatchTextureStd{ o },
     m_dirType{ o.m_dirType }
-{
-    m_impl.SetOwner(this);
-}
+{}
 
 unique_ptr<UIComponent> PatchTextureStd3::CreateClone() const
 {
@@ -93,22 +90,10 @@ void PatchTextureStd3::ChangeBindKeyWithIndex(const string& key, const TextureSo
     }
 }
 
-bool PatchTextureStd3::ImplementChangeSize(const XMUINT2& size) noexcept
+vector<Rectangle> PatchTextureStd3::GetChildSourceList() const noexcept
 {
     const vector<UIComponent*> components = GetChildComponents();
-    auto list = GetSourceList<PatchTextureStd1>(components, &PatchTextureStd1::GetSource);
-    ReturnIfFalse(IsBiggerThanSource(m_dirType, size, list));
-
-    return m_impl.ChangeSize(m_dirType, size, components);
-}
-
-bool PatchTextureStd3::FitToTextureSource() noexcept
-{
-    return m_impl.FitToTextureSource(m_dirType, [this](const XMUINT2& size, XMUINT2& totalSize) {
-        switch (m_dirType) {
-        case DirectionType::Horizontal: totalSize.x += size.x; totalSize.y = max(totalSize.y, size.y); break;
-        case DirectionType::Vertical: totalSize.y += size.y; totalSize.x = max(totalSize.x, size.x); break;
-        }});
+    return GetSourceList<PatchTextureStd1>(components, &PatchTextureStd1::GetSource);
 }
 
 Rectangle PatchTextureStd3::GetFirstComponentSource() const noexcept

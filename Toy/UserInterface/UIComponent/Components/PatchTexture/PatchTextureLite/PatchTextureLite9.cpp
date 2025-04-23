@@ -38,24 +38,13 @@ bool PatchTextureLite9::SetupLayout(size_t index, const vector<Rectangle>& sourc
 	return ChangeSize(size, true);
 }
 
-bool PatchTextureLite9::FitToTextureSource() noexcept
-{
-	return m_impl.FitToTextureSource(DirectionType::Vertical, [this](const XMUINT2& size, XMUINT2& totalSize) {
-		totalSize.y += size.y;
-		totalSize.x = max(totalSize.x, size.x);
-		});
-}
-
 void PatchTextureLite9::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
 {
 	m_impl.SetIndexedSource(index, sources, [&sources](size_t idx) { return GetTripleAt(sources, idx); });
 }
 
-bool PatchTextureLite9::ImplementChangeSize(const XMUINT2& size) noexcept
+vector<Rectangle> PatchTextureLite9::GetChildSourceList() const noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
-	auto list = GetSourceList<PatchTextureLite3>(components, &PatchTextureLite3::GetFirstComponentSource);
-	ReturnIfFalse(IsBiggerThanSource(DirectionType::Vertical, size, list));
-
-	return m_impl.ChangeSize(DirectionType::Vertical, size, components);
+	return GetSourceList<PatchTextureLite3>(components, &PatchTextureLite3::GetFirstComponentSource);
 }

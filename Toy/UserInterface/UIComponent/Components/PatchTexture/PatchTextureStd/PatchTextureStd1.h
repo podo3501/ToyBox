@@ -17,9 +17,10 @@ public:
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 	//PatchTexture
+	virtual bool FitToTextureSource() noexcept override { return m_coord.FitToTextureSource(); }
+	virtual UIComponent* GetCenterComponent() noexcept override { return this; }
 	virtual bool ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept override;
 	virtual const string& GetBindKey() const noexcept override { return m_bindKey; }
-	virtual bool FitToTextureSource() noexcept override { return m_coord.FitToTextureSource(); }
 
 	optional<vector<Rectangle>> GetTextureAreaList();
 	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
@@ -35,6 +36,7 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override; //Binder가 로딩을 다 하고 여기서 값만 연결한다.
 	virtual void ImplementRender(ITextureRender* render) const override { m_coord.Render(render); }
+	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept override { return UIComponent::ImplementChangeSize(size); }
 
 private:
 	string m_bindKey;

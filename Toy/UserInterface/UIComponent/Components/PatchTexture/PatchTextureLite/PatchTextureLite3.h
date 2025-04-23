@@ -19,14 +19,13 @@ public:
 	//PatchTextureLite
 	virtual bool SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size) override;
 	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
-	virtual bool FitToTextureSource() noexcept override;
 
 	Rectangle GetFirstComponentSource() const noexcept;
 
 protected:
 	PatchTextureLite3(const PatchTextureLite3& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
+	virtual vector<Rectangle> GetChildSourceList() const noexcept override;
 
 private:
 	void SetDirectionType(DirectionType dirType) noexcept;

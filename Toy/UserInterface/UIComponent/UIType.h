@@ -181,6 +181,7 @@ enum class DirectionType
 };
 
 TextureSlice DirTypeToTextureSlice(DirectionType dirType) noexcept;
+optional<DirectionType> TextureSliceToDirType(TextureSlice texSlice) noexcept;
 
 /////////////////////////////////////////////////////////////// 
 

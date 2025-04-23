@@ -166,6 +166,12 @@ bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size) noexcept
 	return UIComponent::ImplementChangeSize(size);
 }
 
+unique_ptr<UIComponent> TextureSwitcher::AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+{
+	auto center = m_patchTexL->GetCenterComponent();
+	return UIEx(center).AttachComponent(move(child), relativePos);
+}
+
 string TextureSwitcher::GetBindKey() const noexcept
 {
 	if (!m_state) return {};

@@ -8,15 +8,11 @@
 PatchTextureStd9::~PatchTextureStd9() = default;
 PatchTextureStd9::PatchTextureStd9() noexcept :
 	PatchTextureStd{ TextureSlice::Nine }
-{
-	m_impl.SetOwner(this);
-}
+{}
 
 PatchTextureStd9::PatchTextureStd9(const PatchTextureStd9& o) noexcept :
 	PatchTextureStd{ o }
-{
-	m_impl.SetOwner(this);
-}
+{}
 
 unique_ptr<UIComponent> PatchTextureStd9::CreateClone() const
 {
@@ -44,14 +40,6 @@ bool PatchTextureStd9::ImplementBindSourceInfo(TextureResourceBinder*, ITextureC
 	return ChangeSize(GetSize(), true);
 }
 
-bool PatchTextureStd9::FitToTextureSource() noexcept
-{
-	return m_impl.FitToTextureSource(DirectionType::Vertical, [this](const XMUINT2& size, XMUINT2& totalSize) {
-		totalSize.y += size.y;
-		totalSize.x = max(totalSize.x, size.x);
-		});
-}
-
 const string& PatchTextureStd9::GetBindKey() const noexcept
 {
 	PatchTextureStd3* patchTex3 = ComponentCast<PatchTextureStd3*>(GetChildComponent(0));
@@ -72,13 +60,10 @@ bool PatchTextureStd9::ChangeBindKey(TextureResourceBinder* resBinder, const str
 	return FitToTextureSource();
 }
 
-bool PatchTextureStd9::ImplementChangeSize(const XMUINT2& size) noexcept
+vector<Rectangle> PatchTextureStd9::GetChildSourceList() const noexcept
 {
 	const vector<UIComponent*> components = GetChildComponents();
-	auto list = GetSourceList<PatchTextureStd3>(components, &PatchTextureStd3::GetFirstComponentSource);
-	ReturnIfFalse(IsBiggerThanSource(DirectionType::Vertical, size, list));
-
-	return m_impl.ChangeSize(DirectionType::Vertical, size, components);
+	return GetSourceList<PatchTextureStd3>(components, &PatchTextureStd3::GetFirstComponentSource);
 }
 
 unique_ptr<PatchTextureStd9> CreatePatchTextureStd9(const UILayout& layout, const string& bindKey)

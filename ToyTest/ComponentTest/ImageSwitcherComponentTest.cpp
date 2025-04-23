@@ -5,6 +5,8 @@
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../TestHelper.h"
 #include "../Toy/Utility.h"
 
@@ -131,5 +133,9 @@ namespace UserInterfaceTest
 			{ 23, 70, 43, 142 }, { 43, 70, 158, 142 }, { 158, 70, 178, 142 },
 			{ 23, 142, 43, 161 }, { 43, 142, 158, 161 }, { 158, 142, 178, 161 } };
 		TestMockRender(3, exChangeKey, "OptionImage9");
+
+		auto [tex, texPtr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		EXPECT_EQ(switcherPtr->AttachComponentToCenter(move(tex), { 5, 5 }), nullptr);
+		EXPECT_TRUE(UIEx(switcherPtr).FindComponent<decltype(texPtr)>(texPtr->GetName()));
 	}
 }

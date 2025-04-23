@@ -97,8 +97,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, List
 
 	protoTextArea->Rename("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
-	//?!? 붙일때 PatchTextureLite1_4에 항상 붙기 때문에 여기를 함수를 통해서 붙이도록 하자.
-	auto failed = UIEx(prototype).AttachComponent(move(protoTextArea), { 5, 2 });
+	auto failed = prototype->AttachComponentToCenter(move(protoTextArea), { 0, -6 });
 	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
 
 	for (auto idx : views::iota(0, itemCount))

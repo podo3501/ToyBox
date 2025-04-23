@@ -17,7 +17,6 @@ public:
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 	//PatchTexture
-	virtual bool FitToTextureSource() noexcept override;
 	virtual bool ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept override;
 	virtual const string& GetBindKey() const noexcept override;
 
@@ -30,13 +29,12 @@ protected:
 	PatchTextureStd3(const PatchTextureStd3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
+	virtual vector<Rectangle> GetChildSourceList() const noexcept override;
 
 private:
 	void SetDirectionType(DirectionType dirType) noexcept;
 
 	DirectionType m_dirType;
-	PatchTextureImpl m_impl;
 };
 
 unique_ptr<PatchTextureStd3> CreatePatchTextureStd3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);
