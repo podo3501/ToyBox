@@ -90,16 +90,10 @@ void PatchTextureStd3::ChangeBindKeyWithIndex(const string& key, const TextureSo
     }
 }
 
-vector<Rectangle> PatchTextureStd3::GetChildSourceList() const noexcept
-{
-    const vector<UIComponent*> components = GetChildComponents();
-    return GetSourceList<PatchTextureStd1>(components, &PatchTextureStd1::GetSource);
-}
-
-Rectangle PatchTextureStd3::GetFirstComponentSource() const noexcept
+Rectangle PatchTextureStd3::GetSource() const noexcept
 {
     PatchTextureStd1* tex1 = ComponentCast<PatchTextureStd1*>(GetChildComponent(0));
-    if(!tex1) return {};
+    if (!tex1) return {};
 
     return tex1->GetSource();
 }

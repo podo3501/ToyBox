@@ -1,6 +1,5 @@
 #pragma once
 #include "PatchTextureStd.h"
-#include "../PatchTextureImpl.h"
 
 struct TextureSourceInfo;
 class PatchTextureStd3;
@@ -23,7 +22,6 @@ protected:
 	PatchTextureStd9(const PatchTextureStd9& o) noexcept;
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual vector<Rectangle> GetChildSourceList() const noexcept override;
 };
 
 unique_ptr<PatchTextureStd9> CreatePatchTextureStd9(const UILayout& layout, const string& bindKey);

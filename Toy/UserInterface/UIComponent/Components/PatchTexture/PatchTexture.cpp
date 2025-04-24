@@ -2,6 +2,10 @@
 #include "PatchTexture.h"
 #include "Utility.h"
 #include "UserInterface/UIComponent/UIUtility.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite3.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 
 PatchTexture::~PatchTexture() = default;
 PatchTexture::PatchTexture() = default;
@@ -46,6 +50,31 @@ bool PatchTexture::ApplySizeAndPosition(DirectionType dirType, const XMUINT2& si
 	ApplySize(size);
 
 	return true;
+}
+
+//각 클래스에 맞는 동일한 인터페이스 함수를 상속없이 다형성을 하고 싶을때 처리하는 함수인데 이걸 utility로
+//올리면 UIComponent에서 부모가 다르지만 인터페이스가 같은 함수들의 다형성을 처리할 수 있다.
+template<typename FuncT>
+decltype(auto) PatchTexture::GetSourceByType(UIComponent* component, FuncT&& Func) const noexcept
+{
+	switch (GetTypeID()) {
+	case ComponentID::PatchTextureLite1: return Func(static_cast<PatchTextureLite1*>(component));
+	case ComponentID::PatchTextureLite3: return Func(static_cast<PatchTextureLite3*>(component));
+	case ComponentID::PatchTextureStd1: return Func(static_cast<PatchTextureStd1*>(component));
+	case ComponentID::PatchTextureStd3: return Func(static_cast<PatchTextureStd3*>(component));
+	default: return decltype(Func(declval<PatchTextureLite1*>())){}; //기본타입이 있을때에는 기본타입 리턴 Rectangle을 리턴하니까 이건 Rectangle{}을 리턴.
+	}
+}
+
+vector<Rectangle> PatchTexture::GetChildSourceList() const noexcept
+{
+	const auto& components = GetChildComponents();
+	vector<Rectangle> results;
+
+	for (UIComponent* child : components)
+		results.push_back(GetSourceByType(child, [](auto* c) { return c->GetSource(); }));
+
+	return results;
 }
 
 bool PatchTexture::ImplementChangeSize(const XMUINT2& size) noexcept
@@ -95,7 +124,7 @@ bool PatchTexture::ForEach(predicate<PatchTexture*, size_t> auto&& Each)
 {
 	const auto& components = GetChildComponents();
 	size_t size = components.size();
-	ReturnIfFalse(size >= 3);
+	ReturnIfFalse(size == 3);
 
 	for (size_t n : views::iota(0u, size))
 		if (!Each(static_cast<PatchTexture*>(components[n]), n)) return false;

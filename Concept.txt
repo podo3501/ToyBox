@@ -243,3 +243,51 @@ crtp하는 클래스는  헤더에 인클루드를 걸지 않고 그 crtp를 부
 것이 여간 귀찮은 일이 아닐 수 없다. false가 일어났기 때문에 분명 예전에 이것에 대해서 버그라고 규정지은 것이긴 
 한데 그 부분을 찾는게 for의 연속이면 그나마 낫겠지만 람다 연속이면 좀 짜증난다. for도 마찬가지겠지만 이렇게 
 찾는게 짜증나는 부분은 자주 false를 반환 하는 부분에 있어서 Assert를 걸어주는게 도움이 된다. 
+
+auto FitToTextureSourceCommand::GetTargetType()
+{
+	switch (m_commandID) {
+	case UICommandID::FitToTextureSource: return static_cast<PatchTexture*>(GetTarget());
+	case UICommandID::FitToTextureSourceTS: return static_cast<TextureSwitcher*>(GetTarget());
+	default: return nullptr;
+	}
+}
+
+template<typename FuncT>
+bool FitToTextureSourceCommand::WithTarget(FuncT&& Func)
+{
+	switch (m_commandID) {
+	case UICommandID::FitToTextureSource: return Func(static_cast<PatchTexture*>(GetTarget()));
+	case UICommandID::FitToTextureSourceTS: return Func(static_cast<TextureSwitcher*>(GetTarget()));
+	default: return false;
+	}
+}
+
+예를들어 첫번째 함수처럼 관계가 없는 클래스 간에 다른 타입을 리턴하고 싶을 경우가 있는데 1번 함수처럼
+했을 경우는 타입 불일치로 컴파일 에러가 발생한다. 두번째는 타입을 바꿔서 함수 포인터로 넣어주는데
+이때 타입을 바꾸고 람다로 이 함수를 받을때 auto로 정의하면 바뀐 타입이 auto에 형변환 되어서 넘어온다.
+
+template <typename T>
+decltype(auto) FitToTextureSourceCommand::GetTargetAs()
+{
+	switch (m_commandID) {
+	case UICommandID::FitToTextureSource:		return static_cast<PatchTexture*>(GetTarget());
+	case UICommandID::FitToTextureSourceTS:		return static_cast<TextureSwitcher*>(GetTarget());
+	}
+}
+
+이렇게 바꾸면 되지 않느냐 하지만 auto* switcher = cmd.GetTargetAs<TextureSwitcher*>(); 이런식으로 사용
+할때 타입을 넘겨주어야 한다. 왜냐하면 auto는 컴파일 타임에 알아야 하기 때문이다. 만약 이 타입을 알 수 없는
+경우는 이 함수를 사용하지 못한다. 반면 
+
+	return WithTarget([this](auto* target) {
+		m_size = target->GetSize();
+		return target->FitToTextureSource();
+		});
+
+함수인자로 넘긴것은 받을때 auto로 받으면서도 알아서 형변환된 값이 들어오기 때문에 사용할때 정확한 타입
+을 모르더라도 사용이 가능하게 된다. 즉 템플릿을 사용하면서도 다형성이 가능하게끔 코딩하는 스타일로 템플
+릿은 컴파일 타임에 알아야 하는 것인데 이건 런타임에 알 수 있게 하면서 두 타입이 전혀 관계 없을때 다형성을
+사용할 수 있는 방법이다. variant와의 차이점은 variant는 완전히 별개인 타입에 적용하는 것이고, 이것은 base
+는 같은데 파생된 두 클래스가 우연히 같은 인터페이스 형식을 공유할때 사용할 수 있는 방법이다. 서로다른 
+트리를 탔지만 우연찮게 같은 행동을 하는 경우에 사용하면 좋다. 

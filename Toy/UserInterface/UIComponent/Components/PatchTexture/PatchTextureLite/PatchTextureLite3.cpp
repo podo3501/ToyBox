@@ -9,22 +9,17 @@ PatchTextureLite3::~PatchTextureLite3() = default;
 PatchTextureLite3::PatchTextureLite3() noexcept :
 	PatchTextureLite{ TextureSlice::ThreeH },
 	m_dirType{ DirectionType::Horizontal }
-{
-	m_impl.SetOwner(this);
-}
+{}
 
 PatchTextureLite3::PatchTextureLite3(DirectionType dirType) noexcept
 {
-	m_impl.SetOwner(this);
 	SetDirectionType(dirType);
 }
 
 PatchTextureLite3::PatchTextureLite3(const PatchTextureLite3& o) :
 	PatchTextureLite{ o },
 	m_dirType{ o.m_dirType }
-{
-	m_impl.SetOwner(this);
-}
+{}
 
 void PatchTextureLite3::SetDirectionType(DirectionType dirType) noexcept
 {
@@ -67,20 +62,7 @@ bool PatchTextureLite3::SetupLayout(size_t index, const vector<Rectangle>& sourc
 	return true;
 }
 
-void PatchTextureLite3::SetIndexedSource(size_t index, const vector<Rectangle>& sources) noexcept
-{
-	m_impl.SetIndexedSource(index, sources, [&sources](size_t idx) {
-		return vector<Rectangle>{ sources[idx] };
-		});
-}
-
-vector<Rectangle> PatchTextureLite3::GetChildSourceList() const noexcept
-{
-	const vector<UIComponent*> components = GetChildComponents();
-	return GetSourceList<PatchTextureLite1>(components, &PatchTextureLite1::GetSource);
-}
-
-Rectangle PatchTextureLite3::GetFirstComponentSource() const noexcept
+Rectangle PatchTextureLite3::GetSource() const noexcept
 {
 	PatchTextureLite1* tex1 = ComponentCast<PatchTextureLite1*>(GetChildComponent(0));
 	if (!tex1) return {};

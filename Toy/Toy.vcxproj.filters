@@ -184,9 +184,6 @@
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.h">
-      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClInclude>
@@ -328,9 +325,6 @@
       <Filter>UserInterface\Command\TexResCommandList</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture.cpp">
-      <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.cpp">

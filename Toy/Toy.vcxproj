@@ -236,7 +236,6 @@
     <ClInclude Include="UserInterface\UIComponent\Components\Button.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\Container.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\Dialog.h" />
-    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1.h" />
@@ -292,7 +291,6 @@
     <ClCompile Include="UserInterface\UIComponent\Components\Button.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\Container.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\Dialog.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureImpl.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureCoord.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1.cpp" />

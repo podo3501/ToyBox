@@ -60,11 +60,11 @@ bool PatchTextureStd9::ChangeBindKey(TextureResourceBinder* resBinder, const str
 	return FitToTextureSource();
 }
 
-vector<Rectangle> PatchTextureStd9::GetChildSourceList() const noexcept
-{
-	const vector<UIComponent*> components = GetChildComponents();
-	return GetSourceList<PatchTextureStd3>(components, &PatchTextureStd3::GetFirstComponentSource);
-}
+//vector<Rectangle> PatchTextureStd9::GetChildSourceList() const noexcept
+//{
+//	const vector<UIComponent*> components = GetChildComponents();
+//	return GetSourceList<PatchTextureStd3>(components, &PatchTextureStd3::GetFirstComponentSource);
+//}
 
 unique_ptr<PatchTextureStd9> CreatePatchTextureStd9(const UILayout& layout, const string& bindKey)
 {

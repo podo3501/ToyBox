@@ -120,4 +120,3 @@ TargetType ComponentCast(UIComponent* component)
 
 	return nullptr;
 }
-

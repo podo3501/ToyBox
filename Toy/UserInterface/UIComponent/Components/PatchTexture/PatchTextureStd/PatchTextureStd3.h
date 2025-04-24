@@ -1,6 +1,5 @@
 #pragma once
 #include "PatchTextureStd.h"
-#include "../PatchTextureImpl.h"
 
 struct TextureSourceInfo;
 class PatchTextureStd1;
@@ -22,14 +21,13 @@ public:
 
 	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;
 	void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept;
-	Rectangle GetFirstComponentSource() const noexcept;
+	Rectangle GetSource() const noexcept;
 	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
 
 protected:
 	PatchTextureStd3(const PatchTextureStd3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual vector<Rectangle> GetChildSourceList() const noexcept override;
 
 private:
 	void SetDirectionType(DirectionType dirType) noexcept;
