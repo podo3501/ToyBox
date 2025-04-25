@@ -101,13 +101,21 @@ static void AccumulateSize(DirectionType dir, const XMUINT2& size, XMUINT2& tota
 
 bool PatchTexture::FitToTextureSource() noexcept
 {
+	ReturnIfFalse(ForEach([](PatchTexture* tex, size_t) {
+		return tex->FitToTextureSource();
+		}));
+	
+	return ArrangeTextures();
+}
+
+bool PatchTexture::ArrangeTextures() noexcept
+{
 	auto dirType = TextureSliceToDirType(*m_texSlice);
 	ReturnIfFalse(dirType);
 
 	XMUINT2 totalSize{};
 	vector<XMUINT2> individualSizes{};
 	auto allFitted = ForEach([dirType, &totalSize, &individualSizes](PatchTexture* tex, size_t) {
-		ReturnIfFalse(tex->FitToTextureSource());
 		const XMUINT2 size = GetSizeFromRectangle(tex->GetArea());
 		individualSizes.emplace_back(size);
 		AccumulateSize(*dirType, size, totalSize);

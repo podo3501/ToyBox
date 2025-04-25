@@ -49,3 +49,6 @@ private:
 };
 
 unique_ptr<PatchTextureStd1> CreatePatchTextureStd1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);
+inline unique_ptr<PatchTextureStd1> CreatePatchTextureStd1(const string& bindKey, size_t sourceIndex = 0u) {
+	return CreatePatchTextureStd1({}, bindKey, sourceIndex);
+}

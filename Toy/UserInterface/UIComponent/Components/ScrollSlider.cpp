@@ -144,7 +144,7 @@ bool ScrollSlider::UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noe
 {
 	if (IsToolMode(this)) return ToolUpdateScrollView();
 
-	bool isChange = SetStateFlag(StateFlag::Active, contentSize > viewArea); //?!? 이 줄 SetViewContent 안으로
+	bool isChange = SetStateFlag(StateFlag::Active, contentSize > viewArea);
 	SetViewContent(viewArea, contentSize);
 	return isChange;
 }

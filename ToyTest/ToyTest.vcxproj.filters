@@ -26,7 +26,10 @@
       <Filter>UserInterfaceTest</Filter>
     </ClCompile>
     <ClCompile Include="TextureSourceBinderTest\TextureSourceBinderTest.cpp" />
-    <ClCompile Include="ComponentTest\ImageSwitcherComponentTest.cpp">
+    <ClCompile Include="ComponentTest\TextureSwitcherComponentTest.cpp">
+      <Filter>ComponentTest</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTest\ContainerComponentTest.cpp">
       <Filter>ComponentTest</Filter>
     </ClCompile>
   </ItemGroup>

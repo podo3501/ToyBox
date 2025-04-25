@@ -38,36 +38,20 @@ void PatchTextureStd3::SetDirectionType(DirectionType dirType) noexcept
 
 bool PatchTextureStd3::Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept
 {
-    SetLayout({ layout.GetSize(), Origin::LeftTop });
+    SetLayout({ layout.GetSize(), Origin::LeftTop }); //?!? LeftTop이 고정인데 이거 손봐야 할듯
     SetDirectionType(dirType);
 
     vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(m_dirType);
     for (size_t idx : views::iota(0, 3)) //bindKey를 조회할 수 없어 빈 내용의 자식들을 생성한다.
     {
         size_t childSrcIdx = sourceIndex * 3 + idx;
-        auto tex1 = CreatePatchTextureStd1({ {}, Origin::LeftTop }, bindKey, childSrcIdx);
+        auto tex1 = CreatePatchTextureStd1(bindKey, childSrcIdx);
         if (auto flag = stateFlags[idx]; flag) tex1->SetStateFlag(*flag, true);
         UIEx(this).AttachComponent(move(tex1), {});
     }
     SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 
     return true;
-}
-
-bool PatchTextureStd3::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
-{
-    if (GetSize() == XMUINT2{}) //PatchTexture9을 만들면 초기 크기값이 0로 설정 돼 있다.
-        SetSize(UIEx(this).GetChildrenBoundsSize());
-    else
-        ReturnIfFalse(ChangeSize(GetSize(), true));
-
-    return true;
-}
-
-const string& PatchTextureStd3::GetBindKey() const noexcept
-{
-    PatchTextureStd1* patchTex1 = ComponentCast<PatchTextureStd1*>(GetChildComponent(0));
-    return patchTex1->GetBindKey();
 }
 
 bool PatchTextureStd3::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
@@ -112,5 +96,3 @@ unique_ptr<PatchTextureStd3> CreatePatchTextureStd3(const UILayout& layout, Dire
     auto patchTex3 = make_unique<PatchTextureStd3>();
     return CreateIfSetup(move(patchTex3), layout, dirType, bindKey, sourceIndex);
 }
-
-

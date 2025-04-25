@@ -1,0 +1,72 @@
+#include "pch.h"
+#include "../ToyTestFixture.h"
+#include "../TestHelper.h"
+#include "../Toy/UserInterface/UIComponent/Components/Container.h"
+#include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+
+namespace UserInterfaceTest
+{
+	TEST_F(ContainerComponentTest, Container_PatchTextureStd1)
+	{
+		UILayout layout{ {32, 32}, Origin::Center };
+		auto container = CreateContainer(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal);
+		UIEx(m_panel).AttachComponent(move(container), { 160, 120 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+
+		WriteReadTest(m_panel);
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+
+		MockMouseInput(144, 120, true);	//Pressed
+
+		TestMockRender(2, { { 144, 104, 176, 136 } }, "ExitButton1_Pressed");
+	}
+
+	////////////////////////////////////////////////////////////////
+
+	TEST_F(ContainerComponentTest, Container_PatchTextureStd3_Horizontal)
+	{
+		UILayout layout{ {100, 48}, Origin::Center };
+		auto [container, containerBtr] = GetPtrs(CreateContainer(layout,
+			GetComponentKeyMap(DirectionType::Horizontal, layout.GetSize(), "ScrollButton3_H"), BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(container), { 160, 120 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		m_panel = WriteReadTest(m_panel, containerBtr);
+
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+		MockMouseInput(110, 96);	//Hover
+		vector<RECT> exDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
+		TestMockRender(2, exDest, "ScrollButton3_H_Hovered");
+
+		containerBtr->ChangeSize({ 150, 48 });
+		MockMouseInput(0, 0);	//Normal
+		vector<RECT> exDestChange = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
+		TestMockRender(2, exDestChange, "ScrollButton3_H_Normal");
+
+		CloneTest(exDestChange, "ScrollButton3_H_Normal");
+	}
+
+	////////////////////////////////////////////////////////////////
+
+	TEST_F(ContainerComponentTest, Container_PatchTextureStd3_Vertical)
+	{
+		UILayout layout{ {48, 100}, Origin::Center };
+		auto [container, containerPtr] = GetPtrs(CreateContainer(layout,
+			GetComponentKeyMap(DirectionType::Vertical, layout.GetSize(), "ScrollButton3_V"), BehaviorMode::Normal));
+		UIEx(m_panel).AttachComponent(move(container), { 100, 100 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+
+		m_panel = WriteReadTest(m_panel, containerPtr);
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
+
+		MockMouseInput(77, 51);	//Hover
+		vector<RECT> exDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
+		TestMockRender(2, exDest, "ScrollButton3_V_Hovered");
+
+		containerPtr->ChangeSize({ 48, 150 });
+		MockMouseInput(0, 0);	//Normal
+		vector<RECT> exDestChange = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
+		TestMockRender(2, exDestChange, "ScrollButton3_V_Normal");
+
+		CloneTest(exDestChange, "ScrollButton3_V_Normal");
+	}
+}

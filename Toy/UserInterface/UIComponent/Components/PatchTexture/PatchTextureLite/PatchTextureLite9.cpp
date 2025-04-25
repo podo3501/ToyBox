@@ -31,5 +31,9 @@ bool PatchTextureLite9::SetupLayout(size_t index, const vector<Rectangle>& sourc
 		UIEx(this).AttachComponent(move(tex), {});
 	}
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+
+	if (size == XMUINT2{})
+		return ArrangeTextures();
+
 	return ChangeSize(size, true);
 }

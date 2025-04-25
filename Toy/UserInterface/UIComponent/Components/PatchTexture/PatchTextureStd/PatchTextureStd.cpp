@@ -10,6 +10,20 @@ PatchTextureStd::PatchTextureStd(const PatchTextureStd& other) noexcept :
 	PatchTexture{ other }
 {}
 
+const string& PatchTextureStd::GetBindKey() const noexcept
+{
+	PatchTextureStd* child = static_cast<PatchTextureStd*>(GetChildComponent(0));
+	return child->GetBindKey();
+}
+
+bool PatchTextureStd::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
+{
+	if (GetSize() == XMUINT2{})
+		return ArrangeTextures();
+
+	return ChangeSize(GetSize(), true);
+}
+
 //////////////////////////////////////////////////////////
 
 unique_ptr<PatchTextureStd> CreatePatchTexture(const UILayout& layout, TextureSlice texSlice, const string& bindKey)

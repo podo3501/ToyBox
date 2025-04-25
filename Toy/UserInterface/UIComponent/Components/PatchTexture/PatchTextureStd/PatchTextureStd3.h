@@ -17,7 +17,6 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 	//PatchTexture
 	virtual bool ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept override;
-	virtual const string& GetBindKey() const noexcept override;
 
 	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;
 	void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept;
@@ -27,7 +26,6 @@ public:
 protected:
 	PatchTextureStd3(const PatchTextureStd3& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 
 private:
 	void SetDirectionType(DirectionType dirType) noexcept;
@@ -36,3 +34,6 @@ private:
 };
 
 unique_ptr<PatchTextureStd3> CreatePatchTextureStd3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);
+inline unique_ptr<PatchTextureStd3> CreatePatchTextureStd3(DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u) {
+	return CreatePatchTextureStd3({}, dirType, bindKey, sourceIndex);
+}

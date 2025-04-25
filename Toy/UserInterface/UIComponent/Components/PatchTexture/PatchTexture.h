@@ -18,6 +18,7 @@ protected:
 	PatchTexture(const PatchTexture& other) noexcept;
 	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept override;
 	inline void SetTextureSlice(TextureSlice texSlice) noexcept { m_texSlice = texSlice; }
+	bool ArrangeTextures() noexcept;
 	
 private:
 	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;

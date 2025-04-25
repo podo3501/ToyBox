@@ -57,6 +57,10 @@ private:
 //create
 unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, TextureSlice texSlice,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
+inline unique_ptr<TextureSwitcher> CreateTextureSwitcher(TextureSlice texSlice,
+	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode) {
+	return CreateTextureSwitcher({}, texSlice, stateKeys, behaviorMode);
+}
 
 //utility
 optional<TextureSlice> GetTextureSlice(TextureSwitcher* switcher) noexcept;

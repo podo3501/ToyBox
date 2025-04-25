@@ -54,12 +54,10 @@ bool PatchTextureLite3::SetupLayout(size_t index, const vector<Rectangle>& sourc
 	}
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 
-	if (size == XMUINT2{}) //PatchTexture9을 만들면 초기 크기값이 0로 설정 돼 있다.
-		SetLayout({ UIEx(this).GetChildrenBoundsSize(), Origin::LeftTop });
-	else
-		return ChangeSize(size, true);
-
-	return true;
+	if (size == XMUINT2{})
+		return ArrangeTextures();
+	
+	return ChangeSize(size, true);
 }
 
 Rectangle PatchTextureLite3::GetSource() const noexcept

@@ -41,6 +41,7 @@ protected:
 
 class IRendererTest : public ToyTestFixture {};
 class BasicComponentTest : public ToyTestFixture {};
+class ContainerComponentTest : public ToyTestFixture {};
 class TextureSwitcherComponentTest : public ToyTestFixture 
 {
 protected:

@@ -90,9 +90,11 @@ bool TextureSwitcher::SetupDefaults() noexcept
 	const auto& srcInfo = it->second;
 	const auto optIndex = srcInfo.GetIndex();
 	ReturnIfFalse(optIndex);
-
 	ReturnIfFalse(m_patchTexL->SetupLayout(*optIndex, srcInfo.sources, GetSize()));
+
 	m_state = defaultState;
+	if (GetSize() == XMUINT2{})
+		SetSize(m_patchTexL->GetSize());
 
 	return true;
 }

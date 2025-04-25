@@ -120,7 +120,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ComponentTest\ImageSwitcherComponentTest.cpp" />
+    <ClCompile Include="ComponentTest\ContainerComponentTest.cpp" />
+    <ClCompile Include="ComponentTest\TextureSwitcherComponentTest.cpp" />
     <ClInclude Include="CoreTestFixture.h" />
     <ClInclude Include="IMockRenderer.h" />
     <ClInclude Include="pch.h" />

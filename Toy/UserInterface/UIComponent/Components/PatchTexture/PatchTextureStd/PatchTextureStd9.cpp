@@ -35,36 +35,25 @@ bool PatchTextureStd9::Setup(const UILayout& layout, const string& bindKey)
 	return true;
 }
 
-bool PatchTextureStd9::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
-{
-	return ChangeSize(GetSize(), true);
-}
-
-const string& PatchTextureStd9::GetBindKey() const noexcept
-{
-	PatchTextureStd3* patchTex3 = ComponentCast<PatchTextureStd3*>(GetChildComponent(0));
-	return patchTex3->GetBindKey();
-}
-
 bool PatchTextureStd9::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
 {
-	auto infoRef = resBinder->GetTextureSourceInfo(key);
-	ReturnIfFalse(infoRef);
+	if (auto infoRef = resBinder->GetTextureSourceInfo(key); infoRef)
+	{
+		ChangeBindKeyWithIndex(key, *infoRef, 0);
+		return FitToTextureSource();
+	}
 
+	return false;
+}
+
+void PatchTextureStd9::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+{
 	for (size_t index : views::iota(0u, 3u))
 	{
 		PatchTextureStd3* tex3 = ComponentCast<PatchTextureStd3*>(GetChildComponent(index));
-		tex3->ChangeBindKeyWithIndex(key, *infoRef, index);
+		tex3->ChangeBindKeyWithIndex(key, sourceInfo, sourceIndex * 3 + index);
 	}
-
-	return FitToTextureSource();
 }
-
-//vector<Rectangle> PatchTextureStd9::GetChildSourceList() const noexcept
-//{
-//	const vector<UIComponent*> components = GetChildComponents();
-//	return GetSourceList<PatchTextureStd3>(components, &PatchTextureStd3::GetFirstComponentSource);
-//}
 
 unique_ptr<PatchTextureStd9> CreatePatchTextureStd9(const UILayout& layout, const string& bindKey)
 {
