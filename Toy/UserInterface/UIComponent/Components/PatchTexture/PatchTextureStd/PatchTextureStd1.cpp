@@ -76,17 +76,6 @@ bool PatchTextureStd1::ImplementBindSourceInfo(TextureResourceBinder* resBinder,
 	return true;
 }
 
-bool PatchTextureStd1::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
-{
-	if (auto infoRef = resBinder->GetTextureSourceInfo(key); infoRef)
-	{
-		ChangeBindKeyWithIndex(key, *infoRef, 0);
-		return FitToTextureSource();
-	}
-
-	return false;
-}
-
 void PatchTextureStd1::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
 {
 	m_bindKey = key;

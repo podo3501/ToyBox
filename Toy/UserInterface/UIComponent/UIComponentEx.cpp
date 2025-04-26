@@ -121,6 +121,7 @@ XMUINT2 UIComponentEx::GetChildrenBoundsSize() const noexcept
 
 bool UIComponentEx::IsPositionUpdated() const noexcept
 {
+	m_component->UpdatePositionsManually(true);
 	auto clone = m_component->Clone();
 	clone->UpdatePositionsManually(true); //클론을 만들어서 업데이트 시킨후 현재 컴포넌트와 포지션값 비교.
 	return m_component->ForEachChildUntilFail([&clone](const UIComponent* child) {

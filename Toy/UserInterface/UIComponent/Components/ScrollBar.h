@@ -1,8 +1,10 @@
 #pragma once
 #include "../UIComponent.h"
+#include "../UIHelperClass.h"
 
-class PatchTextureStd1;
-class ScrollSlider;
+enum class KeyState;
+class PatchTextureStd3;
+class TextureSwitcher;
 
 class ScrollBar : public UIComponent
 {
@@ -12,28 +14,42 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ScrollBar; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
+	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, unique_ptr<UIComponent> scrollBackground, 
-		unique_ptr<UIComponent> scrollSlider) noexcept;
-	void SerializeIO(JsonOperation& operation);
-	bool UpdateScrollView(uint32_t viewArea, uint32_t contentSize)  noexcept;
-	inline ScrollSlider* GetScrollSlider() const noexcept { return m_scrollSlider; }
+	void AddScrollChangedCB(function<void(float)> callback) { m_onScrollChangedCB = callback; }
+	bool Setup(const UILayout& layout, 
+		unique_ptr<PatchTextureStd3> scrollTrack,
+		unique_ptr<TextureSwitcher> scrollButton);
+	bool UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept;
+	void SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept;
+	void SetPositionRatio(float positionRatio) noexcept;
+	void SetEnableWheel(bool enable) noexcept;
 
 protected:
 	ScrollBar(const ScrollBar& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept override;
+	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
+	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
 
 private:
 	void ReloadDatas() noexcept;
-	inline bool ChangeSliderSize(const XMUINT2& size) noexcept;
 	bool ToolUpdateScrollView() noexcept;
+	void SetScrollContainerSize(float ratio) noexcept;
+	template<typename ReturnType>
+	inline ReturnType GetMaxScrollRange() const noexcept;
+	void OnPressCB(KeyState keyState);
 
-	PatchTextureStd1* m_scrollBackground;
-	ScrollSlider* m_scrollSlider;
-	uint32_t m_scrollPadding{ 0 };
+	PatchTextureStd3* m_scrollTrack;
+	TextureSwitcher* m_scrollButton;
+	BoundedValue m_bounded;
+	bool m_isWheelEnabled{ false };
+	int32_t m_pressMousePos{ 0 };
+	XMINT2 m_pressContainerPos{};
+	function<void(float)> m_onScrollChangedCB;
 };
 
-unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout, unique_ptr<UIComponent> scrollBackground,
-	unique_ptr<UIComponent> scrollSlider);
+unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout,
+	unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton);
+unique_ptr<ScrollBar> CreateScrollBar(
+	unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton);

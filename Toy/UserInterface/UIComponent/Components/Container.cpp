@@ -54,12 +54,12 @@ void Container::ClearInteraction() noexcept
 		SetState(InteractState::Normal);
 }
 
-bool Container::ImplementChangeSize(const XMUINT2& size) noexcept
+bool Container::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	ReturnIfFalse(ranges::all_of(GetChildComponents(), [&size](const auto& component) {
-			return component->ChangeSize(size);
+	ReturnIfFalse(ranges::all_of(GetChildComponents(), [&size, isForce](const auto& component) {
+			return component->ChangeSize(size, isForce);
 		}));
-	return UIComponent::ImplementChangeSize(size);
+	return UIComponent::ImplementChangeSize(size, isForce);
 }
 
 void Container::AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept

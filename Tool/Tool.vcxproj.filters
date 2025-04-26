@@ -86,9 +86,6 @@
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditListArea.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollSlider.cpp">
-      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
-    </ClCompile>
     <ClCompile Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.cpp">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClCompile>
@@ -179,9 +176,6 @@
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditListArea.h">
-      <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollSlider.h">
       <Filter>MainWindow\SelectedComponent\ComponentEdit</Filter>
     </ClInclude>
     <ClInclude Include="MainWindow\SelectedComponent\ComponentEdit\EditScrollBar.h">

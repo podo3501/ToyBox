@@ -129,12 +129,13 @@
 --Image를 Texture로 바꿔야 하지 않을까?
 --Divider가 안 바뀌어 있다. Divider도 기본값으로 바꿔야 한다.
 --키를 바꾸었을때 사이즈의 최소값으로 기본셋팅한다. 그렇지 않으면 undo에서 에러나고 사이즈 조절이 되지 않는다.
+--ImplementChangeSize 이 함수에 강제로 업데이트 하는 변수 추가
+--새로운 layout size 만 지정하고 origin 빼기
+--ScrollSlider를 ScrollBar로 변경
+--Padding을 리스트에 넣는다. 
 
 @툴에서 리스트 할 수 있게끔
-    기존의 스크롤바를 삭제하고 스크롤 슬라이더를 스크롤 바로 바꾼다.
-        Padding을 리스트에 넣는다. 
-        chageKey tdd 만들고 테스트 후 base 클래스에 올린다.
-
+  
     렌더텍스쳐가 TextureSwitcher 사이에 있는데 이 부분 수정
     컨테이너 간격 셋팅
 

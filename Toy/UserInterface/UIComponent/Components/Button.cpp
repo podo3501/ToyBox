@@ -26,9 +26,9 @@ unique_ptr<UIComponent> Button::CreateClone() const
 	return unique_ptr<Button>(new Button(*this));
 }
 
-bool Button::ImplementChangeSize(const XMUINT2& size) noexcept
+bool Button::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	ReturnIfFalse(m_container->ChangeSize(size));
+	ReturnIfFalse(m_container->ChangeSize(size, isForce));
 	return UIComponent::ImplementChangeSize(size);
 }
 

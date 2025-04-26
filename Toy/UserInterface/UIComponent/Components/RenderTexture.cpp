@@ -78,6 +78,9 @@ void RenderTexture::ImplementPositionUpdated() noexcept
 bool RenderTexture::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController* texController) noexcept
 {
 	Release(); //데이터가 존재하면 지운다.
+
+	if (GetSize() == XMUINT2{})
+		SetSize(UIEx(this).GetChildrenBoundsSize());
 	
 	size_t index{ 0 };
 	UpdatePositionsManually(true);
@@ -89,9 +92,9 @@ bool RenderTexture::ImplementBindSourceInfo(TextureResourceBinder*, ITextureCont
 	return true;
 }
 
-bool RenderTexture::ImplementChangeSize(const XMUINT2& size) noexcept
+bool RenderTexture::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	ReturnIfFalse(m_component->ChangeSize(size));
+	ReturnIfFalse(m_component->ChangeSize(size, isForce));
 	return UIComponent::ImplementChangeSize(size);
 }
 
@@ -159,4 +162,9 @@ unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr
 {
 	unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>();
 	return CreateIfSetup(move(renderTexture), layout, move(component));
+}
+
+unique_ptr<RenderTexture> CreateRenderTexture(unique_ptr<UIComponent> component)
+{
+	return CreateRenderTexture({}, move(component));
 }

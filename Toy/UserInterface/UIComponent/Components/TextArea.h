@@ -26,7 +26,7 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
-	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
+	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
 
 private:
 	bool ArrangeText(const wstring& text);

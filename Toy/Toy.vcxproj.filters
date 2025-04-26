@@ -103,9 +103,6 @@
     <ClInclude Include="UserInterface\UIComponent\Components\ScrollBar.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ScrollSlider.h">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\TextArea.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
@@ -247,9 +244,6 @@
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\ScrollBar.cpp">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\ScrollSlider.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\TextArea.cpp">

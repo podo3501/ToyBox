@@ -26,33 +26,13 @@ bool PatchTextureStd9::Setup(const UILayout& layout, const string& bindKey)
 	vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(DirectionType::Vertical);
 	for (size_t idx : views::iota(0u, 3u))
 	{
-		auto tex1 = CreatePatchTextureStd3({ {}, Origin::LeftTop }, DirectionType::Horizontal, bindKey, idx);
+		auto tex1 = CreatePatchTextureStd3(DirectionType::Horizontal, bindKey, idx);
 		if (auto flag = stateFlags[idx]; flag) tex1->SetStateFlag(*flag, true);
 		UIEx(this).AttachComponent(move(tex1), {});
 	}
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 
 	return true;
-}
-
-bool PatchTextureStd9::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
-{
-	if (auto infoRef = resBinder->GetTextureSourceInfo(key); infoRef)
-	{
-		ChangeBindKeyWithIndex(key, *infoRef, 0);
-		return FitToTextureSource();
-	}
-
-	return false;
-}
-
-void PatchTextureStd9::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
-{
-	for (size_t index : views::iota(0u, 3u))
-	{
-		PatchTextureStd3* tex3 = ComponentCast<PatchTextureStd3*>(GetChildComponent(index));
-		tex3->ChangeBindKeyWithIndex(key, sourceInfo, sourceIndex * 3 + index);
-	}
 }
 
 unique_ptr<PatchTextureStd9> CreatePatchTextureStd9(const UILayout& layout, const string& bindKey)

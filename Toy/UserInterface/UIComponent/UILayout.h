@@ -6,10 +6,10 @@ class JsonOperation;
 class UILayout
 {
 public:
-	UILayout();
 	~UILayout();
-
-	UILayout(const XMUINT2& size, const Origin& origin);
+	UILayout();
+	UILayout(const XMUINT2& size);
+	UILayout(const XMUINT2& size, Origin origin);
 	UILayout(const UILayout& other) = default;
 	UILayout& operator=(const UILayout& other);
 	UILayout(UILayout&& other) noexcept = default;

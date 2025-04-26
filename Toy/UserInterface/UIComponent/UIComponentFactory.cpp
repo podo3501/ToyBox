@@ -14,7 +14,6 @@
 #include "Components/Container.h"
 #include "Components/RenderTexture.h"
 #include "Components/ScrollBar.h"
-#include "Components/ScrollSlider.h"
 #include "Components/TextureSwitcher.h"
 #include <iterator>
 
@@ -35,7 +34,6 @@ constexpr FactoryFunc ComponentFactory[] = //enum의 값과 일치가 되어야 한다. 아�
     []() -> unique_ptr<UIComponent> { return make_unique<Container>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<RenderTexture>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<ScrollBar>(); },
-    []() -> unique_ptr<UIComponent> { return make_unique<ScrollSlider>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<TextureSwitcher>(); },
     //[]() -> unique_ptr<UIComponent> { return make_unique<Unknown>(); } //이런건 없다.
 };

@@ -29,7 +29,7 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual void ImplementPositionUpdated() noexcept override;
-	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept override;
+	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept override;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 
@@ -54,3 +54,4 @@ private:
 };
 
 unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent> component);
+unique_ptr<RenderTexture> CreateRenderTexture(unique_ptr<UIComponent> component);

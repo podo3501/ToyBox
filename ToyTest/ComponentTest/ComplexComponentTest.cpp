@@ -4,7 +4,6 @@
 #include "../TestHelper.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/ScrollBar.h"
-#include "../Toy/UserInterface/UIComponent/Components/ScrollSlider.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
@@ -14,30 +13,34 @@ namespace UserInterfaceTest
 {
 	TEST_F(ComplexComponentTest, ListArea)
 	{
-		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({ { 150, 128 }, Origin::Center }));
+		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, listAreaPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
-		auto scrollSliderPtr = UIEx(listAreaPtr).FindComponent<ScrollSlider*>("ScrollSlider_0");
+		EXPECT_TRUE((listAreaPtr->GetSize() == XMUINT2{ 48, 48 }));
+		listAreaPtr->ChangeSize({ 150, 128 });
+		listAreaPtr->ChangeOrigin(Origin::Center);
+
+		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
 		EXPECT_TRUE(UIEx(m_panel).IsPositionUpdated());
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), m_resBinder.get(), listAreaPtr, 5));
-		EXPECT_TRUE(scrollSliderPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 
 		listAreaPtr->RemoveContainer(0);
-		EXPECT_FALSE(scrollSliderPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 		auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 		EXPECT_NE(preSizeX, curSizeX);
 
 		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
 		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
 		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
-		EXPECT_TRUE(scrollSliderPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 
 		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
-		EXPECT_EQ(scrollContainerPtr->GetSize().y, 32); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 slider 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
+		EXPECT_EQ(scrollContainerPtr->GetSize().y, 30); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 scrollBar 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
 
 		listAreaPtr->ClearContainers();
 		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
@@ -55,12 +58,16 @@ namespace UserInterfaceTest
 
 	TEST_F(ComplexComponentTest, RenderTexture)
 	{
-		auto switcher = CreateTextureSwitcher({ {32, 32}, Origin::Center }, 
-			TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
-		auto [renderTex, renderTexPtr] = GetPtrs(CreateRenderTexture({ { 50, 50 }, Origin::Center }, move(switcher)));
+		auto switcher = CreateTextureSwitcher(TextureSlice::One, 
+			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
+		auto [renderTex, renderTexPtr] = GetPtrs(CreateRenderTexture(move(switcher)));
 		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, renderTexPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
+
+		EXPECT_TRUE((renderTexPtr->GetSize() == XMUINT2{ 32, 32 }));
+		renderTexPtr->ChangeSize({ 50, 50 });
+		renderTexPtr->ChangeOrigin(Origin::Center);
 
 		CallMockRender(TestRenderTexture, "", 1); //core에 렌더코드가 안 돌기 때문에 한번만 들어온다.
 
@@ -70,20 +77,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(ComplexComponentTest, ScrollBar)
-	{
-		auto [scrollBar, scrollBarPtr] = GetPtrs(CreateSampleScrollBar({ {16, 200}, Origin::LeftTop }));
-		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
-		m_panel = WriteReadTest(m_panel, scrollBarPtr);
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-
-		uint32_t viewArea = 500;
-		uint32_t contentSize = 2000;
-		scrollBarPtr->UpdateScrollView(viewArea, contentSize);
-		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
-	}
-
-	static void TestScrollSlide(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
+	static void TestScrollBar(size_t index, const RECT& dest, const RECT* source, TextureResourceBinder* rb)
 	{
 		vector<RECT> expectDest = { 
 			{ 92, 100, 108, 110 }, { 92, 110, 108, 290 }, { 92, 290, 108, 300 },
@@ -95,22 +89,26 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, 2, expectDest, expectSource);
 	}
 
-	TEST_F(ComplexComponentTest, ScrollSlider)
+	TEST_F(ComplexComponentTest, ScrollBar)
 	{
-		auto [scrollSlider, scrollSliderPtr] = GetPtrs(CreateSampleScrollSlider(DirectionType::Vertical, { { 16, 200 }, Origin::Center }));
-		UIEx(m_panel).AttachComponent(move(scrollSlider), { 100, 200 });
-		m_panel = WriteReadTest(m_panel, scrollSliderPtr);
+		auto [scrollBar, scrollBarPtr] = GetPtrs(CreateSampleScrollBar({}, DirectionType::Vertical));
+		UIEx(m_panel).AttachComponent(move(scrollBar), { 100, 200 });
+		m_panel = WriteReadTest(m_panel, scrollBarPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
+		EXPECT_TRUE((scrollBarPtr->GetSize() == XMUINT2{ 16, 48 }));
+		scrollBarPtr->ChangeSize({ 16, 200 });
+		scrollBarPtr->ChangeOrigin(Origin::Center);
+
 		testing::MockFunction<void(float)> mockOnScrollChanged;
-		scrollSliderPtr->AddScrollChangedCB(mockOnScrollChanged.AsStdFunction());
+		scrollBarPtr->AddScrollChangedCB(mockOnScrollChanged.AsStdFunction());
 
 		uint32_t viewArea = 500;
 		uint32_t contentSize = 2000;
-		scrollSliderPtr->SetViewContent(viewArea, contentSize);
-		scrollSliderPtr->SetPositionRatio(0.5f);
-		EXPECT_TRUE(scrollSliderPtr->HasStateFlag(StateFlag::Active));
-		CallMockRender(TestScrollSlide, 6);
+		scrollBarPtr->SetViewContent(viewArea, contentSize);
+		scrollBarPtr->SetPositionRatio(0.5f);
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		CallMockRender(TestScrollBar, 6);
 
 		EXPECT_CALL(mockOnScrollChanged, Call(testing::FloatEq(85.f / 150.f))).Times(1);
 

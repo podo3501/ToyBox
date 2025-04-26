@@ -8,7 +8,6 @@
 #include "TextArea.h"
 #include "ListArea.h"
 #include "ScrollBar.h"
-#include "ScrollSlider.h"
 #include "TextureSwitcher.h"
 #include "Utility.h"
 
@@ -24,7 +23,7 @@ static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 	const XMUINT2& size, const string& bindKey,
 	function<unique_ptr<UIComponent>(UILayout&, const string&)> CreatePatchTextureFn)
 {
-	UILayout layout{ size, Origin::LeftTop };
+	UILayout layout{ size };
 	map<InteractState, unique_ptr<UIComponent>> components;
 
 	const auto& stateKeys = GetStateKeyMap(bindKey);
@@ -50,42 +49,21 @@ map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dir
 		[dirType](UILayout& layout, const string& key) { return CreatePatchTextureStd3(layout, dirType, key); });
 }
 
-unique_ptr<ScrollSlider> CreateSampleScrollSlider(DirectionType dirType, const UILayout& layout)
+unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout, DirectionType dirType)
 {
-	UILayout gridLayout({ layout.GetSize(), Origin::LeftTop });
+	UILayout gridLayout{ layout.GetSize() };
 		
-	return CreateScrollSlider(layout,
+	return CreateScrollBar(layout,
 		CreatePatchTextureStd3(gridLayout, dirType, "ScrollTrack3_V"),
 		CreateTextureSwitcher(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 }
 
-unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout)
-{
-	UILayout bgLayout({ layout.GetSize(), Origin::LeftTop });
-	const XMUINT2& padding{ 6, 6 };
-	UILayout sliderLayout({ layout.GetSize() - padding, Origin::LeftTop });
-
-	return CreateScrollBar(layout,
-		CreatePatchTextureStd1(bgLayout, "ListBackground1_Normal"),
-		CreateSampleScrollSlider(DirectionType::Vertical, sliderLayout));
-}
-
 unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 {
-	UILayout backImgLayout{ layout.GetSize(), Origin::LeftTop };
-	auto listBackImage = CreatePatchTextureStd1(backImgLayout, "ListBackImage1");
-
-	UILayout scrollSliderLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
-	auto scrollSlider = CreateSampleScrollSlider(DirectionType::Vertical, scrollSliderLayout);
-
-	/*UILayout scrollBarLayout({ {22, layout.GetSize().y }, Origin::LeftTop });
-	auto scrollBar = CreateSampleScrollBar(scrollBarLayout);*/
-
-	UILayout switcherLayout({ { layout.GetSize().x, 32 }, Origin::LeftTop });	//컨테이너 크기는 넓이는 같고, 높이는 32
-	auto switcher = CreateTextureSwitcher(switcherLayout, TextureSlice::Nine,
-		GetStateKeyMap("ListBackground9"), BehaviorMode::Normal);
-
-	return CreateListArea(layout, move(listBackImage), move(switcher), move(scrollSlider));
+	return CreateListArea(layout,
+		move(CreatePatchTextureStd1(UILayout{ layout.GetSize() }, "ListBackImage1")),
+		move(CreateTextureSwitcher(TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal)),
+		move(CreateSampleScrollBar({}, DirectionType::Vertical)));
 }
 
 bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, ListArea* listArea, int itemCount)

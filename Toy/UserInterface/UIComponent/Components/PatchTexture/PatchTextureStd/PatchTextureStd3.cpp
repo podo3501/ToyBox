@@ -54,26 +54,6 @@ bool PatchTextureStd3::Setup(const UILayout& layout, DirectionType dirType, cons
     return true;
 }
 
-bool PatchTextureStd3::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
-{
-    if (auto infoRef = resBinder->GetTextureSourceInfo(key); infoRef)
-    {
-        ChangeBindKeyWithIndex(key, *infoRef, 0);
-        return FitToTextureSource();
-    }
-
-    return false;
-}
-
-void PatchTextureStd3::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
-{
-    for (size_t index : views::iota(0u, 3u))
-    {
-        PatchTextureStd1* tex1 = ComponentCast<PatchTextureStd1*>(GetChildComponent(index));
-        tex1->ChangeBindKeyWithIndex(key, sourceInfo, sourceIndex * 3 + index);
-    }
-}
-
 Rectangle PatchTextureStd3::GetSource() const noexcept
 {
     PatchTextureStd1* tex1 = ComponentCast<PatchTextureStd1*>(GetChildComponent(0));

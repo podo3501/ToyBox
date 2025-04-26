@@ -38,7 +38,7 @@ GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
 
 bool GameMainLoop::InitializeDerived()
 {
-    UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
+    UILayout layout{ GetSizeFromRectangle(GetRectResolution()) };
     m_gamePanel = CreateRootPanel("Main", layout, m_renderer);
 
     return true;
@@ -66,7 +66,7 @@ bool GameMainLoop::LoadResources()
     AttachComponentToPanel(CreateSampleListArea({ {200, 170}, Origin::Center }), { 600, 200 });
     ReturnIfFalse(m_gamePanel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
-    MakeSampleListAreaData(m_renderer, m_resBinder.get(), UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 16);
+    MakeSampleListAreaData(m_renderer, m_resBinder.get(), UIEx(m_gamePanel).FindComponent<ListArea*>("ListArea_0"), 13);
     
     return true;
 }

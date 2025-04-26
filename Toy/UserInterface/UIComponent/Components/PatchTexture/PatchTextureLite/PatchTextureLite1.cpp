@@ -24,7 +24,7 @@ bool PatchTextureLite1::SetupLayout(size_t index, const vector<Rectangle>& sourc
 {
 	SetIndexedSource(index, sources);
 	const XMUINT2& curSize = (size == XMUINT2{}) ? GetSourceSize(m_coord) : size;
-	SetLayout({ curSize, Origin::LeftTop });
+	SetLayout(curSize);
 
 	return true;
 }

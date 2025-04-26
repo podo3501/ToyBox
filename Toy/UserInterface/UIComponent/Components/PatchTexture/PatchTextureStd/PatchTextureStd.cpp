@@ -3,6 +3,7 @@
 #include "PatchTextureStd1.h"
 #include "PatchTextureStd3.h"
 #include "PatchTextureStd9.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 
 PatchTextureStd::~PatchTextureStd() = default;
 PatchTextureStd::PatchTextureStd() = default;
@@ -24,11 +25,31 @@ bool PatchTextureStd::ImplementBindSourceInfo(TextureResourceBinder*, ITextureCo
 	return ChangeSize(GetSize(), true);
 }
 
+bool PatchTextureStd::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
+{
+    if (auto infoRef = resBinder->GetTextureSourceInfo(key); infoRef)
+    {
+        ChangeBindKeyWithIndex(key, *infoRef, 0);
+        return FitToTextureSource();
+    }
+
+    return false;
+}
+
+void PatchTextureStd::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& info, size_t sourceIndex) noexcept
+{
+	for (size_t index : views::iota(0u, 3u))
+	{
+		PatchTextureStd* child = static_cast<PatchTextureStd*>(GetChildComponent(index));
+		child->ChangeBindKeyWithIndex(key, info, sourceIndex * 3 + index);
+	}
+}
+
 //////////////////////////////////////////////////////////
 
 unique_ptr<PatchTextureStd> CreatePatchTexture(const UILayout& layout, TextureSlice texSlice, const string& bindKey)
 {
-	UILayout ltLayout({ layout.GetSize(), Origin::LeftTop });
+	UILayout ltLayout(layout.GetSize());
 	switch (texSlice) {
 	case TextureSlice::One: return CreatePatchTextureStd1(ltLayout, bindKey);
 	case TextureSlice::ThreeH: return CreatePatchTextureStd3(ltLayout, DirectionType::Horizontal, bindKey);

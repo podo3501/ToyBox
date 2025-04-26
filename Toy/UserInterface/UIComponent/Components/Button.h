@@ -16,7 +16,7 @@ public:
 protected:
 	Button(const Button& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementChangeSize(const XMUINT2& size) noexcept;
+	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
 
 private:
 	void ReloadDatas() noexcept;

@@ -6,10 +6,14 @@
 
 UILayout::~UILayout() = default;
 UILayout::UILayout() :
-	UILayout(XMUINT2{}, Origin::LeftTop) // 기본 생성자 통합
+	UILayout(XMUINT2{}, Origin::LeftTop)
 {}
 
-UILayout::UILayout(const XMUINT2& size, const Origin& origin) :
+UILayout::UILayout(const XMUINT2& size)
+	: UILayout(size, Origin::LeftTop)
+{}
+
+UILayout::UILayout(const XMUINT2& size, Origin origin) :
 	m_size{ size },
 	m_originPoint{ GetOriginPoint(origin) },
 	m_origin{ origin }

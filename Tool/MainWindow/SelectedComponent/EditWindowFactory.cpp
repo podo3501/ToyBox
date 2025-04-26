@@ -7,7 +7,6 @@
 #include "ComponentEdit/EditContainer.h"
 #include "ComponentEdit/EditRenderTexture.h"
 #include "ComponentEdit/EditListArea.h"
-#include "ComponentEdit/EditScrollSlider.h"
 #include "ComponentEdit/EditScrollBar.h"
 #include "ComponentEdit/EditTextureSwitcher.h"
 #include "../Toy/UserInterface/UIComponent/UIType.h"
@@ -23,7 +22,6 @@
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/Container.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
-#include "../Toy/UserInterface/UIComponent/Components/ScrollSlider.h"
 #include "../Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 
@@ -45,7 +43,6 @@ void EditWindowFactory::RegisterFactories()
     RegisterEditWindow<EditPatchTextureLite9, PatchTextureLite9*>(ComponentID::PatchTextureLite9);
     RegisterEditWindow<EditRenderTexture, RenderTexture*>(ComponentID::RenderTexture);
     RegisterEditWindow<EditScrollBar, ScrollBar*>(ComponentID::ScrollBar);
-    RegisterEditWindow<EditScrollSlider, ScrollSlider*>(ComponentID::ScrollSlider);
     RegisterEditWindow<EditTextArea, TextArea*>(ComponentID::TextArea);
 
     //UIComponent*, UICommandList*, TextureResourceBinder*가 인자로 들어가는 새로운 EditWindow는 여기서 추가

@@ -15,11 +15,8 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
-	//PatchTexture
-	virtual bool ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept override;
 
 	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;
-	void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept;
 	Rectangle GetSource() const noexcept;
 	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
 

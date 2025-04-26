@@ -159,10 +159,10 @@ bool TextureSwitcher::ImplementUpdate(const DX::StepTimer&) noexcept
 	return true;
 }
 
-bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size) noexcept
+bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	bool allChange = ranges::all_of(GetChildComponents(), [&size](const auto& component) {
-		return component->ChangeSize(size);
+	bool allChange = ranges::all_of(GetChildComponents(), [&size, isForce](const auto& component) {
+		return component->ChangeSize(size, isForce);
 		});
 	ReturnIfFalse(allChange);
 	return UIComponent::ImplementChangeSize(size);
