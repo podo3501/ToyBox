@@ -15,12 +15,20 @@ void EditCombo::Render(function<void(const string&)> OnChangeKey)
 		OnChangeKey(m_keys[m_index]);
 }
 
-void EditCombo::SelectItem(const string& key) noexcept
+bool EditCombo::SelectItem(int selectIndex) noexcept
+{
+	if (selectIndex < 0 || selectIndex >= m_keyStorage.size()) return false;
+
+	m_index = selectIndex;
+	return true;
+}
+
+bool EditCombo::SelectItem(const string& key) noexcept
 {
 	auto it = ranges::find(m_keyStorage, key);
-	if (it == m_keyStorage.end()) return;
+	if (it == m_keyStorage.end()) return false;
 
-	m_index = static_cast<int>(distance(m_keyStorage.begin(), it));
+	return SelectItem(static_cast<int>(distance(m_keyStorage.begin(), it)));
 }
 
 /////////////////////////////////////////////////////////////////////

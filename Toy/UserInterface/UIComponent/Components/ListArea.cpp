@@ -59,25 +59,24 @@ bool ListArea::operator==(const UIComponent& rhs) const noexcept
 bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	unique_ptr<TextureSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept
 {
+	// 추후에 다양한 형태(2줄짜리 ListArea 같은)가 나오면 이 bgImage처럼 새로운 컴포넌트를 만들어서 넣는다.
+	// 지금은 Background로 간단하게 했지만 다양한 리스트 형태가 나올수 있다.
+	// RenderTexture는 단순히 RenderTexture만 하는 역할로 놔 두자.
 	SetLayout(layout);
-	UILayout partLayout{ layout.GetSize() }; //속성들은 정렬하지 않는다.
+	
+	m_bgImage = bgImage.get();
+	m_bgImage->Rename("Background Image");
+
+	auto renderTex = CreateRenderTexture({ layout.GetSize() }, move(bgImage));
+	renderTex->EnableChildMouseEvents(true);
+	m_renderTex = renderTex.get();
+	UIEx(this).AttachComponent(move(renderTex), {});
 
 	m_prototypeContainer = switcher.get();
 	m_prototypeContainer->Rename("Prototype Container");
 	m_prototypeContainer->SetStateFlag(StateFlag::ActiveUpdate | StateFlag::Render, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	m_prototypeContainer->SetStateFlag(StateFlag::RenderEditable, true);
 	UIEx(this).AttachComponent(move(switcher), {});
-
-	// 추후에 다양한 형태(2줄짜리 ListArea 같은)가 나오면 이 bgImage처럼 새로운 컴포넌트를 만들어서 넣는다.
-	// 지금은 Background로 간단하게 했지만 다양한 리스트 형태가 나올수 있다.
-	// RenderTexture는 단순히 RenderTexture만 하는 역할로 놔 두자.
-	m_bgImage = bgImage.get();
-	m_bgImage->Rename("Background Image");
-
-	auto renderTex = CreateRenderTexture(partLayout, move(bgImage));
-	renderTex->EnableChildMouseEvents(true);
-	m_renderTex = renderTex.get();
-	UIEx(this).AttachComponent(move(renderTex), {});
 
 	m_scrollBar = scrollBar.get();
 	m_scrollBar->ChangeOrigin(Origin::RightTop);

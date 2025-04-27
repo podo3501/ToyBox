@@ -142,3 +142,4 @@ unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text,
 	unique_ptr<TextArea> textArea = make_unique<TextArea>();
 	return CreateIfSetup(move(textArea), layout, text, bindKeys);
 }
+

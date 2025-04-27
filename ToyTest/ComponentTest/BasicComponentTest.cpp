@@ -217,11 +217,14 @@ namespace UserInterfaceTest
 	{
 		vector<wstring> bindKeys{ L"Hangle", L"English" };
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
-		auto textArea = CreateTextArea({ {320, 120}, Origin::Center }, text, bindKeys);
+		auto [textArea, textAreaPtr] = GetPtrs(CreateTextArea(text, bindKeys));
 		UIEx(m_panel).AttachComponent(move(textArea), { 400, 300 });
-		m_panel = WriteReadTest(m_panel);
+		m_panel = WriteReadTest(m_panel, textAreaPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
-
+		EXPECT_TRUE((textAreaPtr->GetSize() == XMUINT2{}));
+		
+		textAreaPtr->ChangeSize(320, 120);
+		textAreaPtr->ChangeOrigin(Origin::Center);
 		CallMockRender(TestTextAreaRender);
 
 		unique_ptr<UIComponent> clonePanel = m_panel->Clone();

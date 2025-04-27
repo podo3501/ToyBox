@@ -8,7 +8,8 @@ public:
 	~EditCombo();
 	EditCombo(const string& name, const vector<string> keys) noexcept;
 	void Render(function<void(const string&)> OnChangeKey);
-	void SelectItem(const string& key) noexcept;
+	bool SelectItem(const string& key) noexcept;
+	bool SelectItem(int selectIndex) noexcept;
 
 private:
 	string m_name;

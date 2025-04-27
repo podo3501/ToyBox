@@ -46,7 +46,7 @@ void EditTextureSwitcher::RenderStateCombo()
 {
 	if (!m_stateCombo) return;
 
-	m_stateCombo->Render([this](const std::string& key) {
+	m_stateCombo->Render([this](const string& key) {
 		m_texSwitcher->ChangeState(StringToEnum<InteractState>(key));
 		SelectKeyComboItem();
 		});
@@ -56,7 +56,7 @@ void EditTextureSwitcher::RenderKeyCombo()
 {
 	if (!m_keyCombo) return;
 
-	m_keyCombo->Render([this](const std::string& key) {
+	m_keyCombo->Render([this](const string& key) {
 		auto cmdList = GetUICommandList();
 		cmdList->ChangeBindKey(m_texSwitcher, m_resBinder, key);
 		});

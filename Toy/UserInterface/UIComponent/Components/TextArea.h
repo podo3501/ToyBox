@@ -40,3 +40,6 @@ private:
 };
 
 unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, const vector<wstring>& bindKeys);
+inline unique_ptr<TextArea> CreateTextArea(const wstring& text, const vector<wstring>& bindKeys) {
+	return move(CreateTextArea({}, text, bindKeys));
+}

@@ -3,6 +3,7 @@
 
 class TextureResourceBinder;
 class ListArea;
+class EditCombo;
 class EditListArea : public EditWindow
 {
 public:
@@ -10,6 +11,10 @@ public:
 	EditListArea() = delete;
 	EditListArea(ListArea* listArea, UICommandList* cmdList) noexcept;
 
+protected:
+	virtual void RenderComponent() override;
+
 private:
 	ListArea* m_listArea;
+	unique_ptr<EditCombo> m_dummyCountCombo;
 };

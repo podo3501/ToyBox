@@ -49,6 +49,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	bool BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept;
 	bool ChangeSize(const XMUINT2& size, bool isForce = false) noexcept;
+	inline bool ChangeSize(uint32_t x, uint32_t y, bool isForce = false) noexcept { return ChangeSize({ x, y }, isForce); }
 	bool UpdatePositionsManually(bool root = false) noexcept;
 	bool ProcessUpdate(const DX::StepTimer& timer) noexcept;
 
