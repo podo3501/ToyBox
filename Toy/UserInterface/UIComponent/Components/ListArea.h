@@ -33,6 +33,8 @@ protected:
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
+	virtual bool EnterToolMode() noexcept override;
+	virtual bool ExitToolMode() noexcept override;
 
 private:
 	void ReloadDatas() noexcept;
@@ -44,6 +46,7 @@ private:
 	void CheckMouseInteraction() noexcept;
 	int32_t GetContainerHeight() const noexcept;
 	void OnScrollChangedCB(float ratio);
+	void SetContainerVisible(bool visible) noexcept;
 	void MoveContainers(int32_t targetPos) noexcept;
 	bool ChangeScrollBarSizeAndPos(const XMUINT2& size) noexcept;
 

@@ -3,8 +3,6 @@
 namespace StateFlag { enum Type : int; }
 
 void InitializeConfig(const wstring& resourcePath, const Vector2& resolution) noexcept;
-void SetRenderFilterFlag(StateFlag::Type filterFlag) noexcept;
-StateFlag::Type GetRenderFilterFlag() noexcept;
 
 wstring GetResourcePath() noexcept;
 wstring GetResourceFontPath() noexcept;

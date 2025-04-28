@@ -127,29 +127,31 @@ void ScrollBar::OnPressCB(KeyState keyState)
 	m_onScrollChangedCB(ratio);
 }
 
-bool ScrollBar::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
+//이 함수는 세로만 적용돼 있다.
+bool ScrollBar::ImplementChangeSize(const XMUINT2& newSize, bool isForce) noexcept
 {
-	ReturnIfFalse(m_scrollTrack->ChangeSize(size, isForce));
-	//크기가 바뀌면 상대적으로 버튼 크기가 정해지기 때문에 조정되어야 한다.
-	auto& btnHeight = m_scrollButton->GetSize().y;
-	auto btnSize = XMUINT2{ size.x, min(size.y, btnHeight) };
-	m_scrollButton->ChangeSize(btnSize, isForce);
-	return UIComponent::ImplementChangeSize(size);
-}
+	float sizeRatio = static_cast<float>(newSize.y) / static_cast<float>(m_scrollTrack->GetSize().y);
+	ReturnIfFalse(m_scrollTrack->ChangeSize(newSize, isForce));
 
-bool ScrollBar::ToolUpdateScrollView() noexcept
-{
-	SetViewContent(1, 2);
-	return false;
+	//크기가 바뀌면 상대적으로 버튼 크기가 정해지기 때문에 조정되어야 한다.
+	uint32_t btnHeight = static_cast<uint32_t>(static_cast<float>(m_scrollButton->GetSize().y) * sizeRatio);
+	auto btnSize = XMUINT2{ newSize.x, btnHeight };
+	m_scrollButton->ChangeSize(btnSize, isForce);
+
+	return UIComponent::ImplementChangeSize(newSize);
 }
 
 bool ScrollBar::UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept
 {
-	if (IsToolMode(this)) return ToolUpdateScrollView();
+	if (contentSize <= viewArea)
+		return SetStateFlag(StateFlag::Active, false);
 
-	bool isChange = SetStateFlag(StateFlag::Active, contentSize > viewArea);
-	SetViewContent(viewArea, contentSize);
-	return isChange;
+	bool changeFlag = SetStateFlag(StateFlag::Active, true);
+	if (int height = viewArea - contentSize; height < 0)
+		m_bounded.SetBounds(height, 0, 15);
+
+	SetScrollContainerSize(static_cast<float>(viewArea) / static_cast<float>(contentSize));
+	return changeFlag;
 }
 
 void ScrollBar::SetScrollContainerSize(float ratio) noexcept
@@ -166,14 +168,6 @@ void ScrollBar::SetScrollContainerSize(float ratio) noexcept
 	m_scrollButton->ChangeSize(ratioSize);
 }
 
-void ScrollBar::SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept
-{
-	if (int height = viewArea - contentSize; height < 0)
-		m_bounded.SetBounds(height, 0, 15);
-
-	SetScrollContainerSize(static_cast<float>(viewArea) / static_cast<float>(contentSize));
-}
-
 void ScrollBar::SetPositionRatio(float positionRatio) noexcept
 {
 	positionRatio = clamp(positionRatio, 0.f, 1.f);
@@ -187,6 +181,18 @@ void ScrollBar::SetEnableWheel(bool enable) noexcept
 {
 	if(!m_isWheelEnabled && enable) ResetMouseWheelValue();
 	m_isWheelEnabled = enable;
+}
+
+bool ScrollBar::EnterToolMode() noexcept
+{
+	SetStateFlag(StateFlag::Render, true);
+	return true;
+}
+
+bool ScrollBar::ExitToolMode() noexcept
+{
+	SetStateFlag(StateFlag::Render, false);
+	return true;
 }
 
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout,

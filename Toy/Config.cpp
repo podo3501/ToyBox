@@ -6,22 +6,11 @@
 static wstring g_fontPath{ L"UI/Font/" };
 static wstring g_resourcePath{};
 static Vector2 g_resolution{};
-static StateFlag::Type renderFilter{ StateFlag::Render };
 
 void InitializeConfig(const wstring& resourcePath, const Vector2& resolution) noexcept
 {
 	g_resourcePath = resourcePath;
 	g_resolution = resolution;
-}
-
-void SetRenderFilterFlag(StateFlag::Type filterFlag) noexcept
-{
-	renderFilter = filterFlag;
-}
-
-StateFlag::Type GetRenderFilterFlag() noexcept
-{
-	return renderFilter;
 }
 
 wstring GetResourcePath() noexcept { return g_resourcePath; }

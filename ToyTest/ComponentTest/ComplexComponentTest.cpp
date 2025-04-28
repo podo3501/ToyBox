@@ -46,6 +46,23 @@ namespace UserInterfaceTest
 		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
 	}
 
+	TEST_F(ComplexComponentTest, ListAreaToolMode)
+	{
+		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
+		UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
+		//save는 신경쓸 필요 없다. 툴모드도 세이브 하지 않는다. 일단 만들고 관찰해 보자.
+		listAreaPtr->EnableToolMode(true); //false에서 true로 바뀌기 때문에 entered가 호출된다.
+
+		//툴모드가 작동하고 있는지 확인한다. 기본은 셋팅하지 않는 것이다. 툴모드가 있다 없다가 아니라 툴모드인가 툴모드와 관계가 없이 동작하는 가이다.
+		auto protoContainer = listAreaPtr->GetPrototypeContainer();
+
+		//전체 컴포넌트를 툴모드에서 해제한다.
+		//UIEx(m_panel)->EnableToolMode(false); //true에서 false로 바뀌기 때문에 leaved가 호출된다.
+
+		//툴모드가 아닌것을 확인한다.
+	}
+
 	////////////////////////////////////////////////////////
 
 	static void TestRenderTexture(size_t index, const RECT& dest, const RECT* source, const vector<RECT>&)
@@ -105,7 +122,7 @@ namespace UserInterfaceTest
 
 		uint32_t viewArea = 500;
 		uint32_t contentSize = 2000;
-		scrollBarPtr->SetViewContent(viewArea, contentSize);
+		scrollBarPtr->UpdateScrollView(viewArea, contentSize);
 		scrollBarPtr->SetPositionRatio(0.5f);
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 		CallMockRender(TestScrollBar, 6);

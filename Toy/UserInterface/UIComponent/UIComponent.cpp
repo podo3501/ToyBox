@@ -130,7 +130,7 @@ void UIComponent::ProcessRender(ITextureRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
-	ForEachChildBFS(GetRenderFilterFlag(), [render](UIComponent* component) {
+	ForEachChildBFS(StateFlag::Render, [render](UIComponent* component) {
 		component->ImplementRender(render);
 		});
 }
@@ -190,6 +190,19 @@ bool UIComponent::RenameRegion(const string& region) noexcept
 	m_region = region;
 
 	return true;
+}
+
+bool UIComponent::EnableToolMode(bool enable) noexcept
+{
+	if (m_toolMode != enable)
+	{
+		m_toolMode = enable;
+		ReturnIfFalse((enable) ? EnterToolMode() : ExitToolMode());
+	}
+
+	return ranges::all_of(m_children, [enable](auto& child) {
+		return child->EnableToolMode(enable);
+		});
 }
 
 void UIComponent::SerializeIO(JsonOperation& operation)

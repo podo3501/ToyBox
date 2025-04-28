@@ -30,9 +30,9 @@ ListArea::ListArea(const ListArea& o) noexcept :
 void ListArea::ReloadDatas() noexcept
 {
 	vector<UIComponent*> componentList = GetChildComponents();
-	m_prototypeContainer = ComponentCast<TextureSwitcher*>(componentList[0]);
-	m_renderTex = ComponentCast<RenderTexture*>(componentList[1]);
+	m_renderTex = ComponentCast<RenderTexture*>(componentList[0]);
 	m_bgImage = m_renderTex->GetRenderedComponent();
+	m_prototypeContainer = ComponentCast<TextureSwitcher*>(componentList[1]);
 	m_scrollBar = ComponentCast<ScrollBar*>(componentList[2]);
 	m_scrollBar->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
 }
@@ -75,13 +75,11 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	m_prototypeContainer = switcher.get();
 	m_prototypeContainer->Rename("Prototype Container");
 	m_prototypeContainer->SetStateFlag(StateFlag::ActiveUpdate | StateFlag::Render, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
-	m_prototypeContainer->SetStateFlag(StateFlag::RenderEditable, true);
 	UIEx(this).AttachComponent(move(switcher), {});
 
 	m_scrollBar = scrollBar.get();
 	m_scrollBar->ChangeOrigin(Origin::RightTop);
 	m_scrollBar->SetStateFlag(StateFlag::Render, false);
-	m_scrollBar->SetStateFlag(StateFlag::RenderEditable, true);
 	m_scrollBar->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
 	UIEx(this).AttachComponent(move(scrollBar), { static_cast<int32_t>(layout.GetSize().x), 0 });
 
@@ -157,7 +155,6 @@ UIComponent* ListArea::PrepareContainer()
 
 	const auto& containerHeight = GetContainerHeight();
 	cloneContainerPtr->SetStateFlag(StateFlag::Active, true);
-	cloneContainerPtr->SetStateFlag(StateFlag::RenderEditable, false);
 	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
 	if(!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
 	m_containers.emplace_back(cloneContainerPtr);
@@ -193,6 +190,12 @@ void ListArea::ClearContainers() noexcept
 	m_containers.clear();
 	
 	UpdateScrollBar();
+}
+
+void ListArea::SetContainerVisible(bool visible) noexcept
+{
+	for (auto container : m_containers)
+		container->SetStateFlag(StateFlag::Render, visible);
 }
 
 void ListArea::MoveContainers(int32_t targetPos) noexcept
@@ -241,6 +244,22 @@ void ListArea::UpdateContainersScroll(const DX::StepTimer& timer) noexcept
 bool ListArea::ImplementUpdate(const DX::StepTimer& timer) noexcept
 {
 	UpdateContainersScroll(timer);
+
+	return true;
+}
+
+bool ListArea::EnterToolMode() noexcept
+{
+	m_prototypeContainer->SetStateFlag(StateFlag::Render, true);
+	SetContainerVisible(false);
+
+	return true;
+}
+
+bool ListArea::ExitToolMode() noexcept
+{
+	m_prototypeContainer->SetStateFlag(StateFlag::Render, false);
+	SetContainerVisible(true);
 
 	return true;
 }

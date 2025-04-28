@@ -21,7 +21,6 @@ public:
 		unique_ptr<PatchTextureStd3> scrollTrack,
 		unique_ptr<TextureSwitcher> scrollButton);
 	bool UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept;
-	void SetViewContent(uint32_t viewArea, uint32_t contentSize) noexcept;
 	void SetPositionRatio(float positionRatio) noexcept;
 	void SetEnableWheel(bool enable) noexcept;
 
@@ -31,10 +30,11 @@ protected:
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
+	virtual bool EnterToolMode() noexcept override;
+	virtual bool ExitToolMode() noexcept override;
 
 private:
 	void ReloadDatas() noexcept;
-	bool ToolUpdateScrollView() noexcept;
 	void SetScrollContainerSize(float ratio) noexcept;
 	template<typename ReturnType>
 	inline ReturnType GetMaxScrollRange() const noexcept;

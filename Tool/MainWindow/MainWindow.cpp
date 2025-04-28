@@ -84,8 +84,8 @@ void MainWindow::ChangeWindowSize(const ImVec2& size)
 void MainWindow::ToggleToolMode() noexcept
 {
 	m_isTool = !m_isTool;
+	m_panel->EnableToolMode(m_isTool);
 	m_renderTex->EnableChildMouseEvents(!m_isTool);
-	SetRenderFilterFlag(m_isTool ? StateFlag::Render | StateFlag::RenderEditable : StateFlag::Render);
 	m_controller->SetActive(m_isTool);
 }
 

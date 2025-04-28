@@ -99,7 +99,7 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 vector<UIComponent*> UIComponentEx::GetComponents(const XMINT2& pos) noexcept
 {
 	vector<UIComponent*> findList;
-	m_component->ForEachChildBFS(GetRenderFilterFlag(), [&findList, &pos](UIComponent* comp) {
+	m_component->ForEachChildBFS(StateFlag::Render, [&findList, &pos](UIComponent* comp) {
 		if(Contains(comp->GetArea(), pos))
 			findList.push_back(comp);
 		});
@@ -136,9 +136,3 @@ bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ v
 bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeX(c, s.x); }
 bool ChangeSizeY(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ c->GetSize().x, v }); }
 bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeY(c, s.y); }
-
-bool IsToolMode(UIComponent* component) noexcept
-{
-	return (GetRenderFilterFlag() & StateFlag::RenderEditable) &&
-		component->HasStateFlag(StateFlag::RenderEditable);
-}

@@ -130,8 +130,8 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 	ReturnIfFalse(component);
 	m_component = component.get();
 	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(component)));
-	//ReturnIfFalse(m_renderer->LoadComponent(m_renderTex.get()));
 	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_resBinder, m_renderer->GetTextureController()));
+	ReturnIfFalse(m_renderTex->EnableToolMode(true));
 
 	return true;
 }

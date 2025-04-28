@@ -159,11 +159,10 @@ namespace StateFlag
 		ActiveUpdate = 1 << 1, //Active업데이트(Update함수 실행하는가 아닌가) 실행여부
 		Render = 1 << 2, //Render라면 RenderTexture를 동시에 셋팅할 수 있다. RenderTexture에 그려진 것을 Render할때 보여준다.
 		RenderTexture = 1 << 3, //RenderTexture라면 Texture셋팅일때만 그린다.
-		RenderEditable = 1 << 4, //화면에 보여주지는 않지만 Tool에서는 보여줄때 사용한다. prototype ui 같은 경우.
-		Attach = 1 << 5,
-		Detach = 1 << 6,
-		X_SizeLocked = 1 << 7,
-		Y_SizeLocked = 1 << 8,
+		Attach = 1 << 4,
+		Detach = 1 << 5,
+		X_SizeLocked = 1 << 6,
+		Y_SizeLocked = 1 << 7,
 
 		Active = Update | ActiveUpdate | Render,
 		Default = Active | Attach | Detach, // 기본 옵션(모든 옵션 포함)

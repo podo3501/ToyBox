@@ -41,8 +41,6 @@ bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept;
 bool ChangeSizeY(UIComponent* component, uint32_t value) noexcept;
 bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept;
 
-bool IsToolMode(UIComponent* component) noexcept;
-
 template<typename PointerType>
 inline pair<unique_ptr<PointerType>, PointerType*> GetPtrs(unique_ptr<PointerType> uniquePtr)
 {
