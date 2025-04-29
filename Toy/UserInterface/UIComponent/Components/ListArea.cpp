@@ -127,12 +127,13 @@ bool ListArea::UpdateScrollBar() noexcept
 	bool isActiveChange = m_scrollBar->UpdateScrollView(m_renderTex->GetSize().y, GetContainerHeight());
 	if (isActiveChange)
 		return ResizeContainerForScrollbar();
+
 	return true;
 }
 
 XMUINT2 ListArea::GetUsableContentSize() const noexcept
 {
-	uint32_t padding = m_scrollBar->HasStateFlag(StateFlag::Active) ? 
+	uint32_t padding = m_scrollBar->HasStateFlag(StateFlag::Render) ? 
 		m_scrollBar->GetSize().x + m_scrollPadding * 2 : 0;
 	XMUINT2 usableSize{ m_prototypeContainer->GetSize() };
 	usableSize.x -= padding;
@@ -154,7 +155,7 @@ UIComponent* ListArea::PrepareContainer()
 	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
 
 	const auto& containerHeight = GetContainerHeight();
-	cloneContainerPtr->SetStateFlag(StateFlag::Active, true);
+	cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
 	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
 	if(!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
 	m_containers.emplace_back(cloneContainerPtr);
@@ -190,12 +191,6 @@ void ListArea::ClearContainers() noexcept
 	m_containers.clear();
 	
 	UpdateScrollBar();
-}
-
-void ListArea::SetContainerVisible(bool visible) noexcept
-{
-	for (auto container : m_containers)
-		container->SetStateFlag(StateFlag::Render, visible);
 }
 
 void ListArea::MoveContainers(int32_t targetPos) noexcept
@@ -248,20 +243,31 @@ bool ListArea::ImplementUpdate(const DX::StepTimer& timer) noexcept
 	return true;
 }
 
+bool ListArea::SetContainerVisible(bool visible) noexcept
+{
+	for (auto container : m_containers)
+		container->SetStateFlag(StateFlag::Active, visible);
+	m_containerActiveFlag = visible;
+
+	return true;
+}
+
 bool ListArea::EnterToolMode() noexcept
 {
 	m_prototypeContainer->SetStateFlag(StateFlag::Render, true);
-	SetContainerVisible(false);
-
-	return true;
+	m_scrollBar->SetStateFlag(StateFlag::Active, true);
+	m_scrollBar->RestoreDefault();
+	return SetContainerVisible(false);
 }
 
 bool ListArea::ExitToolMode() noexcept
 {
 	m_prototypeContainer->SetStateFlag(StateFlag::Render, false);
+	m_scrollBar->SetStateFlag(StateFlag::Active, false);
 	SetContainerVisible(true);
 
-	return true;
+	ReturnIfFalse(ResizeContainerForScrollbar());
+	return UpdateScrollBar();
 }
 
 void ListArea::SerializeIO(JsonOperation& operation)

@@ -194,15 +194,17 @@ bool UIComponent::RenameRegion(const string& region) noexcept
 
 bool UIComponent::EnableToolMode(bool enable) noexcept
 {
+	ReturnIfFalse(ranges::all_of(m_children, [enable](auto& child) {
+		return child->EnableToolMode(enable);
+		}));
+
 	if (m_toolMode != enable)
 	{
 		m_toolMode = enable;
 		ReturnIfFalse((enable) ? EnterToolMode() : ExitToolMode());
 	}
 
-	return ranges::all_of(m_children, [enable](auto& child) {
-		return child->EnableToolMode(enable);
-		});
+	return true;
 }
 
 void UIComponent::SerializeIO(JsonOperation& operation)

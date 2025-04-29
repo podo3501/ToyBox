@@ -17,7 +17,7 @@ EditListArea::EditListArea(ListArea* listArea, UICommandList* cmdList) noexcept 
 	m_listArea{ listArea }
 {
 		m_dummyCountCombo = make_unique<EditCombo>("Dummies", GenerateNumberStrings(31));
-		m_dummyCountCombo->SelectItem(0);
+		m_dummyCountCombo->SelectItem(static_cast<int>(m_listArea->GetContainerCount()));
 }
 
 void EditListArea::RenderComponent()

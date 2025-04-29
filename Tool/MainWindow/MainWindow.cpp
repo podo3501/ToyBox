@@ -77,8 +77,7 @@ wstring MainWindow::GetSaveFilename() const noexcept
 void MainWindow::ChangeWindowSize(const ImVec2& size)
 {
 	const XMUINT2& uint2Size = ImVec2ToXMUINT2(size);
-	m_renderTex->ModifyTexture(uint2Size);
-	m_panel->ChangeSize(uint2Size);
+	m_renderTex->ChangeSize(uint2Size);
 }
 
 void MainWindow::ToggleToolMode() noexcept

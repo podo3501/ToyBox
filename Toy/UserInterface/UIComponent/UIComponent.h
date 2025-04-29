@@ -32,6 +32,7 @@ protected:
 	UIComponent* GetChildComponent(size_t index) const noexcept;
 	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); }
+	inline bool GetToolMode() const noexcept { return m_toolMode; }
 	
 public:
 	virtual ~UIComponent();

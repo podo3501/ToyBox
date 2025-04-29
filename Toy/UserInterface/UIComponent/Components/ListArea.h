@@ -24,6 +24,7 @@ public:
 	TextureSwitcher* GetPrototypeContainer() noexcept { return m_prototypeContainer; }
 	UIComponent* PrepareContainer();
 	inline UIComponent* GetContainer(unsigned int idx) const noexcept;
+	inline size_t GetContainerCount() const noexcept { return m_containers.size(); }
 	bool RemoveContainer(unsigned int idx) noexcept;
 	void ClearContainers() noexcept;
 
@@ -46,7 +47,7 @@ private:
 	void CheckMouseInteraction() noexcept;
 	int32_t GetContainerHeight() const noexcept;
 	void OnScrollChangedCB(float ratio);
-	void SetContainerVisible(bool visible) noexcept;
+	bool SetContainerVisible(bool visible) noexcept;
 	void MoveContainers(int32_t targetPos) noexcept;
 	bool ChangeScrollBarSizeAndPos(const XMUINT2& size) noexcept;
 
@@ -57,6 +58,7 @@ private:
 	uint32_t m_scrollPadding{ 2 };
 	
 	vector<UIComponent*> m_containers; //이건 저장하지 않는다. 실행시에 채워지는 데이터이다.
+	bool m_containerActiveFlag{ true };
 };
 
 unique_ptr<ListArea> CreateListArea(const UILayout& layout,

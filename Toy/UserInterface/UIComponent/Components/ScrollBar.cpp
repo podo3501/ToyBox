@@ -46,6 +46,13 @@ unique_ptr<UIComponent> ScrollBar::CreateClone() const
 	return unique_ptr<ScrollBar>(new ScrollBar(*this));
 }
 
+void ScrollBar::RestoreDefault() noexcept
+{
+	SetScrollContainerSize(0.5f);
+	SetPositionRatio(0.f);
+	m_bounded.Reset();
+}
+
 bool ScrollBar::Setup(const UILayout& layout,
 	unique_ptr<PatchTextureStd3> scrollTrack,
 	unique_ptr<TextureSwitcher> scrollButton)
@@ -143,6 +150,12 @@ bool ScrollBar::ImplementChangeSize(const XMUINT2& newSize, bool isForce) noexce
 
 bool ScrollBar::UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept
 {
+	if(GetToolMode())
+	{
+		SetScrollContainerSize(0.5f);
+		return false;
+	}
+
 	if (contentSize <= viewArea)
 		return SetStateFlag(StateFlag::Active, false);
 
@@ -181,18 +194,6 @@ void ScrollBar::SetEnableWheel(bool enable) noexcept
 {
 	if(!m_isWheelEnabled && enable) ResetMouseWheelValue();
 	m_isWheelEnabled = enable;
-}
-
-bool ScrollBar::EnterToolMode() noexcept
-{
-	SetStateFlag(StateFlag::Render, true);
-	return true;
-}
-
-bool ScrollBar::ExitToolMode() noexcept
-{
-	SetStateFlag(StateFlag::Render, false);
-	return true;
 }
 
 unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout,

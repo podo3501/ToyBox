@@ -7,6 +7,7 @@ class BoundedValue
 public:
 	BoundedValue() noexcept;
 	BoundedValue(int min, int max, int unit) noexcept;
+	void Reset() noexcept;
 	void SetBounds(int min, int max, int unit) noexcept;
 	int ValidateRange(int value, const DX::StepTimer& timer) noexcept;
 	inline float GetPositionRatio() const noexcept { return static_cast<float>(m_current) / static_cast<float>(m_min); }

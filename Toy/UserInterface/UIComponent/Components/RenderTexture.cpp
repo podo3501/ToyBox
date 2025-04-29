@@ -95,6 +95,7 @@ bool RenderTexture::ImplementBindSourceInfo(TextureResourceBinder*, ITextureCont
 bool RenderTexture::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
 	ReturnIfFalse(m_component->ChangeSize(size, isForce));
+	ReturnIfFalse(m_texController->ModifyRenderTextureSize(*m_index, size));
 	return UIComponent::ImplementChangeSize(size);
 }
 
@@ -103,14 +104,6 @@ bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent> compon
 	SetLayout(layout);
 	m_component = component.get();
 	UIEx(this).AttachComponent(move(component), {});
-
-	return true;
-}
-
-bool RenderTexture::ModifyTexture(const XMUINT2& size)
-{
-	ReturnIfFalse(m_texController->ModifyRenderTextureSize(*m_index, size));
-	SetSize(size);
 
 	return true;
 }

@@ -30,14 +30,14 @@ namespace UserInterfaceTest
 		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 
 		listAreaPtr->RemoveContainer(0);
-		EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Render));
 		auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 		EXPECT_NE(preSizeX, curSizeX);
 
 		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
 		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
 		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
-		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Render));
 
 		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
 		EXPECT_EQ(scrollContainerPtr->GetSize().y, 30); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 scrollBar 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 

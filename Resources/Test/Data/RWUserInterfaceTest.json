@@ -20,7 +20,7 @@
             }
         },
         "Region": "MainRegionEntry",
-        "StateFlag": 103,
+        "StateFlag": 55,
         "Children": [
             {
                 "Child": {
@@ -44,7 +44,7 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 103,
+                    "StateFlag": 55,
                     "Children": [
                         {
                             "Child": {
@@ -68,7 +68,7 @@
                                     }
                                 },
                                 "Region": "",
-                                "StateFlag": 103,
+                                "StateFlag": 55,
                                 "Children": [],
                                 "DirectionType": 1
                             }

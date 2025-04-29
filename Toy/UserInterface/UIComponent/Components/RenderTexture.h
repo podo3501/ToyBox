@@ -15,8 +15,6 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> component) noexcept;
-	bool ModifyTexture(const XMUINT2& size);
-
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 	inline UIComponent* GetRenderedComponent() const noexcept { return m_component; }
 	inline bool IsMouseInArea() const noexcept { return m_mouseInArea; }

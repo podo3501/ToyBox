@@ -26,6 +26,13 @@ BoundedValue::BoundedValue(int min, int max, int unit) noexcept :
 	m_min{ min }, m_max{ max }, m_unit{ unit }
 {}
 
+void BoundedValue::Reset() noexcept
+{
+	m_target = 0;
+	m_current = 0.f;
+	m_previous = 0;
+}
+
 void BoundedValue::SetBounds(int min, int max, int unit) noexcept
 {
 	m_min = min;
