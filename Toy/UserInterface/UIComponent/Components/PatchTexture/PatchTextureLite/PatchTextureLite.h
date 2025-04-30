@@ -7,6 +7,7 @@ class PatchTextureLite : public PatchTexture
 public:
 	~PatchTextureLite();	
 	virtual bool SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size = {}) = 0;
+	virtual bool BindSourceInfo(size_t index, const vector<Rectangle>& sources) { index; sources; return true; } //?!? =0으로 바뀌어야 한다.
 	virtual void SetIndexedSource(size_t, const vector<Rectangle>&) noexcept;
 
 protected:
@@ -18,7 +19,7 @@ protected:
 	PatchTextureLite(const PatchTextureLite& other) noexcept;
 };
 
-unique_ptr<PatchTextureLite> CreatePatchTextureLite(TextureSlice texSlice);
+unique_ptr<PatchTextureLite> CreatePatchTextureLite(TextureSlice texSlice, const XMUINT2& size);
 
 inline vector<Rectangle> GetTripleAt(const vector<Rectangle>& srcs, size_t idx) noexcept
 {

@@ -41,13 +41,17 @@ bool PatchTextureLite::ForEach(predicate<PatchTextureLite*, size_t> auto&& Each)
 	return true;
 }
 
-unique_ptr<PatchTextureLite> CreatePatchTextureLite(TextureSlice texSlice)
+unique_ptr<PatchTextureLite> CreatePatchTextureLite(TextureSlice texSlice, const XMUINT2& size)
 {
 	switch (texSlice) {
-	case TextureSlice::One: return make_unique<PatchTextureLite1>();
+	/*case TextureSlice::One: return make_unique<PatchTextureLite1>();
 	case TextureSlice::ThreeH: return make_unique<PatchTextureLite3>(DirectionType::Horizontal);
 	case TextureSlice::ThreeV: return make_unique<PatchTextureLite3>(DirectionType::Vertical);
-	case TextureSlice::Nine: return make_unique<PatchTextureLite9>();
+	case TextureSlice::Nine: return make_unique<PatchTextureLite9>();*/
+	case TextureSlice::One: return CreatePatchTextureLite1(size);
+	case TextureSlice::ThreeH: return CreatePatchTextureLite3(size, DirectionType::Horizontal);
+	case TextureSlice::ThreeV: return CreatePatchTextureLite3(size, DirectionType::Vertical);
+	case TextureSlice::Nine: return CreatePatchTextureLite9(size);
 	}
 	return nullptr;
 }

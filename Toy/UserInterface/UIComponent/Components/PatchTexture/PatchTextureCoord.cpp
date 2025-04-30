@@ -15,6 +15,14 @@ PatchTextureCoord::PatchTextureCoord(const PatchTextureCoord& o) noexcept :
 	m_source{ o.m_source }
 {}
 
+bool PatchTextureCoord::operator==(const PatchTextureCoord& rhs) const noexcept
+{
+	auto result = (tie(m_index, m_source) == tie(rhs.m_index, rhs.m_source));
+	Assert(result);
+
+	return result;
+}
+
 void PatchTextureCoord::Render(ITextureRender* render) const
 {
 	const auto& position = m_component->GetPosition();

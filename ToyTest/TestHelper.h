@@ -15,6 +15,19 @@ unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, T& compone
 	return move(read);
 }
 
+unique_ptr<UIComponent> WriteReadTest(TextureResourceBinder* binder,
+	unique_ptr<UIComponent>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
+
+template<typename T>
+unique_ptr<UIComponent> WriteReadTest(TextureResourceBinder* binder, 
+	unique_ptr<UIComponent>& write, T& component, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json")
+{
+	auto read = WriteReadTest(binder, write, filename);
+	component = UIEx(read).FindComponent<T>(component->GetName());
+
+	return move(read);
+}
+
 bool TestSourceBinderWriteRead(unique_ptr<TextureResourceBinder>& resBinder, const wstring& filename = L"Test/Data/RWSourceBinderTest.json");
 
 class TestComponent : public UIComponent

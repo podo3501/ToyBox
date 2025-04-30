@@ -8,6 +8,7 @@ public:
 	~PatchTextureCoord();
 	PatchTextureCoord() noexcept;
 	PatchTextureCoord(const PatchTextureCoord& o) noexcept;
+	bool operator==(const PatchTextureCoord& rhs) const noexcept;
 
 	void SetOwner(UIComponent* component) noexcept { m_component = component; }
 	void Render(ITextureRender* render) const;

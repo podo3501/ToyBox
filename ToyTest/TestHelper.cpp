@@ -19,6 +19,20 @@ unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstr
 	return move(read);
 }
 
+unique_ptr<UIComponent> WriteReadTest(TextureResourceBinder* binder,
+	unique_ptr<UIComponent>& write, const wstring& filename)
+{
+	JsonFile::WriteComponent(write, filename);
+
+	unique_ptr<UIComponent> read;
+	JsonFile::ReadComponent(filename, read);
+	EXPECT_TRUE(read->BindTextureSourceInfo(binder, nullptr));
+
+	EXPECT_TRUE(*write == *read);
+
+	return move(read);
+}
+
 bool TestSourceBinderWriteRead(unique_ptr<TextureResourceBinder>& write, const wstring& filename)
 {
 	ReturnIfFalse(write->Save(filename));

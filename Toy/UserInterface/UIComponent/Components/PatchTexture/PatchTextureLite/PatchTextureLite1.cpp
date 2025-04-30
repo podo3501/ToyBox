@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PatchTextureLite1.h"
+#include "Utility.h"
 
 PatchTextureLite1::~PatchTextureLite1() = default;
 PatchTextureLite1::PatchTextureLite1() :
@@ -20,6 +21,20 @@ unique_ptr<UIComponent> PatchTextureLite1::CreateClone() const
 	return unique_ptr<PatchTextureLite1>(new PatchTextureLite1(*this));
 }
 
+bool PatchTextureLite1::operator==(const UIComponent& rhs) const noexcept
+{
+	ReturnIfFalse(UIComponent::operator==(rhs));
+	const PatchTextureLite1* o = static_cast<const PatchTextureLite1*>(&rhs);
+
+	return (tie(m_coord) == tie(o->m_coord));
+}
+
+bool PatchTextureLite1::Setup(const XMUINT2& size)
+{
+	SetLayout(size);
+	return true;
+}
+
 bool PatchTextureLite1::SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size)
 {
 	SetIndexedSource(index, sources);
@@ -27,4 +42,18 @@ bool PatchTextureLite1::SetupLayout(size_t index, const vector<Rectangle>& sourc
 	SetLayout(curSize);
 
 	return true;
+}
+
+bool PatchTextureLite1::BindSourceInfo(size_t index, const vector<Rectangle>& sources)
+{
+	SetIndexedSource(index, sources);
+	if (GetSize() == XMUINT2{})
+		SetLayout(GetSourceSize(m_coord));
+
+	return true;
+}
+
+unique_ptr<PatchTextureLite1> CreatePatchTextureLite1(const XMUINT2& size)
+{
+	return CreateIfSetup(move(make_unique<PatchTextureLite1>()), size); //?!? 아마 CreateIfSetup 이거 템플릿으로 바꿀 수 있을듯
 }

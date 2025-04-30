@@ -40,6 +40,23 @@ bool PatchTextureLite3::operator==(const UIComponent& rhs) const noexcept
 	return (tie(m_dirType) == tie(o->m_dirType));
 }
 
+bool PatchTextureLite3::Setup(const XMUINT2& size, DirectionType dirType)
+{
+	SetLayout(size);
+	SetDirectionType(dirType);
+
+	vector<optional<StateFlag::Type>> stateFlags = GetStateFlagsForDirection(dirType);
+	for (auto idx : views::iota(0u, 3u))
+	{
+		auto tex = CreatePatchTextureLite1();
+		if (auto flag = stateFlags[idx]; flag) tex->SetStateFlag(*flag, true);
+		UIEx(this).AttachComponent(move(tex), {});
+	}
+	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
+
+	return true;
+}
+
 bool PatchTextureLite3::SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size)
 {
 	ReturnIfFalse(sources.size() == 3);
@@ -60,6 +77,22 @@ bool PatchTextureLite3::SetupLayout(size_t index, const vector<Rectangle>& sourc
 	return ChangeSize(size, true);
 }
 
+bool PatchTextureLite3::BindSourceInfo(size_t index, const vector<Rectangle>& sources)
+{
+	ReturnIfFalse(sources.size() == 3);
+
+	for (auto idx : views::iota(0u, sources.size()))
+	{
+		auto texL = static_cast<PatchTextureLite*>(GetChildComponent(idx));
+		texL->BindSourceInfo(index, { sources[idx] });
+	}
+
+	if (GetSize() == XMUINT2{})
+		return ArrangeTextures();
+
+	return ChangeSize(GetSize(), true);
+}
+
 Rectangle PatchTextureLite3::GetSource() const noexcept
 {
 	PatchTextureLite1* tex1 = ComponentCast<PatchTextureLite1*>(GetChildComponent(0));
@@ -75,4 +108,9 @@ void PatchTextureLite3::SerializeIO(JsonOperation& operation)
 
 	if (operation.IsWrite()) return;
 	SetTextureSlice(DirTypeToTextureSlice(m_dirType));
+}
+
+unique_ptr<PatchTextureLite3> CreatePatchTextureLite3(const XMUINT2& size, DirectionType dirType)
+{
+	return CreateIfSetup(make_unique<PatchTextureLite3>(), size, dirType);
 }

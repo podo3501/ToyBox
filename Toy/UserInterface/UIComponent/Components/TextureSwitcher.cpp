@@ -50,7 +50,7 @@ bool TextureSwitcher::Setup(const UILayout& layout, TextureSlice texSlice,
 {
 	SetLayout(layout);
 	unique_ptr<PatchTextureLite> pTexL = nullptr;
-	tie(pTexL, m_patchTexL) = GetPtrs(CreatePatchTextureLite(texSlice));
+	tie(pTexL, m_patchTexL) = GetPtrs(CreatePatchTextureLite(texSlice, layout.GetSize()));
 	UIEx(this).AttachComponent(move(pTexL), {});
 	m_stateKeys = stateKeys;
 	m_behaviorMode = behaviorMode;
@@ -90,7 +90,8 @@ bool TextureSwitcher::SetupDefaults() noexcept
 	const auto& srcInfo = it->second;
 	const auto optIndex = srcInfo.GetIndex();
 	ReturnIfFalse(optIndex);
-	ReturnIfFalse(m_patchTexL->SetupLayout(*optIndex, srcInfo.sources, GetSize()));
+	//ReturnIfFalse(m_patchTexL->SetupLayout(*optIndex, srcInfo.sources, GetSize()));
+	ReturnIfFalse(m_patchTexL->BindSourceInfo(*optIndex, srcInfo.sources));
 
 	m_state = defaultState;
 	if (GetSize() == XMUINT2{})

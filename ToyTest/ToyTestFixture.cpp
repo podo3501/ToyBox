@@ -114,6 +114,13 @@ void ToyTestFixture::CloneTest(const vector<RECT>& expectDest, const string& bin
 	WriteReadTest(clonePanel);
 }
 
+void ToyTestFixture::CloneTestForSwitcher(const vector<RECT>& expectDest, const string& bindKey)
+{
+	unique_ptr<UIComponent> clonePanel = m_panel->Clone();
+	TestMockRender(2, expectDest, bindKey, clonePanel.get());
+	WriteReadTest(m_resBinder.get(), clonePanel);
+}
+
 void ToyTestFixture::TearDown()
 {
 	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.

@@ -23,6 +23,7 @@ public:
 	void CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc);
 
 	void CloneTest(const vector<RECT>& expectDest, const string& bindKey);
+	void CloneTestForSwitcher(const vector<RECT>& expectDest, const string& bindKey); //?!? 이 두 클론 함수 합칠 수 있을꺼 같은데.
 	void MockMouseInput(int mouseX, int mouseY, bool leftButton = false);
 
 protected:
