@@ -31,7 +31,7 @@ protected:
 	vector<UIComponent*> GetChildComponents() const noexcept;
 	UIComponent* GetChildComponent(size_t index) const noexcept;
 	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;
-	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); }
+	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); } //?!? SetSize와 같은 역할이다.
 	inline bool GetToolMode() const noexcept { return m_toolMode; }
 	
 public:

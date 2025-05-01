@@ -21,6 +21,12 @@ unique_ptr<UIComponent> Panel::CreateClone() const
     return unique_ptr<Panel>(new Panel(*this));
 }
 
+bool Panel::Setup(const UILayout& layout)
+{
+    SetLayout(layout);
+    return true;
+}
+
 void Panel::SerializeIO(JsonOperation& operation)
 {
     UIComponent::SerializeIO(operation);
@@ -28,8 +34,9 @@ void Panel::SerializeIO(JsonOperation& operation)
 
 unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer)
 {
-    unique_ptr<UIComponent> panel = make_unique<Panel>(name, layout);
-    panel->RenameRegion("MainRegionEntry");
+    auto panel = CreateComponent<Panel>(layout);
+    if (!panel->Rename(name)) return nullptr;
+    if (!panel->RenameRegion("MainRegionEntry")) return nullptr;
     renderer->AddRenderComponent(panel.get());
 
     return panel;

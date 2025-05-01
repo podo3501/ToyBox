@@ -82,30 +82,20 @@ bool TextureRepository::CreateRenderTexture(IComponent* component,
     return true;
 }
 
-void TextureRepository::ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept
-{
-    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifyPosition(position);
-}
+void TextureRepository::ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept {
+    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifyPosition(position); }
 
-bool TextureRepository::ModifyRenderTextureSize(size_t index, const XMUINT2& size)
-{
-    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifySize(size);
-}
+bool TextureRepository::ModifyRenderTextureSize(size_t index, const XMUINT2& size) {
+    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifySize(size); }
 
-void TextureRepository::DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const 
-{
-    ToType<CFont*>(m_texResources[index].get())->DrawString(m_sprite, text, pos, color);
-}
+void TextureRepository::DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const {
+    ToType<CFont*>(m_texResources[index].get())->DrawString(m_sprite, text, pos, color); }
 
-Rectangle TextureRepository::MeasureText(size_t index, const wstring& text, const Vector2& position)
-{
-    return ToType<CFont*>(m_texResources[index].get())->MeasureText(text, position);
-}
+Rectangle TextureRepository::MeasureText(size_t index, const wstring& text, const Vector2& position) {
+    return ToType<CFont*>(m_texResources[index].get())->MeasureText(text, position); }
 
-float TextureRepository::GetLineSpacing(size_t index) const noexcept
-{
-    return ToType<CFont*>(m_texResources[index].get())->GetLineSpacing();
-}
+float TextureRepository::GetLineSpacing(size_t index) const noexcept {
+    return ToType<CFont*>(m_texResources[index].get())->GetLineSpacing(); }
 
 optional<vector<Rectangle>> TextureRepository::GetTextureAreaList(size_t index, const UINT32& bgColor) 
 {

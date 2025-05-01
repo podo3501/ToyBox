@@ -12,7 +12,7 @@ public:
 	void Clear() noexcept;
 	XMINT2 GetUpdatedPosition(const UILayout& layout, const XMINT2& parentPos) noexcept;
 	void SetRelativePosition(const XMUINT2& size, const XMINT2& relativePos) noexcept;
-	void AdjustPosition(const XMUINT2& size) noexcept;
+	void AdjustPosition(const XMUINT2& size, bool lockPosition) noexcept;
 	void SerializeIO(JsonOperation& operation);
 
 	inline const Vector2& GetRatio() const noexcept { return m_ratio; }

@@ -156,14 +156,14 @@ namespace StateFlag
 	enum Type : int //갯수는 32개까지 가능. 
 	{
 		Update = 1 << 0, //위치 업데이트 및 ActiveUpdate포함
-		ActiveUpdate = 1 << 1, //Active업데이트(Update함수 실행하는가 아닌가) 실행여부
+		ActiveUpdate = 1 << 1, //Active업데이트(Update함수 실행하는가 아닌가) 실행여부. child들은 이 옵션이 false 되면 그 밑은 전부 돌지 않는다. 
 		Render = 1 << 2, //Render라면 RenderTexture를 동시에 셋팅할 수 있다. RenderTexture에 그려진 것을 Render할때 보여준다.
 		RenderTexture = 1 << 3, //RenderTexture라면 Texture셋팅일때만 그린다.
 		Attach = 1 << 4,
 		Detach = 1 << 5,
 		X_SizeLocked = 1 << 6,
 		Y_SizeLocked = 1 << 7,
-
+		LockPosOnResize = 1 << 8, //사이즈를 조절할때 자식 클래스의 위치값을 변하지 않게 한다.
 		Active = Update | ActiveUpdate | Render,
 		Default = Active | Attach | Detach, // 기본 옵션(모든 옵션 포함)
 	};

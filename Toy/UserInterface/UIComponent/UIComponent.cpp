@@ -144,8 +144,9 @@ void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexc
 
 bool UIComponent::ImplementChangeSize(const XMUINT2& size, bool) noexcept
 {
+	
 	ranges::for_each(m_children, [this, &size](auto& child) {
-		GetTransform(child.get()).AdjustPosition(size);
+		GetTransform(child.get()).AdjustPosition(size, HasStateFlag(StateFlag::LockPosOnResize));
 		});
 
 	ApplySize(size);

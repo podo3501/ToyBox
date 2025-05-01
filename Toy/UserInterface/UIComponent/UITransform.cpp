@@ -26,19 +26,30 @@ XMINT2 UITransform::GetUpdatedPosition(const UILayout& layout, const XMINT2& par
 	return m_absolutePosition;
 }
 
+static inline Vector2 CalcRatio(const XMUINT2& size, const XMINT2& pos) noexcept
+{
+	return (size == XMUINT2{}) ? Vector2{ 0.f, 0.f } : Vector2{
+		static_cast<float>(pos.x) / static_cast<float>(size.x),
+		static_cast<float>(pos.y) / static_cast<float>(size.y)
+	};
+}
+
 void UITransform::SetRelativePosition(const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
-	m_ratio = (size == XMUINT2{}) ? Vector2{ 0.f, 0.f } : Vector2{
-		static_cast<float>(relativePos.x) / static_cast<float>(size.x),
-		static_cast<float>(relativePos.y) / static_cast<float>(size.y) };
+	m_ratio = CalcRatio(size, relativePos);
 	m_relativePosition = relativePos;
 }
 
-void UITransform::AdjustPosition(const XMUINT2& size) noexcept
+void UITransform::AdjustPosition(const XMUINT2& size, bool lockPosition) noexcept
 {
-	m_relativePosition = {
-		static_cast<int32_t>(static_cast<float>(size.x) * m_ratio.x),
-		static_cast<int32_t>(static_cast<float>(size.y) * m_ratio.y) };
+	if (!lockPosition) //lockPosition의 기본값은 false이다.
+	{
+		m_relativePosition = {
+			static_cast<int32_t>(static_cast<float>(size.x) * m_ratio.x),
+			static_cast<int32_t>(static_cast<float>(size.y) * m_ratio.y) };
+	}
+	else
+		m_ratio = CalcRatio(size, m_relativePosition);
 }
 
 void UITransform::SerializeIO(JsonOperation& operation)

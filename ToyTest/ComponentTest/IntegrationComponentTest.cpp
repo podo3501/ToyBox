@@ -131,8 +131,8 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, RecursivePosition)
 	{
-		std::unique_ptr<Panel> panel1 = make_unique<Panel>("Panel1", UILayout({ 400, 400 }, Origin::Center));
-		auto [panel2, panel2Ptr] = GetPtrs(make_unique<Panel>("Panel2", UILayout({ 20, 20 }, Origin::Center)));
+		auto [panel1, panel1Ptr] = GetPtrs(CreateComponent<Panel>(UILayout({ 400, 400 }, Origin::Center)));
+		auto [panel2, panel2Ptr] = GetPtrs(CreateComponent<Panel>(UILayout{ { 20, 20 }, Origin::Center }));
 
 		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
 		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
@@ -148,7 +148,12 @@ namespace UserInterfaceTest
 		outList = UIEx(m_panel).GetComponents({ 239, 140 });
 		EXPECT_EQ(outList.size(), 2);
 
-		//사이즈가 바뀌었을때 값이 어떻게 바뀌는지 테스트
+		panel1Ptr->ChangeSize(800, 800); //크기 400에 40위치를 했기 때문에 ratio는 0.1이 된다.
+		EXPECT_EQ(panel2Ptr->GetRelativePosition(), XMINT2(80, 80));
+
+		panel1Ptr->SetStateFlag(StateFlag::LockPosOnResize, true);
+		panel1Ptr->ChangeSize(400, 400);
+		EXPECT_EQ(panel2Ptr->GetRelativePosition(), XMINT2(80, 80));
 	}
 
 	//이름을 구역을 만들어서 다른 구역이면 같은 이름을 쓸 수 있게 한다. 그러면 close 같은 이름이 중복이 되어도

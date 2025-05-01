@@ -66,6 +66,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	
 	m_bgImage = bgImage.get();
 	m_bgImage->Rename("Background Image");
+	m_bgImage->SetStateFlag(StateFlag::LockPosOnResize, true);
 
 	auto renderTex = CreateComponent<RenderTexture>(UILayout{ layout.GetSize() }, move(bgImage));
 	renderTex->EnableChildMouseEvents(true);

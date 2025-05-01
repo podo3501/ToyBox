@@ -96,6 +96,7 @@ bool RenderTexture::ImplementChangeSize(const XMUINT2& size, bool isForce) noexc
 {
 	ReturnIfFalse(m_component->ChangeSize(size, isForce));
 	ReturnIfFalse(m_texController->ModifyRenderTextureSize(*m_index, size));
+
 	return UIComponent::ImplementChangeSize(size);
 }
 
@@ -137,6 +138,9 @@ bool RenderTexture::ImplementUpdate(const DX::StepTimer&) noexcept
 void RenderTexture::ImplementRender(ITextureRender* render) const
 {
 	const auto& position = GetPosition();
+	if (m_texController && m_index)
+		m_texController->ModifyRenderTexturePosition(*m_index, position); //?!? 좌표가 바뀌면 RenderTexture 안에 좌표가 갱신이 되지 않아서 이상해진다. update에 넣고 싶은데 툴에서는 update가 돌지 않는다.
+
 	const auto& size = GetSize();
 	Rectangle destination(position.x, position.y, size.x, size.y);
 

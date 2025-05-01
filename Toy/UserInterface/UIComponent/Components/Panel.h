@@ -15,6 +15,8 @@ public:
     virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
     virtual void SerializeIO(JsonOperation& operation) override;
 
+    bool Setup(const UILayout& layout);
+
 protected:
     Panel(const Panel& other);
     virtual unique_ptr<UIComponent> CreateClone() const override;
