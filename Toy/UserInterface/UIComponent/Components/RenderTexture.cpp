@@ -108,6 +108,11 @@ bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent> compon
 	return true;
 }
 
+bool RenderTexture::Setup(unique_ptr<UIComponent> component) noexcept
+{
+	return Setup({}, move(component));
+}
+
 void RenderTexture::CheckMouseInArea() noexcept
 {
 	m_mouseInArea = Contains(GetArea(), InputManager::GetMouse().GetPosition());
@@ -148,16 +153,4 @@ void RenderTexture::SerializeIO(JsonOperation& operation)
 
 	if (operation.IsWrite()) return;
 	ReloadDatas();
-}
-
-//RenderStateFlag가 true면 렌더 항목도 RenderTexture에 찍히도록 한다.
-unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent> component)
-{
-	unique_ptr<RenderTexture> renderTexture = make_unique<RenderTexture>();
-	return CreateIfSetup(move(renderTexture), layout, move(component));
-}
-
-unique_ptr<RenderTexture> CreateRenderTexture(unique_ptr<UIComponent> component)
-{
-	return CreateRenderTexture({}, move(component));
 }

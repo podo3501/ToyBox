@@ -41,7 +41,7 @@ bool MainWindow::SetupProperty(unique_ptr<Panel>&& panel)
 	m_controller = make_unique<ComponentController>(m_renderer, m_resBinder.get(), m_panel, GetName());
 
 	const auto& size = m_panel->GetSize();
-	m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(panel));
+	m_renderTex = CreateComponent<RenderTexture>(UILayout{ size, Origin::LeftTop }, move(panel));
 	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
 	ToggleToolMode();

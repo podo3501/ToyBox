@@ -40,5 +40,3 @@ private:
 	BehaviorMode m_behaviorMode{ BehaviorMode::Normal };
 	function<void(KeyState)> m_onPressCB;
 };
-
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode);

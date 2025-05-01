@@ -75,9 +75,9 @@ namespace UserInterfaceTest
 
 	TEST_F(ComplexComponentTest, RenderTexture)
 	{
-		auto switcher = CreateTextureSwitcher(TextureSlice::One, 
+		auto switcher = CreateComponent<TextureSwitcher>(TextureSlice::One, 
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
-		auto [renderTex, renderTexPtr] = GetPtrs(CreateRenderTexture(move(switcher)));
+		auto [renderTex, renderTexPtr] = GetPtrs(CreateComponent<RenderTexture>(move(switcher)));
 		UIEx(m_panel).AttachComponent(move(renderTex), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, renderTexPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
@@ -140,7 +140,7 @@ namespace UserInterfaceTest
 
 	TEST_F(ComplexComponentTest, Switcher_Scroll)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {16, 100}, Origin::Center },
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(UILayout{ {16, 100}, Origin::Center },
 			TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
 		m_panel = WriteReadTest(m_panel, switcherPtr);

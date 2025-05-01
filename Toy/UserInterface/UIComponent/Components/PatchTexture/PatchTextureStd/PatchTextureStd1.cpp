@@ -104,9 +104,3 @@ void PatchTextureStd1::SerializeIO(JsonOperation& operation)
 	operation.Process("BindKey", m_bindKey);
 	operation.Process("SourceIndex", m_sourceIndex);
 }
-
-unique_ptr<PatchTextureStd1> CreatePatchTextureStd1(const UILayout& layout, const string& bindKey, size_t sourceIndex)
-{
-	auto patchTex1 = make_unique<PatchTextureStd1>();
-	return CreateIfSetup(move(patchTex1), layout, bindKey, sourceIndex);
-}

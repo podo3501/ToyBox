@@ -136,10 +136,3 @@ void TextArea::SerializeIO(JsonOperation& operation)
 
 	UIComponent::SerializeIO(operation);
 }
-
-unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, const vector<wstring>& bindKeys)
-{
-	unique_ptr<TextArea> textArea = make_unique<TextArea>();
-	return CreateIfSetup(move(textArea), layout, text, bindKeys);
-}
-

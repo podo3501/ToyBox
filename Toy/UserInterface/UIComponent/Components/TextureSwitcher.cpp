@@ -90,7 +90,6 @@ bool TextureSwitcher::SetupDefaults() noexcept
 	const auto& srcInfo = it->second;
 	const auto optIndex = srcInfo.GetIndex();
 	ReturnIfFalse(optIndex);
-	//ReturnIfFalse(m_patchTexL->SetupLayout(*optIndex, srcInfo.sources, GetSize()));
 	ReturnIfFalse(m_patchTexL->BindSourceInfo(*optIndex, srcInfo.sources));
 
 	m_state = defaultState;
@@ -209,14 +208,6 @@ void TextureSwitcher::SerializeIO(JsonOperation& operation)
 }
 
 //////////////////////////////////////////////////////
-
-//create
-unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, TextureSlice texSlice,
-	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
-{
-	unique_ptr<TextureSwitcher> switcher = make_unique<TextureSwitcher>();
-	return CreateIfSetup(move(switcher), layout, texSlice, stateKeys, behaviorMode);
-}
 
 //utility
 static inline PatchTextureLite* GetPTexL(TextureSwitcher* s) noexcept { return s->GetPatchTextureLite(); }

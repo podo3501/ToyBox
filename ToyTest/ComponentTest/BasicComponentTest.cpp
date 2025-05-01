@@ -30,7 +30,7 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, PatchTextureStd1)
 	{
-		auto [tex, img1Ptr] = GetPtrs(CreatePatchTextureStd1("BackImage1"));
+		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
 		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img1Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -79,7 +79,7 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, PatchTextureStd3_Horizontal)
 	{
-		auto [tex, texPtr] = GetPtrs(CreatePatchTextureStd3(DirectionType::Horizontal, "ScrollButton3_H_Normal"));
+		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd3>(DirectionType::Horizontal, "ScrollButton3_H_Normal"));
 		UIEx(m_panel).AttachComponent(move(tex), {400, 300});
 		m_panel = WriteReadTest(m_panel, texPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -119,7 +119,7 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, PatchTextureStd3_Vertical)
 	{
-		auto [tex, img3Ptr] = GetPtrs(CreatePatchTextureStd3(DirectionType::Vertical, "ScrollTrack3_V"));
+		auto [tex, img3Ptr] = GetPtrs(CreateComponent<PatchTextureStd3>(DirectionType::Vertical, "ScrollTrack3_V"));
 		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, img3Ptr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -158,7 +158,7 @@ namespace UserInterfaceTest
 
 	TEST_F(BasicComponentTest, PatchTextureStd9)
 	{
-		auto [tex, texPtr] = GetPtrs(CreatePatchTextureStd9("BackImage9"));
+		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd9>("BackImage9"));
 		UIEx(m_panel).AttachComponent(move(tex), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, texPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -217,7 +217,7 @@ namespace UserInterfaceTest
 	{
 		vector<wstring> bindKeys{ L"Hangle", L"English" };
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
-		auto [textArea, textAreaPtr] = GetPtrs(CreateTextArea(text, bindKeys));
+		auto [textArea, textAreaPtr] = GetPtrs(CreateComponent<TextArea>(text, bindKeys));
 		UIEx(m_panel).AttachComponent(move(textArea), { 400, 300 });
 		m_panel = WriteReadTest(m_panel, textAreaPtr);
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));

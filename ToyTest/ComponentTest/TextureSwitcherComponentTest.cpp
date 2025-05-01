@@ -16,7 +16,7 @@ namespace UserInterfaceTest
 	static inline PatchTextureLite* GetPatchTextureLite(TextureSwitcher* switcherPtr) noexcept { return switcherPtr->GetPatchTextureLite(); }
 	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite1)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher(TextureSlice::One, 
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::One, 
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -43,7 +43,7 @@ namespace UserInterfaceTest
 
 	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite3_H)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher(TextureSlice::ThreeH, 
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeH, 
 			GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -75,7 +75,7 @@ namespace UserInterfaceTest
 
 	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite3_V)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher(TextureSlice::ThreeV, 
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeV, 
 			GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -107,7 +107,7 @@ namespace UserInterfaceTest
 		
 	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite9)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher(TextureSlice::Nine, 
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::Nine, 
 			GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -143,7 +143,7 @@ namespace UserInterfaceTest
 			{ 23, 142, 43, 161 }, { 43, 142, 158, 161 }, { 158, 142, 178, 161 } };
 		TestMockRender(3, exChangeKey, "OptionImage9");
 
-		auto [tex, texPtr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		EXPECT_EQ(switcherPtr->AttachComponentToCenter(move(tex), { 5, 5 }), nullptr);
 		EXPECT_TRUE(UIEx(switcherPtr).FindComponent<decltype(texPtr)>(texPtr->GetName()));
 	}

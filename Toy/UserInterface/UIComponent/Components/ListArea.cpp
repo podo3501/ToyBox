@@ -67,7 +67,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	m_bgImage = bgImage.get();
 	m_bgImage->Rename("Background Image");
 
-	auto renderTex = CreateRenderTexture({ layout.GetSize() }, move(bgImage));
+	auto renderTex = CreateComponent<RenderTexture>(UILayout{ layout.GetSize() }, move(bgImage));
 	renderTex->EnableChildMouseEvents(true);
 	m_renderTex = renderTex.get();
 	UIEx(this).AttachComponent(move(renderTex), {});
@@ -86,6 +86,11 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요
 
 	return true;
+}
+
+bool ListArea::Setup(unique_ptr<UIComponent> bgImage, unique_ptr<TextureSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept
+{
+	return Setup({}, move(bgImage), move(switcher), move(scrollBar));
 }
 
 bool ListArea::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
@@ -277,21 +282,4 @@ void ListArea::SerializeIO(JsonOperation& operation)
 
 	if (operation.IsWrite()) return;
 	ReloadDatas();
-}
-
-unique_ptr<ListArea> CreateListArea(const UILayout& layout,
-	unique_ptr<UIComponent> bgImage,
-	unique_ptr<TextureSwitcher> switcher,
-	unique_ptr<ScrollBar> scrollBar)
-{
-	unique_ptr<ListArea> listArea = make_unique<ListArea>();
-	return CreateIfSetup(move(listArea), layout, move(bgImage), move(switcher), move(scrollBar));
-}
-
-unique_ptr<ListArea> CreateListArea(
-	unique_ptr<UIComponent> bgImage,
-	unique_ptr<TextureSwitcher> switcher,
-	unique_ptr<ScrollBar> scrollBar)
-{
-	return CreateListArea({}, move(bgImage), move(switcher), move(scrollBar));
 }

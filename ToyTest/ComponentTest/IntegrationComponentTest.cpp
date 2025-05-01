@@ -13,7 +13,7 @@ namespace UserInterfaceTest
 {
 	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
 	{
-		auto patchTex1 = CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1");
+		auto patchTex1 = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
 		UIComponent* component = UIEx(panel).FindComponent(componentName);
 		return UIEx(component).AttachComponent(move(patchTex1), { 10, 10 }) ? false : true;
 	}
@@ -27,7 +27,7 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, AttachDetachTest)
 	{
-		auto tex9 = CreatePatchTextureStd9({ {200, 100}, Origin::LeftTop }, "BackImage9");
+		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(tex9), { 80, 60 });
 
 		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "PatchTextureStd9_0"), false);	//9방향 이미지에는 attach 불가
@@ -38,8 +38,8 @@ namespace UserInterfaceTest
 
 		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "PatchTextureStd9_0"), true); //위에서 PatchTextureStd1를 attach 했다.
 
-		auto [tex1, tex1Ptr] = GetPtrs(CreatePatchTextureStd1({ {200, 100}, Origin::LeftTop }, "BackImage1"));
-		auto tex2 = CreatePatchTextureStd1({ {110, 60}, Origin::LeftTop }, "BackImage1");
+		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage1"));
+		auto tex2 = CreateComponent<PatchTextureStd1>(UILayout{ {110, 60}, Origin::LeftTop }, "BackImage1");
 		UIEx(tex1).AttachComponent(move(tex2), { 100, 50 });	//중점에 attach 한다.
 		UIEx(m_panel).AttachComponent(move(tex1), { 100, 100 });
 		m_panel->ProcessUpdate(m_timer);
@@ -52,13 +52,13 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, Clone)
 	{
-		EXPECT_TRUE(VerifyClone(CreatePatchTextureStd1({ {220, 190}, Origin::LeftTop }, "BackImage1")));
-		EXPECT_TRUE(VerifyClone(CreatePatchTextureStd3({ { 100, 36 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")));
-		EXPECT_TRUE(VerifyClone(CreatePatchTextureStd9({ { 220, 190 }, Origin::LeftTop }, "BackImage9")));
+		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd1>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage1")));
+		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd3>(UILayout{ { 100, 36 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")));
+		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd9>(UILayout{ { 220, 190 }, Origin::LeftTop }, "BackImage9")));
 		vector<wstring> bindFontKeys{ L"Hangle", L"English" };
-		EXPECT_TRUE(VerifyClone(CreateTextArea({ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>", bindFontKeys)));
-		EXPECT_TRUE(VerifyClone(CreateTextureSwitcher({ { 220, 190 }, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)));
-		EXPECT_TRUE(VerifyClone(CreateTextureSwitcher({ { 48, 100 }, Origin::Center }, TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal)));
+		EXPECT_TRUE(VerifyClone(CreateComponent<TextArea>(UILayout{ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>", bindFontKeys)));
+		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 220, 190 }, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)));
+		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 48, 100 }, Origin::Center }, TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal)));
 		EXPECT_TRUE(VerifyClone(CreateSampleListArea({ { 220, 190 }, Origin::LeftTop })));
 	}
 
@@ -70,8 +70,8 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, GetComponent)
 	{
-		auto [tex2, tex2Ptr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		auto [tex1, tex1Ptr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		UIEx(tex1).AttachComponent(move(tex2), { 100, 100 });
 		UIEx(m_panel).AttachComponent(move(tex1), { 100, 100 });
 
@@ -99,14 +99,14 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, GetComponents)
 	{
-		auto tex9_0 = CreatePatchTextureStd9({ {220, 190}, Origin::LeftTop }, "BackImage9");
+		auto tex9_0 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(tex9_0), { 80, 60 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel->ProcessUpdate(m_timer);
 		EXPECT_TRUE(CheckComponentCount(m_panel.get(), {0, 0}) == 1);
 		EXPECT_EQ(CheckComponentCount(m_panel.get(), { 100, 100 }), 4);
 
-		auto tex9_1 = CreatePatchTextureStd9({ {221, 191}, Origin::LeftTop }, "BackImage9");
+		auto tex9_1 = CreateComponent<PatchTextureStd9>(UILayout{ {221, 191}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(tex9_1), { 88, 66 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 		m_panel->ProcessUpdate(m_timer);
@@ -115,7 +115,7 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, GetPosition)
 	{
-		auto tex9 = CreatePatchTextureStd9({ {220, 190}, Origin::LeftTop }, "BackImage9");
+		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		unique_ptr<UIComponent> panel = make_unique<Panel>();
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		UIEx(panel).AttachComponent(move(tex9), { 40, 30 });
@@ -156,8 +156,8 @@ namespace UserInterfaceTest
 	//같아도 되니까 코딩할때 이름_1 이런것을 찾지 않아도 된다.
 	TEST_F(IntegrationTest, Region)
 	{
-		auto [tex1, tex1Ptr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		auto [tex2, tex2Ptr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 
 		tex1Ptr->RenameRegion("Region_0"); //먼저 Region값을 넣어주면 이름이 같아도 되고 나중에 Region을 넣으면 
 		tex2Ptr->RenameRegion("Region_0"); //Attach 할때 unique 이름으로 만들어 준다.
@@ -169,7 +169,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(tex1Ptr->GetName(), "PatchTextureStd1_0");
 		EXPECT_EQ(tex2Ptr->GetName(), "PatchTextureStd1_0");
 
-		auto [tex3, tex3Ptr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		tex3->Rename("UnChanging Name");
 		auto [tex4, tex4Ptr] = GetPtrs(tex3->Clone());
 
@@ -179,7 +179,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(tex3Ptr->GetName(), "UnChanging Name");
 		EXPECT_EQ(tex4Ptr->GetName(), "UnChanging Name");
 
-		unique_ptr<UIComponent> imgDummy = CreatePatchTextureStd1({ {64, 64}, Origin::LeftTop }, "BackImage1");
+		unique_ptr<UIComponent> imgDummy = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
 		auto imgDummyPtr = imgDummy.get();
 		UIEx(m_panel).AttachComponent(move(imgDummy), { 100, 100 });
 		EXPECT_TRUE(imgDummyPtr->Rename("UnChanging Name"));
@@ -191,13 +191,13 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, Rename)
 	{
-		auto tex9 = CreatePatchTextureStd9({ {220, 190}, Origin::LeftTop }, "BackImage9");
+		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_panel).AttachComponent(move(tex9), { 80, 60 });
 
 		UIComponent* component = UIEx(m_panel).FindComponent("PatchTextureStd1_0");
 		EXPECT_FALSE(component->Rename("PatchTextureStd9_0")); //같은 이름이 있으면 rename이 되지 않는다.
 
-		auto newImg9 = CreatePatchTextureStd9({ {220, 190}, Origin::LeftTop }, "BackImage9");
+		auto newImg9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
 	}

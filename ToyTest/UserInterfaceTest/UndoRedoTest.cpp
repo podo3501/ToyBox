@@ -34,7 +34,7 @@ namespace UserInterfaceTest
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;
 		UIComponent* panel = m_panel.get();
-		auto [tex1, tex1Ptr] = GetPtrs(CreatePatchTextureStd1({ {64, 64}, Origin::Center }, "BackImage1"));
+		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::Center }, "BackImage1"));
 
 		CaptureSnapshot(h);
 		ExecuteAndCapture(h, [&] { c.AttachComponent(panel, move(tex1), { 111, 222 }); });
@@ -52,7 +52,7 @@ namespace UserInterfaceTest
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;
 		UIComponent* panel = m_panel.get();
-		auto [tex9, tex9Ptr] = GetPtrs(CreatePatchTextureStd9({ {100, 100}, Origin::Center }, "BackImage9"));
+		auto [tex9, tex9Ptr] = GetPtrs(CreateComponent<PatchTextureStd9>(UILayout{ {100, 100}, Origin::Center }, "BackImage9"));
 		UIEx(m_panel).AttachComponent(move(tex9), { 250, 250 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
@@ -68,7 +68,7 @@ namespace UserInterfaceTest
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;
 		UIComponent* panel = m_panel.get();
-		auto [switcher, switcherPtr] = GetPtrs(CreateTextureSwitcher({ {100, 100}, Origin::Center },
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(UILayout{ {100, 100}, Origin::Center },
 			TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(switcher), { 250, 250 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));

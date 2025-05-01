@@ -40,29 +40,29 @@ static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(const XMUINT2& size, const string& bindKey)
 {
 	return GetComponentKeyMap(size, bindKey,
-		[](UILayout& layout, const string& key) { return CreatePatchTextureStd1(layout, key); });
+		[](UILayout& layout, const string& key) { return CreateComponent<PatchTextureStd1>(layout, key); });
 }
 
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dirType, const XMUINT2& size, const string& bindKey)
 {
 	return GetComponentKeyMap(size, bindKey,
-		[dirType](UILayout& layout, const string& key) { return CreatePatchTextureStd3(layout, dirType, key); });
+		[dirType](UILayout& layout, const string& key) { return CreateComponent<PatchTextureStd3>(layout, dirType, key); });
 }
 
 unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout, DirectionType dirType)
 {
 	UILayout gridLayout{ layout.GetSize() };
 		
-	return CreateScrollBar(layout,
-		CreatePatchTextureStd3(gridLayout, dirType, "ScrollTrack3_V"),
-		CreateTextureSwitcher(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
+	return CreateComponent<ScrollBar>(layout,
+		CreateComponent<PatchTextureStd3>(gridLayout, dirType, "ScrollTrack3_V"),
+		CreateComponent<TextureSwitcher>(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 }
 
 unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 {
-	return CreateListArea(layout,
-		move(CreatePatchTextureStd1(UILayout{ layout.GetSize() }, "ListBackImage1")),
-		move(CreateTextureSwitcher(TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal)),
+	return CreateComponent<ListArea>(layout,
+		move(CreateComponent<PatchTextureStd1>(UILayout{ layout.GetSize() }, "ListBackImage1")),
+		move(CreateComponent<TextureSwitcher>(TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal)),
 		move(CreateSampleScrollBar({}, DirectionType::Vertical)));
 }
 
@@ -70,7 +70,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, List
 {
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
-	auto protoTextArea = CreateTextArea({ {200, 30}, Origin::LeftTop }, L"", bindKeys);
+	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
 	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, renderer->GetTextureController()));
 
 	protoTextArea->Rename("ListTextArea");

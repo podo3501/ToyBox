@@ -20,6 +20,7 @@ public:
 	bool SetText(const wstring& text);
 	inline const wstring& GetText() const noexcept { return m_text; }
 	bool Setup(const UILayout& layout, const wstring& text, const vector<wstring> bindKeys) noexcept;
+	inline bool Setup(const wstring& text, const vector<wstring> bindKeys) noexcept { return Setup({}, text, bindKeys); }
 
 protected:
 	TextArea(const TextArea& o);
@@ -38,8 +39,3 @@ private:
 	map<wstring, size_t> m_font; //core상태에 따라서 인덱스는 변할수 있기 때문에 저장하지 않는다.
 	vector<TextData> m_lines;
 };
-
-unique_ptr<TextArea> CreateTextArea(const UILayout& layout, const wstring& text, const vector<wstring>& bindKeys);
-inline unique_ptr<TextArea> CreateTextArea(const wstring& text, const vector<wstring>& bindKeys) {
-	return move(CreateTextArea({}, text, bindKeys));
-}

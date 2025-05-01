@@ -9,7 +9,7 @@ namespace UserInterfaceTest
 	TEST_F(ContainerComponentTest, Container_PatchTextureStd1)
 	{
 		UILayout layout{ {32, 32}, Origin::Center };
-		auto container = CreateContainer(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal);
+		auto container = CreateComponent<Container>(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal);
 		UIEx(m_panel).AttachComponent(move(container), { 160, 120 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
 
@@ -26,7 +26,7 @@ namespace UserInterfaceTest
 	TEST_F(ContainerComponentTest, Container_PatchTextureStd3_Horizontal)
 	{
 		UILayout layout{ {100, 48}, Origin::Center };
-		auto [container, containerBtr] = GetPtrs(CreateContainer(layout,
+		auto [container, containerBtr] = GetPtrs(CreateComponent<Container>(layout,
 			GetComponentKeyMap(DirectionType::Horizontal, layout.GetSize(), "ScrollButton3_H"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(container), { 160, 120 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
@@ -50,7 +50,7 @@ namespace UserInterfaceTest
 	TEST_F(ContainerComponentTest, Container_PatchTextureStd3_Vertical)
 	{
 		UILayout layout{ {48, 100}, Origin::Center };
-		auto [container, containerPtr] = GetPtrs(CreateContainer(layout,
+		auto [container, containerPtr] = GetPtrs(CreateComponent<Container>(layout,
 			GetComponentKeyMap(DirectionType::Vertical, layout.GetSize(), "ScrollButton3_V"), BehaviorMode::Normal));
 		UIEx(m_panel).AttachComponent(move(container), { 100, 100 });
 		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));

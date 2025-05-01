@@ -146,11 +146,3 @@ void Container::SerializeIO(JsonOperation& operation)
 	if (operation.IsWrite()) return;
 	ReloadDatas();
 }
-
-unique_ptr<Container> CreateContainer(const UILayout& layout, map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode)
-{
-	if (patchTexList.size() != 3) return nullptr;
-
-	unique_ptr<Container> container = make_unique<Container>();
-	return CreateIfSetup(move(container), layout, move(patchTexList), behaviorMode);
-}

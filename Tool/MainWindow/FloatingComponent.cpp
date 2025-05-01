@@ -57,17 +57,18 @@ bool FloatingComponent::Excute()
 
 	auto result{ true };
 	static const vector<wstring> fontKeys{ L"Hangle", L"English" };
+
 	using enum MakeComponent;
 	switch (m_currentAction.value())
 	{
-	case PatchTextureStd1: result = LoadComponent(CreatePatchTextureStd1({ { 64, 64 }, Origin::LeftTop }, "BackImage1")); break;
-	case PatchTextureStd3: result = LoadComponent(CreatePatchTextureStd3({ { 48, 48 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")); break;
-	case PatchTextureStd9: result = LoadComponent(CreatePatchTextureStd9({ { 170, 120 }, Origin::LeftTop }, "BackImage9")); break;
-	case TextureSwitcher1: result = LoadComponent(CreateTextureSwitcher({ { 32, 32 }, Origin::LeftTop }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)); break;
-	case TextureSwitcher3: result = LoadComponent(CreateTextureSwitcher({ { 100, 48 }, Origin::LeftTop }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal)); break;
-	case TextureSwitcher9: result = LoadComponent(CreateTextureSwitcher({ { 100, 100 }, Origin::LeftTop }, TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal)); break;
-	case TextArea: result = LoadComponent(CreateTextArea(UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
-	case ListArea: result = LoadComponent(CreateSampleListArea({ { 200, 170 }, Origin::LeftTop })); break;
+	case MPatchTextureStd1: result = LoadComponent(CreateComponent<PatchTextureStd1>(UILayout{ { 64, 64 }, Origin::LeftTop }, "BackImage1")); break;
+	case MPatchTextureStd3: result = LoadComponent(CreateComponent<PatchTextureStd3>(UILayout{ { 48, 48 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")); break;
+	case MPatchTextureStd9: result = LoadComponent(CreateComponent<PatchTextureStd9>(UILayout{ { 170, 120 }, Origin::LeftTop }, "BackImage9")); break;
+	case MTextureSwitcher1: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 32, 32 }, Origin::LeftTop }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)); break;
+	case MTextureSwitcher3: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 100, 48 }, Origin::LeftTop }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal)); break;
+	case MTextureSwitcher9: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 100, 100 }, Origin::LeftTop }, TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal)); break;
+	case MTextArea: result = LoadComponent(CreateComponent<TextArea>(UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
+	case MListArea: result = LoadComponent(CreateSampleListArea({ { 200, 170 }, Origin::LeftTop })); break;
 	}
 	m_currentAction.reset(); // 상태 초기화
 
@@ -110,16 +111,15 @@ void FloatingComponent::Render()
 	}
 	
 	m_isActive = true;
-
 	using enum MakeComponent;
-	if (ImGui::MenuItem("Patch Texture Standard 1")) m_currentAction = PatchTextureStd1;
-	if (ImGui::MenuItem("Patch Texture Standard 3")) m_currentAction = PatchTextureStd3;
-	if (ImGui::MenuItem("Patch Texture Standard 9")) m_currentAction = PatchTextureStd9;
-	if (ImGui::MenuItem("Texture Switcher 1")) m_currentAction = TextureSwitcher1;
-	if (ImGui::MenuItem("Texture Switcher 3")) m_currentAction = TextureSwitcher3;
-	if (ImGui::MenuItem("Texture Switcher 9")) m_currentAction = TextureSwitcher9;
-	if (ImGui::MenuItem("Text Area")) m_currentAction = TextArea;
-	if (ImGui::MenuItem("List Area")) m_currentAction = ListArea;
+	if (ImGui::MenuItem("Patch Texture Standard 1")) m_currentAction = MPatchTextureStd1;
+	if (ImGui::MenuItem("Patch Texture Standard 3")) m_currentAction = MPatchTextureStd3;
+	if (ImGui::MenuItem("Patch Texture Standard 9")) m_currentAction = MPatchTextureStd9;
+	if (ImGui::MenuItem("Texture Switcher 1")) m_currentAction = MTextureSwitcher1;
+	if (ImGui::MenuItem("Texture Switcher 3")) m_currentAction = MTextureSwitcher3;
+	if (ImGui::MenuItem("Texture Switcher 9")) m_currentAction = MTextureSwitcher9;
+	if (ImGui::MenuItem("Text Area")) m_currentAction = MTextArea;
+	if (ImGui::MenuItem("List Area")) m_currentAction = MListArea;
 	if (ImGui::MenuItem("Close")) {}
 	
 	ImGui::EndPopup();
@@ -129,7 +129,7 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 {
 	ReturnIfFalse(component);
 	m_component = component.get();
-	ReturnIfFalse(m_renderTex = CreateRenderTexture({ size, Origin::LeftTop }, move(component)));
+	ReturnIfFalse(m_renderTex = CreateComponent<RenderTexture>(UILayout{ size, Origin::LeftTop }, move(component)));
 	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_resBinder, m_renderer->GetTextureController()));
 	ReturnIfFalse(m_renderTex->EnableToolMode(true));
 

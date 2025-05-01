@@ -21,6 +21,7 @@ public:
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 		unique_ptr<TextureSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept;
+	bool Setup(unique_ptr<UIComponent> bgImage, unique_ptr<TextureSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept;
 	TextureSwitcher* GetPrototypeContainer() noexcept { return m_prototypeContainer; }
 	UIComponent* PrepareContainer();
 	inline UIComponent* GetContainer(unsigned int idx) const noexcept;
@@ -60,13 +61,3 @@ private:
 	vector<UIComponent*> m_containers; //이건 저장하지 않는다. 실행시에 채워지는 데이터이다.
 	bool m_containerActiveFlag{ true };
 };
-
-unique_ptr<ListArea> CreateListArea(const UILayout& layout,
-	unique_ptr<UIComponent> bgImage,
-	unique_ptr<TextureSwitcher> switcher,
-	unique_ptr<ScrollBar> scrollBar);
-
-unique_ptr<ListArea> CreateListArea(
-	unique_ptr<UIComponent> bgImage,
-	unique_ptr<TextureSwitcher> switcher,
-	unique_ptr<ScrollBar> scrollBar);

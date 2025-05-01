@@ -51,9 +51,3 @@ void Button::SerializeIO(JsonOperation& operation)
 	if (operation.IsWrite()) return;
 	ReloadDatas();
 }
-
-unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent> container)
-{
-	unique_ptr<Button> button = make_unique<Button>();
-	return CreateIfSetup(move(button), layout, move(container));
-}

@@ -45,7 +45,7 @@ bool PatchTextureStd3::Setup(const UILayout& layout, DirectionType dirType, cons
     for (size_t idx : views::iota(0, 3)) //bindKey를 조회할 수 없어 빈 내용의 자식들을 생성한다.
     {
         size_t childSrcIdx = sourceIndex * 3 + idx;
-        auto tex1 = CreatePatchTextureStd1(bindKey, childSrcIdx);
+        auto tex1 = CreateComponent<PatchTextureStd1>(bindKey, childSrcIdx);
         if (auto flag = stateFlags[idx]; flag) tex1->SetStateFlag(*flag, true);
         UIEx(this).AttachComponent(move(tex1), {});
     }
@@ -69,10 +69,4 @@ void PatchTextureStd3::SerializeIO(JsonOperation& operation)
 
     if (operation.IsWrite()) return;
     SetTextureSlice(DirTypeToTextureSlice(m_dirType));
-}
-
-unique_ptr<PatchTextureStd3> CreatePatchTextureStd3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex)
-{
-    auto patchTex3 = make_unique<PatchTextureStd3>();
-    return CreateIfSetup(move(patchTex3), layout, dirType, bindKey, sourceIndex);
 }

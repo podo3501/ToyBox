@@ -18,9 +18,8 @@ public:
 
 	void AddScrollChangedCB(function<void(float)> callback) { m_onScrollChangedCB = callback; }
 	void RestoreDefault() noexcept;
-	bool Setup(const UILayout& layout, 
-		unique_ptr<PatchTextureStd3> scrollTrack,
-		unique_ptr<TextureSwitcher> scrollButton);
+	bool Setup(const UILayout& layout, unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton);
+	bool Setup(unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton);
 	bool UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept;
 	void SetPositionRatio(float positionRatio) noexcept;
 	void SetEnableWheel(bool enable) noexcept;
@@ -47,8 +46,3 @@ private:
 	XMINT2 m_pressContainerPos{};
 	function<void(float)> m_onScrollChangedCB;
 };
-
-unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout,
-	unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton);
-unique_ptr<ScrollBar> CreateScrollBar(
-	unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton);

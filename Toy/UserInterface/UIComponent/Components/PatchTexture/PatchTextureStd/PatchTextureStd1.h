@@ -22,7 +22,8 @@ public:
 	virtual const string& GetBindKey() const noexcept override { return m_bindKey; }
 
 	optional<vector<Rectangle>> GetTextureAreaList();
-	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept;
+	bool Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u) noexcept;
+	inline  bool Setup(const string& bindKey, size_t sourceIndex = 0u) noexcept { return Setup({}, bindKey, sourceIndex); }
 	void SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept;
 
 	inline const Rectangle& GetSource() const noexcept { return m_coord.GetSource(); }
@@ -46,8 +47,3 @@ private:
 	UINT64 m_gfxOffset{}; //툴에서 Imgui window 만들때 사용
 	PatchTextureCoord m_coord;
 };
-
-unique_ptr<PatchTextureStd1> CreatePatchTextureStd1(const UILayout& layout, const string& bindKey, size_t sourceIndex = 0u);
-inline unique_ptr<PatchTextureStd1> CreatePatchTextureStd1(const string& bindKey, size_t sourceIndex = 0u) {
-	return CreatePatchTextureStd1({}, bindKey, sourceIndex);
-}

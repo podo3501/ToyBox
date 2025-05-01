@@ -73,6 +73,11 @@ bool ScrollBar::Setup(const UILayout& layout,
 	return true;
 }
 
+bool ScrollBar::Setup(unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton)
+{
+	return Setup({}, move(scrollTrack), move(scrollButton));
+}
+
 bool ScrollBar::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	if (GetSize() == XMUINT2{})
@@ -194,17 +199,4 @@ void ScrollBar::SetEnableWheel(bool enable) noexcept
 {
 	if(!m_isWheelEnabled && enable) ResetMouseWheelValue();
 	m_isWheelEnabled = enable;
-}
-
-unique_ptr<ScrollBar> CreateScrollBar(const UILayout& layout,
-	unique_ptr<PatchTextureStd3> scrollTrack,
-	unique_ptr<TextureSwitcher> scrollButton)
-{
-	unique_ptr<ScrollBar> scrollBar = make_unique<ScrollBar>();
-	return CreateIfSetup(move(scrollBar), layout, move(scrollTrack), move(scrollButton));
-}
-
-unique_ptr<ScrollBar> CreateScrollBar(unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton) 
-{
-	return CreateScrollBar({}, move(scrollTrack), move(scrollButton));
 }

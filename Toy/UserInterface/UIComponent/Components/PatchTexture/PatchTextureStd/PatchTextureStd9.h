@@ -14,13 +14,9 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 
 	bool Setup(const UILayout& layout, const string& bindKey);
+	inline bool Setup(const string& bindKey) { return Setup({}, bindKey); }
 
 protected:
 	PatchTextureStd9(const PatchTextureStd9& o) noexcept;
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 };
-
-unique_ptr<PatchTextureStd9> CreatePatchTextureStd9(const UILayout& layout, const string& bindKey);
-inline unique_ptr<PatchTextureStd9> CreatePatchTextureStd9(const string& bindKey) {
-	return CreatePatchTextureStd9({}, bindKey);
-}

@@ -15,6 +15,7 @@ public:
 	virtual void SerializeIO(JsonOperation& operation) override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> component) noexcept;
+	bool Setup(unique_ptr<UIComponent> component) noexcept;
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 	inline UIComponent* GetRenderedComponent() const noexcept { return m_component; }
 	inline bool IsMouseInArea() const noexcept { return m_mouseInArea; }
@@ -50,6 +51,3 @@ private:
 	bool m_entered{ false };
 	bool m_left{ false };
 };
-
-unique_ptr<RenderTexture> CreateRenderTexture(const UILayout& layout, unique_ptr<UIComponent> component);
-unique_ptr<RenderTexture> CreateRenderTexture(unique_ptr<UIComponent> component);

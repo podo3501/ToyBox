@@ -47,8 +47,10 @@ inline pair<unique_ptr<PointerType>, PointerType*> GetPtrs(unique_ptr<PointerTyp
 	return make_pair(move(uniquePtr), uniquePtr.get());
 }
 
+//Setup함수가 있어야 하며 인자가 일치 해야 한다. Args는 암묵적 캐스팅이 되지 않는다.
 template<typename T, typename... Args>
-unique_ptr<T> CreateIfSetup(unique_ptr<T> obj, Args&&... args)
+unique_ptr<T> CreateComponent(Args&&... args)
 {
+	auto obj = make_unique<T>();
 	return obj && obj->Setup(forward<Args>(args)...) ? move(obj) : nullptr;
 }

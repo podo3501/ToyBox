@@ -17,8 +17,8 @@ public:
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, TextureSlice texSlice, 
-		const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
+	bool Setup(const UILayout& layout, TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
+	inline bool Setup(TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode) { return Setup({}, texSlice, stateKeys, behaviorMode); }
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	unique_ptr<UIComponent> AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	void ClearInteraction() noexcept;
@@ -53,14 +53,6 @@ private:
 	optional<InteractState> m_state;
 	function<void(KeyState)> m_onPressCB;
 };
-
-//create
-unique_ptr<TextureSwitcher> CreateTextureSwitcher(const UILayout& layout, TextureSlice texSlice,
-	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
-inline unique_ptr<TextureSwitcher> CreateTextureSwitcher(TextureSlice texSlice,
-	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode) {
-	return CreateTextureSwitcher({}, texSlice, stateKeys, behaviorMode);
-}
 
 //utility
 optional<TextureSlice> GetTextureSlice(TextureSwitcher* switcher) noexcept;

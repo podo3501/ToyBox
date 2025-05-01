@@ -19,6 +19,7 @@ protected:
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept override;
 	inline void SetTextureSlice(TextureSlice texSlice) noexcept { m_texSlice = texSlice; }
 	bool ArrangeTextures() noexcept;
+	bool ResizeOrApplyDefault() noexcept;
 	
 private:
 	bool ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept;

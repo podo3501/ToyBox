@@ -16,7 +16,8 @@ public:
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 
-	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex) noexcept;
+	bool Setup(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0) noexcept;
+	inline bool Setup(DirectionType dirType, const string& bindKey, size_t sourceIndex = 0) noexcept { return Setup({}, dirType, bindKey, sourceIndex); }
 	Rectangle GetSource() const noexcept;
 	inline DirectionType GetDirectionType() const noexcept { return m_dirType; }
 
@@ -29,8 +30,3 @@ private:
 
 	DirectionType m_dirType;
 };
-
-unique_ptr<PatchTextureStd3> CreatePatchTextureStd3(const UILayout& layout, DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u);
-inline unique_ptr<PatchTextureStd3> CreatePatchTextureStd3(DirectionType dirType, const string& bindKey, size_t sourceIndex = 0u) {
-	return CreatePatchTextureStd3({}, dirType, bindKey, sourceIndex);
-}

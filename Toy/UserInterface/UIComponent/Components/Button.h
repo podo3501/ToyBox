@@ -23,5 +23,3 @@ private:
 
 	UIComponent* m_container;
 };
-
-unique_ptr<Button> CreateButton(const UILayout& layout, unique_ptr<UIComponent> container);

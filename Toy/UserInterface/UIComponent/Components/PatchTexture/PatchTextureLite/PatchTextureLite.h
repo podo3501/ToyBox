@@ -6,8 +6,7 @@ class PatchTextureLite : public PatchTexture
 {
 public:
 	~PatchTextureLite();	
-	virtual bool SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size = {}) = 0;
-	virtual bool BindSourceInfo(size_t index, const vector<Rectangle>& sources) { index; sources; return true; } //?!? =0으로 바뀌어야 한다.
+	virtual bool BindSourceInfo(size_t index, const vector<Rectangle>& sources) = 0;
 	virtual void SetIndexedSource(size_t, const vector<Rectangle>&) noexcept;
 
 protected:

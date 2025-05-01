@@ -16,7 +16,6 @@ public:
 	virtual bool operator==(const UIComponent& rhs) const noexcept override;
 	virtual void SerializeIO(JsonOperation& operation) override;
 	//PatchTextureLite
-	virtual bool SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size) override;
 	virtual bool BindSourceInfo(size_t index, const vector<Rectangle>& sources) override;
 
 	bool Setup(const XMUINT2& size, DirectionType dirType);
@@ -31,5 +30,3 @@ private:
 
 	DirectionType m_dirType;
 };
-
-unique_ptr<PatchTextureLite3> CreatePatchTextureLite3(const XMUINT2& size, DirectionType dirType);

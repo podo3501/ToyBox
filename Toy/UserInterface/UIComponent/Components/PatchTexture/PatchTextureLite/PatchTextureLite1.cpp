@@ -35,15 +35,6 @@ bool PatchTextureLite1::Setup(const XMUINT2& size)
 	return true;
 }
 
-bool PatchTextureLite1::SetupLayout(size_t index, const vector<Rectangle>& sources, const XMUINT2& size)
-{
-	SetIndexedSource(index, sources);
-	const XMUINT2& curSize = (size == XMUINT2{}) ? GetSourceSize(m_coord) : size;
-	SetLayout(curSize);
-
-	return true;
-}
-
 bool PatchTextureLite1::BindSourceInfo(size_t index, const vector<Rectangle>& sources)
 {
 	SetIndexedSource(index, sources);
@@ -51,9 +42,4 @@ bool PatchTextureLite1::BindSourceInfo(size_t index, const vector<Rectangle>& so
 		SetLayout(GetSourceSize(m_coord));
 
 	return true;
-}
-
-unique_ptr<PatchTextureLite1> CreatePatchTextureLite1(const XMUINT2& size)
-{
-	return CreateIfSetup(move(make_unique<PatchTextureLite1>()), size); //?!? 아마 CreateIfSetup 이거 템플릿으로 바꿀 수 있을듯
 }

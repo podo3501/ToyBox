@@ -128,6 +128,14 @@ bool PatchTexture::ArrangeTextures() noexcept
 	return true;
 }
 
+bool PatchTexture::ResizeOrApplyDefault() noexcept
+{
+	if (GetSize() == XMUINT2{})
+		return ArrangeTextures();
+
+	return ChangeSize(GetSize(), true);
+}
+
 bool PatchTexture::ForEach(predicate<PatchTexture*, size_t> auto&& Each)
 {
 	const auto& components = GetChildComponents();

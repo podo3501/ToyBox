@@ -11,14 +11,14 @@ class FloatingComponent
 {
 	enum class MakeComponent
 	{
-		PatchTextureStd1,
-		PatchTextureStd3,
-		PatchTextureStd9,
-		TextureSwitcher1,
-		TextureSwitcher3,
-		TextureSwitcher9,
-		TextArea,
-		ListArea
+		MPatchTextureStd1,
+		MPatchTextureStd3,
+		MPatchTextureStd9,
+		MTextureSwitcher1,
+		MTextureSwitcher3,
+		MTextureSwitcher9,
+		MTextArea,
+		MListArea
 	};
 
 public:

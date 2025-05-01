@@ -19,10 +19,7 @@ const string& PatchTextureStd::GetBindKey() const noexcept
 
 bool PatchTextureStd::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
-	if (GetSize() == XMUINT2{})
-		return ArrangeTextures();
-
-	return ChangeSize(GetSize(), true);
+	return ResizeOrApplyDefault();
 }
 
 bool PatchTextureStd::ChangeBindKey(TextureResourceBinder* resBinder, const string& key) noexcept
@@ -51,10 +48,10 @@ unique_ptr<PatchTextureStd> CreatePatchTexture(const UILayout& layout, TextureSl
 {
 	UILayout ltLayout(layout.GetSize());
 	switch (texSlice) {
-	case TextureSlice::One: return CreatePatchTextureStd1(ltLayout, bindKey);
-	case TextureSlice::ThreeH: return CreatePatchTextureStd3(ltLayout, DirectionType::Horizontal, bindKey);
-	case TextureSlice::ThreeV: return CreatePatchTextureStd3(ltLayout, DirectionType::Vertical, bindKey);
-	case TextureSlice::Nine: return CreatePatchTextureStd9(ltLayout, bindKey);
+	case TextureSlice::One: return CreateComponent<PatchTextureStd1>(ltLayout, bindKey);
+	case TextureSlice::ThreeH: return CreateComponent<PatchTextureStd3>(ltLayout, DirectionType::Horizontal, bindKey);
+	case TextureSlice::ThreeV: return CreateComponent<PatchTextureStd3>(ltLayout, DirectionType::Vertical, bindKey);
+	case TextureSlice::Nine: return CreateComponent<PatchTextureStd9>(ltLayout, bindKey);
 	}
 	return nullptr;
 }
