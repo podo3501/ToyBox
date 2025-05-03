@@ -96,10 +96,10 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 	return foundComponent;
 }
 
-vector<UIComponent*> UIComponentEx::GetComponents(const XMINT2& pos) noexcept
+vector<UIComponent*> UIComponentEx::GetRenderComponents(const XMINT2& pos) noexcept
 {
 	vector<UIComponent*> findList;
-	m_component->ForEachChildBFS(StateFlag::Render, [&findList, &pos](UIComponent* comp) {
+	m_component->ForEachChildToRender([&findList, &pos](UIComponent* comp) {
 		if(Contains(comp->GetArea(), pos))
 			findList.push_back(comp);
 		});

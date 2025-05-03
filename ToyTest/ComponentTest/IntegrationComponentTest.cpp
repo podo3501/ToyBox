@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "../ToyTestFixture.h"
+#include "../IMockRenderer.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
@@ -64,7 +65,7 @@ namespace UserInterfaceTest
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
 	{
-		vector<UIComponent*> components = UIEx(panel).GetComponents(position);
+		vector<UIComponent*> components = UIEx(panel).GetRenderComponents(position);
 		return components.size();
 	}
 
@@ -129,6 +130,38 @@ namespace UserInterfaceTest
 		EXPECT_EQ(component->GetArea(), Rectangle(270, 216, 160, 128));
 	}
 
+	static vector<ComponentID> GetComponentIDs(const vector<UIComponent*>& components)
+	{
+		vector<ComponentID> componentIDs;
+		ranges::transform(components, back_inserter(componentIDs), [](auto component) {
+			return component->GetTypeID(); });
+		return componentIDs;
+	}
+	//데이터에 특정한 패턴이 있는지 검사한다.
+	template<typename T>
+	static bool ContainsSequence(const vector<T>& haystack, const vector<T>& needle)
+	{
+		return !ranges::search(haystack, needle).empty();
+	}
+
+	TEST_F(IntegrationTest, MatchesRenderOrder)
+	{
+		using enum ComponentID;
+
+		auto listArea = CreateSampleListArea({ { 200, 170 }, Origin::LeftTop });
+		UIEx(m_panel).AttachComponent(move(listArea), {});
+		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
+		m_panel->EnableToolMode(true);
+
+		auto components = UIEx(m_panel).GetRenderComponents({ 196, 40 });
+		auto ids = GetComponentIDs(components);
+
+		//렌더링 옵션을 바꿔서 BFS 탐색을 하다가 DFS 탐색으로 전환하는 식으로 만든다.
+		//DFS 탐색하다가 BFS 탐색하는 것은 일단 보류
+		EXPECT_TRUE(ContainsSequence(ids, { 
+			RenderTexture, ScrollBar, PatchTextureStd3, PatchTextureStd1, TextureSwitcher }));		
+	}
+
 	TEST_F(IntegrationTest, RecursivePosition)
 	{
 		auto [panel1, panel1Ptr] = GetPtrs(CreateComponent<Panel>(UILayout({ 400, 400 }, Origin::Center)));
@@ -138,17 +171,17 @@ namespace UserInterfaceTest
 		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
 		m_panel->ProcessUpdate(m_timer);
 
-		vector<UIComponent*> outList = UIEx(m_panel).GetComponents({ 240, 140 });
+		vector<UIComponent*> outList = UIEx(m_panel).GetRenderComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
 		panel2Ptr->ChangeOrigin(Origin::LeftTop);
 		m_panel->ProcessUpdate(m_timer);
 
 		outList.clear();
-		outList = UIEx(m_panel).GetComponents({ 239, 140 });
+		outList = UIEx(m_panel).GetRenderComponents({ 239, 140 });
 		EXPECT_EQ(outList.size(), 2);
 
-		panel1Ptr->ChangeSize(800, 800); //크기 400에 40위치를 했기 때문에 ratio는 0.1이 된다.
+		panel1Ptr->ChangeSize(800, 800); //크기 400에 40위치를 했기 때문에 ratio는 0.1이 된다. 그래서 80
 		EXPECT_EQ(panel2Ptr->GetRelativePosition(), XMINT2(80, 80));
 
 		panel1Ptr->SetStateFlag(StateFlag::LockPosOnResize, true);

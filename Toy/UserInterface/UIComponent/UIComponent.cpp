@@ -21,6 +21,7 @@ UIComponent::UIComponent(const UIComponent& other)
 	m_layout = other.m_layout;
 	m_region = other.m_region;
 	m_stateFlag = other.m_stateFlag;
+	m_renderTraversal = other.m_renderTraversal;
 	m_transform = other.m_transform;
 
 	ranges::transform(other.m_children, back_inserter(m_children), [this, &other](const auto& child) {
@@ -43,8 +44,8 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetTypeID() != o.GetTypeID()) return false;
 
-	ReturnIfFalse(tie(m_name, m_layout, m_region, m_stateFlag, m_transform) ==
-		tie(o.m_name, o.m_layout, o.m_region, o.m_stateFlag, o.m_transform));
+	ReturnIfFalse(tie(m_name, m_layout, m_region, m_stateFlag, m_transform, m_renderTraversal) ==
+		tie(o.m_name, o.m_layout, o.m_region, o.m_stateFlag, o.m_transform, o.m_renderTraversal));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
 	ReturnIfFalse(m_children.size() == o.m_children.size());
 	ReturnIfFalse(ranges::equal(m_children, o.m_children, [](const auto& lhs, const auto& rhs) {
@@ -130,7 +131,7 @@ void UIComponent::ProcessRender(ITextureRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
-	ForEachChildBFS(StateFlag::Render, [render](UIComponent* component) {
+	ForEachChildToRender([render](UIComponent* component) {
 		component->ImplementRender(render);
 		});
 }
@@ -215,6 +216,7 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 	operation.Process("Transform", m_transform);
 	operation.Process("Region", m_region);
 	operation.Process("StateFlag", m_stateFlag);
+	operation.Process("RenderSearch", m_renderTraversal);
 	operation.Process("Children", m_children);
 	
 	if (operation.IsWrite()) return;

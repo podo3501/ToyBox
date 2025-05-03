@@ -171,6 +171,14 @@ namespace StateFlag
 	constexpr StateFlag::Type operator|(StateFlag::Type lhs, StateFlag::Type rhs) { return static_cast<StateFlag::Type>(static_cast<int>(lhs) | static_cast<int>(rhs)); }
 }
 
+//렌더링시 탐색을 바꿔가면서 해야한다. 그렇지 않으면 이미지가 덮혀지거나 순서가 꼬이게 된다.
+enum class RenderTraversal
+{
+	BFS,
+	DFS,
+	Inherited, //윗 노드가 사용한 방식을 따라서.
+};
+
 enum class DirectionType
 {
 	Horizontal,

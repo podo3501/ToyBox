@@ -31,6 +31,7 @@ protected:
 	vector<UIComponent*> GetChildComponents() const noexcept;
 	UIComponent* GetChildComponent(size_t index) const noexcept;
 	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;
+	inline void SetRenderTraversal(RenderTraversal traversal) noexcept { m_renderTraversal = traversal; }
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); } //?!? SetSize와 같은 역할이다.
 	inline bool GetToolMode() const noexcept { return m_toolMode; }
 	
@@ -89,18 +90,20 @@ private:
 	bool RecursivePositionUpdate(const XMINT2& position = {}) noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
+	inline RenderTraversal GetRenderSearchType() const noexcept { return m_renderTraversal; }
 
 	string m_name;
 	UILayout m_layout;
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
 	StateFlag::Type m_stateFlag{ StateFlag::Default };
 	string m_region; //UI에서 네임스페이스 역할을 한다. GetRegionComponent로 찾을 수 있다.
+	RenderTraversal m_renderTraversal{ RenderTraversal::Inherited }; //이건 mode이기 때문에 flag와 성격이 맞지 않아서 따로 만듦. 지금은 2개뿐이라 flag에 넣어도 되긴한데, 추후 확장성을 고려해서 일단 이렇게 놔두기로 하자.
+
 	bool m_toolMode{ false };
+	optional<UIComponentEx> m_componentEx; //optional로 선언하면 포인터가 아닌데도 바로 초기화 하지 않는다.
 
 	friend class UIComponentEx;
 	friend class UIHierarchy;
-
-	optional<UIComponentEx> m_componentEx; //optional로 선언하면 포인터가 아닌데도 바로 초기화 하지 않는다.
 };
 
 inline UIComponentEx& UIEx(UIComponent* component) { return component->GetUIComponentEx(); }

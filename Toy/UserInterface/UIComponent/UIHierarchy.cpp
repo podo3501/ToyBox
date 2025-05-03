@@ -51,11 +51,10 @@ void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> 
 	}
 }
 
-//함수 이름을 렌더링과 관련되게 지어야겠다. 렌더링 전용으로 사용하게끔
-void UIHierarchy<UIComponent>::ForEachChildBFS(StateFlag::Type flag, function<void(UIComponent*)> Func) noexcept
+void UIHierarchy<UIComponent>::ForEachRenderChildBFS(function<void(UIComponent*)> Func) noexcept
 {
 	queue<UIComponent*> cQueue;
-	auto PushChild = [&cQueue, flag](UIComponent* c) { if (c->HasStateFlag(flag)) cQueue.push(c); };
+	auto PushChild = [&cQueue](UIComponent* c) { if (c->HasStateFlag(StateFlag::Render)) cQueue.push(c); };
 
 	PushChild(GetThis());
 
@@ -64,15 +63,45 @@ void UIHierarchy<UIComponent>::ForEachChildBFS(StateFlag::Type flag, function<vo
 		UIComponent* current = cQueue.front();
 		cQueue.pop();
 
+		if (current->GetRenderSearchType() == RenderTraversal::DFS)
+		{
+			current->ForEachRenderChildDFS(Func);
+			continue;
+		}
+
 		Func(current);
 		if (current->HasStateFlag(StateFlag::RenderTexture)) continue;
 
 		for (const auto& child : current->m_children)
 		{
-			if (child)
-				PushChild(child.get());
+			if (!child) continue;
+			PushChild(child.get());
 		}
 	}
+}
+
+template<typename T>
+void UIHierarchy<T>::ForEachRenderChildDFS(function<void(UIComponent*)> Func) noexcept
+{
+	UIComponent* current = GetThis();
+	Func(current);
+	if (current->HasStateFlag(StateFlag::RenderTexture)) return;
+
+	for (auto& child : m_children)
+	{
+		if (!child) continue;
+		child->ForEachRenderChildDFS(Func);
+	}
+}
+
+void UIHierarchy<UIComponent>::ForEachChildToRender(function<void(UIComponent*)> Func) noexcept
+{
+	UIComponent* current = GetThis();
+	RenderTraversal traversal = current->GetRenderSearchType();
+	if(traversal == RenderTraversal::BFS || traversal == RenderTraversal::Inherited )
+		return ForEachRenderChildBFS(Func);
+
+	return ForEachRenderChildDFS(Func);
 }
 
 //부모 region에서 같은 이름이 있는지 확인한다.
@@ -167,7 +196,7 @@ void UIHierarchy<UIComponent>::GenerateUniqueName(UIComponent* attachingBlock) n
 {
 	map<string, UIComponent*> newNames;
 
-	attachingBlock->ForEachChild([this, &newNames](UIComponent* attaching) {
+	attachingBlock->ForEachChildDFS([this, &newNames](UIComponent* attaching) {
 		const string& name = CreateNewName(attaching);
 		const string& uniqueName = CreateUniqueName(newNames, name);
 		newNames[uniqueName] = attaching;
@@ -181,7 +210,7 @@ void UIHierarchy<UIComponent>::GenerateUniqueRegionName(UIComponent* attachingBl
 {
 	map<string, UIComponent*> newNames;
 
-	attachingBlock->ForEachChild([this, &newNames](UIComponent* attaching) {
+	attachingBlock->ForEachChildDFS([this, &newNames](UIComponent* attaching) {
 		const string& name = CreateNewRegionName(attaching);
 		string uniqueName;
 		if (!name.empty()) uniqueName = CreateUniqueName(newNames, name);

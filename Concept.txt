@@ -295,3 +295,9 @@ decltype(auto) FitToTextureSourceCommand::GetTargetAs()
 Component의 조합인 Component는 자신의 크기를 가지고 조합되는 자식들은 크기를 가지지 않는다. setup 시에
 부모의 크기로부터 크기를 조절하면 되기 때문에 Component는 크기를 가지는 것과 가지지 않는 것 2개를 구현해
 야 한다.
+
+BFS로 렌더링 하는데 가끔씩 DFS로 렌더링 해야 할 때가 있다. ScrollBar가 그런 경우인데 바탕그림과 버튼이 BFS
+로 했을때에는 렌더링 순서가 꼬이는 경우가 발생했다. 특히 다른 컴포넌트가 위에 올라올 경우가 그랬는데, BFS
+와 DFS의 렌더링을 교차로 해 주어야 할 필요성을 느꼈는데, 그래서 컴포넌트가 렌더링 방법을 정하고 만약 값이
+없다면 부모의 값으로 적용되어야 겠다. 그래서 기본은 BFS에 옵션으로 DepthRender를 주어서 DepthRender일
+때에는 그 밑에 자식들이 BFS로 되기 전까지는 DFS로 적용되어야 한다.

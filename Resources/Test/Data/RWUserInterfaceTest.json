@@ -21,6 +21,7 @@
         },
         "Region": "MainRegionEntry",
         "StateFlag": 55,
+        "RenderSearch": 2,
         "Children": [
             {
                 "Child": {
@@ -45,6 +46,7 @@
                     },
                     "Region": "",
                     "StateFlag": 55,
+                    "RenderSearch": 2,
                     "Children": [
                         {
                             "Child": {
@@ -69,6 +71,7 @@
                                 },
                                 "Region": "",
                                 "StateFlag": 7,
+                                "RenderSearch": 2,
                                 "Children": [
                                     {
                                         "Child": {
@@ -93,6 +96,7 @@
                                             },
                                             "Region": "",
                                             "StateFlag": 183,
+                                            "RenderSearch": 2,
                                             "Children": []
                                         }
                                     },
@@ -119,6 +123,7 @@
                                             },
                                             "Region": "",
                                             "StateFlag": 55,
+                                            "RenderSearch": 2,
                                             "Children": []
                                         }
                                     },
@@ -145,6 +150,7 @@
                                             },
                                             "Region": "",
                                             "StateFlag": 183,
+                                            "RenderSearch": 2,
                                             "Children": []
                                         }
                                     }

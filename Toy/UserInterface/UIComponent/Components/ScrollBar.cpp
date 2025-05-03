@@ -12,7 +12,9 @@ ScrollBar::~ScrollBar() = default;
 ScrollBar::ScrollBar() :
 	m_scrollTrack{ nullptr },
 	m_scrollButton{ nullptr }
-{}
+{
+	SetRenderTraversal(RenderTraversal::DFS);
+}
 
 ScrollBar::ScrollBar(const ScrollBar& other) :
 	UIComponent{ other },
@@ -61,7 +63,7 @@ bool ScrollBar::Setup(const UILayout& layout,
 
 	m_scrollTrack = scrollTrack.get();
 	UIEx(this).AttachComponent(move(scrollTrack), {});
-	
+
 	m_scrollButton = scrollButton.get();
 	m_scrollButton->AddPressCB([this](KeyState keystate) { OnPressCB(keystate); });
 	UIEx(this).AttachComponent(move(scrollButton), {});

@@ -16,13 +16,12 @@ public:
 	UIComponent* GetParentRegionRoot() noexcept;
 
 	//children을 순회하는 함수 모음
-	void ForEachChild(invocable<UIComponent*> auto&& Func) noexcept;
+	void ForEachChildDFS(function<void(UIComponent*)> Func) noexcept;
 	bool ForEachChildUntilFail(predicate<UIComponent*> auto&& Func) noexcept; //리턴값을 반환하는 재귀(로딩함수같은)
 	bool ForEachChildPostUntilFail(predicate<UIComponent*> auto&& Func) noexcept; //후위 순회로 리턴값 반환 재귀(binder에사용)
 	void ForEachChildBool(function<CResult(UIComponent*)> Func) noexcept; //무언가를 찾았으면 bool 반환으로 그만 하라는 함수
-	//void ForEachChildConst(function<void(const UIComponent*)> Func) const noexcept; //읽기전용
-	void ForEachChildConst(invocable<const UIComponent*> auto&& Func) const noexcept;
-	void ForEachChildBFS(StateFlag::Type flag, function<void(UIComponent*)> Func) noexcept; //BFS용으로 만듦. 기본은DFS
+	void ForEachChildConst(invocable<const UIComponent*> auto&& Func) const noexcept; //읽기전용
+	void ForEachChildToRender(function<void(UIComponent*)> Func) noexcept;
 
 	//이름 및 Region에 관련된 함수들. 함수가 길어서 여기로 일단 대피시킴
 	bool IsUniqueRegion(const string& name) noexcept;
@@ -35,6 +34,8 @@ public:
 
 private:
 	UIComponent* GetThis() noexcept;
+	void ForEachRenderChildBFS(function<void(UIComponent*)> Func) noexcept;
+	void ForEachRenderChildDFS(function<void(UIComponent*)> Func) noexcept;
 
 protected:
 	UIComponent* m_parent{ nullptr };
@@ -42,11 +43,11 @@ protected:
 };
 
 template<typename T>
-void UIHierarchy<T>::ForEachChild(invocable<UIComponent*> auto&& Func) noexcept
+void UIHierarchy<T>::ForEachChildDFS(function<void(UIComponent*)> Func) noexcept
 {
 	Func(GetThis());
 	for (auto& child : m_children)
-		if (child) child->ForEachChild(Func);
+		if (child) child->ForEachChildDFS(Func);
 }
 
 template<typename T>

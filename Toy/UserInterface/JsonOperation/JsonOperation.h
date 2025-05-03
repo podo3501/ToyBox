@@ -7,11 +7,12 @@ class Scene;
 class UITransform;
 struct TextureSourceInfo;
 struct TextureFontInfo;
-enum class Origin;//enum은 컨셉에 추가만 하면 된다.
+enum class Origin;//enum은 전방선언후 컨셉에 추가만 하면 된다.
 enum class InteractState; 
 enum class DirectionType;
 enum class BehaviorMode;
 enum class TextureSlice;
+enum class RenderTraversal;
 namespace StateFlag { enum Type : int; }
 
 namespace Tool
@@ -116,6 +117,7 @@ is_same_v <T, InteractState> ||
 is_same_v <T, DirectionType> ||
 is_same_v <T, TextureSlice> ||
 is_same_v <T, BehaviorMode> ||
+is_same_v <T, RenderTraversal> ||
 is_same_v<T, Tool::ResolutionType>;
 
 template<typename T>
