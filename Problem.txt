@@ -209,12 +209,23 @@ win32 폴더에서 cmd로 들어가서 cmake .. -G "Visual Studio 17 2022" 를 �
 2. tracyClient.cpp, tracy.hpp파일을 include 하고 TRACY_ENABLE을 전처리기 정의에 써 준다.
 3. 테스트할 코드를 작성한다.(ZoneScoped, FrameMark 이런것들)
 4. tracy/profiler/win32 폴더로 이동한 후 cmake .. -G "Visual Studio 17 2022" 실행
-(포트가 연결안될 경우 인바운드 아웃바운드 규칙 만들어서 8086포트를 사용가능하게 만들고 재부팅)
+(win32에 visual studio 프로젝트가 안 보일 경우 파이선이 내 컴퓨터에 설치 돼 있는지 확인하자)
 5. 솔루션 Release빌드해서 tracy profiler.exe를 생성
 6. 생성된 profiler를 실행한후 waiting 시킴.
 7. 테스트 코드를 컴파일 및 실행 한다.
+(포트가 연결안될 경우 인바운드 아웃바운드 규칙 만들어서 8086포트를 사용가능하게 만들고 재부팅)
 8. 127.0.0.1 tcp로 연결되어서 현재 실행되는 프로그램의 상태가 profiler에 자동으로 보여진다.
+9. visual studio에서 도구->외부도구를 하면 exe를 외부도구로 등록할 수 있어서 메뉴 항목에 profiler가 보임
 
-사용법을 확인중인데 옵션을 어떻게 해야 하는지 정보가 부족하다. 일단 어떤 함수에서 문제가 생기는지만
-알아보는 용도로 사용해야 겠다. GPU, CPU 등등 세세하게 정보를 다 볼 수 있는데 옵션이 많아서 내가 보고
-싶은 정보를 걸러내는 옵션이 뭔지를 아직 모르겠다.
+Tracy 폴더에 CMakeLists.txt 파일이 있어서 Tracy/build 폴더로 이동후 cmake .. -G "Visual Studio 17 2022" 
+하면 TracyClient 프로젝트가 나오는데 이것을 빌드해서 붙이면 작동한다. 그런데 기본 옵션이 너무 많은 
+정보를 보여주고 있어서 어느정도 옵션을 꺼야 하는데 아직 그 부분을 모르겠다. 옵션을 끄는 방법은 txt파일
+에서 ON, OFF를 해 준후 build 폴더에 CMakeCache.txt 파일을 지운후 F7을 누르면 자동으로 캐쉬 파일과 
+프로젝트 파일을 만들어주는데 전부 리로딩 후 리빌드를 하면 옵션이 적용된 프로젝트가 된다. 옵션은 자주
+바꿀 일이 없기 때문에 이런식으로 해도 괜찮다. profiler를 돌리면 여러가지가 나오는데 Ghost는 우리가 지정
+해 주지 않은 부분을 측정하는 것이기 때문에 profiler의 옵션에서 안보이게끔 체크박스를 해제하자.
+1. Tracy/build 폴더로 이동후 cmake .. -G "Visual Studio 17 2022" 
+2. TracyClient 프로젝트 적용
+3. CMakeLists.txt 파일안에 옵션 조정후 build 폴더에 CMakeCache.txt 파일을 지운후 F7
+4. 리로딩 및 리빌드
+5. 옵션이 적용된 프로젝트가 됨. 

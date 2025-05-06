@@ -66,8 +66,11 @@ unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 		move(CreateSampleScrollBar({}, DirectionType::Vertical)));
 }
 
+#include "Tracy.hpp"
 bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
 {
+	ZoneScopedN("MakeSampleListAreaData");
+
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);

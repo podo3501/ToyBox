@@ -32,6 +32,9 @@
     <ClCompile Include="ComponentTest\ContainerComponentTest.cpp">
       <Filter>ComponentTest</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterfaceTest\TracyBenchmarkTest.cpp">
+      <Filter>UserInterfaceTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />

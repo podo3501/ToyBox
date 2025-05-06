@@ -8,19 +8,62 @@
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 	m_component{ component }
 {}
+//
+//unique_ptr<UIComponent> UIComponentEx::AttachComponent(
+//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+//{
+//	if (!m_component->HasStateFlag(StateFlag::Attach)) return child;
+//
+//	m_component->GenerateUniqueName(child.get());
+//	m_component->GenerateUniqueRegionName(child.get());
+//	child->SetParent(m_component);
+//	child->m_transform.SetRelativePosition(m_component->m_layout.GetSize(), relativePos); //부모 사이즈와 나의 위치를 비교해야 상대적인 위치값을 구할 수 있다.
+//
+//	m_component->m_children.emplace_back(move(child));
+//	m_component->UpdatePositionsManually(true);
+//
+//	return nullptr;
+//}
 
+#include "Tracy.hpp"
 unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
-	if (!m_component->HasStateFlag(StateFlag::Attach)) return child;
+	ZoneScopedN("AttachComponent"); // 전체 함수 측정
 
-	m_component->GenerateUniqueName(child.get());
-	m_component->GenerateUniqueRegionName(child.get());
-	child->SetParent(m_component);
-	child->m_transform.SetRelativePosition(m_component->m_layout.GetSize(), relativePos); //부모 사이즈와 나의 위치를 비교해야 상대적인 위치값을 구할 수 있다.
+	if (!m_component->HasStateFlag(StateFlag::Attach))
+		return child;
 
-	m_component->m_children.emplace_back(move(child));
-	m_component->UpdatePositionsManually(true);
+	{
+		ZoneScopedN("GenerateUniqueNames");
+		m_component->GenerateUniqueName(child.get());
+	}
+
+	{
+		ZoneScopedN("GenerateUniqueRegionName");
+		m_component->GenerateUniqueRegionName(child.get());
+	}
+
+	{
+		ZoneScopedN("SetParent");
+		child->SetParent(m_component);
+	}
+
+	{
+		ZoneScopedN("SetRelativePosition");
+		child->m_transform.SetRelativePosition(
+			m_component->m_layout.GetSize(), relativePos);
+	}
+
+	{
+		ZoneScopedN("PushBackChild");
+		m_component->m_children.emplace_back(move(child));
+	}
+
+	{
+		ZoneScopedN("UpdateLayout");
+		m_component->UpdatePositionsManually(true);
+	}
 
 	return nullptr;
 }

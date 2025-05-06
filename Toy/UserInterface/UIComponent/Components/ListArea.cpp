@@ -155,19 +155,51 @@ bool ListArea::ResizeContainerForScrollbar() noexcept
 	return  true;
 }
 
+//UIComponent* ListArea::PrepareContainer()
+//{
+//	auto [cloneContainer, cloneContainerPtr] = GetPtrs(m_prototypeContainer->Clone());
+//	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
+//
+//	const auto& containerHeight = GetContainerHeight();
+//	cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
+//	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
+//	if (!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
+//	m_containers.emplace_back(cloneContainerPtr);
+//
+//	if (!UpdateScrollBar()) return nullptr;
+//
+//	return cloneContainerPtr;
+//}
+
+#include "Tracy.hpp"
 UIComponent* ListArea::PrepareContainer()
 {
+	ZoneScoped;
+
 	auto [cloneContainer, cloneContainerPtr] = GetPtrs(m_prototypeContainer->Clone());
-	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
+	{
+		ZoneScopedN("AttachComponent");
+		UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
+	}
 
 	const auto& containerHeight = GetContainerHeight();
-	cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
-	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
-	if(!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
-	m_containers.emplace_back(cloneContainerPtr);
-
-	if(!UpdateScrollBar()) return nullptr;
-
+	{
+		ZoneScopedN("SetInitialState");
+		cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
+		cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
+		if (!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
+	}
+	
+	{
+		ZoneScopedN("PushToList");
+		m_containers.emplace_back(cloneContainerPtr);
+	}
+	
+	{
+		ZoneScopedN("UpdateScrollBar");
+		if (!UpdateScrollBar()) return nullptr;
+	}
+	
 	return cloneContainerPtr;
 }
 

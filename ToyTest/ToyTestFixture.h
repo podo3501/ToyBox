@@ -58,6 +58,7 @@ protected:
 	bool VerifyClone(unique_ptr<UIComponent> original);
 };
 class TextureResourceBinderTest : public ToyTestFixture {};
+class TracyBenchmarkTest : public ToyTestFixture {};
 class UndoRedoTest : public ToyTestFixture
 {
 protected:
