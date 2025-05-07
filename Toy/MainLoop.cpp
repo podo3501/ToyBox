@@ -8,12 +8,15 @@
 #include "InputManager.h"
 
 MainLoop::~MainLoop()
-{}
+{
+    tracy::ShutdownProfiler();
+}
 
 MainLoop::MainLoop(Window* window, IRenderer* renderer) :
     m_window{ window },
     m_renderer{ renderer }
 {
+    tracy::StartupProfiler();
     InputManager::Initialize(m_window->GetHandle());
 }
 
@@ -63,6 +66,8 @@ int MainLoop::Run()
         }
         else
             Tick();
+
+        FrameMark; //Tracy측정할때 한 프레임이 끝났다는 것을 마크하는 표시
     }
 
     return static_cast<int>(msg.wParam);

@@ -229,3 +229,22 @@ Tracy 폴더에 CMakeLists.txt 파일이 있어서 Tracy/build 폴더로 이동�
 3. CMakeLists.txt 파일안에 옵션 조정후 build 폴더에 CMakeCache.txt 파일을 지운후 F7
 4. 리로딩 및 리빌드
 5. 옵션이 적용된 프로젝트가 됨. 
+
+Tracy Profiler를 했을때 너무 느리게 종료 되어서 문제를 확인 해 봤더니 2가지가 있었다. 첫번째는 프로파일을
+수집할 시점이 처음부터 마지막까지여서 필요없는 부분도 수집되는 것이 있었고, 두번째는 수집이 끝난후 그
+부분에 맞는 코드를 찾아서 복사해 주는 부분이 있는데 그 전송량이 많아서 느리게 종료가 되었다. tdd가 아니고
+일반적인 app라면 처음부터 마지막까지의 약간의 딜레이는 참을만하고, 끝나고 나서 코드를 보내주는 부분이
+없기 때문에 빨리 종료가 된다. 하지만 TDD는 종료할때 강제로 종료할수는 없기 때문에 끝나는 시점에 코드를
+계속 서버로 보내주는 부분이 문제가 되었다. 그래서 첫번째 프로파일 수집할 시점을 지정하는 것과 두번째 코
+드를 복사하지 않는 옵션이 존재했다. 
+첫번째(둘다 ON 해야 한다)
+set_option(TRACY_DELAYED_INIT "Enable delayed initialization of the library (init on first call)" ON)
+set_option(TRACY_MANUAL_LIFETIME "Enable the manual lifetime management of the profile" ON)
+두번째
+set_option(TRACY_NO_CODE_TRANSFER "Disable collection of source code" ON)
+이렇게 한 후 코드에 
+tracy::StartupProfiler();
+...
+tracy::ShutdownProfiler();
+를 해 주면 된다. StartupProfiler함수가 보이지 않을 때가 있는데 그건 TRACY_DELAYED_INIT, TRACY_MANUAL_LIFETIME
+디파인이 선언되지 않았기 때문이다.

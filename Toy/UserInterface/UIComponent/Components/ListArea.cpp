@@ -171,7 +171,6 @@ bool ListArea::ResizeContainerForScrollbar() noexcept
 //	return cloneContainerPtr;
 //}
 
-#include "Tracy.hpp"
 UIComponent* ListArea::PrepareContainer()
 {
 	ZoneScoped;

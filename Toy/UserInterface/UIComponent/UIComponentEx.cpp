@@ -25,7 +25,6 @@ UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 //	return nullptr;
 //}
 
-#include "Tracy.hpp"
 unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {

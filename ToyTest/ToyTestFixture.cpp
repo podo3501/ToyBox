@@ -37,6 +37,35 @@ void ToyTestFixture::SetUp()
 	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
 	m_resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
 	m_renderer->LoadTextureBinder(m_resBinder.get());
+
+#ifdef TRACY_ENABLE
+	tracy::StartupProfiler(); //지금처럼 TRACY_ENABLE 안에 넣어도 되고 밖에 있어도 무방하다.
+
+	while (!TracyIsConnected)
+		this_thread::sleep_for(chrono::milliseconds(10));
+#endif
+}
+
+void ToyTestFixture::TearDown()
+{
+#ifdef TRACY_ENABLE
+	FrameMark; // 마지막 프레임 구분
+	this_thread::sleep_for(chrono::milliseconds(100)); // 데이터 전송 시간 확보
+
+	tracy::ShutdownProfiler(); // 내부 쓰레드 및 버퍼 정리
+#endif
+
+	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.
+	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
+	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.
+	m_panel.reset();
+	m_resBinder.reset();
+	m_renderer.reset();
+	m_window.reset();
+
+#if defined(DEBUG) | defined(_DEBUG)
+	ReportLiveObjects();
+#endif
 }
 
 using ::testing::_;
@@ -119,21 +148,6 @@ void ToyTestFixture::CloneTestForSwitcher(const vector<RECT>& expectDest, const 
 	unique_ptr<UIComponent> clonePanel = m_panel->Clone();
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());
 	WriteReadTest(m_resBinder.get(), clonePanel);
-}
-
-void ToyTestFixture::TearDown()
-{
-	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.
-	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
-	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.
-	m_panel.reset();
-	m_resBinder.reset();
-	m_renderer.reset();
-	m_window.reset();
-
-#if defined(DEBUG) | defined(_DEBUG)
-	ReportLiveObjects();
-#endif
 }
 
 bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)

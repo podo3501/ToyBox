@@ -66,7 +66,6 @@ unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
 		move(CreateSampleScrollBar({}, DirectionType::Vertical)));
 }
 
-#include "Tracy.hpp"
 bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
 {
 	ZoneScopedN("MakeSampleListAreaData");
