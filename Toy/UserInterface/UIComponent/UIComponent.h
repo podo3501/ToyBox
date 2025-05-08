@@ -72,6 +72,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }
+	inline const string& GetUniqueName() const noexcept { return m_unqiueName; }
 	inline bool SetStateFlag(StateFlag::Type flag, bool enabled) noexcept { return BitEnum::Set(m_stateFlag, flag, enabled); }
 	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return BitEnum::Has(m_stateFlag, flag); }
 	void SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept;
@@ -93,6 +94,7 @@ private:
 	inline RenderTraversal GetRenderSearchType() const noexcept { return m_renderTraversal; }
 
 	string m_name;
+	string m_unqiueName;
 	UILayout m_layout;
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
 	StateFlag::Type m_stateFlag{ StateFlag::Default };

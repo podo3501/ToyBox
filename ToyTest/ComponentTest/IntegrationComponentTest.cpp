@@ -239,4 +239,20 @@ namespace UserInterfaceTest
 		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
 		EXPECT_TRUE(failed == nullptr);
 	}
+
+	class UserInterface
+	{
+
+	};
+
+	TEST_F(IntegrationTest, UniqueName)
+	{
+		unique_ptr<UserInterface> ui;
+
+		//auto pTex0 = CreateComponent<PatchTextureStd1>("BackImage1");
+		//EXPECT_EQ(pTex0->GetUniqueName(), "PatchTextureStd1_0");
+
+		//auto pTex1 = CreateComponent<PatchTextureStd1>("BackImage1");
+		//pTex1->GetUniqueName();
+	}
 }

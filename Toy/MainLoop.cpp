@@ -9,14 +9,14 @@
 
 MainLoop::~MainLoop()
 {
-    tracy::ShutdownProfiler();
+    TracyShutdownProfiler();
 }
 
 MainLoop::MainLoop(Window* window, IRenderer* renderer) :
     m_window{ window },
     m_renderer{ renderer }
 {
-    tracy::StartupProfiler();
+    TracyStartupProfiler();
     InputManager::Initialize(m_window->GetHandle());
 }
 

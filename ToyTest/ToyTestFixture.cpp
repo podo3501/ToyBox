@@ -33,27 +33,18 @@ void ToyTestFixture::SetUp()
 	InitializeConfig(L"Resources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 	InputManager::Initialize(hwnd);
+
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
 	m_resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
 	m_renderer->LoadTextureBinder(m_resBinder.get());
 
-#ifdef TRACY_ENABLE
-	tracy::StartupProfiler(); //지금처럼 TRACY_ENABLE 안에 넣어도 되고 밖에 있어도 무방하다.
-
-	while (!TracyIsConnected)
-		this_thread::sleep_for(chrono::milliseconds(10));
-#endif
+	TracyStartupProfiler();
 }
 
 void ToyTestFixture::TearDown()
 {
-#ifdef TRACY_ENABLE
-	FrameMark; // 마지막 프레임 구분
-	this_thread::sleep_for(chrono::milliseconds(100)); // 데이터 전송 시간 확보
-
-	tracy::ShutdownProfiler(); // 내부 쓰레드 및 버퍼 정리
-#endif
+	TracyShutdownProfiler();
 
 	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.
 	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데

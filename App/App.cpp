@@ -57,12 +57,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 				return ImguiWndProc(wnd, msg, wp, lp); });
 
 		const auto& outputSize = window.GetOutputSize();
-		unique_ptr<IRenderer> renderer = CreateRenderer(hwnd, 
+		auto renderer = CreateRenderer(hwnd, 
 			static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), bImgui);
 		if (not renderer)
 			return 1;
 
-		unique_ptr<MainLoop> mainLoop = make_unique<GameMainLoop>(&window, renderer.get());
+		auto mainLoop = make_unique<GameMainLoop>(&window, renderer.get());
 		result = mainLoop->Initialize(L"../Resources/", outputSize);
 		if (not result)
 			return 1;

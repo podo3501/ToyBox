@@ -49,6 +49,9 @@
 	} while (0)
 #endif
 
+void TracyStartupProfiler();
+void TracyShutdownProfiler();
+
 wstring StringToWString(const string& str) noexcept;
 //string RemoveNullTerminator(const string& str) noexcept;
 string WStringToString(const wstring& wstr) noexcept;
