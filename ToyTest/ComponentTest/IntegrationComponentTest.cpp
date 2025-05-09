@@ -240,14 +240,82 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(failed == nullptr);
 	}
 
+	//루트 UIComponent는 크게 2종류가 있다. 하나는 Panel이고 하나는 RenderTexture인데, RenderTexture는 주로 툴에서 쓰인다.
+	enum class MainComponent : int
+	{
+		Panel,
+		RenderTexture,
+	};
+
 	class UserInterface
 	{
+	public:
+		~UserInterface() = default;
+		UserInterface() noexcept :
+			m_main{ nullptr }
+		{}
 
+		bool Setup(MainComponent mainType, IRenderer* renderer)
+		{
+			switch (mainType)
+			{
+			case MainComponent::Panel: m_main = CreateComponent<Panel>(); break;
+			//case MainComponent::RenderTexture: main = CreateComponent<RenderTexture>(); break;
+			}
+			if (!m_main) return false;
+			if (!m_main->Rename("Main")) return false;
+			if (!m_main->RenameRegion("MainRegionEntry")) return false; //?!? Region name generator도 만들어야겠다.
+			renderer->AddRenderComponent(m_main.get());
+
+			return true;
+		}
+
+		template<typename T, typename... Args>
+		unique_ptr<T> CreateComponent(Args&&... args)
+		{
+			auto obj = make_unique<T>();
+			return obj && obj->Setup(forward<Args>(args)...) ? move(obj) : nullptr;
+		}
+
+	private:
+		unique_ptr<UIComponent> m_main;
 	};
+
+	class UIRegistry
+	{
+	public:
+		~UIRegistry() = default;
+		UIRegistry() noexcept :
+			m_entryComponent{ nullptr }
+		{}
+
+		inline void SetEntryComponent(UIComponent* component) noexcept { m_entryComponent = component; }
+		template<typename T, typename... Args>
+		unique_ptr<T> CreateComponent(Args&&... args)
+		{
+			auto obj = make_unique<T>();
+			return obj && obj->Setup(forward<Args>(args)...) ? move(obj) : nullptr;
+		}
+
+	private:
+		UIComponent* m_entryComponent;
+	};
+
+	//붙일곳이 어딘지를 알아야 이름이 정해지는데 지금은 생성한다음에 붙이기 때문에 붙일곳이 어딘지 모르는
+	//구조이다. 
 
 	TEST_F(IntegrationTest, UniqueName)
 	{
-		unique_ptr<UserInterface> ui;
+		//unique_ptr<UserInterface> ui = make_unique<UserInterface>();
+		//EXPECT_TRUE(ui->Setup(MainComponent::Panel, m_renderer.get()));
+
+		unique_ptr<UIRegistry> uiRegistry = make_unique<UIRegistry>();
+		const string& assigned = UIEx(m_panel).GetAssignedRegion();
+		uiRegistry->CreateComponent<PatchTextureStd1>("BackImage1");
+
+		//auto texPtr = ui->CreateComponent<PatchTextureStd1>("BackImage1");
+		//EXPECT_EQ(texPtr->GetUniqueName(), "PatchTextureStd1_0");
+
 
 		//auto pTex0 = CreateComponent<PatchTextureStd1>("BackImage1");
 		//EXPECT_EQ(pTex0->GetUniqueName(), "PatchTextureStd1_0");
