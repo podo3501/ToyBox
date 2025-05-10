@@ -3,6 +3,7 @@
 #include "UIComponent.h"
 #include "../Include/IRenderer.h"
 #include "../TextureResourceBinder/TextureResourceBinder.h"
+#include "../UINameGenerator.h"
 #include "Config.h"
 
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
@@ -67,6 +68,26 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	return nullptr;
 }
 
+unique_ptr<UIComponent> UIComponentEx::AttachComponent(UINameGenerator* generator,
+	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+{
+	UIComponent* regionComponent = m_component->GetParentRegionRoot();
+	const auto& region = regionComponent->GetRegion();
+
+	child->ForEachChildUntilFail([this, generator, &region](UIComponent* component) {
+		const auto& name = component->GetUniqueName();
+		if (!name.empty()) return true;
+
+		auto makeName = generator->MakeNameOf(region, component->GetTypeID());
+		if (makeName.empty()) return false;
+
+		component->SetUniqueName(makeName);
+		return true;
+		});
+	
+	return AttachComponent(move(child), relativePos);
+}
+
 unique_ptr<UIComponent> UIComponentEx::DetachChild(UIComponent* parent, UIComponent* detach) noexcept
 {
 	auto find = ranges::find_if(parent->m_children, [detach](auto& child) {
@@ -88,6 +109,22 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	if (!parent || !parent->HasStateFlag(StateFlag::Detach)) return {};
 
 	return { move(DetachChild(parent, m_component)), parent };
+}
+
+pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent(UINameGenerator* generator) noexcept
+{
+	UIComponent* regionComponent = m_component->GetParentRegionRoot();
+	const auto& region = regionComponent->GetRegion();
+
+	m_component->ForEachChildUntilFail([this, generator, &region](UIComponent* component) {
+		auto& uniqueName = component->GetUniqueName();
+		if (uniqueName.empty()) return false;
+
+		if (generator->RemoveNameOf(uniqueName)) //?!? 인자를 Component로 보내서 지우고 이름을 바꾸면 좋지 않을까? attach도 그렇게 하는게.
+			component->SetUniqueName("");
+
+		return true;
+		});
 }
 
 UIComponent* UIComponentEx::FindComponent(const string& name) noexcept

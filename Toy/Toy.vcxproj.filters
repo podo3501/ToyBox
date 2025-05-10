@@ -208,6 +208,9 @@
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UINameGenerator.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -347,6 +350,9 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UINameGenerator.cpp">
+      <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

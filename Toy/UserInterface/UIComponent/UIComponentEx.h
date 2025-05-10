@@ -3,6 +3,7 @@
 struct IRenderer;
 class UIComponent;
 class TextureResourceBinder;
+class UINameGenerator;
 
 //UIComponent클래스에서 public에 관한 것들만 여기에서 정의한다. 
 // 함수가 UIComponent에 private함수를 을 써야 한다면 이 클래스에서 정의한다.
@@ -14,6 +15,10 @@ public:
 
 	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
+
+	unique_ptr<UIComponent> AttachComponent(UINameGenerator* generator,
+		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
+	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UINameGenerator* generator) noexcept;
 
 	UIComponent* FindComponent(const string& name) noexcept;
 
