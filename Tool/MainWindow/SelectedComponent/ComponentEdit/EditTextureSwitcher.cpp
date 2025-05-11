@@ -47,7 +47,10 @@ void EditTextureSwitcher::RenderStateCombo()
 	if (!m_stateCombo) return;
 
 	m_stateCombo->Render([this](const string& key) {
-		m_texSwitcher->ChangeState(StringToEnum<InteractState>(key));
+		auto state = StringToEnum<InteractState>(key);
+		if (!state) return;
+
+		m_texSwitcher->ChangeState(*state);
 		SelectKeyComboItem();
 		});
 }

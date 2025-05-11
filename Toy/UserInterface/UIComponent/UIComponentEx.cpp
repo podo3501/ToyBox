@@ -120,11 +120,22 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent(UINam
 		auto& uniqueName = component->GetUniqueName();
 		if (uniqueName.empty()) return false;
 
-		if (generator->RemoveNameOf(uniqueName)) //?!? 인자를 Component로 보내서 지우고 이름을 바꾸면 좋지 않을까? attach도 그렇게 하는게.
+		if (generator->RemoveNameOf(region, uniqueName)) //?!? 인자를 Component로 보내서 지우고 이름을 바꾸면 좋지 않을까? attach도 그렇게 하는게.
 			component->SetUniqueName("");
 
 		return true;
 		});
+
+	return DetachComponent();
+}
+
+void UIComponentEx::Rename(UINameGenerator* generator, const string& name) noexcept
+{
+	UIComponent* regionComponent = m_component->GetParentRegionRoot();
+	const auto& region = regionComponent->GetRegion();
+
+	generator->RemoveNameOf(region, m_component->GetUniqueName());
+	m_component->SetUniqueName(name);
 }
 
 UIComponent* UIComponentEx::FindComponent(const string& name) noexcept

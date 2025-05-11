@@ -10,6 +10,8 @@
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "../Toy/UserInterface/UINameGenerator.h"
+#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
+#include "../Toy/Utility.h"
 
 namespace UserInterfaceTest
 {
@@ -303,9 +305,25 @@ namespace UserInterfaceTest
 			return UIEx(component).DetachComponent(m_generator.get());
 		}
 
+		void Rename(UIComponent* component, const string& name)
+		{
+			UIEx(component).Rename(m_generator.get(), name);
+		}
+
+		bool Save(const wstring& filename = L"") noexcept
+		{
+			JsonOperation writeJ;
+			writeJ.Write("UIComponent", m_entryComponent);
+			//writeJ.Write("NameGenerator", m_generator.get());
+			ReturnIfFalse(writeJ.Write(filename.empty() ? m_filename : filename));
+			m_filename = filename;
+			return true;
+		}
+
 	private:
 		unique_ptr<UINameGenerator> m_generator;
 		UIComponent* m_entryComponent;
+		wstring m_filename{};
 	};
 
 	static UIComponent* TestAttachName(UIRegistry* uiRegistry, UIComponent* parent, const string& childName)
@@ -323,9 +341,16 @@ namespace UserInterfaceTest
 
 		auto texPtr0 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_0");
 		auto texPtr1 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_1");
+		auto texPtr2 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_2");
 
-		registry->DetachComponent(texPtr0);
 		//Detach하고 난 이후에는 _0이 recycle에 들어가서 다시 재사용 되기 때문에 _0이 된다.
-		auto texPtr0 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_0");
+		registry->DetachComponent(texPtr0);
+		texPtr0 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_0");
+
+		//이름을 바꿀때에도 직접적으로 바꾸면 안된다. 자신이 가지고 있는 것을 반납해야 한다.
+		registry->Rename(texPtr1, "NoMatchComponentType_0");
+		auto texPtr3 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_1");
+
+		EXPECT_TRUE(registry->Save(L"Test/Data/RWUIRegistryTest.json"));
 	}
 }

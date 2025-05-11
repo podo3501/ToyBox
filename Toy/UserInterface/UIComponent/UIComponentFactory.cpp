@@ -42,6 +42,9 @@ static_assert((size(ComponentFactory) + 1) == EnumSize<ComponentID>(), "Componen
 
 unique_ptr<UIComponent> CreateComponent(const string& typeName)
 {
-    int componentID = EtoV(StringToEnum<ComponentID>(typeName));
+    auto type = StringToEnum<ComponentID>(typeName);
+    if (!type) return nullptr;
+
+    int componentID = EtoV(*type);
     return ComponentFactory[componentID]();
 }

@@ -14,18 +14,17 @@ std::string EnumToString(EnumType value)
 }
 
 template<typename EnumType>
-EnumType StringToEnum(const string& str)
+optional<EnumType> StringToEnum(const string& str)
 {
 	constexpr auto list = EnumToStringMap<EnumType>();
 	int iter{ 0 };
 	for (const auto& enumStr : list)
 	{
-		if (enumStr == str)
-			break;
+		if (enumStr == str) return static_cast<EnumType>(iter);
 		iter++;
 	}
 
-	return static_cast<EnumType>(iter);
+	return nullopt;
 }
 
 template<typename EnumType>

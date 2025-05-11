@@ -134,7 +134,7 @@
 
 //Tracy Profiler
 //Define을 먼저 정의해 주어야 Tracy.hpp가 컴파일될때 그에 맞게 코드가 적용된다.
-#define TRACY_ENABLE
+//#define TRACY_ENABLE
 #define TRACY_NO_CODE_TRANSFER //코드를 전송하지 않음. 전송했을때 종료시 시간이 많이 소요됨
 #define TRACY_DELAYED_INIT
 #define TRACY_MANUAL_LIFETIME //두 옵션은 profile할 구역을 지정할 수 있게 함. 지정하지 않으면 측정시 시간소요가 조금 더 일어남

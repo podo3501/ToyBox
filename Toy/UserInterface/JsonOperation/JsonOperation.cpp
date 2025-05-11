@@ -149,7 +149,7 @@ void JsonOperation::Process(const string& key, Rectangle& data) noexcept
 void JsonOperation::Process(const string& key, Origin& data) noexcept
 {
     auto writeFunc = [&data](auto& j) { j = EnumToString(data); };
-    auto readFunc = [&data](const auto& j) { data = StringToEnum<Origin>(j); };
+    auto readFunc = [&data](const auto& j) { data = *StringToEnum<Origin>(j); };
     ProcessImpl(key, writeFunc, readFunc);
 }
 
@@ -191,7 +191,7 @@ void JsonOperation::Process(const string& key, map<InteractState, string>& datas
 
     auto readFunc = [&datas](const auto& j) {
     for (const auto& [k, v] : j.items())
-        datas.emplace(StringToEnum<InteractState>(k), v);
+        datas.emplace(*StringToEnum<InteractState>(k), v);
     };
 
     ProcessImpl(key, writeFunc, readFunc);
