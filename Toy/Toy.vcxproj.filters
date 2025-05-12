@@ -211,6 +211,9 @@
     <ClInclude Include="UserInterface\UINameGenerator.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIRegistry.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -352,6 +355,9 @@
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UINameGenerator.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIRegistry.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>

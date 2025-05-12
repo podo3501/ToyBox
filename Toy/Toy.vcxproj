@@ -264,6 +264,7 @@
     <ClInclude Include="UserInterface\UIComponent\UIType.h" />
     <ClInclude Include="UserInterface\UIComponent\UIUtility.h" />
     <ClInclude Include="UserInterface\UINameGenerator.h" />
+    <ClInclude Include="UserInterface\UIRegistry.h" />
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
@@ -319,6 +320,7 @@
     <ClCompile Include="UserInterface\UIComponent\UIType.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIUtility.cpp" />
     <ClCompile Include="UserInterface\UINameGenerator.cpp" />
+    <ClCompile Include="UserInterface\UIRegistry.cpp" />
     <ClCompile Include="WindowProcedure.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="GameMainLoop.cpp" />

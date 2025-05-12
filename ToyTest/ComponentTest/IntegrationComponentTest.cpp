@@ -10,8 +10,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "../Toy/UserInterface/UINameGenerator.h"
-#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
-#include "../Toy/Utility.h"
+#include "../Toy/UserInterface/UIRegistry.h"
 
 namespace UserInterfaceTest
 {
@@ -283,48 +282,6 @@ namespace UserInterfaceTest
 	//private:
 	//	unique_ptr<UIComponent> m_main;
 	//};
-
-	class UIRegistry
-	{
-	public:
-		~UIRegistry() = default;
-		UIRegistry() noexcept :
-			m_generator{ make_unique<UINameGenerator>() },
-			m_entryComponent{ nullptr }
-		{}
-
-		inline void SetEntryComponent(UIComponent* component) noexcept { m_entryComponent = component; }
-		unique_ptr<UIComponent> AttachComponent(UIComponent* parent, 
-			unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
-		{
-			return UIEx(parent).AttachComponent(m_generator.get(), move(child), relativePos);
-		}
-
-		pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* component) noexcept
-		{
-			return UIEx(component).DetachComponent(m_generator.get());
-		}
-
-		void Rename(UIComponent* component, const string& name)
-		{
-			UIEx(component).Rename(m_generator.get(), name);
-		}
-
-		bool Save(const wstring& filename = L"") noexcept
-		{
-			JsonOperation writeJ;
-			writeJ.Write("UIComponent", m_entryComponent);
-			//writeJ.Write("NameGenerator", m_generator.get());
-			ReturnIfFalse(writeJ.Write(filename.empty() ? m_filename : filename));
-			m_filename = filename;
-			return true;
-		}
-
-	private:
-		unique_ptr<UINameGenerator> m_generator;
-		UIComponent* m_entryComponent;
-		wstring m_filename{};
-	};
 
 	static UIComponent* TestAttachName(UIRegistry* uiRegistry, UIComponent* parent, const string& childName)
 	{
