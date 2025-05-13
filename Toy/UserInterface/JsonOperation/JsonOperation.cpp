@@ -75,22 +75,6 @@ bool JsonOperation::Read(const wstring& filename)
     return true;
 }
 
-void JsonOperation::ProcessImpl(const string& key, auto writeFunc, auto readFunc)
-{
-    if (IsWrite())
-    {
-        m_write->GotoKey(key);
-        writeFunc(m_write->GetCurrent());
-        m_write->GoBack();
-    }
-    else
-    {
-        m_read->GotoKey(key);
-        readFunc(m_read->GetCurrent());
-        m_read->GoBack();
-    }
-}
-
 template<typename T, typename J>
 static void SafeRead(T& out, const J& value)
 {
@@ -215,29 +199,6 @@ void JsonOperation::Process(const string& key, unordered_map<wstring, TextureFon
             JsonOperation jsOp{ v };
             fontInfo.SerializeIO(jsOp);
             datas.emplace(StringToWString(k), fontInfo);
-        }};
-
-    ProcessImpl(key, writeFunc, readFunc);
-}
-
-void JsonOperation::Process(const string& key, unordered_map<string, TextureSourceInfo>& datas) noexcept
-{
-    auto writeFunc = [&datas](auto& j) {
-        for (auto& [k, v] : datas)
-        {
-            JsonOperation jsOp{};
-            v.SerializeIO(jsOp);
-            j[k] = jsOp.GetWrite();
-        }};
-
-    auto readFunc = [&datas](const auto& j) {
-        datas.clear();
-        for (auto& [k, v] : j.items())
-        {
-            TextureSourceInfo sourceInfo{};
-            JsonOperation jsOp{ v };
-            sourceInfo.SerializeIO(jsOp);
-            datas.emplace(k, sourceInfo);
         }};
 
     ProcessImpl(key, writeFunc, readFunc);

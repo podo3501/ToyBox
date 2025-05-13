@@ -2,6 +2,8 @@
 #include "UINameGenerator.h"
 #include "UIComponent/UIType.h"
 #include "Utility.h"
+#include "JsonOperation/JsonOperation.h"
+
 string AutoNamer::Generate() noexcept
 {
     int id;
@@ -58,6 +60,13 @@ bool ComponentNameGenerator::Remove(const string& name) noexcept
     return true;
 }
 
+void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
+{
+    //operation.Process("Namers", m_namers);
+
+    if (operation.IsWrite()) return;
+}
+
 ////////////////////////////////////////////////////////////////
 
 string UINameGenerator::MakeNameOf(const string& region, ComponentID componentID) noexcept
@@ -71,4 +80,11 @@ bool UINameGenerator::RemoveNameOf(const string& region, const string& name) noe
     if (find == m_regionNames.end()) return false;
 
     return find->second.Remove(name);
+}
+
+void UINameGenerator::SerializeIO(JsonOperation& operation)
+{
+    operation.Process("RegionNames", m_regionNames);
+
+    if (operation.IsWrite()) return;
 }

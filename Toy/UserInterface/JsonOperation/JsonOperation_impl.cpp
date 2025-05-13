@@ -2,6 +2,7 @@
 #include "JsonOperation.h"
 #include "../UIComponent/UIComponent.h"
 #include "../UIComponent/UIComponentFactory.h"
+#include "../UINameGenerator.h"
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {
@@ -14,6 +15,16 @@ void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 }
 
 void JsonOperation::UpdateJson(UIComponent* data) noexcept
+{
+    JsonOperation jsOp{};
+    data->SerializeIO(jsOp);
+    //static_cast를 해서 json으로 할당하면 json내의 타입값이 바뀌면서 새로운 타입이 되어 이전 정보 (여기서는 position)값이 사라진다. 그래서 update를 해서 병합하는 것.
+    if (jsOp.GetWrite().empty())
+        return;
+    m_write->GetCurrent().update(jsOp.GetWrite());
+}
+
+void JsonOperation::UpdateJson(UINameGenerator* data) noexcept
 {
     JsonOperation jsOp{};
     data->SerializeIO(jsOp);
@@ -40,6 +51,16 @@ void JsonOperation::Write(const string& key, UIComponent* data)
     m_write->GotoKey(key);
     const string& type = EnumToString<ComponentID>(data->GetTypeID());
     Process("Type", const_cast<string&>(type));
+    UpdateJson(data);
+    m_write->GoBack();
+}
+
+void JsonOperation::Write(const string& key, UINameGenerator* data)
+{
+    if (data == nullptr)
+        return;
+
+    m_write->GotoKey(key);
     UpdateJson(data);
     m_write->GoBack();
 }

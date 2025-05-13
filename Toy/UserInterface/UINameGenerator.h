@@ -1,4 +1,5 @@
 #pragma once
+class JsonOperation;
 
 class AutoNamer
 {
@@ -17,6 +18,8 @@ class ComponentNameGenerator
 public:
     string Create(ComponentID componentID) noexcept;
     bool Remove(const string& name) noexcept;
+
+    void SerializeIO(JsonOperation& operation);
     
 private:
     map<ComponentID, AutoNamer> m_namers;
@@ -30,6 +33,8 @@ public:
 
 	string MakeNameOf(const string& region, ComponentID componentID) noexcept;
     bool RemoveNameOf(const string& region, const string& name) noexcept;
+
+    void SerializeIO(JsonOperation& operation);
 
 private:
     unordered_map<string, ComponentNameGenerator> m_regionNames;

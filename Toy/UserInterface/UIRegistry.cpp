@@ -32,7 +32,7 @@ bool UIRegistry::Save(const wstring& filename) noexcept
 {
 	JsonOperation writeJ;
 	writeJ.Write("UIComponent", m_entryComponent);
-	//writeJ.Write("NameGenerator", m_generator.get());
+	writeJ.Write("UINameGenerator", m_generator.get());
 	ReturnIfFalse(writeJ.Write(filename.empty() ? m_filename : filename));
 	m_filename = filename;
 	return true;

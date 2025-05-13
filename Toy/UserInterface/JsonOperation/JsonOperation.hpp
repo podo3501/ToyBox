@@ -1,5 +1,23 @@
 #pragma once
 #include "JsonOperation.h"
+#include "../UINameGenerator.h"
+
+template <typename WriteFunc, typename ReadFunc>
+void JsonOperation::ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc)
+{
+	if (IsWrite())
+	{
+		m_write->GotoKey(key);
+		writeFunc(m_write->GetCurrent());
+		m_write->GoBack();
+	}
+	else
+	{
+		m_read->GotoKey(key);
+		readFunc(m_read->GetCurrent());
+		m_read->GoBack();
+	}
+}
 
 //Json이 지원하는 기본 타입 
 template<Available T>
@@ -191,4 +209,28 @@ void JsonOperation::Process(const string& key, Property<T>& data)
 		Process(key, tempValue);
 		data.Set(tempValue);
 	}
+}
+
+template<typename T>
+void JsonOperation::Process(const string& key, unordered_map<string, T>& datas) noexcept
+{
+	auto writeFunc = [&datas](auto& j) {
+		for (auto& [k, v] : datas)
+		{
+			JsonOperation jsOp{};
+			v.SerializeIO(jsOp);
+			j[k] = jsOp.GetWrite();
+		}};
+
+	auto readFunc = [&datas](const auto& j) {
+		datas.clear();
+		for (auto& [k, v] : j.items())
+		{
+			T value{};
+			JsonOperation jsOp{ v };
+			value.SerializeIO(jsOp);
+			datas.emplace(k, std::move(value));
+		}};
+
+	ProcessImpl(key, writeFunc, readFunc);
 }
