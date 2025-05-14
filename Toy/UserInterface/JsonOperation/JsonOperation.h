@@ -205,6 +205,11 @@ private:
 	template <typename WriteFunc, typename ReadFunc>
 	void ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc);
 
+	template<typename T>
+	nlohmann::ordered_json SerializeToJson(T& value);
+	template<typename T>
+	T DeserializeFromJson(const nlohmann::json& v);
+
 	nlohmann::ordered_json& GetWrite();
 	nlohmann::json& GetRead();
 

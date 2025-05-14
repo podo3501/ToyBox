@@ -2,21 +2,26 @@
 #include "JsonOperation.h"
 #include "../UINameGenerator.h"
 
-template <typename WriteFunc, typename ReadFunc>
-void JsonOperation::ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc)
-{
-	if (IsWrite())
-	{
-		m_write->GotoKey(key);
-		writeFunc(m_write->GetCurrent());
-		m_write->GoBack();
-	}
-	else
-	{
-		m_read->GotoKey(key);
-		readFunc(m_read->GetCurrent());
-		m_read->GoBack();
-	}
+//map, unordered_map키 값 반환하는 함수
+template<typename Key>
+struct KeyConverter;
+template<> struct KeyConverter<int> { static string ToKey(int key) { return to_string(key); } };
+template<> struct KeyConverter<wstring> { static string ToKey(const wstring& key); };
+
+template<typename Key>
+std::string ToKeyString(const Key& key) {
+	return KeyConverter<Key>::ToKey(key);
+}
+
+template<typename K, typename = void>
+struct FromKeyStringHelper;
+
+template<> struct FromKeyStringHelper<int> { static int Convert(const string& key) { return stoi(key); } };
+template<> struct FromKeyStringHelper<wstring> { static wstring Convert(const string& key); };
+
+template<typename K>
+K FromKeyString(const string& key) {
+	return FromKeyStringHelper<K>::Convert(key);
 }
 
 //Json이 지원하는 기본 타입 
@@ -102,6 +107,23 @@ void JsonOperation::ProcessReadKey(const string& key, ProcessFunc processFunc)
 	m_read->GotoKey(key);
 	processFunc(m_read->GetCurrent());
 	m_read->GoBack();
+}
+
+template <typename WriteFunc, typename ReadFunc>
+void JsonOperation::ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc)
+{
+	if (IsWrite())
+	{
+		m_write->GotoKey(key);
+		writeFunc(m_write->GetCurrent());
+		m_write->GoBack();
+	}
+	else
+	{
+		m_read->GotoKey(key);
+		readFunc(m_read->GetCurrent());
+		m_read->GoBack();
+	}
 }
 
 template<IsClassContainer T>
@@ -212,25 +234,35 @@ void JsonOperation::Process(const string& key, Property<T>& data)
 }
 
 template<typename T>
+nlohmann::ordered_json JsonOperation::SerializeToJson(T& value)
+{
+	JsonOperation jsOp{};
+	value.SerializeIO(jsOp);
+	return jsOp.GetWrite();
+}
+
+template<typename T>
+T JsonOperation::DeserializeFromJson(const nlohmann::json& v)
+{
+	T value{};
+	JsonOperation jsOp{ v };
+	value.SerializeIO(jsOp);
+	return value;
+}
+
+template<typename T>
 void JsonOperation::Process(const string& key, unordered_map<string, T>& datas) noexcept
 {
-	auto writeFunc = [&datas](auto& j) {
+	auto writeFunc = [this, &datas](auto& j) {
 		for (auto& [k, v] : datas)
-		{
-			JsonOperation jsOp{};
-			v.SerializeIO(jsOp);
-			j[k] = jsOp.GetWrite();
-		}};
+			j[k] = SerializeToJson(v);
+		};
 
-	auto readFunc = [&datas](const auto& j) {
+	auto readFunc = [this, &datas](const auto& j) {
 		datas.clear();
 		for (auto& [k, v] : j.items())
-		{
-			T value{};
-			JsonOperation jsOp{ v };
-			value.SerializeIO(jsOp);
-			datas.emplace(k, std::move(value));
-		}};
+			datas.emplace(k, DeserializeFromJson<T>(v));
+		};
 
 	ProcessImpl(key, writeFunc, readFunc);
 }

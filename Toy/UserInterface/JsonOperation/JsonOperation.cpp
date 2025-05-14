@@ -183,46 +183,32 @@ void JsonOperation::Process(const string& key, map<InteractState, string>& datas
 
 void JsonOperation::Process(const string& key, unordered_map<wstring, TextureFontInfo>& datas) noexcept
 {
-    auto writeFunc = [&datas](auto& j) {
+    auto writeFunc = [this, &datas](auto& j) {
         for (auto& [k, v] : datas)
-        {
-            JsonOperation jsOp{};
-            v.SerializeIO(jsOp);
-            j[WStringToString(k)] = jsOp.GetWrite();
-        }};
+            j[WStringToString(k)] = SerializeToJson(v);
+        };
 
-    auto readFunc = [&datas](const auto& j) {
+    auto readFunc = [this, &datas](const auto& j) {
         datas.clear();
         for (auto& [k, v] : j.items())
-        {
-            TextureFontInfo fontInfo{};
-            JsonOperation jsOp{ v };
-            fontInfo.SerializeIO(jsOp);
-            datas.emplace(StringToWString(k), fontInfo);
-        }};
+            datas.emplace(StringToWString(k), DeserializeFromJson<TextureFontInfo>(v));
+        };
 
     ProcessImpl(key, writeFunc, readFunc);
 }
 
 void JsonOperation::Process(const string& key, map<int, UITransform>& datas) noexcept 
 {
-    auto writeFunc = [&datas](auto& j) {
+    auto writeFunc = [this, &datas](auto& j) {
         for (auto& [k, v] : datas)
-        {
-            JsonOperation jsOp{};
-            v.SerializeIO(jsOp);
-            j[to_string(k)] = jsOp.GetWrite();
-        }};
+            j[to_string(k)] = SerializeToJson(v);
+        };
 
-    auto readFunc = [&datas](const auto& j) {
+    auto readFunc = [this, &datas](const auto& j) {
         datas.clear();
         for (auto& [k, v] : j.items())
-        {
-            UITransform trasform{};
-            JsonOperation jsOp{ v };
-            trasform.SerializeIO(jsOp);
-            datas.emplace(stoi(k), trasform);
-        }};
+            datas.emplace(stoi(k), DeserializeFromJson<UITransform>(v));
+        };
 
     ProcessImpl(key, writeFunc, readFunc);
 }
