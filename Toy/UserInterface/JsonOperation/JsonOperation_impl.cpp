@@ -5,9 +5,8 @@
 #include "../UINameGenerator.h"
 #include "Utility.h"
 
-//map, unordered_map키 값 반환하는 함수
 string KeyConverter<wstring>::ToKey(const wstring& key) { return WStringToString(key); }
-wstring FromKeyStringHelper<wstring>::Convert(const string& key) { return StringToWString(key); }
+wstring KeyConverter<wstring>::FromKey(const string& key) { return StringToWString(key); }
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {

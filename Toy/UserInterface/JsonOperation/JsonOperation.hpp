@@ -1,28 +1,23 @@
 #pragma once
-#include "JsonOperation.h"
 #include "../UINameGenerator.h"
 
-//map, unordered_map키 값 반환하는 함수
-template<typename Key>
-struct KeyConverter;
-template<> struct KeyConverter<int> { static string ToKey(int key) { return to_string(key); } };
-template<> struct KeyConverter<wstring> { static string ToKey(const wstring& key); };
-
-template<typename Key>
-std::string ToKeyString(const Key& key) {
-	return KeyConverter<Key>::ToKey(key);
-}
-
-template<typename K, typename = void>
-struct FromKeyStringHelper;
-
-template<> struct FromKeyStringHelper<int> { static int Convert(const string& key) { return stoi(key); } };
-template<> struct FromKeyStringHelper<wstring> { static wstring Convert(const string& key); };
-
+// Key 변환 헬퍼
 template<typename K>
-K FromKeyString(const string& key) {
-	return FromKeyStringHelper<K>::Convert(key);
-}
+struct KeyConverter {
+	static string ToKey(const K& key) { return key; }
+	static K FromKey(const string& key) { return key; }
+};
+
+// 특수화: wstring 처리
+template<>
+struct KeyConverter<wstring> {
+	static string ToKey(const wstring& key);
+	static wstring FromKey(const string& key);
+};
+
+// 변환 함수 래퍼
+template<typename K> string ToKeyString(const K& key) { return KeyConverter<K>::ToKey(key); }
+template<typename K> K FromKeyString(const string& key) { return KeyConverter<K>::FromKey(key); }
 
 //Json이 지원하는 기본 타입 
 template<Available T>
@@ -233,35 +228,18 @@ void JsonOperation::Process(const string& key, Property<T>& data)
 	}
 }
 
-template<typename T>
-nlohmann::ordered_json JsonOperation::SerializeToJson(T& value)
-{
-	JsonOperation jsOp{};
-	value.SerializeIO(jsOp);
-	return jsOp.GetWrite();
-}
-
-template<typename T>
-T JsonOperation::DeserializeFromJson(const nlohmann::json& v)
-{
-	T value{};
-	JsonOperation jsOp{ v };
-	value.SerializeIO(jsOp);
-	return value;
-}
-
-template<typename T>
-void JsonOperation::Process(const string& key, unordered_map<string, T>& datas) noexcept
+template<typename K, typename T>
+void JsonOperation::Process(const string& key, unordered_map<K, T>& datas) noexcept
 {
 	auto writeFunc = [this, &datas](auto& j) {
 		for (auto& [k, v] : datas)
-			j[k] = SerializeToJson(v);
+			j[ToKeyString(k)] = SerializeToJson(v);
 		};
 
 	auto readFunc = [this, &datas](const auto& j) {
 		datas.clear();
 		for (auto& [k, v] : j.items())
-			datas.emplace(k, DeserializeFromJson<T>(v));
+			datas.emplace(FromKeyString<K>(k), DeserializeFromJson<T>(v));
 		};
 
 	ProcessImpl(key, writeFunc, readFunc);

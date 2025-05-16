@@ -214,6 +214,9 @@
     <ClInclude Include="UserInterface\UIRegistry.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\JsonOperation\JsonOperation_traits.hpp">
+      <Filter>UserInterface\JsonOperation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

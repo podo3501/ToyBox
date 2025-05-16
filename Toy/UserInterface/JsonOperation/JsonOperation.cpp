@@ -181,22 +181,6 @@ void JsonOperation::Process(const string& key, map<InteractState, string>& datas
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-void JsonOperation::Process(const string& key, unordered_map<wstring, TextureFontInfo>& datas) noexcept
-{
-    auto writeFunc = [this, &datas](auto& j) {
-        for (auto& [k, v] : datas)
-            j[WStringToString(k)] = SerializeToJson(v);
-        };
-
-    auto readFunc = [this, &datas](const auto& j) {
-        datas.clear();
-        for (auto& [k, v] : j.items())
-            datas.emplace(StringToWString(k), DeserializeFromJson<TextureFontInfo>(v));
-        };
-
-    ProcessImpl(key, writeFunc, readFunc);
-}
-
 void JsonOperation::Process(const string& key, map<int, UITransform>& datas) noexcept 
 {
     auto writeFunc = [this, &datas](auto& j) {

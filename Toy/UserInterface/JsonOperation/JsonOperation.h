@@ -177,8 +177,8 @@ public:
 	void Process(const string& key, vector<unique_ptr<T>>& data);
 	template<typename T>
 	void Process(const string& key, Property<T>& data);
-	template<typename T>
-	void Process(const string& key, unordered_map<string, T>& datas) noexcept;
+	template<typename K, typename T>
+	void Process(const string& key, unordered_map<K, T>& datas) noexcept;
 
 	void Process(const string& key, XMINT2& data) noexcept;
 	void Process(const string& key, XMUINT2& data) noexcept;
@@ -188,12 +188,21 @@ public:
 	void Process(const string& key, unique_ptr<UIComponent>& data);
 	void Process(const string& key, vector<unique_ptr<UIComponent>>& datas);
 	void Process(const string& key, wstring& data) noexcept;
+	//?!? mapÀ» template·Î ¹Ù²Ü Â÷·Ê
 	void Process(const string& key, map<int, UITransform>& datas) noexcept;
 	void Process(const string& key, map<InteractState, string>& datas) noexcept;
-	void Process(const string& key, unordered_map<wstring, TextureFontInfo>& datas) noexcept;
 	void Process(const string& key, deque<wstring>& data) noexcept;
 	void Write(const string& key, UIComponent* data);
 	void Write(const string& key, UINameGenerator* data);
+
+private: //ÀÌ ÇÔ¼ö´Â JsonOperation_
+	template<typename T>
+	nlohmann::ordered_json SerializeToJson(T& value);
+	template<> nlohmann::ordered_json SerializeToJson<XMUINT2>(nlohmann::ordered_json& j, XMUINT2& data);
+
+	template<typename T>
+	T DeserializeFromJson(const nlohmann::json& v);
+	template<> void DeserializeFromJson<XMUINT2>(const nlohmann::json& j, XMUINT2& data);
 
 private:
 	template<typename T>
@@ -204,11 +213,6 @@ private:
 	void ProcessReadKey(const string& key, ProcessFunc processFunc);
 	template <typename WriteFunc, typename ReadFunc>
 	void ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc);
-
-	template<typename T>
-	nlohmann::ordered_json SerializeToJson(T& value);
-	template<typename T>
-	T DeserializeFromJson(const nlohmann::json& v);
 
 	nlohmann::ordered_json& GetWrite();
 	nlohmann::json& GetRead();
@@ -223,4 +227,4 @@ private:
 };
 
 #include "JsonOperation.hpp"
-
+#include "JsonOperation_traits.hpp"
