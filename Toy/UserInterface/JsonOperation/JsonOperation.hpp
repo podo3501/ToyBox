@@ -233,13 +233,13 @@ void JsonOperation::Process(const string& key, unordered_map<K, T>& datas) noexc
 {
 	auto writeFunc = [this, &datas](auto& j) {
 		for (auto& [k, v] : datas)
-			j[ToKeyString(k)] = SerializeToJson(v);
+			j[ToKeyString(k)] = JsonTraits<T>::SerializeToJson(v);
 		};
 
 	auto readFunc = [this, &datas](const auto& j) {
 		datas.clear();
 		for (auto& [k, v] : j.items())
-			datas.emplace(FromKeyString<K>(k), DeserializeFromJson<T>(v));
+			datas.emplace(FromKeyString<K>(k), JsonTraits<T>::DeserializeFromJson(v));
 		};
 
 	ProcessImpl(key, writeFunc, readFunc);

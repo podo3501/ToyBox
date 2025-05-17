@@ -12,9 +12,15 @@ using ordered_json = nlohmann::ordered_json;
 JsonOperation::~JsonOperation() = default;
 JsonOperation::JsonOperation()
 {
-    auto write = std::make_unique<ordered_json>();
-    m_write = make_unique<JsonNavigator<ordered_json>>(move(write));
+    auto writeJson = std::make_unique<ordered_json>();
+    m_write = make_unique<JsonNavigator<ordered_json>>(move(writeJson));
 }
+
+//JsonOperation::JsonOperation(const nlohmann::ordered_json& write)
+//{
+//    auto writeJson = make_unique<ordered_json>(write);
+//    m_write = make_unique<JsonNavigator<ordered_json>>(move(writeJson));
+//}
 
 JsonOperation::JsonOperation(const nlohmann::json& read)
 {
@@ -31,15 +37,15 @@ bool JsonOperation::IsWrite()
     return false;
 }
 
-ordered_json& JsonOperation::GetWrite()
-{
-    return m_write->GetCurrent();
-}
-
-json& JsonOperation::GetRead()
-{
-    return m_read->GetCurrent();
-}
+//ordered_json& JsonOperation::GetWrite()
+//{
+//    return m_write->GetCurrent();
+//}
+//
+//json& JsonOperation::GetRead()
+//{
+//    return m_read->GetCurrent();
+//}
 
 bool IsJsonFile(const wstring& filename)
 {
@@ -185,13 +191,13 @@ void JsonOperation::Process(const string& key, map<int, UITransform>& datas) noe
 {
     auto writeFunc = [this, &datas](auto& j) {
         for (auto& [k, v] : datas)
-            j[to_string(k)] = SerializeToJson(v);
+            j[to_string(k)] = JsonTraits<UITransform>::SerializeToJson(v);
         };
 
     auto readFunc = [this, &datas](const auto& j) {
         datas.clear();
         for (auto& [k, v] : j.items())
-            datas.emplace(stoi(k), DeserializeFromJson<UITransform>(v));
+            datas.emplace(stoi(k), JsonTraits<UITransform>::DeserializeFromJson(v));
         };
 
     ProcessImpl(key, writeFunc, readFunc);

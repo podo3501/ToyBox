@@ -54,7 +54,7 @@ public:
 	}
 
 	// 현재 객체 값 가져오기
-	T& GetCurrent() {
+	T& GetCurrent() const noexcept {
 		return *current;
 	}
 
@@ -155,8 +155,13 @@ class JsonOperation
 {
 public:
 	JsonOperation();
-	JsonOperation(const nlohmann::json& read);
+	//JsonOperation(const nlohmann::ordered_json& write);
+	explicit JsonOperation(const nlohmann::json& read);
 	virtual ~JsonOperation();
+
+	//?!? traits 패턴때문에 여기로 올리긴 했지만, 이러면 다른 클래스가 여기를 쓸 수 있기 때문에 정리할때 private로 옮겨야 한다.
+	inline nlohmann::ordered_json& GetWrite() const noexcept { return m_write->GetCurrent(); }
+	inline nlohmann::json& GetRead() const noexcept { return m_read->GetCurrent(); }
 
 	bool IsWrite();
 
@@ -196,13 +201,13 @@ public:
 	void Write(const string& key, UINameGenerator* data);
 
 private: //이 함수는 JsonOperation_
-	template<typename T>
-	nlohmann::ordered_json SerializeToJson(T& value);
-	template<> nlohmann::ordered_json SerializeToJson<XMUINT2>(nlohmann::ordered_json& j, XMUINT2& data);
+	//template<typename T>
+	//static nlohmann::ordered_json SerializeToJson(T& value);
+	//template<> nlohmann::ordered_json SerializeToJson<XMUINT2>(nlohmann::ordered_json& j, XMUINT2& data);
 
 	template<typename T>
 	T DeserializeFromJson(const nlohmann::json& v);
-	template<> void DeserializeFromJson<XMUINT2>(const nlohmann::json& j, XMUINT2& data);
+	//template<> void DeserializeFromJson<XMUINT2>(const nlohmann::json& j, XMUINT2& data);
 
 private:
 	template<typename T>
@@ -214,9 +219,6 @@ private:
 	template <typename WriteFunc, typename ReadFunc>
 	void ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc);
 
-	nlohmann::ordered_json& GetWrite();
-	nlohmann::json& GetRead();
-
 	void UpdateJson(const unique_ptr<UIComponent>& data) noexcept;
 	void UpdateJson(UIComponent* data) noexcept;
 	void UpdateJson(UINameGenerator* data) noexcept;
@@ -226,5 +228,6 @@ private:
 	unique_ptr<JsonNavigator<nlohmann::json>> m_read;
 };
 
-#include "JsonOperation.hpp"
 #include "JsonOperation_traits.hpp"
+#include "JsonOperation.hpp"
+
