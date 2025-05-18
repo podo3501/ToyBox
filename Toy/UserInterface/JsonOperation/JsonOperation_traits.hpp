@@ -1,34 +1,67 @@
 #pragma once
 
+template<typename T, typename J>
+static void SafeRead(T& out, const J& value)
+{
+	Assert(!value.is_null());
+	out = value.get<T>();
+}
+
 template<typename T>
 struct JsonTraits
 {
-	static nlohmann::ordered_json SerializeToJson(T& value)
+	static nlohmann::ordered_json SerializeToJson(T& data)
 	{
 		JsonOperation jsOp{};
-		value.SerializeIO(jsOp);
+		data.SerializeIO(jsOp);
 		return jsOp.GetWrite();
 	}
 
-	static T DeserializeFromJson(const nlohmann::json& v)
+	static T DeserializeFromJson(const nlohmann::json& dataJ)
 	{
-		T value{};
-		JsonOperation jsOp{ v };
-		value.SerializeIO(jsOp);
-		return value;
+		T data{};
+		JsonOperation jsOp{ dataJ };
+		data.SerializeIO(jsOp);
+		return data;
 	}
 };
 
-//template<>
-//nlohmann::ordered_json JsonOperation::SerializeToJson<XMUINT2>(XMUINT2& data) {
-//	JsonOperation jsOp{};
-//	jsOp["x"] = data.x;
-//	jsOp["y"] = data.y;
-//	return jsOp.GetWrite();
-//}
+template<>
+struct JsonTraits<XMINT2>
+{
+	static nlohmann::ordered_json SerializeToJson(XMINT2& data)
+	{
+		nlohmann::ordered_json j;
+        j["x"] = data.x;
+        j["y"] = data.y;
+		return j;
+	}
 
-//template<>
-//void JsonOperation::DeserializeFromJson<XMUINT2>(const nlohmann::json& j, XMUINT2& data) {
-//    SafeRead(data.x, j["x"]);
-//    SafeRead(data.y, j["y"]);
-//}
+	static XMINT2 DeserializeFromJson(const nlohmann::json& dataJ)
+	{
+		XMINT2 data{};
+		SafeRead(data.x, dataJ["x"]);
+		SafeRead(data.y, dataJ["y"]);
+		return data;
+	}
+};
+
+template<>
+struct JsonTraits<XMUINT2>
+{
+	static nlohmann::ordered_json SerializeToJson(XMUINT2& data) 
+	{
+		nlohmann::ordered_json j;
+		j["x"] = data.x;
+		j["y"] = data.y;
+		return j;
+	}
+
+	static XMUINT2 DeserializeFromJson(const nlohmann::json& dataJ)
+	{
+		XMUINT2 data{};
+		SafeRead(data.x, dataJ["x"]);
+		SafeRead(data.y, dataJ["y"]);
+		return data;
+	}
+};

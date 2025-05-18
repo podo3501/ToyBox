@@ -160,7 +160,7 @@ public:
 	virtual ~JsonOperation();
 
 	//?!? traits 패턴때문에 여기로 올리긴 했지만, 이러면 다른 클래스가 여기를 쓸 수 있기 때문에 정리할때 private로 옮겨야 한다.
-	inline nlohmann::ordered_json& GetWrite() const noexcept { return m_write->GetCurrent(); }
+	inline nlohmann::ordered_json& GetWrite() noexcept { return m_write->GetCurrent(); }
 	inline nlohmann::json& GetRead() const noexcept { return m_read->GetCurrent(); }
 
 	bool IsWrite();
@@ -184,6 +184,12 @@ public:
 	void Process(const string& key, Property<T>& data);
 	template<typename K, typename T>
 	void Process(const string& key, unordered_map<K, T>& datas) noexcept;
+	/*template<typename T>
+		requires requires (T& t, const nlohmann::json& j) {
+			{ JsonTraits<T>::SerializeToJson(t) } -> same_as<nlohmann::ordered_json>;
+			{ JsonTraits<T>::DeserializeFromJson(j) } -> same_as<T>;
+	}
+	void Process(const string& key, T& data) noexcept;*/
 
 	void Process(const string& key, XMINT2& data) noexcept;
 	void Process(const string& key, XMUINT2& data) noexcept;

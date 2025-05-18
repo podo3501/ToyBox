@@ -155,6 +155,8 @@ inline void PIXEndEvent(T*) {}
 #include <pix.h>
 #endif
 
+#include "../Common/Assert.h"
+
 using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;

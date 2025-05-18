@@ -81,38 +81,18 @@ bool JsonOperation::Read(const wstring& filename)
     return true;
 }
 
-template<typename T, typename J>
-static void SafeRead(T& out, const J& value)
-{
-    Assert(!value.is_null());
-    out = value.get<T>();
-}
-
 void JsonOperation::Process(const string& key, XMINT2& data) noexcept
 {
-    auto writeFunc = [&data](auto& j) {
-        j["x"] = data.x;
-        j["y"] = data.y;
-        };
+    auto writeFunc = [&data](auto& j) { j = JsonTraits<XMINT2>::SerializeToJson(data); };
+    auto readFunc = [&data](const auto& j) { data = JsonTraits<XMINT2>::DeserializeFromJson(j); };
 
-    auto readFunc = [&data](const auto& j) {
-        SafeRead(data.x, j["x"]);
-        SafeRead(data.y, j["y"]);
-        };
     ProcessImpl(key, writeFunc, readFunc);
 }
 
 void JsonOperation::Process(const string& key, XMUINT2& data) noexcept
 {
-    auto writeFunc = [&data](auto& j) {
-        j["x"] = data.x;
-        j["y"] = data.y;
-        };
-
-    auto readFunc = [&data](const auto& j) {
-        SafeRead(data.x, j["x"]);
-        SafeRead(data.y, j["y"]);
-        };
+    auto writeFunc = [&data](auto& j) { j = JsonTraits<XMUINT2>::SerializeToJson(data); };
+    auto readFunc = [&data](const auto& j) { data = JsonTraits<XMUINT2>::DeserializeFromJson(j); };
 
     ProcessImpl(key, writeFunc, readFunc);
 }

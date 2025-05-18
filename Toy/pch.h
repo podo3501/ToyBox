@@ -163,6 +163,8 @@ inline void PIXEndEvent(T*) {}
 #define TRACY_MANUAL_LIFETIME //두 옵션은 profile할 구역을 지정할 수 있게 함. 지정하지 않으면 측정시 시간소요가 조금 더 일어남
 #include "Tracy.hpp"
 
+#include "../Common/Assert.h"
+
 using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;

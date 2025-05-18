@@ -51,6 +51,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{980E4560-9
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TracyClient", "Tracy\build\TracyClient.vcxproj", "{C6B3E223-6088-38D8-97B8-0D1316A11012}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxproj", "{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -169,6 +171,18 @@ Global
 		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x64.Build.0 = Release|x64
 		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x86.ActiveCfg = Release|x64
 		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x86.Build.0 = Release|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|ARM64.ActiveCfg = Debug|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|ARM64.Build.0 = Debug|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|x64.ActiveCfg = Debug|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|x64.Build.0 = Debug|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|x86.ActiveCfg = Debug|Win32
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|x86.Build.0 = Debug|Win32
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|ARM64.ActiveCfg = Release|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|ARM64.Build.0 = Release|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|x64.ActiveCfg = Release|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|x64.Build.0 = Release|x64
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|x86.ActiveCfg = Release|Win32
+		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
