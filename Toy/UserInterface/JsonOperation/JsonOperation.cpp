@@ -6,6 +6,7 @@
 #include "../UIComponent/UITransform.h"
 #include "../TextureResourceBinder/TextureResourceBinder.h"
 
+
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
 
@@ -99,27 +100,21 @@ void JsonOperation::Process(const string& key, XMUINT2& data) noexcept
 
 void JsonOperation::Process(const string& key, Rectangle& data) noexcept
 {
-    auto writeFunc = [&data](auto& j) {
-        j["x"] = data.x;
-        j["y"] = data.y;
-        j["width"] = data.width;
-        j["height"] = data.height;
-    };
-
-    auto readFunc = [&data](const auto& j) {
-        SafeRead(data.x, j["x"]);
-        SafeRead(data.y, j["y"]);
-        SafeRead(data.width, j["width"]);
-        SafeRead(data.height, j["height"]);
-    };
+    auto writeFunc = [&data](auto& j) { j = JsonTraits<Rectangle>::SerializeToJson(data); };
+    auto readFunc = [&data](const auto& j) { data = JsonTraits<Rectangle>::DeserializeFromJson(j); };
 
     ProcessImpl(key, writeFunc, readFunc);
 }
 
 void JsonOperation::Process(const string& key, Origin& data) noexcept
 {
-    auto writeFunc = [&data](auto& j) { j = EnumToString(data); };
+    /*auto writeFunc = [&data](auto& j) { j = EnumToString(data); };
     auto readFunc = [&data](const auto& j) { data = *StringToEnum<Origin>(j); };
+    ProcessImpl(key, writeFunc, readFunc);*/
+
+    auto writeFunc = [&data](auto& j) { j = JsonTraits<Origin>::SerializeToJson(data); };
+    auto readFunc = [&data](const auto& j) { data = JsonTraits<Origin>::DeserializeFromJson(j); };
+
     ProcessImpl(key, writeFunc, readFunc);
 }
 
@@ -130,25 +125,35 @@ static double RoundToSixA(double value) noexcept
 
 void JsonOperation::Process(const string & key, Vector2& data) noexcept
 {
-    auto writeFunc = [&data](auto& j) {
-        Assert(!isnan(data.x));
-        Assert(!isnan(data.y));
-        j["x"] = RoundToSixA(data.x);
-        j["y"] = RoundToSixA(data.y);
-        };
+    //auto writeFunc = [&data](auto& j) {
+    //    Assert(!isnan(data.x));
+    //    Assert(!isnan(data.y));
+    //    j["x"] = RoundToSixA(data.x);
+    //    j["y"] = RoundToSixA(data.y);
+    //    };
 
-    auto readFunc = [&data](const auto& j) {
-        SafeRead(data.x, j["x"]);
-        SafeRead(data.y, j["y"]);
-        };
+    //auto readFunc = [&data](const auto& j) {
+    //    json_detail::SafeRead(data.x, j["x"]);
+    //    json_detail::SafeRead(data.y, j["y"]);
+    //    };
+
+    //ProcessImpl(key, writeFunc, readFunc);
+
+    auto writeFunc = [&data](auto& j) { j = JsonTraits<Vector2>::SerializeToJson(data); };
+    auto readFunc = [&data](const auto& j) { data = JsonTraits<Vector2>::DeserializeFromJson(j); };
 
     ProcessImpl(key, writeFunc, readFunc);
 }
 
 void JsonOperation::Process(const string& key, wstring& data) noexcept
 {
-    auto writeFunc = [&data](auto& j) { j = WStringToString(data); };
-    auto readFunc = [&data](const auto& j) { data = StringToWString(j); };
+    //auto writeFunc = [&data](auto& j) { j = WStringToString(data); };
+    //auto readFunc = [&data](const auto& j) { data = StringToWString(j); };
+    //ProcessImpl(key, writeFunc, readFunc);
+
+    auto writeFunc = [&data](auto& j) { j = JsonTraits<wstring>::SerializeToJson(data); };
+    auto readFunc = [&data](const auto& j) { data = JsonTraits<wstring>::DeserializeFromJson(j); };
+
     ProcessImpl(key, writeFunc, readFunc);
 }
 

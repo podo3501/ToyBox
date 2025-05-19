@@ -53,6 +53,9 @@
     <Filter Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd">
       <UniqueIdentifier>{7a3c1d34-9d41-408e-8ecf-951fb5069abf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserInterface\JsonOperation\Traits">
+      <UniqueIdentifier>{bdbe2f3b-a5fc-4c2b-a1dc-f2816d7c26ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -214,8 +217,14 @@
     <ClInclude Include="UserInterface\UIRegistry.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\JsonOperation_traits.hpp">
-      <Filter>UserInterface\JsonOperation</Filter>
+    <ClInclude Include="UserInterface\JsonOperation\Traits\BasicTypes.hpp">
+      <Filter>UserInterface\JsonOperation\Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.hpp">
+      <Filter>UserInterface\JsonOperation\Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp">
+      <Filter>UserInterface\JsonOperation\Traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

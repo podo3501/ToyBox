@@ -227,7 +227,9 @@
     <ClInclude Include="UserInterface\JsonOperation\JsonHelper.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp" />
-    <ClInclude Include="UserInterface\JsonOperation\JsonOperation_traits.hpp" />
+    <ClInclude Include="UserInterface\JsonOperation\Traits\BasicTypes.hpp" />
+    <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp" />
+    <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.hpp" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureBinderHelper.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureFontInfo.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureInfo.h" />
