@@ -5,8 +5,8 @@
 #include "../UINameGenerator.h"
 #include "Utility.h"
 
-string KeyConverter<wstring>::ToKey(const wstring& key) { return WStringToString(key); }
-wstring KeyConverter<wstring>::FromKey(const string& key) { return StringToWString(key); }
+//string KeyConverter<wstring>::ToKey(const wstring& key) { return WStringToString(key); }
+//wstring KeyConverter<wstring>::FromKey(const string& key) { return StringToWString(key); }
 
 void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
 {

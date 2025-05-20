@@ -2,7 +2,7 @@
 #include "Traits.hpp"
 #include "JsonDetail.hpp"
 #include "../../UIComponent/UIType.h"
-#include "Utility.h"
+#include "../../../Utility.h"
 
 template<>
 struct JsonTraits<XMINT2>
@@ -78,10 +78,13 @@ struct JsonTraits<Vector2>
 template<>
 struct JsonTraits<wstring>
 {
-	static nlohmann::ordered_json SerializeToJson(wstring& data) { return WStringToString(data); }
-	static wstring DeserializeFromJson(const nlohmann::json& dataJ)
-	{
-		return json_detail::CreateAndFill<wstring>([&dataJ](wstring& data) {
-			data = StringToWString(dataJ); });
-	}
+	//static nlohmann::ordered_json SerializeToJson(wstring& data) { return WStringToString(data); }
+	//static wstring DeserializeFromJson(const nlohmann::json& dataJ)
+	//{
+	//	return json_detail::CreateAndFill<wstring>([&dataJ](wstring& data) {
+	//		data = StringToWString(dataJ); });
+	//}
+
+	static nlohmann::ordered_json SerializeToJson(wstring& data);
+	static wstring DeserializeFromJson(const nlohmann::json& dataJ);
 };

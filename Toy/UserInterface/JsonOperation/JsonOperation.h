@@ -234,6 +234,7 @@ private:
 	unique_ptr<JsonNavigator<nlohmann::json>> m_read;
 };
 
-#include "Traits/BasicTypes.hpp"
+//#include "Traits/BasicTypes.h"
+//#include "Traits/ContainerTypes.hpp"
 #include "JsonOperation.hpp"
 

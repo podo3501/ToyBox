@@ -118,10 +118,10 @@ void JsonOperation::Process(const string& key, Origin& data) noexcept
     ProcessImpl(key, writeFunc, readFunc);
 }
 
-static double RoundToSixA(double value) noexcept
-{
-    return round(value * 1e6) / 1e6;
-}
+//static double RoundToSixA(double value) noexcept
+//{
+//    return round(value * 1e6) / 1e6;
+//}
 
 void JsonOperation::Process(const string & key, Vector2& data) noexcept
 {

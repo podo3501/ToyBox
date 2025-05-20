@@ -1,23 +1,23 @@
 #pragma once
 #include "../UINameGenerator.h"
 
-// Key 변환 헬퍼
-template<typename K>
-struct KeyConverter {
-	static string ToKey(const K& key) { return key; }
-	static K FromKey(const string& key) { return key; }
-};
-
-// 특수화: wstring 처리
-template<>
-struct KeyConverter<wstring> {
-	static string ToKey(const wstring& key);
-	static wstring FromKey(const string& key);
-};
-
-// 변환 함수 래퍼
-template<typename K> string ToKeyString(const K& key) { return KeyConverter<K>::ToKey(key); }
-template<typename K> K FromKeyString(const string& key) { return KeyConverter<K>::FromKey(key); }
+//// Key 변환 헬퍼
+//template<typename K>
+//struct KeyConverter {
+//	static string ToKey(const K& key) { return key; }
+//	static K FromKey(const string& key) { return key; }
+//};
+//
+//// 특수화: wstring 처리
+//template<>
+//struct KeyConverter<wstring> {
+//	static string ToKey(const wstring& key);
+//	static wstring FromKey(const string& key);
+//};
+//
+//// 변환 함수 래퍼
+//template<typename K> string ToKeyString(const K& key) { return KeyConverter<K>::ToKey(key); }
+//template<typename K> K FromKeyString(const string& key) { return KeyConverter<K>::FromKey(key); }
 
 //Json이 지원하는 기본 타입 
 template<Available T>
@@ -231,16 +231,8 @@ void JsonOperation::Process(const string& key, Property<T>& data)
 template<typename K, typename T>
 void JsonOperation::Process(const string& key, unordered_map<K, T>& datas) noexcept
 {
-	auto writeFunc = [this, &datas](auto& j) {
-		for (auto& [k, v] : datas)
-			j[ToKeyString(k)] = JsonTraits<T>::SerializeToJson(v);
-		};
-
-	auto readFunc = [this, &datas](const auto& j) {
-		datas.clear();
-		for (auto& [k, v] : j.items())
-			datas.emplace(FromKeyString<K>(k), JsonTraits<T>::DeserializeFromJson(v));
-		};
+	auto writeFunc = [&datas](auto& j) { j = JsonTraits<unordered_map<K, T>>::SerializeToJson(datas); };
+	auto readFunc = [&datas](const auto& j) { datas = JsonTraits<unordered_map<K, T>>::DeserializeFromJson(j); };
 
 	ProcessImpl(key, writeFunc, readFunc);
 }

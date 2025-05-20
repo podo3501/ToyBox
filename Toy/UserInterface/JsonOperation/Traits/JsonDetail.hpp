@@ -2,6 +2,24 @@
 
 namespace json_detail
 {
+	// Key 변환 헬퍼
+	template<typename K>
+	struct KeyConverter {
+		static string ToKey(const K& key) { return key; }
+		static K FromKey(const string& key) { return key; }
+	};
+
+	// 특수화: wstring 처리
+	template<>
+	struct KeyConverter<wstring> {
+		static string ToKey(const wstring& key);
+		static wstring FromKey(const string& key);
+	};
+
+	// 변환 함수 래퍼
+	template<typename K> string ToKeyString(const K& key) { return KeyConverter<K>::ToKey(key); }
+	template<typename K> K FromKeyString(const string& key) { return KeyConverter<K>::FromKey(key); }
+
 	template<typename T, typename J>
 	static void SafeRead(T& out, const J& value)
 	{

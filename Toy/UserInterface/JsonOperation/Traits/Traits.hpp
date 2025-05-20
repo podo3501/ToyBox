@@ -1,4 +1,5 @@
 #pragma once
+#include "../JsonOperation.h"
 
 template<typename T>
 struct JsonTraits
