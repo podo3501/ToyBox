@@ -142,8 +142,6 @@
         ]
     },
     "UINameGenerator": {
-        "RegionNames": {
-            "MainRegionEntry": null
-        }
+        "RegionNames": null
     }
 }

@@ -151,6 +151,13 @@ IsBasicType<T> || IsBasicContainer<T>;
 template<typename T>
 concept IsNotUIComponent = !std::is_same_v<T, UIComponent>;
 
+// SerializeIO 지원 여부 확인
+class JsonOperation;
+template<typename T>
+concept HasSerializeIO = requires(T t, JsonOperation & op) {
+	{ t.SerializeIO(op) };
+};
+
 class JsonOperation
 {
 public:
@@ -229,6 +236,11 @@ private:
 	void UpdateJson(UIComponent* data) noexcept;
 	void UpdateJson(UINameGenerator* data) noexcept;
 	unique_ptr<UIComponent> CreateComponentFromType(const string& typeName);
+
+	template<typename Container>
+	nlohmann::ordered_json SerializeMapContainer(Container& datas);
+	template<typename Container>
+	void DeserializeMapContainer(Container& datas, const nlohmann::ordered_json& j);
 
 	unique_ptr<JsonNavigator<nlohmann::ordered_json>> m_write;
 	unique_ptr<JsonNavigator<nlohmann::json>> m_read;

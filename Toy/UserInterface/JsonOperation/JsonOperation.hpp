@@ -1,6 +1,7 @@
 #pragma once
 #include "../UINameGenerator.h"
-
+#include "Traits/JsonDetail.hpp"
+#include "Traits/Traits.hpp"
 //// Key ∫Ø»Ø «Ô∆€
 //template<typename K>
 //struct KeyConverter {
@@ -228,11 +229,80 @@ void JsonOperation::Process(const string& key, Property<T>& data)
 	}
 }
 
+template<typename Container>
+nlohmann::ordered_json JsonOperation::SerializeMapContainer(Container& datas)
+{
+	nlohmann::ordered_json j;
+	using K = typename Container::key_type;
+	using T = typename Container::mapped_type;
+
+	for (auto& [k, v] : datas) 
+	{
+		if constexpr (HasSerializeIO<T>) 
+		{
+			JsonOperation jsOp{};
+			v.SerializeIO(jsOp);
+			j[json_detail::ToKeyString(k)] = jsOp.GetWrite();
+		}
+		else
+			j[json_detail::ToKeyString(k)] = JsonTraits<T>::SerializeToJson(v);
+	}
+	return j;
+}
+
+template<typename Container>
+void JsonOperation::DeserializeMapContainer(Container& datas, const nlohmann::ordered_json& j) 
+{
+	using K = typename Container::key_type;
+	using T = typename Container::mapped_type;
+
+	for (const auto& [k, v] : j.items()) 
+	{
+		if constexpr (HasSerializeIO<T>) 
+		{
+			T data{};
+			JsonOperation jsOp{ v };
+			data.SerializeIO(jsOp);
+			datas.emplace(json_detail::FromKeyString<K>(k), move(data));
+		}
+		else
+			datas = JsonTraits<Container>::DeserializeFromJson(v);
+	}
+}
+
 template<typename K, typename T>
 void JsonOperation::Process(const string& key, unordered_map<K, T>& datas) noexcept
 {
-	auto writeFunc = [&datas](auto& j) { j = JsonTraits<unordered_map<K, T>>::SerializeToJson(datas); };
-	auto readFunc = [&datas](const auto& j) { datas = JsonTraits<unordered_map<K, T>>::DeserializeFromJson(j); };
+	//nlohmann::ordered_json j;
+	//auto writeFunc = [&datas](auto& j) {
+	//	for (auto& [k, v] : datas) {
+	//		if constexpr (HasSerializeIO<T>) {
+	//			JsonOperation jsOp{};
+	//			v.SerializeIO(jsOp);
+	//			j[json_detail::ToKeyString(k)] = jsOp.GetWrite();
+	//		}
+	//		else
+	//			j[json_detail::ToKeyString(k)] = JsonTraits<T>::SerializeToJson(v);
+	//	}
+	//	return j;
+	//	};
+
+	//auto readFunc = [&datas](const auto& j) {
+	//	for (const auto& [k, v] : j.items()) {
+	//		if constexpr (HasSerializeIO<T>) {
+	//			T data{};
+	//			JsonOperation jsOp{ v };
+	//			data.SerializeIO(jsOp);
+	//			datas.emplace(json_detail::FromKeyString<K>(k), data);
+	//		}
+	//		else
+	//			datas = JsonTraits<unordered_map<K, T>>::DeserializeFromJson(v);
+	//	}};
+
+	//ProcessImpl(key, writeFunc, readFunc);
+
+	auto writeFunc = [this, &datas](auto&) { return SerializeMapContainer(datas); };
+	auto readFunc = [this, &datas](const auto& j) { DeserializeMapContainer(datas, j); };
 
 	ProcessImpl(key, writeFunc, readFunc);
 }

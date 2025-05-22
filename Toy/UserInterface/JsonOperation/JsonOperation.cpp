@@ -5,7 +5,7 @@
 #include "../UIComponent/UIType.h"
 #include "../UIComponent/UITransform.h"
 #include "../TextureResourceBinder/TextureResourceBinder.h"
-
+#include "Traits/BasicTypes.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -174,16 +174,20 @@ void JsonOperation::Process(const string& key, map<InteractState, string>& datas
 
 void JsonOperation::Process(const string& key, map<int, UITransform>& datas) noexcept 
 {
-    auto writeFunc = [this, &datas](auto& j) {
-        for (auto& [k, v] : datas)
-            j[to_string(k)] = JsonTraits<UITransform>::SerializeToJson(v);
-        };
+    //auto writeFunc = [this, &datas](auto& j) {
+    //    for (auto& [k, v] : datas)
+    //        j[to_string(k)] = JsonTraits<UITransform>::SerializeToJson(v);
+    //    };
 
-    auto readFunc = [this, &datas](const auto& j) {
-        datas.clear();
-        for (auto& [k, v] : j.items())
-            datas.emplace(stoi(k), JsonTraits<UITransform>::DeserializeFromJson(v));
-        };
+    //auto readFunc = [this, &datas](const auto& j) {
+    //    datas.clear();
+    //    for (auto& [k, v] : j.items())
+    //        datas.emplace(stoi(k), JsonTraits<UITransform>::DeserializeFromJson(v));
+    //    };
+
+    //ProcessImpl(key, writeFunc, readFunc);
+    auto writeFunc = [this, &datas](auto&) { return SerializeMapContainer(datas); };
+    auto readFunc = [this, &datas](const auto& j) { DeserializeMapContainer(datas, j); };
 
     ProcessImpl(key, writeFunc, readFunc);
 }

@@ -16,6 +16,12 @@ namespace json_detail
 		static wstring FromKey(const string& key);
 	};
 
+	template<>
+	struct KeyConverter<int> {
+		static string ToKey(const int& key);
+		static int FromKey(const string& key);
+	};
+
 	// 변환 함수 래퍼
 	template<typename K> string ToKeyString(const K& key) { return KeyConverter<K>::ToKey(key); }
 	template<typename K> K FromKeyString(const string& key) { return KeyConverter<K>::FromKey(key); }
