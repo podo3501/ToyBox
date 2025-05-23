@@ -1,6 +1,5 @@
 #pragma once
-#include "Traits.hpp"
-#include "JsonDetail.hpp"
+#include "Traits.h"
 
 template<typename K, typename T>
 struct JsonTraits<unordered_map<K, T>>

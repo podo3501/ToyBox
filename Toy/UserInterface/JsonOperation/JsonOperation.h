@@ -179,10 +179,10 @@ public:
 	void Process(const string& key, T& data) noexcept;
 	template<IsClass T>
 	void Process(const string& key, T& data) noexcept;
-	template<IsNotUIComponent T>
-	void Process(const string& key, unique_ptr<T>& data);
 	template<IsClassContainer T>
 	void Process(const string& key, T& data) noexcept;
+	template<IsNotUIComponent T>
+	void Process(const string& key, unique_ptr<T>& data);
 	template<typename T>
 	void Process(const string& key, vector<T>& datas);
 	template<typename T>
@@ -235,12 +235,12 @@ private:
 	void UpdateJson(const unique_ptr<UIComponent>& data) noexcept;
 	void UpdateJson(UIComponent* data) noexcept;
 	void UpdateJson(UINameGenerator* data) noexcept;
-	unique_ptr<UIComponent> CreateComponentFromType(const string& typeName);
+	unique_ptr<UIComponent> CreateComponentFromType(const string& typeName, const nlohmann::json& readJ);
 
 	template<typename Container>
-	nlohmann::ordered_json SerializeMapContainer(Container& datas);
+	void SerializeMapContainer(const Container& datas, nlohmann::ordered_json& j);
 	template<typename Container>
-	void DeserializeMapContainer(Container& datas, const nlohmann::ordered_json& j);
+	void DeserializeMapContainer(const nlohmann::ordered_json& j, Container& datas);
 
 	unique_ptr<JsonNavigator<nlohmann::ordered_json>> m_write;
 	unique_ptr<JsonNavigator<nlohmann::json>> m_read;

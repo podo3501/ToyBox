@@ -227,10 +227,9 @@
     <ClInclude Include="UserInterface\JsonOperation\JsonHelper.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp" />
-    <ClInclude Include="UserInterface\JsonOperation\Traits\BasicTypes.h" />
     <ClInclude Include="UserInterface\JsonOperation\Traits\ContainerTypes.hpp" />
     <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp" />
-    <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.hpp" />
+    <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureBinderHelper.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureFontInfo.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureInfo.h" />
@@ -287,7 +286,7 @@
     <ClCompile Include="UserInterface\JsonOperation\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation_impl.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\Traits\BasicTypes.cpp" />
+    <ClCompile Include="UserInterface\JsonOperation\Traits\BasicTraits.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetail.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureBinderHelper.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureFontInfo.cpp" />

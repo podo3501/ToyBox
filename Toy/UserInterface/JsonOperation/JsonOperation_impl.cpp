@@ -38,11 +38,12 @@ void JsonOperation::UpdateJson(UINameGenerator* data) noexcept
     m_write->GetCurrent().update(jsOp.GetWrite());
 }
 
-unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typeName)
+unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typeName, const nlohmann::json& readJ)
 {
     unique_ptr<UIComponent> comp = CreateComponent(typeName);
 
-    comp->SerializeIO(*this);
+    JsonOperation jsOp{ readJ };
+    comp->SerializeIO(jsOp);
     return comp;
 }
 
@@ -86,7 +87,7 @@ void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data)
     {
         ProcessReadKey(key, [&data, this](auto& currentJson) {
             string curType{ currentJson["Type"] };
-            data = move(CreateComponentFromType(curType));
+            data = move(CreateComponentFromType(curType, currentJson));
             });
     }
 }

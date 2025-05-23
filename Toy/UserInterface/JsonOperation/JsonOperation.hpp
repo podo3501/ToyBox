@@ -1,24 +1,6 @@
 #pragma once
 #include "../UINameGenerator.h"
-#include "Traits/JsonDetail.hpp"
-#include "Traits/Traits.hpp"
-//// Key 변환 헬퍼
-//template<typename K>
-//struct KeyConverter {
-//	static string ToKey(const K& key) { return key; }
-//	static K FromKey(const string& key) { return key; }
-//};
-//
-//// 특수화: wstring 처리
-//template<>
-//struct KeyConverter<wstring> {
-//	static string ToKey(const wstring& key);
-//	static wstring FromKey(const string& key);
-//};
-//
-//// 변환 함수 래퍼
-//template<typename K> string ToKeyString(const K& key) { return KeyConverter<K>::ToKey(key); }
-//template<typename K> K FromKeyString(const string& key) { return KeyConverter<K>::FromKey(key); }
+#include "Traits/Traits.h"
 
 //Json이 지원하는 기본 타입 
 template<Available T>
@@ -40,18 +22,32 @@ void JsonOperation::Process(const string& key, T& data) noexcept
 template<IsClass T>
 void JsonOperation::Process(const string& key, T& data) noexcept
 {
-	if (IsWrite())
-	{
-		m_write->GotoKey(key);
-		data.SerializeIO(*this);
-		m_write->GoBack();
-	}
-	else
-	{
-		m_read->GotoKey(key);
-		data.SerializeIO(*this);
-		m_read->GoBack();
-	}
+	auto writeFunc = [this, &data](nlohmann::ordered_json& j) {
+		JsonOperation jsOp{};
+		data.SerializeIO(jsOp);
+		j = jsOp.GetWrite(); };
+
+	auto readFunc = [this, &data](const nlohmann::json& j) { 
+		JsonOperation jsOp{ j };
+		data.SerializeIO(jsOp); };
+
+	ProcessImpl(key, writeFunc, readFunc);
+}
+
+//UIComponent overload 된 함수가 존재한다. 그래서 이건 Component가 아닌 unique_ptr에 관한 함수
+template<IsNotUIComponent T>
+void JsonOperation::Process(const string& key, unique_ptr<T>& data)
+{
+	auto writeFunc = [this, &data](nlohmann::ordered_json& j) {
+		JsonOperation jsOp{};
+		data->SerializeIO(jsOp);
+		j = jsOp.GetWrite(); };
+
+	auto readFunc = [this, &data](const nlohmann::json& j) {
+		JsonOperation jsOp{ j };
+		data->SerializeIO(jsOp); };
+
+	ProcessImpl(key, writeFunc, readFunc);
 }
 
 template<typename T>
@@ -66,60 +62,32 @@ unique_ptr<T> JsonOperation::CreateData(const nlohmann::json& readJ)
 	return comp;
 }
 
-//UIComponent overload 된 함수가 존재한다. 그래서 이건 Component가 아닌 unique_ptr에 관한 함수
-template<IsNotUIComponent T>
-void JsonOperation::Process(const string& key, unique_ptr<T>& data)
-{
-	if (IsWrite())
-	{
-		m_write->GotoKey(key);
-		data->SerializeIO(*this);
-		m_write->GoBack();
-	}
-	else
-	{
-		m_read->GotoKey(key);
-		data = CreateData<T>();
-		m_read->GoBack();
-	}
-}
-
 //배열 형식을 가지고 있기 때문에 push_back으로 값을 넣어야 한다.
 template <typename ProcessFunc>
 void JsonOperation::ProcessWriteKey(const string& key, ProcessFunc processFunc)
 {
-	m_write->GotoKey(key, true);
-	processFunc(m_write->GetCurrent());
-	m_write->GoBack();
+	nlohmann::ordered_json writeJ{};
+	processFunc(writeJ);
+	m_write->GetCurrent()[key] = writeJ;
 }
 
 template <typename ProcessFunc>
 void JsonOperation::ProcessReadKey(const string& key, ProcessFunc processFunc)
 {
-	const auto& j = m_read->GetCurrent();
-	if (!j.contains(key))
+	const auto& readJ = m_read->GetCurrent();
+	if (!readJ.contains(key))
 		return;
 
-	m_read->GotoKey(key);
-	processFunc(m_read->GetCurrent());
-	m_read->GoBack();
+	processFunc(readJ[key]);
 }
 
 template <typename WriteFunc, typename ReadFunc>
 void JsonOperation::ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc)
 {
-	if (IsWrite())
-	{
-		m_write->GotoKey(key);
-		writeFunc(m_write->GetCurrent());
-		m_write->GoBack();
-	}
-	else
-	{
-		m_read->GotoKey(key);
-		readFunc(m_read->GetCurrent());
-		m_read->GoBack();
-	}
+	if (IsWrite()) 
+		ProcessWriteKey(key, writeFunc);
+	else 
+		ProcessReadKey(key, readFunc);
 }
 
 template<IsClassContainer T>
@@ -230,28 +198,25 @@ void JsonOperation::Process(const string& key, Property<T>& data)
 }
 
 template<typename Container>
-nlohmann::ordered_json JsonOperation::SerializeMapContainer(Container& datas)
+void JsonOperation::SerializeMapContainer(const Container& datas, nlohmann::ordered_json& j)
 {
-	nlohmann::ordered_json j;
-	using K = typename Container::key_type;
 	using T = typename Container::mapped_type;
 
-	for (auto& [k, v] : datas) 
+	for (const auto& [k, v] : datas) 
 	{
 		if constexpr (HasSerializeIO<T>) 
 		{
 			JsonOperation jsOp{};
-			v.SerializeIO(jsOp);
+			const_cast<T&>(v).SerializeIO(jsOp);  //const를 제거한다. SerializeIO 함수는 입출력을 둘다 담당하기 때문에 const가 될수 없다.
 			j[json_detail::ToKeyString(k)] = jsOp.GetWrite();
 		}
 		else
 			j[json_detail::ToKeyString(k)] = JsonTraits<T>::SerializeToJson(v);
 	}
-	return j;
 }
 
 template<typename Container>
-void JsonOperation::DeserializeMapContainer(Container& datas, const nlohmann::ordered_json& j) 
+void JsonOperation::DeserializeMapContainer(const nlohmann::ordered_json& j, Container& datas)
 {
 	using K = typename Container::key_type;
 	using T = typename Container::mapped_type;
@@ -273,36 +238,8 @@ void JsonOperation::DeserializeMapContainer(Container& datas, const nlohmann::or
 template<typename K, typename T>
 void JsonOperation::Process(const string& key, unordered_map<K, T>& datas) noexcept
 {
-	//nlohmann::ordered_json j;
-	//auto writeFunc = [&datas](auto& j) {
-	//	for (auto& [k, v] : datas) {
-	//		if constexpr (HasSerializeIO<T>) {
-	//			JsonOperation jsOp{};
-	//			v.SerializeIO(jsOp);
-	//			j[json_detail::ToKeyString(k)] = jsOp.GetWrite();
-	//		}
-	//		else
-	//			j[json_detail::ToKeyString(k)] = JsonTraits<T>::SerializeToJson(v);
-	//	}
-	//	return j;
-	//	};
-
-	//auto readFunc = [&datas](const auto& j) {
-	//	for (const auto& [k, v] : j.items()) {
-	//		if constexpr (HasSerializeIO<T>) {
-	//			T data{};
-	//			JsonOperation jsOp{ v };
-	//			data.SerializeIO(jsOp);
-	//			datas.emplace(json_detail::FromKeyString<K>(k), data);
-	//		}
-	//		else
-	//			datas = JsonTraits<unordered_map<K, T>>::DeserializeFromJson(v);
-	//	}};
-
-	//ProcessImpl(key, writeFunc, readFunc);
-
-	auto writeFunc = [this, &datas](auto&) { return SerializeMapContainer(datas); };
-	auto readFunc = [this, &datas](const auto& j) { DeserializeMapContainer(datas, j); };
+	auto writeFunc = [this, &datas](nlohmann::ordered_json& j) { SerializeMapContainer(datas, j); };
+	auto readFunc = [this, &datas](const nlohmann::json& j) { DeserializeMapContainer(j, datas); };
 
 	ProcessImpl(key, writeFunc, readFunc);
 }

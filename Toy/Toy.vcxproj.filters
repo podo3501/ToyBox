@@ -217,10 +217,7 @@
     <ClInclude Include="UserInterface\UIRegistry.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\Traits\BasicTypes.h">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.hpp">
+    <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.h">
       <Filter>UserInterface\JsonOperation\Traits</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp">
@@ -378,7 +375,7 @@
     <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetail.cpp">
       <Filter>UserInterface\JsonOperation\Traits</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\Traits\BasicTypes.cpp">
+    <ClCompile Include="UserInterface\JsonOperation\Traits\BasicTraits.cpp">
       <Filter>UserInterface\JsonOperation\Traits</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "BasicTypes.h"
-
-/////////////////////////////////////////////////////////////////
+#include "Traits.h"
+#include "../../UIComponent/UIType.h"
+#include "../../../Utility.h"
 
 nlohmann::ordered_json JsonTraitsBase<XMINT2>::SerializeToJson(XMINT2& data) { return json_detail::SerializeXY(data); }
 XMINT2 JsonTraitsBase<XMINT2>::DeserializeFromJson(const nlohmann::json& dataJ)

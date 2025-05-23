@@ -47,7 +47,7 @@
                     "Region": "",
                     "StateFlag": 55,
                     "RenderSearch": 2,
-                    "Children": [],
+                    "Children": null,
                     "BindKey": "BackImage1",
                     "SourceIndex": 0
                 }
@@ -76,7 +76,7 @@
                     "Region": "",
                     "StateFlag": 55,
                     "RenderSearch": 2,
-                    "Children": [],
+                    "Children": null,
                     "BindKey": "BackImage1",
                     "SourceIndex": 0
                 }
@@ -105,7 +105,7 @@
                     "Region": "",
                     "StateFlag": 55,
                     "RenderSearch": 2,
-                    "Children": [],
+                    "Children": null,
                     "BindKey": "BackImage1",
                     "SourceIndex": 0
                 }
@@ -134,7 +134,7 @@
                     "Region": "",
                     "StateFlag": 55,
                     "RenderSearch": 2,
-                    "Children": [],
+                    "Children": null,
                     "BindKey": "BackImage1",
                     "SourceIndex": 0
                 }
@@ -142,6 +142,8 @@
         ]
     },
     "UINameGenerator": {
-        "RegionNames": null
+        "RegionNames": {
+            "MainRegionEntry": null
+        }
     }
 }
