@@ -12,8 +12,8 @@ using ordered_json = nlohmann::ordered_json;
 JsonOperation::~JsonOperation() = default;
 JsonOperation::JsonOperation()
 {
-    auto writeJson = std::make_unique<ordered_json>();
-    m_write = make_unique<JsonNavigator<ordered_json>>(move(writeJson));
+    auto writeJson = make_unique<ordered_json>();
+    m_write1 = make_unique<JsonNavigator<ordered_json>>(move(writeJson));
 }
 
 //JsonOperation::JsonOperation(const nlohmann::ordered_json& write)
@@ -25,13 +25,13 @@ JsonOperation::JsonOperation()
 JsonOperation::JsonOperation(const nlohmann::json& read)
 {
     auto readJson = make_unique<json>(read);
-    m_read = make_unique<JsonNavigator<json>>(move(readJson));
+    m_read1 = make_unique<JsonNavigator<json>>(move(readJson));
 }
 
 bool JsonOperation::IsWrite()
 {
     //읽는게 아니면 쓰는 것이다.
-    if (m_read == nullptr || m_read->IsEmpty())
+    if (m_read1 == nullptr || m_read1->IsEmpty())
         return true;
 
     return false;
@@ -59,8 +59,8 @@ bool JsonOperation::Write(const wstring& filename)
     ofstream file(GetResourceFullFilename(filename));
     if (!file.is_open())
         return false;
-
-    auto& json = m_write->GetRoot();
+    
+    auto& json = m_write1->GetRoot();
     file << json.dump(4);
     file.close();
 
@@ -76,7 +76,7 @@ bool JsonOperation::Read(const wstring& filename)
         return false;
 
     auto readJson = make_unique<json>(json::parse(file));
-    m_read = make_unique<JsonNavigator<json>>(move(readJson));
+    m_read1 = make_unique<JsonNavigator<json>>(move(readJson));
 
     return true;
 }

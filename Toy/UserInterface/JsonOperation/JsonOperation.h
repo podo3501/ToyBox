@@ -29,29 +29,29 @@ public:
 	explicit JsonNavigator(unique_ptr<T> root)
 		: root(move(root)), current(this->root.get()) {}
 
-	// 특정 키로 내려가기 (키가 없으면 생성)
-	bool GotoKey(const string& key, bool createArray = false)
-	{
-		if (!current || key.empty()) return false;
+	//// 특정 키로 내려가기 (키가 없으면 생성)
+	//bool GotoKey(const string& key, bool createArray = false)
+	//{
+	//	if (!current || key.empty()) return false;
 
-		if (!current->contains(key)) {
-			(*current)[key] = createArray ? T::array() : T();
-		}
+	//	if (!current->contains(key)) {
+	//		(*current)[key] = createArray ? T::array() : T();
+	//	}
 
-		parentStack.push(current);
-		current = &(*current)[key];
-		return true;
-	}
+	//	parentStack.push(current);
+	//	current = &(*current)[key];
+	//	return true;
+	//}
 
-	// 부모 객체로 올라가기
-	bool GoBack() {
-		if (!parentStack.empty()) {
-			current = parentStack.top();     // 부모 객체로 돌아가기
-			parentStack.pop();               // 스택에서 부모 객체 제거
-			return true;
-		}
-		return false;
-	}
+	//// 부모 객체로 올라가기
+	//bool GoBack() {
+	//	if (!parentStack.empty()) {
+	//		current = parentStack.top();     // 부모 객체로 돌아가기
+	//		parentStack.pop();               // 스택에서 부모 객체 제거
+	//		return true;
+	//	}
+	//	return false;
+	//}
 
 	// 현재 객체 값 가져오기
 	T& GetCurrent() const noexcept {
@@ -59,10 +59,10 @@ public:
 	}
 
 	//json을 읽을때 특정 json으로 읽어야 할 때가 있다. 그때 살짝 자리바꿈 한 다음에 goBack으로 돌려놓는다.
-	void SetCurrent(T* _current)
-	{
-		current = _current;
-	}
+	//void SetCurrent(T* _current)
+	//{
+	//	current = _current;
+	//}
 
 	bool IsEmpty()
 	{
@@ -89,7 +89,7 @@ public:
 private:
 	unique_ptr<T> root;         // 루트 객체
 	T* current;                      // 현재 탐색 중인 객체
-	std::stack<T*> parentStack;      // 부모 객체 추적을 위한 스택
+	//std::stack<T*> parentStack;      // 부모 객체 추적을 위한 스택
 };
 
 // STL 컨테이너인지 확인하는 메타함수
@@ -167,8 +167,8 @@ public:
 	virtual ~JsonOperation();
 
 	//?!? traits 패턴때문에 여기로 올리긴 했지만, 이러면 다른 클래스가 여기를 쓸 수 있기 때문에 정리할때 private로 옮겨야 한다.
-	inline nlohmann::ordered_json& GetWrite() noexcept { return m_write->GetCurrent(); }
-	inline nlohmann::json& GetRead() const noexcept { return m_read->GetCurrent(); }
+	inline nlohmann::ordered_json& GetWrite() noexcept { return m_write1->GetCurrent(); }
+	inline nlohmann::json& GetRead() const noexcept { return m_read1->GetCurrent(); }
 
 	bool IsWrite();
 
@@ -210,7 +210,7 @@ public:
 	void Process(const string& key, map<int, UITransform>& datas) noexcept;
 	void Process(const string& key, map<InteractState, string>& datas) noexcept;
 	void Process(const string& key, deque<wstring>& data) noexcept;
-	void Write(const string& key, UIComponent* data);
+	void Write(const string& key, UIComponent* data); //?!? 밑에 함수와 이 함수는 template로 합쳐질 예정.
 	void Write(const string& key, UINameGenerator* data);
 
 private: //이 함수는 JsonOperation_
@@ -232,9 +232,6 @@ private:
 	template <typename WriteFunc, typename ReadFunc>
 	void ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc);
 
-	void UpdateJson(const unique_ptr<UIComponent>& data) noexcept;
-	void UpdateJson(UIComponent* data) noexcept;
-	void UpdateJson(UINameGenerator* data) noexcept;
 	unique_ptr<UIComponent> CreateComponentFromType(const string& typeName, const nlohmann::json& readJ);
 
 	template<typename Container>
@@ -242,8 +239,12 @@ private:
 	template<typename Container>
 	void DeserializeMapContainer(const nlohmann::ordered_json& j, Container& datas);
 
-	unique_ptr<JsonNavigator<nlohmann::ordered_json>> m_write;
-	unique_ptr<JsonNavigator<nlohmann::json>> m_read;
+	unique_ptr<JsonNavigator<nlohmann::ordered_json>> m_write1;
+	unique_ptr<JsonNavigator<nlohmann::json>> m_read1;
+
+	nlohmann::ordered_json m_write;
+	nlohmann::json m_read;
+	
 };
 
 //#include "Traits/BasicTypes.h"

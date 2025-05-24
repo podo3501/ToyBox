@@ -68,13 +68,13 @@ void JsonOperation::ProcessWriteKey(const string& key, ProcessFunc processFunc)
 {
 	nlohmann::ordered_json writeJ{};
 	processFunc(writeJ);
-	m_write->GetCurrent()[key] = writeJ;
+	GetWrite()[key] = writeJ;
 }
 
 template <typename ProcessFunc>
 void JsonOperation::ProcessReadKey(const string& key, ProcessFunc processFunc)
 {
-	const auto& readJ = m_read->GetCurrent();
+	const auto& readJ = GetRead();
 	if (!readJ.contains(key))
 		return;
 

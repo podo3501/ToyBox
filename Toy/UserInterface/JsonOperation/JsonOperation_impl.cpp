@@ -5,37 +5,14 @@
 #include "../UINameGenerator.h"
 #include "Utility.h"
 
-//string KeyConverter<wstring>::ToKey(const wstring& key) { return WStringToString(key); }
-//wstring KeyConverter<wstring>::FromKey(const string& key) { return StringToWString(key); }
-
-void JsonOperation::UpdateJson(const unique_ptr<UIComponent>& data) noexcept
+template<typename T> //?!? SerializeIO가 있는지확인하는 컨셉으로 바꿔야 함.
+static void UpdateJson(T* data, nlohmann::ordered_json& writeJ) noexcept
 {
     JsonOperation jsOp{};
     data->SerializeIO(jsOp);
-    //static_cast를 해서 json으로 할당하면 json내의 타입값이 바뀌면서 새로운 타입이 되어 이전 정보 (여기서는 position)값이 사라진다. 그래서 update를 해서 병합하는 것.
-    if (jsOp.GetWrite().empty())
-        return;
-    m_write->GetCurrent().update(jsOp.GetWrite());
-}
+    const auto& curJson = jsOp.GetWrite();
 
-void JsonOperation::UpdateJson(UIComponent* data) noexcept
-{
-    JsonOperation jsOp{};
-    data->SerializeIO(jsOp);
-    //static_cast를 해서 json으로 할당하면 json내의 타입값이 바뀌면서 새로운 타입이 되어 이전 정보 (여기서는 position)값이 사라진다. 그래서 update를 해서 병합하는 것.
-    if (jsOp.GetWrite().empty())
-        return;
-    m_write->GetCurrent().update(jsOp.GetWrite());
-}
-
-void JsonOperation::UpdateJson(UINameGenerator* data) noexcept
-{
-    JsonOperation jsOp{};
-    data->SerializeIO(jsOp);
-    //static_cast를 해서 json으로 할당하면 json내의 타입값이 바뀌면서 새로운 타입이 되어 이전 정보 (여기서는 position)값이 사라진다. 그래서 update를 해서 병합하는 것.
-    if (jsOp.GetWrite().empty())
-        return;
-    m_write->GetCurrent().update(jsOp.GetWrite());
+    writeJ.update(curJson);
 }
 
 unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typeName, const nlohmann::json& readJ)
@@ -50,42 +27,29 @@ unique_ptr<UIComponent> JsonOperation::CreateComponentFromType(const string& typ
 //?!? Read를 만들고 void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data) 얘를 지우자
 void JsonOperation::Write(const string& key, UIComponent* data)
 {
-    if (data == nullptr)
-        return;
+    if (data == nullptr) return;
 
-    m_write->GotoKey(key);
-    const string& type = EnumToString<ComponentID>(data->GetTypeID());
-    Process("Type", const_cast<string&>(type));
-    UpdateJson(data);
-    m_write->GoBack();
+    ProcessWriteKey(key, [&data](nlohmann::ordered_json& writeJ) {
+        writeJ["Type"] = EnumToString<ComponentID>(data->GetTypeID());
+        UpdateJson(data, writeJ); });
 }
 
 void JsonOperation::Write(const string& key, UINameGenerator* data)
 {
-    if (data == nullptr)
-        return;
+    if (data == nullptr) return;
 
-    m_write->GotoKey(key);
-    UpdateJson(data);
-    m_write->GoBack();
+    ProcessWriteKey(key, [&data](nlohmann::ordered_json& writeJ) {
+        UpdateJson(data, writeJ); });
 }
 
 void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data)
 {
     if (IsWrite())
-    {
-        if (data == nullptr)
-            return;
-
-        m_write->GotoKey(key);
-        const string& type = EnumToString<ComponentID>(data->GetTypeID());
-        Process("Type", const_cast<string&>(type));
-        UpdateJson(data);
-        m_write->GoBack();
-    }
+        Write(key, data.get());
     else
     {
-        ProcessReadKey(key, [&data, this](auto& currentJson) {
+        //Read(key, data.get()); //?!? 이런 함수가 만들어져야 한다.
+        ProcessReadKey(key, [this, &data](auto& currentJson) {
             string curType{ currentJson["Type"] };
             data = move(CreateComponentFromType(curType, currentJson));
             });
