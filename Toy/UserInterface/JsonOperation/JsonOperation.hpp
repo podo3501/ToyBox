@@ -1,6 +1,6 @@
 #pragma once
 #include "../UINameGenerator.h"
-#include "Traits/Traits.h"
+#include "JsonSerializationHelper.hpp"
 
 //Json이 지원하는 기본 타입 
 template<Available T>
@@ -22,14 +22,8 @@ void JsonOperation::Process(const string& key, T& data) noexcept
 template<IsClass T>
 void JsonOperation::Process(const string& key, T& data) noexcept
 {
-	auto writeFunc = [this, &data](nlohmann::ordered_json& j) {
-		JsonOperation jsOp{};
-		data.SerializeIO(jsOp);
-		j = jsOp.GetWrite(); };
-
-	auto readFunc = [this, &data](const nlohmann::json& j) { 
-		JsonOperation jsOp{ j };
-		data.SerializeIO(jsOp); };
+	auto writeFunc = [this, &data](nlohmann::ordered_json& j) { j = SerializeClassIO(data); };
+	auto readFunc = [this, &data](const nlohmann::json& j) { data = DeserializeClassIO<T>(j); };
 
 	ProcessImpl(key, writeFunc, readFunc);
 }
@@ -38,14 +32,8 @@ void JsonOperation::Process(const string& key, T& data) noexcept
 template<IsNotUIComponent T>
 void JsonOperation::Process(const string& key, unique_ptr<T>& data)
 {
-	auto writeFunc = [this, &data](nlohmann::ordered_json& j) {
-		JsonOperation jsOp{};
-		data->SerializeIO(jsOp);
-		j = jsOp.GetWrite(); };
-
-	auto readFunc = [this, &data](const nlohmann::json& j) {
-		JsonOperation jsOp{ j };
-		data->SerializeIO(jsOp); };
+	auto writeFunc = [this, &data](nlohmann::ordered_json& j) { j = SerializeClassIO(*data); };
+	auto readFunc = [this, &data](const nlohmann::json& j) { DeserializeClassIO(j, data); };
 
 	ProcessImpl(key, writeFunc, readFunc);
 }
@@ -198,45 +186,7 @@ void JsonOperation::Process(const string& key, Property<T>& data)
 }
 
 template<typename Container>
-void JsonOperation::SerializeMapContainer(const Container& datas, nlohmann::ordered_json& j)
-{
-	using T = typename Container::mapped_type;
-
-	for (const auto& [k, v] : datas) 
-	{
-		if constexpr (HasSerializeIO<T>) 
-		{
-			JsonOperation jsOp{};
-			const_cast<T&>(v).SerializeIO(jsOp);  //const를 제거한다. SerializeIO 함수는 입출력을 둘다 담당하기 때문에 const가 될수 없다.
-			j[json_detail::ToKeyString(k)] = jsOp.GetWrite();
-		}
-		else
-			j[json_detail::ToKeyString(k)] = JsonTraits<T>::SerializeToJson(v);
-	}
-}
-
-template<typename Container>
-void JsonOperation::DeserializeMapContainer(const nlohmann::ordered_json& j, Container& datas)
-{
-	using K = typename Container::key_type;
-	using T = typename Container::mapped_type;
-
-	for (const auto& [k, v] : j.items()) 
-	{
-		if constexpr (HasSerializeIO<T>) 
-		{
-			T data{};
-			JsonOperation jsOp{ v };
-			data.SerializeIO(jsOp);
-			datas.emplace(json_detail::FromKeyString<K>(k), move(data));
-		}
-		else
-			datas = JsonTraits<Container>::DeserializeFromJson(v);
-	}
-}
-
-template<typename K, typename T>
-void JsonOperation::Process(const string& key, unordered_map<K, T>& datas) noexcept
+void JsonOperation::Process(const string& key, Container& datas) noexcept
 {
 	auto writeFunc = [this, &datas](nlohmann::ordered_json& j) { SerializeMapContainer(datas, j); };
 	auto readFunc = [this, &datas](const nlohmann::json& j) { DeserializeMapContainer(j, datas); };

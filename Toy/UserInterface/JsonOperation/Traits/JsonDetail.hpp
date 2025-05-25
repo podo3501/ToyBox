@@ -1,5 +1,6 @@
 #pragma once
 
+enum class InteractState;
 namespace json_detail
 {
 	// Key 변환 헬퍼
@@ -20,6 +21,12 @@ namespace json_detail
 	struct KeyConverter<int> {
 		static string ToKey(const int& key);
 		static int FromKey(const string& key);
+	};
+
+	template<>
+	struct KeyConverter<InteractState> {
+		static string ToKey(InteractState state);
+		static InteractState FromKey(const string& key);
 	};
 
 	// 변환 함수 래퍼

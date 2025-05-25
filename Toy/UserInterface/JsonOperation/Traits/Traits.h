@@ -4,7 +4,7 @@
 template<typename T>
 struct JsonTraitsBase
 {
-	static nlohmann::ordered_json SerializeToJson(T& data);
+	static nlohmann::ordered_json SerializeToJson(const T& data);
 	static T DeserializeFromJson(const nlohmann::json& dataJ);
 };
 

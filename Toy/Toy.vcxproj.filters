@@ -226,6 +226,9 @@
     <ClInclude Include="UserInterface\JsonOperation\Traits\ContainerTypes.hpp">
       <Filter>UserInterface\JsonOperation\Traits</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\JsonOperation\JsonSerializationHelper.hpp">
+      <Filter>UserInterface\JsonOperation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
