@@ -114,12 +114,8 @@ public:
 	void Process(const string& key, T& data) noexcept;
 	template<IsNotUIComponent T>
 	void Process(const string& key, unique_ptr<T>& data);
-	template<typename T>
-	void Process(const string& key, vector<T>& datas);
-	template<typename T>
-	void Process(const string& key, vector<unique_ptr<T>>& data);
-	template<typename T>
-	void Process(const string& key, Property<T>& data);
+	//template<typename T>
+	//void Process(const string& key, vector<T>& datas);
 	template<typename Container>
 	void Process(const string& key, Container& datas) noexcept;
 	/*template<typename T>
@@ -151,8 +147,6 @@ private: //이 함수는 JsonOperation_
 	//template<> void DeserializeFromJson<XMUINT2>(const nlohmann::json& j, XMUINT2& data);
 
 private:
-	template<typename T>
-	unique_ptr<T> CreateData(const nlohmann::json& readJ = nullptr);
 	template <typename ProcessFunc>
 	void ProcessWriteKey(const string& key, ProcessFunc processFunc);
 	template <typename ProcessFunc>
