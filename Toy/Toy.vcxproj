@@ -224,6 +224,7 @@
     <ClInclude Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.h" />
     <ClInclude Include="UserInterface\Command\UICommandList\UICommandList.h" />
     <ClInclude Include="UserInterface\Command\UICommandList\UICommandRegistry.h" />
+    <ClInclude Include="UserInterface\JsonOperation\JsonConcepts.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonHelper.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp" />
@@ -286,8 +287,8 @@
     <ClCompile Include="UserInterface\Command\UICommandList\UICommandRegistry.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\JsonOperation_impl.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\Traits\BasicTraits.cpp" />
+    <ClCompile Include="UserInterface\JsonOperation\JsonSerializationHelper.cpp" />
+    <ClCompile Include="UserInterface\JsonOperation\Traits\Traits.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetail.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureBinderHelper.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureFontInfo.cpp" />

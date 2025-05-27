@@ -229,6 +229,9 @@
     <ClInclude Include="UserInterface\JsonOperation\JsonSerializationHelper.hpp">
       <Filter>UserInterface\JsonOperation</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\JsonOperation\JsonConcepts.h">
+      <Filter>UserInterface\JsonOperation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -306,9 +309,6 @@
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp">
       <Filter>UserInterface\JsonOperation</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\JsonOperation_impl.cpp">
-      <Filter>UserInterface\JsonOperation</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\Command\UICommandList\UICommandList.cpp">
       <Filter>UserInterface\Command\UICommandList</Filter>
     </ClCompile>
@@ -378,8 +378,11 @@
     <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetail.cpp">
       <Filter>UserInterface\JsonOperation\Traits</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\Traits\BasicTraits.cpp">
+    <ClCompile Include="UserInterface\JsonOperation\Traits\Traits.cpp">
       <Filter>UserInterface\JsonOperation\Traits</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\JsonOperation\JsonSerializationHelper.cpp">
+      <Filter>UserInterface\JsonOperation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,8 +4,6 @@
 #include "../Toy/Utility.h"
 #include "FileTab.h"
 
-using namespace Tool;
-
 RecentFiles::RecentFiles()
 {
     JsonFile::Read(RecentFilename, *this);

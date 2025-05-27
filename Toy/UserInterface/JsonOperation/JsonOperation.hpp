@@ -1,33 +1,22 @@
 #pragma once
-#include "../UINameGenerator.h"
 #include "JsonSerializationHelper.hpp"
+#include  "JsonConcepts.h"
 
-//Json이 지원하는 기본 타입 
-template<Available T>
+//JsonOperation을 사용해야 하는 타입은 여기서 분기해 준다. 그렇지 않으면 JsonTraits에서 분기
+template<typename T>
 void JsonOperation::Process(const string& key, T& data) noexcept
 {
-	auto writeFunc = [this, &data](nlohmann::ordered_json& j) { j = data; };
-	auto readFunc = [this, &data](const nlohmann::json& j) { data = j; };
+	auto writeFunc = [this, &data](nlohmann::ordered_json& j) {
+		if constexpr (HasSerializeIO<T>) SerializeClassIO(data, j); //SerializeIO 가 있는 클래스. unique_ptr도 포함해서.
+		else if constexpr (SequenceLike<T>) SerializeSeqContainer(data, j); //시퀀스 컨테이너일때 처리
+		else if constexpr (MapLike<T>) SerializeMapContainer(data, j); //Map 컨테이너일때 처리
+		else j = JsonTraits<T>::SerializeToJson(data); }; //일반적인 데이터 형식일때 처리
 
-	ProcessImpl(key, writeFunc, readFunc);
-}
-
-//기본 타입이 아니라 클래스 타입일 경우
-template<IsClass T>
-void JsonOperation::Process(const string& key, T& data) noexcept
-{
-	auto writeFunc = [this, &data](nlohmann::ordered_json& j) { j = SerializeClassIO(data); };
-	auto readFunc = [this, &data](const nlohmann::json& j) { data = DeserializeClassIO<T>(j); };
-
-	ProcessImpl(key, writeFunc, readFunc);
-}
-
-//UIComponent overload 된 함수가 존재한다. 그래서 이건 Component가 아닌 unique_ptr에 관한 함수
-template<IsNotUIComponent T>
-void JsonOperation::Process(const string& key, unique_ptr<T>& data)
-{
-	auto writeFunc = [this, &data](nlohmann::ordered_json& j) { j = SerializeClassIO(*data); };
-	auto readFunc = [this, &data](const nlohmann::json& j) { DeserializeClassIO(j, data); };
+	auto readFunc = [this, &data](const nlohmann::json& j) {
+		if constexpr (HasSerializeIO<T>) DeserializeClassIO(j, data);
+		else if constexpr (SequenceLike<T>) DeserializeSeqContainer(j, data);
+		else if constexpr (MapLike<T>) DeserializeMapContainer(j, data);
+		else data = JsonTraits<T>::DeserializeFromJson(j); };
 
 	ProcessImpl(key, writeFunc, readFunc);
 }
@@ -59,22 +48,4 @@ void JsonOperation::ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFu
 		ProcessWriteKey(key, writeFunc);
 	else 
 		ProcessReadKey(key, readFunc);
-}
-
-template<IsClassContainer T>
-void JsonOperation::Process(const string& key, T& datas) noexcept
-{
-	auto writeFunc = [this, &datas](nlohmann::ordered_json& j) { SerializeSeqContainer(datas, j); };
-	auto readFunc = [this, &datas](const nlohmann::json& j) { DeserializeSeqContainer(j, datas); };
-
-	ProcessImpl(key, writeFunc, readFunc);
-}
-
-template<typename Container>
-void JsonOperation::Process(const string& key, Container& datas) noexcept
-{
-	auto writeFunc = [this, &datas](nlohmann::ordered_json& j) { SerializeMapContainer(datas, j); };
-	auto readFunc = [this, &datas](const nlohmann::json& j) { DeserializeMapContainer(j, datas); };
-
-	ProcessImpl(key, writeFunc, readFunc);
 }

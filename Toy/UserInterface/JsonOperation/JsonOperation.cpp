@@ -2,9 +2,8 @@
 #include "JsonOperation.h"
 #include "Config.h"
 #include "Utility.h"
-#include "../UIComponent/UIType.h"
-#include "../UIComponent/UITransform.h"
-#include "../TextureResourceBinder/TextureResourceBinder.h"
+#include "../UIComponent/UIComponent.h"
+#include "../UINameGenerator.h"
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -59,72 +58,31 @@ bool JsonOperation::Read(const wstring& filename)
     return true;
 }
 
-void JsonOperation::Process(const string& key, XMINT2& data) noexcept
+template<typename T> //?!? SerializeIO가 있는지확인하는 컨셉으로 바꿔야 함.
+static void UpdateJson(T* data, nlohmann::ordered_json& writeJ) noexcept
 {
-    auto writeFunc = [&data](auto& j) { j = JsonTraits<XMINT2>::SerializeToJson(data); };
-    auto readFunc = [&data](const auto& j) { data = JsonTraits<XMINT2>::DeserializeFromJson(j); };
+    JsonOperation jsOp{};
+    data->SerializeIO(jsOp);
+    const auto& curJson = jsOp.GetWrite();
 
-    ProcessImpl(key, writeFunc, readFunc);
+    writeJ.update(curJson);
 }
 
-void JsonOperation::Process(const string& key, XMUINT2& data) noexcept
+//?!? Read를 만들고 void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data) 얘를 지우자
+void JsonOperation::Write(const string& key, UIComponent* data)
 {
-    auto writeFunc = [&data](auto& j) { j = JsonTraits<XMUINT2>::SerializeToJson(data); };
-    auto readFunc = [&data](const auto& j) { data = JsonTraits<XMUINT2>::DeserializeFromJson(j); };
+    if (data == nullptr) return;
 
-    ProcessImpl(key, writeFunc, readFunc);
+    ProcessWriteKey(key, [&data](nlohmann::ordered_json& writeJ) {
+        writeJ["Type"] = EnumToString<ComponentID>(data->GetTypeID());
+        UpdateJson(data, writeJ); });
+    //Process(key, data); //?!? 이런식으로 되어야 겠지?
 }
 
-void JsonOperation::Process(const string& key, Rectangle& data) noexcept
+void JsonOperation::Write(const string& key, UINameGenerator* data)
 {
-    auto writeFunc = [&data](auto& j) { j = JsonTraits<Rectangle>::SerializeToJson(data); };
-    auto readFunc = [&data](const auto& j) { data = JsonTraits<Rectangle>::DeserializeFromJson(j); };
+    if (data == nullptr) return;
 
-    ProcessImpl(key, writeFunc, readFunc);
-}
-
-void JsonOperation::Process(const string& key, Origin& data) noexcept
-{
-    auto writeFunc = [&data](auto& j) { j = JsonTraits<Origin>::SerializeToJson(data); };
-    auto readFunc = [&data](const auto& j) { data = JsonTraits<Origin>::DeserializeFromJson(j); };
-
-    ProcessImpl(key, writeFunc, readFunc);
-}
-
-void JsonOperation::Process(const string & key, Vector2& data) noexcept
-{
-    auto writeFunc = [&data](auto& j) { j = JsonTraits<Vector2>::SerializeToJson(data); };
-    auto readFunc = [&data](const auto& j) { data = JsonTraits<Vector2>::DeserializeFromJson(j); };
-
-    ProcessImpl(key, writeFunc, readFunc);
-}
-
-void JsonOperation::Process(const string& key, wstring& data) noexcept
-{
-    auto writeFunc = [&data](auto& j) { j = JsonTraits<wstring>::SerializeToJson(data); };
-    auto readFunc = [&data](const auto& j) { data = JsonTraits<wstring>::DeserializeFromJson(j); };
-
-    ProcessImpl(key, writeFunc, readFunc);
-}
-
-void JsonOperation::Process(const string& key, deque<wstring>& data) noexcept
-{
-    if (IsWrite())
-    {
-        if (data.empty())
-            return;
-
-        ProcessWriteKey(key, [&data](auto& currentJson) {
-            for (auto& wstr : data)
-                currentJson.push_back(WStringToString(wstr));
-            });
-    }
-    else
-    {
-        data.clear();
-        ProcessReadKey(key, [&data, this](const auto& currentJson) {
-            for (const auto& item : currentJson)
-                data.emplace_back(StringToWString(item));
-            });
-    }
+    ProcessWriteKey(key, [&data](nlohmann::ordered_json& writeJ) {
+        UpdateJson(data, writeJ); });
 }

@@ -1,13 +1,32 @@
 #pragma once
 #include "Traits/Traits.h"
+#include "JsonConcepts.h"
+
+class UIComponent;
 
 template<typename T>
-nlohmann::ordered_json SerializeClassIO(T& data)
+void SerializeClassIO_Internal(T& data, nlohmann::ordered_json& j)
 {
 	JsonOperation jsOp{};
 	data.SerializeIO(jsOp);
-	return jsOp.GetWrite();
+	j = jsOp.GetWrite();
 }
+
+template<typename T>
+void SerializeClassIO(T& data, nlohmann::ordered_json& j)
+{
+	SerializeClassIO_Internal(data, j);
+}
+
+template<typename T>
+void SerializeClassIO(unique_ptr<T>& data, nlohmann::ordered_json& j)
+{
+	SerializeClassIO_Internal(*data, j);
+}
+
+void SerializeClassIO(unique_ptr<UIComponent>& data, nlohmann::ordered_json& j);
+
+///////////////////////////////////////////////////////
 
 template<typename T>
 void DeserializeClassIO_Internal(const nlohmann::json& j, T& data)
@@ -17,11 +36,9 @@ void DeserializeClassIO_Internal(const nlohmann::json& j, T& data)
 }
 
 template<typename T>
-T DeserializeClassIO(const nlohmann::json& j)
+void DeserializeClassIO(const nlohmann::json& j, T& data)
 {
-	T data{};
 	DeserializeClassIO_Internal(j, data);
-	return data;
 }
 
 template<typename T>
@@ -30,11 +47,17 @@ void DeserializeClassIO(const nlohmann::json& j, unique_ptr<T>& data)
 	DeserializeClassIO_Internal(j, *data);
 }
 
+void DeserializeClassIO(const nlohmann::json& j, unique_ptr<UIComponent>& data);
+
 template<typename T>
 nlohmann::ordered_json SerializeByType(T& v)
 {
 	if constexpr (HasSerializeIO<T>)
-		return SerializeClassIO(v);
+	{
+		nlohmann::ordered_json j{};
+		SerializeClassIO(v, j);
+		return j;
+	}
 	else
 		return JsonTraits<T>::SerializeToJson(v);
 }
@@ -43,7 +66,11 @@ template<typename T>
 T DeserializeByType(const nlohmann::json& v)
 {
 	if constexpr (HasSerializeIO<T>)
-		return DeserializeClassIO<T>(v);
+	{
+		T data{};
+		DeserializeClassIO(v, data);
+		return data;
+	}
 	else
 		return JsonTraits<T>::DeserializeFromJson(v);
 }
