@@ -229,7 +229,6 @@
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp" />
     <ClInclude Include="UserInterface\JsonOperation\JsonSerializationHelper.hpp" />
-    <ClInclude Include="UserInterface\JsonOperation\Traits\ContainerTypes.hpp" />
     <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp" />
     <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureBinderHelper.h" />
@@ -269,7 +268,7 @@
     <ClInclude Include="UserInterface\UIComponent\UIType.h" />
     <ClInclude Include="UserInterface\UIComponent\UIUtility.h" />
     <ClInclude Include="UserInterface\UINameGenerator.h" />
-    <ClInclude Include="UserInterface\UIRegistry.h" />
+    <ClInclude Include="UserInterface\UIModule.h" />
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
@@ -327,7 +326,7 @@
     <ClCompile Include="UserInterface\UIComponent\UIType.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIUtility.cpp" />
     <ClCompile Include="UserInterface\UINameGenerator.cpp" />
-    <ClCompile Include="UserInterface\UIRegistry.cpp" />
+    <ClCompile Include="UserInterface\UIModule.cpp" />
     <ClCompile Include="WindowProcedure.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="GameMainLoop.cpp" />

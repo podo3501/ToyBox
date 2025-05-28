@@ -4,6 +4,12 @@
 #include "Utility.h"
 #include "JsonOperation/JsonOperation.h"
 
+bool AutoNamer::operator==(const AutoNamer& o) const noexcept
+{
+    ReturnIfFalse(tie(m_nextID, m_recycled) == tie(o.m_nextID, o.m_recycled));
+    return true;
+}
+
 string AutoNamer::Generate() noexcept
 {
     int id;
@@ -25,7 +31,19 @@ void AutoNamer::Recycle(int id) noexcept
     m_recycled.insert(id);
 }
 
+void AutoNamer::SerializeIO(JsonOperation& operation)
+{
+    operation.Process("Namers", m_nextID);
+    operation.Process("Recycled", m_recycled);
+}
+
 ////////////////////////////////////////////////////////////////
+
+bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) const noexcept
+{
+    ReturnIfFalse(ranges::equal(m_namers, other.m_namers));
+    return true;
+}
 
 string ComponentNameGenerator::Create(ComponentID componentID) noexcept
 {
@@ -62,12 +80,16 @@ bool ComponentNameGenerator::Remove(const string& name) noexcept
 
 void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
 {
-    //operation.Process("Namers", m_namers);
-
-    if (operation.IsWrite()) return;
+    operation.Process("Namers", m_namers);
 }
 
 ////////////////////////////////////////////////////////////////
+
+bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
+{
+    ReturnIfFalse(ranges::equal(m_regionNames, other.m_regionNames));
+    return true;
+}
 
 string UINameGenerator::MakeNameOf(const string& region, ComponentID componentID) noexcept
 {
@@ -85,6 +107,4 @@ bool UINameGenerator::RemoveNameOf(const string& region, const string& name) noe
 void UINameGenerator::SerializeIO(JsonOperation& operation)
 {
     operation.Process("RegionNames", m_regionNames);
-
-    if (operation.IsWrite()) return;
 }

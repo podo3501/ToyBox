@@ -214,16 +214,13 @@
     <ClInclude Include="UserInterface\UINameGenerator.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIRegistry.h">
+    <ClInclude Include="UserInterface\UIModule.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.h">
       <Filter>UserInterface\JsonOperation\Traits</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\Traits\ContainerTypes.hpp">
       <Filter>UserInterface\JsonOperation\Traits</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\JsonOperation\JsonSerializationHelper.hpp">
@@ -372,7 +369,7 @@
     <ClCompile Include="UserInterface\UINameGenerator.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIRegistry.cpp">
+    <ClCompile Include="UserInterface\UIModule.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetail.cpp">

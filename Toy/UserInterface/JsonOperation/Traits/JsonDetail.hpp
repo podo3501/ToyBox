@@ -1,35 +1,32 @@
 #pragma once
 
+//키 변환을 간단하게 선언하는 Define 코드. 키가 템플릿 특수화로 돼 있어서 똑같은 선언을 계속 해야 하기 때문.
+#ifndef DECLARE_KEY_CONVERTER
+#define DECLARE_KEY_CONVERTER(Type)                 \
+	template<>                                         \
+	struct KeyConverter<Type> {                        \
+		static string ToKey(const Type&);     \
+		static Type FromKey(const string&);   \
+	};
+#endif //DECLARE_KEY_CONVERTER
+
 enum class InteractState;
+enum class ComponentID;
 namespace json_detail
 {
-	// Key 변환 헬퍼
+	//Key 변환 헬퍼
 	template<typename K>
 	struct KeyConverter {
 		static string ToKey(const K& key) { return key; }
 		static K FromKey(const string& key) { return key; }
 	};
 
-	// 특수화: wstring 처리
-	template<>
-	struct KeyConverter<wstring> {
-		static string ToKey(const wstring& key);
-		static wstring FromKey(const string& key);
-	};
+	//Key 특수화
+	DECLARE_KEY_CONVERTER(int)
+	DECLARE_KEY_CONVERTER(wstring)
+	DECLARE_KEY_CONVERTER(InteractState)
+	DECLARE_KEY_CONVERTER(ComponentID)
 
-	template<>
-	struct KeyConverter<int> {
-		static string ToKey(const int& key);
-		static int FromKey(const string& key);
-	};
-
-	template<>
-	struct KeyConverter<InteractState> {
-		static string ToKey(InteractState state);
-		static InteractState FromKey(const string& key);
-	};
-
-	// 변환 함수 래퍼
 	template<typename K> string ToKeyString(const K& key) { return KeyConverter<K>::ToKey(key); }
 	template<typename K> K FromKeyString(const string& key) { return KeyConverter<K>::FromKey(key); }
 

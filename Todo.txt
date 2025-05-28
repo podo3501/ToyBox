@@ -145,6 +145,8 @@
 --Tracy 측정도구 클라이언트에 붙이기
 --tdd 코드가 tracy가 늦게 돌아가는데 이유는 코드 전송때문이었다. 그 코드 전송을 끄는 옵션을 사용하자.
 --Tracy가 다른 프로젝트와 연동시 문제가 없도록 수정
+--UINameGenerator에 SerializeIO 완성하기
+--UIModule에 Read 함수 만들기
 
 @툴에서 리스트 할 수 있게끔
     컨테이너 간격 셋팅 
@@ -172,6 +174,10 @@
         Tracy 때문에 성능측정을 하지 않는데도 테스트가 느려진다. 
 
         Traits 패턴을 이용해서 TMP 쪽 코드 정리. 컨셉이 많아지면 복잡해져서 traits로 가야하긴 한다. traits.hpp 하는중
+
+        UIEx 클래스에서 하는부분을 UIModule로 옮겨오기
+        기존의 툴이나 TDD에서 UIComponent를 쓴 부분을 UIModule로 바꾸기
+        JsonHelper 클래스 지우기
 
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔

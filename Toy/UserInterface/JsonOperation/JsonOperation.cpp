@@ -67,22 +67,3 @@ static void UpdateJson(T* data, nlohmann::ordered_json& writeJ) noexcept
 
     writeJ.update(curJson);
 }
-
-//?!? Read를 만들고 void JsonOperation::Process(const string& key, unique_ptr<UIComponent>& data) 얘를 지우자
-void JsonOperation::Write(const string& key, UIComponent* data)
-{
-    if (data == nullptr) return;
-
-    ProcessWriteKey(key, [&data](nlohmann::ordered_json& writeJ) {
-        writeJ["Type"] = EnumToString<ComponentID>(data->GetTypeID());
-        UpdateJson(data, writeJ); });
-    //Process(key, data); //?!? 이런식으로 되어야 겠지?
-}
-
-void JsonOperation::Write(const string& key, UINameGenerator* data)
-{
-    if (data == nullptr) return;
-
-    ProcessWriteKey(key, [&data](nlohmann::ordered_json& writeJ) {
-        UpdateJson(data, writeJ); });
-}

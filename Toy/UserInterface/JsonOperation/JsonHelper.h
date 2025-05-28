@@ -2,7 +2,7 @@
 #include "JsonOperation.h"
 
 class UIComponent;
-
+//?!?  이 클래스가 UIModule이 만들어지면 사라지게 될 것이다. Module 클래스가 이 클래스를 대신해야한다.
 class JsonFile
 {
 public:
@@ -29,7 +29,7 @@ public:
 	static bool WriteComponent(T data, const wstring& filename)
 	{
 		JsonOperation writeJ;
-		writeJ.Write("Component", data);
+		writeJ.Process("Component", data);
 		wstring curFilename = GetJsonFilename(data);
 		if (!filename.empty())
 			curFilename = filename;

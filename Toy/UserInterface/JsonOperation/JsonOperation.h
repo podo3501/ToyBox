@@ -24,13 +24,10 @@ public:
 	template<typename T>
 	void Process(const string& key, T& data) noexcept;
 
-	void Write(const string& key, UIComponent* data); //?!? 밑에 함수와 이 함수는 template로 합쳐질 예정.
-	void Write(const string& key, UINameGenerator* data);
-
 private:
-	template <typename ProcessFunc>
+	template <typename ProcessFunc> //?!? 이 함수도 static 함수로 바꾸고 헤더에서 선언부를 지우자
 	void ProcessWriteKey(const string& key, ProcessFunc processFunc);
-	template <typename ProcessFunc>
+	template <typename ProcessFunc> //?!? 이 함수도 static 함수로 바꾸고 헤더에서 선언부를 지우자
 	void ProcessReadKey(const string& key, ProcessFunc processFunc);
 	template <typename WriteFunc, typename ReadFunc>
 	void ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc);

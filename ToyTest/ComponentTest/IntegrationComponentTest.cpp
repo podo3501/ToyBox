@@ -10,7 +10,9 @@
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "../Toy/UserInterface/UINameGenerator.h"
-#include "../Toy/UserInterface/UIRegistry.h"
+#include "../Toy/UserInterface/UIModule.h"
+#include "../Toy/Utility.h"
+#include "../Toy/Config.h"
 
 namespace UserInterfaceTest
 {
@@ -283,31 +285,44 @@ namespace UserInterfaceTest
 	//	unique_ptr<UIComponent> m_main;
 	//};
 
-	static UIComponent* TestAttachName(UIRegistry* uiRegistry, UIComponent* parent, const string& childName)
+	static UIComponent* TestAttachName(UIModule* uiModule, UIComponent* parent, const string& childName)
 	{
 		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
-		uiRegistry->AttachComponent(parent, move(tex), { 400, 300 });
+		uiModule->AttachComponent(parent, move(tex), { 400, 300 });
 		EXPECT_EQ(texPtr->GetUniqueName(), childName);
 		return texPtr;
 	}
 
 	TEST_F(IntegrationTest, UniqueName)
 	{
-		unique_ptr<UIRegistry> registry = make_unique<UIRegistry>();
-		registry->SetEntryComponent(m_panel.get());
+		unique_ptr<UIModule> module = make_unique<UIModule>();
+		UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
+		EXPECT_TRUE(module->SetupMainComponent("Main", layout, m_renderer.get()));
+		UIComponent* mainPanel = module->GetComponent();
 
-		auto texPtr0 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_0");
-		auto texPtr1 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_1");
-		auto texPtr2 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_2");
+		auto texPtr0 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_0");
+		auto texPtr1 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_1");
+		auto texPtr2 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_2");
 
 		//Detach하고 난 이후에는 _0이 recycle에 들어가서 다시 재사용 되기 때문에 _0이 된다.
-		registry->DetachComponent(texPtr0);
-		texPtr0 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_0");
+		module->DetachComponent(texPtr0);
+		texPtr0 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_0");
 
 		//이름을 바꿀때에도 직접적으로 바꾸면 안된다. 자신이 가지고 있는 것을 반납해야 한다.
-		registry->Rename(texPtr1, "NoMatchComponentType_0");
-		auto texPtr3 = TestAttachName(registry.get(), m_panel.get(), "PatchTextureStd1_1");
+		module->Rename(texPtr1, "NoMatchComponentType_0");
+		auto texPtr3 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_1");
 
-		EXPECT_TRUE(registry->Save(L"Test/Data/RWUIRegistryTest.json"));
+		//reccycle에 들어갔는지 확인하기 위해서
+		module->DetachComponent(texPtr3);
+
+		const wstring filename = L"Test/Data/RWUIModuleTest.json";
+		EXPECT_TRUE(module->Write(filename));
+		unique_ptr<UIModule> read = make_unique<UIModule>();
+		EXPECT_TRUE(read->Read(filename));
+
+		EXPECT_TRUE(CompareUniquePtr(module, read));
+
+		//?!? 세이브 로드가 끝나고 프로젝트를 UIComponent에서 UIRegistry로 read, write 하는걸로 바꾼후에
+		//json 부분에 Write를 Read 정리를 해야겠다.
 	}
 }
