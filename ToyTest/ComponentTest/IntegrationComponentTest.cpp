@@ -295,9 +295,8 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, UniqueName)
 	{
-		unique_ptr<UIModule> module = make_unique<UIModule>();
 		UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
-		EXPECT_TRUE(module->SetupMainComponent("Main", layout, m_renderer.get()));
+		unique_ptr<UIModule> module = CreateUIModule("Main", layout, m_renderer.get());
 		UIComponent* mainPanel = module->GetComponent();
 
 		auto texPtr0 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_0");

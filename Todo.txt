@@ -175,8 +175,8 @@
 
         Traits 패턴을 이용해서 TMP 쪽 코드 정리. 컨셉이 많아지면 복잡해져서 traits로 가야하긴 한다. traits.hpp 하는중
 
-        UIEx 클래스에서 하는부분을 UIModule로 옮겨오기
         기존의 툴이나 TDD에서 UIComponent를 쓴 부분을 UIModule로 바꾸기
+            UIModule::~UIModule() 하고 있음. 바꾸고 있는 중. 랜더링이 안되고 있음. WriteRead 하면서 안되는 것 같음. 디버깅 필요
         JsonHelper 클래스 지우기
 
 @콤보박스 컴포넌트 만들기

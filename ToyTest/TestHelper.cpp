@@ -7,6 +7,7 @@
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/Utility.h"
 
+//?!?이 함수는 사라질 예정
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
 {
 	JsonFile::WriteComponent(write, filename);
@@ -16,6 +17,16 @@ unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstr
 
 	EXPECT_TRUE(*write == *read);
 
+	return move(read);
+}
+
+unique_ptr<UIModule> WriteReadTest(unique_ptr<UIModule>& write, const wstring& filename)
+{
+	if (!write->Write(filename)) return nullptr;
+	unique_ptr<UIModule> read = make_unique<UIModule>();
+	read->Read(filename);
+
+	EXPECT_TRUE(*write == *read);
 	return move(read);
 }
 

@@ -26,3 +26,5 @@ private:
 
 	wstring m_filename{};
 };
+
+unique_ptr<UIModule> CreateUIModule(const string& mainUIName, const UILayout& layout, IRenderer* renderer) noexcept;

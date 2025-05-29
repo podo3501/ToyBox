@@ -7,7 +7,11 @@
 #include "UIComponent/Components/Panel.h"
 #include "Utility.h"
 
-UIModule::~UIModule() = default;
+UIModule::~UIModule()
+{
+	
+}
+
 UIModule::UIModule() noexcept :
 	m_generator{ make_unique<UINameGenerator>() },
 	m_component{ nullptr }
@@ -67,4 +71,12 @@ bool UIModule::Read(const wstring& filename) noexcept
 	m_filename = filename;
 
 	return true;
+}
+
+unique_ptr<UIModule> CreateUIModule(const string& mainUIName, const UILayout& layout, IRenderer* renderer) noexcept
+{
+	unique_ptr<UIModule> module = make_unique<UIModule>();
+	if(!module->SetupMainComponent(mainUIName, layout, renderer)) return nullptr;
+
+	return module;
 }

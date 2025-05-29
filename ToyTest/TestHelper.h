@@ -1,16 +1,30 @@
 #pragma once
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
+#include "../Toy/UserInterface/UIModule.h"
 
 struct ITextureLoad;
 class TextureResourceBinder;
 
+//?!?이 함수는 사라질 예정
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
 
+//?!?이 함수는 사라질 예정
 template<typename T>
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, T& component, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json")
 {
 	auto read = WriteReadTest(write, filename);
 	component = UIEx(read).FindComponent<T>(component->GetName());
+
+	return move(read);
+}
+
+unique_ptr<UIModule> WriteReadTest(unique_ptr<UIModule>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
+
+template<typename T>
+unique_ptr<UIModule> WriteReadTest(unique_ptr<UIModule>& write, T& component, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json")
+{
+	auto read = WriteReadTest(write, filename);
+	component = UIEx(read->GetComponent()).FindComponent<T>(component->GetName());
 
 	return move(read);
 }

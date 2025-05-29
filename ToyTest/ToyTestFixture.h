@@ -3,6 +3,7 @@
 
 class Window;
 class UIComponent;
+class UIModule;
 class TextureResourceBinder;
 struct IRenderer;
 struct IComponent;
@@ -34,6 +35,8 @@ protected:
 	unique_ptr<IRenderer> m_renderer;
 	DX::StepTimer m_timer;
 	unique_ptr<UIComponent> m_panel;
+	unique_ptr<UIModule> m_uiModule;
+	UIComponent* m_main;
 	unique_ptr<TextureResourceBinder> m_resBinder;
 };
 

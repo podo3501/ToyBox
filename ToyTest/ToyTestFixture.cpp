@@ -8,6 +8,7 @@
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "../Toy/UserInterface/UIModule.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
@@ -15,8 +16,10 @@
 #include "IMockRenderer.h"
 #include "TestHelper.h"
 
-ToyTestFixture::ToyTestFixture() = default;
 ToyTestFixture::~ToyTestFixture() = default;
+ToyTestFixture::ToyTestFixture() :
+	m_main{ nullptr }
+{}
 
 void ToyTestFixture::SetUp()
 {
@@ -36,6 +39,10 @@ void ToyTestFixture::SetUp()
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
+
+	m_uiModule = CreateUIModule("Main", layout, m_renderer.get());
+	m_main = m_uiModule->GetComponent();
+
 	m_resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
 	m_renderer->LoadTextureBinder(m_resBinder.get());
 
