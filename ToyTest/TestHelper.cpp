@@ -20,11 +20,11 @@ unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstr
 	return move(read);
 }
 
-unique_ptr<UIModule> WriteReadTest(unique_ptr<UIModule>& write, const wstring& filename)
+unique_ptr<UIModule> WriteReadTest(IRenderer* renderer, unique_ptr<UIModule>& write, const wstring& filename)
 {
 	if (!write->Write(filename)) return nullptr;
-	unique_ptr<UIModule> read = make_unique<UIModule>();
-	read->Read(filename);
+	auto resBinder = write->GetTexResBinder();
+	unique_ptr<UIModule> read = CreateUIModule(filename, renderer, resBinder->GetJsonFilename());
 
 	EXPECT_TRUE(*write == *read);
 	return move(read);

@@ -24,14 +24,19 @@
         "RenderSearch": 2,
         "Children": [
             {
-                "Type": "PatchTextureStd1",
-                "Name": "PatchTextureStd1_0",
+                "Type": "TextArea",
+                "BindKeys": [
+                    "Hangle",
+                    "English"
+                ],
+                "Text": "<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>",
+                "Name": "TextArea_0",
                 "Layout": {
                     "Size": {
-                        "x": 0,
-                        "y": 0
+                        "x": 320,
+                        "y": 120
                     },
-                    "Origin": "LeftTop"
+                    "Origin": "Center"
                 },
                 "Transform": {
                     "Ratio": {
@@ -46,9 +51,7 @@
                 "Region": "",
                 "StateFlag": 55,
                 "RenderSearch": 2,
-                "Children": null,
-                "BindKey": "BackImage1",
-                "SourceIndex": 0
+                "Children": null
             }
         ]
     },
@@ -56,7 +59,7 @@
         "RegionNames": {
             "UIModuleMainEntry": {
                 "Namers": {
-                    "PatchTextureStd1": {
+                    "TextArea": {
                         "Namers": 1,
                         "Recycled": []
                     }

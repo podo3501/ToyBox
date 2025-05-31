@@ -38,13 +38,14 @@ void ToyTestFixture::SetUp()
 	InputManager::Initialize(hwnd);
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
-	m_panel = CreateRootPanel("Main", layout, m_renderer.get());
+	//m_panel = CreateRootPanel("Main", layout, m_renderer.get());
 
-	m_uiModule = CreateUIModule("Main", layout, m_renderer.get());
+	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
+	m_uiModule = CreateUIModule(layout, "Main", m_renderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetComponent();
 
-	m_resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
-	m_renderer->LoadTextureBinder(m_resBinder.get());
+	//m_resBinder = CreateSourceBinder(srcBinderFilename);
+	//m_renderer->LoadTextureBinder(m_resBinder.get());
 
 	TracyStartupProfiler();
 }
@@ -57,7 +58,8 @@ void ToyTestFixture::TearDown()
 	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
 	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.
 	m_panel.reset();
-	m_resBinder.reset();
+	//m_resBinder.reset();
+	m_uiModule.reset();
 	m_renderer.reset();
 	m_window.reset();
 
@@ -100,9 +102,9 @@ void ToyTestFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(static_cast<int>(expectDest.size()))
 		.WillRepeatedly(Invoke([this, expIndex, &expectDest, &bindKey](size_t index, const RECT& dest, const RECT* source) {
-		TestCoordinates(index, dest, source, expIndex, expectDest, GetSources(m_resBinder.get(), bindKey));
+		TestCoordinates(index, dest, source, expIndex, expectDest, GetSources(m_uiModule->GetTexResBinder(), bindKey));
 			}));
-	UIComponent* curComponent = (component) ? component : m_panel.get();
+	UIComponent* curComponent = (component) ? component : m_main;
 	curComponent->ProcessUpdate(m_timer);
 	curComponent->ProcessRender(&mockRender);
 }
@@ -120,8 +122,8 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const wstring&, const 
 {
 	MockRender mockRender;
 	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
-	m_panel->ProcessUpdate(m_timer);
-	m_panel->ProcessRender(&mockRender);
+	m_main->ProcessUpdate(m_timer);
+	m_main->ProcessRender(&mockRender);
 }
 
 void ToyTestFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
@@ -147,6 +149,7 @@ void ToyTestFixture::CloneTestForSwitcher(const vector<RECT>& expectDest, const 
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());
 	WriteReadTest(m_resBinder.get(), clonePanel);
 }
+TextureResourceBinder* ToyTestFixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
 
 bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 {

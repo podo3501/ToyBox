@@ -3,18 +3,21 @@
 #include "../Include/IRenderer.h"
 #include "UIComponent/UIComponent.h"
 #include "UINameGenerator.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
 #include "UIComponent/Components/Panel.h"
 #include "Utility.h"
 
 UIModule::~UIModule()
 {
-	
+	Assert(m_component); //m_component는 꼭 만들어져야 한다.
+	m_renderer->RemoveRenderComponent(m_component.get());
 }
 
 UIModule::UIModule() noexcept :
 	m_generator{ make_unique<UINameGenerator>() },
-	m_component{ nullptr }
+	m_component{ nullptr },
+	m_renderer{ nullptr }
 {}
 
 bool UIModule::operator==(const UIModule& other) const noexcept
@@ -40,13 +43,39 @@ void UIModule::Rename(UIComponent* component, const string& name)
 {
 	UIEx(component).Rename(m_generator.get(), name);
 }
-
-bool UIModule::SetupMainComponent(const string& name, const UILayout& layout, IRenderer* renderer)
+//?!? 두 SetupMainComponent 함수 리팩토링 해야 함
+bool UIModule::SetupMainComponent(const UILayout& layout, const string& name, 
+	IRenderer* renderer, const wstring& srcBinderFilename)
 {
 	m_component = CreateComponent<Panel>(layout);
 	ReturnIfFalse(m_component->Rename(name));
 	ReturnIfFalse(m_component->RenameRegion("UIModuleMainEntry"));
 	renderer->AddRenderComponent(m_component.get());
+
+	m_resBinder = CreateSourceBinder(srcBinderFilename);
+	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
+	m_renderer = renderer;
+
+	return true;
+}
+
+bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename)
+{
+	ReturnIfFalse(Read(filename));
+
+	m_resBinder = CreateSourceBinder(srcBinderFilename);
+	m_renderer = renderer;
+	ReturnIfFalse(m_renderer->LoadTextureBinder(m_resBinder.get()));
+	ReturnIfFalse(BindTextureResources());
+
+	return true;
+}
+
+bool UIModule::BindTextureResources() noexcept
+{
+	ReturnIfFalse(m_resBinder);
+	ReturnIfFalse(m_component);
+	ReturnIfFalse(m_component->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
 	return true;
 }
@@ -73,10 +102,19 @@ bool UIModule::Read(const wstring& filename) noexcept
 	return true;
 }
 
-unique_ptr<UIModule> CreateUIModule(const string& mainUIName, const UILayout& layout, IRenderer* renderer) noexcept
+unique_ptr<UIModule> CreateUIModule(const UILayout& layout, const string& mainUIName, 
+	IRenderer* renderer, const wstring& srcBinderFilename)
 {
 	unique_ptr<UIModule> module = make_unique<UIModule>();
-	if(!module->SetupMainComponent(mainUIName, layout, renderer)) return nullptr;
+	if(!module->SetupMainComponent(layout, mainUIName, renderer, srcBinderFilename)) return nullptr;
+
+	return module;
+}
+
+unique_ptr<UIModule> CreateUIModule(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename)
+{
+	unique_ptr<UIModule> module = make_unique<UIModule>();
+	if (!module->SetupMainComponent(filename, renderer, srcBinderFilename)) return nullptr;
 
 	return module;
 }

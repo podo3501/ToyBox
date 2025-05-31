@@ -28,8 +28,8 @@
                 "Name": "PatchTextureStd1_1",
                 "Layout": {
                     "Size": {
-                        "x": 0,
-                        "y": 0
+                        "x": 64,
+                        "y": 64
                     },
                     "Origin": "LeftTop"
                 },
@@ -55,8 +55,8 @@
                 "Name": "PatchTextureStd1_2",
                 "Layout": {
                     "Size": {
-                        "x": 0,
-                        "y": 0
+                        "x": 64,
+                        "y": 64
                     },
                     "Origin": "LeftTop"
                 },
@@ -82,8 +82,8 @@
                 "Name": "PatchTextureStd1_0",
                 "Layout": {
                     "Size": {
-                        "x": 0,
-                        "y": 0
+                        "x": 64,
+                        "y": 64
                     },
                     "Origin": "LeftTop"
                 },

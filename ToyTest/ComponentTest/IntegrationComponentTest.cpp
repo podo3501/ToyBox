@@ -295,31 +295,29 @@ namespace UserInterfaceTest
 
 	TEST_F(IntegrationTest, UniqueName)
 	{
-		UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
-		unique_ptr<UIModule> module = CreateUIModule("Main", layout, m_renderer.get());
-		UIComponent* mainPanel = module->GetComponent();
-
-		auto texPtr0 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_0");
-		auto texPtr1 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_1");
-		auto texPtr2 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_2");
+		auto texPtr0 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_0");
+		auto texPtr1 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_1");
+		auto texPtr2 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_2");
 
 		//Detach하고 난 이후에는 _0이 recycle에 들어가서 다시 재사용 되기 때문에 _0이 된다.
-		module->DetachComponent(texPtr0);
-		texPtr0 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_0");
+		m_uiModule->DetachComponent(texPtr0);
+		texPtr0 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_0");
 
 		//이름을 바꿀때에도 직접적으로 바꾸면 안된다. 자신이 가지고 있는 것을 반납해야 한다.
-		module->Rename(texPtr1, "NoMatchComponentType_0");
-		auto texPtr3 = TestAttachName(module.get(), mainPanel, "PatchTextureStd1_1");
+		m_uiModule->Rename(texPtr1, "NoMatchComponentType_0");
+		auto texPtr3 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_1");
 
 		//reccycle에 들어갔는지 확인하기 위해서
-		module->DetachComponent(texPtr3);
+		m_uiModule->DetachComponent(texPtr3);
+		m_uiModule->BindTextureResources();
 
 		const wstring filename = L"Test/Data/RWUIModuleTest.json";
-		EXPECT_TRUE(module->Write(filename));
-		unique_ptr<UIModule> read = make_unique<UIModule>();
-		EXPECT_TRUE(read->Read(filename));
+		EXPECT_TRUE(m_uiModule->Write(filename));
 
-		EXPECT_TRUE(CompareUniquePtr(module, read));
+		wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
+		unique_ptr<UIModule> read = CreateUIModule(filename, m_renderer.get(), srcBinderFilename);
+
+		EXPECT_TRUE(CompareUniquePtr(m_uiModule, read));
 
 		//?!? 세이브 로드가 끝나고 프로젝트를 UIComponent에서 UIRegistry로 read, write 하는걸로 바꾼후에
 		//json 부분에 Write를 Read 정리를 해야겠다.

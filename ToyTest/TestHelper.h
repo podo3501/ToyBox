@@ -18,15 +18,14 @@ unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, T& compone
 	return move(read);
 }
 
-unique_ptr<UIModule> WriteReadTest(unique_ptr<UIModule>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
-
+unique_ptr<UIModule> WriteReadTest(IRenderer* renderer, unique_ptr<UIModule>& write, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json");
 template<typename T>
-unique_ptr<UIModule> WriteReadTest(unique_ptr<UIModule>& write, T& component, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json")
+pair<unique_ptr<UIModule>, UIComponent*> WriteReadTest(IRenderer* renderer, unique_ptr<UIModule>& write, T& component, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json")
 {
-	auto read = WriteReadTest(write, filename);
+	auto read = WriteReadTest(renderer, write, filename);
 	component = UIEx(read->GetComponent()).FindComponent<T>(component->GetName());
 
-	return move(read);
+	return { move(read), read->GetComponent() };
 }
 
 unique_ptr<UIComponent> WriteReadTest(TextureResourceBinder* binder,
