@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="5" failures="0" disabled="0" errors="0" time="1.718" timestamp="2025-05-31T23:36:10.922" name="AllTests">
-  <testsuite name="BasicComponentTest" tests="5" failures="0" disabled="0" skipped="0" errors="0" time="1.717" timestamp="2025-05-31T23:36:10.923">
-    <testcase name="PatchTextureStd1" status="run" result="completed" time="0.423" timestamp="2025-05-31T23:36:10.923" classname="BasicComponentTest" />
-    <testcase name="PatchTextureStd3_Horizontal" status="run" result="completed" time="0.323" timestamp="2025-05-31T23:36:11.347" classname="BasicComponentTest" />
-    <testcase name="PatchTextureStd3_Vertical" status="run" result="completed" time="0.313" timestamp="2025-05-31T23:36:11.670" classname="BasicComponentTest" />
-    <testcase name="PatchTextureStd9" status="run" result="completed" time="0.341" timestamp="2025-05-31T23:36:11.984" classname="BasicComponentTest" />
-    <testcase name="TextArea" status="run" result="completed" time="0.315" timestamp="2025-05-31T23:36:12.325" classname="BasicComponentTest" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.456" timestamp="2025-06-01T23:19:00.937" name="AllTests">
+  <testsuite name="ComplexComponentTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.456" timestamp="2025-06-01T23:19:00.938">
+    <testcase name="ListArea" status="run" result="completed" time="0.456" timestamp="2025-06-01T23:19:00.938" classname="ComplexComponentTest" />
   </testsuite>
 </testsuites>

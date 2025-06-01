@@ -51,7 +51,7 @@ bool CompareUniquePtr(const unique_ptr<T>& lhs, const unique_ptr<T>& rhs)
 		return false;
 
 	auto result{ *lhs == *rhs }; // 가리키는 값 비교
-	assert(result);
+	Assert(result);
 
 	return result;
 }

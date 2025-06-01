@@ -77,10 +77,10 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const REC
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke([this, testRenderFunc](size_t index, const RECT& dest, const RECT* source) {
-		testRenderFunc(index, dest, source, m_resBinder.get());
+		testRenderFunc(index, dest, source, GetResBinder());
 			}));
-	m_panel->ProcessUpdate(m_timer);
-	m_panel->ProcessRender(&mockRender);
+	m_main->ProcessUpdate(m_timer);
+	m_main->ProcessRender(&mockRender);
 }
 
 void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc, 
@@ -90,10 +90,10 @@ void ToyTestFixture::CallMockRender(function<void(size_t, const RECT&, const REC
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke([this, testRenderFunc, &bindKey](size_t index, const RECT& dest, const RECT* source) {
-		testRenderFunc(index, dest, source, GetSources(m_resBinder.get(), bindKey));
+		testRenderFunc(index, dest, source, GetSources(GetResBinder(), bindKey));
 			}));
-	m_panel->ProcessUpdate(m_timer);
-	m_panel->ProcessRender(&mockRender);
+	m_main->ProcessUpdate(m_timer);
+	m_main->ProcessRender(&mockRender);
 }
 
 void ToyTestFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, const string& bindKey, UIComponent* component)
@@ -102,7 +102,7 @@ void ToyTestFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest
 	EXPECT_CALL(mockRender, Render(_, _, _))
 		.Times(static_cast<int>(expectDest.size()))
 		.WillRepeatedly(Invoke([this, expIndex, &expectDest, &bindKey](size_t index, const RECT& dest, const RECT* source) {
-		TestCoordinates(index, dest, source, expIndex, expectDest, GetSources(m_uiModule->GetTexResBinder(), bindKey));
+		TestCoordinates(index, dest, source, expIndex, expectDest, GetSources(GetResBinder(), bindKey));
 			}));
 	UIComponent* curComponent = (component) ? component : m_main;
 	curComponent->ProcessUpdate(m_timer);
