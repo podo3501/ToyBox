@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.456" timestamp="2025-06-01T23:19:00.937" name="AllTests">
-  <testsuite name="ComplexComponentTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.456" timestamp="2025-06-01T23:19:00.938">
-    <testcase name="ListArea" status="run" result="completed" time="0.456" timestamp="2025-06-01T23:19:00.938" classname="ComplexComponentTest" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.448" timestamp="2025-06-02T23:13:33.282" name="AllTests">
+  <testsuite name="ContainerComponentTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.448" timestamp="2025-06-02T23:13:33.282">
+    <testcase name="Container_PatchTextureStd3_Vertical" status="run" result="completed" time="0.448" timestamp="2025-06-02T23:13:33.282" classname="ContainerComponentTest" />
   </testsuite>
 </testsuites>

@@ -7,7 +7,7 @@ class JsonOperation
 {
 public:
 	JsonOperation();
-	//JsonOperation(const nlohmann::ordered_json& write);
+	explicit JsonOperation(const nlohmann::ordered_json& write);
 	explicit JsonOperation(const nlohmann::json& read);
 	virtual ~JsonOperation();
 
@@ -37,7 +37,6 @@ private:
 
 	nlohmann::json m_read{};
 	nlohmann::json* m_rCurrent{ nullptr };
-	
 };
 
 #include "JsonOperation.hpp"

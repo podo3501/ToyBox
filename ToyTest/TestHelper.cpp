@@ -4,17 +4,18 @@
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
+#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/Utility.h"
 
 //?!?이 함수는 사라질 예정
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
 {
-	JsonFile::WriteComponent(write, filename);
-
+	WriteJsonToFile(write, filename);
+	
 	unique_ptr<UIComponent> read;
-	JsonFile::ReadComponent(filename, read);
-
+	ReadJsonFromFile(filename, read);
+	
 	EXPECT_TRUE(*write == *read);
 
 	return move(read);

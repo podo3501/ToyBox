@@ -2,6 +2,27 @@
 #include "JsonSerializationHelper.hpp"
 #include  "JsonConcepts.h"
 
+template<HasSerializeIO T>
+bool WriteJsonToFile(T& obj, const wstring& filename)
+{
+	nlohmann::ordered_json writeJ;
+	SerializeClassIO(obj, writeJ);
+	JsonOperation js{ writeJ };
+	if (!js.Write(filename)) return false;
+
+	return true;
+}
+
+template<HasSerializeIO T>
+bool ReadJsonFromFile(const wstring& filename, T& obj)
+{
+	JsonOperation readJ;
+	if (!readJ.Read(filename)) return false;
+	DeserializeClassIO(readJ.GetRead(), obj);
+
+	return true;
+}
+
 //JsonOperation을 사용해야 하는 타입은 여기서 분기해 준다. 그렇지 않으면 JsonTraits에서 분기
 template<typename T>
 void JsonOperation::Process(const string& key, T& data) noexcept

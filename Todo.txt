@@ -180,6 +180,40 @@
             Attach 한 후에 Binding을 명시적으로 호출하는 식으로.
         JsonHelper 클래스 지우기
 
+        
+bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
+{
+	auto forEachResult = ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
+		bool result = component->ImplementBindSourceInfo(resBinder, texController);
+		Assert(result);
+		return result;
+		});
+	ReturnIfFalse(forEachResult);
+	auto forEachResult2 = ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
+		bool result = component->ImplementBindSourceInfo(resBinder, texController);
+		Assert(result);
+		return result;
+		});
+	ReturnIfFalse(forEachResult2);
+	ReturnIfFalse(UpdatePositionsManually());
+	return true;
+}
+이렇게 두번 호출해야 정상적으로 셋팅이 되는데 아마도 처음에 호출할때 셋팅이 다 되지 않아서 그런 현상이 일어나는 것 같다.
+기존에 버그가 있었던듯. ScrollBar_0의 위치가 함수 두번 호출해야 정상적으로 위치되는 것 같다.
+bool ListArea::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
+{
+	ApplySize(size); //ScrollBar가 부모의 크기를 알아야해서 먼저 사이즈를 셋팅해 준다.
+
+	ReturnIfFalse(ChangeSizeX(m_prototypeContainer, size));
+	ReturnIfFalse(ChangeScrollBarSizeAndPos(size));
+	ReturnIfFalse(m_renderTex->ChangeSize(size, isForce));
+	UpdateScrollBar();
+
+	return UIComponent::ImplementChangeSize(size);
+}
+return UIComponent::ImplementChangeSize(size); 이 부분을 상단으로 올려서 호출했을때 문제가 생길수 있는지 확인해야 한다.
+	
+
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔
 @UI에서 리로딩하게 되면 Undo 히스토리가 삭제 된다고 경고메세지 출력

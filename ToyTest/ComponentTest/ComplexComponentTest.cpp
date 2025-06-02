@@ -7,6 +7,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/InputManager.h"
 
 namespace UserInterfaceTest
@@ -15,39 +16,35 @@ namespace UserInterfaceTest
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		m_uiModule->AttachComponent(m_main, move(listArea), { 400, 300 });
-		m_uiModule->BindTextureResources();
+		EXPECT_TRUE(m_uiModule->BindTextureResources());
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, listAreaPtr);
 
-		//UIEx(m_panel).AttachComponent(move(listArea), { 400, 300 });
-		//m_panel = WriteReadTest(m_panel, listAreaPtr);
-		//EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
+		EXPECT_TRUE((listAreaPtr->GetSize() == XMUINT2{ 48, 48 }));
+		listAreaPtr->ChangeSize({ 150, 128 });
+		listAreaPtr->ChangeOrigin(Origin::Center);
 
-		//EXPECT_TRUE((listAreaPtr->GetSize() == XMUINT2{ 48, 48 }));
-		//listAreaPtr->ChangeSize({ 150, 128 });
-		//listAreaPtr->ChangeOrigin(Origin::Center);
+		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
+		EXPECT_TRUE(UIEx(m_main).IsPositionUpdated());
 
-		//auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
-		//EXPECT_TRUE(UIEx(m_main).IsPositionUpdated());
+		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), GetResBinder(), listAreaPtr, 5));
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 
-		//EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), GetResBinder(), listAreaPtr, 5));
-		//EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
-		//auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
+		listAreaPtr->RemoveContainer(0);
+		EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Render));
+		auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
+		EXPECT_NE(preSizeX, curSizeX);
 
-		//listAreaPtr->RemoveContainer(0);
-		//EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Render));
-		//auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
-		//EXPECT_NE(preSizeX, curSizeX);
+		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
+		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
+		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Render));
 
-		//auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
-		//EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
-		//EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
-		//EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Render));
+		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
+		EXPECT_EQ(scrollContainerPtr->GetSize().y, 30); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 scrollBar 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
 
-		//auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
-		//EXPECT_EQ(scrollContainerPtr->GetSize().y, 30); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 scrollBar 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
-
-		//listAreaPtr->ClearContainers();
-		//EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
+		listAreaPtr->ClearContainers();
+		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
 	}
 
 	TEST_F(ComplexComponentTest, ListAreaToolMode)

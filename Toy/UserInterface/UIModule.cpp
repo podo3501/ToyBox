@@ -50,8 +50,8 @@ bool UIModule::SetupMainComponent(const UILayout& layout, const string& name,
 	m_component = CreateComponent<Panel>(layout);
 	ReturnIfFalse(m_component->Rename(name));
 	ReturnIfFalse(m_component->RenameRegion("UIModuleMainEntry"));
-	renderer->AddRenderComponent(m_component.get());
 
+	renderer->AddRenderComponent(m_component.get());
 	m_resBinder = CreateSourceBinder(srcBinderFilename);
 	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
 	m_renderer = renderer;
@@ -63,9 +63,11 @@ bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, 
 {
 	ReturnIfFalse(Read(filename));
 
+	renderer->AddRenderComponent(m_component.get());
 	m_resBinder = CreateSourceBinder(srcBinderFilename);
+	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
 	m_renderer = renderer;
-	ReturnIfFalse(m_renderer->LoadTextureBinder(m_resBinder.get()));
+
 	ReturnIfFalse(BindTextureResources());
 
 	return true;
@@ -80,24 +82,26 @@ bool UIModule::BindTextureResources() noexcept
 	return true;
 }
 
+void UIModule::SerializeIO(JsonOperation& operation)
+{
+	operation.Process("UIComponent", m_component);
+	operation.Process("UINameGenerator", m_generator);
+}
+
 bool UIModule::Write(const wstring& filename) noexcept
 {
-	JsonOperation writeJ;
-	writeJ.Process("UIComponent", m_component);
-	writeJ.Process("UINameGenerator", m_generator);
-	ReturnIfFalse(writeJ.Write(!filename.empty() ? filename : m_filename));
-	m_filename = filename;
+	const wstring& curFilename = !filename.empty() ? filename : m_filename;
+	WriteJsonToFile(*this, curFilename);
+	m_filename = curFilename;
 
 	return true;
 }
 
 bool UIModule::Read(const wstring& filename) noexcept
 {
-	JsonOperation readJ;
-	ReturnIfFalse(readJ.Read(!filename.empty() ? filename : m_filename));
-	readJ.Process("UIComponent", m_component);
-	readJ.Process("UINameGenerator", m_generator);
-	m_filename = filename;
+	const wstring& curFilename = !filename.empty() ? filename : m_filename;
+	ReadJsonFromFile(curFilename, *this);
+	m_filename = curFilename;
 
 	return true;
 }

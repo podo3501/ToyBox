@@ -14,6 +14,12 @@ m_wCurrent{ &m_write },
 m_rCurrent{ &m_read }
 {}
 
+JsonOperation::JsonOperation(const nlohmann::ordered_json& write) //?!? 이 함수 만들면 리팩토링 할 부분이 있었는데.. 찾아봐야 한다.
+{
+    m_write = write;
+    m_wCurrent = &m_write;
+}
+
 JsonOperation::JsonOperation(const nlohmann::json& read)
 {
     m_read = read;

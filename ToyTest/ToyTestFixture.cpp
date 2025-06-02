@@ -38,12 +38,11 @@ void ToyTestFixture::SetUp()
 	InputManager::Initialize(hwnd);
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
-	//m_panel = CreateRootPanel("Main", layout, m_renderer.get());
-
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
 	m_uiModule = CreateUIModule(layout, "Main", m_renderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetComponent();
 
+	//m_panel = CreateRootPanel("Main", layout, m_renderer.get());
 	//m_resBinder = CreateSourceBinder(srcBinderFilename);
 	//m_renderer->LoadTextureBinder(m_resBinder.get());
 
@@ -138,7 +137,7 @@ void ToyTestFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 
 void ToyTestFixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey)
 {
-	unique_ptr<UIComponent> clonePanel = m_panel->Clone();
+	unique_ptr<UIComponent> clonePanel = m_main->Clone();
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());
 	WriteReadTest(clonePanel);
 }

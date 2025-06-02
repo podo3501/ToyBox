@@ -5,6 +5,7 @@ class UILayout;
 class UIComponent;
 class UINameGenerator;
 class TextureResourceBinder;
+class JsonOperation;
 class UIModule
 {
 public:
@@ -19,6 +20,7 @@ public:
 	unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* component) noexcept;
+	void SerializeIO(JsonOperation& operation);
 	void Rename(UIComponent* component, const string& name);
 	bool Write(const wstring& filename = L"") noexcept;
 	inline UIComponent* GetComponent() const noexcept { return m_component.get(); }
