@@ -35,10 +35,8 @@ protected:
 	unique_ptr<Window> m_window;
 	unique_ptr<IRenderer> m_renderer;
 	DX::StepTimer m_timer;
-	unique_ptr<UIComponent> m_panel;
 	unique_ptr<UIModule> m_uiModule;
 	UIComponent* m_main;
-	unique_ptr<TextureResourceBinder> m_resBinder;
 };
 
 //비주얼 스튜디오 테스트 탐색기에 계층구조 표시하기 위해서 Fixture를 상속받아서 함.

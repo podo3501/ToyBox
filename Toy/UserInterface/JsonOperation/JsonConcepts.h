@@ -11,17 +11,6 @@ concept HasSerializeIO =
 		{ t.SerializeIO(op) };    // 일반 객체용
 	};
 
-//template<typename T>
-//concept HasSerializeIOSmartPtr =
-//(requires { typename T::element_type; }) &&  // 스마트 포인터 개념 탐지
-//HasSerializeIO<typename T::element_type>;
-
-template<typename T>
-concept SmartPtr = requires(T p) {
-	typename T::element_type;
-	{ p.get() } -> std::same_as<typename T::element_type*>;
-};
-
 template<typename T> //멤버 begin/end가 있는 경우
 concept HasMemberBeginEnd = requires(T t) {
 	{ t.begin() } -> std::input_iterator;

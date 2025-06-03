@@ -41,7 +41,7 @@ unique_ptr<UIComponent> WriteReadTest(TextureResourceBinder* binder,
 	return move(read);
 }
 
-bool TestSourceBinderWriteRead(unique_ptr<TextureResourceBinder>& resBinder, const wstring& filename = L"Test/Data/RWSourceBinderTest.json");
+bool TestSourceBinderWriteRead(TextureResourceBinder* resBinder, const wstring& filename = L"Test/Data/RWSourceBinderTest.json");
 
 class TestComponent : public UIComponent
 {

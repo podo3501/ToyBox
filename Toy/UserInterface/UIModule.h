@@ -6,6 +6,7 @@ class UIComponent;
 class UINameGenerator;
 class TextureResourceBinder;
 class JsonOperation;
+namespace DX { class StepTimer; }
 class UIModule
 {
 public:
@@ -17,17 +18,23 @@ public:
 		IRenderer* renderer, const wstring& srcBinderFilename);
 	bool SetupMainComponent(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename);
 	bool BindTextureResources() noexcept;
+	bool Update(const DX::StepTimer& timer) noexcept;
 	unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
+	unique_ptr<UIComponent> AttachComponent(const string& regionName, const string& name,
+		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* component) noexcept;
+	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(const string& regionName, const string& name) noexcept;
 	void SerializeIO(JsonOperation& operation);
 	void Rename(UIComponent* component, const string& name);
 	bool Write(const wstring& filename = L"") noexcept;
+	UIComponent* FindComponent(const string& name) const noexcept;
 	inline UIComponent* GetComponent() const noexcept { return m_component.get(); }
 	inline TextureResourceBinder* GetTexResBinder() const noexcept { return m_resBinder.get(); }
 
 private:
 	bool Read(const wstring& filename = L"") noexcept;
+	UIComponent* FindComponentInRegion(const string& regionName, const string& name) const noexcept;
 
 	unique_ptr<UINameGenerator> m_generator;
 	unique_ptr<UIComponent> m_component;

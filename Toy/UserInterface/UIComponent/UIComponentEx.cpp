@@ -71,6 +71,9 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 unique_ptr<UIComponent> UIComponentEx::AttachComponent(UINameGenerator* generator,
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
+	if (!m_component->HasStateFlag(StateFlag::Attach))
+		return child;
+
 	UIComponent* regionComponent = m_component->GetParentRegionRoot();
 	const auto& region = regionComponent->GetRegion();
 

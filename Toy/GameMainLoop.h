@@ -1,10 +1,8 @@
 #pragma once
 #include "MainLoop.h"
 
-class Button;
-class TextArea;
 class UIComponent;
-class TextureResourceBinder;
+class UIModule;
 
 class GameMainLoop final : public MainLoop
 {
@@ -24,7 +22,5 @@ private:
 
 	Window* m_window;
 	IRenderer* m_renderer;
-
-	unique_ptr<UIComponent> m_gamePanel;
-	unique_ptr<TextureResourceBinder> m_resBinder;
+	unique_ptr<UIModule> m_uiModule;
 };

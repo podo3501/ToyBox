@@ -111,7 +111,7 @@ bool ListArea::ChangeScrollBarSizeAndPos(const XMUINT2& size) noexcept
 
 bool ListArea::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	ApplySize(size); //ScrollBar가 부모의 크기를 알아야해서 먼저 사이즈를 셋팅해 준다.
+	ApplySize(size); //?!? ScrollBar가 부모의 크기를 알아야해서 먼저 사이즈를 셋팅해 준다. UIComponent::ImplementChangeSize(size); 를 위로 올리면 되는데 테스트 해봐야 한다.
 
 	ReturnIfFalse(ChangeSizeX(m_prototypeContainer, size));
 	ReturnIfFalse(ChangeScrollBarSizeAndPos(size));

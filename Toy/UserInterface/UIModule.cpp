@@ -34,9 +34,26 @@ unique_ptr<UIComponent> UIModule::AttachComponent(UIComponent* parent,
 	return UIEx(parent).AttachComponent(m_generator.get(), move(child), relativePos);
 }
 
+unique_ptr<UIComponent> UIModule::AttachComponent(const string& regionName, const string& name,
+	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+{
+	UIComponent* component = FindComponentInRegion(regionName, name);
+	if (!component) return child;
+
+	return AttachComponent(component, move(child), relativePos);
+}
+
 pair<unique_ptr<UIComponent>, UIComponent*> UIModule::DetachComponent(UIComponent* component) noexcept
 {
 	return UIEx(component).DetachComponent(m_generator.get());
+}
+
+pair<unique_ptr<UIComponent>, UIComponent*> UIModule::DetachComponent(const string& regionName, const string& name) noexcept
+{
+	UIComponent* component = FindComponentInRegion(regionName, name);
+	if (!component) return {};
+
+	return DetachComponent(component);
 }
 
 void UIModule::Rename(UIComponent* component, const string& name)
@@ -82,6 +99,11 @@ bool UIModule::BindTextureResources() noexcept
 	return true;
 }
 
+bool UIModule::Update(const DX::StepTimer& timer) noexcept
+{
+	return m_component->ProcessUpdate(timer);
+}
+
 void UIModule::SerializeIO(JsonOperation& operation)
 {
 	operation.Process("UIComponent", m_component);
@@ -104,6 +126,19 @@ bool UIModule::Read(const wstring& filename) noexcept
 	m_filename = curFilename;
 
 	return true;
+}
+
+UIComponent* UIModule::FindComponent(const string& name) const noexcept
+{
+	return UIEx(m_component).FindComponent(name);
+}
+
+UIComponent* UIModule::FindComponentInRegion(const string& regionName, const string& name) const noexcept
+{
+	UIComponent* regionRoot = UIEx(m_component).GetRegionComponent(regionName);
+	if (!regionRoot) return nullptr;
+
+	return UIEx(regionRoot).FindComponent(name);
 }
 
 unique_ptr<UIModule> CreateUIModule(const UILayout& layout, const string& mainUIName, 

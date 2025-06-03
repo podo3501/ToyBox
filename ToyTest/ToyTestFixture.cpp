@@ -42,10 +42,6 @@ void ToyTestFixture::SetUp()
 	m_uiModule = CreateUIModule(layout, "Main", m_renderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetComponent();
 
-	//m_panel = CreateRootPanel("Main", layout, m_renderer.get());
-	//m_resBinder = CreateSourceBinder(srcBinderFilename);
-	//m_renderer->LoadTextureBinder(m_resBinder.get());
-
 	TracyStartupProfiler();
 }
 
@@ -56,8 +52,6 @@ void ToyTestFixture::TearDown()
 	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.
 	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
 	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.
-	m_panel.reset();
-	//m_resBinder.reset();
 	m_uiModule.reset();
 	m_renderer.reset();
 	m_window.reset();
@@ -144,16 +138,18 @@ void ToyTestFixture::CloneTest(const vector<RECT>& expectDest, const string& bin
 
 void ToyTestFixture::CloneTestForSwitcher(const vector<RECT>& expectDest, const string& bindKey)
 {
-	unique_ptr<UIComponent> clonePanel = m_panel->Clone();
+	unique_ptr<UIComponent> clonePanel = m_main->Clone();
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());
-	WriteReadTest(m_resBinder.get(), clonePanel);
+	WriteReadTest(GetResBinder(), clonePanel);
+	//WriteReadTest(m_resBinder.get(), clonePanel);
 }
 TextureResourceBinder* ToyTestFixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
 
 bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 {
 	if (!original) return false;
-	EXPECT_TRUE(original->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
+	auto resBinder = m_uiModule->GetTexResBinder();
+	EXPECT_TRUE(original->BindTextureSourceInfo(resBinder, m_renderer->GetTextureController()));
 	auto clone = original->Clone();
 
 	return CompareUniquePtr(original, clone);
@@ -161,44 +157,46 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 
 void TextureSwitcherComponentTest::FitToTextureSourceTest(const string& bindingKey)
 {
-	TextureSwitcher* texSwitcher = UIEx(m_panel).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
+	TextureSwitcher* texSwitcher = UIEx(m_main).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
 	EXPECT_TRUE(texSwitcher->FitToTextureSource());
-	EXPECT_EQ(texSwitcher->GetSize(), GetSizeOfBindKey(m_resBinder.get(), bindingKey));
+	EXPECT_EQ(texSwitcher->GetSize(), GetSizeOfBindKey(GetResBinder(), bindingKey));
 }
 
 void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<UIComponent>>& history)
 {
-	history.emplace_back(m_panel->Clone());
+	history.emplace_back(m_main->Clone());
 }
 
 void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<TextureResourceBinder>>& history)
 {
-	history.emplace_back(make_unique<TextureResourceBinder>(*m_resBinder));
+	history.emplace_back(make_unique<TextureResourceBinder>(*GetResBinder()));
 }
 
 void UndoRedoTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
 {
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
 		cmdList.Undo();
-		EXPECT_TRUE(CompareUniquePtr(m_panel, snapshot));
+		EXPECT_TRUE(*m_main == *snapshot);
 		});
 
 	for_each(history.begin() + 1, history.end(), [&](const auto& snapshot) {
 		cmdList.Redo();
-		EXPECT_TRUE(CompareUniquePtr(m_panel, snapshot));
+		EXPECT_TRUE(*m_main == *snapshot);
 		});
 }
 
 void UndoRedoTest::VerifyUndoRedo(TexResCommandList& cmdList, const vector<unique_ptr<TextureResourceBinder>>& history)
 {
+	auto resBinder = GetResBinder();
+
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
 		cmdList.Undo();
-		EXPECT_TRUE(CompareUniquePtr(m_resBinder, snapshot));
+		EXPECT_TRUE(*resBinder == *snapshot);
 		});
 
 	for_each(history.begin() + 1, history.end(), [&](const auto& snapshot) {
 		cmdList.Redo();
-		EXPECT_TRUE(CompareUniquePtr(m_resBinder, snapshot));
+		EXPECT_TRUE(*resBinder == *snapshot);
 		});
 }
 

@@ -76,12 +76,6 @@ bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextu
 		return result;
 		});
 	ReturnIfFalse(forEachResult);
-	//auto forEachResult2 = ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
-	//	bool result = component->ImplementBindSourceInfo(resBinder, texController);
-	//	Assert(result);
-	//	return result;
-	//	});
-	//ReturnIfFalse(forEachResult2);
 	ReturnIfFalse(UpdatePositionsManually());
 	return true;
 }
@@ -233,8 +227,6 @@ void UIComponent::SerializeIO(JsonOperation& operation)
 bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
 {
 	if (!m_parent) return false;
-	Assert(m_parent->GetSize() != XMUINT2{});
-	//if (m_parent->GetSize() == XMUINT2{}) return false;
 	m_transform.SetRelativePosition(m_parent->GetSize(), relativePos);
 	return true;
 }

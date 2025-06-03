@@ -18,9 +18,9 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::One, 
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-		m_panel = WriteReadTest(m_resBinder.get(), m_panel, switcherPtr);
+		m_uiModule->AttachComponent(m_main, move(switcher), { 160, 120 });
+		m_uiModule->BindTextureResources();
+		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 
 		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 32, 32 }));
 		switcherPtr->ChangeOrigin(Origin::Center);
@@ -34,7 +34,7 @@ namespace UserInterfaceTest
 
 		FitToTextureSourceTest("ExitButton1_Pressed");
 
-		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ListBackground1_Normal"));
+		EXPECT_TRUE(switcherPtr->ChangeBindKey(GetResBinder(), "ListBackground1_Normal"));
 		vector<RECT> exChangeKey = { { 144, 104, 176, 136 } };
 		TestMockRender(2, exChangeKey, "ListBackground1_Normal");
 	}
@@ -45,9 +45,9 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeH, 
 			GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(switcher), { 160, 120 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-		m_panel = WriteReadTest(m_resBinder.get(), m_panel, switcherPtr);
+		m_uiModule->AttachComponent(m_main, move(switcher), { 160, 120 });
+		m_uiModule->BindTextureResources();
+		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 
 		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 48, 48 }));
 		switcherPtr->ChangeOrigin(Origin::Center);
@@ -66,7 +66,7 @@ namespace UserInterfaceTest
 		CloneTestForSwitcher(exChangeSize, "ScrollButton3_H_Normal");
 		FitToTextureSourceTest("ScrollButton3_H_Normal");
 
-		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_H_Hovered"));
+		EXPECT_TRUE(switcherPtr->ChangeBindKey(GetResBinder(), "ScrollButton3_H_Hovered"));
 		vector<RECT> exChangeKey = { { 136, 96, 158, 144 }, { 158, 96, 162, 144 }, { 162, 96, 184, 144 } };
 		TestMockRender(2, exChangeKey, "ScrollButton3_H_Hovered");
 	}
@@ -77,9 +77,9 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeV, 
 			GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-		m_panel = WriteReadTest(m_resBinder.get(), m_panel, switcherPtr);
+		m_uiModule->AttachComponent(m_main, move(switcher), { 100, 100 });
+		m_uiModule->BindTextureResources();
+		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 
 		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 16, 16 }));
 		switcherPtr->ChangeOrigin(Origin::Center);
@@ -98,7 +98,7 @@ namespace UserInterfaceTest
 		CloneTestForSwitcher(exDestChange, "ScrollButton3_V_Normal");
 		FitToTextureSourceTest("ScrollButton3_V_Normal");
 
-		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "ScrollButton3_V_Hovered"));
+		EXPECT_TRUE(switcherPtr->ChangeBindKey(GetResBinder(), "ScrollButton3_V_Hovered"));
 		vector<RECT> exChangeKey = { { 92, 92, 108, 99 }, { 92, 99, 108, 101 }, { 92, 101, 108, 108 } };
 		TestMockRender(2, exChangeKey, "ScrollButton3_V_Hovered");
 	}
@@ -109,9 +109,9 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::Nine, 
 			GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
-		UIEx(m_panel).AttachComponent(move(switcher), { 100, 100 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-		m_panel = WriteReadTest(m_resBinder.get(), m_panel, switcherPtr);
+		m_uiModule->AttachComponent(m_main, move(switcher), { 100, 100 });
+		m_uiModule->BindTextureResources();
+		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 
 		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 32, 32 }));
 		switcherPtr->ChangeOrigin(Origin::Center);
@@ -136,7 +136,7 @@ namespace UserInterfaceTest
 		CloneTestForSwitcher(exDestChange, "ListBackground9_Normal");
 		FitToTextureSourceTest("ListBackground9_Normal");
 
-		EXPECT_TRUE(switcherPtr->ChangeBindKey(m_resBinder.get(), "OptionImage9"));
+		EXPECT_TRUE(switcherPtr->ChangeBindKey(GetResBinder(), "OptionImage9"));
 		vector<RECT> exChangeKey = {
 			{ 23, 40, 43, 70 }, { 43, 40, 158, 70 }, { 158, 40, 178, 70 },
 			{ 23, 70, 43, 142 }, { 43, 70, 158, 142 }, { 158, 70, 178, 142 },

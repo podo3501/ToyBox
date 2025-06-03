@@ -16,41 +16,39 @@
 
 namespace UserInterfaceTest
 {
-	static bool AttachComponentHelper(UIComponent* panel, const string& componentName) noexcept
+	static bool AttachComponentHelper(UIModule* module, const string& componentName) noexcept
 	{
 		auto patchTex1 = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
-		UIComponent* component = UIEx(panel).FindComponent(componentName);
-		return UIEx(component).AttachComponent(move(patchTex1), { 10, 10 }) ? false : true;
+		return module->AttachComponent("UIModuleMainEntry", componentName, move(patchTex1), { 10, 10 }) ? false : true;
 	}
 
-	static bool DetachComponentHelper(UIComponent* panel, const string& componentName) noexcept 
+	static bool DetachComponentHelper(UIModule* module, const string& componentName) noexcept 
 	{
-		UIComponent* component = UIEx(panel).FindComponent(componentName);
-		auto [detach, parent] = UIEx(component).DetachComponent();
+		auto [detach, parent] = module->DetachComponent("UIModuleMainEntry", componentName);
 		return detach != nullptr;
 	}
 
 	TEST_F(IntegrationTest, AttachDetachTest)
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage9");
-		UIEx(m_panel).AttachComponent(move(tex9), { 80, 60 });
+		m_uiModule->AttachComponent(m_main, move(tex9), { 80, 60 });
 
-		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "PatchTextureStd9_0"), false);	//9방향 이미지에는 attach 불가
-		EXPECT_EQ(AttachComponentHelper(m_panel.get(), "PatchTextureStd1_0"), true);
+		EXPECT_EQ(AttachComponentHelper(m_uiModule.get(), "PatchTextureStd9_0"), false);	//9방향 이미지에는 attach 불가
+		EXPECT_EQ(AttachComponentHelper(m_uiModule.get(), "PatchTextureStd1_0"), true);
 
-		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "PatchTextureStd1_0"), false);
-		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "PatchTextureStd1_9"), true); //위에서 PatchTextureStd1를 attach 했다.
+		EXPECT_EQ(DetachComponentHelper(m_uiModule.get(), "PatchTextureStd1_0"), false);
+		EXPECT_EQ(DetachComponentHelper(m_uiModule.get(), "PatchTextureStd1_9"), true); //위에서 PatchTextureStd1를 attach 했다.
 
-		EXPECT_EQ(DetachComponentHelper(m_panel.get(), "PatchTextureStd9_0"), true); //위에서 PatchTextureStd1를 attach 했다.
+		EXPECT_EQ(DetachComponentHelper(m_uiModule.get(), "PatchTextureStd9_0"), true); //위에서 PatchTextureStd1를 attach 했다.
 
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage1"));
 		auto tex2 = CreateComponent<PatchTextureStd1>(UILayout{ {110, 60}, Origin::LeftTop }, "BackImage1");
 		UIEx(tex1).AttachComponent(move(tex2), { 100, 50 });	//중점에 attach 한다.
-		UIEx(m_panel).AttachComponent(move(tex1), { 100, 100 });
-		m_panel->ProcessUpdate(m_timer);
+		m_uiModule->AttachComponent(m_main, move(tex1), { 100, 100 });
+		m_uiModule->Update(m_timer);
 
 		EXPECT_EQ(UIEx(tex1Ptr).GetChildrenBoundsSize(), XMUINT2(210, 110));
-		auto [detached, parent] = UIEx(tex1Ptr).DetachComponent();
+		auto [detached, parent] = m_uiModule->DetachComponent(tex1Ptr);
 		detached->ProcessUpdate(m_timer);
 		EXPECT_EQ(UIEx(detached).GetChildrenBoundsSize(), XMUINT2(210, 110));
 	}
@@ -78,14 +76,14 @@ namespace UserInterfaceTest
 		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		UIEx(tex1).AttachComponent(move(tex2), { 100, 100 });
-		UIEx(m_panel).AttachComponent(move(tex1), { 100, 100 });
+		m_uiModule->AttachComponent(m_main, move(tex1), { 100, 100 });
 
 		tex1Ptr->Rename("image1"); 
 		tex2Ptr->Rename("image2");
 		tex1Ptr->RenameRegion("Region1");
 		
-		EXPECT_FALSE(UIEx(m_panel).FindComponent("image1")); //Img1이 다른 Region이라서 찾을 수 없다.
-		EXPECT_FALSE(UIEx(m_panel).FindComponent("image2"));
+		EXPECT_FALSE(UIEx(m_main).FindComponent("image1")); //Img1이 다른 Region이라서 찾을 수 없다.
+		EXPECT_FALSE(UIEx(m_main).FindComponent("image2"));
 		EXPECT_FALSE(UIEx(tex1Ptr).FindComponent("Main"));//Img1이 Region이라서 위에 노드는 못 찾는다.
 		EXPECT_TRUE(UIEx(tex1Ptr).FindComponent("image2"));
 		EXPECT_FALSE(UIEx(tex2Ptr).FindComponent("Main"));
@@ -96,8 +94,8 @@ namespace UserInterfaceTest
 		EXPECT_FALSE(UIEx(tex1Ptr).FindComponent("image2"));
 		EXPECT_FALSE(UIEx(tex2Ptr).FindComponent("image1"));
 
-		EXPECT_EQ(UIEx(m_panel).GetRegionComponent("Region1"), tex1Ptr);
-		EXPECT_FALSE(UIEx(m_panel).GetRegionComponent("Region2"));
+		EXPECT_EQ(UIEx(m_main).GetRegionComponent("Region1"), tex1Ptr);
+		EXPECT_FALSE(UIEx(m_main).GetRegionComponent("Region2"));
 		EXPECT_EQ(UIEx(tex1Ptr).GetRegionComponent("Region2"), tex2Ptr);
 		EXPECT_FALSE(UIEx(tex2Ptr).GetRegionComponent("Region1"));
 	}
@@ -105,17 +103,19 @@ namespace UserInterfaceTest
 	TEST_F(IntegrationTest, GetComponents)
 	{
 		auto tex9_0 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
-		UIEx(m_panel).AttachComponent(move(tex9_0), { 80, 60 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-		m_panel->ProcessUpdate(m_timer);
-		EXPECT_TRUE(CheckComponentCount(m_panel.get(), {0, 0}) == 1);
-		EXPECT_EQ(CheckComponentCount(m_panel.get(), { 100, 100 }), 4);
+		m_uiModule->AttachComponent(m_main, move(tex9_0), { 80, 60 });
+		m_uiModule->BindTextureResources();
+		m_uiModule->Update(m_timer);
+
+		EXPECT_TRUE(CheckComponentCount(m_main, {0, 0}) == 1);
+		EXPECT_EQ(CheckComponentCount(m_main, { 100, 100 }), 4);
 
 		auto tex9_1 = CreateComponent<PatchTextureStd9>(UILayout{ {221, 191}, Origin::LeftTop }, "BackImage9");
-		UIEx(m_panel).AttachComponent(move(tex9_1), { 88, 66 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-		m_panel->ProcessUpdate(m_timer);
-		EXPECT_TRUE(CheckComponentCount(m_panel.get(), { 180, 160 }) == 7);
+		m_uiModule->AttachComponent(m_main, move(tex9_1), { 88, 66 });
+		m_uiModule->BindTextureResources();
+		m_uiModule->Update(m_timer);
+
+		EXPECT_TRUE(CheckComponentCount(m_main, { 180, 160 }) == 7);
 	}
 
 	TEST_F(IntegrationTest, GetPosition)
@@ -124,11 +124,12 @@ namespace UserInterfaceTest
 		unique_ptr<UIComponent> panel = make_unique<Panel>();
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		UIEx(panel).AttachComponent(move(tex9), { 40, 30 });
-		UIEx(m_panel).AttachComponent(move(panel), { 400, 300 });
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), nullptr));
-		m_panel->ProcessUpdate(m_timer);
 
-		UIComponent* component = UIEx(m_panel).FindComponent("PatchTextureStd1_4");
+		m_uiModule->AttachComponent(m_main, move(panel), { 400, 300 });
+		m_uiModule->BindTextureResources();
+		m_uiModule->Update(m_timer);
+
+		UIComponent* component = m_uiModule->FindComponent("PatchTextureStd1_4");
 		XMINT2 pos = component->GetPosition();
 		EXPECT_EQ(pos, XMINT2(270, 216));
 		EXPECT_EQ(component->GetArea(), Rectangle(270, 216, 160, 128));
@@ -153,11 +154,11 @@ namespace UserInterfaceTest
 		using enum ComponentID;
 
 		auto listArea = CreateSampleListArea({ { 200, 170 }, Origin::LeftTop });
-		UIEx(m_panel).AttachComponent(move(listArea), {});
-		EXPECT_TRUE(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
-		m_panel->EnableToolMode(true);
+		m_uiModule->AttachComponent(m_main, move(listArea), {});
+		m_uiModule->BindTextureResources();
+		m_main->EnableToolMode(true);
 
-		auto components = UIEx(m_panel).GetRenderComponents({ 196, 40 });
+		auto components = UIEx(m_main).GetRenderComponents({ 196, 40 });
 		auto ids = GetComponentIDs(components);
 
 		//렌더링 옵션을 바꿔서 BFS 탐색을 하다가 DFS 탐색으로 전환하는 식으로 만든다.
@@ -172,17 +173,18 @@ namespace UserInterfaceTest
 		auto [panel2, panel2Ptr] = GetPtrs(CreateComponent<Panel>(UILayout{ { 20, 20 }, Origin::Center }));
 
 		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
-		UIEx(m_panel).AttachComponent(move(panel1), { 400, 300 });
-		m_panel->ProcessUpdate(m_timer);
+		m_uiModule->AttachComponent(m_main, move(panel1), { 400, 300 });
+		m_uiModule->BindTextureResources();
+		m_uiModule->Update(m_timer);
 
-		vector<UIComponent*> outList = UIEx(m_panel).GetRenderComponents({ 240, 140 });
+		vector<UIComponent*> outList = UIEx(m_main).GetRenderComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
 		panel2Ptr->ChangeOrigin(Origin::LeftTop);
-		m_panel->ProcessUpdate(m_timer);
+		m_main->ProcessUpdate(m_timer);
 
 		outList.clear();
-		outList = UIEx(m_panel).GetRenderComponents({ 239, 140 });
+		outList = UIEx(m_main).GetRenderComponents({ 239, 140 });
 		EXPECT_EQ(outList.size(), 2);
 
 		panel1Ptr->ChangeSize(800, 800); //크기 400에 40위치를 했기 때문에 ratio는 0.1이 된다. 그래서 80
@@ -204,8 +206,8 @@ namespace UserInterfaceTest
 		tex1Ptr->RenameRegion("Region_0"); //먼저 Region값을 넣어주면 이름이 같아도 되고 나중에 Region을 넣으면 
 		tex2Ptr->RenameRegion("Region_0"); //Attach 할때 unique 이름으로 만들어 준다.
 
-		UIEx(m_panel).AttachComponent(move(tex1), { 100, 100 });
-		UIEx(m_panel).AttachComponent(move(tex2), { 100, 100 });
+		m_uiModule->AttachComponent(m_main, move(tex1), { 100, 100 });
+		m_uiModule->AttachComponent(m_main, move(tex2), { 100, 100 });
 
 		EXPECT_EQ(tex2Ptr->GetRegion(), "Region_1"); //이름이 바뀌었다.
 		EXPECT_EQ(tex1Ptr->GetName(), "PatchTextureStd1_0");
@@ -223,67 +225,26 @@ namespace UserInterfaceTest
 
 		unique_ptr<UIComponent> imgDummy = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
 		auto imgDummyPtr = imgDummy.get();
-		UIEx(m_panel).AttachComponent(move(imgDummy), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(imgDummy), { 100, 100 });
 		EXPECT_TRUE(imgDummyPtr->Rename("UnChanging Name"));
 
 		auto [tex5, tex5Ptr] = GetPtrs(tex1Ptr->Clone());
-		UIEx(m_panel).AttachComponent(move(tex5), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
 		EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name"));
 	}
 
 	TEST_F(IntegrationTest, Rename)
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
-		UIEx(m_panel).AttachComponent(move(tex9), { 80, 60 });
+		m_uiModule->AttachComponent(m_main, move(tex9), { 80, 60 });
 
-		UIComponent* component = UIEx(m_panel).FindComponent("PatchTextureStd1_0");
+		UIComponent* component = m_uiModule->FindComponent("PatchTextureStd1_0");
 		EXPECT_FALSE(component->Rename("PatchTextureStd9_0")); //같은 이름이 있으면 rename이 되지 않는다.
 
 		auto newImg9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
-		auto failed = UIEx(m_panel).AttachComponent(move(newImg9), { 80, 60 }); //같은 컴포넌트를 attach하면 내부적으로 이름을 생성해 준다.
+		auto failed = m_uiModule->AttachComponent(m_main, move(newImg9), { 80, 60 });
 		EXPECT_TRUE(failed == nullptr);
 	}
-
-	//루트 UIComponent는 크게 2종류가 있다. 하나는 Panel이고 하나는 RenderTexture인데, RenderTexture는 주로 툴에서 쓰인다.
-	//enum class MainComponent : int
-	//{
-	//	Panel,
-	//	RenderTexture,
-	//};
-
-	//class UserInterface
-	//{
-	//public:
-	//	~UserInterface() = default;
-	//	UserInterface() noexcept :
-	//		m_main{ nullptr }
-	//	{}
-
-	//	bool Setup(MainComponent mainType, IRenderer* renderer)
-	//	{
-	//		switch (mainType)
-	//		{
-	//		case MainComponent::Panel: m_main = CreateComponent<Panel>(); break;
-	//		//case MainComponent::RenderTexture: main = CreateComponent<RenderTexture>(); break;
-	//		}
-	//		if (!m_main) return false;
-	//		if (!m_main->Rename("Main")) return false;
-	//		if (!m_main->RenameRegion("MainRegionEntry")) return false; //?!? Region name generator도 만들어야겠다.
-	//		renderer->AddRenderComponent(m_main.get());
-
-	//		return true;
-	//	}
-
-	//	template<typename T, typename... Args>
-	//	unique_ptr<T> CreateComponent(Args&&... args)
-	//	{
-	//		auto obj = make_unique<T>();
-	//		return obj && obj->Setup(forward<Args>(args)...) ? move(obj) : nullptr;
-	//	}
-
-	//private:
-	//	unique_ptr<UIComponent> m_main;
-	//};
 
 	static UIComponent* TestAttachName(UIModule* uiModule, UIComponent* parent, const string& childName)
 	{

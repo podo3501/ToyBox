@@ -9,32 +9,33 @@ namespace UserInterfaceTest
 {
 	TEST_F(TextureResourceBinderTest, BasicOperations)
 	{
+		auto resBinder = m_uiModule->GetTexResBinder();
 		const wstring& filename = L"UI/SampleTexture/Sample_0.png";
 		TextureSourceInfo sourceInfo{ filename, TextureSlice::One, {{10, 10, 64, 64}} };
-		EXPECT_EQ(m_resBinder->GetBindingKey(sourceInfo), "BackImage1");
+		EXPECT_EQ(resBinder->GetBindingKey(sourceInfo), "BackImage1");
 
-		vector<TextureSourceInfo> horzAreas = GetAreas(m_resBinder.get(), filename, TextureSlice::ThreeH);
+		vector<TextureSourceInfo> horzAreas = GetAreas(resBinder, filename, TextureSlice::ThreeH);
 		EXPECT_TRUE(!horzAreas.empty() && horzAreas[0].sources.size() == 3);
-		vector<TextureSourceInfo> vertAreas = GetAreas(m_resBinder.get(), filename, TextureSlice::ThreeV);
+		vector<TextureSourceInfo> vertAreas = GetAreas(resBinder, filename, TextureSlice::ThreeV);
 		EXPECT_NE(horzAreas.size(), vertAreas.size());
 
 		TextureSourceInfo testSourceInfo{ L"TestTexFilename.json", TextureSlice::One, {} };
 		TextureFontInfo testFontInfo{ L"TestFontFilename.json" };
-		EXPECT_TRUE(m_resBinder->AddFontKey(L"Test", testFontInfo));
-		EXPECT_TRUE(m_resBinder->AddTextureKey("Test", testSourceInfo));
-		EXPECT_TRUE(m_resBinder->RenameFontKey(L"Test", L"NewTest"));
-		EXPECT_TRUE(m_resBinder->RenameTextureKey("Test", "NewTest"));
-		EXPECT_TRUE(m_resBinder->RemoveKeyByFilename(L"TestFontFilename.json"));
-		EXPECT_TRUE(m_resBinder->RemoveKeyByFilename(L"TestTexFilename.json"));
+		EXPECT_TRUE(resBinder->AddFontKey(L"Test", testFontInfo));
+		EXPECT_TRUE(resBinder->AddTextureKey("Test", testSourceInfo));
+		EXPECT_TRUE(resBinder->RenameFontKey(L"Test", L"NewTest"));
+		EXPECT_TRUE(resBinder->RenameTextureKey("Test", "NewTest"));
+		EXPECT_TRUE(resBinder->RemoveKeyByFilename(L"TestFontFilename.json"));
+		EXPECT_TRUE(resBinder->RemoveKeyByFilename(L"TestTexFilename.json"));
 
-		EXPECT_TRUE(m_resBinder->GetTextureKeys(TextureSlice::ThreeH).size());
+		EXPECT_TRUE(resBinder->GetTextureKeys(TextureSlice::ThreeH).size());
 
-		TestSourceBinderWriteRead(m_resBinder);
+		TestSourceBinderWriteRead(resBinder);
 
-		auto resBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
-		m_renderer->LoadTextureBinder(resBinder.get());
+		auto newResBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
+		m_renderer->LoadTextureBinder(newResBinder.get());
 
-		EXPECT_EQ(*m_resBinder, *resBinder);
+		EXPECT_EQ(*resBinder, *newResBinder);
 	}
 
 	static void TestLoadTextureFromFile(IRenderer* renderer, TextureLoadBinder* loadBinder, const wstring& filename)
