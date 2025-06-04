@@ -11,6 +11,7 @@ class MouseTracker;
 class RenderTexture;
 class TextureResourceBinder;
 class ComponentController;
+class UIModule;
 
 class MainWindow : public InnerWindow
 {
@@ -30,10 +31,12 @@ public:
     inline bool IsOpen() const noexcept { return m_isOpen; }
 
 private:
-    bool SetupProperty(unique_ptr<Panel>&& panel);
+    //bool SetupProperty(unique_ptr<Panel>&& panel);
+    bool SetupProperty(unique_ptr<UIModule> uiModule);
     void ToggleToolMode() noexcept;
     void CheckActiveUpdate() noexcept;
     void CheckChangeWindow(const ImGuiWindow* window);
+    UIModule* GetUIModule() const noexcept;
     inline ImVec2 GetPanelSize() const noexcept;
 
     void SetupWindowAppearing() noexcept;
@@ -44,10 +47,12 @@ private:
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
-    unique_ptr<TextureResourceBinder> m_resBinder;
-    unique_ptr<RenderTexture> m_renderTex;
+    //unique_ptr<TextureResourceBinder> m_resBinder;
+    //unique_ptr<RenderTexture> m_renderTex;
     unique_ptr<ComponentController> m_controller;
-    Panel* m_panel;
+    //Panel* m_panel;
+
+    unique_ptr<RenderTexture> m_mainRenderTexture;
 
     bool m_isOpen{ false };
     bool m_isTool{ false };

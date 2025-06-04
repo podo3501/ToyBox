@@ -7,8 +7,12 @@
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "../Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
+#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/InputManager.h"
+#include "../Toy/Config.h"
+#include "../Toy/Utility.h"
 
 namespace UserInterfaceTest
 {
@@ -157,5 +161,21 @@ namespace UserInterfaceTest
 
 		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Pressed가 되어야한다.
 		TestMockRender(2, exDest, "ScrollButton3_V_Pressed");
+	}
+
+	TEST_F(ComplexComponentTest, UIModuleAsComponent)
+	{
+		UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
+		wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
+		unique_ptr<UIModule> uiModule = CreateUIModule(layout, "Main", m_renderer.get(), srcBinderFilename);
+		auto [asComponent, asComponentPtr] = GetPtrs(CreateComponent<UIModuleAsComponent>(move(uiModule)));
+
+		UIModule* module = asComponent->GetUIModule();
+		EXPECT_TRUE(module->EnableToolMode(true));
+
+		UIComponent* main = module->GetComponent();
+		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
+
+		
 	}
 }

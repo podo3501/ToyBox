@@ -4,6 +4,9 @@
 #include "Utility.h"
 #include "JsonOperation/JsonOperation.h"
 
+AutoNamer::~AutoNamer() = default;
+AutoNamer::AutoNamer() = default;
+
 bool AutoNamer::operator==(const AutoNamer& o) const noexcept
 {
     ReturnIfFalse(tie(m_nextID, m_recycled) == tie(o.m_nextID, o.m_recycled));
@@ -38,6 +41,9 @@ void AutoNamer::SerializeIO(JsonOperation& operation)
 }
 
 ////////////////////////////////////////////////////////////////
+
+ComponentNameGenerator::~ComponentNameGenerator() = default;
+ComponentNameGenerator::ComponentNameGenerator() = default;
 
 bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) const noexcept
 {
@@ -84,6 +90,9 @@ void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
 }
 
 ////////////////////////////////////////////////////////////////
+
+UINameGenerator::~UINameGenerator() = default;
+UINameGenerator::UINameGenerator() = default;
 
 bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
 {

@@ -336,3 +336,14 @@ Attach 하는 방식으로 할 예정이다. 모듈은 Attach로 조합 가능�
 하면서 하나의 씬에서 처리하는 방식을 사용, 내렸다 올렸다 하지 않고, 서버에서 재요청 하거나 씬이 달라졌다고 해서
 UI를 다시 셋팅하기 위해서 씬마다 데이터 클래스를 만드는 것이 없도록 할 예정임. 모듈이 메인 모듈에서 떨어지면 
 메모리를 해제할 예정. 자주 쓰이는 UI 모듈은 추후에 다시 생각할 예정. 
+
+UIModule을 만들고 툴에 붙일려고 하는데 RenderTexture가 UIComponent만 취급하기 때문에 UIModule은 UIComponent
+가 아니기 때문에 문제가 발생한다. UIModule은 다른 Module과 조립이 가능해야 한다. 예를 들면 메신저 UI는 모든 씬
+에서 동일하게 등장하기 때문에 모든 씬에서 메신저 UI를 만드는게 아니라 한번만 만들고 UIModule로 조립해서 씬에서
+사용하게 될 것이기 때문이다. 그래서 문제의 해결책은 UIModule을 UIComponent로 변환시키는 Adapter 패턴을
+써서 UIComponent로 변환시킨뒤 RenderTexture에서 사용할 수 있도록 만드는 것이다. 결국 Composite 패턴은 커지면
+다른 클래스를 물고 있는 클래스로 확장될 수 밖에 없고, 이 클래스는 결국 UIComponent로 만들어져야 작업이 편해
+지기 때문이다. UIModule용 Merge같은 것을 만들어서 내부 클래스들을 Merge 할 수도 있지만, 프로그램이 점점 복잡
+해지고 오류도 많이 생길 것 같다. 그리고 UIModule이 Adapter를 써서 UIComponent로 바뀌면 Merge같은 것을 쓰지
+않고도 attach와 detach가 가능해지기 때문이다. 결론적으로 Composite 패턴은 Adapter 패턴을 같이 가지고 갈 수 밖에 
+없는 구조인 것이다.

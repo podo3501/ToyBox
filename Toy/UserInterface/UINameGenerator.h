@@ -4,6 +4,8 @@ class JsonOperation;
 class AutoNamer
 {
 public:
+    ~AutoNamer();
+    AutoNamer();
     bool operator==(const AutoNamer& other) const noexcept;
 
 	string Generate() noexcept;
@@ -20,6 +22,9 @@ enum class ComponentID;
 class ComponentNameGenerator
 {
 public:
+    ~ComponentNameGenerator();
+    ComponentNameGenerator();
+
     bool operator==(const ComponentNameGenerator& other) const noexcept;
     string Create(ComponentID componentID) noexcept;
     bool Remove(const string& name) noexcept;
@@ -33,8 +38,8 @@ private:
 class UINameGenerator
 {
 public:
-	~UINameGenerator() = default;
-	UINameGenerator() = default;
+	~UINameGenerator();
+	UINameGenerator();
     bool operator==(const UINameGenerator& other) const noexcept;
 
 	string MakeNameOf(const string& region, ComponentID componentID) noexcept;

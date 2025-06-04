@@ -10,7 +10,6 @@
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "../Toy/UserInterface/UIModule.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/Config.h"
 #include "../Toy/Utility.h"
 #include "Utility.h"
 #include "IMockRenderer.h"

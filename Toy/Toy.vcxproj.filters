@@ -229,6 +229,9 @@
     <ClInclude Include="UserInterface\JsonOperation\JsonConcepts.h">
       <Filter>UserInterface\JsonOperation</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -380,6 +383,9 @@
     </ClCompile>
     <ClCompile Include="UserInterface\JsonOperation\JsonSerializationHelper.cpp">
       <Filter>UserInterface\JsonOperation</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponent.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

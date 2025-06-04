@@ -15,6 +15,7 @@
 #include "Components/RenderTexture.h"
 #include "Components/ScrollBar.h"
 #include "Components/TextureSwitcher.h"
+#include "Components/UIModuleAsComponent.h"
 #include <iterator>
 
 using FactoryFunc = unique_ptr<UIComponent>(*)();   //constexpr을 쓰기 때문에 function(동적할당)을 쓸 수없다.
@@ -35,6 +36,7 @@ constexpr FactoryFunc ComponentFactory[] = //enum의 값과 일치가 되어야 한다. 아�
     []() -> unique_ptr<UIComponent> { return make_unique<RenderTexture>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<ScrollBar>(); },
     []() -> unique_ptr<UIComponent> { return make_unique<TextureSwitcher>(); },
+    []() -> unique_ptr<UIComponent> { return make_unique<UIModuleAsComponent>(); },
     //[]() -> unique_ptr<UIComponent> { return make_unique<Unknown>(); } //이런건 없다.
 };
 

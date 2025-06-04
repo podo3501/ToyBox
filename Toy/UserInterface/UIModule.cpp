@@ -68,7 +68,7 @@ bool UIModule::SetupMainComponent(const UILayout& layout, const string& name,
 	ReturnIfFalse(m_component->Rename(name));
 	ReturnIfFalse(m_component->RenameRegion("UIModuleMainEntry"));
 
-	renderer->AddRenderComponent(m_component.get());
+	//renderer->AddRenderComponent(m_component.get());
 	m_resBinder = CreateSourceBinder(srcBinderFilename);
 	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
 	m_renderer = renderer;
@@ -126,6 +126,11 @@ bool UIModule::Read(const wstring& filename) noexcept
 	m_filename = curFilename;
 
 	return true;
+}
+
+bool UIModule::EnableToolMode(bool enable)
+{
+	return m_component->EnableToolMode(enable);
 }
 
 UIComponent* UIModule::FindComponent(const string& name) const noexcept

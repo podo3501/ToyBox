@@ -74,7 +74,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, List
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
 	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, renderer->GetTextureController()));
-
+	
 	protoTextArea->Rename("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
 	auto failed = prototype->AttachComponentToCenter(move(protoTextArea), { 0, -6 });

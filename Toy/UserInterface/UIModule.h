@@ -28,9 +28,11 @@ public:
 	void SerializeIO(JsonOperation& operation);
 	void Rename(UIComponent* component, const string& name);
 	bool Write(const wstring& filename = L"") noexcept;
+	bool EnableToolMode(bool enable);
 	UIComponent* FindComponent(const string& name) const noexcept;
 	inline UIComponent* GetComponent() const noexcept { return m_component.get(); }
 	inline TextureResourceBinder* GetTexResBinder() const noexcept { return m_resBinder.get(); }
+	inline const wstring& GetFilename() const noexcept { return m_filename; }
 
 private:
 	bool Read(const wstring& filename = L"") noexcept;
