@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UICommandRegistry.h"
 #include "Utility.h"
+#include "../../UIModule.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
@@ -9,9 +10,10 @@
 #include "../../UIComponent/Components/TextArea.h"
 #include "../Include/IRenderer.h"
 
-AttachComponentCommand::AttachComponentCommand(UIComponent* parent,
+AttachComponentCommand::AttachComponentCommand(UIModule* uiModule, UIComponent* parent,
 	unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept :
 	UICommand{ nullptr },
+	m_uiModule{ uiModule },
 	m_parent{ parent },
 	m_attach{ move(component) },
 	m_pos{ relativePos },
@@ -21,13 +23,13 @@ AttachComponentCommand::AttachComponentCommand(UIComponent* parent,
 bool AttachComponentCommand::Execute()
 {
 	m_detach = m_attach.get();
-	m_failureResult = UIEx(m_parent).AttachComponent(move(m_attach), m_pos);
+	m_failureResult = m_uiModule->AttachComponent(m_parent, move(m_attach), m_pos);
 	return m_failureResult == nullptr;
 }
 
 bool AttachComponentCommand::Undo()
 {
-	if (auto [detach, parent] = UIEx(m_detach).DetachComponent(); detach)
+	if (auto [detach, parent] = m_uiModule->DetachComponent(m_detach); detach)
 	{
 		m_attach = move(detach);
 		return true;
@@ -37,7 +39,7 @@ bool AttachComponentCommand::Undo()
 
 bool AttachComponentCommand::Redo()
 {
-	m_failureResult = UIEx(m_parent).AttachComponent(move(m_attach), m_pos);
+	m_failureResult = m_uiModule->AttachComponent(m_parent, move(m_attach), m_pos);
 	return m_failureResult == nullptr;
 }
 
@@ -48,8 +50,9 @@ unique_ptr<UIComponent> AttachComponentCommand::GetFailureResult() noexcept
 
 //////////////////////////////////////////////////////////////////
 
-DetachComponentCommand::DetachComponentCommand(UIComponent* detach) noexcept :
+DetachComponentCommand::DetachComponentCommand(UIModule* uiModule, UIComponent* detach) noexcept :
 	UICommand{ nullptr },
+	m_uiModule{ uiModule },
 	m_detach{ detach },
 	m_component{ nullptr },
 	m_parent{ nullptr },
@@ -59,7 +62,7 @@ DetachComponentCommand::DetachComponentCommand(UIComponent* detach) noexcept :
 bool DetachComponentCommand::Execute()
 {
 	XMINT2 pos = m_detach->GetRelativePosition();
-	auto [component, parent] = UIEx(m_detach).DetachComponent();
+	auto [component, parent] = m_uiModule->DetachComponent(m_detach);
 	if (!component) return false;
 
 	m_position = pos;
@@ -74,7 +77,7 @@ bool DetachComponentCommand::Execute()
 bool DetachComponentCommand::Undo()
 {
 	UIComponent* detach = m_component.get();
-	auto resultComponent = UIEx(m_parent).AttachComponent(move(m_component), m_position);
+	auto resultComponent = m_uiModule->AttachComponent(m_parent, move(m_component), m_position);
 	if (resultComponent) return false;
 
 	m_detach = detach;
@@ -83,7 +86,7 @@ bool DetachComponentCommand::Undo()
 
 bool DetachComponentCommand::Redo()
 {
-	auto [component, parent] = UIEx(m_detach).DetachComponent();
+	auto [component, parent] = m_uiModule->DetachComponent(m_detach);
 	if (!component) return false;
 
 	m_component = move(component);

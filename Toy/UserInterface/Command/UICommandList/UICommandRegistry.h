@@ -3,11 +3,13 @@
 #include "../CommandType.h"
 #include "../../UIComponent/UIType.h"
 
+class UIModule;
 class UIComponent;
 class AttachComponentCommand : public UICommand
 {
 public:
-	AttachComponentCommand(UIComponent* parent, unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
+	AttachComponentCommand(UIModule* uiModule, UIComponent* parent, 
+		unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept;
 
 	virtual bool Execute() override;
 	virtual bool Undo() override;
@@ -20,6 +22,7 @@ protected:
 	virtual bool IsMerge(UICommand*) noexcept { return false; }
 
 private:
+	UIModule* m_uiModule;
 	UIComponent* m_parent;
 	unique_ptr<UIComponent> m_attach;
 	XMINT2 m_pos{};
@@ -30,7 +33,7 @@ private:
 class DetachComponentCommand : public UICommand
 {
 public:
-	DetachComponentCommand(UIComponent* detach) noexcept;
+	DetachComponentCommand(UIModule* uiModule, UIComponent* detach) noexcept;
 
 	virtual bool Execute() override;
 	virtual bool Undo() override;
@@ -43,6 +46,7 @@ protected:
 	virtual bool IsMerge(UICommand*) noexcept { return false; }
 
 private:
+	UIModule* m_uiModule;
 	UIComponent* m_detach;
 	XMINT2 m_position{};
 	unique_ptr<UIComponent> m_component;

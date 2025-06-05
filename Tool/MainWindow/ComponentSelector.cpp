@@ -3,6 +3,7 @@
 #include "SelectedComponent/ComponentEdit/EditWindow.h"
 #include "SelectedComponent/ComponentTooltip.h"
 #include "SelectedComponent/EditWindowFactory.h"
+#include "../Toy/UserInterface/UIModule.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Utility.h"
@@ -11,23 +12,36 @@
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 
 ComponentSelector::~ComponentSelector() = default;
-ComponentSelector::ComponentSelector(IRenderer* renderer, 
-	TextureResourceBinder* resBinder, UICommandList* cmdList, UIComponent* panel) :
+//ComponentSelector::ComponentSelector(IRenderer* renderer, 
+//	TextureResourceBinder* resBinder, UICommandList* cmdList, UIComponent* panel) :
+//	m_renderer{ renderer },
+//	m_resBinder{ resBinder },
+//	m_cmdList{ cmdList },
+//	m_mainWnd{ nullptr },
+//	m_tooltip{ make_unique<ComponentTooltip>(panel) },
+//	m_editWindow{ nullptr },
+//	m_panel{ panel },
+//	m_component{ nullptr }
+//{
+//	EditWindowFactory::RegisterFactories();
+//}
+ComponentSelector::ComponentSelector(IRenderer* renderer, UIModule* uiModule, UICommandList* cmdList) :
 	m_renderer{ renderer },
-	m_resBinder{ resBinder },
+	m_uiModule{ uiModule },
 	m_cmdList{ cmdList },
 	m_mainWnd{ nullptr },
-	m_tooltip{ make_unique<ComponentTooltip>(panel) },
+	m_tooltip{ make_unique<ComponentTooltip>(uiModule->GetComponent()) },
 	m_editWindow{ nullptr },
-	m_panel{ panel },
+	m_mainComponent{ uiModule->GetComponent() },
 	m_component{ nullptr }
 {
 	EditWindowFactory::RegisterFactories();
 }
 
+
 void ComponentSelector::SetPanel(UIComponent* panel) noexcept
 {
-	m_panel = panel;
+	m_mainComponent = panel;
 	m_tooltip->SetPanel(panel);
 }
 
@@ -40,7 +54,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 		return;
 	}
 
-	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_cmdList, m_resBinder);
+	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_cmdList, m_uiModule->GetTexResBinder());
 	if (m_editWindow) m_editWindow->Setup();
 
 	m_component = component;
@@ -54,7 +68,7 @@ void ComponentSelector::SelectComponent() noexcept
 
 	static vector<UIComponent*> preComponentList{ nullptr };
 	const XMINT2& pos = InputManager::GetMouse().GetPosition();
-	vector<UIComponent*> componentList = UIEx(m_panel).GetRenderComponents(pos);
+	vector<UIComponent*> componentList = UIEx(m_mainComponent).GetRenderComponents(pos);
 	if (componentList.empty()) return;
 
 	if (preComponentList == componentList)
@@ -121,13 +135,13 @@ void ComponentSelector::RepeatedSelection(const vector<UIComponent*>& componentL
 	SetComponent(componentList[idx]);
 }
 
-bool AttachSelectedComponent(UICommandList* cmdList, ComponentSelector* selector, FloatingComponent* floater,
-	const XMINT2& position) noexcept
+bool AttachSelectedComponent(UICommandList* cmdList, UIModule* uiModule, 
+	ComponentSelector* selector, FloatingComponent* floater, const XMINT2& position) noexcept
 {
 	UIComponent* selectComponent = selector->GetComponent();
 	if (!selectComponent) return false;
 
-	if (!AddComponentFromScreenPos(cmdList, selectComponent, floater, position))
+	if (!AddComponentFromScreenPos(cmdList, uiModule, selectComponent, floater, position))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Attachment failed for this component.");
 		return false;
@@ -136,12 +150,12 @@ bool AttachSelectedComponent(UICommandList* cmdList, ComponentSelector* selector
 	return true;
 }
 
-unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList, ComponentSelector* selector) noexcept
+unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList, UIModule* uiModule, ComponentSelector* selector) noexcept
 {
 	UIComponent* selectComponent = selector->GetComponent();
 	if (!selectComponent) return nullptr;
 
-	auto [detach, parent] = cmdList->DetachComponent(selectComponent);
+	auto [detach, parent] = cmdList->DetachComponent(uiModule, selectComponent);
 	if (!detach)
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Detachment failed for this component.");

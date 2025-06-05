@@ -36,16 +36,13 @@ namespace UserInterfaceTest
 		vector<unique_ptr<UIComponent>> h;
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::Center }, "BackImage1"));
 
-		//CaptureSnapshot(h);
-		//ExecuteAndCapture(h, [&] { c.AttachComponent(m_main, move(tex1), { 111, 222 }); });
-		//ExecuteAndCapture(h, [&] { c.SetRelativePosition(tex1Ptr, { 123, 234 }); });
-		//ExecuteAndCapture(h, [&] { c.SetSize(tex1Ptr, { 32, 32 }); });
-		//ExecuteAndCapture(h, [&] { c.RenameRegion(tex1Ptr, "region"); });
-		//ExecuteAndCapture(h, [&] { c.Rename(tex1Ptr, "tex1"); });
-		//ExecuteAndCapture(h, [&] { c.DetachComponent(tex1Ptr); });
-		//VerifyUndoRedo(c, h);
-
 		CaptureSnapshot(h);
+		ExecuteAndCapture(h, [&] { c.AttachComponent(m_uiModule.get(), m_main, move(tex1), {111, 222}); });
+		ExecuteAndCapture(h, [&] { c.SetRelativePosition(tex1Ptr, { 123, 234 }); });
+		ExecuteAndCapture(h, [&] { c.SetSize(tex1Ptr, { 32, 32 }); });
+		ExecuteAndCapture(h, [&] { c.RenameRegion(tex1Ptr, "region"); });
+		ExecuteAndCapture(h, [&] { c.Rename(tex1Ptr, "tex1"); });
+		ExecuteAndCapture(h, [&] { c.DetachComponent(m_uiModule.get(), tex1Ptr); });
 		VerifyUndoRedo(c, h);
 	}
 

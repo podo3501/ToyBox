@@ -87,11 +87,11 @@ void DrawRectangles(const ImGuiWindow* window, const vector<Rectangle>& rects,
 		});
 }
 
-bool AddComponentFromScreenPos(UICommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept
+bool AddComponentFromScreenPos(UICommandList* cmdList, UIModule* module, UIComponent* parent, FloatingComponent* floater, const XMINT2& pos) noexcept
 {
-	const XMINT2& comPos = addable->GetPosition();
+	const XMINT2& comPos = parent->GetPosition();
 	XMINT2 relativePos = pos - comPos;
-	unique_ptr<UIComponent> failed = cmdList->AttachComponent(addable, floater->GetComponent(), relativePos);
+	unique_ptr<UIComponent> failed = cmdList->AttachComponent(module, parent, floater->GetComponent(), relativePos);
 	if (failed) //제대로 붙지 않았다면 인자로 보낸 Component가 리턴값으로 돌아온다.
 	{
 		floater->SetComponent(move(failed));

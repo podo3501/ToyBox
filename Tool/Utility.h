@@ -58,10 +58,6 @@ namespace Tool
 }
 void IgnoreMouseClick(ImGuiWindow* window);
 
-class UIComponent;
-class UICommandList;
-class FloatingComponent;
-
 inline ImColor ToColor(const XMVECTORF32& color, float alpha = 1.f) noexcept {
 	return {
 		static_cast<int>(color.f[0] * 255.0f),
@@ -70,5 +66,9 @@ inline ImColor ToColor(const XMVECTORF32& color, float alpha = 1.f) noexcept {
 		static_cast<int>(alpha * 255.0f) };
 }
 
-bool AddComponentFromScreenPos(UICommandList* cmdList, UIComponent* addable, FloatingComponent* floater, const XMINT2& pos) noexcept;
+class UIComponent;
+class UICommandList;
+class FloatingComponent;
+class UIModule;
+bool AddComponentFromScreenPos(UICommandList* cmdList, UIModule* module, UIComponent* parent, FloatingComponent* floater, const XMINT2& pos) noexcept;
 wstring ReplaceFileExtension(const wstring& filename, const wstring& newExtension);

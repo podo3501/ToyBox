@@ -2,6 +2,7 @@
 
 struct IRenderer;
 class TextureResourceBinder;
+class UIModule;
 class UIComponent;
 class FloatingComponent;
 class ComponentSelector;
@@ -11,8 +12,9 @@ class ComponentController
 {
 public:
 	~ComponentController();
-	ComponentController(IRenderer* renderer, TextureResourceBinder* resBinder,
-		UIComponent* panel, const string& mainWndNam) noexcept;
+	/*ComponentController(IRenderer* renderer, TextureResourceBinder* resBinder,
+		UIComponent* panel, const string& mainWndNam) noexcept;*/
+	ComponentController(IRenderer* renderer, UIModule* uiModule, const string& mainWndName) noexcept;
 
 	void SetPanel(UIComponent* panel) noexcept;
 	void SetMainWindow(ImGuiWindow* mainWnd) noexcept;
@@ -30,6 +32,7 @@ private:
 	bool CheckRedoComponent() noexcept;
 
 	ImGuiWindow* m_mainWnd;
+	UIModule* m_uiModule;
 	unique_ptr<UICommandList> m_cmdList;
 	unique_ptr<FloatingComponent> m_floater;
 	unique_ptr<ComponentSelector> m_selector;
