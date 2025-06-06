@@ -80,7 +80,6 @@ bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, 
 {
 	ReturnIfFalse(Read(filename));
 
-	renderer->AddRenderComponent(m_component.get());
 	m_resBinder = CreateSourceBinder(srcBinderFilename);
 	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
 	m_renderer = renderer;
@@ -88,6 +87,11 @@ bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, 
 	ReturnIfFalse(BindTextureResources());
 
 	return true;
+}
+
+void UIModule::AddRenderer() noexcept
+{
+	m_renderer->AddRenderComponent(m_component.get());
 }
 
 bool UIModule::BindTextureResources() noexcept
@@ -102,6 +106,11 @@ bool UIModule::BindTextureResources() noexcept
 bool UIModule::Update(const DX::StepTimer& timer) noexcept
 {
 	return m_component->ProcessUpdate(timer);
+}
+
+void UIModule::Render(ITextureRender* render) const
+{
+	return m_component->ProcessRender(render);
 }
 
 void UIModule::SerializeIO(JsonOperation& operation)

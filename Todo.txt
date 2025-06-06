@@ -180,6 +180,11 @@
             Attach 한 후에 Binding을 명시적으로 호출하는 식으로.
         JsonHelper 클래스 지우기
 
+		UIModule 을 찾아내서 내부적으로 attach하는 부분을 UIModule을 통해서 attach 하도록 수정.
+		바꾼후 Tracy를 통해서 얼만큼 속도 향상이 있는지 체크
+		UIModule로 바꾸고 나서 생긴 버그들 수정
+		코드정리
+		Json에서 Helper 및 Read 부분 정리
         
 bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
 {

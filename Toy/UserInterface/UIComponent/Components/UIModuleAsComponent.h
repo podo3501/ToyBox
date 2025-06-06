@@ -16,6 +16,7 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept;
+	virtual void ImplementRender(ITextureRender* render) const override;
 
 public:
 	bool Setup(unique_ptr<UIModule> module) noexcept;

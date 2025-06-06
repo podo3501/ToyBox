@@ -39,6 +39,7 @@ void ToyTestFixture::SetUp()
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
 	m_uiModule = CreateUIModule(layout, "Main", m_renderer.get(), srcBinderFilename);
+	m_uiModule->AddRenderer();
 	m_main = m_uiModule->GetComponent();
 
 	TracyStartupProfiler();
