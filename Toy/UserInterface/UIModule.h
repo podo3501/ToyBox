@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+struct ITextureRender;
 class UILayout;
 class UIComponent;
 class UINameGenerator;
@@ -17,8 +18,10 @@ public:
 	bool SetupMainComponent(const UILayout& layout, const string& name,
 		IRenderer* renderer, const wstring& srcBinderFilename);
 	bool SetupMainComponent(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename);
+	void AddRenderer() noexcept;
 	bool BindTextureResources() noexcept;
 	bool Update(const DX::StepTimer& timer) noexcept;
+	void Render(ITextureRender* render) const;
 	unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	unique_ptr<UIComponent> AttachComponent(const string& regionName, const string& name,

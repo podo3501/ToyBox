@@ -20,6 +20,10 @@ bool UIModuleAsComponent::ImplementBindSourceInfo(TextureResourceBinder*, ITextu
 
 bool UIModuleAsComponent::ImplementUpdate(const DX::StepTimer& timer) noexcept
 {
-	m_module->Update(timer);
-	return true;
+	return m_module->Update(timer);
+}
+
+void UIModuleAsComponent::ImplementRender(ITextureRender* render) const
+{
+	m_module->Render(render);
 }

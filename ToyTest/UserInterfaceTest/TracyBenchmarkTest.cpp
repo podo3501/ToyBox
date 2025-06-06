@@ -11,6 +11,6 @@ namespace UserInterfaceTest
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		m_uiModule->AttachComponent(m_main, move(listArea), { 400, 300 });
-		MakeSampleListAreaData(m_renderer.get(), GetResBinder(), listAreaPtr, 1);
+		MakeSampleListAreaData(m_renderer.get(), GetResBinder(), listAreaPtr, 20);
 	}
 }

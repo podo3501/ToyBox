@@ -39,6 +39,7 @@ bool GameMainLoop::InitializeDerived()
 {
     UILayout layout{ GetSizeFromRectangle(GetRectResolution()) };
     m_uiModule = CreateUIModule(layout, "Main", m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
+    m_uiModule->AddRenderer();
     m_renderer->LoadTextureBinder(m_uiModule->GetTexResBinder());
 
     return true;
