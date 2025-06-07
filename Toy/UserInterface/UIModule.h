@@ -4,6 +4,7 @@ struct IRenderer;
 struct ITextureRender;
 class UILayout;
 class UIComponent;
+class Panel;
 class UINameGenerator;
 class TextureResourceBinder;
 class JsonOperation;
@@ -33,16 +34,18 @@ public:
 	bool Write(const wstring& filename = L"") noexcept;
 	bool EnableToolMode(bool enable);
 	UIComponent* FindComponent(const string& name) const noexcept;
-	inline UIComponent* GetComponent() const noexcept { return m_component.get(); }
+	UIComponent* GetComponent() const noexcept;
 	inline TextureResourceBinder* GetTexResBinder() const noexcept { return m_resBinder.get(); }
+	inline UINameGenerator* GetNameGenerator() const noexcept { return m_generator.get(); }
 	inline const wstring& GetFilename() const noexcept { return m_filename; }
 
 private:
 	bool Read(const wstring& filename = L"") noexcept;
+	void ReloadDatas() noexcept;
 	UIComponent* FindComponentInRegion(const string& regionName, const string& name) const noexcept;
 
 	unique_ptr<UINameGenerator> m_generator;
-	unique_ptr<UIComponent> m_component;
+	unique_ptr<UIComponent> m_panel;
 	unique_ptr<TextureResourceBinder> m_resBinder;
 	IRenderer* m_renderer;
 

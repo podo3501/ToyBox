@@ -32,7 +32,8 @@ namespace UserInterfaceTest
 	TEST_F(BasicComponentTest, PatchTextureStd1)
 	{
 		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
-		m_uiModule->AttachComponent(m_main, move(tex), { 400, 300 });
+		//m_uiModule->AttachComponent(m_main, move(tex), { 400, 300 });
+		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, img1Ptr);
 

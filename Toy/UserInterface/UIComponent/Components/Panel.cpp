@@ -9,7 +9,8 @@ Panel::Panel() {};
 Panel::~Panel() = default;
 
 Panel::Panel(const Panel& other) :
-    UIComponent{ other }
+    UIComponent{ other },
+    m_uiModule{ nullptr }
 {}
 
 Panel::Panel(const string& name, const UILayout& layout) noexcept :

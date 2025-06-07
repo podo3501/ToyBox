@@ -3,11 +3,15 @@
 #include "UIComponent.h"
 #include "../Include/IRenderer.h"
 #include "../TextureResourceBinder/TextureResourceBinder.h"
+#include "Components/UIModuleAsComponent.h"
+#include "Components/Panel.h"
 #include "../UINameGenerator.h"
+#include "../UIModule.h"
 #include "Config.h"
 
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
-	m_component{ component }
+	m_component{ component },
+	m_cachedUIModule{ nullptr }
 {}
 //
 //unique_ptr<UIComponent> UIComponentEx::AttachComponent(
@@ -26,44 +30,79 @@ UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 //	return nullptr;
 //}
 
+//unique_ptr<UIComponent> UIComponentEx::AttachComponent(
+//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+//{
+//	ZoneScopedN("AttachComponent"); // 전체 함수 측정
+//
+//	if (!m_component->HasStateFlag(StateFlag::Attach))
+//		return child;
+//
+//	{
+//		ZoneScopedN("GenerateUniqueNames");
+//		m_component->GenerateUniqueName(child.get());
+//	}
+//
+//	{
+//		ZoneScopedN("GenerateUniqueRegionName");
+//		m_component->GenerateUniqueRegionName(child.get());
+//	}
+//
+//	{
+//		ZoneScopedN("SetParent");
+//		child->SetParent(m_component);
+//	}
+//
+//	{
+//		ZoneScopedN("SetRelativePosition");
+//		child->m_transform.SetRelativePosition(
+//			m_component->m_layout.GetSize(), relativePos);
+//	}
+//
+//	{
+//		ZoneScopedN("PushBackChild");
+//		m_component->m_children.emplace_back(move(child));
+//	}
+//
+//	{
+//		ZoneScopedN("UpdateLayout");
+//		m_component->UpdatePositionsManually(true);
+//	}
+//
+//	return nullptr;
+//}
+
 unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
-	ZoneScopedN("AttachComponent"); // 전체 함수 측정
-
 	if (!m_component->HasStateFlag(StateFlag::Attach))
 		return child;
 
-	{
-		ZoneScopedN("GenerateUniqueNames");
-		m_component->GenerateUniqueName(child.get());
-	}
+	m_component->GenerateUniqueRegionName(child.get());
 
-	{
-		ZoneScopedN("GenerateUniqueRegionName");
-		m_component->GenerateUniqueRegionName(child.get());
-	}
+	UIComponent* regionComponent = m_component->GetParentRegionRoot();
+	const auto& region = regionComponent->GetRegion();
 
-	{
-		ZoneScopedN("SetParent");
-		child->SetParent(m_component);
-	}
+	UIModule* uiModule = GetUIModule();
+	UINameGenerator* nameGen = uiModule->GetNameGenerator();
 
-	{
-		ZoneScopedN("SetRelativePosition");
-		child->m_transform.SetRelativePosition(
-			m_component->m_layout.GetSize(), relativePos);
-	}
+	child->ForEachChildUntilFail([this, nameGen, &region](UIComponent* component) {
+		const auto& name = component->GetUniqueName();
+		if (!name.empty()) return true;
 
-	{
-		ZoneScopedN("PushBackChild");
-		m_component->m_children.emplace_back(move(child));
-	}
+		auto makeName = nameGen->MakeNameOf(region, component->GetTypeID());
+		if (makeName.empty()) return false;
 
-	{
-		ZoneScopedN("UpdateLayout");
-		m_component->UpdatePositionsManually(true);
-	}
+		//component->SetUniqueName(makeName);
+		component->m_name = makeName;
+		return true;
+		});
+
+	child->SetParent(m_component);
+	child->m_transform.SetRelativePosition(
+		m_component->m_layout.GetSize(), relativePos);
+	m_component->m_children.emplace_back(move(child));
+	m_component->UpdatePositionsManually(true);
 
 	return nullptr;
 }
@@ -221,6 +260,39 @@ bool UIComponentEx::IsPositionUpdated() const noexcept
 		UIComponent* cloneComponent = UIEx(clone).FindComponent(child->GetName());
 		return cloneComponent->GetPosition() == child->GetPosition();
 		});
+}
+
+UIModule* UIComponentEx::GetUIModule(UIComponent* start) const
+{
+	UIComponent* current = start;
+
+	while (current)
+	{
+		if (Panel* panel = ComponentCast<Panel*>(current))
+		{
+			if (UIModule* module = panel->GetUIModule())
+				return module;
+		}
+
+		current = current->m_parent;
+	}
+
+	return nullptr;
+}
+
+UIModule* UIComponentEx::GetUIModule() const noexcept
+{
+	if (m_cachedUIModule) return m_cachedUIModule;
+	
+	m_cachedUIModule = GetUIModule(m_component);
+	return m_cachedUIModule;
+}
+
+void UIComponentEx::InvalidateUIModuleCache()
+{
+	m_cachedUIModule = nullptr;
+	for (auto& child : m_component->m_children)
+		UIEx(child).InvalidateUIModuleCache();
 }
 
 /////////////////////////////////////////////////////////////////
