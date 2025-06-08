@@ -51,10 +51,9 @@ bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) con
     return true;
 }
 
-string ComponentNameGenerator::Create(ComponentID componentID) noexcept
+string ComponentNameGenerator::Create(const string& prefix, ComponentID id) noexcept
 {
-    auto componentName = EnumToString<ComponentID>(componentID);
-    return componentName + "_" + m_namers[componentID].Generate();
+    return prefix + m_namers[id].Generate();
 }
 
 template<typename T>
@@ -100,9 +99,19 @@ bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
     return true;
 }
 
-string UINameGenerator::MakeNameOf(const string& region, ComponentID componentID) noexcept
+static bool ShouldGenerateName(const string& name, const string& prefix)
 {
-    return m_regionNames[region].Create(componentID);
+    if (name.empty()) return true;
+    return name.find(prefix) != string::npos;
+}
+
+string UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept
+{
+    const string& prefix = EnumToString<ComponentID>(componentID) + "_";
+    if (!ShouldGenerateName(name, prefix))
+        return name;
+
+    return m_regionNames[region].Create(prefix, componentID);
 }
 
 bool UINameGenerator::RemoveNameOf(const string& region, const string& name) noexcept

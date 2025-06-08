@@ -26,7 +26,7 @@ public:
     ComponentNameGenerator();
 
     bool operator==(const ComponentNameGenerator& other) const noexcept;
-    string Create(ComponentID componentID) noexcept;
+    string Create(const string& prefix, ComponentID id) noexcept;
     bool Remove(const string& name) noexcept;
 
     void SerializeIO(JsonOperation& operation);
@@ -42,7 +42,7 @@ public:
 	UINameGenerator();
     bool operator==(const UINameGenerator& other) const noexcept;
 
-	string MakeNameOf(const string& region, ComponentID componentID) noexcept;
+	string MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept;
     bool RemoveNameOf(const string& region, const string& name) noexcept;
 
     void SerializeIO(JsonOperation& operation);

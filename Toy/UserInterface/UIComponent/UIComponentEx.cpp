@@ -83,17 +83,21 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	UIComponent* regionComponent = m_component->GetParentRegionRoot();
 	const auto& region = regionComponent->GetRegion();
 
+	unique_ptr<UINameGenerator> newNameGen{ nullptr };
+	UINameGenerator* nameGen{ nullptr };
 	UIModule* uiModule = GetUIModule();
-	UINameGenerator* nameGen = uiModule->GetNameGenerator();
+	if (uiModule)
+		nameGen = uiModule->GetNameGenerator();
+	else
+	{
+		newNameGen = make_unique<UINameGenerator>();
+		nameGen = newNameGen.get();
+	}
 
 	child->ForEachChildUntilFail([this, nameGen, &region](UIComponent* component) {
-		const auto& name = component->GetUniqueName();
-		if (!name.empty()) return true;
-
-		auto makeName = nameGen->MakeNameOf(region, component->GetTypeID());
+		auto makeName = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID());
 		if (makeName.empty()) return false;
 
-		//component->SetUniqueName(makeName);
 		component->m_name = makeName;
 		return true;
 		});
@@ -117,13 +121,10 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(UINameGenerator* generato
 	const auto& region = regionComponent->GetRegion();
 
 	child->ForEachChildUntilFail([this, generator, &region](UIComponent* component) {
-		const auto& name = component->GetUniqueName();
-		if (!name.empty()) return true;
-
-		auto makeName = generator->MakeNameOf(region, component->GetTypeID());
+		auto makeName = generator->MakeNameOf(component->GetName(), region, component->GetTypeID());
 		if (makeName.empty()) return false;
 
-		component->SetUniqueName(makeName);
+		component->m_name = makeName;
 		return true;
 		});
 	
