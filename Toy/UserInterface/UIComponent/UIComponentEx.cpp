@@ -209,7 +209,7 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 	UIComponent* root = m_component->GetRegionRoot();
 	if (!root) root = m_component->GetRoot();
 	const string& rootRegion = root->GetRegion();
-	UIComponent* foundComponent = nullptr;
+	UIComponent* foundComponent{ nullptr };
 
 	root->ForEachChildBool([&foundComponent, &rootRegion, &findRegion](UIComponent* component) {
 		const string& curRegion = component->GetRegion();
@@ -227,6 +227,14 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 		});
 
 	return foundComponent;
+}
+
+UIComponent* UIComponentEx::FindComponent(const string& region, const string& name) noexcept
+{
+	UIComponent* component = GetRegionComponent(region);
+	if (component == nullptr) return nullptr;
+
+	return UIEx(component).FindComponent(name);
 }
 
 vector<UIComponent*> UIComponentEx::GetRenderComponents(const XMINT2& pos) noexcept
@@ -252,13 +260,14 @@ XMUINT2 UIComponentEx::GetChildrenBoundsSize() const noexcept
 	return GetSizeFromRectangle(totalArea);
 }
 
-bool UIComponentEx::IsPositionUpdated() const noexcept
+bool UIComponentEx::IsPositionUpdated() const noexcept //?!? 이건 뭐할때 쓰는 함수이지? 테스트 용이면 테스트쪽으로 빼자.
 {
 	m_component->UpdatePositionsManually(true);
 	auto clone = m_component->Clone();
 	clone->UpdatePositionsManually(true); //클론을 만들어서 업데이트 시킨후 현재 컴포넌트와 포지션값 비교.
 	return m_component->ForEachChildUntilFail([&clone](const UIComponent* child) {
-		UIComponent* cloneComponent = UIEx(clone).FindComponent(child->GetName());
+		UIComponent* cloneComponent = UIEx(clone).FindComponent(child->GetMyRegion(), child->GetName());
+		if (cloneComponent == nullptr) return false;
 		return cloneComponent->GetPosition() == child->GetPosition();
 		});
 }

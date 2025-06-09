@@ -75,6 +75,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 
 	m_prototypeContainer = switcher.get();
 	m_prototypeContainer->Rename("Prototype Container");
+	m_prototypeContainer->RenameRegion("ListContainer");
 	m_prototypeContainer->SetStateFlag(StateFlag::ActiveUpdate | StateFlag::Render, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	UIEx(this).AttachComponent(move(switcher), {});
 

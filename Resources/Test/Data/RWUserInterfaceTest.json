@@ -121,7 +121,7 @@
                                 "y": 0
                             }
                         },
-                        "Region": "",
+                        "Region": "ListContainer",
                         "StateFlag": 49,
                         "RenderSearch": 2,
                         "Children": [

@@ -83,7 +83,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, List
 	for (auto idx : views::iota(0, itemCount))
 	{
 		auto container = listArea->PrepareContainer();
-		TextArea* textArea = UIEx(container).FindComponent<TextArea*>("ListTextArea_" + to_string(idx));
+		TextArea* textArea = UIEx(container).FindComponent<TextArea*>("ListTextArea");
 		textArea->SetText(L"<English><Black>Test " + IntToWString(idx * 10) + L"</Black></English>");
 	}
 
