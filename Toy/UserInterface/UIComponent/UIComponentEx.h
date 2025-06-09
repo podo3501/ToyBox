@@ -23,6 +23,7 @@ public:
 	void Rename(UINameGenerator* generator, const string& name) noexcept;
 
 	UIComponent* FindComponent(const string& name) noexcept;
+	UIComponent* FindComponent(const string& region, const string& name) noexcept;
 
 	template<typename T>
 	T FindComponent(const string& name) noexcept

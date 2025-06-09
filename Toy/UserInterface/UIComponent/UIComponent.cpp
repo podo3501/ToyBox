@@ -193,6 +193,12 @@ bool UIComponent::RenameRegion(const string& region) noexcept
 	return true;
 }
 
+string UIComponent::GetMyRegion() const noexcept
+{
+	UIComponent* regionRoot = GetRegionRoot();
+	return regionRoot->GetRegion();
+}
+
 bool UIComponent::EnableToolMode(bool enable) noexcept
 {
 	ReturnIfFalse(ranges::all_of(m_children, [enable](auto& child) {
