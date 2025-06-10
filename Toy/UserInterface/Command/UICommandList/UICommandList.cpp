@@ -8,10 +8,10 @@
 UICommandList::~UICommandList() = default;
 UICommandList::UICommandList() = default;
 
-unique_ptr<UIComponent> UICommandList::AttachComponent(UIModule* uiModule,
-	UIComponent* parent, unique_ptr<UIComponent> component, const XMINT2& relativePos)
+unique_ptr<UIComponent> UICommandList::AttachComponent(	UIComponent* parent, 
+	unique_ptr<UIComponent> component, const XMINT2& relativePos)
 {
-	unique_ptr<UICommand> command = make_unique<AttachComponentCommand>(uiModule, parent, move(component), relativePos);
+	unique_ptr<UICommand> command = make_unique<AttachComponentCommand>(parent, move(component), relativePos);
 	if (!command->Execute())
 	{
 		auto attachCmd = static_cast<AttachComponentCommand*>(command.get());
@@ -22,9 +22,9 @@ unique_ptr<UIComponent> UICommandList::AttachComponent(UIModule* uiModule,
 	return nullptr;
 }
 
-pair<unique_ptr<UIComponent>, UIComponent*> UICommandList::DetachComponent(UIModule* module, UIComponent* detach)
+pair<unique_ptr<UIComponent>, UIComponent*> UICommandList::DetachComponent(UIComponent* detach)
 {
-	unique_ptr<UICommand> command = make_unique<DetachComponentCommand>(module, detach);
+	unique_ptr<UICommand> command = make_unique<DetachComponentCommand>(detach);
 	command->Execute();
 
 	auto detachCmd = static_cast<DetachComponentCommand*>(command.get());

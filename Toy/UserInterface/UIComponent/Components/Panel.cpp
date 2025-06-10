@@ -4,9 +4,10 @@
 #include "Utility.h"
 #include "../../JsonOperation/JsonOperation.h"
 
-
-Panel::Panel() {};
 Panel::~Panel() = default;
+Panel::Panel() : 
+    m_uiModule{ nullptr }
+{};
 
 Panel::Panel(const Panel& other) :
     UIComponent{ other },
@@ -14,7 +15,8 @@ Panel::Panel(const Panel& other) :
 {}
 
 Panel::Panel(const string& name, const UILayout& layout) noexcept :
-    UIComponent(name, layout)
+    UIComponent(name, layout),
+    m_uiModule{ nullptr }
 {}
 
 unique_ptr<UIComponent> Panel::CreateClone() const

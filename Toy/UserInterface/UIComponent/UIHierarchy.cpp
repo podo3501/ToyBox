@@ -4,12 +4,13 @@
 #include "UIComponentEx.h"
 #include "Utility.h"
 
-UIComponent* UIHierarchy<UIComponent>::GetThis() noexcept
+UIComponent* UIHierarchy<UIComponent>::GetThis() const noexcept
 {
-	return static_cast<UIComponent*>(this);
+	UIHierarchy<UIComponent>* hierarchy = const_cast<UIHierarchy<UIComponent>*>(this);
+	return static_cast<UIComponent*>(hierarchy);
 }
 
-UIComponent* UIHierarchy<UIComponent>::GetRoot() noexcept
+UIComponent* UIHierarchy<UIComponent>::GetRoot() const noexcept
 {
 	UIComponent* current = GetThis();
 	while (current->m_parent != nullptr)
@@ -18,7 +19,7 @@ UIComponent* UIHierarchy<UIComponent>::GetRoot() noexcept
 	return current;
 }
 
-UIComponent* UIHierarchy<UIComponent>::GetRegionRoot() noexcept
+UIComponent* UIHierarchy<UIComponent>::GetRegionRoot() const noexcept
 {
 	UIComponent* current = GetThis();
 	while (current->GetRegion().empty())
@@ -33,7 +34,7 @@ UIComponent* UIHierarchy<UIComponent>::GetRegionRoot() noexcept
 	return current;
 }
 
-UIComponent* UIHierarchy<UIComponent>::GetParentRegionRoot() noexcept
+UIComponent* UIHierarchy<UIComponent>::GetParentRegionRoot() const noexcept
 {
 	if (m_parent == nullptr) return GetThis();
 	return m_parent->GetRegionRoot();

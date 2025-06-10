@@ -37,12 +37,12 @@ namespace UserInterfaceTest
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::Center }, "BackImage1"));
 
 		CaptureSnapshot(h);
-		ExecuteAndCapture(h, [&] { c.AttachComponent(m_uiModule.get(), m_main, move(tex1), {111, 222}); });
+		ExecuteAndCapture(h, [&] { c.AttachComponent(m_main, move(tex1), {111, 222}); });
 		ExecuteAndCapture(h, [&] { c.SetRelativePosition(tex1Ptr, { 123, 234 }); });
 		ExecuteAndCapture(h, [&] { c.SetSize(tex1Ptr, { 32, 32 }); });
 		ExecuteAndCapture(h, [&] { c.RenameRegion(tex1Ptr, "region"); });
 		ExecuteAndCapture(h, [&] { c.Rename(tex1Ptr, "tex1"); });
-		ExecuteAndCapture(h, [&] { c.DetachComponent(m_uiModule.get(), tex1Ptr); });
+		ExecuteAndCapture(h, [&] { c.DetachComponent(tex1Ptr); });
 		VerifyUndoRedo(c, h);
 	}
 
@@ -52,7 +52,7 @@ namespace UserInterfaceTest
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;
 		auto [tex9, tex9Ptr] = GetPtrs(CreateComponent<PatchTextureStd9>(UILayout{ {100, 100}, Origin::Center }, "BackImage9"));
-		m_uiModule->AttachComponent(m_main, move(tex9), { 250, 250 });
+		UIEx(m_main).AttachComponent(move(tex9), { 250, 250 });
 		m_uiModule->BindTextureResources();
 
 		CaptureSnapshot(h);
@@ -68,7 +68,7 @@ namespace UserInterfaceTest
 		vector<unique_ptr<UIComponent>> h;
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(UILayout{ {100, 100}, Origin::Center },
 			TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
-		m_uiModule->AttachComponent(m_main, move(switcher), { 250, 250 });
+		UIEx(m_main).AttachComponent(move(switcher), { 250, 250 });
 		m_uiModule->BindTextureResources();
 
 		CaptureSnapshot(h);

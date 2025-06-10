@@ -10,7 +10,7 @@ namespace UserInterfaceTest
 	TEST_F(TracyBenchmarkTest, SimpleTest)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
-		m_uiModule->AttachComponent(m_main, move(listArea), { 400, 300 });
+		UIEx(m_main).AttachComponent(move(listArea), { 400, 300 });
 		MakeSampleListAreaData(m_renderer.get(), GetResBinder(), listAreaPtr, 20);
 	}
 }

@@ -18,7 +18,7 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::One, 
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
-		m_uiModule->AttachComponent(m_main, move(switcher), { 160, 120 });
+		UIEx(m_main).AttachComponent(move(switcher), { 160, 120 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 
@@ -45,7 +45,7 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeH, 
 			GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
-		m_uiModule->AttachComponent(m_main, move(switcher), { 160, 120 });
+		UIEx(m_main).AttachComponent(move(switcher), { 160, 120 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 
@@ -77,7 +77,7 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeV, 
 			GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
-		m_uiModule->AttachComponent(m_main, move(switcher), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(switcher), { 100, 100 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 
@@ -109,7 +109,7 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::Nine, 
 			GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
-		m_uiModule->AttachComponent(m_main, move(switcher), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(switcher), { 100, 100 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 

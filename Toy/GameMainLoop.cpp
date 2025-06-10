@@ -50,7 +50,7 @@ bool GameMainLoop::AttachComponentToPanel(unique_ptr<UIComponent> component, con
     if (!component) return false;
 
     UIComponent* main = m_uiModule->GetComponent();
-    m_uiModule->AttachComponent(main, move(component), position);
+    UIEx(main).AttachComponent(move(component), position);
 
     return true;
 }
