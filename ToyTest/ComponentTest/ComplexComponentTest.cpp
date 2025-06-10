@@ -19,7 +19,6 @@ namespace UserInterfaceTest
 	TEST_F(ComplexComponentTest, ListArea)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
-		//m_uiModule->AttachComponent(m_main, move(listArea), { 400, 300 });
 		UIEx(m_main).AttachComponent(move(listArea), { 400, 300 });
 		EXPECT_TRUE(m_uiModule->BindTextureResources());
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, listAreaPtr);
@@ -32,30 +31,30 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(UIEx(m_main).IsPositionUpdated());
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), GetResBinder(), listAreaPtr, 5));
-		//EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
-		//auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
+		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 
-		//listAreaPtr->RemoveContainer(0);
-		//EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Render));
-		//auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
-		//EXPECT_NE(preSizeX, curSizeX);
+		listAreaPtr->RemoveContainer(0);
+		EXPECT_FALSE(scrollBarPtr->HasStateFlag(StateFlag::Render));
+		auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
+		EXPECT_NE(preSizeX, curSizeX);
 
-		//auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
-		//EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
-		//EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
-		//EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Render));
+		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
+		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
+		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
+		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Render));
 
-		//auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
-		//EXPECT_EQ(scrollContainerPtr->GetSize().y, 30); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 scrollBar 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
+		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
+		EXPECT_EQ(scrollContainerPtr->GetSize().y, 30); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 scrollBar 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
 
-		//listAreaPtr->ClearContainers();
-		//EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
+		listAreaPtr->ClearContainers();
+		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
 	}
 
 	TEST_F(ComplexComponentTest, ListAreaToolMode)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
-		m_uiModule->AttachComponent(m_main, move(listArea), { 400, 300 });
+		UIEx(m_main).AttachComponent(move(listArea), { 400, 300 });
 		m_uiModule->BindTextureResources();
 
 		//save는 신경쓸 필요 없다. 툴모드도 세이브 하지 않는다. 일단 만들고 관찰해 보자.
@@ -85,7 +84,7 @@ namespace UserInterfaceTest
 		auto switcher = CreateComponent<TextureSwitcher>(TextureSlice::One, 
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
 		auto [renderTex, renderTexPtr] = GetPtrs(CreateComponent<RenderTexture>(move(switcher)));
-		m_uiModule->AttachComponent(m_main, move(renderTex), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(renderTex), { 100, 100 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, renderTexPtr);
 
@@ -113,7 +112,7 @@ namespace UserInterfaceTest
 	TEST_F(ComplexComponentTest, ScrollBar)
 	{
 		auto [scrollBar, scrollBarPtr] = GetPtrs(CreateSampleScrollBar({}, DirectionType::Vertical));
-		m_uiModule->AttachComponent(m_main, move(scrollBar), { 100, 200 });
+		UIEx(m_main).AttachComponent(move(scrollBar), { 100, 200 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, scrollBarPtr);
 
@@ -146,7 +145,7 @@ namespace UserInterfaceTest
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(UILayout{ {16, 100}, Origin::Center },
 			TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
-		m_uiModule->AttachComponent(m_main, move(switcher), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(switcher), { 100, 100 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
 

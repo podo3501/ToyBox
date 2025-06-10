@@ -11,9 +11,9 @@ public:
 	~UIHierarchy() = default;
 	UIHierarchy() = default;
 
-	UIComponent* GetRoot() noexcept;
-	UIComponent* GetRegionRoot() noexcept;
-	UIComponent* GetParentRegionRoot() noexcept;
+	UIComponent* GetRoot() const noexcept;
+	UIComponent* GetRegionRoot() const noexcept;
+	UIComponent* GetParentRegionRoot() const noexcept;
 
 	//children을 순회하는 함수 모음
 	void ForEachChildDFS(function<void(UIComponent*)> Func) noexcept;
@@ -33,7 +33,7 @@ public:
 	void GenerateUniqueRegionName(UIComponent* attachingBlock) noexcept;
 
 private:
-	UIComponent* GetThis() noexcept;
+	UIComponent* GetThis() const noexcept;
 	void ForEachRenderChildBFS(function<void(UIComponent*)> Func) noexcept;
 	void ForEachRenderChildDFS(function<void(UIComponent*)> Func) noexcept;
 

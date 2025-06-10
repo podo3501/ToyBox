@@ -16,39 +16,39 @@
 
 namespace UserInterfaceTest
 {
-	static bool AttachComponentHelper(UIModule* module, const string& componentName) noexcept
+	static bool AttachComponentHelper(UIComponent* main, const string& componentName) noexcept
 	{
 		auto patchTex1 = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
-		return module->AttachComponent("UIModuleMainEntry", componentName, move(patchTex1), { 10, 10 }) ? false : true;
+		return UIEx(main).AttachComponent("UIModuleMainEntry", componentName, move(patchTex1), { 10, 10 }) ? false : true;
 	}
 
-	static bool DetachComponentHelper(UIModule* module, const string& componentName) noexcept 
+	static bool DetachComponentHelper(UIComponent* main, const string& componentName) noexcept 
 	{
-		auto [detach, parent] = module->DetachComponent("UIModuleMainEntry", componentName);
+		auto [detach, parent] = UIEx(main).DetachComponent("UIModuleMainEntry", componentName);
 		return detach != nullptr;
 	}
 
-	TEST_F(IntegrationTest, AttachDetachTest)
+	TEST_F(IntegrationTest, AttachDetachTest) //?!? 여기 할 차례 네번째에서 통과실패.
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage9");
-		m_uiModule->AttachComponent(m_main, move(tex9), { 80, 60 });
+		UIEx(m_main).AttachComponent(move(tex9), { 80, 60 });
 
-		EXPECT_EQ(AttachComponentHelper(m_uiModule.get(), "PatchTextureStd9_0"), false);	//9방향 이미지에는 attach 불가
-		EXPECT_EQ(AttachComponentHelper(m_uiModule.get(), "PatchTextureStd1_0"), true);
+		EXPECT_EQ(AttachComponentHelper(m_main, "PatchTextureStd9_0"), false);
+		EXPECT_EQ(AttachComponentHelper(m_main, "PatchTextureStd1_0"), true);
 
-		EXPECT_EQ(DetachComponentHelper(m_uiModule.get(), "PatchTextureStd1_0"), false);
-		EXPECT_EQ(DetachComponentHelper(m_uiModule.get(), "PatchTextureStd1_9"), true); //위에서 PatchTextureStd1를 attach 했다.
+		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd1_0"), false);
+		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd1_9"), true); //위에서 PatchTextureStd1를 attach 했다.
 
-		EXPECT_EQ(DetachComponentHelper(m_uiModule.get(), "PatchTextureStd9_0"), true); //위에서 PatchTextureStd1를 attach 했다.
+		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd9_0"), true); //위에서 PatchTextureStd1를 attach 했다.
 
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage1"));
 		auto tex2 = CreateComponent<PatchTextureStd1>(UILayout{ {110, 60}, Origin::LeftTop }, "BackImage1");
 		UIEx(tex1).AttachComponent(move(tex2), { 100, 50 });	//중점에 attach 한다.
-		m_uiModule->AttachComponent(m_main, move(tex1), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
 		m_uiModule->Update(m_timer);
 
 		EXPECT_EQ(UIEx(tex1Ptr).GetChildrenBoundsSize(), XMUINT2(210, 110));
-		auto [detached, parent] = m_uiModule->DetachComponent(tex1Ptr);
+		auto [detached, parent] = UIEx(tex1Ptr).DetachComponent();
 		detached->ProcessUpdate(m_timer);
 		EXPECT_EQ(UIEx(detached).GetChildrenBoundsSize(), XMUINT2(210, 110));
 	}
@@ -76,7 +76,7 @@ namespace UserInterfaceTest
 		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		UIEx(tex1).AttachComponent(move(tex2), { 100, 100 });
-		m_uiModule->AttachComponent(m_main, move(tex1), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
 
 		tex1Ptr->Rename("image1"); 
 		tex2Ptr->Rename("image2");
@@ -103,7 +103,7 @@ namespace UserInterfaceTest
 	TEST_F(IntegrationTest, GetComponents)
 	{
 		auto tex9_0 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
-		m_uiModule->AttachComponent(m_main, move(tex9_0), { 80, 60 });
+		UIEx(m_main).AttachComponent(move(tex9_0), { 80, 60 });
 		m_uiModule->BindTextureResources();
 		m_uiModule->Update(m_timer);
 
@@ -111,7 +111,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(CheckComponentCount(m_main, { 100, 100 }), 4);
 
 		auto tex9_1 = CreateComponent<PatchTextureStd9>(UILayout{ {221, 191}, Origin::LeftTop }, "BackImage9");
-		m_uiModule->AttachComponent(m_main, move(tex9_1), { 88, 66 });
+		UIEx(m_main).AttachComponent(move(tex9_1), { 88, 66 });
 		m_uiModule->BindTextureResources();
 		m_uiModule->Update(m_timer);
 
@@ -125,7 +125,7 @@ namespace UserInterfaceTest
 		panel->SetLayout({ { 400, 300 }, Origin::Center });
 		UIEx(panel).AttachComponent(move(tex9), { 40, 30 });
 
-		m_uiModule->AttachComponent(m_main, move(panel), { 400, 300 });
+		UIEx(m_main).AttachComponent(move(panel), { 400, 300 });
 		m_uiModule->BindTextureResources();
 		m_uiModule->Update(m_timer);
 
@@ -154,7 +154,7 @@ namespace UserInterfaceTest
 		using enum ComponentID;
 
 		auto listArea = CreateSampleListArea({ { 200, 170 }, Origin::LeftTop });
-		m_uiModule->AttachComponent(m_main, move(listArea), {});
+		UIEx(m_main).AttachComponent(move(listArea), {});
 		m_uiModule->BindTextureResources();
 		m_main->EnableToolMode(true);
 
@@ -173,7 +173,7 @@ namespace UserInterfaceTest
 		auto [panel2, panel2Ptr] = GetPtrs(CreateComponent<Panel>(UILayout{ { 20, 20 }, Origin::Center }));
 
 		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
-		m_uiModule->AttachComponent(m_main, move(panel1), { 400, 300 });
+		UIEx(m_main).AttachComponent(move(panel1), { 400, 300 });
 		m_uiModule->BindTextureResources();
 		m_uiModule->Update(m_timer);
 
@@ -206,8 +206,8 @@ namespace UserInterfaceTest
 		tex1Ptr->RenameRegion("Region_0"); //먼저 Region값을 넣어주면 이름이 같아도 되고 나중에 Region을 넣으면 
 		tex2Ptr->RenameRegion("Region_0"); //Attach 할때 unique 이름으로 만들어 준다.
 
-		m_uiModule->AttachComponent(m_main, move(tex1), { 100, 100 });
-		m_uiModule->AttachComponent(m_main, move(tex2), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(tex2), { 100, 100 });
 
 		EXPECT_EQ(tex2Ptr->GetRegion(), "Region_1"); //이름이 바뀌었다.
 		EXPECT_EQ(tex1Ptr->GetName(), "PatchTextureStd1_0");
@@ -236,40 +236,41 @@ namespace UserInterfaceTest
 	TEST_F(IntegrationTest, Rename)
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
-		m_uiModule->AttachComponent(m_main, move(tex9), { 80, 60 });
+		UIEx(m_main).AttachComponent(move(tex9), { 80, 60 });
 
-		UIComponent* component = m_uiModule->FindComponent("PatchTextureStd1_0");
+		UIComponent* component = UIEx(m_main).FindComponent("PatchTextureStd1_0");
 		EXPECT_FALSE(component->Rename("PatchTextureStd9_0")); //같은 이름이 있으면 rename이 되지 않는다.
 
 		auto newImg9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
-		auto failed = m_uiModule->AttachComponent(m_main, move(newImg9), { 80, 60 });
+		auto failed = UIEx(m_main).AttachComponent(move(newImg9), { 80, 60 });
 		EXPECT_TRUE(failed == nullptr);
 	}
 
-	static UIComponent* TestAttachName(UIModule* uiModule, UIComponent* parent, const string& childName)
+	static UIComponent* TestAttachName(UIComponent* parent, const string& childName)
 	{
 		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
-		uiModule->AttachComponent(parent, move(tex), { 400, 300 });
-		EXPECT_EQ(texPtr->GetUniqueName(), childName);
+		UIEx(parent).AttachComponent(move(tex), { 400, 300 });
+		EXPECT_EQ(texPtr->GetName(), childName);
 		return texPtr;
 	}
 
 	TEST_F(IntegrationTest, UniqueName)
 	{
-		auto texPtr0 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_0");
-		auto texPtr1 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_1");
-		auto texPtr2 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_2");
+		auto texPtr0 = TestAttachName(m_main, "PatchTextureStd1_0");
+		auto texPtr1 = TestAttachName(m_main, "PatchTextureStd1_1");
+		auto texPtr2 = TestAttachName(m_main, "PatchTextureStd1_2");
 
 		//Detach하고 난 이후에는 _0이 recycle에 들어가서 다시 재사용 되기 때문에 _0이 된다.
-		m_uiModule->DetachComponent(texPtr0);
-		texPtr0 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_0");
+		UIEx(texPtr0).DetachComponent();
+		texPtr0 = TestAttachName(m_main, "PatchTextureStd1_0");
 
 		//이름을 바꿀때에도 직접적으로 바꾸면 안된다. 자신이 가지고 있는 것을 반납해야 한다.
 		m_uiModule->Rename(texPtr1, "NoMatchComponentType_0");
-		auto texPtr3 = TestAttachName(m_uiModule.get(), m_main, "PatchTextureStd1_1");
+		UIEx(texPtr1).Rename("NoMatchComponentType_0");
+		auto texPtr3 = TestAttachName(m_main, "PatchTextureStd1_1");
 
 		//reccycle에 들어갔는지 확인하기 위해서
-		m_uiModule->DetachComponent(texPtr3);
+		UIEx(texPtr3).DetachComponent();
 		m_uiModule->BindTextureResources();
 
 		const wstring filename = L"Test/Data/RWUIModuleTest.json";
@@ -280,6 +281,7 @@ namespace UserInterfaceTest
 
 		EXPECT_TRUE(CompareUniquePtr(m_uiModule, read));
 
+		//?!? region값이 다를때 밑에 이름값은 변화가 없어야 하는데 지금은 변하고 있다. 테스트 해야함.
 		//?!? 세이브 로드가 끝나고 프로젝트를 UIComponent에서 UIRegistry로 read, write 하는걸로 바꾼후에
 		//json 부분에 Write를 Read 정리를 해야겠다.
 	}

@@ -91,7 +91,7 @@ bool AddComponentFromScreenPos(UICommandList* cmdList, UIModule* module, UICompo
 {
 	const XMINT2& comPos = parent->GetPosition();
 	XMINT2 relativePos = pos - comPos;
-	unique_ptr<UIComponent> failed = cmdList->AttachComponent(module, parent, floater->GetComponent(), relativePos);
+	unique_ptr<UIComponent> failed = cmdList->AttachComponent(parent, floater->GetComponent(), relativePos);
 	if (failed) //제대로 붙지 않았다면 인자로 보낸 Component가 리턴값으로 돌아온다.
 	{
 		floater->SetComponent(move(failed));

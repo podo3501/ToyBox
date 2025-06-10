@@ -16,11 +16,17 @@ public:
 
 	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
+	unique_ptr<UIComponent> AttachComponent(const string& region, const string& name,
+		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 
 	unique_ptr<UIComponent> AttachComponent(UINameGenerator* generator,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
+
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UINameGenerator* generator) noexcept;
+	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(const string& region, const string& name) noexcept;
+
 	void Rename(UINameGenerator* generator, const string& name) noexcept;
+	void Rename(const string& name) noexcept;
 
 	UIComponent* FindComponent(const string& name) noexcept;
 	UIComponent* FindComponent(const string& region, const string& name) noexcept;
@@ -41,6 +47,7 @@ private:
 	unique_ptr<UIComponent> DetachChild(UIComponent* parent, UIComponent* detach) noexcept;
 	UIModule* GetUIModule(UIComponent* start) const;
 	UIModule* GetUIModule() const noexcept;
+	UINameGenerator* GetNameGenerator(unique_ptr<UINameGenerator>& nameGenerator) const noexcept;
 	void InvalidateUIModuleCache();
 
 	UIComponent* m_component;

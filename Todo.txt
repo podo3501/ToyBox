@@ -220,6 +220,7 @@ return UIComponent::ImplementChangeSize(size); 이 부분을 상단으로 올려
 
 Region이 같은 이름일때 attach를 하게 되면 이름이 바뀌는데 이게 새로 만든 Generator에서 하는건지 확인이 필요하다.
 Adapter 클래스를 만들어서 RenderTexture에 UIModule을 연결시키자.
+region 이름이 같을때 생성 부분을 nameGenerator에서 할 수 있도록 구현
 
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔

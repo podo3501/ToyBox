@@ -14,11 +14,9 @@ public:
 	~UICommandList();
 	UICommandList();
 
-	//unique_ptr<UIComponent> AttachComponent(UIComponent* addable, unique_ptr<UIComponent> component, const XMINT2& relativePos);
-	unique_ptr<UIComponent> AttachComponent(UIModule* module, 
-		UIComponent* parent, unique_ptr<UIComponent> component, const XMINT2& relativePos);
-	//pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* detach);
-	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIModule* module, UIComponent* detach);
+	unique_ptr<UIComponent> AttachComponent(UIComponent* parent, 
+		unique_ptr<UIComponent> component, const XMINT2& relativePos);
+	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* detach);
 	bool SetRelativePosition(UIComponent* component, const XMINT2& relativePos);
 	bool SetSize(UIComponent* component, const XMUINT2& size);
 	bool RenameRegion(UIComponent* component, const string& region);

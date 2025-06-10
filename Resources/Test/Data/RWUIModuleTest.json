@@ -25,7 +25,7 @@
         "Children": [
             {
                 "Type": "PatchTextureStd1",
-                "Name": "PatchTextureStd1_1",
+                "Name": "NoMatchComponentType_0",
                 "Layout": {
                     "Size": {
                         "x": 64,

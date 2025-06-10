@@ -10,7 +10,7 @@ namespace UserInterfaceTest
 	{
 		UILayout layout{ {32, 32}, Origin::Center };
 		auto [container, containerPtr] = GetPtrs(CreateComponent<Container>(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal));
-		m_uiModule->AttachComponent(m_main, move(container), { 160, 120 });
+		UIEx(m_main).AttachComponent(move(container), { 160, 120 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, containerPtr);
 
@@ -25,7 +25,7 @@ namespace UserInterfaceTest
 		UILayout layout{ {100, 48}, Origin::Center };
 		auto [container, containerPtr] = GetPtrs(CreateComponent<Container>(layout,
 			GetComponentKeyMap(DirectionType::Horizontal, layout.GetSize(), "ScrollButton3_H"), BehaviorMode::Normal));
-		m_uiModule->AttachComponent(m_main, move(container), { 160, 120 });
+		UIEx(m_main).AttachComponent(move(container), { 160, 120 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, containerPtr);
 
@@ -48,7 +48,7 @@ namespace UserInterfaceTest
 		UILayout layout{ {48, 100}, Origin::Center };
 		auto [container, containerPtr] = GetPtrs(CreateComponent<Container>(layout,
 			GetComponentKeyMap(DirectionType::Vertical, layout.GetSize(), "ScrollButton3_V"), BehaviorMode::Normal));
-		m_uiModule->AttachComponent(m_main, move(container), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(container), { 100, 100 });
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, containerPtr);
 

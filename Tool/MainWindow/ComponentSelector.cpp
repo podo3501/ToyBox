@@ -155,7 +155,7 @@ unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList, UIModule
 	UIComponent* selectComponent = selector->GetComponent();
 	if (!selectComponent) return nullptr;
 
-	auto [detach, parent] = cmdList->DetachComponent(uiModule, selectComponent);
+	auto [detach, parent] = cmdList->DetachComponent(selectComponent);
 	if (!detach)
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Detachment failed for this component.");
