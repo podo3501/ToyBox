@@ -4,7 +4,6 @@
 #include "ComponentController.h"
 #include "../Toy/Config.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
@@ -56,10 +55,8 @@ ImVec2 MainWindow::GetPanelSize() const noexcept
 
 bool MainWindow::SetupProperty(unique_ptr<UIModule> uiModule)
 {
-	//m_controller = make_unique<ComponentController>(m_renderer, 
-		//uiModule->GetTexResBinder(), mainComponent, GetName());
-	m_controller = make_unique<ComponentController>(m_renderer,
-		uiModule.get(), GetName());
+	m_controller = make_unique<ComponentController>(m_renderer, uiModule->GetTexResBinder(),
+		uiModule->GetComponent(), GetName());
 
 	UIComponent* mainComponent = uiModule->GetComponent();
 	unique_ptr<UIModuleAsComponent> asComponent = CreateComponent<UIModuleAsComponent>(move(uiModule));

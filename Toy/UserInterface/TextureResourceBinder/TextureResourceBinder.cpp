@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "TextureResourceBinder.h"
-#include "../JsonOperation/JsonHelper.h"
-#include "Utility.h"
+#include "../JsonOperation/JsonOperation.h"
 #include "../UIComponent/UIUtility.h"
+#include "Utility.h"
+
 
 TextureResourceBinder::~TextureResourceBinder() = default;
 TextureResourceBinder::TextureResourceBinder()
@@ -30,7 +31,7 @@ bool TextureResourceBinder::LoadResources(ITextureLoad* load)
 
 bool TextureResourceBinder::Load(const wstring& jsonFilename)
 {
-    ReturnIfFalse(JsonFile::Read(jsonFilename, *this));
+    ReturnIfFalse(ReadJsonFromFile(jsonFilename, *this));
     m_jsonFilename = jsonFilename;
 
     return true;
@@ -38,7 +39,7 @@ bool TextureResourceBinder::Load(const wstring& jsonFilename)
 
 bool TextureResourceBinder::Save(const wstring& jsonFilename)
 {
-    ReturnIfFalse(JsonFile::Write(*this, jsonFilename));
+    ReturnIfFalse(WriteJsonToFile(*this, jsonFilename));
     m_jsonFilename = jsonFilename;
 
     return true;

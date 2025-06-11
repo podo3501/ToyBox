@@ -11,19 +11,12 @@
 #include "../Utility.h"
 
 ComponentController::~ComponentController() = default;
-//ComponentController::ComponentController(IRenderer* renderer, TextureResourceBinder* resBinder,
-//	UIComponent* panel, const string& mainWndName) noexcept :
-//	m_mainWnd{ nullptr },
-//	m_cmdList{ make_unique<UICommandList>() },
-//	m_floater{ make_unique<FloatingComponent>(renderer, resBinder, mainWndName) },
-//	m_selector{ make_unique<ComponentSelector>(renderer, resBinder, m_cmdList.get(), panel) }
-//{}
-ComponentController::ComponentController(IRenderer* renderer, UIModule* uiModule, const string& mainWndName) noexcept :
+ComponentController::ComponentController(IRenderer* renderer, 	TextureResourceBinder* resBinder, 
+	UIComponent* mainComponent, const string& mainWndName) noexcept :
 	m_mainWnd{ nullptr },
-	m_uiModule{ uiModule },
 	m_cmdList{ make_unique<UICommandList>() },
-	m_floater{ make_unique<FloatingComponent>(renderer, uiModule->GetTexResBinder(), mainWndName)},
-	m_selector{ make_unique<ComponentSelector>(renderer, uiModule, m_cmdList.get()) }
+	m_floater{ make_unique<FloatingComponent>(renderer, resBinder, mainWndName)},
+	m_selector{ make_unique<ComponentSelector>(renderer, resBinder, mainComponent, m_cmdList.get()) }
 {}
 
 void ComponentController::SetPanel(UIComponent* panel) noexcept
@@ -44,7 +37,7 @@ bool ComponentController::CheckAttachComponent() noexcept
 	if (!IsInputAction(Keyboard::LeftShift, MouseButton::Left)) return false;
 
 	const XMINT2& mousePosition = InputManager::GetMouse().GetPosition();
-	AttachSelectedComponent(m_cmdList.get(), m_uiModule, m_selector.get(), m_floater.get(), mousePosition);
+	AttachSelectedComponent(m_cmdList.get(), m_selector.get(), m_floater.get(), mousePosition);
 
 	return true;
 }
@@ -54,7 +47,7 @@ bool ComponentController::CheckDetachComponent() noexcept
 	if (m_floater->IsComponent()) return false;
 	if (!IsInputAction(Keyboard::D, KeyState::Pressed)) return false;
 
-	auto detachComponent = DetachSelectedComponent(m_cmdList.get(), m_uiModule, m_selector.get());
+	auto detachComponent = DetachSelectedComponent(m_cmdList.get(), m_selector.get());
 	if (!detachComponent)
 		return true;
 
@@ -73,7 +66,7 @@ bool ComponentController::CheckDeleteComponent() noexcept
 	if (m_floater->IsComponent()) return false;
 	if (!IsInputAction(Keyboard::Delete, KeyState::Pressed)) return false;
 
-	DetachSelectedComponent(m_cmdList.get(), m_uiModule, m_selector.get());
+	DetachSelectedComponent(m_cmdList.get(), m_selector.get());
 
 	return true;
 }

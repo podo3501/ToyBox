@@ -28,38 +28,6 @@ bool UIModule::operator==(const UIModule& other) const noexcept
 	return true;
 }
 
-unique_ptr<UIComponent> UIModule::AttachComponent(UIComponent* parent,
-	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
-{
-	return UIEx(parent).AttachComponent(m_generator.get(), move(child), relativePos);
-}
-
-unique_ptr<UIComponent> UIModule::AttachComponent(const string& regionName, const string& name,
-	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
-{
-	UIComponent* component = FindComponentInRegion(regionName, name);
-	if (!component) return child;
-
-	return AttachComponent(component, move(child), relativePos);
-}
-
-pair<unique_ptr<UIComponent>, UIComponent*> UIModule::DetachComponent(UIComponent* component) noexcept
-{
-	return UIEx(component).DetachComponent(m_generator.get());
-}
-
-pair<unique_ptr<UIComponent>, UIComponent*> UIModule::DetachComponent(const string& regionName, const string& name) noexcept
-{
-	UIComponent* component = FindComponentInRegion(regionName, name);
-	if (!component) return {};
-
-	return DetachComponent(component);
-}
-
-void UIModule::Rename(UIComponent* component, const string& name)
-{
-	UIEx(component).Rename(m_generator.get(), name);
-}
 //?!? 두 SetupMainComponent 함수 리팩토링 해야 함
 bool UIModule::SetupMainComponent(const UILayout& layout, const string& name, 
 	IRenderer* renderer, const wstring& srcBinderFilename)

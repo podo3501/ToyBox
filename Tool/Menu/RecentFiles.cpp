@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "RecentFiles.h"
-#include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
+#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
 #include "../Toy/Utility.h"
 #include "FileTab.h"
 
 RecentFiles::RecentFiles()
 {
-    JsonFile::Read(RecentFilename, *this);
+    ReadJsonFromFile(RecentFilename, *this);
 }
 
 void RecentFiles::AddFile(const wstring& filename)
@@ -19,7 +19,7 @@ void RecentFiles::AddFile(const wstring& filename)
     if (m_recentFiles.size() > MaxRecentFiles)
         m_recentFiles.pop_back();
 
-    JsonFile::Write(*this, RecentFilename);
+    WriteJsonToFile(*this, RecentFilename);
 }
 
 bool RecentFiles::OpenFile(FileTab& menuBar)

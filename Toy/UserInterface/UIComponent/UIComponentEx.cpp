@@ -13,64 +13,6 @@ UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 	m_component{ component },
 	m_cachedUIModule{ nullptr }
 {}
-//
-//unique_ptr<UIComponent> UIComponentEx::AttachComponent(
-//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
-//{
-//	if (!m_component->HasStateFlag(StateFlag::Attach)) return child;
-//
-//	m_component->GenerateUniqueName(child.get());
-//	m_component->GenerateUniqueRegionName(child.get());
-//	child->SetParent(m_component);
-//	child->m_transform.SetRelativePosition(m_component->m_layout.GetSize(), relativePos); //부모 사이즈와 나의 위치를 비교해야 상대적인 위치값을 구할 수 있다.
-//
-//	m_component->m_children.emplace_back(move(child));
-//	m_component->UpdatePositionsManually(true);
-//
-//	return nullptr;
-//}
-
-//unique_ptr<UIComponent> UIComponentEx::AttachComponent(
-//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
-//{
-//	ZoneScopedN("AttachComponent"); // 전체 함수 측정
-//
-//	if (!m_component->HasStateFlag(StateFlag::Attach))
-//		return child;
-//
-//	{
-//		ZoneScopedN("GenerateUniqueNames");
-//		m_component->GenerateUniqueName(child.get());
-//	}
-//
-//	{
-//		ZoneScopedN("GenerateUniqueRegionName");
-//		m_component->GenerateUniqueRegionName(child.get());
-//	}
-//
-//	{
-//		ZoneScopedN("SetParent");
-//		child->SetParent(m_component);
-//	}
-//
-//	{
-//		ZoneScopedN("SetRelativePosition");
-//		child->m_transform.SetRelativePosition(
-//			m_component->m_layout.GetSize(), relativePos);
-//	}
-//
-//	{
-//		ZoneScopedN("PushBackChild");
-//		m_component->m_children.emplace_back(move(child));
-//	}
-//
-//	{
-//		ZoneScopedN("UpdateLayout");
-//		m_component->UpdatePositionsManually(true);
-//	}
-//
-//	return nullptr;
-//}
 
 unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
@@ -126,26 +68,6 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(const string& region, con
 	return UIEx(find).AttachComponent(move(child), relativePos);
 }
 
-unique_ptr<UIComponent> UIComponentEx::AttachComponent(UINameGenerator* generator,
-	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
-{
-	if (!m_component->HasStateFlag(StateFlag::Attach))
-		return child;
-
-	UIComponent* regionComponent = m_component->GetParentRegionRoot();
-	const auto& region = regionComponent->GetRegion();
-
-	child->ForEachChildUntilFail([this, generator, &region](UIComponent* component) {
-		auto makeName = generator->MakeNameOf(component->GetName(), region, component->GetTypeID());
-		if (makeName.empty()) return false;
-
-		component->m_name = makeName;
-		return true;
-		});
-	
-	return AttachComponent(move(child), relativePos);
-}
-
 unique_ptr<UIComponent> UIComponentEx::DetachChild(UIComponent* parent, UIComponent* detach) noexcept
 {
 	auto find = ranges::find_if(parent->m_children, [detach](auto& child) {
@@ -167,7 +89,7 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	if (!parent || !parent->HasStateFlag(StateFlag::Detach)) return {};
 
 	unique_ptr<UINameGenerator> newNameGen;
-	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
+	UINameGenerator* nameGen = GetNameGenerator(newNameGen); //?!? NameGenerator가 없을때는 리턴값을 nullptr로 처리해서 RemoveNameOf를 실행 시키지 않는게 맞는 방법 같다.
 
 	UIComponent* regionComponent = m_component->GetParentRegionRoot();
 	const auto& region = regionComponent->GetRegion();
@@ -185,33 +107,6 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent(const
 	if (!find) return {};
 
 	return UIEx(find).DetachComponent();
-}
-
-pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent(UINameGenerator* generator) noexcept //?!? 사라질 함수
-{
-	UIComponent* regionComponent = m_component->GetParentRegionRoot();
-	const auto& region = regionComponent->GetRegion();
-
-	m_component->ForEachChildUntilFail([this, generator, &region](UIComponent* component) {
-		auto& uniqueName = component->GetUniqueName();
-		if (uniqueName.empty()) return false;
-
-		if (generator->RemoveNameOf(region, uniqueName)) //?!? 인자를 Component로 보내서 지우고 이름을 바꾸면 좋지 않을까? attach도 그렇게 하는게.
-			component->SetUniqueName("");
-
-		return true;
-		});
-
-	return DetachComponent();
-}
-
-void UIComponentEx::Rename(UINameGenerator* generator, const string& name) noexcept
-{
-	UIComponent* regionComponent = m_component->GetParentRegionRoot();
-	const auto& region = regionComponent->GetRegion();
-
-	generator->RemoveNameOf(region, m_component->GetUniqueName());
-	m_component->SetUniqueName(name);
 }
 
 void UIComponentEx::Rename(const string& name) noexcept

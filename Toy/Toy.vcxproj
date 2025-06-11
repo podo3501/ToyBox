@@ -225,7 +225,6 @@
     <ClInclude Include="UserInterface\Command\UICommandList\UICommandList.h" />
     <ClInclude Include="UserInterface\Command\UICommandList\UICommandRegistry.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonConcepts.h" />
-    <ClInclude Include="UserInterface\JsonOperation\JsonHelper.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp" />
     <ClInclude Include="UserInterface\JsonOperation\JsonSerializationHelper.hpp" />
@@ -285,7 +284,6 @@
     <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.cpp" />
     <ClCompile Include="UserInterface\Command\UICommandList\UICommandList.cpp" />
     <ClCompile Include="UserInterface\Command\UICommandList\UICommandRegistry.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\JsonHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonSerializationHelper.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\Traits\Traits.cpp" />

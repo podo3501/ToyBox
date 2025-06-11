@@ -25,14 +25,15 @@ ComponentSelector::~ComponentSelector() = default;
 //{
 //	EditWindowFactory::RegisterFactories();
 //}
-ComponentSelector::ComponentSelector(IRenderer* renderer, UIModule* uiModule, UICommandList* cmdList) :
+ComponentSelector::ComponentSelector(IRenderer* renderer, TextureResourceBinder* resBinder, 
+	UIComponent* mainComponent, UICommandList* cmdList) :
 	m_renderer{ renderer },
-	m_uiModule{ uiModule },
+	m_resBinder{ resBinder },
 	m_cmdList{ cmdList },
 	m_mainWnd{ nullptr },
-	m_tooltip{ make_unique<ComponentTooltip>(uiModule->GetComponent()) },
+	m_tooltip{ make_unique<ComponentTooltip>(mainComponent) },
 	m_editWindow{ nullptr },
-	m_mainComponent{ uiModule->GetComponent() },
+	m_mainComponent{ mainComponent },
 	m_component{ nullptr }
 {
 	EditWindowFactory::RegisterFactories();
@@ -54,7 +55,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 		return;
 	}
 
-	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_cmdList, m_uiModule->GetTexResBinder());
+	m_editWindow = EditWindowFactory::CreateEditWindow(component, m_cmdList, m_resBinder);
 	if (m_editWindow) m_editWindow->Setup();
 
 	m_component = component;
@@ -135,13 +136,13 @@ void ComponentSelector::RepeatedSelection(const vector<UIComponent*>& componentL
 	SetComponent(componentList[idx]);
 }
 
-bool AttachSelectedComponent(UICommandList* cmdList, UIModule* uiModule, 
+bool AttachSelectedComponent(UICommandList* cmdList, 
 	ComponentSelector* selector, FloatingComponent* floater, const XMINT2& position) noexcept
 {
 	UIComponent* selectComponent = selector->GetComponent();
 	if (!selectComponent) return false;
 
-	if (!AddComponentFromScreenPos(cmdList, uiModule, selectComponent, floater, position))
+	if (!AddComponentFromScreenPos(cmdList, selectComponent, floater, position))
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Attachment failed for this component.");
 		return false;
@@ -150,7 +151,7 @@ bool AttachSelectedComponent(UICommandList* cmdList, UIModule* uiModule,
 	return true;
 }
 
-unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList, UIModule* uiModule, ComponentSelector* selector) noexcept
+unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList, ComponentSelector* selector) noexcept
 {
 	UIComponent* selectComponent = selector->GetComponent();
 	if (!selectComponent) return nullptr;
