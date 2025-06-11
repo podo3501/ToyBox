@@ -1,7 +1,6 @@
 #pragma once
 
 struct IRenderer;
-class UIModule;
 class UIComponent;
 class ComponentTooltip;
 class TextureResourceBinder;
@@ -12,7 +11,8 @@ class ComponentSelector
 {
 public:
 	~ComponentSelector();
-	ComponentSelector(IRenderer* renderer, UIModule* uiModule, UICommandList* cmdList);
+	ComponentSelector(IRenderer* renderer, TextureResourceBinder* resBinder,
+		UIComponent* mainComponent, UICommandList* cmdList);
 
 	void SetPanel(UIComponent* panel) noexcept;
 	void Update() noexcept;
@@ -28,7 +28,7 @@ private:
 	bool UpdateEditWindow() noexcept;
 
 	IRenderer* m_renderer;
-	UIModule* m_uiModule;
+	TextureResourceBinder* m_resBinder;
 	UICommandList* m_cmdList;
 	ImGuiWindow* m_mainWnd;
 	unique_ptr<ComponentTooltip> m_tooltip;
@@ -41,7 +41,6 @@ private:
 /////////////////////////////////////////////////////////////////
 
 class FloatingComponent;
-bool AttachSelectedComponent(UICommandList* cmdList, UIModule* uiModule,
+bool AttachSelectedComponent(UICommandList* cmdList,
 	ComponentSelector* selector, FloatingComponent* floater, const XMINT2& position) noexcept;
-unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList,
-	UIModule* uiModule, ComponentSelector* selector) noexcept;
+unique_ptr<UIComponent> DetachSelectedComponent(UICommandList* cmdList, ComponentSelector* selector) noexcept;

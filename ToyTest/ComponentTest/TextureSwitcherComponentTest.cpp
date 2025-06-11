@@ -9,7 +9,6 @@
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../TestHelper.h"
 #include "../Toy/Utility.h"
-#include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
 
 namespace UserInterfaceTest
 {

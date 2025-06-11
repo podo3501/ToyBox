@@ -25,10 +25,6 @@ public:
 	void Process(const string& key, T& data) noexcept;
 
 private:
-	template <typename ProcessFunc> //?!? 이 함수도 static 함수로 바꾸고 헤더에서 선언부를 지우자
-	void ProcessWriteKey(const string& key, ProcessFunc processFunc);
-	template <typename ProcessFunc> //?!? 이 함수도 static 함수로 바꾸고 헤더에서 선언부를 지우자
-	void ProcessReadKey(const string& key, ProcessFunc processFunc);
 	template <typename WriteFunc, typename ReadFunc>
 	void ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc);
 
@@ -38,6 +34,12 @@ private:
 	nlohmann::json m_read{};
 	nlohmann::json* m_rCurrent{ nullptr };
 };
+
+//Json을 저장하고 읽는 함수. hpp에 구현되어 있다.
+//template<HasSerializeIO T>
+//bool WriteJsonToFile(T& obj, const wstring& filename)
+//template<HasSerializeIO T>
+//bool ReadJsonFromFile(const wstring& filename, T& obj)
 
 #include "JsonOperation.hpp"
 

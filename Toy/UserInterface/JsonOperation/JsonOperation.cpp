@@ -14,7 +14,7 @@ m_wCurrent{ &m_write },
 m_rCurrent{ &m_read }
 {}
 
-JsonOperation::JsonOperation(const nlohmann::ordered_json& write) //?!? 이 함수 만들면 리팩토링 할 부분이 있었는데.. 찾아봐야 한다.
+JsonOperation::JsonOperation(const nlohmann::ordered_json& write)
 {
     m_write = write;
     m_wCurrent = &m_write;
@@ -28,10 +28,7 @@ JsonOperation::JsonOperation(const nlohmann::json& read)
 
 bool JsonOperation::IsWrite()
 {
-    //읽는게 아니면 쓰는 것이다.
-    if (m_read.empty())
-        return true;
-
+    if (m_read.empty()) return true; //읽는게 아니면 쓰는 것이다.
     return false;
 }
 
@@ -62,14 +59,4 @@ bool JsonOperation::Read(const wstring& filename)
     m_read = json::parse(file);
 
     return true;
-}
-
-template<typename T> //?!? SerializeIO가 있는지확인하는 컨셉으로 바꿔야 함.
-static void UpdateJson(T* data, nlohmann::ordered_json& writeJ) noexcept
-{
-    JsonOperation jsOp{};
-    data->SerializeIO(jsOp);
-    const auto& curJson = jsOp.GetWrite();
-
-    writeJ.update(curJson);
 }

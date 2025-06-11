@@ -265,7 +265,6 @@ namespace UserInterfaceTest
 		texPtr0 = TestAttachName(m_main, "PatchTextureStd1_0");
 
 		//이름을 바꿀때에도 직접적으로 바꾸면 안된다. 자신이 가지고 있는 것을 반납해야 한다.
-		m_uiModule->Rename(texPtr1, "NoMatchComponentType_0");
 		UIEx(texPtr1).Rename("NoMatchComponentType_0");
 		auto texPtr3 = TestAttachName(m_main, "PatchTextureStd1_1");
 

@@ -87,7 +87,7 @@ void DrawRectangles(const ImGuiWindow* window, const vector<Rectangle>& rects,
 		});
 }
 
-bool AddComponentFromScreenPos(UICommandList* cmdList, UIModule* module, UIComponent* parent, FloatingComponent* floater, const XMINT2& pos) noexcept
+bool AddComponentFromScreenPos(UICommandList* cmdList, UIComponent* parent, FloatingComponent* floater, const XMINT2& pos) noexcept
 {
 	const XMINT2& comPos = parent->GetPosition();
 	XMINT2 relativePos = pos - comPos;

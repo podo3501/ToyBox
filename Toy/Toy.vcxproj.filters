@@ -139,9 +139,6 @@
     <ClInclude Include="UserInterface\UIComponent\EnumUtility.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\JsonHelper.h">
-      <Filter>UserInterface\JsonOperation</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h">
       <Filter>UserInterface\JsonOperation</Filter>
     </ClInclude>
@@ -302,9 +299,6 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\EnumUtility.cpp">
       <Filter>UserInterface\UIComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\JsonHelper.cpp">
-      <Filter>UserInterface\JsonOperation</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp">
       <Filter>UserInterface\JsonOperation</Filter>

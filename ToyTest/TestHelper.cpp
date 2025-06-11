@@ -3,7 +3,6 @@
 #include "../Include/IComponent.h"
 #include "../Toy/Config.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
-#include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
 #include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/Utility.h"

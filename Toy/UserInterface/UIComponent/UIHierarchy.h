@@ -27,9 +27,7 @@ public:
 	bool IsUniqueRegion(const string& name) noexcept;
 	bool IsUniqueName(const string& name, UIComponent* self) noexcept;
 	bool IsUniqueRegionName(const string& name, UIComponent* self) noexcept;
-	string CreateNewName(UIComponent* attaching) noexcept;
 	string CreateNewRegionName(UIComponent* attaching) noexcept;
-	void GenerateUniqueName(UIComponent* attachingBlock) noexcept;
 	void GenerateUniqueRegionName(UIComponent* attachingBlock) noexcept;
 
 private:

@@ -19,13 +19,8 @@ public:
 	unique_ptr<UIComponent> AttachComponent(const string& region, const string& name,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 
-	unique_ptr<UIComponent> AttachComponent(UINameGenerator* generator,
-		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
-
-	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UINameGenerator* generator) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(const string& region, const string& name) noexcept;
 
-	void Rename(UINameGenerator* generator, const string& name) noexcept;
 	void Rename(const string& name) noexcept;
 
 	UIComponent* FindComponent(const string& name) noexcept;

@@ -28,9 +28,6 @@ UIComponent* UIHierarchy<UIComponent>::GetRegionRoot() const noexcept
 		current = current->m_parent;
 	}
 
-	if (current->GetRegion().empty())
-		return nullptr;
-
 	return current;
 }
 
@@ -149,20 +146,6 @@ bool UIHierarchy<UIComponent>::IsUniqueRegionName(const string& name, UIComponen
 	return true;
 }
 
-string UIHierarchy<UIComponent>::CreateNewName(UIComponent* attaching) noexcept
-{
-	const string& name = attaching->m_name;
-	if (!name.empty() && IsUniqueName(name, attaching)) return name;
-
-	auto [baseName, _] = GetBaseName(name, EnumToString(attaching->GetTypeID()));
-	string newName; int n{ 0 };
-	do {
-		newName = string(baseName) + to_string(n++);
-	} while (!IsUniqueName(newName, attaching));
-
-	return newName;
-}
-
 string UIHierarchy<UIComponent>::CreateNewRegionName(UIComponent* attaching) noexcept
 {
 	const string& name = attaching->m_region;
@@ -191,20 +174,6 @@ static string CreateUniqueName(const map<string, UIComponent*>& names, const str
 	} while (IsExistName(newName));
 
 	return newName;
-}
-
-void UIHierarchy<UIComponent>::GenerateUniqueName(UIComponent* attachingBlock) noexcept
-{
-	map<string, UIComponent*> newNames;
-
-	attachingBlock->ForEachChildDFS([this, &newNames](UIComponent* attaching) {
-		const string& name = CreateNewName(attaching);
-		const string& uniqueName = CreateUniqueName(newNames, name);
-		newNames[uniqueName] = attaching;
-		});
-
-	for (auto& uniqueName : newNames)
-		uniqueName.second->m_name = uniqueName.first;
 }
 
 void UIHierarchy<UIComponent>::GenerateUniqueRegionName(UIComponent* attachingBlock) noexcept

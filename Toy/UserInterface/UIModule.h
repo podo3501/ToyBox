@@ -23,14 +23,11 @@ public:
 	bool BindTextureResources() noexcept;
 	bool Update(const DX::StepTimer& timer) noexcept;
 	void Render(ITextureRender* render) const;
-	unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
-		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
-	unique_ptr<UIComponent> AttachComponent(const string& regionName, const string& name,
-		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
-	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* component) noexcept;
-	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(const string& regionName, const string& name) noexcept;
+	//unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
+	//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
+	//unique_ptr<UIComponent> AttachComponent(const string& regionName, const string& name,
+	//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	void SerializeIO(JsonOperation& operation);
-	void Rename(UIComponent* component, const string& name);
 	bool Write(const wstring& filename = L"") noexcept;
 	bool EnableToolMode(bool enable);
 	UIComponent* FindComponent(const string& name) const noexcept;

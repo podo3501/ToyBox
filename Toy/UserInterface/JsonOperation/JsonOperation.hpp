@@ -2,27 +2,6 @@
 #include "JsonSerializationHelper.hpp"
 #include  "JsonConcepts.h"
 
-template<HasSerializeIO T>
-bool WriteJsonToFile(T& obj, const wstring& filename)
-{
-	nlohmann::ordered_json writeJ;
-	SerializeClassIO(obj, writeJ);
-	JsonOperation js{ writeJ };
-	if (!js.Write(filename)) return false;
-
-	return true;
-}
-
-template<HasSerializeIO T>
-bool ReadJsonFromFile(const wstring& filename, T& obj)
-{
-	JsonOperation readJ;
-	if (!readJ.Read(filename)) return false;
-	DeserializeClassIO(readJ.GetRead(), obj);
-
-	return true;
-}
-
 //JsonOperation을 사용해야 하는 타입은 여기서 분기해 준다. 그렇지 않으면 JsonTraits에서 분기
 template<typename T>
 void JsonOperation::Process(const string& key, T& data) noexcept
@@ -42,31 +21,47 @@ void JsonOperation::Process(const string& key, T& data) noexcept
 	ProcessImpl(key, writeFunc, readFunc);
 }
 
-//배열 형식을 가지고 있기 때문에 push_back으로 값을 넣어야 한다.
 template <typename ProcessFunc>
-void JsonOperation::ProcessWriteKey(const string& key, ProcessFunc processFunc)
+static void ProcessWriteKey(const string& key, ProcessFunc processFunc, nlohmann::ordered_json& curWriteJ)
 {
 	nlohmann::ordered_json writeJ{};
 	processFunc(writeJ);
-	nlohmann::ordered_json& currentJ = GetWrite();
-	currentJ[key] = move(writeJ);
+	curWriteJ[key] = move(writeJ);
 }
 
 template <typename ProcessFunc>
-void JsonOperation::ProcessReadKey(const string& key, ProcessFunc processFunc)
+static void ProcessReadKey(nlohmann::json& curReadJ, const string& key, ProcessFunc processFunc)
 {
-	const auto& readJ = GetRead();
-	if (!readJ.contains(key))
-		return;
-
-	processFunc(readJ[key]);
+	if (!curReadJ.contains(key)) return;
+	processFunc(curReadJ[key]);
 }
 
 template <typename WriteFunc, typename ReadFunc>
 void JsonOperation::ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc)
 {
 	if (IsWrite()) 
-		ProcessWriteKey(key, writeFunc);
+		ProcessWriteKey(key, writeFunc, m_write);
 	else 
-		ProcessReadKey(key, readFunc);
+		ProcessReadKey(m_read, key, readFunc);
+}
+
+template<HasSerializeIO T>
+bool WriteJsonToFile(T& obj, const wstring& filename)
+{
+	nlohmann::ordered_json writeJ;
+	SerializeClassIO(obj, writeJ);
+	JsonOperation js{ writeJ };
+	if (!js.Write(filename)) return false;
+
+	return true;
+}
+
+template<HasSerializeIO T>
+bool ReadJsonFromFile(const wstring& filename, T& obj)
+{
+	JsonOperation readJ;
+	if (!readJ.Read(filename)) return false;
+	DeserializeClassIO(readJ.GetRead(), obj);
+
+	return true;
 }

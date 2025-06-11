@@ -16,11 +16,25 @@ inline nlohmann::ordered_json SerializeClassIO_GenerateJson(T& data)
 }
 
 template<typename T>
-void SerializeClassIO_Internal(T& data, nlohmann::ordered_json& j) { j = SerializeClassIO_GenerateJson(data); }
+inline void SerializeClassIO_GenerateJson_N(T& data, nlohmann::ordered_json& outJson)
+{
+	JsonOperation jsOp{ outJson };
+	if constexpr (std::is_pointer_v<T>)
+		data->SerializeIO(jsOp);
+	else
+		data.SerializeIO(jsOp);
+	//outJson = jsOp.GetWrite();
+}
+
+template<typename T>
+void SerializeClassIO_Internal(T& data, nlohmann::ordered_json& j) 
+{ 
+	SerializeClassIO_GenerateJson_N(data, j); 
+}
 void SerializeClassIO_Internal(UIComponent& data, nlohmann::ordered_json& j);
 
 template<typename T>
-void SerializeClassIO(T& data, nlohmann::ordered_json& j) { SerializeClassIO_Internal(data, j); }
+void SerializeClassIO(T& data, nlohmann::ordered_json& j) { j = SerializeClassIO_GenerateJson(data); }
 template<typename T>
 void SerializeClassIO(unique_ptr<T>& data, nlohmann::ordered_json& j) { SerializeClassIO_Internal(*data, j); }
 

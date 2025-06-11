@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
+#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
 #include "ToyTestFixture.h"
 
 namespace JsonSerializeTest
@@ -70,10 +70,11 @@ namespace JsonSerializeTest
 	TEST_F(ToyTestFixture, TestClassContainer)	
 	{
 		UserComponent wData(true);
-		JsonFile::Write(wData, L"Test/Data/JsonSerializeTest.json");
+		const auto& serializeTestFilename = L"Test/Data/JsonSerializeTest.json";
+		EXPECT_TRUE(WriteJsonToFile(wData, serializeTestFilename));
 
 		UserComponent rData(false);
-		JsonFile::Read(L"Test/Data/JsonSerializeTest.json", rData);
+		EXPECT_TRUE(ReadJsonFromFile(serializeTestFilename, rData));
 
 		EXPECT_TRUE(wData == rData);
 	}

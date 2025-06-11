@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Config.h"
-#include "../Toy/UserInterface/JsonOperation/JsonHelper.h"
+#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
 
 using namespace Tool;
 
@@ -11,7 +11,7 @@ Config* Config::m_Instance = nullptr;
 Config::Config()
 {
 	m_Instance = this;
-	JsonFile::Read(ResolutionFilename, *this);
+	ReadJsonFromFile(ResolutionFilename, *this);
 }
 
 Config::~Config()
@@ -23,7 +23,7 @@ void Config::SetResolution(ResolutionType type) noexcept
 		return;
 
 	m_resolutionType = type;
-	JsonFile::Write(*m_Instance, ResolutionFilename);
+	WriteJsonToFile(*m_Instance, ResolutionFilename);
 }
 
 ResolutionType Config::GetResolution() noexcept
