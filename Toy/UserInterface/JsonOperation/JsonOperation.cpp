@@ -5,30 +5,18 @@
 #include "../UIComponent/UIComponent.h"
 #include "../UINameGenerator.h"
 
-using json = nlohmann::json;
-using ordered_json = nlohmann::ordered_json;
-
 JsonOperation::~JsonOperation() = default;
-JsonOperation::JsonOperation() :
+JsonOperation::JsonOperation() noexcept :
 m_wCurrent{ &m_write },
 m_rCurrent{ &m_read }
 {}
 
-JsonOperation::JsonOperation(const nlohmann::ordered_json& write)
-{
-    m_write = write;
-    m_wCurrent = &m_write;
-}
-
-JsonOperation::JsonOperation(const nlohmann::json& read)
-{
-    m_read = read;
-    m_rCurrent = &m_read;
-}
+JsonOperation::JsonOperation(nlohmann::ordered_json& write) noexcept { m_wCurrent = &write; }
+JsonOperation::JsonOperation(const nlohmann::json& read) noexcept { m_rCurrent = const_cast<nlohmann::json*>(&read); }
 
 bool JsonOperation::IsWrite()
 {
-    if (m_read.empty()) return true; //읽는게 아니면 쓰는 것이다.
+    if (!m_rCurrent || m_rCurrent->empty()) return true; //읽는게 아니면 쓰는 것이다.
     return false;
 }
 
@@ -41,7 +29,7 @@ bool JsonOperation::Write(const wstring& filename)
     if (!file.is_open())
         return false;
     
-    auto& json = GetWriteRoot();
+    auto& json = GetWrite();
     file << json.dump(4);
     file.close();
 
@@ -56,7 +44,7 @@ bool JsonOperation::Read(const wstring& filename)
     if (!file.is_open())
         return false;
 
-    m_read = json::parse(file);
+    (*m_rCurrent) = nlohmann::json::parse(file);
 
     return true;
 }

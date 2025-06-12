@@ -11,7 +11,7 @@ Config* Config::m_Instance = nullptr;
 Config::Config()
 {
 	m_Instance = this;
-	ReadJsonFromFile(ResolutionFilename, *this);
+	JsonOperation::ReadJsonFromFile(ResolutionFilename, *this);
 }
 
 Config::~Config()
@@ -23,7 +23,7 @@ void Config::SetResolution(ResolutionType type) noexcept
 		return;
 
 	m_resolutionType = type;
-	WriteJsonToFile(*m_Instance, ResolutionFilename);
+	JsonOperation::WriteJsonToFile(*m_Instance, ResolutionFilename);
 }
 
 ResolutionType Config::GetResolution() noexcept
