@@ -6,7 +6,7 @@
 
 RecentFiles::RecentFiles()
 {
-    ReadJsonFromFile(RecentFilename, *this);
+    JsonOperation::ReadJsonFromFile(RecentFilename, *this);
 }
 
 void RecentFiles::AddFile(const wstring& filename)
@@ -19,7 +19,9 @@ void RecentFiles::AddFile(const wstring& filename)
     if (m_recentFiles.size() > MaxRecentFiles)
         m_recentFiles.pop_back();
 
-    WriteJsonToFile(*this, RecentFilename);
+    JsonOperation::WriteJsonToFile(*this, RecentFilename);
+
+    //JsonOperation::WriteJsonToFile()
 }
 
 bool RecentFiles::OpenFile(FileTab& menuBar)

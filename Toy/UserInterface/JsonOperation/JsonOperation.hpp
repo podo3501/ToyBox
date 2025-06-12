@@ -22,7 +22,7 @@ void JsonOperation::Process(const string& key, T& data) noexcept
 }
 
 template <typename ProcessFunc>
-static void ProcessWriteKey(const string& key, ProcessFunc processFunc, nlohmann::ordered_json& curWriteJ)
+static void ProcessWriteKey(const string& key, ProcessFunc processFunc, nlohmann::ordered_json& curWriteJ) noexcept
 {
 	nlohmann::ordered_json writeJ{};
 	processFunc(writeJ);
@@ -30,23 +30,23 @@ static void ProcessWriteKey(const string& key, ProcessFunc processFunc, nlohmann
 }
 
 template <typename ProcessFunc>
-static void ProcessReadKey(nlohmann::json& curReadJ, const string& key, ProcessFunc processFunc)
+static void ProcessReadKey(nlohmann::json& curReadJ, const string& key, ProcessFunc processFunc) noexcept
 {
 	if (!curReadJ.contains(key)) return;
 	processFunc(curReadJ[key]);
 }
 
 template <typename WriteFunc, typename ReadFunc>
-void JsonOperation::ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc)
+void JsonOperation::ProcessImpl(const string& key, WriteFunc&& writeFunc, ReadFunc&& readFunc) noexcept
 {
 	if (IsWrite()) 
-		ProcessWriteKey(key, writeFunc, m_write);
+		ProcessWriteKey(key, writeFunc, *m_wCurrent);
 	else 
-		ProcessReadKey(m_read, key, readFunc);
+		ProcessReadKey(*m_rCurrent, key, readFunc);
 }
 
 template<HasSerializeIO T>
-bool WriteJsonToFile(T& obj, const wstring& filename)
+bool JsonOperation::WriteJsonToFile(T& obj, const wstring& filename)
 {
 	nlohmann::ordered_json writeJ;
 	SerializeClassIO(obj, writeJ);
@@ -57,7 +57,7 @@ bool WriteJsonToFile(T& obj, const wstring& filename)
 }
 
 template<HasSerializeIO T>
-bool ReadJsonFromFile(const wstring& filename, T& obj)
+bool JsonOperation::ReadJsonFromFile(const wstring& filename, T& obj)
 {
 	JsonOperation readJ;
 	if (!readJ.Read(filename)) return false;

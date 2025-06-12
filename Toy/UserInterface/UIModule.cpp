@@ -101,7 +101,7 @@ void UIModule::SerializeIO(JsonOperation& operation)
 bool UIModule::Write(const wstring& filename) noexcept
 {
 	const wstring& curFilename = !filename.empty() ? filename : m_filename;
-	WriteJsonToFile(*this, curFilename);
+	JsonOperation::WriteJsonToFile(*this, curFilename);
 	m_filename = curFilename;
 
 	return true;
@@ -110,7 +110,7 @@ bool UIModule::Write(const wstring& filename) noexcept
 bool UIModule::Read(const wstring& filename) noexcept
 {
 	const wstring& curFilename = !filename.empty() ? filename : m_filename;
-	ReadJsonFromFile(curFilename, *this);
+	JsonOperation::ReadJsonFromFile(curFilename, *this);
 	m_filename = curFilename;
 
 	return true;

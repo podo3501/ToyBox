@@ -10,10 +10,10 @@
 //?!?이 함수는 사라질 예정
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
 {
-	WriteJsonToFile(write, filename);
+	JsonOperation::WriteJsonToFile(write, filename);
 	
 	unique_ptr<UIComponent> read;
-	ReadJsonFromFile(filename, read);
+	JsonOperation::ReadJsonFromFile(filename, read);
 	
 	EXPECT_TRUE(*write == *read);
 
@@ -33,10 +33,10 @@ unique_ptr<UIModule> WriteReadTest(IRenderer* renderer, unique_ptr<UIModule>& wr
 unique_ptr<UIComponent> WriteReadTest(TextureResourceBinder* binder,
 	unique_ptr<UIComponent>& write, const wstring& filename)
 {
-	WriteJsonToFile(write, filename);
+	JsonOperation::WriteJsonToFile(write, filename);
 
 	unique_ptr<UIComponent> read;
-	ReadJsonFromFile(filename, read);
+	JsonOperation::ReadJsonFromFile(filename, read);
 	EXPECT_TRUE(read->BindTextureSourceInfo(binder, nullptr));
 	EXPECT_TRUE(*write == *read);
 

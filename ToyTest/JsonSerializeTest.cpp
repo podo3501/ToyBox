@@ -71,10 +71,10 @@ namespace JsonSerializeTest
 	{
 		UserComponent wData(true);
 		const auto& serializeTestFilename = L"Test/Data/JsonSerializeTest.json";
-		EXPECT_TRUE(WriteJsonToFile(wData, serializeTestFilename));
+		EXPECT_TRUE(JsonOperation::WriteJsonToFile(wData, serializeTestFilename));
 
 		UserComponent rData(false);
-		EXPECT_TRUE(ReadJsonFromFile(serializeTestFilename, rData));
+		EXPECT_TRUE(JsonOperation::ReadJsonFromFile(serializeTestFilename, rData));
 
 		EXPECT_TRUE(wData == rData);
 	}

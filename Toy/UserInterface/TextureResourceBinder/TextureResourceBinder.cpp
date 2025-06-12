@@ -31,7 +31,7 @@ bool TextureResourceBinder::LoadResources(ITextureLoad* load)
 
 bool TextureResourceBinder::Load(const wstring& jsonFilename)
 {
-    ReturnIfFalse(ReadJsonFromFile(jsonFilename, *this));
+    ReturnIfFalse(JsonOperation::ReadJsonFromFile(jsonFilename, *this));
     m_jsonFilename = jsonFilename;
 
     return true;
@@ -39,7 +39,7 @@ bool TextureResourceBinder::Load(const wstring& jsonFilename)
 
 bool TextureResourceBinder::Save(const wstring& jsonFilename)
 {
-    ReturnIfFalse(WriteJsonToFile(*this, jsonFilename));
+    ReturnIfFalse(JsonOperation::WriteJsonToFile(*this, jsonFilename));
     m_jsonFilename = jsonFilename;
 
     return true;
