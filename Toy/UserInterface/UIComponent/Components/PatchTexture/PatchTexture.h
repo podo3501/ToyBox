@@ -16,7 +16,7 @@ protected:
 	PatchTexture();
 	PatchTexture(TextureSlice texSlice) noexcept;
 	PatchTexture(const PatchTexture& other) noexcept;
-	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept override;
+	virtual bool ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept override;
 	inline void SetTextureSlice(TextureSlice texSlice) noexcept { m_texSlice = texSlice; }
 	bool ArrangeTextures() noexcept;
 	bool ResizeOrApplyDefault() noexcept;

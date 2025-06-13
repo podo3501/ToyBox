@@ -147,80 +147,26 @@
 --Tracy가 다른 프로젝트와 연동시 문제가 없도록 수정
 --UINameGenerator에 SerializeIO 완성하기
 --UIModule에 Read 함수 만들기
+--Adapter 클래스를 만들어서 RenderTexture에 UIModule을 연결시키자.
+--Region이 같은 이름일때 attach를 하게 되면 이름이 바뀌는데 이게 새로 만든 Generator에서 하는건지 확인이 필요하다.
+--return UIComponent::ImplementChangeSize(size); 이 부분을 상단으로 올려서 호출했을때 문제가 생길수 있는지 확인해야 한다.
+--Json에서 Helper 및 Read 부분 정리
+--Tracy로 측정한 결과 5개 원소를 추가하는데 총 20ms 걸렸다. 개선해야함. 대부분은 GenerateUniqueNames 함수가 원인
+    이름을 비교하는게 아니라 생성할때 이름을 정하고 비교 없이 붙임. 그리고 이름생성 클래스는 따로 만들어서 다음에 어떤 이름
+    이 생성될지 저장해야 함. 
+--바꾼후 Tracy를 통해서 얼만큼 속도 향상이 있는지 체크. (결과: attach하는데 시간을 거의 소비하지 않게 수정됨)
+--Tracy 때문에 성능측정을 하지 않는데도 테스트가 느려진다. 
+--Traits 패턴을 이용해서 TMP 쪽 코드 정리. 컨셉이 많아지면 복잡해져서 traits로 가야하긴 한다. traits.hpp 하는중
+--기존의 툴이나 TDD에서 UIComponent를 쓴 부분을 UIModule로 바꾸기
+--JsonHelper 클래스 지우기
+--UIModule 을 찾아내서 내부적으로 attach하는 부분을 UIModule을 통해서 attach 하도록 수정.
 
 @툴에서 리스트 할 수 있게끔
     컨테이너 간격 셋팅 
     ListArea에서 더미가 늦게 추가되는거 확인(아마 컴포넌트에 Region name이 없어서 그럴꺼 같은데)
-        Tracy로 측정한 결과 5개 원소를 추가하는데 총 20ms 걸렸다. 개선해야함. 대부분은 GenerateUniqueNames 함수가 원인
-        이름을 비교하는게 아니라 생성할때 이름을 정하고 비교 없이 붙임. 그리고 이름생성 클래스는 따로 만들어서 다음에 어떤 이름
-        이 생성될지 저장해야 함. 
-
-       	붙일곳이 어딘지를 알아야 이름이 정해지는데 지금은 생성한다음에 붙이기 때문에 붙일곳이 어딘지 모르는 구조이다. 
-
-	    문제가 되는 부분은 이름 때문에 새로운 컴포넌트를 붙일때 시간이 오래 걸린다는 것이다.
-	    그래서 이름을 먼저 생성한 다음 컴포넌트 붙일때 검사없이 붙이고자 한다.
-	    그런데 붙일 Region이 모르기 때문에 어떤 이름을 써야 하는지 알 수가 없다.
-	    그렇다면 생성시에는 이름을 지정하지 않고, Attach할때 Region에 따라서 이름을 할당해 준다.
-	    UIComponent에서 Attach할때 이름을 지정하려고 하면, UIComponent가 Generate 클래스를 알아야 하기 때문에
-	    이름을 다 바꾸고 난 뒤에 Attach한다.
-	    Detach할때에는 Detach후 이름을 반환하고, UIComponent 이름을 지운다.
-	    이름 Generate 클래스는 UIComponent와 독립적으로 존재하게끔 만든다. 키값은 Region으로 한다.
-	    Region값의 변동이 있을 경우에는 Generate 클래스를 다시 구축해 준다.
-	    추후에 다른 UI가 로드되었을 경우 Load하면서 Generate 클래스가 합쳐져야 한다.
-	    합치는 방식은 로드시에 같은 Region이 있다면 false로 하고, 그냥 Region을 추가하는 방식이다.
-	    툴에서는 Attach할때 UINameGenerator를 모르므로, UINameGenerator와 UIComponent의 포인터를 가지는
-	    클래스를 만들어 그 클래스를 이용해서 Attach하는 방식을 사용한다.
-
-        Tracy 때문에 성능측정을 하지 않는데도 테스트가 느려진다. 
-
-        Traits 패턴을 이용해서 TMP 쪽 코드 정리. 컨셉이 많아지면 복잡해져서 traits로 가야하긴 한다. traits.hpp 하는중
-
-        기존의 툴이나 TDD에서 UIComponent를 쓴 부분을 UIModule로 바꾸기
-            UIModule::~UIModule() 하고 있음. 바꾸고 있는 중. 랜더링이 안되고 있음. WriteRead 하면서 안되는 것 같음. 디버깅 필요
-            Attach 한 후에 Binding을 명시적으로 호출하는 식으로.
-        JsonHelper 클래스 지우기
-
-		UIModule 을 찾아내서 내부적으로 attach하는 부분을 UIModule을 통해서 attach 하도록 수정.
-		바꾼후 Tracy를 통해서 얼만큼 속도 향상이 있는지 체크
 		UIModule로 바꾸고 나서 생긴 버그들 수정
-		코드정리
-		Json에서 Helper 및 Read 부분 정리
-        
-bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
-{
-	auto forEachResult = ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
-		bool result = component->ImplementBindSourceInfo(resBinder, texController);
-		Assert(result);
-		return result;
-		});
-	ReturnIfFalse(forEachResult);
-	auto forEachResult2 = ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
-		bool result = component->ImplementBindSourceInfo(resBinder, texController);
-		Assert(result);
-		return result;
-		});
-	ReturnIfFalse(forEachResult2);
-	ReturnIfFalse(UpdatePositionsManually());
-	return true;
-}
-이렇게 두번 호출해야 정상적으로 셋팅이 되는데 아마도 처음에 호출할때 셋팅이 다 되지 않아서 그런 현상이 일어나는 것 같다.
-기존에 버그가 있었던듯. ScrollBar_0의 위치가 함수 두번 호출해야 정상적으로 위치되는 것 같다.
-bool ListArea::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
-{
-	ApplySize(size); //ScrollBar가 부모의 크기를 알아야해서 먼저 사이즈를 셋팅해 준다.
-
-	ReturnIfFalse(ChangeSizeX(m_prototypeContainer, size));
-	ReturnIfFalse(ChangeScrollBarSizeAndPos(size));
-	ReturnIfFalse(m_renderTex->ChangeSize(size, isForce));
-	UpdateScrollBar();
-
-	return UIComponent::ImplementChangeSize(size);
-}
-return UIComponent::ImplementChangeSize(size); 이 부분을 상단으로 올려서 호출했을때 문제가 생길수 있는지 확인해야 한다.
-
-Region이 같은 이름일때 attach를 하게 되면 이름이 바뀌는데 이게 새로 만든 Generator에서 하는건지 확인이 필요하다.
-Adapter 클래스를 만들어서 RenderTexture에 UIModule을 연결시키자.
-region 이름이 같을때 생성 부분을 nameGenerator에서 할 수 있도록 구현
+        region 이름이 같을때 생성 부분을 nameGenerator에서 할 수 있도록 구현
+        Tracy의 build 폴더 github에 추가
 
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔

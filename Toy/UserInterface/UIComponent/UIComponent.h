@@ -21,7 +21,8 @@ protected:
 	virtual void ImplementPositionUpdated() noexcept {}; //위치값 업데이트 할때 컴포넌트에서 추가로 설정할게 있다면
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept { return true; }
 	virtual void ImplementRender(ITextureRender*) const {};
-	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce = false) noexcept;
+	virtual bool ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept;
+	virtual bool ImplementChangeSize(const XMUINT2&, bool) noexcept { return true; }
 	virtual bool EnterToolMode() noexcept { return true;	}
 	virtual bool ExitToolMode() noexcept { return true; }
 

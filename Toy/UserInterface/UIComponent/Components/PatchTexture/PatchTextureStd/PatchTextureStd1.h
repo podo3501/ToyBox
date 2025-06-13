@@ -35,7 +35,7 @@ protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override; //Binder가 로딩을 다 하고 여기서 값만 연결한다.
 	virtual void ImplementRender(ITextureRender* render) const override { m_coord.Render(render); }
-	virtual bool ImplementChangeSize(const XMUINT2& size, bool) noexcept override { return UIComponent::ImplementChangeSize(size); }
+	virtual bool ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept override { return UIComponent::ImplementResizeAndAdjustPos(size); }
 	virtual void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept override;
 
 private:

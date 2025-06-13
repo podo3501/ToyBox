@@ -77,7 +77,7 @@ vector<Rectangle> PatchTexture::GetChildSourceList() const noexcept
 	return results;
 }
 
-bool PatchTexture::ImplementChangeSize(const XMUINT2& size, bool) noexcept
+bool PatchTexture::ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept
 {
 	auto dirType = TextureSliceToDirType(*m_texSlice);
 	ReturnIfFalse(dirType);

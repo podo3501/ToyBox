@@ -152,7 +152,7 @@ bool ScrollBar::ImplementChangeSize(const XMUINT2& newSize, bool isForce) noexce
 	auto btnSize = XMUINT2{ newSize.x, btnHeight };
 	m_scrollButton->ChangeSize(btnSize, isForce);
 
-	return UIComponent::ImplementChangeSize(newSize);
+	return true;
 }
 
 bool ScrollBar::UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept
