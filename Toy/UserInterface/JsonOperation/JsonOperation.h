@@ -11,12 +11,10 @@ public:
 	JsonOperation() noexcept;
 	explicit JsonOperation(nlohmann::ordered_json& write) noexcept;
 	explicit JsonOperation(const nlohmann::json& read) noexcept;	
-
 	bool IsWrite();
 
 	template<typename T>
 	void Process(const string& key, T& data) noexcept;
-
 	template<HasSerializeIO T>
 	static bool WriteJsonToFile(T& obj, const wstring& filename);
 	template<HasSerializeIO T>

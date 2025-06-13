@@ -20,8 +20,6 @@ void RecentFiles::AddFile(const wstring& filename)
         m_recentFiles.pop_back();
 
     JsonOperation::WriteJsonToFile(*this, RecentFilename);
-
-    //JsonOperation::WriteJsonToFile()
 }
 
 bool RecentFiles::OpenFile(FileTab& menuBar)

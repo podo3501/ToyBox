@@ -87,9 +87,8 @@ bool TextArea::SetText(const wstring& text)
 	return true;
 }
 
-bool TextArea::ImplementChangeSize(const XMUINT2& size, bool) noexcept
+bool TextArea::ImplementChangeSize(const XMUINT2&, bool) noexcept
 {
-	ReturnIfFalse(UIComponent::ImplementChangeSize(size));
 	return ArrangeText(m_text);
 }
 

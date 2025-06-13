@@ -161,11 +161,8 @@ bool TextureSwitcher::ImplementUpdate(const DX::StepTimer&) noexcept
 
 bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	bool allChange = ranges::all_of(GetChildComponents(), [&size, isForce](const auto& component) {
-		return component->ChangeSize(size, isForce);
-		});
-	ReturnIfFalse(allChange);
-	return UIComponent::ImplementChangeSize(size);
+	return ranges::all_of(GetChildComponents(), [&size, isForce](const auto& component) {
+		return component->ChangeSize(size, isForce); });
 }
 
 unique_ptr<UIComponent> TextureSwitcher::AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept

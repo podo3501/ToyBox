@@ -73,8 +73,6 @@ string JsonTraitsBase<string>::DeserializeFromJson(const nlohmann::json& dataJ) 
 nlohmann::ordered_json JsonTraitsBase<wstring>::SerializeToJson(const wstring& data) { return WStringToString(data); }
 wstring JsonTraitsBase<wstring>::DeserializeFromJson(const nlohmann::json& dataJ)
 {
-	return json_detail::CreateAndFill<wstring>([&dataJ](wstring& data) 
-		{
-		data = StringToWString(dataJ); 
-		});
+	return json_detail::CreateAndFill<wstring>([&dataJ](wstring& data) {
+		data = StringToWString(dataJ); });
 }

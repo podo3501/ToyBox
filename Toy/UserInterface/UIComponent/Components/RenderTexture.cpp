@@ -96,8 +96,8 @@ bool RenderTexture::ImplementChangeSize(const XMUINT2& size, bool isForce) noexc
 {
 	ReturnIfFalse(m_component->ChangeSize(size, isForce));
 	ReturnIfFalse(m_texController->ModifyRenderTextureSize(*m_index, size));
-	
-	return UIComponent::ImplementChangeSize(size);
+
+	return true;
 }
 
 bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent> component) noexcept

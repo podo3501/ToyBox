@@ -143,7 +143,7 @@ void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexc
 		});
 }
 
-bool UIComponent::ImplementChangeSize(const XMUINT2& size, bool) noexcept
+bool UIComponent::ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept
 {
 	ranges::for_each(m_children, [this, &size](auto& child) {
 		GetTransform(child.get()).AdjustPosition(size, HasStateFlag(StateFlag::LockPosOnResize));
@@ -163,6 +163,7 @@ bool UIComponent::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 
 	if (!isForce && lockedSize == preSize) return true;
 
+	ReturnIfFalse(ImplementResizeAndAdjustPos(size));
 	return ImplementChangeSize(lockedSize, isForce);
 }
 

@@ -114,7 +114,7 @@ string UINameGenerator::MakeNameOf(const string& name, const string& region, Com
     return m_regionNames[region].Create(prefix, componentID);
 }
 
-bool UINameGenerator::RemoveNameOf(const string& region, const string& name) noexcept
+bool UINameGenerator::TryRemoveName(const string& region, const string& name) noexcept
 {
     auto find = m_regionNames.find(region);
     if (find == m_regionNames.end()) return false;

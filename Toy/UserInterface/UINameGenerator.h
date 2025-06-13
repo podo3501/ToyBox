@@ -43,7 +43,7 @@ public:
     bool operator==(const UINameGenerator& other) const noexcept;
 
 	string MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept;
-    bool RemoveNameOf(const string& region, const string& name) noexcept;
+    bool TryRemoveName(const string& region, const string& name) noexcept;
 
     void SerializeIO(JsonOperation& operation);
 

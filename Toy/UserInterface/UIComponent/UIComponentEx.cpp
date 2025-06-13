@@ -97,7 +97,7 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	unique_ptr<UIComponent> detach = DetachChild(parent, m_component);
 	if (detach == nullptr) return {};
 
-	nameGen->RemoveNameOf(region, detach->GetName());
+	nameGen->TryRemoveName(region, detach->GetName());
 	return { move(detach), parent };
 }
 
@@ -117,7 +117,7 @@ void UIComponentEx::Rename(const string& name) noexcept
 	UIComponent* regionComponent = m_component->GetParentRegionRoot();
 	const auto& region = regionComponent->GetRegion();
 
-	nameGen->RemoveNameOf(region, m_component->GetName());
+	nameGen->TryRemoveName(region, m_component->GetName());
 	m_component->m_name = name;
 }
 
