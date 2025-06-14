@@ -21,6 +21,7 @@ public:
 	bool ForEachChildPostUntilFail(predicate<UIComponent*> auto&& Func) noexcept; //후위 순회로 리턴값 반환 재귀(binder에사용)
 	void ForEachChildBool(function<CResult(UIComponent*)> Func) noexcept; //무언가를 찾았으면 bool 반환으로 그만 하라는 함수
 	void ForEachChildConst(invocable<const UIComponent*> auto&& Func) const noexcept; //읽기전용
+	void ForEachChildWithRegion(function<void(const string&, UIComponent*)> Func) noexcept; //소속된 region을 알려주면서 foreach
 	void ForEachChildToRender(function<void(UIComponent*)> Func) noexcept;
 
 	//이름 및 Region에 관련된 함수들. 함수가 길어서 여기로 일단 대피시킴
@@ -73,3 +74,4 @@ void UIHierarchy<T>::ForEachChildConst(invocable<const UIComponent*> auto&& Func
 	for (const auto& child : m_children)
 		if (child) child->ForEachChildConst(Func);
 }
+

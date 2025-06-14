@@ -207,7 +207,7 @@ void MainWindow::ShowStatusBar() const//상태 표시줄(임시)
 	else
 	{
 		ImGui::SetCursorPos({ 0, GetFrameHeight() });
-		ImGui::Text("Status update has been activated.");
+		ImGui::Text("Frames per Second: %.4f  --Status update has been activated--", m_fps);
 	}	
 }
 

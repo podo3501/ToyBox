@@ -21,8 +21,8 @@ protected:
 	virtual void ImplementPositionUpdated() noexcept {}; //위치값 업데이트 할때 컴포넌트에서 추가로 설정할게 있다면
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept { return true; }
 	virtual void ImplementRender(ITextureRender*) const {};
-	virtual bool ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept;
-	virtual bool ImplementChangeSize(const XMUINT2&, bool) noexcept { return true; }
+	virtual bool ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept; //사이즈 바꾸면 child의 위치를 바꿔야 한다.
+	virtual bool ImplementChangeSize(const XMUINT2&, bool) noexcept { return true; } //사이즈 바꿀때
 	virtual bool EnterToolMode() noexcept { return true;	}
 	virtual bool ExitToolMode() noexcept { return true; }
 
@@ -73,7 +73,10 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }
-	inline bool SetStateFlag(StateFlag::Type flag, bool enabled) noexcept { return BitEnum::Set(m_stateFlag, flag, enabled); }
+	inline bool SetStateFlag(StateFlag::Type flag, bool enabled) noexcept 
+	{ 
+		return BitEnum::Set(m_stateFlag, flag, enabled); 
+	}
 	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return BitEnum::Has(m_stateFlag, flag); }
 	void SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept;
 	bool RenameRegion(const string& region) noexcept;

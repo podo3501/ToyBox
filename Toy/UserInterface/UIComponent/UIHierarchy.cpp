@@ -102,6 +102,22 @@ void UIHierarchy<UIComponent>::ForEachChildToRender(function<void(UIComponent*)>
 	return ForEachRenderChildDFS(Func);
 }
 
+void UIHierarchy<UIComponent>::ForEachChildWithRegion(function<void(const string&, UIComponent*)> Func) noexcept
+{
+	const auto Traverse = [&](UIHierarchy<UIComponent>* node, const string& region, auto&& self_ref) -> void {
+		UIComponent* component = static_cast<UIComponent*>(node);
+		string currentRegion = !component->GetRegion().empty() ? component->GetRegion() : region;
+		Func(currentRegion, component);
+
+		for (auto& child : node->m_children) {
+			if (child)
+				self_ref(child.get(), currentRegion, self_ref);
+		}};
+
+	UIComponent* regionComponent = GetParentRegionRoot();
+	Traverse(GetThis(), regionComponent->GetRegion(), Traverse);
+}
+
 //부모 region에서 같은 이름이 있는지 확인한다.
 bool UIHierarchy<UIComponent>::IsUniqueRegion(const string& name) noexcept
 {
