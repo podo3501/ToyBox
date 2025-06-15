@@ -171,7 +171,7 @@
     <ProjectReference Include="..\Toy\Toy.vcxproj">
       <Project>{ce88cfb8-f480-4ead-b13e-d54c92e8fde8}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Tracy\build\TracyClient.vcxproj">
+    <ProjectReference Include="..\Tracy\vs_project\TracyClient.vcxproj">
       <Project>{c6b3e223-6088-38d8-97b8-0d1316a11012}</Project>
     </ProjectReference>
   </ItemGroup>

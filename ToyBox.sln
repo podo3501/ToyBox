@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Toy", "Toy\Toy.vcxproj", "{CE88CFB8-F480-4EAD-B13E-D54C92E8FDE8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C6B3E223-6088-38D8-97B8-0D1316A11012} = {C6B3E223-6088-38D8-97B8-0D1316A11012}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "App", "App\App.vcxproj", "{F174F0E5-1C59-4CCA-835C-AD7CF3E37C4F}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -23,6 +26,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoogleTestLib", "GoogleTestLib\GoogleTestLib.vcxproj", "{D35ACB5A-C588-45C9-AE36-D6802A812A75}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToyTest", "ToyTest\ToyTest.vcxproj", "{6AF974ED-793D-4358-8050-718DB6D37275}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C6B3E223-6088-38D8-97B8-0D1316A11012} = {C6B3E223-6088-38D8-97B8-0D1316A11012}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{69C6CF77-41C4-4FCE-AC9B-6B5223B97BE3}"
 	ProjectSection(SolutionItems) = preProject
@@ -49,9 +55,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{980E4560-9
 		Resources\UI\Data\FirstScene.json = Resources\UI\Data\FirstScene.json
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TracyClient", "Tracy\build\TracyClient.vcxproj", "{C6B3E223-6088-38D8-97B8-0D1316A11012}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxproj", "{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TracyClient", "Tracy\vs_project\TracyClient.vcxproj", "{C6B3E223-6088-38D8-97B8-0D1316A11012}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,18 +165,6 @@ Global
 		{A3B677A0-27E1-4A53-9761-AB4F496DC1CF}.Release|x64.Build.0 = Release|x64
 		{A3B677A0-27E1-4A53-9761-AB4F496DC1CF}.Release|x86.ActiveCfg = Release|Win32
 		{A3B677A0-27E1-4A53-9761-AB4F496DC1CF}.Release|x86.Build.0 = Release|Win32
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|ARM64.ActiveCfg = Debug|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|ARM64.Build.0 = Debug|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|x64.ActiveCfg = Debug|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|x64.Build.0 = Debug|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|x86.ActiveCfg = Debug|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|x86.Build.0 = Debug|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|ARM64.ActiveCfg = Release|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|ARM64.Build.0 = Release|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x64.ActiveCfg = Release|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x64.Build.0 = Release|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x86.ActiveCfg = Release|x64
-		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x86.Build.0 = Release|x64
 		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|ARM64.ActiveCfg = Debug|x64
 		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|ARM64.Build.0 = Debug|x64
 		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Debug|x64.ActiveCfg = Debug|x64
@@ -183,6 +177,18 @@ Global
 		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|x64.Build.0 = Release|x64
 		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|x86.ActiveCfg = Release|Win32
 		{A9D428F9-8CED-42B2-AD67-3E2A3E8C08FF}.Release|x86.Build.0 = Release|Win32
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|ARM64.ActiveCfg = Debug|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|ARM64.Build.0 = Debug|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|x64.ActiveCfg = Debug|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|x64.Build.0 = Debug|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|x86.ActiveCfg = Debug|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Debug|x86.Build.0 = Debug|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|ARM64.ActiveCfg = Release|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|ARM64.Build.0 = Release|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x64.ActiveCfg = Release|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x64.Build.0 = Release|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x86.ActiveCfg = Release|x64
+		{C6B3E223-6088-38D8-97B8-0D1316A11012}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
