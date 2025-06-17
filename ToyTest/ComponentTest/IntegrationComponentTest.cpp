@@ -266,7 +266,7 @@ namespace UserInterfaceTest
 		UIEx(texPtr1).Rename("NoMatchComponentType_0");
 		auto texPtr3 = TestAttachName(m_main, "PatchTextureStd1_1");
 
-		//reccycle에 들어갔는지 확인하기 위해서
+		//recycle에 들어갔는지 확인하기 위해서
 		UIEx(texPtr3).DetachComponent();
 		m_uiModule->BindTextureResources();
 

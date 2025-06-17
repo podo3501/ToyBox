@@ -12,8 +12,6 @@ class ComponentController
 {
 public:
 	~ComponentController();
-	/*ComponentController(IRenderer* renderer, TextureResourceBinder* resBinder,
-		UIComponent* panel, const string& mainWndNam) noexcept;*/
 	ComponentController(IRenderer* renderer, TextureResourceBinder* resBinder,
 		UIComponent* mainComponent, const string& mainWndName) noexcept;
 

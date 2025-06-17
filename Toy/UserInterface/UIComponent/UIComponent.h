@@ -57,9 +57,6 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	inline bool ChangeSize(uint32_t x, uint32_t y, bool isForce = false) noexcept { return ChangeSize({ x, y }, isForce); }
 	bool UpdatePositionsManually(bool root = false) noexcept;
 	bool ProcessUpdate(const DX::StepTimer& timer) noexcept;
-
-	template<typename T>
-	T GetComponent(const string& name) noexcept;
 	
 	inline const XMINT2& GetPosition() const noexcept { return m_transform.GetAbsolutePosition(); }
 	inline const XMINT2& GetRelativePosition() const noexcept { return m_transform.GetRelativePosition(); }

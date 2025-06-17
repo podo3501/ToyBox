@@ -22,36 +22,15 @@ MainWindow::~MainWindow()
 MainWindow::MainWindow(IRenderer* renderer) :
 	InnerWindow{ "Main Window " + to_string(m_mainWindowIndex++) },
 	m_renderer{ renderer }
-	//m_resBinder{ CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json") }
-	//m_panel{ nullptr }
 {
 	m_renderer->AddImguiComponent(this);
-	//m_renderer->LoadTextureBinder(m_resBinder.get());
 }
 
 ImVec2 MainWindow::GetPanelSize() const noexcept
 {
-	//return XMUINT2ToImVec2(m_panel->GetSize());
 	UIComponent* component = GetUIModule()->GetComponent();
 	return XMUINT2ToImVec2(component->GetSize());
 }
-
-//bool MainWindow::SetupProperty(unique_ptr<Panel>&& panel)
-//{
-//	//AddRenderComponent가 없는것은 main 화면에서 보여주는게 아니라 TextureRendering해서 보여주는거기 때문에 Render에 연결시키지 않는다.
-//	m_panel = panel.get();
-//	m_panel->RenameRegion("MainRegionEntry");
-//	m_controller = make_unique<ComponentController>(m_renderer, m_resBinder.get(), m_panel, GetName());
-//
-//	const auto& size = m_panel->GetSize();
-//	m_renderTex = CreateComponent<RenderTexture>(UILayout{ size, Origin::LeftTop }, move(panel));
-//	ReturnIfFalse(m_renderTex->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
-//
-//	ToggleToolMode();
-//	m_isOpen = true;
-//
-//	return true;
-//}
 
 bool MainWindow::SetupProperty(unique_ptr<UIModule> uiModule)
 {
@@ -75,9 +54,6 @@ bool MainWindow::CreateScene(const XMUINT2& size)
 	unique_ptr<UIModule> module = CreateUIModule(UILayout(size, Origin::LeftTop), 
 		"Main", m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
 	return SetupProperty(move(module));
-
-	//auto panel = make_unique<Panel>("Main", UILayout(size, Origin::LeftTop));
-	//return SetupProperty(move(panel));
 }
 
 bool MainWindow::CreateScene(const wstring& filename)
@@ -85,26 +61,18 @@ bool MainWindow::CreateScene(const wstring& filename)
 	unique_ptr<UIModule> module = CreateUIModule(filename,
 		m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
 	return SetupProperty(move(module));
-
-	//unique_ptr<Panel> panel;
-	//ReturnIfFalse(JsonFile::ReadComponent(filename, panel));
-	//return SetupProperty(move(panel));
 }
 
 bool MainWindow::SaveScene(const wstring& filename)
 {
 	UIModule* module = GetUIModule();
 	return module->Write(filename);
-
-	//return JsonFile::WriteComponent(m_panel, filename);
 }
 
 wstring MainWindow::GetSaveFilename() const noexcept
 {
 	UIModule* module = GetUIModule();
 	return module->GetFilename();
-
-	//return JsonFile::GetJsonFilename(m_panel);
 }
 
 void MainWindow::ChangeWindowSize(const ImVec2& size)
@@ -123,7 +91,6 @@ UIModule* MainWindow::GetUIModule() const noexcept
 void MainWindow::ToggleToolMode() noexcept
 {
 	m_isTool = !m_isTool;
-	//m_panel->EnableToolMode(m_isTool);
 	GetUIModule()->EnableToolMode(m_isTool);
 	m_mainRenderTexture->EnableChildMouseEvents(!m_isTool);
 	m_controller->SetActive(m_isTool);
