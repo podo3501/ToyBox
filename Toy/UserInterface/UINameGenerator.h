@@ -42,6 +42,7 @@ public:
 	UINameGenerator();
     bool operator==(const UINameGenerator& other) const noexcept;
 
+    string MakeRegionOf(const string& region) noexcept;
 	string MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept;
     bool TryRemoveName(const string& region, const string& name) noexcept;
 

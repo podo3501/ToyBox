@@ -105,6 +105,12 @@ static bool ShouldGenerateName(const string& name, const string& prefix)
     return name.find(prefix) != string::npos;
 }
 
+string UINameGenerator::MakeRegionOf(const string& region) noexcept
+{
+    region;
+    return "";
+}
+
 string UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept
 {
     const string& prefix = EnumToString<ComponentID>(componentID) + "_";

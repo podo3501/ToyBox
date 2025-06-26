@@ -244,6 +244,14 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(failed == nullptr);
 	}
 
+	TEST_F(IntegrationTest, UINameGenerator)
+	{
+		unique_ptr<UINameGenerator> generator = make_unique<UINameGenerator>();
+		string region = "newRegion";
+		string curRegion = generator->MakeRegionOf(region);
+		EXPECT_EQ(region, curRegion);
+	}
+
 	static UIComponent* TestAttachName(UIComponent* parent, const string& childName)
 	{
 		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
