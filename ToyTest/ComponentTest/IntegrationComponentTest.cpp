@@ -250,6 +250,8 @@ namespace UserInterfaceTest
 		string region = "newRegion";
 		string curRegion = generator->MakeRegionOf(region);
 		EXPECT_EQ(region, curRegion);
+
+		//컴포넌트 이름 테스트 하는 부분 만들기
 	}
 
 	static UIComponent* TestAttachName(UIComponent* parent, const string& childName)

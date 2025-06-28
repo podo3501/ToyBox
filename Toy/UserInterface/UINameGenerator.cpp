@@ -95,8 +95,35 @@ UINameGenerator::UINameGenerator() = default;
 
 bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
 {
-    ReturnIfFalse(ranges::equal(m_regionNames, other.m_regionNames));
+    ReturnIfFalse(ranges::equal(m_componentNameGens, other.m_componentNameGens));
     return true;
+}
+
+static string GetBaseRegionName(std::string_view region) 
+{
+    auto pos = region.rfind('_');
+    if (pos == string_view::npos || pos + 1 >= region.size()) return string(region);
+
+    auto suffix = region.substr(pos + 1);
+    if (ranges::all_of(suffix, [](char c) { return isdigit(c); }))
+        return string(region.substr(0, pos));   // 뒤가 전부 숫자라면 _숫자 를 떼고 앞만 리턴
+    return string(region);
+}
+
+//이거 일단 componentNameGenerator를 흉내내서 만든다음에 두 클래스의 공통 부분을 빼서 만들자.
+class NameGenerator
+{
+public:
+private:
+};
+
+string UINameGenerator::MakeRegionOf(const string& region) noexcept
+{
+    string baseRegion = GetBaseRegionName(region);
+    
+    unordered_map<string, NameGenerator> regionNameGens;
+
+    return "";
 }
 
 static bool ShouldGenerateName(const string& name, const string& prefix)
@@ -105,30 +132,24 @@ static bool ShouldGenerateName(const string& name, const string& prefix)
     return name.find(prefix) != string::npos;
 }
 
-string UINameGenerator::MakeRegionOf(const string& region) noexcept
-{
-    region;
-    return "";
-}
-
 string UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept
 {
     const string& prefix = EnumToString<ComponentID>(componentID) + "_";
     if (!ShouldGenerateName(name, prefix))
         return name;
 
-    return m_regionNames[region].Create(prefix, componentID);
+    return m_componentNameGens[region].Create(prefix, componentID);
 }
 
 bool UINameGenerator::TryRemoveName(const string& region, const string& name) noexcept
 {
-    auto find = m_regionNames.find(region);
-    if (find == m_regionNames.end()) return false;
+    auto find = m_componentNameGens.find(region);
+    if (find == m_componentNameGens.end()) return false;
 
     return find->second.Remove(name);
 }
 
 void UINameGenerator::SerializeIO(JsonOperation& operation)
 {
-    operation.Process("RegionNames", m_regionNames);
+    operation.Process("RegionNames", m_componentNameGens);
 }
