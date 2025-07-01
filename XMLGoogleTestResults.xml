@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="1" disabled="0" errors="0" time="0.464" timestamp="2025-06-26T23:55:00.440" name="AllTests">
-  <testsuite name="IntegrationTest" tests="1" failures="1" disabled="0" skipped="0" errors="0" time="0.463" timestamp="2025-06-26T23:55:00.441">
-    <testcase name="UINameGenerator" status="run" result="completed" time="0.463" timestamp="2025-06-26T23:55:00.441" classname="IntegrationTest">
-      <failure message="D:\ProgrammingStudy\ToyBox\ToyTest\ComponentTest\IntegrationComponentTest.cpp:252&#x0A;Expected equality of these values:&#x0A;  region&#x0A;    Which is: &quot;newRegion&quot;&#x0A;  curRegion&#x0A;    Which is: &quot;&quot;" type=""><![CDATA[D:\ProgrammingStudy\ToyBox\ToyTest\ComponentTest\IntegrationComponentTest.cpp:252
-Expected equality of these values:
-  region
-    Which is: "newRegion"
-  curRegion
-    Which is: ""]]></failure>
-    </testcase>
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.426" timestamp="2025-07-01T23:52:52.395" name="AllTests">
+  <testsuite name="IntegrationTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.426" timestamp="2025-07-01T23:52:52.395">
+    <testcase name="UINameGenerator" status="run" result="completed" time="0.426" timestamp="2025-07-01T23:52:52.395" classname="IntegrationTest" />
   </testsuite>
 </testsuites>

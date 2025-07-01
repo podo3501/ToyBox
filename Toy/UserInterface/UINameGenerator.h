@@ -49,5 +49,6 @@ public:
     void SerializeIO(JsonOperation& operation);
 
 private:
+    unordered_map<string, AutoNamer> m_regionNameGens;
     unordered_map<string, ComponentNameGenerator> m_componentNameGens;
 };

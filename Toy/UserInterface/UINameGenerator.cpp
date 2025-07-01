@@ -120,10 +120,15 @@ private:
 string UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
     string baseRegion = GetBaseRegionName(region);
-    
-    unordered_map<string, NameGenerator> regionNameGens;
 
-    return "";
+    auto find = m_regionNameGens.find(baseRegion);
+    if (find == m_regionNameGens.end())
+    {
+        m_regionNameGens.emplace(region, AutoNamer());
+        return region;
+    }
+    
+    return region + "_" + m_regionNameGens[region].Generate();
 }
 
 static bool ShouldGenerateName(const string& name, const string& prefix)

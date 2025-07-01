@@ -248,8 +248,8 @@ namespace UserInterfaceTest
 	{
 		unique_ptr<UINameGenerator> generator = make_unique<UINameGenerator>();
 		string region = "newRegion";
-		string curRegion = generator->MakeRegionOf(region);
-		EXPECT_EQ(region, curRegion);
+		EXPECT_EQ(generator->MakeRegionOf(region), region);
+		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_0");
 
 		//컴포넌트 이름 테스트 하는 부분 만들기
 	}
