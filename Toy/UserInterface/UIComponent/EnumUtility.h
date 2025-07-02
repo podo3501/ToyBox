@@ -14,7 +14,7 @@ std::string EnumToString(EnumType value)
 }
 
 template<typename EnumType>
-optional<EnumType> StringToEnum(const string& str)
+optional<EnumType> StringToEnum(string_view str)
 {
 	constexpr auto list = EnumToStringMap<EnumType>();
 	int iter{ 0 };

@@ -66,20 +66,27 @@ bool IsVaildEnumType(T type)
     return true;
 }
 
-bool ComponentNameGenerator::Remove(const string& name) noexcept
+static pair<string_view, string_view> SplitNameAndId(string_view name) 
 {
     auto underscore = name.find('_');
-    if (underscore == string::npos) return false;
+    if (underscore == string_view::npos) return {};
 
-    EnumSize<ComponentID>();
-    string type = name.substr(0, underscore);
-    auto componentID = StringToEnum<ComponentID>(type);
+    auto prefix = name.substr(0, underscore);
+    auto idStr = name.substr(underscore + 1);
+    if (idStr.empty() || !std::ranges::all_of(idStr, ::isdigit)) return {};
+
+    return { prefix, idStr };
+}
+
+bool ComponentNameGenerator::Remove(const string& name) noexcept
+{
+    auto [prefix, idStr] = SplitNameAndId(name);
+    if (prefix.empty()) return false;
+
+    auto componentID = StringToEnum<ComponentID>(prefix);
     if (!componentID) return false;
 
-    auto idStr = name.substr(underscore + 1);
-    ReturnIfFalse(!idStr.empty() && ranges::all_of(idStr, ::isdigit)); //idStr이 숫자문자 이어야 한다.
-
-    m_namers[*componentID].Recycle(stoi(idStr));
+    m_namers[*componentID].Recycle(stoi(string(idStr)));
     return true;
 }
 
@@ -110,13 +117,6 @@ static string GetBaseRegionName(std::string_view region)
     return string(region);
 }
 
-//이거 일단 componentNameGenerator를 흉내내서 만든다음에 두 클래스의 공통 부분을 빼서 만들자.
-class NameGenerator
-{
-public:
-private:
-};
-
 string UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
     string baseRegion = GetBaseRegionName(region);
@@ -124,11 +124,24 @@ string UINameGenerator::MakeRegionOf(const string& region) noexcept
     auto find = m_regionNameGens.find(baseRegion);
     if (find == m_regionNameGens.end())
     {
-        m_regionNameGens.emplace(region, AutoNamer());
+        m_regionNameGens.emplace(baseRegion, AutoNamer());
         return region;
     }
     
-    return region + "_" + m_regionNameGens[region].Generate();
+    return baseRegion + "_" + m_regionNameGens[baseRegion].Generate();
+}
+
+bool UINameGenerator::TryRemoveRegion(const string& region) noexcept
+{
+    auto [prefix, idStr] = SplitNameAndId(region);
+    if (prefix.empty()) return false;
+
+    auto find = m_regionNameGens.find(string(prefix));
+    if (find == m_regionNameGens.end()) return false;
+
+    find->second.Recycle(stoi(string(idStr)));
+
+    return true;
 }
 
 static bool ShouldGenerateName(const string& name, const string& prefix)
