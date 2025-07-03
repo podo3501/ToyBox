@@ -252,7 +252,10 @@ namespace UserInterfaceTest
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_0");
 
 		EXPECT_TRUE(generator->TryRemoveRegion("newRegion_0"));
-		//EXPECT_TRUE(generator->TryRemoveRegion("newRegion")); //이걸 지우면 맵에 newRegion도 사라져야 한다.
+		EXPECT_TRUE(generator->TryRemoveRegion("newRegion")); //이걸 지우면 맵에 newRegion도 사라져야 한다.
+
+		EXPECT_EQ(generator->MakeNameOf("", "Region", ComponentID::PatchTextureStd1), "PatchTextureStd1_0");
+		EXPECT_TRUE(generator->TryRemoveName("Region", "PatchTextureStd1_0"));
 		
 		//컴포넌트 이름 테스트 하는 부분 만들기
 	}

@@ -9,7 +9,8 @@ public:
     bool operator==(const AutoNamer& other) const noexcept;
 
 	string Generate() noexcept;
-    void Recycle(int id) noexcept;
+    [[nodiscard]] 
+    pair<bool, bool> Recycle(int id) noexcept;
 
     void SerializeIO(JsonOperation& operation);
 

@@ -28,10 +28,15 @@ string AutoNamer::Generate() noexcept
     return to_string(id);
 }
 
-void AutoNamer::Recycle(int id) noexcept
+pair<bool, bool> AutoNamer::Recycle(int id) noexcept
 {
-    if (id >= m_nextID) return;
+    if (id >= m_nextID) return { false, false };
     m_recycled.insert(id);
+
+    bool deletableName{ false };
+    if (m_nextID <= m_recycled.size()) deletableName = true;
+        
+    return { true, deletableName };
 }
 
 void AutoNamer::SerializeIO(JsonOperation& operation)
@@ -86,7 +91,9 @@ bool ComponentNameGenerator::Remove(const string& name) noexcept
     auto componentID = StringToEnum<ComponentID>(prefix);
     if (!componentID) return false;
 
-    m_namers[*componentID].Recycle(stoi(string(idStr)));
+    auto [result, deletable] = m_namers[*componentID].Recycle(stoi(string(idStr)));
+    if (deletable) m_namers.erase(*componentID);
+
     return true;
 }
 
@@ -139,7 +146,8 @@ bool UINameGenerator::TryRemoveRegion(const string& region) noexcept
     auto find = m_regionNameGens.find(string(prefix));
     if (find == m_regionNameGens.end()) return false;
 
-    find->second.Recycle(stoi(string(idStr)));
+    auto [result, deletable] = find->second.Recycle(stoi(string(idStr)));
+    if (deletable) m_regionNameGens.erase(find);
 
     return true;
 }
