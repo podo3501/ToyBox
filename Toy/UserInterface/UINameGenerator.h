@@ -11,12 +11,14 @@ public:
 	string Generate() noexcept;
     [[nodiscard]] 
     pair<bool, bool> Recycle(int id) noexcept;
+    inline bool IsDeletable() noexcept { return (m_nextID <= m_recycled.size()); }
 
     void SerializeIO(JsonOperation& operation);
 
 private:
     int m_nextID{ 0 };
     set<int> m_recycled;
+    bool m_isDeletable{ false };
 };
 
 enum class ComponentID;
@@ -52,6 +54,19 @@ public:
     void SerializeIO(JsonOperation& operation);
 
 private:
-    unordered_map<string, AutoNamer> m_regionNameGens;
+    struct RegionAutoNamer
+    {
+        RegionAutoNamer() = default;
+        explicit RegionAutoNamer(bool isBaseName) noexcept
+            : deleted(!isBaseName)
+        {}
+
+        AutoNamer namer;
+        bool deleted{ false };
+    };
+
+    bool TryMarkRegionDeleted(unordered_map<string, RegionAutoNamer>::iterator iter) noexcept;
+
+    unordered_map<string, RegionAutoNamer> m_regionNameGens;
     unordered_map<string, ComponentNameGenerator> m_componentNameGens;
 };

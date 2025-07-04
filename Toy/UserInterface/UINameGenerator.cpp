@@ -32,11 +32,8 @@ pair<bool, bool> AutoNamer::Recycle(int id) noexcept
 {
     if (id >= m_nextID) return { false, false };
     m_recycled.insert(id);
-
-    bool deletableName{ false };
-    if (m_nextID <= m_recycled.size()) deletableName = true;
         
-    return { true, deletableName };
+    return { true, IsDeletable() };
 }
 
 void AutoNamer::SerializeIO(JsonOperation& operation)
@@ -74,7 +71,7 @@ bool IsVaildEnumType(T type)
 static pair<string_view, string_view> SplitNameAndId(string_view name) 
 {
     auto underscore = name.find('_');
-    if (underscore == string_view::npos) return {};
+    if (underscore == string_view::npos) return { name, {} };
 
     auto prefix = name.substr(0, underscore);
     auto idStr = name.substr(underscore + 1);
@@ -131,11 +128,24 @@ string UINameGenerator::MakeRegionOf(const string& region) noexcept
     auto find = m_regionNameGens.find(baseRegion);
     if (find == m_regionNameGens.end())
     {
-        m_regionNameGens.emplace(baseRegion, AutoNamer());
+        m_regionNameGens.emplace(baseRegion, RegionAutoNamer(baseRegion == region));
         return region;
     }
     
-    return baseRegion + "_" + m_regionNameGens[baseRegion].Generate();
+    return baseRegion + "_" + m_regionNameGens[baseRegion].namer.Generate();
+}
+
+bool UINameGenerator::TryMarkRegionDeleted(unordered_map<string, RegionAutoNamer>::iterator iter) noexcept
+{
+    auto& regionAutoNamer = iter->second;
+    if (regionAutoNamer.deleted) return false;
+
+    regionAutoNamer.deleted = true;
+
+    if (regionAutoNamer.namer.IsDeletable())
+        m_regionNameGens.erase(iter);
+
+    return true;
 }
 
 bool UINameGenerator::TryRemoveRegion(const string& region) noexcept
@@ -146,8 +156,12 @@ bool UINameGenerator::TryRemoveRegion(const string& region) noexcept
     auto find = m_regionNameGens.find(string(prefix));
     if (find == m_regionNameGens.end()) return false;
 
-    auto [result, deletable] = find->second.Recycle(stoi(string(idStr)));
-    if (deletable) m_regionNameGens.erase(find);
+    if (idStr.empty())
+        return TryMarkRegionDeleted(find);
+
+    auto& regionAutoNamer = find->second;
+    auto [result, deletable] = regionAutoNamer.namer.Recycle(stoi(string(idStr)));
+    if (deletable && regionAutoNamer.deleted) m_regionNameGens.erase(find);
 
     return true;
 }
