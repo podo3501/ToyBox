@@ -255,9 +255,11 @@ namespace UserInterfaceTest
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_1"); //newRegion을 지워도 새로운 이름은 newRegion이 아니라 newRegion_1이 된다. 한번 지워진 newRegion(베이스 이름)은 자동생성기를 돌려도 생성되지 않는다.
 		EXPECT_TRUE(generator->TryRemoveRegion("newRegion_0"));
 		EXPECT_TRUE(generator->TryRemoveRegion("newRegion_1")); //이걸 지우면 맵에 newRegion도 사라져야 한다. 베이스 이름도 없기 때문에.
+		EXPECT_TRUE(generator->IsUniqueRegion(region));
 
 		EXPECT_EQ(generator->MakeNameOf("", "Region", ComponentID::PatchTextureStd1), "PatchTextureStd1_0");
 		EXPECT_TRUE(generator->TryRemoveName("Region", "PatchTextureStd1_0"));
+		EXPECT_TRUE(generator->IsUniqueName("Region", "PatchTextureStd1_0"));
 		
 		//실제로 attach, detach 할때 이걸 사용해서 하도록 수정하고 name 관련 코드 삭제 한다.
 	}

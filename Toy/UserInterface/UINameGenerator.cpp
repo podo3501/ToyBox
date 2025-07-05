@@ -94,6 +94,12 @@ bool ComponentNameGenerator::Remove(const string& name) noexcept
     return true;
 }
 
+bool ComponentNameGenerator::IsUniqueName(string_view name) noexcept
+{
+    //?!? 이 부분 만드는 중
+    return false;
+}
+
 void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
 {
     operation.Process("Namers", m_namers);
@@ -166,6 +172,11 @@ bool UINameGenerator::TryRemoveRegion(const string& region) noexcept
     return true;
 }
 
+bool UINameGenerator::IsUniqueRegion(string_view region) noexcept
+{
+    return m_regionNameGens.find(region) == m_regionNameGens.end();
+}
+
 static bool ShouldGenerateName(const string& name, const string& prefix)
 {
     if (name.empty()) return true;
@@ -187,6 +198,13 @@ bool UINameGenerator::TryRemoveName(const string& region, const string& name) no
     if (find == m_componentNameGens.end()) return false;
 
     return find->second.Remove(name);
+}
+
+bool UINameGenerator::IsUniqueName(string_view region, string_view name) noexcept
+{
+    auto find = m_componentNameGens.find(region);
+    if (find == m_componentNameGens.end()) return true;
+    return find->second.IsUniqueName(name);
 }
 
 void UINameGenerator::SerializeIO(JsonOperation& operation)

@@ -229,6 +229,7 @@
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
+    <ClInclude Include="stl_ext.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
