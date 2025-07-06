@@ -258,6 +258,7 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(generator->IsUniqueRegion(region));
 
 		EXPECT_EQ(generator->MakeNameOf("", "Region", ComponentID::PatchTextureStd1), "PatchTextureStd1_0");
+		EXPECT_FALSE(generator->IsUniqueName("Region", "PatchTextureStd1_0"));
 		EXPECT_TRUE(generator->TryRemoveName("Region", "PatchTextureStd1_0"));
 		EXPECT_TRUE(generator->IsUniqueName("Region", "PatchTextureStd1_0"));
 		

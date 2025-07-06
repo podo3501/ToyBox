@@ -13,10 +13,12 @@ public:
 	string Generate() noexcept;
     [[nodiscard]] pair<bool, bool> Recycle(int id) noexcept;
     inline bool IsDeletable() noexcept { return (m_nextID <= m_recycled.size()); }
-
+    bool IsUnused(int id) const noexcept;
     void SerializeIO(JsonOperation& operation);
 
 private:
+    inline bool HasBeenGenerated(int id) const noexcept { return id >= 0 && id < m_nextID; }
+
     int m_nextID{ 0 };
     set<int> m_recycled;
     bool m_isDeletable{ false };
@@ -32,7 +34,7 @@ public:
     bool operator==(const ComponentNameGenerator& other) const noexcept;
     string Create(const string& prefix, ComponentID id) noexcept;
     bool Remove(const string& name) noexcept;
-    bool IsUniqueName(string_view name) noexcept;
+    bool IsUniqueName(string_view name) const noexcept;
 
     void SerializeIO(JsonOperation& operation);
     

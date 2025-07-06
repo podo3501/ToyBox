@@ -36,6 +36,14 @@ pair<bool, bool> AutoNamer::Recycle(int id) noexcept
     return { true, IsDeletable() };
 }
 
+bool AutoNamer::IsUnused(int id) const noexcept 
+{
+    bool notGenerated = !HasBeenGenerated(id);
+    bool recycled = m_recycled.find(id) != m_recycled.end();
+
+    return notGenerated || recycled;
+}
+
 void AutoNamer::SerializeIO(JsonOperation& operation)
 {
     operation.Process("Namers", m_nextID);
@@ -80,24 +88,37 @@ static pair<string_view, string_view> SplitNameAndId(string_view name)
     return { prefix, idStr };
 }
 
-bool ComponentNameGenerator::Remove(const string& name) noexcept
+static pair<ComponentID, int> ExtractComponentAndId(string_view name)
 {
     auto [prefix, idStr] = SplitNameAndId(name);
-    if (prefix.empty()) return false;
+    if (prefix.empty() || idStr.empty()) return { ComponentID::Unknown, -1 };
 
     auto componentID = StringToEnum<ComponentID>(prefix);
-    if (!componentID) return false;
+    if (!componentID) return { ComponentID::Unknown, -1 };
 
-    auto [result, deletable] = m_namers[*componentID].Recycle(stoi(string(idStr)));
-    if (deletable) m_namers.erase(*componentID);
+    return { *componentID, stoi(string(idStr)) };
+}
+
+bool ComponentNameGenerator::Remove(const string& name) noexcept
+{
+    auto [componentID, id] = ExtractComponentAndId(name);
+    if (componentID == ComponentID::Unknown) return false;
+
+    auto [result, deletable] = m_namers[componentID].Recycle(id);
+    if (deletable) m_namers.erase(componentID);
 
     return true;
 }
 
-bool ComponentNameGenerator::IsUniqueName(string_view name) noexcept
+bool ComponentNameGenerator::IsUniqueName(string_view name) const noexcept
 {
-    //?!? 이 부분 만드는 중
-    return false;
+    auto [componentID, id] = ExtractComponentAndId(name);
+    if (componentID == ComponentID::Unknown) return true;
+
+    auto find = m_namers.find(componentID);
+    if (find == m_namers.end()) return true;
+
+    return find->second.IsUnused(id);
 }
 
 void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
