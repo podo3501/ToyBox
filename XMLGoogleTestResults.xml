@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.433" timestamp="2025-07-06T23:43:57.476" name="AllTests">
-  <testsuite name="IntegrationTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.433" timestamp="2025-07-06T23:43:57.476">
-    <testcase name="GetComponent" status="run" result="completed" time="0.433" timestamp="2025-07-06T23:43:57.477" classname="IntegrationTest" />
+<testsuites tests="1" failures="1" disabled="0" errors="0" time="0.486" timestamp="2025-07-08T23:55:28.825" name="AllTests">
+  <testsuite name="IntegrationTest" tests="1" failures="1" disabled="0" skipped="0" errors="0" time="0.483" timestamp="2025-07-08T23:55:28.828">
+    <testcase name="UINameGenerator" status="run" result="completed" time="0.483" timestamp="2025-07-08T23:55:28.828" classname="IntegrationTest">
+      <failure message="D:\ProgrammingStudy\ToyBox\ToyTest\ComponentTest\IntegrationComponentTest.cpp:261&#x0A;Value of: generator-&gt;IsUniqueName(&quot;Region&quot;, &quot;PatchTextureStd1_0&quot;)&#x0A;  Actual: true&#x0A;Expected: false" type=""><![CDATA[D:\ProgrammingStudy\ToyBox\ToyTest\ComponentTest\IntegrationComponentTest.cpp:261
+Value of: generator->IsUniqueName("Region", "PatchTextureStd1_0")
+  Actual: true
+Expected: false]]></failure>
+    </testcase>
   </testsuite>
 </testsuites>

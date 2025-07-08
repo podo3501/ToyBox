@@ -41,6 +41,16 @@ vector<string> EnumToList()
 	return result;
 }
 
+template<typename EnumType>
+bool IsValidEnumString(string_view str)
+{
+	constexpr auto list = EnumToStringMap<EnumType>();
+
+	auto it = ranges::find(list, str, [](const char* s) { return string_view(s); });
+
+	return it != list.end();
+}
+
 template <typename EnumType>
 constexpr auto EtoV(EnumType enumerator) noexcept	//EnumToValue 이름이 길어서 줄인다.
 {

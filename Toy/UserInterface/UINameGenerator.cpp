@@ -61,9 +61,9 @@ bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) con
     return true;
 }
 
-string ComponentNameGenerator::Create(const string& prefix, ComponentID id) noexcept
+string ComponentNameGenerator::Create(const string& name) noexcept
 {
-    return prefix + m_namers[id].Generate();
+    return name + m_namers[name].Generate();
 }
 
 template<typename T>
@@ -88,34 +88,32 @@ static pair<string_view, string_view> SplitNameAndId(string_view name)
     return { prefix, idStr };
 }
 
-static pair<ComponentID, int> ExtractComponentAndId(string_view name)
+static pair<string, int> ExtractNameAndId(string_view name)
 {
     auto [prefix, idStr] = SplitNameAndId(name);
-    if (prefix.empty() || idStr.empty()) return { ComponentID::Unknown, -1 };
+    if (prefix.empty() || idStr.empty()) return { "", -1};
 
-    auto componentID = StringToEnum<ComponentID>(prefix);
-    if (!componentID) return { ComponentID::Unknown, -1 };
-
-    return { *componentID, stoi(string(idStr)) };
+    if(!IsValidEnumString<ComponentID>(prefix)) return { "", -1 };
+    return { string(prefix), stoi(string(idStr)) };
 }
 
 bool ComponentNameGenerator::Remove(const string& name) noexcept
 {
-    auto [componentID, id] = ExtractComponentAndId(name);
-    if (componentID == ComponentID::Unknown) return false;
+    auto [baseName, id] = ExtractNameAndId(name);
+    if (name.empty()) return false;
 
-    auto [result, deletable] = m_namers[componentID].Recycle(id);
-    if (deletable) m_namers.erase(componentID);
+    auto [result, deletable] = m_namers[baseName].Recycle(id);
+    if (deletable) m_namers.erase(baseName);
 
     return true;
 }
 
 bool ComponentNameGenerator::IsUniqueName(string_view name) const noexcept
 {
-    auto [componentID, id] = ExtractComponentAndId(name);
-    if (componentID == ComponentID::Unknown) return true;
+    auto [baseName, id] = ExtractNameAndId(name);
+    if (name.empty()) return true;
 
-    auto find = m_namers.find(componentID);
+    auto find = m_namers.find(baseName);
     if (find == m_namers.end()) return true;
 
     return find->second.IsUnused(id);
@@ -137,7 +135,7 @@ bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
     return true;
 }
 
-static string GetBaseRegionName(std::string_view region) 
+static string GetBaseRegionName(string_view region) 
 {
     auto pos = region.rfind('_');
     if (pos == string_view::npos || pos + 1 >= region.size()) return string(region);
@@ -207,10 +205,10 @@ static bool ShouldGenerateName(const string& name, const string& prefix)
 string UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept
 {
     const string& prefix = EnumToString<ComponentID>(componentID) + "_";
-    if (!ShouldGenerateName(name, prefix))
-        return name;
+    if (ShouldGenerateName(name, prefix))
+        return m_componentNameGens[region].Create(prefix);
 
-    return m_componentNameGens[region].Create(prefix, componentID);
+    return name;
 }
 
 bool UINameGenerator::TryRemoveName(const string& region, const string& name) noexcept

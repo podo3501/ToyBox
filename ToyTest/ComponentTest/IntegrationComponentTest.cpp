@@ -249,7 +249,7 @@ namespace UserInterfaceTest
 		unique_ptr<UINameGenerator> generator = make_unique<UINameGenerator>();
 		string region = "newRegion";
 		EXPECT_EQ(generator->MakeRegionOf(region), region);
-		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_0");
+		EXPECT_EQ(generator->MakeRegionOf(region), region + string("_0"));
 
 		EXPECT_TRUE(generator->TryRemoveRegion(region));
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_1"); //newRegion을 지워도 새로운 이름은 newRegion이 아니라 newRegion_1이 된다. 한번 지워진 newRegion(베이스 이름)은 자동생성기를 돌려도 생성되지 않는다.
@@ -261,7 +261,15 @@ namespace UserInterfaceTest
 		EXPECT_FALSE(generator->IsUniqueName("Region", "PatchTextureStd1_0"));
 		EXPECT_TRUE(generator->TryRemoveName("Region", "PatchTextureStd1_0"));
 		EXPECT_TRUE(generator->IsUniqueName("Region", "PatchTextureStd1_0"));
+
+		//string name = "newName";
+		//EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), name);
+		//EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), name + "_0");
+
+		//Component 경우 "" 일 경우에는 Component_0 이 되고 값이 있는 경우에는 name_0 이런식으로 되어야 한다.
+		//이렇게 되었을때 자동 이름 생성기에서 이름을 다 관리 할 수 있게 되어서 기존 IsUnique 함수를 대체할 수 있다.
 		
+		//이름을 rename 할때 _숫자 가 검출되면 안되도록 한다.
 		//실제로 attach, detach 할때 이걸 사용해서 하도록 수정하고 name 관련 코드 삭제 한다.
 	}
 

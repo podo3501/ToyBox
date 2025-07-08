@@ -32,14 +32,14 @@ public:
     ComponentNameGenerator();
 
     bool operator==(const ComponentNameGenerator& other) const noexcept;
-    string Create(const string& prefix, ComponentID id) noexcept;
+    string Create(const string& name) noexcept;
     bool Remove(const string& name) noexcept;
     bool IsUniqueName(string_view name) const noexcept;
 
     void SerializeIO(JsonOperation& operation);
     
 private:
-    map<ComponentID, AutoNamer> m_namers;
+    unordered_svmap<string, AutoNamer> m_namers;
 };
 
 class UINameGenerator
