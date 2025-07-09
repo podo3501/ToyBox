@@ -61,9 +61,14 @@ bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) con
     return true;
 }
 
-string ComponentNameGenerator::Create(const string& name) noexcept
+string ComponentNameGenerator::MakeNameFromComponent(const string& name) noexcept
 {
-    return name + m_namers[name].Generate();
+    return name + "_" + m_namers[name].Generate();
+}
+
+string ComponentNameGenerator::MakeNameFromBase(const string& name) noexcept
+{
+    return name + "_" + m_namers[name].Generate();
 }
 
 template<typename T>
@@ -204,11 +209,11 @@ static bool ShouldGenerateName(const string& name, const string& prefix)
 
 string UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept
 {
-    const string& prefix = EnumToString<ComponentID>(componentID) + "_";
-    if (ShouldGenerateName(name, prefix))
-        return m_componentNameGens[region].Create(prefix);
-
-    return name;
+    const string& strComponent = EnumToString<ComponentID>(componentID);
+    if (ShouldGenerateName(name, strComponent))
+        return m_componentNameGens[region].MakeNameFromComponent(strComponent);
+    else
+        return m_componentNameGens[region].MakeNameFromBase(name);
 }
 
 bool UINameGenerator::TryRemoveName(const string& region, const string& name) noexcept
@@ -216,7 +221,10 @@ bool UINameGenerator::TryRemoveName(const string& region, const string& name) no
     auto find = m_componentNameGens.find(region);
     if (find == m_componentNameGens.end()) return false;
 
-    return find->second.Remove(name);
+    if (find->second.Remove(name) == false) return false;
+    if (find->second.Empty()) m_componentNameGens.erase(find);
+
+    return true;
 }
 
 bool UINameGenerator::IsUniqueName(string_view region, string_view name) noexcept

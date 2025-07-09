@@ -32,9 +32,11 @@ public:
     ComponentNameGenerator();
 
     bool operator==(const ComponentNameGenerator& other) const noexcept;
-    string Create(const string& name) noexcept;
+    string MakeNameFromComponent(const string& name) noexcept;
+    string MakeNameFromBase(const string& name) noexcept;
     bool Remove(const string& name) noexcept;
     bool IsUniqueName(string_view name) const noexcept;
+    bool Empty() const noexcept { return m_namers.empty(); }
 
     void SerializeIO(JsonOperation& operation);
     
