@@ -263,8 +263,10 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(generator->IsUniqueName("Region", "PatchTextureStd1_0"));
 
 		string name = "newName";
-		//EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), name);
-		//EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), name + string("_0"));
+		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), name);
+		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), name + string("_0"));
+
+		EXPECT_TRUE(generator->TryRemoveName("Region", "newName"));
 
 		//Component 경우 "" 일 경우에는 Component_0 이 되고 값이 있는 경우에는 name_0 이런식으로 되어야 한다.
 		//이렇게 되었을때 자동 이름 생성기에서 이름을 다 관리 할 수 있게 되어서 기존 IsUnique 함수를 대체할 수 있다.

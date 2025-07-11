@@ -24,6 +24,11 @@ private:
     bool m_isDeletable{ false };
 };
 
+//autonamer안에
+//bool deleted{ false }; //base 이름으로 생성했을때에는 base 이름을 지우면 이것이 true가 된다. 자동생성할때에는 base 이름은 자동생성되지 않는다. 베이스 이름과 자동생성된 이름이 다 삭제가 되면 이 클래스도 삭제한다.
+//이걸 넣어서 내부적으로 base 이름에 대한 책임을 가지게 만든다. 이것을 위한 스트럭쳐를 만들까 했는데, 단순히 클래스 중복이라 불값 하나를 넣는게 더 옳은 판단 같다.
+//차라리 m_nextID값을 -1부터 시작하는 걸로 하고 base를 여기서 일괄적으로 처리하게끔 바꾸는게 좋을것 같다.
+
 enum class ComponentID;
 class ComponentNameGenerator
 {

@@ -52,6 +52,27 @@ void AutoNamer::SerializeIO(JsonOperation& operation)
 
 ////////////////////////////////////////////////////////////////
 
+static pair<string_view, string_view> SplitNameAndId(string_view name)
+{
+    auto underscore = name.find('_');
+    if (underscore == string_view::npos) return { name, {} };
+
+    auto prefix = name.substr(0, underscore);
+    auto idStr = name.substr(underscore + 1);
+    if (idStr.empty() || !std::ranges::all_of(idStr, ::isdigit)) return {};
+
+    return { prefix, idStr };
+}
+
+static pair<string, int> ExtractNameAndId(string_view name)
+{
+    auto [prefix, idStr] = SplitNameAndId(name);
+    if (prefix.empty() || idStr.empty()) return { "", -1 };
+
+    if (!IsValidEnumString<ComponentID>(prefix)) return { "", -1 };
+    return { string(prefix), stoi(string(idStr)) };
+}
+
 ComponentNameGenerator::~ComponentNameGenerator() = default;
 ComponentNameGenerator::ComponentNameGenerator() = default;
 
@@ -68,7 +89,19 @@ string ComponentNameGenerator::MakeNameFromComponent(const string& name) noexcep
 
 string ComponentNameGenerator::MakeNameFromBase(const string& name) noexcept
 {
-    return name + "_" + m_namers[name].Generate();
+    auto [baseName, idStr] = SplitNameAndId(name);
+    if (baseName.empty()) return "";
+
+    string strName = string(baseName);
+
+    auto find = m_namers.find(strName);
+    if (find == m_namers.end())
+    {
+        m_namers.emplace(strName, AutoNamer());
+        return strName;
+    }
+
+    return strName + "_" + m_namers[strName].Generate();
 }
 
 template<typename T>
@@ -79,27 +112,6 @@ bool IsVaildEnumType(T type)
         return false;
 
     return true;
-}
-
-static pair<string_view, string_view> SplitNameAndId(string_view name) 
-{
-    auto underscore = name.find('_');
-    if (underscore == string_view::npos) return { name, {} };
-
-    auto prefix = name.substr(0, underscore);
-    auto idStr = name.substr(underscore + 1);
-    if (idStr.empty() || !std::ranges::all_of(idStr, ::isdigit)) return {};
-
-    return { prefix, idStr };
-}
-
-static pair<string, int> ExtractNameAndId(string_view name)
-{
-    auto [prefix, idStr] = SplitNameAndId(name);
-    if (prefix.empty() || idStr.empty()) return { "", -1};
-
-    if(!IsValidEnumString<ComponentID>(prefix)) return { "", -1 };
-    return { string(prefix), stoi(string(idStr)) };
 }
 
 bool ComponentNameGenerator::Remove(const string& name) noexcept
