@@ -82,5 +82,6 @@ private:
     bool TryMarkRegionDeleted(unordered_map<string, RegionAutoNamer>::iterator iter) noexcept;
 
     unordered_svmap<string, RegionAutoNamer> m_regionNameGens;
+    unordered_svmap<string, AutoNamer> m_regionNameGems;
     unordered_svmap<string, ComponentNameGenerator> m_componentNameGens;
 };

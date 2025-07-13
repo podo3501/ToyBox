@@ -25,7 +25,7 @@ string AutoNamer::Generate() noexcept
     else
         id = m_nextID++;
 
-    return to_string(id);
+    return (id == 0) ? "" : to_string(id);
 }
 
 pair<bool, bool> AutoNamer::Recycle(int id) noexcept
@@ -166,15 +166,10 @@ static string GetBaseRegionName(string_view region)
 string UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
     string baseRegion = GetBaseRegionName(region);
+    auto& autoNamer = m_regionNameGems.try_emplace(baseRegion).first->second;
 
-    auto find = m_regionNameGens.find(baseRegion);
-    if (find == m_regionNameGens.end())
-    {
-        m_regionNameGens.emplace(baseRegion, RegionAutoNamer(baseRegion == region));
-        return region;
-    }
-    
-    return baseRegion + "_" + m_regionNameGens[baseRegion].namer.Generate();
+    const auto& newNamer = autoNamer.Generate();
+    return newNamer.empty() ? baseRegion : baseRegion + "_" + newNamer;
 }
 
 bool UINameGenerator::TryMarkRegionDeleted(unordered_map<string, RegionAutoNamer>::iterator iter) noexcept
