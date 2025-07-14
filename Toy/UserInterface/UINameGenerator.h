@@ -3,7 +3,7 @@
 
 class JsonOperation;
 
-class AutoNamer
+class AutoNamer //이름은 base, base_1... 즉, base_0 이라는 자동 이름은 없다.
 {
 public:
     ~AutoNamer();
@@ -68,20 +68,6 @@ public:
     void SerializeIO(JsonOperation& operation);
 
 private:
-    struct RegionAutoNamer
-    {
-        RegionAutoNamer() = default;
-        explicit RegionAutoNamer(bool isBaseName) noexcept
-            : deleted(!isBaseName)
-        {}
-
-        AutoNamer namer;
-        bool deleted{ false }; //base 이름으로 생성했을때에는 base 이름을 지우면 이것이 true가 된다. 자동생성할때에는 base 이름은 자동생성되지 않는다. 베이스 이름과 자동생성된 이름이 다 삭제가 되면 이 클래스도 삭제한다.
-    };
-
-    bool TryMarkRegionDeleted(unordered_map<string, RegionAutoNamer>::iterator iter) noexcept;
-
-    unordered_svmap<string, RegionAutoNamer> m_regionNameGens;
-    unordered_svmap<string, AutoNamer> m_regionNameGems;
+    unordered_svmap<string, AutoNamer> m_regionAutoNamers;
     unordered_svmap<string, ComponentNameGenerator> m_componentNameGens;
 };
