@@ -31,17 +31,17 @@ string AutoNamer::Generate() noexcept
 pair<bool, bool> AutoNamer::Recycle(int id) noexcept
 {
     if (id >= m_nextID) return { false, false };
-    if (!m_recycled.insert(id).second) return { false, false }; //?!? .second가 보기 싫으니 stl 헬퍼 함수를 만들고 따로 h로 빼야겠다.
+    if (!InsertIfAbsent(m_recycled, id)) return { false, false };
 
     return { true, IsDeletable() };
 }
 
-bool AutoNamer::IsUnused(int id) const noexcept //?!? IsUsed로 바꾸자 함수이름이 부정이면  머리가 복잡하다. 인간은 긍정으로 생각할려는 편이기 때문.
+bool AutoNamer::IsUsed(int id) const noexcept
 {
-    bool notGenerated = !HasBeenGenerated(id);
-    bool recycled = m_recycled.find(id) != m_recycled.end();
+    bool generated = HasBeenGenerated(id);
+    bool notRecycled = (m_recycled.find(id) == m_recycled.end());
 
-    return notGenerated || recycled;
+    return generated && notRecycled;
 }
 
 void AutoNamer::SerializeIO(JsonOperation& operation)
@@ -51,6 +51,11 @@ void AutoNamer::SerializeIO(JsonOperation& operation)
 }
 
 ////////////////////////////////////////////////////////////////
+
+static inline string AppendIfPresent(const string& base, const string& suffix, const string& delim = "_")
+{
+    return suffix.empty() ? base : base + delim + suffix;
+}
 
 static pair<string_view, string_view> SplitNameAndId(string_view name)
 {
@@ -91,12 +96,14 @@ bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) con
     return true;
 }
 
+string ComponentNameGenerator::MakeRegion() noexcept
+{
+    return AppendIfPresent("", m_region.Generate());
+}
+
 string ComponentNameGenerator::MakeNameFromComponent(const string& name) noexcept
 {
-    const string& id = m_namers[name].Generate(); //?!? 이런 부분이 region에도 있다. 리팩토링
-    if (id.empty()) return name;
-
-    return name + "_" + id;
+    return AppendIfPresent(name, m_namers[name].Generate());
 }
 
 string ComponentNameGenerator::MakeNameFromBase(const string& name) noexcept
@@ -105,8 +112,7 @@ string ComponentNameGenerator::MakeNameFromBase(const string& name) noexcept
     string strName = string(baseName);
     auto& autoNamer = m_namers.try_emplace(strName).first->second;
 
-    const auto& newNamer = autoNamer.Generate();
-    return newNamer.empty() ? strName : strName + "_" + newNamer;
+    return AppendIfPresent(strName, autoNamer.Generate());
 }
 
 template<typename T>
@@ -117,6 +123,15 @@ bool IsVaildEnumType(T type)
         return false;
 
     return true;
+}
+
+pair<bool, bool> ComponentNameGenerator::RemoveRegion(int id) noexcept
+{
+    auto [result, deletable] = m_region.Recycle(id);
+    if (result == false) return { false, false };
+    
+    bool regionDeletable = m_namers.empty() && deletable;
+    return { result, regionDeletable };
 }
 
 bool ComponentNameGenerator::Remove(const string& name) noexcept
@@ -140,7 +155,7 @@ bool ComponentNameGenerator::IsUniqueName(string_view name) const noexcept
     auto find = m_namers.find(baseName);
     if (find == m_namers.end()) return true;
 
-    return find->second.IsUnused(id);
+    return !find->second.IsUsed(id);
 }
 
 void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
@@ -172,33 +187,32 @@ static string GetBaseRegionName(string_view region)
 
 string UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
-    string baseRegion = GetBaseRegionName(region);
-    auto& autoNamer = m_regionAutoNamers.try_emplace(baseRegion).first->second;
+    auto [vName, _] = SplitNameAndId(region);
+    string name{ vName };
+    auto& nameGenerator = m_componentNameGens.try_emplace(name).first->second;
 
-    const auto& newNamer = autoNamer.Generate();
-    return newNamer.empty() ? baseRegion : baseRegion + "_" + newNamer;
+    return name + nameGenerator.MakeRegion();
 }
 
 bool UINameGenerator::TryRemoveRegion(const string& region) noexcept
 {
-    auto [prefix, idStr] = SplitNameAndId(region);
-    if (prefix.empty()) return false;
+    auto [name, idStr] = SplitNameAndId(region);
+    if (name.empty()) return false;
 
-    auto find = m_regionAutoNamers.find(string(prefix));
-    if (find == m_regionAutoNamers.end()) return false;
+    auto find = m_componentNameGens.find(string(name));
+    if (find == m_componentNameGens.end()) return false;
 
-    auto& autoNamer = find->second;
     int id = idStr.empty() ? 0 : stoi(string(idStr));
-    auto [result, deletable] = autoNamer.Recycle(id);
-    
-    if (deletable) m_regionAutoNamers.erase(find);
+    auto [result, deletable] = find->second.RemoveRegion(id);
+    ReturnIfFalse(result);
 
+    if (deletable) m_componentNameGens.erase(find);
     return true;
 }
 
 bool UINameGenerator::IsUniqueRegion(string_view region) noexcept
 {
-    return m_regionAutoNamers.find(region) == m_regionAutoNamers.end();
+    return m_componentNameGens.find(region) == m_componentNameGens.end();
 }
 
 static bool ShouldGenerateName(const string& name, const string& prefix)

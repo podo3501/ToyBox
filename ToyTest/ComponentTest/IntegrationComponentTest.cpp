@@ -250,13 +250,13 @@ namespace UserInterfaceTest
 		string region = "newRegion";
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_1");
-
+		
 		EXPECT_TRUE(generator->TryRemoveRegion(region));
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
 		EXPECT_TRUE(generator->TryRemoveRegion("newRegion"));
 		EXPECT_TRUE(generator->TryRemoveRegion("newRegion_1"));
 		EXPECT_TRUE(generator->IsUniqueRegion(region));
-
+	
 		EXPECT_EQ(generator->MakeNameOf("", "Region", ComponentID::PatchTextureStd1), "PatchTextureStd1");
 		EXPECT_FALSE(generator->IsUniqueName("Region", "PatchTextureStd1"));
 		EXPECT_TRUE(generator->TryRemoveName("Region", "PatchTextureStd1"));
@@ -269,6 +269,9 @@ namespace UserInterfaceTest
 		EXPECT_FALSE(generator->TryRemoveName("Region", "newName"));
 		EXPECT_FALSE(generator->TryRemoveName("Region", "newName_0"));
 		EXPECT_TRUE(generator->TryRemoveName("Region", "newName_1"));
+
+		//두 변수가 하나의 키값을 공유하고 있어서 ComponentNameGenerator 에 AutoNamer m_region; 만들고 unordered_svmap<string, AutoNamer> m_regionAutoNamers; 를 안쓰게끔 하는중.
+		//rename 하는 로직추가
 		
 
 		//이름을 rename 할때 _숫자 가 검출되면 이름바꾸기가 안되도록 한다.

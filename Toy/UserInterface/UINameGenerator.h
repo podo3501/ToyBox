@@ -13,7 +13,7 @@ public:
 	string Generate() noexcept;
     [[nodiscard]] pair<bool, bool> Recycle(int id) noexcept;
     inline bool IsDeletable() noexcept { return (m_nextID <= m_recycled.size()); }
-    bool IsUnused(int id) const noexcept;
+    bool IsUsed(int id) const noexcept;
     void SerializeIO(JsonOperation& operation);
 
 private:
@@ -37,8 +37,11 @@ public:
     ComponentNameGenerator();
 
     bool operator==(const ComponentNameGenerator& other) const noexcept;
+    string MakeRegion() noexcept;
     string MakeNameFromComponent(const string& name) noexcept;
     string MakeNameFromBase(const string& name) noexcept;
+
+    pair<bool, bool> RemoveRegion(int id) noexcept;
     bool Remove(const string& name) noexcept;
     bool IsUniqueName(string_view name) const noexcept;
     bool Empty() const noexcept { return m_namers.empty(); }
@@ -46,6 +49,7 @@ public:
     void SerializeIO(JsonOperation& operation);
     
 private:
+    AutoNamer m_region;
     unordered_svmap<string, AutoNamer> m_namers;
 };
 
@@ -68,6 +72,5 @@ public:
     void SerializeIO(JsonOperation& operation);
 
 private:
-    unordered_svmap<string, AutoNamer> m_regionAutoNamers;
     unordered_svmap<string, ComponentNameGenerator> m_componentNameGens;
 };
