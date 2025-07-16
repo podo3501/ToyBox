@@ -44,7 +44,6 @@ public:
     pair<bool, bool> RemoveRegion(int id) noexcept;
     bool Remove(const string& name) noexcept;
     bool IsUniqueName(string_view name) const noexcept;
-    bool Empty() const noexcept { return m_namers.empty(); }
 
     void SerializeIO(JsonOperation& operation);
     
@@ -62,15 +61,17 @@ public:
 
     //?!? 두 함수 패턴이 비슷하니 클래스를 만들어서 처리하면 될 것 같다.
     string MakeRegionOf(const string& region) noexcept;
-    bool TryRemoveRegion(const string& region) noexcept;
+    bool RemoveRegion(const string& region) noexcept;
     bool IsUniqueRegion(string_view region) noexcept;
 
 	string MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept;
-    bool TryRemoveName(const string& region, const string& name) noexcept;
+    bool RemoveName(const string& region, const string& name) noexcept;
     bool IsUniqueName(string_view region, string_view name) noexcept;
 
     void SerializeIO(JsonOperation& operation);
 
 private:
+    void InsertRegion(const string& region) noexcept;
+
     unordered_svmap<string, ComponentNameGenerator> m_componentNameGens;
 };

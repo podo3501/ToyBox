@@ -72,15 +72,6 @@ static pair<string_view, string_view> SplitNameAndId(string_view name)
 static pair<string, int> ExtractNameAndId(string_view name)
 {
     auto [prefix, idStr] = SplitNameAndId(name);
-    if (prefix.empty() || idStr.empty()) return { "", -1 };
-
-    if (!IsValidEnumString<ComponentID>(prefix)) return { "", -1 };
-    return { string(prefix), stoi(string(idStr)) };
-}
-
-static pair<string, int> ExtractNameAndId2(string_view name)
-{
-    auto [prefix, idStr] = SplitNameAndId(name);
     if (prefix.empty()) return { "", 0 };
 
     int id = (idStr.empty()) ? 0 : stoi(string(idStr));
@@ -136,7 +127,7 @@ pair<bool, bool> ComponentNameGenerator::RemoveRegion(int id) noexcept
 
 bool ComponentNameGenerator::Remove(const string& name) noexcept
 {
-    auto [baseName, id] = ExtractNameAndId2(name);
+    auto [baseName, id] = ExtractNameAndId(name);
     if (baseName.empty()) return false;
 
     auto [result, deletable] = m_namers[baseName].Recycle(id);
@@ -149,7 +140,7 @@ bool ComponentNameGenerator::Remove(const string& name) noexcept
 
 bool ComponentNameGenerator::IsUniqueName(string_view name) const noexcept
 {
-    auto [baseName, id] = ExtractNameAndId2(name);
+    auto [baseName, id] = ExtractNameAndId(name);
     if (baseName.empty()) return true;
 
     auto find = m_namers.find(baseName);
@@ -174,27 +165,15 @@ bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
     return true;
 }
 
-static string GetBaseRegionName(string_view region) 
-{
-    auto pos = region.rfind('_');
-    if (pos == string_view::npos || pos + 1 >= region.size()) return string(region);
-
-    auto suffix = region.substr(pos + 1);
-    if (ranges::all_of(suffix, [](char c) { return isdigit(c); }))
-        return string(region.substr(0, pos));   // 뒤가 전부 숫자라면 _숫자 를 떼고 앞만 리턴
-    return string(region);
-}
-
 string UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
-    auto [vName, _] = SplitNameAndId(region);
-    string name{ vName };
+    auto [name, _] = ExtractNameAndId(region);
     auto& nameGenerator = m_componentNameGens.try_emplace(name).first->second;
 
     return name + nameGenerator.MakeRegion();
 }
 
-bool UINameGenerator::TryRemoveRegion(const string& region) noexcept
+bool UINameGenerator::RemoveRegion(const string& region) noexcept
 {
     auto [name, idStr] = SplitNameAndId(region);
     if (name.empty()) return false;
@@ -221,8 +200,16 @@ static bool ShouldGenerateName(const string& name, const string& prefix)
     return name.find(prefix) != string::npos;
 }
 
+void UINameGenerator::InsertRegion(const string& region) noexcept
+{
+
+}
+
 string UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept
 {
+    if (IsUniqueRegion(region))
+        InsertRegion(region);
+
     const string& strComponent = EnumToString<ComponentID>(componentID);
     if (ShouldGenerateName(name, strComponent))
         return m_componentNameGens[region].MakeNameFromComponent(strComponent);
@@ -230,15 +217,12 @@ string UINameGenerator::MakeNameOf(const string& name, const string& region, Com
         return m_componentNameGens[region].MakeNameFromBase(name);
 }
 
-bool UINameGenerator::TryRemoveName(const string& region, const string& name) noexcept
+bool UINameGenerator::RemoveName(const string& region, const string& name) noexcept
 {
     auto find = m_componentNameGens.find(region);
     if (find == m_componentNameGens.end()) return false;
 
-    if (find->second.Remove(name) == false) return false;
-    if (find->second.Empty()) m_componentNameGens.erase(find);
-
-    return true;
+    return find->second.Remove(name);
 }
 
 bool UINameGenerator::IsUniqueName(string_view region, string_view name) noexcept

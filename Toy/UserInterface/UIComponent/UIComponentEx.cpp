@@ -92,7 +92,7 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	UINameGenerator* nameGen = GetNameGenerator(newNameGen); //?!? NameGenerator가 없을때는 리턴값을 nullptr로 처리해서 RemoveNameOf를 실행 시키지 않는게 맞는 방법 같다.
 
 	m_component->ForEachChildWithRegion([nameGen](const string& region, UIComponent* component) {
-		nameGen->TryRemoveName(region, component->GetName());
+		nameGen->RemoveName(region, component->GetName());
 		});
 
 	unique_ptr<UIComponent> detach = DetachChild(parent, m_component);
@@ -117,7 +117,7 @@ void UIComponentEx::Rename(const string& name) noexcept
 	UIComponent* regionComponent = m_component->GetParentRegionRoot();
 	const auto& region = regionComponent->GetRegion();
 
-	nameGen->TryRemoveName(region, m_component->GetName());
+	nameGen->RemoveName(region, m_component->GetName());
 	m_component->m_name = name;
 }
 

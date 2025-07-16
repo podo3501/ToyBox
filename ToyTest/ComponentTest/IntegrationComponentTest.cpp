@@ -251,28 +251,44 @@ namespace UserInterfaceTest
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_1");
 		
-		EXPECT_TRUE(generator->TryRemoveRegion(region));
+		EXPECT_TRUE(generator->RemoveRegion(region));
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
-		EXPECT_TRUE(generator->TryRemoveRegion("newRegion"));
-		EXPECT_TRUE(generator->TryRemoveRegion("newRegion_1"));
+		EXPECT_TRUE(generator->RemoveRegion("newRegion"));
+		EXPECT_TRUE(generator->RemoveRegion("newRegion_1"));
 		EXPECT_TRUE(generator->IsUniqueRegion(region));
-	
+
 		EXPECT_EQ(generator->MakeNameOf("", "Region", ComponentID::PatchTextureStd1), "PatchTextureStd1");
 		EXPECT_FALSE(generator->IsUniqueName("Region", "PatchTextureStd1"));
-		EXPECT_TRUE(generator->TryRemoveName("Region", "PatchTextureStd1"));
+		EXPECT_TRUE(generator->RemoveName("Region", "PatchTextureStd1"));
 		EXPECT_TRUE(generator->IsUniqueName("Region", "PatchTextureStd1"));
 
 		string name = "newName";
 		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), "newName");
 		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), "newName_1");
-		EXPECT_TRUE(generator->TryRemoveName("Region", "newName"));
-		EXPECT_FALSE(generator->TryRemoveName("Region", "newName"));
-		EXPECT_FALSE(generator->TryRemoveName("Region", "newName_0"));
-		EXPECT_TRUE(generator->TryRemoveName("Region", "newName_1"));
+		EXPECT_TRUE(generator->RemoveName("Region", "newName"));
+		EXPECT_FALSE(generator->RemoveName("Region", "newName"));
+		EXPECT_FALSE(generator->RemoveName("Region", "newName_0"));
+		EXPECT_TRUE(generator->RemoveName("Region", "newName_1"));
 
-		//두 변수가 하나의 키값을 공유하고 있어서 ComponentNameGenerator 에 AutoNamer m_region; 만들고 unordered_svmap<string, AutoNamer> m_regionAutoNamers; 를 안쓰게끔 하는중.
+		EXPECT_TRUE(generator->RemoveRegion("Region"));
+		EXPECT_TRUE(generator->IsUniqueRegion("Region"));
+
+		//region을 삭제하면 밑에 딸려있는 name들도 모두 삭제된다. 하지만 node에서 노드 탐색하면서 이름을 
+		//다시 넣어주기 때문에 삭제된 이름들은 다른 region에 붙게 된다.
+
+		//generator->MakeRegionOf(region);
+
+
+		//"" 이름없는 region일 경우 테스트 추가
+		//이름_1이 있는데 이름_1을 추가하면 이름_2가 되는지 확인
+		//rename의 경우 region이 바뀌면 밑에 이름들은 실패가 반환되면 안되기 때문에 강제 rename이 필요할껀데
+		//사용자가 rename할 경우에는 이름이 있는 경우는 실패를 반환하는게 직관적일듯.
+
+
 		//rename 하는 로직추가
-		
+		//generator안에 모든 이름이 있지만 여기서 이름을 수정한다고 해도 실제로 component에 이름이 수정이
+		//안되기 때문에 rename이라는 것은 노드에서 있어야 하고 거기서 remove와 insert를 통해서 이름을 rename
+		//하는 식으로 바꿔야 한다.
 
 		//이름을 rename 할때 _숫자 가 검출되면 이름바꾸기가 안되도록 한다.
 		//실제로 attach, detach 할때 이걸 사용해서 하도록 수정하고 name 관련 코드 삭제 한다.
