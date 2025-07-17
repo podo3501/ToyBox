@@ -121,8 +121,7 @@ pair<bool, bool> ComponentNameGenerator::RemoveRegion(int id) noexcept
     auto [result, deletable] = m_region.Recycle(id);
     if (result == false) return { false, false };
     
-    bool regionDeletable = m_namers.empty() && deletable;
-    return { result, regionDeletable };
+    return { result, deletable };
 }
 
 bool ComponentNameGenerator::Remove(const string& name) noexcept
@@ -200,15 +199,10 @@ static bool ShouldGenerateName(const string& name, const string& prefix)
     return name.find(prefix) != string::npos;
 }
 
-void UINameGenerator::InsertRegion(const string& region) noexcept
-{
-
-}
-
 string UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept
 {
     if (IsUniqueRegion(region))
-        InsertRegion(region);
+        MakeRegionOf(region);
 
     const string& strComponent = EnumToString<ComponentID>(componentID);
     if (ShouldGenerateName(name, strComponent))

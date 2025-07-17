@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="1" disabled="0" errors="0" time="0.422" timestamp="2025-07-16T18:56:37.279" name="AllTests">
-  <testsuite name="IntegrationTest" tests="1" failures="1" disabled="0" skipped="0" errors="0" time="0.421" timestamp="2025-07-16T18:56:37.279">
-    <testcase name="UINameGenerator" status="run" result="completed" time="0.421" timestamp="2025-07-16T18:56:37.279" classname="IntegrationTest">
-      <failure message="D:\ProgrammingStudy\ToyBox\ToyTest\ComponentTest\IntegrationComponentTest.cpp:273&#x0A;Value of: generator-&gt;RemoveRegion(&quot;Region&quot;)&#x0A;  Actual: false&#x0A;Expected: true" type=""><![CDATA[D:\ProgrammingStudy\ToyBox\ToyTest\ComponentTest\IntegrationComponentTest.cpp:273
-Value of: generator->RemoveRegion("Region")
-  Actual: false
-Expected: true]]></failure>
-      <failure message="D:\ProgrammingStudy\ToyBox\ToyTest\ComponentTest\IntegrationComponentTest.cpp:274&#x0A;Value of: generator-&gt;IsUniqueRegion(&quot;Region&quot;)&#x0A;  Actual: false&#x0A;Expected: true" type=""><![CDATA[D:\ProgrammingStudy\ToyBox\ToyTest\ComponentTest\IntegrationComponentTest.cpp:274
-Value of: generator->IsUniqueRegion("Region")
-  Actual: false
-Expected: true]]></failure>
-    </testcase>
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.426" timestamp="2025-07-17T23:56:36.457" name="AllTests">
+  <testsuite name="IntegrationTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.425" timestamp="2025-07-17T23:56:36.458">
+    <testcase name="UINameGenerator" status="run" result="completed" time="0.425" timestamp="2025-07-17T23:56:36.458" classname="IntegrationTest" />
   </testsuite>
 </testsuites>

@@ -268,16 +268,15 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(generator->RemoveName("Region", "newName"));
 		EXPECT_FALSE(generator->RemoveName("Region", "newName"));
 		EXPECT_FALSE(generator->RemoveName("Region", "newName_0"));
-		EXPECT_TRUE(generator->RemoveName("Region", "newName_1"));
 
-		EXPECT_TRUE(generator->RemoveRegion("Region"));
+		EXPECT_TRUE(generator->RemoveRegion("Region")); //newName_1이 남아 있지만 상관없이 region을 지운다.
 		EXPECT_TRUE(generator->IsUniqueRegion("Region"));
 
-		//region을 삭제하면 밑에 딸려있는 name들도 모두 삭제된다. 하지만 node에서 노드 탐색하면서 이름을 
-		//다시 넣어주기 때문에 삭제된 이름들은 다른 region에 붙게 된다.
+		//region을 삭제하면 밑에 딸려있는 name들도 모두 삭제된다. 이때 노드에 있는 이름과 동기화가 안되지만,
+		//노드 탐색하면서 이름을 다시 만들어 주면서 동기화가 된다. 여기서 동기화를 시킨다면 generator 클래스가 node 클래스를 알아야 하는데, 그건 이치에 안 맞는 것 같다.
 
-		//generator->MakeRegionOf(region);
-
+		EXPECT_EQ(generator->MakeNameOf(name, "", ComponentID::PatchTextureStd1), "newName");
+		EXPECT_EQ(generator->MakeNameOf("newName_10", "", ComponentID::PatchTextureStd1), "newName_1");
 
 		//"" 이름없는 region일 경우 테스트 추가
 		//이름_1이 있는데 이름_1을 추가하면 이름_2가 되는지 확인

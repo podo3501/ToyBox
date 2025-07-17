@@ -71,7 +71,5 @@ public:
     void SerializeIO(JsonOperation& operation);
 
 private:
-    void InsertRegion(const string& region) noexcept;
-
     unordered_svmap<string, ComponentNameGenerator> m_componentNameGens;
 };
