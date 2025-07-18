@@ -86,6 +86,7 @@
 #include <stack>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <system_error>
 #include <tuple>
 #include <typeindex>
@@ -164,6 +165,7 @@ inline void PIXEndEvent(T*) {}
 #include "Tracy.hpp"
 
 #include "../Common/Assert.h"
+#include "stl_ext.hpp"
 
 using namespace std;
 using namespace DirectX;

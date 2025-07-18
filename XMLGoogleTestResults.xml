@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.426" timestamp="2025-07-17T23:56:36.457" name="AllTests">
-  <testsuite name="IntegrationTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.425" timestamp="2025-07-17T23:56:36.458">
-    <testcase name="UINameGenerator" status="run" result="completed" time="0.425" timestamp="2025-07-17T23:56:36.458" classname="IntegrationTest" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.471" timestamp="2025-07-18T23:40:49.141" name="AllTests">
+  <testsuite name="IntegrationTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.471" timestamp="2025-07-18T23:40:49.141">
+    <testcase name="Region" status="run" result="completed" time="0.471" timestamp="2025-07-18T23:40:49.141" classname="IntegrationTest" />
   </testsuite>
 </testsuites>

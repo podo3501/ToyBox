@@ -48,6 +48,7 @@ void AutoNamer::SerializeIO(JsonOperation& operation)
 {
     operation.Process("Namers", m_nextID);
     operation.Process("Recycled", m_recycled);
+    operation.Process("Deletable", m_isDeletable);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -83,7 +84,8 @@ ComponentNameGenerator::ComponentNameGenerator() = default;
 
 bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) const noexcept
 {
-    ReturnIfFalse(ranges::equal(m_namers, other.m_namers));
+    ReturnIfFalse(m_region == other.m_region);
+    ReturnIfFalse(m_namers == other.m_namers);
     return true;
 }
 
@@ -150,6 +152,7 @@ bool ComponentNameGenerator::IsUniqueName(string_view name) const noexcept
 
 void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
 {
+    operation.Process("Region", m_region);
     operation.Process("Namers", m_namers);
 }
 

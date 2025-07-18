@@ -21,7 +21,8 @@ public:
 
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(const string& region, const string& name) noexcept;
 
-	void Rename(const string& name) noexcept;
+	bool Rename(const string& name) noexcept;
+	bool RenameRegion(const string& region) noexcept;
 
 	UIComponent* FindComponent(const string& name) noexcept;
 	UIComponent* FindComponent(const string& region, const string& name) noexcept;

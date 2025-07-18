@@ -109,7 +109,7 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent(const
 	return UIEx(find).DetachComponent();
 }
 
-void UIComponentEx::Rename(const string& name) noexcept
+bool UIComponentEx::Rename(const string& name) noexcept
 {
 	unique_ptr<UINameGenerator> newNameGen;
 	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
@@ -117,8 +117,31 @@ void UIComponentEx::Rename(const string& name) noexcept
 	UIComponent* regionComponent = m_component->GetParentRegionRoot();
 	const auto& region = regionComponent->GetRegion();
 
+	if (!nameGen->IsUniqueName(region, name)) return false;
+
 	nameGen->RemoveName(region, m_component->GetName());
-	m_component->m_name = name;
+	m_component->m_name = nameGen->MakeNameOf(name, region, m_component->GetTypeID());
+
+	return true;
+}
+
+bool UIComponentEx::RenameRegion(const string& region) noexcept
+{
+	unique_ptr<UINameGenerator> newNameGen;
+	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
+
+	UIComponent* regionComponent = m_component->GetParentRegionRoot();
+	const auto& curRegion = regionComponent->GetRegion();
+
+	ReturnIfFalse(nameGen->IsUniqueRegion(region));
+	ReturnIfFalse(nameGen->RemoveRegion(curRegion));	//같은 region에 소속된 name은 여기서 다 사라진다. 그래서 소속된 component를 돌면서 이름을 다시 넣어주어야 한다.
+	const auto& newRegion = nameGen->MakeRegionOf(region);
+
+	m_component->ForEachChildWithRegion([nameGen, &newRegion](const string&, UIComponent* component) {
+		component->m_name = nameGen->MakeNameOf(component->GetName(), newRegion, component->GetTypeID());
+		});
+
+	return true;
 }
 
 UIComponent* UIComponentEx::FindComponent(const string& name) noexcept
