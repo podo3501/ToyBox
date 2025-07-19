@@ -33,11 +33,11 @@ namespace UserInterfaceTest
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_main).AttachComponent(move(tex9), { 80, 60 });
 
-		EXPECT_EQ(AttachComponentHelper(m_main, "PatchTextureStd9_0"), false); //Tex9에는 Attach 안됨 
-		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd9_0"), true); //위에서 PatchTextureStd1를 attach 했다.
+		EXPECT_EQ(AttachComponentHelper(m_main, "PatchTextureStd9"), false); //Tex9에는 Attach 안됨 
+		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd9"), true); //위에서 PatchTextureStd1를 attach 했다.
 		EXPECT_EQ(AttachComponentHelper(m_main, "Main"), true);
-		EXPECT_TRUE(UIEx(m_main).FindComponent("PatchTextureStd1_0")); //Detach 하고 이름을 반환했다면 PatchTextureStd1_0 이름이어야 한다.
-		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd1_0"), true);
+		EXPECT_TRUE(UIEx(m_main).FindComponent("PatchTextureStd1")); //Detach 하고 이름을 반환했다면 PatchTextureStd1 이름이어야 한다.
+		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd1"), true);
 
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage1"));
 		auto tex2 = CreateComponent<PatchTextureStd1>(UILayout{ {110, 60}, Origin::LeftTop }, "BackImage1");
@@ -76,9 +76,9 @@ namespace UserInterfaceTest
 		UIEx(tex1).AttachComponent(move(tex2), { 100, 100 });
 		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
 
-		tex1Ptr->Rename("image1"); 
-		tex2Ptr->Rename("image2");
-		tex1Ptr->RenameRegion("Region1");
+		UIEx(tex1Ptr).Rename("image1"); 
+		UIEx(tex2Ptr).Rename("image2");
+		UIEx(tex1Ptr).RenameRegion("Region1");
 		
 		EXPECT_FALSE(UIEx(m_main).FindComponent("image1")); //Img1이 다른 Region이라서 찾을 수 없다.
 		EXPECT_FALSE(UIEx(m_main).FindComponent("image2"));
@@ -87,7 +87,7 @@ namespace UserInterfaceTest
 		EXPECT_FALSE(UIEx(tex2Ptr).FindComponent("Main"));
 		EXPECT_TRUE(UIEx(tex2Ptr).FindComponent("image1"));
 
-		tex2Ptr->RenameRegion("Region2");
+		UIEx(tex2Ptr).RenameRegion("Region2");
 
 		EXPECT_FALSE(UIEx(tex1Ptr).FindComponent("image2"));
 		EXPECT_FALSE(UIEx(tex2Ptr).FindComponent("image1"));
@@ -201,37 +201,36 @@ namespace UserInterfaceTest
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 
-		UIEx(tex1Ptr).RenameRegion("Region"); //먼저 Region값을 넣어주면 이름이 같아도 되고 나중에 Region을 넣으면 
-		//tex2Ptr->RenameRegion("Region_0"); //Attach 할때 unique 이름으로 만들어 준다.
+		EXPECT_TRUE(UIEx(tex1Ptr).RenameRegion("Region")); //먼저 Region값을 넣어주면 이름이 같아도 되고 나중에 Region을 넣으면 
+		EXPECT_TRUE(UIEx(tex2Ptr).RenameRegion("Region")); //Attach 할때 unique 이름으로 만들어 준다.
 
-		//UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
-		//UIEx(m_main).AttachComponent(move(tex2), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(tex2), { 100, 100 });
 
-		//EXPECT_EQ(tex2Ptr->GetRegion(), "Region_1"); //이름이 바뀌었다.
-		//EXPECT_EQ(tex1Ptr->GetName(), "PatchTextureStd1_0");
-		//EXPECT_EQ(tex2Ptr->GetName(), "PatchTextureStd1_0");
+		EXPECT_EQ(tex2Ptr->GetRegion(), "Region_1"); //이름이 바뀌었다.
+		EXPECT_EQ(tex1Ptr->GetName(), "PatchTextureStd1");
+		EXPECT_EQ(tex2Ptr->GetName(), "PatchTextureStd1");
 
-		//auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		//tex3->Rename("UnChanging Name");
-		//auto [tex4, tex4Ptr] = GetPtrs(tex3->Clone());
+		auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		UIEx(tex3).Rename("UnChanging Name");
+		auto [tex4, tex4Ptr] = GetPtrs(tex3->Clone());
 
-		//UIEx(tex1Ptr).AttachComponent(move(tex3), { 100, 100 });
-		//UIEx(tex2Ptr).AttachComponent(move(tex4), { 100, 100 });
+		UIEx(tex1Ptr).AttachComponent(move(tex3), { 100, 100 });
+		UIEx(tex2Ptr).AttachComponent(move(tex4), { 100, 100 });
 
-		//EXPECT_EQ(tex3Ptr->GetName(), "UnChanging Name");
-		//EXPECT_EQ(tex4Ptr->GetName(), "UnChanging Name");
+		EXPECT_EQ(tex3Ptr->GetName(), "UnChanging Name");
+		EXPECT_EQ(tex4Ptr->GetName(), "UnChanging Name");
 
-		//unique_ptr<UIComponent> imgDummy = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
-		//auto imgDummyPtr = imgDummy.get();
-		//UIEx(m_main).AttachComponent(move(imgDummy), { 100, 100 });
-		//EXPECT_TRUE(imgDummyPtr->Rename("UnChanging Name"));
+		unique_ptr<UIComponent> imgDummy = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
+		auto imgDummyPtr = imgDummy.get();
+		UIEx(m_main).AttachComponent(move(imgDummy), { 100, 100 });
+		EXPECT_TRUE(UIEx(imgDummyPtr).Rename("UnChanging Name"));
 
-		//auto [tex5, tex5Ptr] = GetPtrs(tex1Ptr->Clone());
-		//UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
-		//EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name"));
+		auto [tex5, tex5Ptr] = GetPtrs(tex1Ptr->Clone());
+		UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
+		EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name"));
 	}
-	//?!? rename 테스트 할 차례. 테스트들이 통과하는지 확인하고 generator가 잘 동작하는지, 어떤 함수가 필요한지
-	//파악하는 일이 남았다.
+
 	TEST_F(IntegrationTest, Rename)
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
@@ -243,6 +242,10 @@ namespace UserInterfaceTest
 		auto newImg9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		auto failed = UIEx(m_main).AttachComponent(move(newImg9), { 80, 60 });
 		EXPECT_TRUE(failed == nullptr);
+
+		//?!? 중간에 다른 region인지 찾아내는 것보다 현재 root region을 삭제한 후 현재 node에 새로운 region을 넣고 
+		//root region에서 새로 작성한다. 그러면 nameGenerator와 동기화가 된다. 
+		//3개 정도 attach 한 다음에 2번째에 region을 바꾸었을때 제대로 동작하는지 테스트 하는 코드가 필요.
 	}
 
 	TEST_F(IntegrationTest, UINameGenerator)
@@ -308,7 +311,7 @@ namespace UserInterfaceTest
 		auto texPtr1 = TestAttachName(m_main, "PatchTextureStd1_1");
 		auto texPtr2 = TestAttachName(m_main, "PatchTextureStd1_2");
 
-		//Detach하고 난 이후에는 _0이 recycle에 들어가서 다시 재사용 되기 때문에 _0이 된다.
+		//Detach하고 난 이후에는 recycle에 들어가서 다시 재사용 되기 때문에 PatchTextureStd1이 된다.
 		UIEx(texPtr).DetachComponent();
 		texPtr = TestAttachName(m_main, "PatchTextureStd1");
 

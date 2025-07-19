@@ -22,26 +22,26 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	if (!m_component->HasStateFlag(StateFlag::Attach))
 		return child;
 
+	unique_ptr<UINameGenerator> newNameGen{ nullptr };
+	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
+
 	{
 		ZoneScopedN("GenerateUniqueRegionName");
-		m_component->GenerateUniqueRegionName(child.get());
+		child->m_region = nameGen->MakeRegionOf(child->GetRegion());
 	}
 
 	{
 		ZoneScopedN("GenerateUniqueName");
 
-		UIComponent* regionComponent = child->GetParentRegionRoot();
+		UIComponent* regionComponent = child->GetRegionRoot();
 		string region{ regionComponent->GetRegion() };
 		if (region.empty())
 		{
-			regionComponent = m_component->GetParentRegionRoot();
+			regionComponent = m_component->GetRegionRoot();
 			region = regionComponent->GetRegion();
 		}
 
-		unique_ptr<UINameGenerator> newNameGen{ nullptr };
-		UINameGenerator* nameGen = GetNameGenerator(newNameGen);
-
-		child->ForEachChildUntilFail([this, nameGen, &region](UIComponent* component) {
+		child->ForEachChildUntilFail([this, nameGen, &region](UIComponent* component) { //?!? ForEachChildWithRegion함수를 써야 할듯. 
 			auto makeName = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID());
 			if (makeName.empty()) return false;
 
@@ -133,9 +133,13 @@ bool UIComponentEx::RenameRegion(const string& region) noexcept
 	UIComponent* regionComponent = m_component->GetParentRegionRoot();
 	const auto& curRegion = regionComponent->GetRegion();
 
+	//?!? 중간에 다른 region인지 찾아내는 것보다 현재 root region을 삭제한 후 현재 node에 새로운 region을 넣고 
+	//root region에서 새로 작성한다. 그러면 nameGenerator와 동기화가 된다. 
+
 	ReturnIfFalse(nameGen->IsUniqueRegion(region));
 	ReturnIfFalse(nameGen->RemoveRegion(curRegion));	//같은 region에 소속된 name은 여기서 다 사라진다. 그래서 소속된 component를 돌면서 이름을 다시 넣어주어야 한다.
-	const auto& newRegion = nameGen->MakeRegionOf(region);
+	m_component->m_region = nameGen->MakeRegionOf(region);
+	const auto& newRegion = m_component->m_region;
 
 	m_component->ForEachChildWithRegion([nameGen, &newRegion](const string&, UIComponent* component) {
 		component->m_name = nameGen->MakeNameOf(component->GetName(), newRegion, component->GetTypeID());

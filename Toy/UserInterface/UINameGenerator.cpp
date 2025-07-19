@@ -171,6 +171,7 @@ string UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
     auto [name, _] = ExtractNameAndId(region);
     auto& nameGenerator = m_componentNameGens.try_emplace(name).first->second;
+    if (name.empty()) return name; //이름이 없는 region은 특수 region으로 makeRegion 해서 _1같은 것을 생성시키지 않는다.
 
     return name + nameGenerator.MakeRegion();
 }
@@ -178,10 +179,8 @@ string UINameGenerator::MakeRegionOf(const string& region) noexcept
 bool UINameGenerator::RemoveRegion(const string& region) noexcept
 {
     auto [name, idStr] = SplitNameAndId(region);
-    if (name.empty()) return false;
-
     auto find = m_componentNameGens.find(string(name));
-    if (find == m_componentNameGens.end()) return false;
+    if (find == m_componentNameGens.end()) return true;
 
     int id = idStr.empty() ? 0 : stoi(string(idStr));
     auto [result, deletable] = find->second.RemoveRegion(id);

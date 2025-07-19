@@ -154,12 +154,12 @@ RenameRegionCommand::RenameRegionCommand(UIComponent* component, const string& r
 bool RenameRegionCommand::Execute()
 {
 	m_record.previous = GetTarget()->GetRegion();
-	GetTarget()->RenameRegion(m_record.current);
+	UIEx(GetTarget()).RenameRegion(m_record.current);
 	return true;
 }
 
-bool RenameRegionCommand::Undo() { GetTarget()->RenameRegion(m_record.previous); return true; }
-bool RenameRegionCommand::Redo() { GetTarget()->RenameRegion(m_record.current); return true; }
+bool RenameRegionCommand::Undo() { UIEx(GetTarget()).RenameRegion(m_record.previous); return true; }
+bool RenameRegionCommand::Redo() { UIEx(GetTarget()).RenameRegion(m_record.current); return true; }
 
 //////////////////////////////////////////////////////////////////
 
