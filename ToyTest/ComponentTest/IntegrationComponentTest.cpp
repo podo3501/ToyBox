@@ -229,6 +229,8 @@ namespace UserInterfaceTest
 		auto [tex5, tex5Ptr] = GetPtrs(tex1Ptr->Clone());
 		UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
 		EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name"));
+
+		//3개 정도 attach 한 다음에 2번째에 region을 바꾸었을때 제대로 동작하는지 테스트 하는 코드가 필요.
 	}
 
 	TEST_F(IntegrationTest, Rename)
@@ -242,10 +244,26 @@ namespace UserInterfaceTest
 		auto newImg9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		auto failed = UIEx(m_main).AttachComponent(move(newImg9), { 80, 60 });
 		EXPECT_TRUE(failed == nullptr);
+	}
 
-		//?!? 중간에 다른 region인지 찾아내는 것보다 현재 root region을 삭제한 후 현재 node에 새로운 region을 넣고 
-		//root region에서 새로 작성한다. 그러면 nameGenerator와 동기화가 된다. 
-		//3개 정도 attach 한 다음에 2번째에 region을 바꾸었을때 제대로 동작하는지 테스트 하는 코드가 필요.
+	TEST_F(IntegrationTest, RenameRegion)
+	{
+		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+
+		UIEx(tex1).AttachComponent(move(tex2), { 100, 100 });
+		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
+
+		//tex2에 RenameRegion을 하면 tex2의 이름은 PatchTextureStd1_1에서 PatchTextureStd1이 된다. 새로운 region으로 바뀌었기 때문에 이름도 처음부터 시작한다.
+		EXPECT_EQ(tex2Ptr->GetName(), "PatchTextureStd1_1");
+		EXPECT_TRUE(UIEx(tex2Ptr).RenameRegion("newRegion"));
+		EXPECT_EQ(tex2Ptr->GetName(), "PatchTextureStd1");
+
+		//RenameRegion에서 region값이 있을때에는 기존의 region 이름만 변경될뿐 안에 name에는 영향을 미치지 않기 때문에
+		//이름만 변경하고 끝낸다. 하지만, region값이 "" 일 경우에는 기존의 region에 속해 있으므로, 새로운 Region을 만드는 경우
+		//이기 때문에 기존의 region을 재구축하고 새로운 region을 만들어야 한다. 그러면 연산하는데 오래 걸리는데 이 RenameRegion은
+		//update시 호출하는 함수가 아니기 때문에 게임시에는 속도영향을 주지 않을 것이다. 즉 attach, detach 할때에는 이 연산이
+		//안 쓰이고 위에 이름만 교체되는 RenameRegion이 사용되기 때문에 속도문제는 해결된다.
 	}
 
 	TEST_F(IntegrationTest, UINameGenerator)
