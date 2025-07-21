@@ -264,6 +264,12 @@ namespace UserInterfaceTest
 		//이기 때문에 기존의 region을 재구축하고 새로운 region을 만들어야 한다. 그러면 연산하는데 오래 걸리는데 이 RenameRegion은
 		//update시 호출하는 함수가 아니기 때문에 게임시에는 속도영향을 주지 않을 것이다. 즉 attach, detach 할때에는 이 연산이
 		//안 쓰이고 위에 이름만 교체되는 RenameRegion이 사용되기 때문에 속도문제는 해결된다.
+
+		auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex4, tex4Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+
+		UIEx(m_main).AttachComponent(move(tex3), { 100, 100 });
+		EXPECT_EQ(tex3Ptr->GetName(), "PatchTextureStd1_1");
 	}
 
 	TEST_F(IntegrationTest, UINameGenerator)
