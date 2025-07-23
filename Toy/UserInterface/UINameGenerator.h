@@ -63,8 +63,10 @@ public:
     string MakeRegionOf(const string& region) noexcept;
     bool RemoveRegion(const string& region) noexcept;
     bool IsUniqueRegion(string_view region) noexcept;
+    bool RenameRegion(const string& preRegion, const string& curRegion) noexcept;
 
-	string MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept;
+    pair<string, string> MakeNameOf(const string& name, const string& region, ComponentID componentID,
+        bool forceUniqueRegion = false) noexcept;
     bool RemoveName(const string& region, const string& name) noexcept;
     bool IsUniqueName(string_view region, string_view name) noexcept;
 

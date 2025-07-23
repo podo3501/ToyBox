@@ -22,6 +22,7 @@ public:
 	void ForEachChildBool(function<CResult(UIComponent*)> Func) noexcept; //무언가를 찾았으면 bool 반환으로 그만 하라는 함수
 	void ForEachChildConst(invocable<const UIComponent*> auto&& Func) const noexcept; //읽기전용
 	void ForEachChildWithRegion(function<void(const string&, UIComponent*)> Func) noexcept; //소속된 region을 알려주면서 foreach
+	void ForEachChildInSameRegion(function<void(UIComponent*)> Func) noexcept; //소속된 region만 도는 foreach
 	void ForEachChildToRender(function<void(UIComponent*)> Func) noexcept;
 
 	//이름 및 Region에 관련된 함수들. 함수가 길어서 여기로 일단 대피시킴

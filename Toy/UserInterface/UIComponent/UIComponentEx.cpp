@@ -25,26 +25,35 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	unique_ptr<UINameGenerator> newNameGen{ nullptr };
 	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
 
-	{
-		ZoneScopedN("GenerateUniqueRegionName");
-		child->m_region = nameGen->MakeRegionOf(child->GetRegion());
-	}
+	//{
+	//	ZoneScopedN("GenerateUniqueRegionName");
+	//	child->m_region = nameGen->MakeRegionOf(child->GetRegion());
+	//}
 
 	{
 		ZoneScopedN("GenerateUniqueName");
 
-		UIComponent* regionComponent = child->GetRegionRoot();
-		string region{ regionComponent->GetRegion() };
-		if (region.empty())
-		{
-			regionComponent = m_component->GetRegionRoot();
-			region = regionComponent->GetRegion();
-		}
+		//UIComponent* regionComponent = child->GetRegionRoot();
+		//string region{ regionComponent->GetRegion() };
+		//if (region.empty())
+		//{
+		//	regionComponent = m_component->GetRegionRoot();
+		//	region = regionComponent->GetRegion();
+		//}
 
-		child->ForEachChildUntilFail([this, nameGen, &region](UIComponent* component) { //?!? ForEachChildWithRegion함수를 써야 할듯. 
-			auto makeName = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID());
+		//child->ForEachChildUntilFail([this, nameGen, &region](UIComponent* component) { //?!? ForEachChildWithRegion함수를 써야 할듯. 
+		//	auto makeName = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID());
+		//	if (makeName.empty()) return false;
+
+		//	component->m_name = makeName;
+		//	return true;
+		//	});
+
+		child->ForEachChildWithRegion([nameGen](const string& region, UIComponent* component) {
+			auto [makeRegion, makeName] = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID(), true);
 			if (makeName.empty()) return false;
 
+			component->m_region = makeRegion;
 			component->m_name = makeName;
 			return true;
 			});
@@ -120,37 +129,44 @@ bool UIComponentEx::Rename(const string& name) noexcept
 	if (!nameGen->IsUniqueName(region, name)) return false;
 
 	nameGen->RemoveName(region, m_component->GetName());
-	m_component->m_name = nameGen->MakeNameOf(name, region, m_component->GetTypeID());
+	auto result = nameGen->MakeNameOf(name, region, m_component->GetTypeID());
+	m_component->m_region = move(result.first);
+	m_component->m_name = move(result.second);
 
 	return true;
 }
 
 bool UIComponentEx::RenameRegion(const string& region) noexcept
 {
+	unique_ptr<UINameGenerator> newNameGen;
+	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
+	ReturnIfFalse(nameGen->IsUniqueRegion(region));
+
 	if (m_component->GetRegion().empty()) //비어있다면 어디에 속해있는 region이기 때문에 새로운 region을 만들어야 한다.
 	{
-		unique_ptr<UINameGenerator> newNameGen;
-		UINameGenerator* nameGen = GetNameGenerator(newNameGen);
+		UIComponent* regionComponent = m_component->GetRegionRoot();
+		string curRegion = regionComponent->GetRegion();
 
-		UIComponent* regionComponent = m_component->GetParentRegionRoot();
-		const auto& curRegion = regionComponent->GetRegion();
-
-		ReturnIfFalse(nameGen->IsUniqueRegion(region));
 		ReturnIfFalse(nameGen->RemoveRegion(curRegion));	//같은 region에 소속된 name은 여기서 다 사라진다. 그래서 소속된 component를 돌면서 이름을 다시 넣어주어야 한다.
 		m_component->m_region = nameGen->MakeRegionOf(region);
-		const auto& newRegion = m_component->m_region;
+		string newRegion = m_component->GetRegion();
 
-		regionComponent->ForEachChildWithRegion([nameGen, &curRegion](const string&, UIComponent* component) {
-			component->m_name = nameGen->MakeNameOf(component->GetName(), curRegion, component->GetTypeID());
+		regionComponent->ForEachChildInSameRegion([nameGen, &curRegion](UIComponent* component) {
+			auto result = nameGen->MakeNameOf(component->GetName(), curRegion, component->GetTypeID());
+			component->m_region = move(result.first);
+			component->m_name = move(result.second);
 			});
 
-		m_component->ForEachChildWithRegion([nameGen, &newRegion](const string&, UIComponent* component) {
-			component->m_name = nameGen->MakeNameOf(component->GetName(), newRegion, component->GetTypeID());
+		m_component->ForEachChildInSameRegion([nameGen, &newRegion](UIComponent* component) {
+			auto result = nameGen->MakeNameOf(component->GetName(), newRegion, component->GetTypeID());
+			component->m_region = move(result.first);
+			component->m_name = move(result.second);
 			});
 	}
 	else
 	{
-
+		ReturnIfFalse(nameGen->RenameRegion(m_component->m_region, region));
+		m_component->m_region = region;
 	}
 
 	return true;

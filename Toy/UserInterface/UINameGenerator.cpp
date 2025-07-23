@@ -201,16 +201,32 @@ static bool ShouldGenerateName(const string& name, const string& prefix)
     return name.find(prefix) != string::npos;
 }
 
-string UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID) noexcept
+pair<string, string> UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID, bool forceUniqueRegion) noexcept
 {
-    if (IsUniqueRegion(region))
-        MakeRegionOf(region);
-
+    string newRegion{ region }, newName{ name };
+    if (IsUniqueRegion(region) || forceUniqueRegion) //붙일 region이 존재하지 않거나, 존재하더라도 유니크이어야 한다면
+        newRegion = MakeRegionOf(region);
+    
     const string& strComponent = EnumToString<ComponentID>(componentID);
     if (ShouldGenerateName(name, strComponent))
-        return m_componentNameGens[region].MakeNameFromComponent(strComponent);
+        newName = m_componentNameGens[region].MakeNameFromComponent(strComponent);
     else
-        return m_componentNameGens[region].MakeNameFromBase(name);
+        newName = m_componentNameGens[region].MakeNameFromBase(name);
+
+    return { newRegion, newName };
+}
+
+bool UINameGenerator::RenameRegion(const string& preRegion, const string& curRegion) noexcept
+{
+    ReturnIfFalse(IsUniqueRegion(curRegion));
+
+    auto it = m_componentNameGens.find(preRegion);
+    if (it == m_componentNameGens.end()) return false;
+    
+    m_componentNameGens.emplace(curRegion, move(it->second));
+    m_componentNameGens.erase(it);
+
+    return true;
 }
 
 bool UINameGenerator::RemoveName(const string& region, const string& name) noexcept

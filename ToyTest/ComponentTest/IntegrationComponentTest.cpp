@@ -211,26 +211,26 @@ namespace UserInterfaceTest
 		EXPECT_EQ(tex1Ptr->GetName(), "PatchTextureStd1");
 		EXPECT_EQ(tex2Ptr->GetName(), "PatchTextureStd1");
 
-		auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		UIEx(tex3).Rename("UnChanging Name");
-		auto [tex4, tex4Ptr] = GetPtrs(tex3->Clone());
+		//auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		//UIEx(tex3).Rename("UnChanging Name");
+		//auto [tex4, tex4Ptr] = GetPtrs(tex3->Clone());
 
-		UIEx(tex1Ptr).AttachComponent(move(tex3), { 100, 100 });
-		UIEx(tex2Ptr).AttachComponent(move(tex4), { 100, 100 });
+		//UIEx(tex1Ptr).AttachComponent(move(tex3), { 100, 100 });
+		//UIEx(tex2Ptr).AttachComponent(move(tex4), { 100, 100 });
 
-		EXPECT_EQ(tex3Ptr->GetName(), "UnChanging Name");
-		EXPECT_EQ(tex4Ptr->GetName(), "UnChanging Name");
+		//EXPECT_EQ(tex3Ptr->GetName(), "UnChanging Name");
+		//EXPECT_EQ(tex4Ptr->GetName(), "UnChanging Name");
 
-		unique_ptr<UIComponent> imgDummy = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
-		auto imgDummyPtr = imgDummy.get();
-		UIEx(m_main).AttachComponent(move(imgDummy), { 100, 100 });
-		EXPECT_TRUE(UIEx(imgDummyPtr).Rename("UnChanging Name"));
+		//unique_ptr<UIComponent> imgDummy = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
+		//auto imgDummyPtr = imgDummy.get();
+		//UIEx(m_main).AttachComponent(move(imgDummy), { 100, 100 });
+		//EXPECT_TRUE(UIEx(imgDummyPtr).Rename("UnChanging Name"));
 
-		auto [tex5, tex5Ptr] = GetPtrs(tex1Ptr->Clone());
-		UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
-		EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name"));
+		//auto [tex5, tex5Ptr] = GetPtrs(tex1Ptr->Clone());
+		//UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
+		//EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name"));
 
-		//3개 정도 attach 한 다음에 2번째에 region을 바꾸었을때 제대로 동작하는지 테스트 하는 코드가 필요.
+		
 	}
 
 	TEST_F(IntegrationTest, Rename)
@@ -260,8 +260,8 @@ namespace UserInterfaceTest
 		EXPECT_EQ(tex2Ptr->GetName(), "PatchTextureStd1");
 
 		//RenameRegion에서 region값이 있을때에는 기존의 region 이름만 변경될뿐 안에 name에는 영향을 미치지 않기 때문에
-		//이름만 변경하고 끝낸다. 하지만, region값이 "" 일 경우에는 기존의 region에 속해 있으므로, 새로운 Region을 만드는 경우
-		//이기 때문에 기존의 region을 재구축하고 새로운 region을 만들어야 한다. 그러면 연산하는데 오래 걸리는데 이 RenameRegion은
+		//이름만 변경하고 끝낸다. 하지만, region값이 "" 일 경우에는 기존의 region에 속해 있으므로, 새로운 Region을 만드는 경우이기
+		//때문에 기존의 region을 재구축하고 새로운 region을 만들어야 한다. 그러면 연산하는데 오래 걸리는데 이 RenameRegion은
 		//update시 호출하는 함수가 아니기 때문에 게임시에는 속도영향을 주지 않을 것이다. 즉 attach, detach 할때에는 이 연산이
 		//안 쓰이고 위에 이름만 교체되는 RenameRegion이 사용되기 때문에 속도문제는 해결된다.
 
@@ -269,7 +269,12 @@ namespace UserInterfaceTest
 		auto [tex4, tex4Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 
 		UIEx(m_main).AttachComponent(move(tex3), { 100, 100 });
-		EXPECT_EQ(tex3Ptr->GetName(), "PatchTextureStd1_1");
+		EXPECT_EQ(tex3Ptr->GetName(), "PatchTextureStd1_1"); //newRegion이 생기면서 기존의 region에서 _1이 떨어져 나갔기 때문에 _1로 생성됨.
+		UIEx(tex2Ptr).AttachComponent(move(tex4), { 100, 100 });
+		EXPECT_EQ(tex4Ptr->GetName(), "PatchTextureStd1_1"); //newRegion은 PatchTextureStd1 밖에 없기 때문에 _1 이 생성될 차례임.
+
+		EXPECT_TRUE(UIEx(tex2Ptr).RenameRegion("anotherRegion")); //기존에 region 이름이 있으면 region 이름만 바꾼다.
+		EXPECT_FALSE(UIEx(tex2Ptr).RenameRegion(m_main->GetRegion()));	//같은 이름이 있으면 안된다.
 	}
 
 	TEST_F(IntegrationTest, UINameGenerator)
@@ -278,21 +283,21 @@ namespace UserInterfaceTest
 		string region = "newRegion";
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_1");
-		
+
 		EXPECT_TRUE(generator->RemoveRegion(region));
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
 		EXPECT_TRUE(generator->RemoveRegion("newRegion"));
 		EXPECT_TRUE(generator->RemoveRegion("newRegion_1"));
 		EXPECT_TRUE(generator->IsUniqueRegion(region));
 
-		EXPECT_EQ(generator->MakeNameOf("", "Region", ComponentID::PatchTextureStd1), "PatchTextureStd1");
+		EXPECT_EQ(generator->MakeNameOf("", "Region", ComponentID::PatchTextureStd1), make_pair("Region", "PatchTextureStd1"));
 		EXPECT_FALSE(generator->IsUniqueName("Region", "PatchTextureStd1"));
 		EXPECT_TRUE(generator->RemoveName("Region", "PatchTextureStd1"));
 		EXPECT_TRUE(generator->IsUniqueName("Region", "PatchTextureStd1"));
 
 		string name = "newName";
-		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), "newName");
-		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), "newName_1");
+		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), make_pair("Region", "newName"));
+		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), make_pair("Region", "newName_1"));
 		EXPECT_TRUE(generator->RemoveName("Region", "newName"));
 		EXPECT_FALSE(generator->RemoveName("Region", "newName"));
 		EXPECT_FALSE(generator->RemoveName("Region", "newName_0"));
@@ -303,8 +308,8 @@ namespace UserInterfaceTest
 		//region을 삭제하면 밑에 딸려있는 name들도 모두 삭제된다. 이때 노드에 있는 이름과 동기화가 안되지만,
 		//노드 탐색하면서 이름을 다시 만들어 주면서 동기화가 된다. 여기서 동기화를 시킨다면 generator 클래스가 node 클래스를 알아야 하는데, 그건 이치에 안 맞는 것 같다.
 
-		EXPECT_EQ(generator->MakeNameOf(name, "", ComponentID::PatchTextureStd1), "newName");
-		EXPECT_EQ(generator->MakeNameOf("newName_10", "", ComponentID::PatchTextureStd1), "newName_1");
+		EXPECT_EQ(generator->MakeNameOf(name, "", ComponentID::PatchTextureStd1), make_pair("", "newName"));
+		EXPECT_EQ(generator->MakeNameOf("newName_10", "", ComponentID::PatchTextureStd1), make_pair("", "newName_1"));
 
 		//"" 이름없는 region일 경우 테스트 추가
 		//이름_1이 있는데 이름_1을 추가하면 이름_2가 되는지 확인

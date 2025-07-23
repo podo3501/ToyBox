@@ -118,6 +118,26 @@ void UIHierarchy<UIComponent>::ForEachChildWithRegion(function<void(const string
 	Traverse(GetThis(), regionComponent->GetRegion(), Traverse);
 }
 
+void UIHierarchy<UIComponent>::ForEachChildInSameRegion(function<void(UIComponent*)> Func) noexcept
+{
+	const auto Traverse = [&](UIHierarchy<UIComponent>* node, const string& region, auto&& self_ref) -> void {
+		UIComponent* component = static_cast<UIComponent*>(node);
+
+		const string& nodeRegion = component->GetRegion();
+		if (!nodeRegion.empty() && nodeRegion != region)
+			return;
+
+		Func(component);
+
+		for (auto& child : node->m_children) {
+			if (child)
+				self_ref(child.get(), region, self_ref);
+		}};
+
+	UIComponent* regionComponent = GetRegionRoot();
+	Traverse(GetThis(), regionComponent->GetRegion(), Traverse);
+}
+
 //부모 region에서 같은 이름이 있는지 확인한다.
 bool UIHierarchy<UIComponent>::IsUniqueRegion(const string& name) noexcept
 {
