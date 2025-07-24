@@ -161,10 +161,20 @@ void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
 UINameGenerator::~UINameGenerator() = default;
 UINameGenerator::UINameGenerator() = default;
 
+UINameGenerator::UINameGenerator(const UINameGenerator& other)
+{
+    m_componentNameGens = other.m_componentNameGens;
+}
+
 bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
 {
     ReturnIfFalse(ranges::equal(m_componentNameGens, other.m_componentNameGens));
     return true;
+}
+
+unique_ptr<UINameGenerator> UINameGenerator::Clone() const
+{
+    return unique_ptr<UINameGenerator>(new UINameGenerator(*this));
 }
 
 string UINameGenerator::MakeRegionOf(const string& region) noexcept
@@ -209,9 +219,9 @@ pair<string, string> UINameGenerator::MakeNameOf(const string& name, const strin
     
     const string& strComponent = EnumToString<ComponentID>(componentID);
     if (ShouldGenerateName(name, strComponent))
-        newName = m_componentNameGens[region].MakeNameFromComponent(strComponent);
+        newName = m_componentNameGens[newRegion].MakeNameFromComponent(strComponent);
     else
-        newName = m_componentNameGens[region].MakeNameFromBase(name);
+        newName = m_componentNameGens[newRegion].MakeNameFromBase(name);
 
     return { newRegion, newName };
 }

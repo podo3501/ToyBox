@@ -108,14 +108,6 @@
     },
     "UINameGenerator": {
         "RegionNames": {
-            "": {
-                "Region": {
-                    "Namers": 0,
-                    "Recycled": [],
-                    "Deletable": false
-                },
-                "Namers": null
-            },
             "UIModuleMainEntry": {
                 "Region": {
                     "Namers": 1,

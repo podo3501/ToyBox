@@ -211,26 +211,25 @@ namespace UserInterfaceTest
 		EXPECT_EQ(tex1Ptr->GetName(), "PatchTextureStd1");
 		EXPECT_EQ(tex2Ptr->GetName(), "PatchTextureStd1");
 
-		//auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		//UIEx(tex3).Rename("UnChanging Name");
-		//auto [tex4, tex4Ptr] = GetPtrs(tex3->Clone());
+		auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		UIEx(tex3).Rename("UnChanging Name");
+		auto [tex4, tex4Ptr] = GetPtrs(tex3->Clone());
 
-		//UIEx(tex1Ptr).AttachComponent(move(tex3), { 100, 100 });
-		//UIEx(tex2Ptr).AttachComponent(move(tex4), { 100, 100 });
+		UIEx(tex1Ptr).AttachComponent(move(tex3), { 100, 100 });
+		UIEx(tex2Ptr).AttachComponent(move(tex4), { 100, 100 });
 
-		//EXPECT_EQ(tex3Ptr->GetName(), "UnChanging Name");
-		//EXPECT_EQ(tex4Ptr->GetName(), "UnChanging Name");
+		EXPECT_EQ(tex3Ptr->GetName(), "UnChanging Name");
+		EXPECT_EQ(tex4Ptr->GetName(), "UnChanging Name");
 
-		//unique_ptr<UIComponent> imgDummy = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
-		//auto imgDummyPtr = imgDummy.get();
-		//UIEx(m_main).AttachComponent(move(imgDummy), { 100, 100 });
-		//EXPECT_TRUE(UIEx(imgDummyPtr).Rename("UnChanging Name"));
+		unique_ptr<UIComponent> imgDummy = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
+		auto imgDummyPtr = imgDummy.get();
+		UIEx(m_main).AttachComponent(move(imgDummy), { 100, 100 });
+		EXPECT_TRUE(UIEx(imgDummyPtr).Rename("UnChanging Name"));
 
-		//auto [tex5, tex5Ptr] = GetPtrs(tex1Ptr->Clone());
-		//UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
-		//EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name"));
-
-		
+		auto [tex5, tex5Ptr] = GetPtrs(tex1Ptr->Clone());
+		EXPECT_TRUE(UIEx(tex5).RenameRegion("")); //?!? 데이터가 없는 NameGenerator라서 false가 나온다. generator가 존재하지 않는다면 그냥 바꿔도 무방할것 같다. attach 할때 무결성을 체크하기 때문이다.
+		UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
+		EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name")); //region을 없애고 밑에 노드를 찾으면 찾아진다.
 	}
 
 	TEST_F(IntegrationTest, Rename)
@@ -310,6 +309,9 @@ namespace UserInterfaceTest
 
 		EXPECT_EQ(generator->MakeNameOf(name, "", ComponentID::PatchTextureStd1), make_pair("", "newName"));
 		EXPECT_EQ(generator->MakeNameOf("newName_10", "", ComponentID::PatchTextureStd1), make_pair("", "newName_1"));
+
+		unique_ptr<UINameGenerator> cloneGenerator = generator->Clone();
+		EXPECT_TRUE(CompareUniquePtr(generator, cloneGenerator));
 
 		//"" 이름없는 region일 경우 테스트 추가
 		//이름_1이 있는데 이름_1을 추가하면 이름_2가 되는지 확인

@@ -54,10 +54,14 @@ private:
 
 class UINameGenerator
 {
+protected:
+    UINameGenerator(const UINameGenerator& other);
+
 public:
 	~UINameGenerator();
 	UINameGenerator();
     bool operator==(const UINameGenerator& other) const noexcept;
+    unique_ptr<UINameGenerator> Clone() const;
 
     //?!? 두 함수 패턴이 비슷하니 클래스를 만들어서 처리하면 될 것 같다.
     string MakeRegionOf(const string& region) noexcept;
