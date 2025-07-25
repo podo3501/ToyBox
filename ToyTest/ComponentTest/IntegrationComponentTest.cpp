@@ -33,11 +33,11 @@ namespace UserInterfaceTest
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_main).AttachComponent(move(tex9), { 80, 60 });
 
-		EXPECT_EQ(AttachComponentHelper(m_main, "PatchTextureStd9"), false); //Tex9에는 Attach 안됨 
-		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd9"), true); //위에서 PatchTextureStd1를 attach 했다.
-		EXPECT_EQ(AttachComponentHelper(m_main, "Main"), true);
+		EXPECT_FALSE(AttachComponentHelper(m_main, "PatchTextureStd9")); //Tex9에는 Attach 안됨 
+		EXPECT_TRUE(DetachComponentHelper(m_main, "PatchTextureStd9")); //위에서 PatchTextureStd1를 attach 했다.
+		EXPECT_TRUE(AttachComponentHelper(m_main, "Main"));
 		EXPECT_TRUE(UIEx(m_main).FindComponent("PatchTextureStd1")); //Detach 하고 이름을 반환했다면 PatchTextureStd1 이름이어야 한다.
-		EXPECT_EQ(DetachComponentHelper(m_main, "PatchTextureStd1"), true);
+		EXPECT_TRUE(DetachComponentHelper(m_main, "PatchTextureStd1"));
 
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage1"));
 		auto tex2 = CreateComponent<PatchTextureStd1>(UILayout{ {110, 60}, Origin::LeftTop }, "BackImage1");
@@ -49,6 +49,24 @@ namespace UserInterfaceTest
 		auto [detached, parent] = UIEx(tex1Ptr).DetachComponent();
 		detached->ProcessUpdate(m_timer);
 		EXPECT_EQ(UIEx(detached).GetChildrenBoundsSize(), XMUINT2(210, 110));
+	}
+
+	TEST_F(IntegrationTest, DetachThenNameTest)
+	{
+		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		UIEx(tex1).RenameRegion("Region");
+		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
+		EXPECT_TRUE(UIEx(tex1Ptr).FindComponent("PatchTextureStd1"));
+
+		UIEx(tex1Ptr).DetachComponent();
+		EXPECT_FALSE(UIEx(m_main).FindComponent("PatchTextureStd1"));
+
+		//region이 잘 지워졌는지 테스트
+		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		UIEx(tex2).RenameRegion("Region");
+		UIEx(m_main).AttachComponent(move(tex2), { 100, 100 });
+		EXPECT_EQ(tex2Ptr->GetRegion(), "Region");
+		EXPECT_TRUE(UIEx(tex2Ptr).FindComponent("PatchTextureStd1"));
 	}
 
 	TEST_F(IntegrationTest, Clone)

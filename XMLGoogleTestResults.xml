@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.432" timestamp="2025-07-24T23:35:24.954" name="AllTests">
-  <testsuite name="UndoRedoTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.432" timestamp="2025-07-24T23:35:24.954">
-    <testcase name="UI_PatchTextureStd1" status="run" result="completed" time="0.432" timestamp="2025-07-24T23:35:24.954" classname="UndoRedoTest" />
+<testsuites tests="2" failures="0" disabled="0" errors="0" time="0.761" timestamp="2025-07-25T23:53:34.884" name="AllTests">
+  <testsuite name="TextureResourceBinderTest" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.761" timestamp="2025-07-25T23:53:34.884">
+    <testcase name="BasicOperations" status="run" result="completed" time="0.439" timestamp="2025-07-25T23:53:34.884" classname="TextureResourceBinderTest" />
+    <testcase name="TextureFileLoadingTest" status="run" result="completed" time="0.321" timestamp="2025-07-25T23:53:35.324" classname="TextureResourceBinderTest" />
   </testsuite>
 </testsuites>
