@@ -27,7 +27,7 @@ namespace UserInterfaceTest
 		listAreaPtr->ChangeSize({ 150, 128 });
 		listAreaPtr->ChangeOrigin(Origin::Center);
 
-		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar_0");
+		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar");
 		EXPECT_TRUE(UIEx(m_main).IsPositionUpdated());
 
 		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), GetResBinder(), listAreaPtr, 5));
@@ -39,18 +39,18 @@ namespace UserInterfaceTest
 		auto curSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 		EXPECT_NE(preSizeX, curSizeX);
 
-		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture_0");
+		auto renderTexturePtr = UIEx(listAreaPtr).FindComponent<RenderTexture*>("RenderTexture");
 		EXPECT_TRUE(listAreaPtr->ChangeSize({ 150, 64 }));
 		EXPECT_EQ(renderTexturePtr->GetSize(), XMUINT2(150, 64));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Render));
 
-		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
+		auto scrollContainerPtr = UIEx(listAreaPtr).FindComponent<TextureSwitcher*>("TextureSwitcher");
 		EXPECT_EQ(scrollContainerPtr->GetSize().y, 30); //스크롤 세로로된 버튼 길이. (64 - padding) * (60 / 120) 총 scrollBar 길이(-padding)에 보여줄 컨텐츠 비례해서 크기조정값 
 
 		listAreaPtr->ClearContainers();
 		EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
 	}
-
+	
 	TEST_F(ComplexComponentTest, ListAreaToolMode)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));

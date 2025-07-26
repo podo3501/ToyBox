@@ -65,7 +65,7 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	SetLayout(layout);
 	
 	m_bgImage = bgImage.get();
-	m_bgImage->Rename("Background Image");
+	UIEx(m_bgImage).Rename("Background Image");
 	m_bgImage->SetStateFlag(StateFlag::LockPosOnResize, true);
 
 	auto renderTex = CreateComponent<RenderTexture>(UILayout{ layout.GetSize() }, move(bgImage));
@@ -74,8 +74,8 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	UIEx(this).AttachComponent(move(renderTex), {});
 
 	m_prototypeContainer = switcher.get();
-	m_prototypeContainer->Rename("Prototype Container");
-	m_prototypeContainer->RenameRegion("ListContainer");
+	UIEx(m_prototypeContainer).Rename("Prototype Container");
+	UIEx(m_prototypeContainer).RenameRegion("ListContainer");
 	m_prototypeContainer->SetStateFlag(StateFlag::ActiveUpdate | StateFlag::Render, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
 	UIEx(this).AttachComponent(move(switcher), {});
 

@@ -270,3 +270,5 @@ tracy::ShutdownProfiler();
  했기 때문에 오류 없이 넘어가는 경우가 있는데, 근본적인 문제는 intellisense와 코드를 컴파일 할때 컴파일이 서로 
  다르기 때문에 일어나는 현상이다. 이게 일어났다면 최근에 추가된 hpp가 있는지 의심하는게 합당할 것이다. 그리고
  그 hpp안에 필요한 헤더 파일이 있다면 pch에서 include 하고 있겠지만 다시 hpp 안에서 include 해야한다.
+ 그래서 chatgpt를 돌려서 필요한 include가 뭐가 있는지 조사한 다음 헤더에 붙여놨더니 전혀 이 파일과 관련없던 
+ cpp 파일의 intellisense가 작동했다. 

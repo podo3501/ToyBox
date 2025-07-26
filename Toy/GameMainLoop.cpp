@@ -66,7 +66,7 @@ bool GameMainLoop::LoadResources()
     AttachComponentToPanel(CreateSampleListArea({ {200, 170}, Origin::Center }), { 600, 200 });
     ReturnIfFalse(m_uiModule->BindTextureResources());
 
-    ListArea* list = UIEx(m_uiModule->GetComponent()).FindComponent<ListArea*>("ListArea_0");
+    ListArea* list = UIEx(m_uiModule->GetComponent()).FindComponent<ListArea*>("ListArea");
     MakeSampleListAreaData(m_renderer, m_uiModule->GetTexResBinder(), list, 13);
     
     return true;

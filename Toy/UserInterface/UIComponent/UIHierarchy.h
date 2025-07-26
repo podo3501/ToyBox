@@ -25,13 +25,6 @@ public:
 	void ForEachChildInSameRegion(function<void(UIComponent*)> Func) noexcept; //소속된 region만 도는 foreach
 	void ForEachChildToRender(function<void(UIComponent*)> Func) noexcept;
 
-	//이름 및 Region에 관련된 함수들. 함수가 길어서 여기로 일단 대피시킴
-	bool IsUniqueRegion(const string& name) noexcept;
-	bool IsUniqueName(const string& name, UIComponent* self) noexcept;
-	bool IsUniqueRegionName(const string& name, UIComponent* self) noexcept;
-	string CreateNewRegionName(UIComponent* attaching) noexcept;
-	void GenerateUniqueRegionName(UIComponent* attachingBlock) noexcept;
-
 private:
 	UIComponent* GetThis() const noexcept;
 	void ForEachRenderChildBFS(function<void(UIComponent*)> Func) noexcept;

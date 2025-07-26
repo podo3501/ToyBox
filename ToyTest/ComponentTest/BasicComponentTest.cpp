@@ -58,7 +58,7 @@ namespace UserInterfaceTest
 		img1Ptr->ChangeSize({ 128, 128 });
 		TestMockRender(2, exDest, "BackImage1");
 
-		FitToTextureSourceTest<PatchTextureStd1*>(m_main, "PatchTextureStd1_0", "BackImage1", GetResBinder());
+		FitToTextureSourceTest<PatchTextureStd1*>(m_main, "PatchTextureStd1", "BackImage1", GetResBinder());
 
 		//EXPECT_TRUE(img1Ptr->ChangeBindKey(GetResBinder(), "ListBackground1_Normal"));
 		//vector<RECT> exChangeKey = { { 384, 284, 416, 316 } };
@@ -106,7 +106,7 @@ namespace UserInterfaceTest
 
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, texPtr);
 		TestMockRender(2, exDestChange, "ScrollButton3_H_Normal");
-		FitToTextureSourceTest<PatchTextureStd3*>(m_main, "PatchTextureStd3_0", "ScrollButton3_H_Normal", GetResBinder());
+		FitToTextureSourceTest<PatchTextureStd3*>(m_main, "PatchTextureStd3", "ScrollButton3_H_Normal", GetResBinder());
 
 		EXPECT_TRUE(texPtr->ChangeBindKey(GetResBinder(), "ScrollButton3_H_Hovered"));
 		vector<RECT> exChangeKey = { { 376, 276, 398, 324 }, { 398, 276, 402, 324 }, { 402, 276, 424, 324 } };
@@ -142,7 +142,7 @@ namespace UserInterfaceTest
 
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, img3Ptr);
 		TestMockRender(2, exDestChange, "ScrollTrack3_V");
-		FitToTextureSourceTest<PatchTextureStd3*>(m_main, "PatchTextureStd3_0", "ScrollTrack3_V", GetResBinder());
+		FitToTextureSourceTest<PatchTextureStd3*>(m_main, "PatchTextureStd3", "ScrollTrack3_V", GetResBinder());
 
 		EXPECT_TRUE(img3Ptr->ChangeBindKey(GetResBinder(), "ScrollButton3_V_Hovered"));
 		vector<RECT> exChangeKey = { { 392, 292, 408, 299 }, { 392, 299, 408, 301 }, { 392, 301, 408, 308 } };
@@ -185,7 +185,7 @@ namespace UserInterfaceTest
 
 		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, texPtr);
 		TestMockRender(2, exDestChange, "BackImage9");
-		FitToTextureSourceTest<PatchTextureStd9*>(m_main, "PatchTextureStd9_0", "BackImage9", GetResBinder());
+		FitToTextureSourceTest<PatchTextureStd9*>(m_main, "PatchTextureStd9", "BackImage9", GetResBinder());
 
 		EXPECT_TRUE(texPtr->ChangeBindKey(GetResBinder(), "ListBackground9_Normal"));
 		vector<RECT> exChangeKey = {

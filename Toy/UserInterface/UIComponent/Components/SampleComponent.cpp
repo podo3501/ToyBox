@@ -75,7 +75,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, List
 	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
 	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, renderer->GetTextureController()));
 	
-	protoTextArea->Rename("ListTextArea"); //?!? 이 줄 지우고 밑에 TextArea_0으로 수정해서 region이 다를때 같은 이름이 나오는지 확인
+	UIEx(protoTextArea).Rename("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
 	auto failed = prototype->AttachComponentToCenter(move(protoTextArea), { 0, -6 });
 	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
@@ -83,7 +83,7 @@ bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, List
 	for (auto idx : views::iota(0, itemCount))
 	{
 		auto container = listArea->PrepareContainer();
-		TextArea* textArea = UIEx(container).FindComponent<TextArea*>("ListTextArea"); //?!? TextArea_0으로 수정해서 region이 다를때 같은 이름이 나오는지 확인
+		TextArea* textArea = UIEx(container).FindComponent<TextArea*>("ListTextArea");
 		textArea->SetText(L"<English><Black>Test " + IntToWString(idx * 10) + L"</Black></English>");
 	}
 

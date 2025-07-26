@@ -1,5 +1,9 @@
 #pragma once
 #include <string_view> //hpp파일에서 이걸 인클루드 안해줘도 컴파일 되지만 vs의 intellisense가 작동이 안된다. 이 파일이 아닌 다른 파일들이 작동을 안하기 때문에 찾기 힘들다.
+#include <unordered_map>  // std::unordered_map
+#include <functional>     // std::equal_to<>
+#include <utility>        // std::pair, std::forward
+#include <concepts>       // std::same_as (concepts 사용 시)
 //?!? util 폴더를 만들어서 이 파일과 utility.h 파일을 같이 둬야 겠다.
  
 // map은 c++14부터 string_view가 지원되기 때문에 굳이 이렇게 안 만들어도 바로 string_view를 넣어도 된다.

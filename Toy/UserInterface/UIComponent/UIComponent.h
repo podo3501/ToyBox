@@ -60,7 +60,6 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	
 	inline const XMINT2& GetPosition() const noexcept { return m_transform.GetAbsolutePosition(); }
 	inline const XMINT2& GetRelativePosition() const noexcept { return m_transform.GetRelativePosition(); }
-	bool Rename(const string& name) noexcept;
 	Rectangle GetArea() const noexcept;
 	const XMUINT2& GetSize() const noexcept;
 	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
@@ -76,7 +75,6 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	}
 	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return BitEnum::Has(m_stateFlag, flag); }
 	void SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept;
-	bool RenameRegion(const string& region) noexcept;
 	inline const string& GetRegion() const noexcept { return m_region; } //현재 이 컴포넌트의 region값
 	string GetMyRegion() const noexcept; //자기가 속해있는 region값
 

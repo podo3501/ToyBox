@@ -53,8 +53,17 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 		string parentRegion = regionComponent->GetRegion();
 
 		child->ForEachChildWithRegion([nameGen, &parentRegion](const string& region, UIComponent* component) {
-			bool isUniqueRegion = !region.empty(); //child가 원래 가지고 있던 region은 attach될때에는 유니크하게 이름을 생성해 줘야 한다.
-			string curRegion = isUniqueRegion ? region : parentRegion;
+			//bool isUniqueRegion = !region.empty(); //child가 원래 가지고 있던 region은 attach될때에는 유니크하게 이름을 생성해 줘야 한다.
+			//string curRegion = isUniqueRegion ? region : parentRegion;
+
+			bool isUniqueRegion{ false };
+			string curRegion{ parentRegion };
+			if (!region.empty() && parentRegion != region)
+			{
+				isUniqueRegion = true;
+				curRegion = region;
+			}
+				
 			auto [makeRegion, makeName] = nameGen->MakeNameOf(component->GetName(), curRegion, component->GetTypeID(), isUniqueRegion);
 			if (makeName.empty()) return false;
 
@@ -154,23 +163,6 @@ bool UIComponentEx::Rename(const string& name) noexcept
 	return true;
 }
 
-//bool UIComponentEx::Rename(const string& name) noexcept
-//{
-//	unique_ptr<UINameGenerator> newNameGen;
-//	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
-//
-//	UIComponent* regionComponent = m_component->GetParentRegionRoot();
-//	const auto& region = regionComponent->GetRegion();
-//
-//	if (!nameGen->IsUniqueName(region, name)) return false;
-//
-//	nameGen->RemoveName(region, m_component->GetName());
-//	auto [_, newName] = nameGen->MakeNameOf(name, region, m_component->GetTypeID());
-//	m_component->m_name = move(newName);
-//
-//	return true;
-//}
-
 void UIComponentEx::AssignNamesInRegion(UIComponent* component, UINameGenerator* nameGen, const string& region) noexcept
 {
 	component->ForEachChildInSameRegion([nameGen, &region, component](UIComponent* curComponent) {
@@ -213,57 +205,6 @@ bool UIComponentEx::RenameRegion(const string& region) noexcept
 
 	return true;
 }
-
-//bool UIComponentEx::RenameRegion(const string& region) noexcept
-//{
-//	unique_ptr<UINameGenerator> newNameGen;
-//	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
-//	ReturnIfFalse(nameGen->IsUniqueRegion(region));
-//
-//	if (m_component->GetRegion().empty()) //비어있다면 어디에 속해있는 region이기 때문에 새로운 region을 만들어야 한다.
-//	{
-//		UIComponent* regionComponent = m_component->GetRegionRoot();
-//		string curRegion = regionComponent->GetRegion();
-//
-//		ReturnIfFalse(nameGen->RemoveRegion(curRegion));	//같은 region에 소속된 name은 여기서 다 사라진다. 그래서 소속된 component를 돌면서 이름을 다시 넣어주어야 한다.
-//		m_component->m_region = nameGen->MakeRegionOf(region);
-//		string newRegion = m_component->GetRegion();
-//
-//		if (regionComponent != m_component)	//region이 새로 만들어져서 region이 두개가 될때 기존 region을 새로만든다.
-//			AssignNamesInRegion(regionComponent, nameGen, curRegion);
-//		AssignNamesInRegion(m_component, nameGen, newRegion);
-//	}
-//	else
-//	{
-//		ReturnIfFalse(nameGen->RenameRegion(m_component->m_region, region));
-//		m_component->m_region = region;
-//	}
-//
-//	return true;
-//}
-
-//bool UIComponentEx::RenameRegion(const string& region) noexcept
-//{
-//	unique_ptr<UINameGenerator> newNameGen;
-//	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
-//
-//	UIComponent* regionComponent = m_component->GetParentRegionRoot();
-//	const auto& curRegion = regionComponent->GetRegion();
-//
-//	//?!? 중간에 다른 region인지 찾아내는 것보다 현재 root region을 삭제한 후 현재 node에 새로운 region을 넣고 
-//	//root region에서 새로 작성한다. 그러면 nameGenerator와 동기화가 된다. 
-//
-//	ReturnIfFalse(nameGen->IsUniqueRegion(region));
-//	ReturnIfFalse(nameGen->RemoveRegion(curRegion));	//같은 region에 소속된 name은 여기서 다 사라진다. 그래서 소속된 component를 돌면서 이름을 다시 넣어주어야 한다.
-//	m_component->m_region = nameGen->MakeRegionOf(region);
-//	const auto& newRegion = m_component->m_region;
-//
-//	m_component->ForEachChildWithRegion([nameGen, &newRegion](const string&, UIComponent* component) {
-//		component->m_name = nameGen->MakeNameOf(component->GetName(), newRegion, component->GetTypeID());
-//		});
-//
-//	return true;
-//}
 
 UIComponent* UIComponentEx::FindComponent(const string& name) noexcept
 {

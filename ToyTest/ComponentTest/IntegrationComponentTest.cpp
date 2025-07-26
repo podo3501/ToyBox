@@ -54,19 +54,22 @@ namespace UserInterfaceTest
 	TEST_F(IntegrationTest, DetachThenNameTest)
 	{
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		UIEx(tex1).RenameRegion("Region");
+		UIEx(tex1).AttachComponent(move(tex2), { 100, 100 });
 		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
 		EXPECT_TRUE(UIEx(tex1Ptr).FindComponent("PatchTextureStd1"));
+		EXPECT_TRUE(tex2Ptr->GetRegion().empty());
 
 		UIEx(tex1Ptr).DetachComponent();
 		EXPECT_FALSE(UIEx(m_main).FindComponent("PatchTextureStd1"));
 
 		//region이 잘 지워졌는지 테스트
-		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		UIEx(tex2).RenameRegion("Region");
-		UIEx(m_main).AttachComponent(move(tex2), { 100, 100 });
-		EXPECT_EQ(tex2Ptr->GetRegion(), "Region");
-		EXPECT_TRUE(UIEx(tex2Ptr).FindComponent("PatchTextureStd1"));
+		auto [tex3, tex3Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		UIEx(tex3).RenameRegion("Region");
+		UIEx(m_main).AttachComponent(move(tex3), { 100, 100 });
+		EXPECT_EQ(tex3Ptr->GetRegion(), "Region");
+		EXPECT_TRUE(UIEx(tex3Ptr).FindComponent("PatchTextureStd1"));
 	}
 
 	TEST_F(IntegrationTest, Clone)

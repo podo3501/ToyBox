@@ -168,8 +168,7 @@ UINameGenerator::UINameGenerator(const UINameGenerator& other)
 
 bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
 {
-    ReturnIfFalse(ranges::equal(m_componentNameGens, other.m_componentNameGens));
-    return true;
+    return (m_componentNameGens == other.m_componentNameGens);
 }
 
 unique_ptr<UINameGenerator> UINameGenerator::Clone() const
@@ -208,7 +207,9 @@ bool UINameGenerator::IsUniqueRegion(string_view region) noexcept
 static bool ShouldGenerateName(const string& name, const string& prefix)
 {
     if (name.empty()) return true;
-    return name.find(prefix) != string::npos;
+
+    auto [curName, id] = ExtractNameAndId(name);
+    return curName == prefix;
 }
 
 pair<string, string> UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID, bool forceUniqueRegion) noexcept

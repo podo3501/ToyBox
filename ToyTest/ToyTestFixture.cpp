@@ -157,7 +157,7 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 
 void TextureSwitcherComponentTest::FitToTextureSourceTest(const string& bindingKey)
 {
-	TextureSwitcher* texSwitcher = UIEx(m_main).FindComponent<TextureSwitcher*>("TextureSwitcher_0");
+	TextureSwitcher* texSwitcher = UIEx(m_main).FindComponent<TextureSwitcher*>("TextureSwitcher");
 	EXPECT_TRUE(texSwitcher->FitToTextureSource());
 	EXPECT_EQ(texSwitcher->GetSize(), GetSizeOfBindKey(GetResBinder(), bindingKey));
 }

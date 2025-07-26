@@ -33,8 +33,8 @@ bool UIModule::SetupMainComponent(const UILayout& layout, const string& name,
 	IRenderer* renderer, const wstring& srcBinderFilename)
 {
 	m_panel = CreateComponent<Panel>(layout);
-	ReturnIfFalse(m_panel->Rename(name));
-	ReturnIfFalse(m_panel->RenameRegion("UIModuleMainEntry"));
+	ReturnIfFalse(UIEx(m_panel).Rename(name));
+	ReturnIfFalse(UIEx(m_panel).RenameRegion("UIModuleMainEntry"));
 	Panel* panel = ComponentCast<Panel*>(m_panel.get());
 	panel->SetUIModule(this);
 

@@ -170,11 +170,11 @@ RenameCommand::RenameCommand(UIComponent* component, const string& name) noexcep
 bool RenameCommand::Execute()
 {
 	m_record.previous = GetTarget()->GetName();
-	return GetTarget()->Rename(m_record.current);
+	return UIEx(GetTarget()).Rename(m_record.current);
 }
 
-bool RenameCommand::Undo() { return GetTarget()->Rename(m_record.previous); }
-bool RenameCommand::Redo() { return GetTarget()->Rename(m_record.current); }
+bool RenameCommand::Undo() { return UIEx(GetTarget()).Rename(m_record.previous); }
+bool RenameCommand::Redo() { return UIEx(GetTarget()).Rename(m_record.current); }
 
 //////////////////////////////////////////////////////////////////
 

@@ -174,26 +174,6 @@ bool UIComponent::ChangePosition(size_t index, const XMUINT2& size, const XMINT2
 	return true;
 }
 
-bool UIComponent::Rename(const string& name) noexcept
-{
-	if (m_name == name) return true;
-
-	ReturnIfFalse(IsUniqueName(name, this));
-	m_name = name;
-
-	return true;
-}
-
-bool UIComponent::RenameRegion(const string& region) noexcept
-{
-	if (m_region == region) return true;
-
-	ReturnIfFalse(IsUniqueRegion(region));
-	m_region = region;
-
-	return true;
-}
-
 string UIComponent::GetMyRegion() const noexcept
 {
 	UIComponent* regionRoot = GetRegionRoot();

@@ -38,8 +38,8 @@ void Panel::SerializeIO(JsonOperation& operation)
 unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer)
 {
     auto panel = CreateComponent<Panel>(layout);
-    if (!panel->Rename(name)) return nullptr;
-    if (!panel->RenameRegion("MainRegionEntry")) return nullptr;
+    if (!UIEx(panel).Rename(name)) return nullptr;
+    if (!UIEx(panel).RenameRegion("MainRegionEntry")) return nullptr;
     renderer->AddRenderComponent(panel.get());
 
     return panel;
