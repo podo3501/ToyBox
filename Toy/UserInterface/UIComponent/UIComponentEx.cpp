@@ -25,37 +25,13 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	unique_ptr<UINameGenerator> newNameGen{ nullptr };
 	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
 
-	//{
-	//	ZoneScopedN("GenerateUniqueRegionName");
-	//	child->m_region = nameGen->MakeRegionOf(child->GetRegion());
-	//}
-
 	{
 		ZoneScopedN("GenerateUniqueName");
-
-		//UIComponent* regionComponent = child->GetRegionRoot();
-		//string region{ regionComponent->GetRegion() };
-		//if (region.empty())
-		//{
-		//	regionComponent = m_component->GetRegionRoot();
-		//	region = regionComponent->GetRegion();
-		//}
-
-		//child->ForEachChildUntilFail([this, nameGen, &region](UIComponent* component) { //?!? ForEachChildWithRegion함수를 써야 할듯. 
-		//	auto makeName = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID());
-		//	if (makeName.empty()) return false;
-
-		//	component->m_name = makeName;
-		//	return true;
-		//	});
 
 		UIComponent* regionComponent = m_component->GetRegionRoot();
 		string parentRegion = regionComponent->GetRegion();
 
-		child->ForEachChildWithRegion([nameGen, &parentRegion](const string& region, UIComponent* component) {
-			//bool isUniqueRegion = !region.empty(); //child가 원래 가지고 있던 region은 attach될때에는 유니크하게 이름을 생성해 줘야 한다.
-			//string curRegion = isUniqueRegion ? region : parentRegion;
-
+		bool result = child->ForEachChildWithRegion([nameGen, &parentRegion](const string& region, UIComponent* component) {
 			bool isUniqueRegion{ false };
 			string curRegion{ parentRegion };
 			if (!region.empty() && parentRegion != region)
@@ -76,6 +52,8 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 			component->m_name = makeName;
 			return true;
 			});
+		if (!result) 
+			return child;
 
 		child->SetParent(m_component);
 		child->m_transform.SetRelativePosition(
@@ -121,12 +99,18 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 
 	UIComponent* parentRegionRoot = parent->GetRegionRoot();
 	const string& parentRegion = parentRegionRoot->GetRegion();
-	m_component->ForEachChildWithRegion([nameGen, &parentRegion](const string& region, UIComponent* component) {
+	bool result = m_component->ForEachChildWithRegion([nameGen, &parentRegion](const string& region, UIComponent* component) {
+		bool result{ false };
 		if (parentRegion == region)
-			nameGen->RemoveName(region, component->GetName());
+			result = nameGen->RemoveName(region, component->GetName());
 		else
-			nameGen->RemoveRegion(region);
+			result = nameGen->RemoveRegion(region);
+		if (!result)
+			return result;
+		return result;
 		});
+	if (!result) 
+		return {};
 
 	unique_ptr<UIComponent> detach = DetachChild(parent, m_component);
 	if (detach == nullptr) return {};
@@ -201,6 +185,10 @@ bool UIComponentEx::RenameRegion(const string& region) noexcept
 	{
 		ReturnIfFalse(nameGen->RenameRegion(m_component->m_region, region));
 		m_component->m_region = region;
+
+		UIComponent* regionComponent = m_component->GetRegionRoot();
+		string curRegion = regionComponent->GetRegion();
+		AssignNamesInRegion(m_component, nameGen, curRegion);
 	}
 
 	return true;

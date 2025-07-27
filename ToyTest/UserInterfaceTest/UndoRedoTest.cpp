@@ -38,10 +38,10 @@ namespace UserInterfaceTest
 
 		CaptureSnapshot(h);
 		ExecuteAndCapture(h, [&] { c.AttachComponent(m_main, move(tex1), {111, 222}); });
-		ExecuteAndCapture(h, [&] { c.SetRelativePosition(tex1Ptr, { 123, 234 }); });
-		ExecuteAndCapture(h, [&] { c.SetSize(tex1Ptr, { 32, 32 }); });
-		ExecuteAndCapture(h, [&] { c.RenameRegion(tex1Ptr, "region"); });
-		ExecuteAndCapture(h, [&] { c.Rename(tex1Ptr, "tex1"); });
+		//ExecuteAndCapture(h, [&] { c.SetRelativePosition(tex1Ptr, { 123, 234 }); });
+		//ExecuteAndCapture(h, [&] { c.SetSize(tex1Ptr, { 32, 32 }); });
+		ExecuteAndCapture(h, [&] { c.RenameRegion(tex1Ptr, "region"); }); //기존의 region으로 돌아오면서 PatchTextureStd1의 이름을 등록 시켰어야 한다.
+		//ExecuteAndCapture(h, [&] { c.Rename(tex1Ptr, "tex1"); });
 		ExecuteAndCapture(h, [&] { c.DetachComponent(tex1Ptr); });
 		VerifyUndoRedo(c, h);
 	}

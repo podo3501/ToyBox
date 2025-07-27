@@ -234,9 +234,7 @@ bool UINameGenerator::RenameRegion(const string& preRegion, const string& curReg
     auto it = m_componentNameGens.find(preRegion);
     if (it == m_componentNameGens.end()) return false;
     
-    m_componentNameGens.emplace(curRegion, move(it->second));
     m_componentNameGens.erase(it);
-
     return true;
 }
 
