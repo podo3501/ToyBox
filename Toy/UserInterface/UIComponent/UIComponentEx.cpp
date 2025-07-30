@@ -22,45 +22,39 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	if (!m_component->HasStateFlag(StateFlag::Attach))
 		return child;
 
-	unique_ptr<UINameGenerator> newNameGen{ nullptr };
-	UINameGenerator* nameGen = GetNameGenerator(newNameGen);
-
+	if (UINameGenerator* nameGen = GetNameGenerator())
 	{
-		ZoneScopedN("GenerateUniqueName");
-
 		UIComponent* regionComponent = m_component->GetRegionRoot();
 		string parentRegion = regionComponent->GetRegion();
 
-		bool result = child->ForEachChildWithRegion([nameGen, &parentRegion](const string& region, UIComponent* component) {
-			bool isUniqueRegion{ false };
-			string curRegion{ parentRegion };
-			if (!region.empty() && parentRegion != region)
-			{
-				isUniqueRegion = true; //부모노드에 같은 region이 있으면 새 region(_1을 붙여서)으로 만들어야 한다.
-				curRegion = region;
-			}
-				
-			auto [makeRegion, makeName] = nameGen->MakeNameOf(component->GetName(), curRegion, component->GetTypeID(), isUniqueRegion);
-			if (makeName.empty()) return false;
+		bool success = child->ForEachChildWithRegion(
+			[nameGen, &parentRegion](const string& region, UIComponent* component) {
+				const bool isUniqueRegion = (!region.empty() && parentRegion != region);
+				const string curRegion = isUniqueRegion ? region : parentRegion;
 
-			if (makeRegion != parentRegion)
-			{
-				parentRegion = makeRegion;
-				component->m_region = makeRegion;
-			}
+				auto [newRegion, newName] = nameGen->MakeNameOf(component->GetName(), curRegion, component->GetTypeID(), isUniqueRegion);
+				if (newName.empty())
+					return false;
 
-			component->m_name = makeName;
-			return true;
+				if (newRegion != parentRegion)
+				{
+					parentRegion = newRegion; //region이 바뀌게 되면 parentRegion을 바꾼다.
+					component->m_region = newRegion;
+				}
+
+				component->m_name = newName;
+				return true;
 			});
-		if (!result) 
-			return child;
 
-		child->SetParent(m_component);
-		child->m_transform.SetRelativePosition(
-			m_component->m_layout.GetSize(), relativePos);
-		m_component->m_children.emplace_back(move(child));
-		m_component->UpdatePositionsManually(true);
+		if (!success)
+			return child;
 	}
+
+	child->SetParent(m_component);
+	child->m_transform.SetRelativePosition(
+		m_component->m_layout.GetSize(), relativePos);
+	m_component->m_children.emplace_back(move(child));
+	m_component->UpdatePositionsManually(true);
 
 	return nullptr;
 }
@@ -94,27 +88,25 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	UIComponent* parent = m_component->m_parent;
 	if (!parent || !parent->HasStateFlag(StateFlag::Detach)) return {};
 
-	unique_ptr<UINameGenerator> newNameGen;
-	UINameGenerator* nameGen = GetNameGenerator(newNameGen); //?!? NameGenerator가 없을때는 리턴값을 nullptr로 처리해서 RemoveNameOf를 실행 시키지 않는게 맞는 방법 같다.
+	if (UINameGenerator* nameGen = GetNameGenerator())	// 이름 제거 처리
+	{
+		UIComponent* parentRegionRoot = parent->GetRegionRoot();
+		const string& parentRegion = parentRegionRoot->GetRegion();
 
-	UIComponent* parentRegionRoot = parent->GetRegionRoot();
-	const string& parentRegion = parentRegionRoot->GetRegion();
-	bool result = m_component->ForEachChildWithRegion([nameGen, &parentRegion](const string& region, UIComponent* component) {
-		bool result{ false };
-		if (parentRegion == region)
-			result = nameGen->RemoveName(region, component->GetName());
-		else
-			result = nameGen->RemoveRegion(region); 
-		//?!? 컨테이너가 _1, _2 이렇게 많이 나오는게 문제네. 왜 이렇게 들어가는지 확인해 보자. 아니지 _1, _2 이렇게 나와야한다. 이름도 _1, _2 이렇게 되나?
-		if (!result)
-			return result;
-		return result;
-		});
-	if (!result) 
-		return {};
+		bool allRemoved = m_component->ForEachChildWithRegion(
+			[nameGen, &parentRegion](const string& region, UIComponent* component) {
+				if (region == parentRegion)
+					return nameGen->RemoveName(region, component->GetName());
+				else
+					return nameGen->RemoveRegion(region);
+			});
+
+		if (!allRemoved)
+			return {};
+	}
 
 	unique_ptr<UIComponent> detach = DetachChild(parent, m_component);
-	if (detach == nullptr) return {};
+	if (!detach) return {};
 
 	return { move(detach), parent };
 }
@@ -307,16 +299,6 @@ UIModule* UIComponentEx::GetUIModule() const noexcept
 	
 	m_cachedUIModule = GetUIModule(m_component);
 	return m_cachedUIModule;
-}
-
-UINameGenerator* UIComponentEx::GetNameGenerator(unique_ptr<UINameGenerator>& nameGenerator) const noexcept
-{
-	UIModule* uiModule = GetUIModule();
-	if (uiModule)
-		return uiModule->GetNameGenerator();
-
-	nameGenerator = make_unique<UINameGenerator>();
-	return nameGenerator.get();
 }
 
 UINameGenerator* UIComponentEx::GetNameGenerator() const noexcept

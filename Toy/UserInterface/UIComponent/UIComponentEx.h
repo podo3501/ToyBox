@@ -43,7 +43,6 @@ private:
 	unique_ptr<UIComponent> DetachChild(UIComponent* parent, UIComponent* detach) noexcept;
 	UIModule* GetUIModule(UIComponent* start) const;
 	UIModule* GetUIModule() const noexcept;
-	UINameGenerator* GetNameGenerator(unique_ptr<UINameGenerator>& nameGenerator) const noexcept;
 	UINameGenerator* GetNameGenerator() const noexcept;
 	void InvalidateUIModuleCache();
 	void AssignNamesInRegion(UIComponent* component, UINameGenerator* nameGen, const string& region) noexcept;

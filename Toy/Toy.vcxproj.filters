@@ -230,6 +230,15 @@
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
     <ClInclude Include="stl_ext.hpp" />
+    <ClInclude Include="UserInterface\AutoNamer.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\ComponentNameGenerator.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\StringUtil.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -381,6 +390,15 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponent.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\AutoNamer.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\ComponentNameGenerator.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\StringUtil.cpp">
+      <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

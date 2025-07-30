@@ -2,146 +2,8 @@
 #include "UINameGenerator.h"
 #include "UIComponent/UIType.h"
 #include "Utility.h"
+#include "StringUtil.h"
 #include "JsonOperation/JsonOperation.h"
-
-AutoNamer::~AutoNamer() = default;
-AutoNamer::AutoNamer() = default;
-
-bool AutoNamer::operator==(const AutoNamer& o) const noexcept
-{
-    ReturnIfFalse(tie(m_nextID, m_recycled) == tie(o.m_nextID, o.m_recycled));
-    return true;
-}
-
-string AutoNamer::Generate() noexcept
-{
-    int id;
-    if (!m_recycled.empty())
-    {
-        auto it = m_recycled.begin();
-        id = *it;
-        m_recycled.erase(it);
-    }
-    else
-        id = m_nextID++;
-
-    return (id == 0) ? "" : to_string(id);
-}
-
-pair<bool, bool> AutoNamer::Recycle(int id) noexcept
-{
-    if (id >= m_nextID) return { false, false };
-    if (!InsertIfAbsent(m_recycled, id)) return { false, false };
-
-    return { true, IsDeletable() };
-}
-
-bool AutoNamer::IsUsed(int id) const noexcept
-{
-    bool generated = HasBeenGenerated(id);
-    bool notRecycled = (m_recycled.find(id) == m_recycled.end());
-
-    return generated && notRecycled;
-}
-
-void AutoNamer::SerializeIO(JsonOperation& operation)
-{
-    operation.Process("Namers", m_nextID);
-    operation.Process("Recycled", m_recycled);
-    operation.Process("Deletable", m_isDeletable);
-}
-
-////////////////////////////////////////////////////////////////
-
-static inline string AppendIfPresent(const string& base, const string& suffix, const string& delim = "_")
-{
-    return suffix.empty() ? base : base + delim + suffix;
-}
-
-static pair<string_view, string_view> SplitNameAndId(string_view name)
-{
-    auto underscore = name.find('_');
-    if (underscore == string_view::npos) return { name, {} };
-
-    auto prefix = name.substr(0, underscore);
-    auto idStr = name.substr(underscore + 1);
-    if (idStr.empty() || !std::ranges::all_of(idStr, ::isdigit)) return {};
-
-    return { prefix, idStr };
-}
-
-static pair<string, int> ExtractNameAndId(string_view name)
-{
-    auto [prefix, idStr] = SplitNameAndId(name);
-    if (prefix.empty()) return { "", 0 };
-
-    int id = (idStr.empty()) ? 0 : stoi(string(idStr));
-    return { string(prefix), id };
-}
-
-ComponentNameGenerator::~ComponentNameGenerator() = default;
-ComponentNameGenerator::ComponentNameGenerator() = default;
-
-bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) const noexcept
-{
-    ReturnIfFalse(m_namers == other.m_namers);
-    return true;
-}
-
-string ComponentNameGenerator::MakeNameFromComponent(const string& name) noexcept
-{
-    return AppendIfPresent(name, m_namers[name].Generate());
-}
-
-string ComponentNameGenerator::MakeNameFromBase(const string& name) noexcept
-{
-    auto [baseName, idStr] = SplitNameAndId(name);
-    string strName = string(baseName);
-    auto& autoNamer = m_namers.try_emplace(strName).first->second;
-
-    return AppendIfPresent(strName, autoNamer.Generate());
-}
-
-template<typename T>
-bool IsVaildEnumType(T type)
-{
-    constexpr auto size = EnumSize<T>();
-    if ( size <= static_cast<size_t>(type))
-        return false;
-
-    return true;
-}
-
-bool ComponentNameGenerator::Remove(const string& name) noexcept
-{
-    auto [baseName, id] = ExtractNameAndId(name);
-    if (baseName.empty()) return false;
-
-    auto [result, deletable] = m_namers[baseName].Recycle(id);
-    ReturnIfFalse(result);
-
-    if (deletable) m_namers.erase(baseName);
-
-    return true;
-}
-
-bool ComponentNameGenerator::IsUniqueName(string_view name) const noexcept
-{
-    auto [baseName, id] = ExtractNameAndId(name);
-    if (baseName.empty()) return true;
-
-    auto find = m_namers.find(baseName);
-    if (find == m_namers.end()) return true;
-
-    return !find->second.IsUsed(id);
-}
-
-void ComponentNameGenerator::SerializeIO(JsonOperation& operation)
-{
-    operation.Process("Namers", m_namers);
-}
-
-////////////////////////////////////////////////////////////////
 
 UINameGenerator::~UINameGenerator() = default;
 UINameGenerator::UINameGenerator() = default;
@@ -243,6 +105,7 @@ bool UINameGenerator::IsUniqueName(string_view region, string_view name) noexcep
 {
     auto find = m_componentNameGens.find(region);
     if (find == m_componentNameGens.end()) return true;
+
     return find->second.IsUniqueName(name);
 }
 
@@ -251,3 +114,5 @@ void UINameGenerator::SerializeIO(JsonOperation& operation)
     operation.Process("RegionGens", m_regionGens);
     operation.Process("RegionNames", m_componentNameGens);
 }
+
+//?!? util폴더 만들어서 정리하기. UINameGenerator 관련 파일들 폴더에 넣기. 

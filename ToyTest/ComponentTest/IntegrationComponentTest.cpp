@@ -16,13 +16,28 @@
 
 namespace UserInterfaceTest
 {
+	//툴에서 임시로 component를 생성할때 module이 생성되지 않은 상태이기 때문에 테스트가 필요
+	TEST_F(IntegrationTest, AttachDetachNoModuleTest)
+	{
+		auto [main, mainPtr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+
+		EXPECT_TRUE(UIEx(mainPtr).Rename("main"));
+		EXPECT_TRUE(UIEx(tex1Ptr).RenameRegion("region"));
+		UIEx(main).AttachComponent(move(tex1), { 100, 100 });
+
+		auto result = UIEx(tex1Ptr).DetachComponent();
+		EXPECT_NE(result.first.get(), nullptr);
+		EXPECT_NE(result.second, nullptr);
+	}
+
 	static bool AttachComponentHelper(UIComponent* main, const string& parentName) noexcept
 	{
 		auto patchTex1 = CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1");
 		return UIEx(main).AttachComponent("UIModuleMainEntry", parentName, move(patchTex1), { 10, 10 }) ? false : true;
 	}
 
-	static bool DetachComponentHelper(UIComponent* main, const string& componentName) noexcept 
+	static bool DetachComponentHelper(UIComponent* main, const string& componentName) noexcept
 	{
 		auto [detach, parent] = UIEx(main).DetachComponent("UIModuleMainEntry", componentName);
 		return detach != nullptr;

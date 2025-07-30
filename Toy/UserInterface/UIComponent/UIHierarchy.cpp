@@ -31,7 +31,7 @@ UIComponent* UIHierarchy<UIComponent>::GetRegionRoot() const noexcept
 	return current;
 }
 
-UIComponent* UIHierarchy<UIComponent>::GetParentRegionRoot() const noexcept //?!? 자기껀 검사 안하고 부모로 올라가는데 그렇다면 이 함수가 쓰여야 할까?
+UIComponent* UIHierarchy<UIComponent>::GetParentRegionRoot() const noexcept
 {
 	if (m_parent == nullptr) return GetThis();
 	return m_parent->GetRegionRoot();
@@ -121,7 +121,7 @@ bool UIHierarchy<UIComponent>::ForEachChildWithRegion(function<bool(const string
 
 		return true; };
 
-	UIComponent* regionComponent = GetParentRegionRoot();
+	UIComponent* regionComponent = GetRegionRoot();
 	return Traverse(GetThis(), regionComponent->GetRegion(), Traverse);
 }
 

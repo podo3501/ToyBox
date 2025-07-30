@@ -169,11 +169,6 @@
         },
         "RegionNames": {
             "UIModuleMainEntry": {
-                "Region": {
-                    "Namers": 0,
-                    "Recycled": [],
-                    "Deletable": false
-                },
                 "Namers": {
                     "PatchTextureLite1": {
                         "Namers": 3,
