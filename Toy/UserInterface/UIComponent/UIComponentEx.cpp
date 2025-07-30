@@ -36,7 +36,7 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 			string curRegion{ parentRegion };
 			if (!region.empty() && parentRegion != region)
 			{
-				isUniqueRegion = true;
+				isUniqueRegion = true; //부모노드에 같은 region이 있으면 새 region(_1을 붙여서)으로 만들어야 한다.
 				curRegion = region;
 			}
 				
@@ -104,7 +104,8 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 		if (parentRegion == region)
 			result = nameGen->RemoveName(region, component->GetName());
 		else
-			result = nameGen->RemoveRegion(region);
+			result = nameGen->RemoveRegion(region); 
+		//?!? 컨테이너가 _1, _2 이렇게 많이 나오는게 문제네. 왜 이렇게 들어가는지 확인해 보자. 아니지 _1, _2 이렇게 나와야한다. 이름도 _1, _2 이렇게 되나?
 		if (!result)
 			return result;
 		return result;
@@ -168,28 +169,25 @@ bool UIComponentEx::RenameRegion(const string& region) noexcept
 
 	ReturnIfFalse(nameGen->IsUniqueRegion(region));
 
-	if (m_component->GetRegion().empty()) //비어있다면 어디에 속해있는 region이기 때문에 새로운 region을 만들어야 한다.
+	UIComponent* rootRegionComponent = region.empty() ?
+		m_component->GetParentRegionRoot() :
+		m_component->GetRegionRoot();
+
+	const string& rootRegion = rootRegionComponent->GetRegion();
+	ReturnIfFalse(nameGen->RemoveRegion(rootRegion));
+	if (rootRegionComponent != m_component)
 	{
-		UIComponent* regionComponent = m_component->GetRegionRoot();
-		string curRegion = regionComponent->GetRegion();
+		const string& preRegion = m_component->GetRegion();
+		if (!preRegion.empty())
+		{
+			ReturnIfFalse(nameGen->RemoveRegion(preRegion));
+			m_component->m_region.clear();
+		}
 
-		ReturnIfFalse(nameGen->RemoveRegion(curRegion));	//같은 region에 소속된 name은 여기서 다 사라진다. 그래서 소속된 component를 돌면서 이름을 다시 넣어주어야 한다.
-		m_component->m_region = nameGen->MakeRegionOf(region);
-		string newRegion = m_component->GetRegion();
-
-		if (regionComponent != m_component)	//region이 새로 만들어져서 region이 두개가 될때 기존 region을 새로만든다.
-			AssignNamesInRegion(regionComponent, nameGen, curRegion);
-		AssignNamesInRegion(m_component, nameGen, newRegion);
+		if(!region.empty()) //region이 값이 없다면 상위 region에 이름이 포함되게 된다.
+			AssignNamesInRegion(m_component, nameGen, region);
 	}
-	else
-	{
-		ReturnIfFalse(nameGen->RenameRegion(m_component->m_region, region));
-		m_component->m_region = region;
-
-		UIComponent* regionComponent = m_component->GetRegionRoot();
-		string curRegion = regionComponent->GetRegion();
-		AssignNamesInRegion(m_component, nameGen, curRegion);
-	}
+	AssignNamesInRegion(rootRegionComponent, nameGen, rootRegion);
 
 	return true;
 }

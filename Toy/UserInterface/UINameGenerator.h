@@ -37,18 +37,13 @@ public:
     ComponentNameGenerator();
 
     bool operator==(const ComponentNameGenerator& other) const noexcept;
-    string MakeRegion() noexcept;
     string MakeNameFromComponent(const string& name) noexcept;
     string MakeNameFromBase(const string& name) noexcept;
-
-    pair<bool, bool> RemoveRegion(int id) noexcept;
     bool Remove(const string& name) noexcept;
     bool IsUniqueName(string_view name) const noexcept;
-
     void SerializeIO(JsonOperation& operation);
     
 private:
-    AutoNamer m_region;
     unordered_svmap<string, AutoNamer> m_namers;
 };
 
@@ -67,7 +62,6 @@ public:
     string MakeRegionOf(const string& region) noexcept;
     bool RemoveRegion(const string& region) noexcept;
     bool IsUniqueRegion(string_view region) noexcept;
-    bool RenameRegion(const string& preRegion, const string& curRegion) noexcept;
 
     pair<string, string> MakeNameOf(const string& name, const string& region, ComponentID componentID,
         bool forceUniqueRegion = false) noexcept;
@@ -77,5 +71,6 @@ public:
     void SerializeIO(JsonOperation& operation);
 
 private:
+    unordered_svmap<string, AutoNamer> m_regionGens; //Generator 해서 키 값을 생성함. 이 키값과 region키 값이 다름. 여기는 base name 으로 키값을 생성하는 곳.
     unordered_svmap<string, ComponentNameGenerator> m_componentNameGens;
 };

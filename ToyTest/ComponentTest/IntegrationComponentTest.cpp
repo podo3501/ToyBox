@@ -303,6 +303,7 @@ namespace UserInterfaceTest
 		string region = "newRegion";
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_1");
+		EXPECT_FALSE(generator->IsUniqueRegion("newRegion_1"));
 
 		EXPECT_TRUE(generator->RemoveRegion(region));
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
@@ -333,17 +334,6 @@ namespace UserInterfaceTest
 
 		unique_ptr<UINameGenerator> cloneGenerator = generator->Clone();
 		EXPECT_TRUE(CompareUniquePtr(generator, cloneGenerator));
-
-		//"" 이름없는 region일 경우 테스트 추가
-		//이름_1이 있는데 이름_1을 추가하면 이름_2가 되는지 확인
-		//rename의 경우 region이 바뀌면 밑에 이름들은 실패가 반환되면 안되기 때문에 강제 rename이 필요할껀데
-		//사용자가 rename할 경우에는 이름이 있는 경우는 실패를 반환하는게 직관적일듯.
-
-
-		//rename 하는 로직추가
-		//generator안에 모든 이름이 있지만 여기서 이름을 수정한다고 해도 실제로 component에 이름이 수정이
-		//안되기 때문에 rename이라는 것은 노드에서 있어야 하고 거기서 remove와 insert를 통해서 이름을 rename
-		//하는 식으로 바꿔야 한다.
 
 		//이름을 rename 할때 _숫자 가 검출되면 이름바꾸기가 안되도록 한다.
 		//실제로 attach, detach 할때 이걸 사용해서 하도록 수정하고 name 관련 코드 삭제 한다.
