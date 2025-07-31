@@ -7,6 +7,7 @@ class AutoNamer //이름은 base, base_1... 즉, base_0 이라는 자동 이름은 없다.
 public:
     ~AutoNamer();
     AutoNamer();
+    //AutoNamer(const AutoNamer& other);
     bool operator==(const AutoNamer& other) const noexcept;
 
     string Generate() noexcept;

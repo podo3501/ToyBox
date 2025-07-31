@@ -56,6 +56,12 @@
     <Filter Include="UserInterface\JsonOperation\Traits">
       <UniqueIdentifier>{bdbe2f3b-a5fc-4c2b-a1dc-f2816d7c26ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{20c09a70-3f20-4355-a47c-95afb2fff7d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UINameGenerator">
+      <UniqueIdentifier>{f4569c6f-77f4-4758-a897-59e37b1e9875}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -208,9 +214,6 @@
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UINameGenerator.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIModule.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
@@ -229,15 +232,20 @@
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
-    <ClInclude Include="stl_ext.hpp" />
-    <ClInclude Include="UserInterface\AutoNamer.h">
-      <Filter>UserInterface</Filter>
+    <ClInclude Include="Utils\stl_ext.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\ComponentNameGenerator.h">
-      <Filter>UserInterface</Filter>
+    <ClInclude Include="Utils\StringUtil.h">
+      <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\StringUtil.h">
-      <Filter>UserInterface</Filter>
+    <ClInclude Include="UserInterface\UINameGenerator\AutoNamer.h">
+      <Filter>UserInterface\UINameGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UINameGenerator\ComponentNameGenerator.h">
+      <Filter>UserInterface\UINameGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UINameGenerator\UINameGenerator.h">
+      <Filter>UserInterface\UINameGenerator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -373,9 +381,6 @@
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UINameGenerator.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIModule.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
@@ -391,14 +396,17 @@
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponent.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\AutoNamer.cpp">
-      <Filter>UserInterface</Filter>
+    <ClCompile Include="Utils\StringUtil.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\ComponentNameGenerator.cpp">
-      <Filter>UserInterface</Filter>
+    <ClCompile Include="UserInterface\UINameGenerator\AutoNamer.cpp">
+      <Filter>UserInterface\UINameGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\StringUtil.cpp">
-      <Filter>UserInterface</Filter>
+    <ClCompile Include="UserInterface\UINameGenerator\ComponentNameGenerator.cpp">
+      <Filter>UserInterface\UINameGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UINameGenerator\UINameGenerator.cpp">
+      <Filter>UserInterface\UINameGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

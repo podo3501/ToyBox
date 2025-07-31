@@ -1,7 +1,7 @@
 #pragma once
-#include "../stl_ext.hpp"
 #include "AutoNamer.h"
 #include "ComponentNameGenerator.h"
+#include "Utils/stl_ext.hpp"
 
 class JsonOperation;
 enum class ComponentID;

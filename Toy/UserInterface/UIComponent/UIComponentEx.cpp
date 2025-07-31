@@ -5,7 +5,7 @@
 #include "../TextureResourceBinder/TextureResourceBinder.h"
 #include "Components/UIModuleAsComponent.h"
 #include "Components/Panel.h"
-#include "../UINameGenerator.h"
+#include "../UINameGenerator/UINameGenerator.h"
 #include "../UIModule.h"
 #include "Config.h"
 

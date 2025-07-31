@@ -9,7 +9,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/ListArea.h"
-#include "../Toy/UserInterface/UINameGenerator.h"
+#include "../Toy/UserInterface/UINameGenerator/UINameGenerator.h"
 #include "../Toy/UserInterface/UIModule.h"
 #include "../Toy/Utility.h"
 #include "../Toy/Config.h"

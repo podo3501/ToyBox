@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "UINameGenerator.h"
-#include "UIComponent/UIType.h"
+#include "../UIComponent/UIType.h"
+#include "../JsonOperation/JsonOperation.h"
 #include "Utility.h"
-#include "StringUtil.h"
-#include "JsonOperation/JsonOperation.h"
+#include "Utils/StringUtil.h"
 
 UINameGenerator::~UINameGenerator() = default;
 UINameGenerator::UINameGenerator() = default;

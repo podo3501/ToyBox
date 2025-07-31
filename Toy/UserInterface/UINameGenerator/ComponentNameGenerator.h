@@ -1,5 +1,6 @@
 #pragma once
 #include "AutoNamer.h"
+#include "Utils/stl_ext.hpp"
 
 class JsonOperation;
 class ComponentNameGenerator
@@ -7,6 +8,8 @@ class ComponentNameGenerator
 public:
     ~ComponentNameGenerator();
     ComponentNameGenerator();
+    ComponentNameGenerator(const ComponentNameGenerator& other);
+    ComponentNameGenerator& operator=(const ComponentNameGenerator& other);
 
     bool operator==(const ComponentNameGenerator& other) const noexcept;
     string MakeNameFromComponent(const string& name) noexcept;
@@ -16,5 +19,6 @@ public:
     void SerializeIO(JsonOperation& operation);
 
 private:
-    unordered_svmap<string, AutoNamer> m_namers;
+    //unordered_svmap<string, AutoNamer> m_namers;
+    unordered_svmap<string, unique_ptr<AutoNamer>> m_namers;
 };

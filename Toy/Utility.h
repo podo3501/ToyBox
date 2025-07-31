@@ -102,6 +102,23 @@ bool CompareAssoc(const map<Key, unique_ptr<Value>>& lhs, const map<Key, unique_
 	return true;
 }
 
+template <typename MapType>
+bool CompareUnorderedAssoc(const MapType& lhs, const MapType& rhs) {
+	if (lhs.size() != rhs.size())
+		return false;
+
+	for (const auto& [key, val] : lhs) {
+		auto it = rhs.find(key);
+		if (it == rhs.end())
+			return false;
+
+		if (!CompareUniquePtr(val, it->second))
+			return false;
+	}
+
+	return true;
+}
+
 inline bool CompareEpsilon(float a, float b, float epsilon = 1e-6f) noexcept
 {
 	return fabs(a - b) <= epsilon;

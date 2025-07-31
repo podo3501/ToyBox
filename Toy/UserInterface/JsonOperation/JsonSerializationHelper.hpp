@@ -44,6 +44,7 @@ void DeserializeClassIO(const nlohmann::json& j, T& data)
 template<typename T>
 void DeserializeClassIO(const nlohmann::json& j, unique_ptr<T>& data)
 {
+	data = make_unique<T>();
 	DeserializeClassIO_Internal(j, *data);
 }
 

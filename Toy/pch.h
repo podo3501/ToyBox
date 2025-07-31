@@ -165,7 +165,7 @@ inline void PIXEndEvent(T*) {}
 #include "Tracy.hpp"
 
 #include "../Common/Assert.h"
-#include "stl_ext.hpp"
+#include "Utils/stl_ext.hpp"
 
 using namespace std;
 using namespace DirectX;

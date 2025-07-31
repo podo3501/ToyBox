@@ -1,4 +1,7 @@
 #pragma once
+#include <concepts>
+#include <type_traits>
+#include <string>
 
 // SerializeIO 지원 여부 확인
 class JsonOperation;
@@ -36,3 +39,7 @@ concept MapLike = requires {
 	typename T::key_type;
 	typename T::mapped_type; }&&
 	HasMemberBeginEnd<T>;
+
+template<typename T> //이것이 unique, shared 만 찾아주는게 아니라 element_type 이 있는 것을 찾아주는 건데, 대부분 이 타입이 있으면 smartPtr만 있기 때문이다.
+concept SmartPointerLike = requires {
+	typename T::element_type; };

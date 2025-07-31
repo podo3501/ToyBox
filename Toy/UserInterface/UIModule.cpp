@@ -2,7 +2,7 @@
 #include "UIModule.h"
 #include "../Include/IRenderer.h"
 #include "UIComponent/UIComponent.h"
-#include "UINameGenerator.h"
+#include "UINameGenerator/UINameGenerator.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
 #include "UIComponent/Components/Panel.h"
