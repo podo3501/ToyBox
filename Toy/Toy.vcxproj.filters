@@ -72,7 +72,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="GameMainLoop.h" />
-    <ClInclude Include="Utility.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="Locator.h" />
@@ -232,7 +231,7 @@
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\stl_ext.hpp">
+    <ClInclude Include="Utils\StlTypeExt.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\StringUtil.h">
@@ -247,12 +246,20 @@
     <ClInclude Include="UserInterface\UINameGenerator\UINameGenerator.h">
       <Filter>UserInterface\UINameGenerator</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\StlUtil.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\GeometryUtil.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\CommonUtil.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="GameMainLoop.cpp" />
     <ClCompile Include="Window.cpp" />
-    <ClCompile Include="Utility.cpp" />
     <ClCompile Include="WindowProcedure.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="MainLoop.cpp" />
@@ -407,6 +414,15 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UINameGenerator\UINameGenerator.cpp">
       <Filter>UserInterface\UINameGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\StlUtil.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\GeometryUtil.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\CommonUtil.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

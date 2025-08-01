@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ToolSystem.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 #include "../Toy/Config.h"
 #include "MainWindow/MainWindow.h"
 #include "TextureResBinderWindow/TextureResBinderWindow.h"

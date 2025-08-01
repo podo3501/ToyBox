@@ -3,7 +3,7 @@
 #include "../Utility.h"
 #include "ComponentController.h"
 #include "../Toy/Config.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "../Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"

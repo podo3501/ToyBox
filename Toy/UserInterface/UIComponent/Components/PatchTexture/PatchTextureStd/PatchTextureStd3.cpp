@@ -2,7 +2,6 @@
 #include "PatchTextureStd3.h"
 #include "PatchTextureStd1.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "Utility.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
 

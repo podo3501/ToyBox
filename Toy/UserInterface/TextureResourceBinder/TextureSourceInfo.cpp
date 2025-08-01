@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "../JsonOperation/JsonOperation.h"
 #include "../UIComponent/UIType.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 
 TextureSourceInfo::~TextureSourceInfo() = default;
 TextureSourceInfo::TextureSourceInfo() noexcept :

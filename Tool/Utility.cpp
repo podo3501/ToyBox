@@ -3,7 +3,7 @@
 #include "MainWindow/FloatingComponent.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/GeometryUtil.h"
 #include "../Toy/InputManager.h"
 
 ImGuiMouseCursor_ Tool::MouseCursor::m_mouseCursor = ImGuiMouseCursor_Arrow;

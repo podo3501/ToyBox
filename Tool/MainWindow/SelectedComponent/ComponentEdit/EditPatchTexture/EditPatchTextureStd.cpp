@@ -7,7 +7,7 @@
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 #include "EditUtility/EditUtility.h"
 
 EditPatchTextureStd::~EditPatchTextureStd() = default;

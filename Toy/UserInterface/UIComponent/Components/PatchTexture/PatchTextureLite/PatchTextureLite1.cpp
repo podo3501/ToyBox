@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "PatchTextureLite1.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 
 PatchTextureLite1::~PatchTextureLite1() = default;
 PatchTextureLite1::PatchTextureLite1() :

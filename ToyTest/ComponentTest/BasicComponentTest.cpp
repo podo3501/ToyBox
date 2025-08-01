@@ -10,7 +10,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/UIModule.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 
 using testing::ElementsAre;
 

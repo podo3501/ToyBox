@@ -2,7 +2,7 @@
 #include "Imgui.h"
 #include "../Toy/Window.h"
 #include "../Core/Renderer.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 
 constexpr int NUM_FRAMES_IN_FLIGHT = 2;
 

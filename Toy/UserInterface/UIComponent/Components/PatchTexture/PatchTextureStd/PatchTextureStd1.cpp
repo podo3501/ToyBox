@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "PatchTextureStd1.h"
 #include "../Include/IRenderer.h"
-#include "Utility.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"

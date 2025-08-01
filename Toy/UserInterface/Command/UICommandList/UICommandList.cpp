@@ -3,7 +3,7 @@
 #include "UICommandRegistry.h"
 #include "../../UIComponent/UIComponent.h"
 #include "../../UIComponent/UIType.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 
 UICommandList::~UICommandList() = default;
 UICommandList::UICommandList() = default;

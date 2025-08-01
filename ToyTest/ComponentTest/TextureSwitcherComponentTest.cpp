@@ -8,7 +8,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../TestHelper.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 
 namespace UserInterfaceTest
 {

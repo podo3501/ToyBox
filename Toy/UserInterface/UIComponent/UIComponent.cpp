@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "UIComponent.h"
-#include "../../Utility.h"
+#include "Utils/StlUtil.h"
+#include "Utils/GeometryUtil.h"
 #include "../JsonOperation/JsonOperation.h"
 #include "Config.h"
 

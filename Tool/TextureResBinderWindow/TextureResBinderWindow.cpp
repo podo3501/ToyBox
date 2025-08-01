@@ -3,7 +3,7 @@
 #include "EditFontTexture.h"
 #include "EditSourceTexture.h"
 #include "../Utility.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/StringUtil.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"

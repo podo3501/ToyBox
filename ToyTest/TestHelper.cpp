@@ -5,7 +5,7 @@
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/GeometryUtil.h"
 
 //?!?이 함수는 사라질 예정
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)

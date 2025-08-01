@@ -3,7 +3,7 @@
 #include "PatchTextureLite1.h"
 #include "PatchTextureLite3.h"
 #include "PatchTextureLite9.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 
 PatchTextureLite::~PatchTextureLite() = default;
 PatchTextureLite::PatchTextureLite() = default;

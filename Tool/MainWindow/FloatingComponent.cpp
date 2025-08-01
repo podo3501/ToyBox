@@ -2,7 +2,7 @@
 #include "FloatingComponent.h"
 #include "../Include/IRenderer.h"
 #include "../Toy/Config.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 #include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "../Toy/UserInterface/UIComponent/Components/Button.h"

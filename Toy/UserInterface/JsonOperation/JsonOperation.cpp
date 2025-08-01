@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "JsonOperation.h"
 #include "Config.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 #include "../UIComponent/UIComponent.h"
 
 JsonOperation::~JsonOperation() = default;

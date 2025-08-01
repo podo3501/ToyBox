@@ -1,7 +1,8 @@
 #include "pch.h"
+#include "AutoNamer.h"
 #include "ComponentNameGenerator.h"
-#include "Utility.h"
 #include "Utils/StringUtil.h"
+#include "Utils/StlUtil.h"
 #include "../JsonOperation/JsonOperation.h"
 
 ComponentNameGenerator::~ComponentNameGenerator() = default;
@@ -9,8 +10,7 @@ ComponentNameGenerator::ComponentNameGenerator() = default;
 
 ComponentNameGenerator::ComponentNameGenerator(const ComponentNameGenerator& other)
 {
-    for (const auto& [key, value] : other.m_namers)
-        m_namers.emplace(key, value ? make_unique<AutoNamer>(*value) : nullptr);
+    m_namers = CopyAssoc(other.m_namers);
 }
 
 bool ComponentNameGenerator::operator==(const ComponentNameGenerator& other) const noexcept
@@ -22,35 +22,21 @@ ComponentNameGenerator& ComponentNameGenerator::operator=(const ComponentNameGen
 {
     if (this == &other) return *this;
     
-    m_namers.clear();
-    for (const auto& [key, value] : other.m_namers)
-        m_namers.emplace(key, value ? make_unique<AutoNamer>(*value) : nullptr);
+    m_namers = CopyAssoc(other.m_namers);
 
     return *this;
 }
 
-//Unique Pointer 일 경우에는 make_unique 해야 하는데 그때 키 값과 인자가 매번 복잡하게 들어가야 하고, 
-// try_emplace 구문상 first->second 라는게 헤깔리게 만들 수 있기 때문에 helper 함수 필요
-template<typename T, typename Map, typename Key, typename... Args>
-    requires is_same_v<typename Map::mapped_type, unique_ptr<T>>
-auto& TryEmplaceUPtr(Map& map, const Key& key, Args&&... args)
-{
-    return map.try_emplace(key, make_unique<T>(forward<Args>(args)...)).first->second;
-}
-
 string ComponentNameGenerator::MakeNameFromComponent(const string& name) noexcept
 {
-    //auto value = TryEmplace(m_namers, name);
-    //return AppendIfPresent(name, m_namers[name]->Generate());
-
-    auto& autoNamer = TryEmplaceUPtr<AutoNamer>(m_namers, name);
+    auto& autoNamer = TryEmplaceAssoc(m_namers, name);
     return AppendIfPresent(name, autoNamer->Generate());
 }
 
 string ComponentNameGenerator::MakeNameFromBase(const string& name) noexcept
 {
     auto [baseName, _] = ExtractNameAndId(name);
-    auto& autoNamer = TryEmplaceUPtr<AutoNamer>(m_namers, baseName);
+    auto& autoNamer = TryEmplaceAssoc(m_namers, baseName);
 
     return AppendIfPresent(baseName, autoNamer->Generate());
 }

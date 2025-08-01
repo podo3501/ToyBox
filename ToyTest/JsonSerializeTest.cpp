@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "../Toy/UserInterface/UIComponent/UIComponent.h"
-#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
+#include "UserInterface/UIComponent/UIComponent.h"
+#include "UserInterface/JsonOperation/JsonOperation.h"
 #include "ToyTestFixture.h"
-#include "../Toy/Utility.h"
-#include "../Toy/Utils/stl_ext.hpp"
+#include "Utils/StlTypeExt.hpp"
+#include "Utils/StlUtil.h"
 
 namespace JsonSerializeTest
 {

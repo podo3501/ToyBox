@@ -7,7 +7,7 @@
 #include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "../Toy/UserInterface/UIComponent/UIUtility.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/GeometryUtil.h"
 #include "../Utility.h"
 #include "../HelperClass.h"
 

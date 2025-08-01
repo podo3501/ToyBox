@@ -9,7 +9,7 @@
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "EditUtility/EditUtility.h"
 #include "../Dialog.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/StringUtil.h"
 
 enum class PendingAction : int
 {

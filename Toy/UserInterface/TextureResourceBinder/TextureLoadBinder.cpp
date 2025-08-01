@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TextureLoadBinder.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 
 bool TextureLoadBinder::LoadResources(ITextureLoad* load)
 {

@@ -1,4 +1,5 @@
 #pragma once
+#include "../../Utils/CommonUtil.h"
 
 struct SourceDivider;
 class UIComponent;

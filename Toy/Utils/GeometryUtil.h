@@ -1,123 +1,5 @@
 #pragma once
-
-//class CException
-//{
-//public:
-//    CException() = default;
-//    CException(HRESULT hr, const std::wstring& functionName, const std::wstring& filename, int lineNumber);
-//
-//    std::wstring ToString()const;
-//
-//    HRESULT ErrorCode = S_OK;
-//    std::wstring FunctionName;
-//    std::wstring Filename;
-//    int LineNumber = -1;
-//};
-
-#ifndef ReturnIfFalse
-#define ReturnIfFalse(x)                       \
-	do{													\
-		if(!(x)) return false;						\
-	} while (0)
-#endif
-
-#ifndef ReturnIfFailed
-#define ReturnIfFailed(x)                                              \
-	do{													\
-		if(FAILED(x))                                            \
-			return false;                                                \
-	} while (0)
-#endif
-
-void TracyStartupProfiler();
-void TracyShutdownProfiler();
-
-wstring StringToWString(const string& str) noexcept;
-//string RemoveNullTerminator(const string& str) noexcept;
-string WStringToString(const wstring& wstr) noexcept;
-void StringToChar(const string& str, span<char> outstr) noexcept;
-wstring CharToWString(const span<char> str) noexcept;
-void WStringToChar(const wstring& wstr, span<char> outstr) noexcept;
-wstring IntToWString(int value) noexcept;
-
-//스마트 포인터 비교
-template <typename T>
-bool CompareUniquePtr(const unique_ptr<T>& lhs, const unique_ptr<T>& rhs)
-{
-	if (lhs == nullptr && rhs == nullptr)
-		return true;
-
-	if (lhs == nullptr || rhs == nullptr)
-		return false;
-
-	auto result{ *lhs == *rhs }; // 가리키는 값 비교
-	Assert(result);
-
-	return result;
-}
-
-//시퀀스 컨테이너 비교
-template <typename T>
-bool CompareSeq(const vector<unique_ptr<T>>& lhs, const vector<unique_ptr<T>>& rhs)
-{
-	if (lhs.size() != rhs.size())
-		return false;
-
-	return equal(lhs.begin(), lhs.end(), rhs.begin(), CompareUniquePtr<T>);
-}
-
-//원소가 몇번째에 있는지 확인
-template <typename Container, typename T>
-optional<int> FindIndex(const Container& container, const T& target)
-{
-	auto it = ranges::find(container, target);
-	if (it != container.end())
-		return static_cast<int>(distance(container.begin(), it));
-	return nullopt;
-}
-
-//연관 컨테이너 비교
-template <typename Key, typename Value>
-bool CompareAssoc(const map<Key, unique_ptr<Value>>& lhs, const map<Key, unique_ptr<Value>>& rhs)
-{
-	if (lhs.size() != rhs.size())
-		return false;
-
-	auto it1 = lhs.begin();
-	auto it2 = rhs.begin();
-
-	while (it1 != lhs.end() && it2 != rhs.end()) {
-		// 키 비교
-		if (it1->first != it2->first)
-			return false;
-
-		// 값 비교
-		if (!CompareUniquePtr(it1->second, it2->second))
-			return false;
-
-		++it1;
-		++it2;
-	}
-
-	return true;
-}
-
-template <typename MapType>
-bool CompareUnorderedAssoc(const MapType& lhs, const MapType& rhs) {
-	if (lhs.size() != rhs.size())
-		return false;
-
-	for (const auto& [key, val] : lhs) {
-		auto it = rhs.find(key);
-		if (it == rhs.end())
-			return false;
-
-		if (!CompareUniquePtr(val, it->second))
-			return false;
-	}
-
-	return true;
-}
+#include "CommonUtil.h"
 
 inline bool CompareEpsilon(float a, float b, float epsilon = 1e-6f) noexcept
 {
@@ -133,7 +15,8 @@ inline XMINT2 operator+(const XMINT2& a, const XMINT2& b) noexcept { return XMIN
 inline XMINT2 operator-(const XMINT2& a, const XMINT2& b) noexcept { return XMINT2(a.x - b.x, a.y - b.y); }
 inline XMINT2 operator*(const XMINT2& a, const XMINT2& b) noexcept { return XMINT2(a.x * b.x, a.y * b.y); }
 inline XMINT2 operator/(const XMINT2& a, const XMINT2& b) noexcept {
-	return XMINT2((b.x != 0) ? a.x / b.x : 0, (b.y != 0) ? a.y / b.y : 0); }
+	return XMINT2((b.x != 0) ? a.x / b.x : 0, (b.y != 0) ? a.y / b.y : 0);
+}
 
 inline ImVec2 operator+(const ImVec2& a, const ImVec2& b) noexcept { return ImVec2(a.x + b.x, a.y + b.y); }
 inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) noexcept { return ImVec2(a.x - b.x, a.y - b.y); }

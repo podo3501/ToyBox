@@ -3,7 +3,7 @@
 #include "TestImgui.h"
 #include "ToolSystem.h"
 #include "../Toy/Config.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"

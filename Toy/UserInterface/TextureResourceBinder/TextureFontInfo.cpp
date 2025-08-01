@@ -3,7 +3,7 @@
 #include "../Include/IRenderer.h"
 #include "../JsonOperation/JsonOperation.h"
 #include "Config.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 
 TextureFontInfo::~TextureFontInfo() = default;
 TextureFontInfo::TextureFontInfo() noexcept = default;

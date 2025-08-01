@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "PatchTextureLite3.h"
 #include "PatchTextureLite1.h"
-#include "Utility.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
 

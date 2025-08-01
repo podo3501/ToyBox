@@ -2,7 +2,7 @@
 #include "EditTextArea.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextArea.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 #include "EditUtility/EditUtility.h"
 
 EditTextArea::~EditTextArea() = default;

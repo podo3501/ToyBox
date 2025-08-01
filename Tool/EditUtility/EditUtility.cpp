@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "EditUtility.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/StringUtil.h"
 #include "../Dialog.h"
 #include "../Toy/UserInterface/UIComponent/UIType.h"
 

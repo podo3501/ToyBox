@@ -2,7 +2,6 @@
 #include "PatchTextureStd9.h"
 #include "PatchTextureStd3.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "Utility.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 
 PatchTextureStd9::~PatchTextureStd9() = default;

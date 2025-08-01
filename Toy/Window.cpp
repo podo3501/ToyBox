@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Window.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 
 LPCWSTR g_szAppName = L"Toy";
 

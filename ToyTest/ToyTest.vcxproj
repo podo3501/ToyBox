@@ -128,7 +128,7 @@
     <ClInclude Include="TestHelper.h" />
     <ClInclude Include="TestMain.h" />
     <ClInclude Include="ToyTestFixture.h" />
-    <ClInclude Include="Utility.h" />
+    <ClInclude Include="TestUtility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComponentTest\BasicComponentTest.cpp" />
@@ -153,7 +153,7 @@
     <ClCompile Include="ToyTestFixture.cpp" />
     <ClCompile Include="UserInterfaceTest\TracyBenchmarkTest.cpp" />
     <ClCompile Include="UserInterfaceTest\UndoRedoTest.cpp" />
-    <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="TestUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.vcxproj">

@@ -1,7 +1,7 @@
 #pragma once
 #include "AutoNamer.h"
 #include "ComponentNameGenerator.h"
-#include "Utils/stl_ext.hpp"
+#include "Utils/StlTypeExt.hpp"
 
 class JsonOperation;
 enum class ComponentID;
@@ -29,6 +29,7 @@ public:
     void SerializeIO(JsonOperation& operation);
 
 private:
-    unordered_svmap<string, AutoNamer> m_regionGens; //Generator 해서 키 값을 생성함. 이 키값과 region키 값이 다름. 여기는 base name 으로 키값을 생성하는 곳.
+    //unordered_svmap<string, AutoNamer> m_regionGens; //Generator 해서 키 값을 생성함. 이 키값과 region키 값이 다름. 여기는 base name 으로 키값을 생성하는 곳.
+    unordered_svmap<string, unique_ptr<AutoNamer>> m_regionGens; //Generator 해서 키 값을 생성함. 이 키값과 region키 값이 다름. 여기는 base name 으로 키값을 생성하는 곳.
     unordered_svmap<string, ComponentNameGenerator> m_componentNameGens;
 };

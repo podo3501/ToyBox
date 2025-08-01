@@ -2,7 +2,7 @@
 #include "CoreTestFixture.h"
 #include "../Toy/Window.h"
 #include "../Core/DeviceResources.h"
-#include "Utility.h"
+#include "TestUtility.h"
 
 CoreTest::CoreTest() = default;
 
@@ -112,7 +112,7 @@ bool CoreTest::LoadResources(function<bool(ITextureLoad*)> funcLoad, ITextureLoa
 
 	m_batch->Begin();
 
-	ReturnIfFalse(funcLoad(load));
+	if(!funcLoad(load)) return false;
 	
 	auto uploadResourcesFinished = m_batch->End(m_deviceResources->GetCommandQueue());
 	uploadResourcesFinished.wait();

@@ -9,7 +9,7 @@
 #include "ListArea.h"
 #include "ScrollBar.h"
 #include "TextureSwitcher.h"
-#include "Utility.h"
+#include "Utils/StringUtil.h"
 
 map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept
 {

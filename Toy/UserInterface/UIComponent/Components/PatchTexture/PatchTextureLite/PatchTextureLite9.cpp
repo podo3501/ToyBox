@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "PatchTextureLite9.h"
 #include "PatchTextureLite3.h"
-#include "Utility.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 
 PatchTextureLite9::~PatchTextureLite9() = default;

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Utility.h"
+#include "Utils/GeometryUtil.h"
 #include "UIComponent.h"
 #include "../Include/IRenderer.h"
 #include "../TextureResourceBinder/TextureResourceBinder.h"

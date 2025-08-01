@@ -2,21 +2,21 @@
 #include "UINameGenerator.h"
 #include "../UIComponent/UIType.h"
 #include "../JsonOperation/JsonOperation.h"
-#include "Utility.h"
 #include "Utils/StringUtil.h"
+#include "Utils/StlUtil.h"
 
 UINameGenerator::~UINameGenerator() = default;
 UINameGenerator::UINameGenerator() = default;
 
 UINameGenerator::UINameGenerator(const UINameGenerator& other)
 {
-    m_regionGens = other.m_regionGens;
+    m_regionGens = CopyAssoc(other.m_regionGens);
     m_componentNameGens = other.m_componentNameGens;
 }
 
 bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
 {
-    ReturnIfFalse(m_regionGens == other.m_regionGens);
+    ReturnIfFalse(CompareUnorderedAssoc(m_regionGens, other.m_regionGens));
     ReturnIfFalse(m_componentNameGens == other.m_componentNameGens);
 
     return true;
@@ -30,14 +30,14 @@ unique_ptr<UINameGenerator> UINameGenerator::Clone() const
 string UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
     auto [name, id] = ExtractNameAndId(region);
-    auto& nameGenerator = m_regionGens.try_emplace(name).first->second; //first는 iterator, 그뒤에 ->second는 autonamer
+    auto& nameGenerator = TryEmplaceAssoc(m_regionGens, name);
 
     string newRegion{};
     if (name.empty()) //값이 없는 region은 특별 region이므로, nameGenerator에서 생성하지 않고 그냥 내보낸다.
         m_componentNameGens.try_emplace(name);
     else
     {
-        newRegion = AppendIfPresent(name, nameGenerator.Generate());
+        newRegion = AppendIfPresent(name, nameGenerator->Generate());
         if (!IsUniqueRegion(newRegion)) return "";
 
         m_componentNameGens.emplace(newRegion, ComponentNameGenerator{});
@@ -54,7 +54,7 @@ bool UINameGenerator::RemoveRegion(const string& region) noexcept
     auto find = m_regionGens.find(name);
     if (find == m_regionGens.end()) return false; //키값은 있는데 Generator가 없으면 이상한 일이다.
 
-    auto [result, deletable] = find->second.Recycle(id);
+    auto [result, deletable] = find->second->Recycle(id);
     ReturnIfFalse(result);
 
     m_componentNameGens.erase(region);

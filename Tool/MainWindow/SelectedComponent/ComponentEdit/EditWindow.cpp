@@ -8,7 +8,7 @@
 #include "EditUtility/EditUtility.h"
 #include "HelperClass.h"
 #include "Utility.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/GeometryUtil.h"
 
 enum class OnDrag
 {

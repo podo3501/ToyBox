@@ -6,7 +6,7 @@
 #include "../Toy/UserInterface/UIModule.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/InputManager.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/StlUtil.h"
 #include "../Dialog.h"
 #include "../Utility.h"
 #include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"

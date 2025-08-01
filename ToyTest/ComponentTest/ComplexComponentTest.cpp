@@ -12,7 +12,7 @@
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/InputManager.h"
 #include "../Toy/Config.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/GeometryUtil.h"
 
 namespace UserInterfaceTest
 {

@@ -2,7 +2,7 @@
 #include "TextArea.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "../Include/IRenderer.h"
-#include "Utility.h"
+#include "Utils/GeometryUtil.h"
 #include "Config.h"
 #include "../UIUtility.h"
 #include "../../JsonOperation/JsonOperation.h"

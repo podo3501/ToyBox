@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Panel.h"
 #include "../Include/IRenderer.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 #include "../../JsonOperation/JsonOperation.h"
 
 Panel::~Panel() = default;

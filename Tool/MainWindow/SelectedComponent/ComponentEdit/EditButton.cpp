@@ -2,7 +2,7 @@
 #include "Editbutton.h"
 #include "../Toy/UserInterface/UIComponent/UIType.h"
 #include "../Toy/UserInterface/UIComponent/Components/Button.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/CommonUtil.h"
 #include "EditUtility/EditUtility.h"
 
 EditButton::~EditButton() {};

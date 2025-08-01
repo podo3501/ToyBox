@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "UICommandRegistry.h"
-#include "Utility.h"
+#include "Utils/CommonUtil.h"
 #include "../../UIModule.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"

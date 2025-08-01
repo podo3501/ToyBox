@@ -2,7 +2,7 @@
 #include "FileTab.h"
 #include "../Dialog.h"
 #include "../Toy/Window.h"
-#include "../Toy/Utility.h"
+#include "../Toy/Utils/StringUtil.h"
 #include "../Toy/Config.h"
 #include "../ToolSystem.h"
 #include "../MainWindow/MainWindow.h"
