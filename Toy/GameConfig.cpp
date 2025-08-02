@@ -1,7 +1,6 @@
 #include "pch.h"
-#include "Config.h"
+#include "GameConfig.h"
 #include "UserInterface/UIComponent/UIType.h"
-#include <filesystem>
 
 static wstring g_fontPath{ L"UI/Font/" };
 static wstring g_resourcePath{};

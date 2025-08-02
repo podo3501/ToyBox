@@ -1,14 +1,13 @@
 #include "pch.h"
 #include "EditWindow.h"
-#include "../Include/IRenderer.h"
-#include "../Toy/UserInterface/UIComponent/UIComponent.h"
-#include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "../Toy/InputManager.h"
+#include "UserInterface/UIComponent/Components/Panel.h"
+#include "UserInterface/Command/UICommandList/UICommandList.h"
+#include "InputManager.h"
+#include "Utils/GeometryUtil.h"
 #include "EditUtility/EditUtility.h"
 #include "HelperClass.h"
 #include "Utility.h"
-#include "../Toy/Utils/GeometryUtil.h"
+
 
 enum class OnDrag
 {

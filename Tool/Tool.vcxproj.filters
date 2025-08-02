@@ -36,7 +36,6 @@
     <ClCompile Include="Tool.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="ToolMainLoop.cpp" />
-    <ClCompile Include="TestImgui.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="Menu\MenuBar.cpp">
@@ -51,7 +50,7 @@
     <ClCompile Include="Menu\MenuHelper.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ToolConfig.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="MainWindow\MainWindow.cpp">
       <Filter>MainWindow</Filter>
@@ -128,7 +127,6 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToolMainLoop.h" />
-    <ClInclude Include="TestImgui.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="Dialog.h" />
     <ClInclude Include="Menu\MenuBar.h">
@@ -143,7 +141,7 @@
     <ClInclude Include="Menu\MenuHelper.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="Config.h" />
+    <ClInclude Include="ToolConfig.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="MainWindow\MainWindow.h">
       <Filter>MainWindow</Filter>

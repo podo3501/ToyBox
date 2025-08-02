@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "EditPatchTextureLite.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite3.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite9.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite3.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite9.h"
 
 EditPatchTextureLite::~EditPatchTextureLite() = default;
 EditPatchTextureLite::EditPatchTextureLite(PatchTextureLite* patchTexL, UICommandList* cmdList) noexcept :

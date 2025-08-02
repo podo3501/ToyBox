@@ -3,8 +3,8 @@
 #include "../Core/Utility.h"
 #include "ToyTestFixture.h"
 #include "../Include/IRenderer.h"
-#include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "UserInterface/UIComponent/Components/Panel.h"
+#include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "TestHelper.h"
 
 using ::testing::Pair;

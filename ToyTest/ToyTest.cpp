@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "ToyTestFixture.h"
 #include "IMockRenderer.h"
-#include "../Toy/GameMainLoop.h"
-#include "../Toy/WindowProcedure.h"
-#include "../Toy/Window.h"
+#include "GameMainLoop.h"
+#include "WindowProcedure.h"
+#include "Window.h"
 
 namespace BasicClient
 {

@@ -2,7 +2,7 @@
 #include "MainLoop.h"
 #include "../Include/IRenderer.h"
 #include "Utils/CommonUtil.h"
-#include "Config.h"
+#include "GameConfig.h"
 #include "Window.h"
 #include "WindowProcedure.h"
 #include "InputManager.h"

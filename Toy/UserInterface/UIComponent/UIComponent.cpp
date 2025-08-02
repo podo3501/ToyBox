@@ -3,7 +3,7 @@
 #include "Utils/StlUtil.h"
 #include "Utils/GeometryUtil.h"
 #include "../JsonOperation/JsonOperation.h"
-#include "Config.h"
+#include "GameConfig.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -49,8 +49,7 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 		tie(o.m_name, o.m_layout, o.m_region, o.m_stateFlag, o.m_transform, o.m_renderTraversal));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
 	ReturnIfFalse(m_children.size() == o.m_children.size());
-	ReturnIfFalse(ranges::equal(m_children, o.m_children, [](const auto& lhs, const auto& rhs) {
-		return CompareUniquePtr(lhs, rhs); }));
+	ReturnIfFalse(CompareSeq(m_children, o.m_children));
 
 	return true;
 }

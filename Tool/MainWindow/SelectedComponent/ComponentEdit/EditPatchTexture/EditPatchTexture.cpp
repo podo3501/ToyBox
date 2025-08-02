@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "EditPatchTexture.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
-#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
+#include "UserInterface/Command/UICommandList/UICommandList.h"
 
 EditPatchTexture::~EditPatchTexture() = default;
 EditPatchTexture::EditPatchTexture(PatchTexture* patchTex, UICommandList* cmdList) noexcept :

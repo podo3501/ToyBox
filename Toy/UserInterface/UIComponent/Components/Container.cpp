@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "../../JsonOperation/JsonOperation.h"
 #include "Utils/GeometryUtil.h"
+#include "Utils/StlUtil.h"
 
 using enum InteractState;
 
@@ -36,10 +37,11 @@ bool Container::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const Container* o = static_cast<const Container*>(&rhs);
 
-	return ranges::all_of(m_textures, [o](const auto& pair) {
-		auto state = pair.first;
-		return pair.second->GetName() == o->m_textures.at(state)->GetName();
-		});
+	//return ranges::all_of(m_textures, [o](const auto& pair) {
+	//	auto state = pair.first;
+	//	return pair.second->GetName() == o->m_textures.at(state)->GetName();
+	//	});
+	return CompareAssoc(m_textures, o->m_textures);
 }
 
 bool Container::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept

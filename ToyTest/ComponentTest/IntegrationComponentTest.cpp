@@ -12,7 +12,7 @@
 #include "UserInterface/UINameGenerator/UINameGenerator.h"
 #include "UserInterface/UIModule.h"
 #include "Utils/StlUtil.h"
-#include "Config.h"
+#include "GameConfig.h"
 
 namespace UserInterfaceTest
 {
@@ -348,7 +348,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(generator->MakeNameOf("newName_10", "", ComponentID::PatchTextureStd1), make_pair("", "newName_1"));
 
 		unique_ptr<UINameGenerator> cloneGenerator = generator->Clone();
-		EXPECT_TRUE(CompareUniquePtr(generator, cloneGenerator));
+		EXPECT_TRUE(Compare(generator, cloneGenerator));
 
 		//이름을 rename 할때 _숫자 가 검출되면 이름바꾸기가 안되도록 한다.
 		//실제로 attach, detach 할때 이걸 사용해서 하도록 수정하고 name 관련 코드 삭제 한다.
@@ -387,7 +387,7 @@ namespace UserInterfaceTest
 		wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
 		unique_ptr<UIModule> read = CreateUIModule(filename, m_renderer.get(), srcBinderFilename);
 
-		EXPECT_TRUE(CompareUniquePtr(m_uiModule, read));
+		EXPECT_TRUE(Compare(m_uiModule, read));
 
 		//?!? region값이 다를때 밑에 이름값은 변화가 없어야 하는데 지금은 변하고 있다. 테스트 해야함.
 		//?!? 세이브 로드가 끝나고 프로젝트를 UIComponent에서 UIRegistry로 read, write 하는걸로 바꾼후에

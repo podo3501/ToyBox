@@ -7,7 +7,7 @@
 #include "Components/Panel.h"
 #include "../UINameGenerator/UINameGenerator.h"
 #include "../UIModule.h"
-#include "Config.h"
+#include "GameConfig.h"
 
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 	m_component{ component },

@@ -79,7 +79,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);$(SolutionDir)Toy\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
@@ -121,7 +121,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);$(SolutionDir)Toy\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
       <RuntimeTypeInfo>
       </RuntimeTypeInfo>
@@ -155,7 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ToolConfig.cpp" />
     <ClCompile Include="EditUtility\EditClass.cpp" />
     <ClCompile Include="EditUtility\EditUtility.cpp" />
     <ClCompile Include="HelperClass.cpp" />
@@ -187,7 +187,6 @@
     <ClCompile Include="TextureResBinderWindow\ImageSelector.cpp" />
     <ClCompile Include="TextureResBinderWindow\TextureResBinderWindow.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
-    <ClCompile Include="TestImgui.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -199,7 +198,7 @@
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Config.h" />
+    <ClInclude Include="ToolConfig.h" />
     <ClInclude Include="EditUtility\EditClass.h" />
     <ClInclude Include="EditUtility\EditUtility.h" />
     <ClInclude Include="HelperClass.h" />
@@ -231,7 +230,6 @@
     <ClInclude Include="TextureResBinderWindow\ImageSelector.h" />
     <ClInclude Include="TextureResBinderWindow\TextureResBinderWindow.h" />
     <ClInclude Include="ToolSystem.h" />
-    <ClInclude Include="TestImgui.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ToolMainLoop.h" />
     <ClInclude Include="Utility.h" />

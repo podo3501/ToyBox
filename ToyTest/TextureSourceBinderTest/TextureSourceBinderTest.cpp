@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "../ToyTestFixture.h"
 #include "../IMockRenderer.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/TextureResourceBinder/TextureLoadBinder.h"
 #include "../TestHelper.h"
 
 namespace UserInterfaceTest

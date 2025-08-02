@@ -2,7 +2,7 @@
 #include "ToyTestFixture.h"
 #include "../Include/IRenderer.h"
 #include "Window.h"
-#include "Config.h"
+#include "GameConfig.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/UIComponent/Components/Panel.h"
 #include "UserInterface/Command/UICommandList/UICommandList.h"
@@ -153,7 +153,7 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 	EXPECT_TRUE(original->BindTextureSourceInfo(resBinder, m_renderer->GetTextureController()));
 	auto clone = original->Clone();
 
-	return CompareUniquePtr(original, clone);
+	return Compare(original, clone);
 }
 
 void TextureSwitcherComponentTest::FitToTextureSourceTest(const string& bindingKey)

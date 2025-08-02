@@ -76,7 +76,7 @@
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="MainLoop.h" />
-    <ClInclude Include="Config.h" />
+    <ClInclude Include="GameConfig.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="UserInterface\Command\Command.h">
       <Filter>UserInterface\Command</Filter>
@@ -255,6 +255,9 @@
     <ClInclude Include="Utils\CommonUtil.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\StlUtilTraitsConcepts.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -263,7 +266,7 @@
     <ClCompile Include="WindowProcedure.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="MainLoop.cpp" />
-    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\Button.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>

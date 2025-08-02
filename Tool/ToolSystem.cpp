@@ -1,12 +1,10 @@
 #include "pch.h"
 #include "ToolSystem.h"
-#include "../Toy/Utils/CommonUtil.h"
-#include "../Toy/Config.h"
 #include "MainWindow/MainWindow.h"
 #include "TextureResBinderWindow/TextureResBinderWindow.h"
 #include "Menu/MenuBar.h"
 #include "Dialog.h"
-#include "Config.h"
+#include "ToolConfig.h"
 
 ToolSystem::~ToolSystem() = default;
 ToolSystem::ToolSystem(IRenderer* renderer) :

@@ -1,14 +1,12 @@
 #include "pch.h"
 #include "ComponentController.h"
-#include "../Include/IRenderer.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
-#include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/InputManager.h"
-#include "../Toy/UserInterface/UIModule.h"
-#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "../Dialog.h"
-#include "../Utility.h"
+#include "UserInterface/UIComponent/Components/Panel.h"
+#include "InputManager.h"
+#include "UserInterface/Command/UICommandList/UICommandList.h"
+#include "Dialog.h"
+#include "Utility.h"
 
 ComponentController::~ComponentController() = default;
 ComponentController::ComponentController(IRenderer* renderer, 	TextureResourceBinder* resBinder, 

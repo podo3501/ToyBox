@@ -2,14 +2,14 @@
 #include "ImageSelector.h"
 #include "TextureResBinderWindow.h"
 #include "EditUtility/EditUtility.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "../Toy/UserInterface/UIComponent/UIUtility.h"
-#include "../Toy/InputManager.h"
-#include "../Toy/Utils/GeometryUtil.h"
-#include "../Utility.h"
-#include "../HelperClass.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "UserInterface/UIComponent/UIUtility.h"
+#include "InputManager.h"
+#include "Utils/GeometryUtil.h"
+#include "Utility.h"
+#include "HelperClass.h"
 
 ImageSelector::~ImageSelector() = default;
 ImageSelector::ImageSelector(TextureResBinderWindow* textureWindow) :

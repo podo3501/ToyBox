@@ -1,15 +1,14 @@
 #include "pch.h"
 #include "FileTab.h"
-#include "../Dialog.h"
-#include "../Toy/Window.h"
-#include "../Toy/Utils/StringUtil.h"
-#include "../Toy/Config.h"
-#include "../ToolSystem.h"
-#include "../MainWindow/MainWindow.h"
-#include "../TextureResBinderWindow/TextureResBinderWindow.h"
+#include "Dialog.h"
+#include "Window.h"
+#include "Utils/StringUtil.h"
+#include "ToolSystem.h"
+#include "MainWindow/MainWindow.h"
+#include "TextureResBinderWindow/TextureResBinderWindow.h"
 #include "MenuHelper.h"
 #include "RecentFiles.h"
-#include "../Config.h"
+#include "ToolConfig.h"
 
 using namespace Tool;
 

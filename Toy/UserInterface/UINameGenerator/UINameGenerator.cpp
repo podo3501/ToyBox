@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "UINameGenerator.h"
+#include "AutoNamer.h"
+#include "ComponentNameGenerator.h"
 #include "../UIComponent/UIType.h"
 #include "../JsonOperation/JsonOperation.h"
 #include "Utils/StringUtil.h"
@@ -11,13 +13,13 @@ UINameGenerator::UINameGenerator() = default;
 UINameGenerator::UINameGenerator(const UINameGenerator& other)
 {
     m_regionGens = CopyAssoc(other.m_regionGens);
-    m_componentNameGens = other.m_componentNameGens;
+    m_componentNameGens = CopyAssoc(other.m_componentNameGens);
 }
 
 bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
 {
     ReturnIfFalse(CompareUnorderedAssoc(m_regionGens, other.m_regionGens));
-    ReturnIfFalse(m_componentNameGens == other.m_componentNameGens);
+    ReturnIfFalse(CompareUnorderedAssoc(m_componentNameGens, other.m_componentNameGens));
 
     return true;
 }
@@ -34,13 +36,13 @@ string UINameGenerator::MakeRegionOf(const string& region) noexcept
 
     string newRegion{};
     if (name.empty()) //값이 없는 region은 특별 region이므로, nameGenerator에서 생성하지 않고 그냥 내보낸다.
-        m_componentNameGens.try_emplace(name);
+        TryEmplaceAssoc(m_componentNameGens, name);
     else
     {
         newRegion = AppendIfPresent(name, nameGenerator->Generate());
         if (!IsUniqueRegion(newRegion)) return "";
 
-        m_componentNameGens.emplace(newRegion, ComponentNameGenerator{});
+        m_componentNameGens.emplace(newRegion, make_unique<ComponentNameGenerator>());
     }
 
     return newRegion;
@@ -85,10 +87,11 @@ pair<string, string> UINameGenerator::MakeNameOf(const string& name, const strin
     if (find == m_componentNameGens.end()) return { "", "" };
     
     const string& strComponent = EnumToString<ComponentID>(componentID);
+    auto& componentNameGens = find->second;
     if (ShouldGenerateName(name, strComponent))
-        newName = find->second.MakeNameFromComponent(strComponent);
+        newName = componentNameGens->MakeNameFromComponent(strComponent);
     else
-        newName = find->second.MakeNameFromBase(name);
+        newName = componentNameGens->MakeNameFromBase(name);
 
     return { newRegion, newName };
 }
@@ -98,7 +101,7 @@ bool UINameGenerator::RemoveName(const string& region, const string& name) noexc
     auto find = m_componentNameGens.find(region);
     if (find == m_componentNameGens.end()) return false;
 
-    return find->second.Remove(name);
+    return find->second->Remove(name);
 }
 
 bool UINameGenerator::IsUniqueName(string_view region, string_view name) noexcept
@@ -106,7 +109,7 @@ bool UINameGenerator::IsUniqueName(string_view region, string_view name) noexcep
     auto find = m_componentNameGens.find(region);
     if (find == m_componentNameGens.end()) return true;
 
-    return find->second.IsUniqueName(name);
+    return find->second->IsUniqueName(name);
 }
 
 void UINameGenerator::SerializeIO(JsonOperation& operation)
@@ -114,5 +117,3 @@ void UINameGenerator::SerializeIO(JsonOperation& operation)
     operation.Process("RegionGens", m_regionGens);
     operation.Process("RegionNames", m_componentNameGens);
 }
-
-//?!? util폴더 만들어서 정리하기. UINameGenerator 관련 파일들 폴더에 넣기. 

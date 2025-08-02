@@ -2,7 +2,7 @@
 #include "TextureFontInfo.h"
 #include "../Include/IRenderer.h"
 #include "../JsonOperation/JsonOperation.h"
-#include "Config.h"
+#include "GameConfig.h"
 #include "Utils/CommonUtil.h"
 
 TextureFontInfo::~TextureFontInfo() = default;

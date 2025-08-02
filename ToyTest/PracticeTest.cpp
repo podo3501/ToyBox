@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "../Toy/Locator.h"
-#include "../Toy/UserInterface/UIComponent/UIUtility.h"
-#include "../Toy/UserInterface/UIComponent/UILayout.h"
+#include "Locator.h"
+#include "UserInterface/UIComponent/UIUtility.h"
+#include "UserInterface/UIComponent/UILayout.h"
 #include "../Core/Utility.h"
 
 namespace Practice

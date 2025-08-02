@@ -22,8 +22,8 @@ UIModule::UIModule() noexcept :
 
 bool UIModule::operator==(const UIModule& other) const noexcept
 {
-	ReturnIfFalse(CompareUniquePtr(m_generator, other.m_generator));
-	ReturnIfFalse(CompareUniquePtr(m_panel, other.m_panel));
+	ReturnIfFalse(Compare(m_generator, other.m_generator));
+	ReturnIfFalse(Compare(m_panel, other.m_panel));
 
 	return true;
 }

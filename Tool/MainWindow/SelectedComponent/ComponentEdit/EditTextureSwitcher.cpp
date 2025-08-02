@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "EditTextureSwitcher.h"
-#include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
+#include "UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/Command/UICommandList/UICommandList.h"
 #include "EditUtility/EditUtility.h"
 
 EditTextureSwitcher::~EditTextureSwitcher() = default;

@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "Config.h"
-#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
+#include "ToolConfig.h"
+#include "UserInterface/JsonOperation/JsonOperation.h"
 
 using namespace Tool;
 

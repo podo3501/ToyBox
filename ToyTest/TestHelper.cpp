@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TestHelper.h"
 #include "../Include/IComponent.h"
-#include "../Toy/Config.h"
+#include "../Toy/GameConfig.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"
 #include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"

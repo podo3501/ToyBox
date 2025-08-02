@@ -1,5 +1,5 @@
 #pragma once
-#include "../Toy/MainLoop.h"
+#include "MainLoop.h"
 
 struct IRenderer;
 class Window;
@@ -24,8 +24,6 @@ protected:
 private:
 	Window* m_window;
 	IRenderer* m_renderer;
-
-	unique_ptr<TestImgui> m_testImgui;
 
 	unique_ptr<ToolSystem> m_toolSystem;
 };

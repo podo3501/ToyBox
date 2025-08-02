@@ -1,15 +1,14 @@
 #include "pch.h"
-#include "../Include/IRenderer.h"
 #include "EditSourceTexture.h"
 #include "TextureResBinderWindow.h"
 #include "ImageSelector.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
-#include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/TextureResourceBinder/TextureLoadBinder.h"
+#include "UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "Utils/StringUtil.h"
 #include "EditUtility/EditUtility.h"
-#include "../Dialog.h"
-#include "../Toy/Utils/StringUtil.h"
+#include "Dialog.h"
 
 enum class PendingAction : int
 {

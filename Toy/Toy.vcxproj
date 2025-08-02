@@ -213,7 +213,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Config.h" />
+    <ClInclude Include="GameConfig.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Locator.h" />
@@ -277,6 +277,7 @@
     <ClInclude Include="Utils\GeometryUtil.h" />
     <ClInclude Include="Utils\StlTypeExt.hpp" />
     <ClInclude Include="Utils\StlUtil.h" />
+    <ClInclude Include="Utils\StlUtilTraitsConcepts.hpp" />
     <ClInclude Include="Utils\StringUtil.h" />
     <ClInclude Include="WindowProcedure.h" />
     <ClInclude Include="pch.h" />
@@ -284,7 +285,7 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />

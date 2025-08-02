@@ -2,6 +2,7 @@
 #include "Utils/StlTypeExt.hpp"
 
 class JsonOperation;
+class AutoNamer;
 class ComponentNameGenerator
 {
 public:

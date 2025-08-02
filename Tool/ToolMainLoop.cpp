@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "ToolMainLoop.h"
-#include "TestImgui.h"
 #include "ToolSystem.h"
-#include "../Toy/Config.h"
-#include "../Toy/Utils/CommonUtil.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -25,8 +22,7 @@ ToolMainLoop::~ToolMainLoop() = default;
 ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
     ::MainLoop(window, renderer),
     m_window{ window },
-    m_renderer{ renderer },
-    m_testImgui{ make_unique<TestImgui>(renderer) }
+    m_renderer{ renderer }
 {}
 
 bool ToolMainLoop::InitializeDerived()
@@ -43,7 +39,6 @@ bool ToolMainLoop::LoadResources()
 
 bool ToolMainLoop::PostLoaded(ITextureController* texController)
 {
-    //m_toolSystem = make_unique<ToolSystem>(m_renderer);
     return true;
 }
 
@@ -52,8 +47,6 @@ void ToolMainLoop::Update(const DX::StepTimer& timer)
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
     UNREFERENCED_PARAMETER(timer);
-    //float elapsedTime = float(timer->GetElapsedSeconds());
-
     m_toolSystem->Update(timer);
 
     PIXEndEvent();

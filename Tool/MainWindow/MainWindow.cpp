@@ -1,16 +1,13 @@
 #include "pch.h"
 #include "MainWindow.h"
-#include "../Utility.h"
+#include "Utility.h"
 #include "ComponentController.h"
-#include "../Toy/Config.h"
-#include "../Toy/Utils/CommonUtil.h"
-#include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
-#include "../Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "../Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/UserInterface/UIModule.h"
-#include "../Toy/InputManager.h"
-#include "../Toy/StepTimer.h"
+#include "Utils/CommonUtil.h"
+#include "UserInterface/UIComponent/Components/RenderTexture.h"
+#include "UserInterface/UIComponent/Components/UIModuleAsComponent.h"
+#include "UserInterface/UIModule.h"
+#include "InputManager.h"
+#include "StepTimer.h"
 
 int MainWindow::m_mainWindowIndex = 0;
 

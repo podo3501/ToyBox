@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "../ToyTestFixture.h"
 #include "../TestHelper.h"
-#include "../Toy/UserInterface/UIComponent/Components/Container.h"
-#include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "UserInterface/UIComponent/Components/Container.h"
+#include "UserInterface/UIComponent/Components/SampleComponent.h"
 
 namespace UserInterfaceTest
 {

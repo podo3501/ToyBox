@@ -3,28 +3,14 @@
 #include "SelectedComponent/ComponentEdit/EditWindow.h"
 #include "SelectedComponent/ComponentTooltip.h"
 #include "SelectedComponent/EditWindowFactory.h"
-#include "../Toy/UserInterface/UIModule.h"
-#include "../Toy/UserInterface/UIComponent/UIComponent.h"
-#include "../Toy/InputManager.h"
-#include "../Toy/Utils/StlUtil.h"
-#include "../Dialog.h"
-#include "../Utility.h"
-#include "../Toy/UserInterface/Command/UICommandList/UICommandList.h"
+#include "UserInterface/UIComponent/UIComponent.h"
+#include "UserInterface/Command/UICommandList/UICommandList.h"
+#include "InputManager.h"
+#include "Utils/StlUtil.h"
+#include "Dialog.h"
+#include "Utility.h"
 
 ComponentSelector::~ComponentSelector() = default;
-//ComponentSelector::ComponentSelector(IRenderer* renderer, 
-//	TextureResourceBinder* resBinder, UICommandList* cmdList, UIComponent* panel) :
-//	m_renderer{ renderer },
-//	m_resBinder{ resBinder },
-//	m_cmdList{ cmdList },
-//	m_mainWnd{ nullptr },
-//	m_tooltip{ make_unique<ComponentTooltip>(panel) },
-//	m_editWindow{ nullptr },
-//	m_panel{ panel },
-//	m_component{ nullptr }
-//{
-//	EditWindowFactory::RegisterFactories();
-//}
 ComponentSelector::ComponentSelector(IRenderer* renderer, TextureResourceBinder* resBinder, 
 	UIComponent* mainComponent, UICommandList* cmdList) :
 	m_renderer{ renderer },

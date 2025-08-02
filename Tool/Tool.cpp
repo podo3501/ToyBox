@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "ToolMainLoop.h"
-#include "../Toy/Window.h"
-#include "../Toy/WindowProcedure.h"
 #include "../Include/IRenderer.h"
+#include "Window.h"
+#include "WindowProcedure.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()

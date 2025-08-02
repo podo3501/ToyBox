@@ -6,12 +6,6 @@
 AutoNamer::~AutoNamer() = default;
 AutoNamer::AutoNamer() = default;
 
-//AutoNamer::AutoNamer(const AutoNamer& other)
-//    : m_nextID{ other.m_nextID },
-//    m_recycled{ other.m_recycled },
-//    m_isDeletable{ other.m_isDeletable }
-//{}
-
 bool AutoNamer::operator==(const AutoNamer& o) const noexcept
 {
     ReturnIfFalse(tie(m_nextID, m_recycled) == tie(o.m_nextID, o.m_recycled));

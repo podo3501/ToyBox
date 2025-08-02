@@ -2,14 +2,13 @@
 #include "TextureResBinderWindow.h"
 #include "EditFontTexture.h"
 #include "EditSourceTexture.h"
-#include "../Utility.h"
-#include "../Toy/Utils/StringUtil.h"
-#include "../Toy/UserInterface/UIComponent/Components/RenderTexture.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "../Toy/InputManager.h"
-#include "../Toy/UserInterface/UIComponent/UIUtility.h"
+#include "Utility.h"
+#include "Utils/StringUtil.h"
+#include "UserInterface/UIComponent/Components/RenderTexture.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "InputManager.h"
 
 TextureResBinderWindow::~TextureResBinderWindow()
 {

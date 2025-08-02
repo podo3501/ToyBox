@@ -8,7 +8,7 @@ template<typename T>
 inline void SerializeClassIO_GenerateJson(T& data, nlohmann::ordered_json& outWriteJ)
 {
 	JsonOperation jsOp{ outWriteJ };
-	if constexpr (std::is_pointer_v<T>)
+	if constexpr (RawPointerLike<T>)
 		data->SerializeIO(jsOp);
 	else
 		data.SerializeIO(jsOp);
@@ -29,7 +29,7 @@ template<typename T>
 void DeserializeClassIO_Internal(const nlohmann::json& outReadJ, T& data)
 {
 	JsonOperation jsOp{ outReadJ };
-	if constexpr (std::is_pointer_v<T>) 
+	if constexpr (RawPointerLike<T>)
 		data->SerializeIO(jsOp);
 	else 
 		data.SerializeIO(jsOp);
