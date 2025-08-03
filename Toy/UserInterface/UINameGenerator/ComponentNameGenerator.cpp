@@ -64,7 +64,7 @@ bool ComponentNameGenerator::Remove(const string& name) noexcept
     return true;
 }
 
-bool ComponentNameGenerator::IsUniqueName(string_view name) const noexcept
+bool ComponentNameGenerator::IsUnusedName(string_view name) const noexcept
 {
     auto [baseName, id] = ExtractNameAndId(name);
     if (baseName.empty()) return true;

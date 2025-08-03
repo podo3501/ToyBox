@@ -15,7 +15,7 @@ public:
     string MakeNameFromComponent(const string& name) noexcept;
     string MakeNameFromBase(const string& name) noexcept;
     bool Remove(const string& name) noexcept;
-    bool IsUniqueName(string_view name) const noexcept;
+    bool IsUnusedName(string_view name) const noexcept;
     void SerializeIO(JsonOperation& operation);
 
 private:

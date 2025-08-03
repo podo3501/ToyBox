@@ -37,6 +37,12 @@ UIComponent* UIHierarchy<UIComponent>::GetParentRegionRoot() const noexcept
 	return m_parent->GetRegionRoot();
 }
 
+const string& UIHierarchy<UIComponent>::GetMyRegion() const noexcept
+{
+	UIComponent* current = GetThis();
+	return GetRegionRoot()->GetRegion();
+}
+
 void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> Func) noexcept
 {
 	if (Func(GetThis()) == CResult::SkipChildren)
@@ -100,6 +106,29 @@ void UIHierarchy<UIComponent>::ForEachChildToRender(function<void(UIComponent*)>
 		return ForEachRenderChildBFS(Func);
 
 	return ForEachRenderChildDFS(Func);
+}
+
+bool UIHierarchy<UIComponent>::ForEachChildWithRegion(const string& parentRegion, function<bool(const string&, UIComponent*, bool)> Func) noexcept
+{
+	const auto Traverse = [&](UIHierarchy<UIComponent>* node, const string& region, auto&& self_ref) -> bool {
+		UIComponent* component = static_cast<UIComponent*>(node);
+		string currentRegion = !component->GetRegion().empty() ? component->GetRegion() : region;
+		ReturnIfFalse(Func(currentRegion, component, currentRegion != region)); //region이 달라졌다면 true 인자값을 넣어준다.
+
+		string childRegion{ currentRegion };
+		const string& maybeChangedRegion = component->GetRegion();
+		if (!maybeChangedRegion.empty() && maybeChangedRegion != currentRegion)
+			childRegion = maybeChangedRegion;	//region이 Func()안에서 새로 생성되면서 바뀔수 있으므로 GetRegion 해서 현재 region이 다음 노드에 적용되도록 한다.
+
+		for (auto& child : node->m_children) {
+			if (child && !self_ref(child.get(), childRegion, self_ref))
+				return false;
+		}
+
+		return true; };
+
+	string curRegion = !parentRegion.empty() ? parentRegion : GetRegionRoot()->GetRegion();
+	return Traverse(GetThis(), curRegion, Traverse);
 }
 
 bool UIHierarchy<UIComponent>::ForEachChildWithRegion(function<bool(const string&, UIComponent*)> Func) noexcept

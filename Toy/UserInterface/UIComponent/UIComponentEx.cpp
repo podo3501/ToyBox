@@ -24,24 +24,13 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 
 	if (UINameGenerator* nameGen = GetNameGenerator())
 	{
-		UIComponent* regionComponent = m_component->GetRegionRoot();
-		string parentRegion = regionComponent->GetRegion();
-
-		bool success = child->ForEachChildWithRegion(
-			[nameGen, &parentRegion](const string& region, UIComponent* component) {
-				const bool isUniqueRegion = (!region.empty() && parentRegion != region);
-				const string curRegion = isUniqueRegion ? region : parentRegion;
-
-				auto [newRegion, newName] = nameGen->MakeNameOf(component->GetName(), curRegion, component->GetTypeID(), isUniqueRegion);
+		bool success = child->ForEachChildWithRegion(m_component->GetMyRegion(),
+			[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
+				auto [newRegion, newName] = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID(), isNewRegion);
 				if (newName.empty())
 					return false;
 
-				if (newRegion != parentRegion)
-				{
-					parentRegion = newRegion; //region이 바뀌게 되면 parentRegion을 바꾼다.
-					component->m_region = newRegion;
-				}
-
+				if (isNewRegion) component->m_region = newRegion;
 				component->m_name = newName;
 				return true;
 			});
@@ -90,15 +79,14 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 
 	if (UINameGenerator* nameGen = GetNameGenerator())	// 이름 제거 처리
 	{
-		UIComponent* parentRegionRoot = parent->GetRegionRoot();
-		const string& parentRegion = parentRegionRoot->GetRegion();
+		bool allRemoved = m_component->ForEachChildWithRegion(parent->GetMyRegion(),
+			[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
+				if (nameGen->IsUnusedRegion(region)) //region이 없는 경우는 detach 하다가 부모 노드에서 region을 지운 경우이다.
+					return true;
 
-		bool allRemoved = m_component->ForEachChildWithRegion(
-			[nameGen, &parentRegion](const string& region, UIComponent* component) {
-				if (region == parentRegion)
-					return nameGen->RemoveName(region, component->GetName());
-				else
+				if (isNewRegion) //노드가 새로운 region이면 
 					return nameGen->RemoveRegion(region);
+				return nameGen->RemoveName(region, component->GetName());
 			});
 
 		if (!allRemoved)
@@ -128,10 +116,8 @@ bool UIComponentEx::Rename(const string& name) noexcept
 		return true;
 	}
 
-	UIComponent* regionComponent = m_component->GetRegionRoot();
-	const auto& region = regionComponent->GetRegion();
-
-	if (!nameGen->IsUniqueName(region, name)) return false;
+	const auto& region = m_component->GetMyRegion();
+	if (!nameGen->IsUnusedName(region, name)) return false;
 
 	nameGen->RemoveName(region, m_component->GetName());
 	auto [_, newName] = nameGen->MakeNameOf(name, region, m_component->GetTypeID());
@@ -159,7 +145,7 @@ bool UIComponentEx::RenameRegion(const string& region) noexcept
 		return true;
 	}
 
-	ReturnIfFalse(nameGen->IsUniqueRegion(region));
+	ReturnIfFalse(nameGen->IsUnusedRegion(region));
 
 	UIComponent* rootRegionComponent = region.empty() ?
 		m_component->GetParentRegionRoot() :

@@ -318,18 +318,18 @@ namespace UserInterfaceTest
 		string region = "newRegion";
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion_1");
-		EXPECT_FALSE(generator->IsUniqueRegion("newRegion_1"));
+		EXPECT_FALSE(generator->IsUnusedRegion("newRegion_1"));
 
 		EXPECT_TRUE(generator->RemoveRegion(region));
 		EXPECT_EQ(generator->MakeRegionOf(region), "newRegion");
 		EXPECT_TRUE(generator->RemoveRegion("newRegion"));
 		EXPECT_TRUE(generator->RemoveRegion("newRegion_1"));
-		EXPECT_TRUE(generator->IsUniqueRegion(region));
+		EXPECT_TRUE(generator->IsUnusedRegion(region));
 
 		EXPECT_EQ(generator->MakeNameOf("", "Region", ComponentID::PatchTextureStd1), make_pair("Region", "PatchTextureStd1"));
-		EXPECT_FALSE(generator->IsUniqueName("Region", "PatchTextureStd1"));
+		EXPECT_FALSE(generator->IsUnusedName("Region", "PatchTextureStd1"));
 		EXPECT_TRUE(generator->RemoveName("Region", "PatchTextureStd1"));
-		EXPECT_TRUE(generator->IsUniqueName("Region", "PatchTextureStd1"));
+		EXPECT_TRUE(generator->IsUnusedName("Region", "PatchTextureStd1"));
 
 		string name = "newName";
 		EXPECT_EQ(generator->MakeNameOf(name, "Region", ComponentID::PatchTextureStd1), make_pair("Region", "newName"));
@@ -339,7 +339,7 @@ namespace UserInterfaceTest
 		EXPECT_FALSE(generator->RemoveName("Region", "newName_0"));
 
 		EXPECT_TRUE(generator->RemoveRegion("Region")); //newName_1이 남아 있지만 상관없이 region을 지운다.
-		EXPECT_TRUE(generator->IsUniqueRegion("Region"));
+		EXPECT_TRUE(generator->IsUnusedRegion("Region"));
 
 		//region을 삭제하면 밑에 딸려있는 name들도 모두 삭제된다. 이때 노드에 있는 이름과 동기화가 안되지만,
 		//노드 탐색하면서 이름을 다시 만들어 주면서 동기화가 된다. 여기서 동기화를 시킨다면 generator 클래스가 node 클래스를 알아야 하는데, 그건 이치에 안 맞는 것 같다.

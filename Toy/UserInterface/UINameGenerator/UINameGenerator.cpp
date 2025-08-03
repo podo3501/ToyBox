@@ -32,25 +32,22 @@ unique_ptr<UINameGenerator> UINameGenerator::Clone() const
 string UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
     auto [name, id] = ExtractNameAndId(region);
-    auto& nameGenerator = TryEmplaceAssoc(m_regionGens, name);
-
-    string newRegion{};
-    if (name.empty()) //값이 없는 region은 특별 region이므로, nameGenerator에서 생성하지 않고 그냥 내보낸다.
-        TryEmplaceAssoc(m_componentNameGens, name);
-    else
-    {
-        newRegion = AppendIfPresent(name, nameGenerator->Generate());
-        if (!IsUniqueRegion(newRegion)) return "";
-
-        m_componentNameGens.emplace(newRegion, make_unique<ComponentNameGenerator>());
+    if (name.empty()) {
+        TryEmplaceAssoc(m_componentNameGens, name); //값이 없는 region은 특별 region이므로, nameGenerator에서 생성하지 않고 그냥 내보낸다.
+        return {};
     }
 
+    auto& nameGenerator = TryEmplaceAssoc(m_regionGens, name);
+    string newRegion = AppendIfPresent(name, nameGenerator->Generate());
+    if (!IsUnusedRegion(newRegion)) return "";
+
+    m_componentNameGens.emplace(newRegion, make_unique<ComponentNameGenerator>());
     return newRegion;
 }
 
 bool UINameGenerator::RemoveRegion(const string& region) noexcept
 {
-    if (IsUniqueRegion(region)) return true;
+    if (IsUnusedRegion(region)) return true;
 
     auto [name, id] = ExtractNameAndId(region);
     auto find = m_regionGens.find(name);
@@ -64,12 +61,12 @@ bool UINameGenerator::RemoveRegion(const string& region) noexcept
     return true;
 }
 
-bool UINameGenerator::IsUniqueRegion(string_view region) noexcept
+bool UINameGenerator::IsUnusedRegion(string_view region) noexcept
 {
     return m_componentNameGens.find(region) == m_componentNameGens.end();
 }
 
-static bool ShouldGenerateName(const string& name, const string& prefix)
+static bool IsGeneratedComponentName(const string& name, const string& prefix)
 {
     if (name.empty()) return true;
 
@@ -80,36 +77,39 @@ static bool ShouldGenerateName(const string& name, const string& prefix)
 pair<string, string> UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID, bool forceUniqueRegion) noexcept
 {
     string newRegion{ region }, newName{ name };
-    if (IsUniqueRegion(region) || forceUniqueRegion) //붙일 region이 존재하지 않거나, 존재하더라도 유니크이어야 한다면
+    if (IsUnusedRegion(region) || forceUniqueRegion) //붙일 region이 존재하지 않거나, 존재하더라도 유니크이어야 한다면
         newRegion = MakeRegionOf(region);
 
-    auto find = m_componentNameGens.find(newRegion);
-    if (find == m_componentNameGens.end()) return { "", "" };
-    
+    auto nameGen = GetComponentNameGen(newRegion);
+    if (!nameGen) return { "", "" };
+
     const string& strComponent = EnumToString<ComponentID>(componentID);
-    auto& componentNameGens = find->second;
-    if (ShouldGenerateName(name, strComponent))
-        newName = componentNameGens->MakeNameFromComponent(strComponent);
+    if (IsGeneratedComponentName(name, strComponent))
+        newName = nameGen->MakeNameFromComponent(strComponent);
     else
-        newName = componentNameGens->MakeNameFromBase(name);
+        newName = nameGen->MakeNameFromBase(name);
 
     return { newRegion, newName };
 }
 
 bool UINameGenerator::RemoveName(const string& region, const string& name) noexcept
 {
-    auto find = m_componentNameGens.find(region);
-    if (find == m_componentNameGens.end()) return false;
-
-    return find->second->Remove(name);
+    auto nameGen = GetComponentNameGen(region);
+    return nameGen ? nameGen->Remove(name) : true;
 }
 
-bool UINameGenerator::IsUniqueName(string_view region, string_view name) noexcept
+bool UINameGenerator::IsUnusedName(string_view region, string_view name) noexcept
+{
+    auto nameGen = GetComponentNameGen(region);
+    return nameGen ? nameGen->IsUnusedName(name) : true;
+}
+
+ComponentNameGenerator* UINameGenerator::GetComponentNameGen(string_view region) const noexcept
 {
     auto find = m_componentNameGens.find(region);
-    if (find == m_componentNameGens.end()) return true;
+    if (find == m_componentNameGens.end()) return nullptr;
 
-    return find->second->IsUniqueName(name);
+    return find->second.get();
 }
 
 void UINameGenerator::SerializeIO(JsonOperation& operation)

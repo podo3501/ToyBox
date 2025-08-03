@@ -14,6 +14,7 @@ public:
 	UIComponent* GetRoot() const noexcept;
 	UIComponent* GetRegionRoot() const noexcept;
 	UIComponent* GetParentRegionRoot() const noexcept;
+	const string& GetMyRegion() const noexcept;
 
 	//children을 순회하는 함수 모음
 	void ForEachChildDFS(function<void(UIComponent*)> Func) noexcept;
@@ -21,7 +22,8 @@ public:
 	bool ForEachChildPostUntilFail(predicate<UIComponent*> auto&& Func) noexcept; //후위 순회로 리턴값 반환 재귀(binder에사용)
 	void ForEachChildBool(function<CResult(UIComponent*)> Func) noexcept; //무언가를 찾았으면 bool 반환으로 그만 하라는 함수
 	void ForEachChildConst(invocable<const UIComponent*> auto&& Func) const noexcept; //읽기전용
-	bool ForEachChildWithRegion(function<bool(const string&, UIComponent*)> Func) noexcept; //소속된 region을 알려주면서 foreach
+	bool ForEachChildWithRegion(const string& parentRegion, function<bool(const string&, UIComponent*, bool)> Func) noexcept; //소속된 region을 알려주면서 foreach
+	bool ForEachChildWithRegion(function<bool(const string&, UIComponent*)> Func) noexcept; 
 	void ForEachChildInSameRegion(function<void(UIComponent*)> Func) noexcept; //소속된 region만 도는 foreach
 	void ForEachChildToRender(function<void(UIComponent*)> Func) noexcept;
 
