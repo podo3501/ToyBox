@@ -27,19 +27,19 @@ UIComponent* PatchTexture::GetCenterComponent() noexcept
 
 bool PatchTexture::ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept
 {
-	ReturnIfFalse(ForEach([&sizes](PatchTexture* tex, size_t index) {
+	bool result = ForEach([&sizes](PatchTexture* tex, size_t index) {
 		return tex->ChangeSize(sizes[index]);
-		}));
-	return true;
+		});
+	return result;
 }
 
 bool PatchTexture::ApplyPositions(DirectionType dirType, const XMUINT2& size, const vector<XMUINT2>& sizes) noexcept
 {
 	vector<XMINT2> positions = ExtractStartPosFromSizes(dirType, sizes);
-	ReturnIfFalse(ForEach([this, &size, &positions](PatchTexture*, size_t index) {
+	bool result = (ForEach([this, &size, &positions](PatchTexture*, size_t index) {
 		return ChangePosition(index, size, positions[index]);
 		}));
-	return true;
+	return result;
 }
 
 bool PatchTexture::ApplySizeAndPosition(DirectionType dirType, const XMUINT2& size, const vector<UIComponent*>& components) noexcept

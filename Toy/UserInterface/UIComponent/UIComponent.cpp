@@ -182,9 +182,10 @@ string UIComponent::GetMyRegion() const noexcept
 
 bool UIComponent::EnableToolMode(bool enable) noexcept
 {
-	ReturnIfFalse(ranges::all_of(m_children, [enable](auto& child) {
+	bool result = ranges::all_of(m_children, [enable](auto& child) {
 		return child->EnableToolMode(enable);
-		}));
+		});
+	ReturnIfFalse(result);
 
 	if (m_toolMode != enable)
 	{

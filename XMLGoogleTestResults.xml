@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="52" failures="0" disabled="0" errors="0" time="15.451" timestamp="2025-08-04T00:55:26.873" name="AllTests">
-  <testsuite name="ContainerComponentTest" tests="3" failures="0" disabled="0" skipped="0" errors="0" time="1.125" timestamp="2025-08-04T00:55:26.873">
-    <testcase name="Container_PatchTextureStd1" status="run" result="completed" time="0.443" timestamp="2025-08-04T00:55:26.873" classname="ContainerComponentTest" />
-    <testcase name="Container_PatchTextureStd3_Horizontal" status="run" result="completed" time="0.342" timestamp="2025-08-04T00:55:27.316" classname="ContainerComponentTest" />
-    <testcase name="Container_PatchTextureStd3_Vertical" status="run" result="completed" time="0.34" timestamp="2025-08-04T00:55:27.658" classname="ContainerComponentTest" />
+<testsuites tests="52" failures="0" disabled="0" errors="0" time="15.256" timestamp="2025-08-04T18:09:04.050" name="AllTests">
+  <testsuite name="ContainerComponentTest" tests="3" failures="0" disabled="0" skipped="0" errors="0" time="1.122" timestamp="2025-08-04T18:09:04.050">
+    <testcase name="Container_PatchTextureStd1" status="run" result="completed" time="0.454" timestamp="2025-08-04T18:09:04.050" classname="ContainerComponentTest" />
+    <testcase name="Container_PatchTextureStd3_Horizontal" status="run" result="completed" time="0.34" timestamp="2025-08-04T18:09:04.505" classname="ContainerComponentTest" />
+    <testcase name="Container_PatchTextureStd3_Vertical" status="run" result="completed" time="0.327" timestamp="2025-08-04T18:09:04.845" classname="ContainerComponentTest" />
   </testsuite>
-  <testsuite name="TextureSwitcherComponentTest" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="1.321" timestamp="2025-08-04T00:55:27.999">
-    <testcase name="TextureSwitcher_PatchTextureLite1" status="run" result="completed" time="0.328" timestamp="2025-08-04T00:55:27.999" classname="TextureSwitcherComponentTest" />
-    <testcase name="TextureSwitcher_PatchTextureLite3_H" status="run" result="completed" time="0.325" timestamp="2025-08-04T00:55:28.328" classname="TextureSwitcherComponentTest" />
-    <testcase name="TextureSwitcher_PatchTextureLite3_V" status="run" result="completed" time="0.332" timestamp="2025-08-04T00:55:28.653" classname="TextureSwitcherComponentTest" />
-    <testcase name="TextureSwitcher_PatchTextureLite9" status="run" result="completed" time="0.335" timestamp="2025-08-04T00:55:28.985" classname="TextureSwitcherComponentTest" />
+  <testsuite name="TextureSwitcherComponentTest" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="1.354" timestamp="2025-08-04T18:09:05.173">
+    <testcase name="TextureSwitcher_PatchTextureLite1" status="run" result="completed" time="0.342" timestamp="2025-08-04T18:09:05.173" classname="TextureSwitcherComponentTest" />
+    <testcase name="TextureSwitcher_PatchTextureLite3_H" status="run" result="completed" time="0.341" timestamp="2025-08-04T18:09:05.516" classname="TextureSwitcherComponentTest" />
+    <testcase name="TextureSwitcher_PatchTextureLite3_V" status="run" result="completed" time="0.326" timestamp="2025-08-04T18:09:05.857" classname="TextureSwitcherComponentTest" />
+    <testcase name="TextureSwitcher_PatchTextureLite9" status="run" result="completed" time="0.343" timestamp="2025-08-04T18:09:06.184" classname="TextureSwitcherComponentTest" />
   </testsuite>
-  <testsuite name="BasicComponentTest" tests="5" failures="0" disabled="0" skipped="0" errors="0" time="1.661" timestamp="2025-08-04T00:55:29.321">
-    <testcase name="PatchTextureStd1" status="run" result="completed" time="0.328" timestamp="2025-08-04T00:55:29.321" classname="BasicComponentTest" />
-    <testcase name="PatchTextureStd3_Horizontal" status="run" result="completed" time="0.336" timestamp="2025-08-04T00:55:29.649" classname="BasicComponentTest" />
-    <testcase name="PatchTextureStd3_Vertical" status="run" result="completed" time="0.343" timestamp="2025-08-04T00:55:29.986" classname="BasicComponentTest" />
-    <testcase name="PatchTextureStd9" status="run" result="completed" time="0.326" timestamp="2025-08-04T00:55:30.329" classname="BasicComponentTest" />
-    <testcase name="TextArea" status="run" result="completed" time="0.326" timestamp="2025-08-04T00:55:30.656" classname="BasicComponentTest" />
+  <testsuite name="BasicComponentTest" tests="5" failures="0" disabled="0" skipped="0" errors="0" time="1.706" timestamp="2025-08-04T18:09:06.527">
+    <testcase name="PatchTextureStd1" status="run" result="completed" time="0.327" timestamp="2025-08-04T18:09:06.527" classname="BasicComponentTest" />
+    <testcase name="PatchTextureStd3_Horizontal" status="run" result="completed" time="0.341" timestamp="2025-08-04T18:09:06.855" classname="BasicComponentTest" />
+    <testcase name="PatchTextureStd3_Vertical" status="run" result="completed" time="0.341" timestamp="2025-08-04T18:09:07.196" classname="BasicComponentTest" />
+    <testcase name="PatchTextureStd9" status="run" result="completed" time="0.357" timestamp="2025-08-04T18:09:07.538" classname="BasicComponentTest" />
+    <testcase name="TextArea" status="run" result="completed" time="0.337" timestamp="2025-08-04T18:09:07.896" classname="BasicComponentTest" />
   </testsuite>
-  <testsuite name="ComplexComponentTest" tests="6" failures="0" disabled="0" skipped="0" errors="0" time="1.961" timestamp="2025-08-04T00:55:30.983">
-    <testcase name="ListArea" status="run" result="completed" time="0.326" timestamp="2025-08-04T00:55:30.983" classname="ComplexComponentTest" />
-    <testcase name="ListAreaToolMode" status="run" result="completed" time="0.31" timestamp="2025-08-04T00:55:31.309" classname="ComplexComponentTest" />
-    <testcase name="RenderTexture" status="run" result="completed" time="0.322" timestamp="2025-08-04T00:55:31.620" classname="ComplexComponentTest" />
-    <testcase name="ScrollBar" status="run" result="completed" time="0.331" timestamp="2025-08-04T00:55:31.943" classname="ComplexComponentTest" />
-    <testcase name="Switcher_Scroll" status="run" result="completed" time="0.326" timestamp="2025-08-04T00:55:32.274" classname="ComplexComponentTest" />
-    <testcase name="UIModuleAsComponent" status="run" result="completed" time="0.342" timestamp="2025-08-04T00:55:32.601" classname="ComplexComponentTest" />
+  <testsuite name="ComplexComponentTest" tests="6" failures="0" disabled="0" skipped="0" errors="0" time="1.968" timestamp="2025-08-04T18:09:08.234">
+    <testcase name="ListArea" status="run" result="completed" time="0.34" timestamp="2025-08-04T18:09:08.234" classname="ComplexComponentTest" />
+    <testcase name="ListAreaToolMode" status="run" result="completed" time="0.324" timestamp="2025-08-04T18:09:08.574" classname="ComplexComponentTest" />
+    <testcase name="RenderTexture" status="run" result="completed" time="0.326" timestamp="2025-08-04T18:09:08.899" classname="ComplexComponentTest" />
+    <testcase name="ScrollBar" status="run" result="completed" time="0.322" timestamp="2025-08-04T18:09:09.225" classname="ComplexComponentTest" />
+    <testcase name="Switcher_Scroll" status="run" result="completed" time="0.328" timestamp="2025-08-04T18:09:09.548" classname="ComplexComponentTest" />
+    <testcase name="UIModuleAsComponent" status="run" result="completed" time="0.325" timestamp="2025-08-04T18:09:09.877" classname="ComplexComponentTest" />
   </testsuite>
-  <testsuite name="IntegrationTest" tests="14" failures="0" disabled="0" skipped="0" errors="0" time="4.607" timestamp="2025-08-04T00:55:32.944">
-    <testcase name="AttachDetachNoModuleTest" status="run" result="completed" time="0.351" timestamp="2025-08-04T00:55:32.944" classname="IntegrationTest" />
-    <testcase name="AttachDetachTest" status="run" result="completed" time="0.322" timestamp="2025-08-04T00:55:33.296" classname="IntegrationTest" />
-    <testcase name="DetachThenNameTest" status="run" result="completed" time="0.31" timestamp="2025-08-04T00:55:33.619" classname="IntegrationTest" />
-    <testcase name="Clone" status="run" result="completed" time="0.327" timestamp="2025-08-04T00:55:33.929" classname="IntegrationTest" />
-    <testcase name="GetComponent" status="run" result="completed" time="0.324" timestamp="2025-08-04T00:55:34.257" classname="IntegrationTest" />
-    <testcase name="GetComponents" status="run" result="completed" time="0.342" timestamp="2025-08-04T00:55:34.582" classname="IntegrationTest" />
-    <testcase name="GetPosition" status="run" result="completed" time="0.307" timestamp="2025-08-04T00:55:34.925" classname="IntegrationTest" />
-    <testcase name="MatchesRenderOrder" status="run" result="completed" time="0.328" timestamp="2025-08-04T00:55:35.232" classname="IntegrationTest" />
-    <testcase name="RecursivePosition" status="run" result="completed" time="0.311" timestamp="2025-08-04T00:55:35.560" classname="IntegrationTest" />
-    <testcase name="Region" status="run" result="completed" time="0.331" timestamp="2025-08-04T00:55:35.872" classname="IntegrationTest" />
-    <testcase name="Rename" status="run" result="completed" time="0.342" timestamp="2025-08-04T00:55:36.204" classname="IntegrationTest" />
-    <testcase name="RenameRegion" status="run" result="completed" time="0.347" timestamp="2025-08-04T00:55:36.546" classname="IntegrationTest" />
-    <testcase name="UINameGenerator" status="run" result="completed" time="0.319" timestamp="2025-08-04T00:55:36.894" classname="IntegrationTest" />
-    <testcase name="UniqueName" status="run" result="completed" time="0.338" timestamp="2025-08-04T00:55:37.213" classname="IntegrationTest" />
+  <testsuite name="IntegrationTest" tests="14" failures="0" disabled="0" skipped="0" errors="0" time="4.461" timestamp="2025-08-04T18:09:10.202">
+    <testcase name="AttachDetachNoModuleTest" status="run" result="completed" time="0.307" timestamp="2025-08-04T18:09:10.202" classname="IntegrationTest" />
+    <testcase name="AttachDetachTest" status="run" result="completed" time="0.31" timestamp="2025-08-04T18:09:10.510" classname="IntegrationTest" />
+    <testcase name="DetachThenNameTest" status="run" result="completed" time="0.312" timestamp="2025-08-04T18:09:10.821" classname="IntegrationTest" />
+    <testcase name="Clone" status="run" result="completed" time="0.313" timestamp="2025-08-04T18:09:11.133" classname="IntegrationTest" />
+    <testcase name="GetComponent" status="run" result="completed" time="0.309" timestamp="2025-08-04T18:09:11.446" classname="IntegrationTest" />
+    <testcase name="GetComponents" status="run" result="completed" time="0.33" timestamp="2025-08-04T18:09:11.756" classname="IntegrationTest" />
+    <testcase name="GetPosition" status="run" result="completed" time="0.305" timestamp="2025-08-04T18:09:12.087" classname="IntegrationTest" />
+    <testcase name="MatchesRenderOrder" status="run" result="completed" time="0.328" timestamp="2025-08-04T18:09:12.393" classname="IntegrationTest" />
+    <testcase name="RecursivePosition" status="run" result="completed" time="0.324" timestamp="2025-08-04T18:09:12.722" classname="IntegrationTest" />
+    <testcase name="Region" status="run" result="completed" time="0.327" timestamp="2025-08-04T18:09:13.046" classname="IntegrationTest" />
+    <testcase name="Rename" status="run" result="completed" time="0.325" timestamp="2025-08-04T18:09:13.373" classname="IntegrationTest" />
+    <testcase name="RenameRegion" status="run" result="completed" time="0.328" timestamp="2025-08-04T18:09:13.699" classname="IntegrationTest" />
+    <testcase name="UINameGenerator" status="run" result="completed" time="0.309" timestamp="2025-08-04T18:09:14.027" classname="IntegrationTest" />
+    <testcase name="UniqueName" status="run" result="completed" time="0.327" timestamp="2025-08-04T18:09:14.337" classname="IntegrationTest" />
   </testsuite>
-  <testsuite name="CoreUtility" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T00:55:37.551">
-    <testcase name="CycleIterator" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:37.551" classname="CoreUtility" />
+  <testsuite name="CoreUtility" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T18:09:14.664">
+    <testcase name="CycleIterator" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:14.664" classname="CoreUtility" />
   </testsuite>
-  <testsuite name="ToyTestFixture" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.637" timestamp="2025-08-04T00:55:37.552">
-    <testcase name="TestClassContainer" status="run" result="completed" time="0.307" timestamp="2025-08-04T00:55:37.552" classname="ToyTestFixture" />
-    <testcase name="OpenUI" status="run" result="completed" time="0.329" timestamp="2025-08-04T00:55:37.859" classname="ToyTestFixture" />
+  <testsuite name="ToyTestFixture" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.667" timestamp="2025-08-04T18:09:14.664">
+    <testcase name="TestClassContainer" status="run" result="completed" time="0.341" timestamp="2025-08-04T18:09:14.664" classname="ToyTestFixture" />
+    <testcase name="OpenUI" status="run" result="completed" time="0.325" timestamp="2025-08-04T18:09:15.006" classname="ToyTestFixture" />
   </testsuite>
-  <testsuite name="Locator" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T00:55:38.189">
-    <testcase name="Test" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.189" classname="Locator" />
+  <testsuite name="Locator" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T18:09:15.332">
+    <testcase name="Test" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.332" classname="Locator" />
   </testsuite>
-  <testsuite name="NestedForLoops" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T00:55:38.189">
-    <testcase name="Test" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.189" classname="NestedForLoops" />
+  <testsuite name="NestedForLoops" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T18:09:15.332">
+    <testcase name="Test" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.332" classname="NestedForLoops" />
   </testsuite>
-  <testsuite name="Parser" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T00:55:38.189">
-    <testcase name="Test" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.189" classname="Parser" />
+  <testsuite name="Parser" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T18:09:15.332">
+    <testcase name="Test" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.332" classname="Parser" />
   </testsuite>
-  <testsuite name="Json" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T00:55:38.190">
-    <testcase name="Test" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.190" classname="Json" />
+  <testsuite name="Json" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T18:09:15.332">
+    <testcase name="Test" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.332" classname="Json" />
   </testsuite>
-  <testsuite name="CPP" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T00:55:38.190">
-    <testcase name="Move" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.190" classname="CPP" />
-    <testcase name="CRTP" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.190" classname="CPP" />
+  <testsuite name="CPP" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T18:09:15.332">
+    <testcase name="Move" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.332" classname="CPP" />
+    <testcase name="CRTP" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.332" classname="CPP" />
   </testsuite>
-  <testsuite name="Algorithm" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T00:55:38.190">
-    <testcase name="FindRectangles" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.190" classname="Algorithm" />
-    <testcase name="MergeRectangles" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.190" classname="Algorithm" />
+  <testsuite name="Algorithm" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T18:09:15.332">
+    <testcase name="FindRectangles" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.332" classname="Algorithm" />
+    <testcase name="MergeRectangles" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.333" classname="Algorithm" />
   </testsuite>
-  <testsuite name="Pattern" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T00:55:38.190">
-    <testcase name="Composite" status="run" result="completed" time="0" timestamp="2025-08-04T00:55:38.190" classname="Pattern" />
+  <testsuite name="Pattern" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-08-04T18:09:15.333">
+    <testcase name="Composite" status="run" result="completed" time="0" timestamp="2025-08-04T18:09:15.333" classname="Pattern" />
   </testsuite>
-  <testsuite name="TextureResourceBinderTest" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.709" timestamp="2025-08-04T00:55:38.190">
-    <testcase name="BasicOperations" status="run" result="completed" time="0.366" timestamp="2025-08-04T00:55:38.190" classname="TextureResourceBinderTest" />
-    <testcase name="TextureFileLoadingTest" status="run" result="completed" time="0.342" timestamp="2025-08-04T00:55:38.558" classname="TextureResourceBinderTest" />
+  <testsuite name="TextureResourceBinderTest" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.657" timestamp="2025-08-04T18:09:15.333">
+    <testcase name="BasicOperations" status="run" result="completed" time="0.33" timestamp="2025-08-04T18:09:15.333" classname="TextureResourceBinderTest" />
+    <testcase name="TextureFileLoadingTest" status="run" result="completed" time="0.326" timestamp="2025-08-04T18:09:15.663" classname="TextureResourceBinderTest" />
   </testsuite>
-  <testsuite name="MainLoop" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="1.794" timestamp="2025-08-04T00:55:38.900">
-    <testcase name="MultipleAppExcute" status="run" result="completed" time="1.794" timestamp="2025-08-04T00:55:38.900" classname="MainLoop" />
+  <testsuite name="MainLoop" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="1.728" timestamp="2025-08-04T18:09:15.990">
+    <testcase name="MultipleAppExcute" status="run" result="completed" time="1.728" timestamp="2025-08-04T18:09:15.990" classname="MainLoop" />
   </testsuite>
-  <testsuite name="TracyBenchmarkTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.327" timestamp="2025-08-04T00:55:40.695">
-    <testcase name="SimpleTest" status="run" result="completed" time="0.327" timestamp="2025-08-04T00:55:40.695" classname="TracyBenchmarkTest" />
+  <testsuite name="TracyBenchmarkTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.327" timestamp="2025-08-04T18:09:17.718">
+    <testcase name="SimpleTest" status="run" result="completed" time="0.327" timestamp="2025-08-04T18:09:17.718" classname="TracyBenchmarkTest" />
   </testsuite>
-  <testsuite name="UndoRedoTest" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="1.301" timestamp="2025-08-04T00:55:41.023">
-    <testcase name="TextureResourceBinder" status="run" result="completed" time="0.323" timestamp="2025-08-04T00:55:41.023" classname="UndoRedoTest" />
-    <testcase name="UI_PatchTextureStd1" status="run" result="completed" time="0.325" timestamp="2025-08-04T00:55:41.347" classname="UndoRedoTest" />
-    <testcase name="UI_PatchTextureStd9" status="run" result="completed" time="0.325" timestamp="2025-08-04T00:55:41.672" classname="UndoRedoTest" />
-    <testcase name="UI_TextureSwitcher" status="run" result="completed" time="0.326" timestamp="2025-08-04T00:55:41.998" classname="UndoRedoTest" />
+  <testsuite name="UndoRedoTest" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="1.26" timestamp="2025-08-04T18:09:18.046">
+    <testcase name="TextureResourceBinder" status="run" result="completed" time="0.307" timestamp="2025-08-04T18:09:18.046" classname="UndoRedoTest" />
+    <testcase name="UI_PatchTextureStd1" status="run" result="completed" time="0.314" timestamp="2025-08-04T18:09:18.354" classname="UndoRedoTest" />
+    <testcase name="UI_PatchTextureStd9" status="run" result="completed" time="0.317" timestamp="2025-08-04T18:09:18.668" classname="UndoRedoTest" />
+    <testcase name="UI_TextureSwitcher" status="run" result="completed" time="0.32" timestamp="2025-08-04T18:09:18.985" classname="UndoRedoTest" />
   </testsuite>
 </testsuites>

@@ -266,6 +266,14 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(UIEx(tex5).RenameRegion("")); //?!? 데이터가 없는 NameGenerator라서 false가 나온다. generator가 존재하지 않는다면 그냥 바꿔도 무방할것 같다. attach 할때 무결성을 체크하기 때문이다.
 		UIEx(m_main).AttachComponent(move(tex5), { 100, 100 });
 		EXPECT_TRUE(UIEx(tex5Ptr).FindComponent("UnChanging Name")); //region을 없애고 밑에 노드를 찾으면 찾아진다.
+
+		//region을 1로 해 놓고 그걸 clone해서 다시 그 노드에 붙였을때 clone된 노드 region은 1_1로 붙어야함.
+		auto [tex6, tex6Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+		UIEx(m_main).AttachComponent(move(tex6), { 100, 100 });
+		EXPECT_TRUE(UIEx(tex6Ptr).RenameRegion("SubRegionName"));
+		auto [tex7, tex7Ptr] = GetPtrs(tex6Ptr->Clone());
+		UIEx(tex6Ptr).AttachComponent(move(tex7), { 100, 100 });
+		EXPECT_EQ(tex7Ptr->GetRegion(), "SubRegionName_1");
 	}
 
 	TEST_F(IntegrationTest, Rename)
