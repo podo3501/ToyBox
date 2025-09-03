@@ -5,8 +5,7 @@ UI 컴포넌트 모듈화, JSON 직렬화 시스템, ImGui를 이용한 UI툴 �
 
 ## 주요 기능
 
-- **유닛 테스트**
-  - TDD를 사용하여 개발
+- **Test-Driven Development로 개발**
   - Google Test와 gMock을 사용
 
 - **UI 컴포넌트 모듈화**
