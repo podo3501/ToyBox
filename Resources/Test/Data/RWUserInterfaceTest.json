@@ -24,138 +24,31 @@
         "RenderSearch": 2,
         "Children": [
             {
-                "Type": "TextureSwitcher",
-                "Name": "TextureSwitcher",
+                "Type": "PatchTextureStd1",
+                "Name": "PatchTextureStd1",
                 "Layout": {
                     "Size": {
-                        "x": 16,
-                        "y": 100
+                        "x": 64,
+                        "y": 64
                     },
-                    "Origin": "Center"
+                    "Origin": "LeftTop"
                 },
                 "Transform": {
                     "Ratio": {
-                        "x": 0.125,
-                        "y": 0.166667
+                        "x": 0.5,
+                        "y": 0.5
                     },
                     "RelativePosition": {
-                        "x": 100,
-                        "y": 100
+                        "x": 400,
+                        "y": 300
                     }
                 },
                 "Region": "",
                 "StateFlag": 55,
                 "RenderSearch": 2,
-                "Children": [
-                    {
-                        "Type": "PatchTextureLite3",
-                        "Name": "PatchTextureLite3",
-                        "Layout": {
-                            "Size": {
-                                "x": 16,
-                                "y": 100
-                            },
-                            "Origin": "LeftTop"
-                        },
-                        "Transform": {
-                            "Ratio": {
-                                "x": 0.0,
-                                "y": 0.0
-                            },
-                            "RelativePosition": {
-                                "x": 0,
-                                "y": 0
-                            }
-                        },
-                        "Region": "",
-                        "StateFlag": 7,
-                        "RenderSearch": 2,
-                        "Children": [
-                            {
-                                "Type": "PatchTextureLite1",
-                                "Name": "PatchTextureLite1",
-                                "Layout": {
-                                    "Size": {
-                                        "x": 16,
-                                        "y": 7
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Transform": {
-                                    "Ratio": {
-                                        "x": 0.0,
-                                        "y": 0.0
-                                    },
-                                    "RelativePosition": {
-                                        "x": 0,
-                                        "y": 0
-                                    }
-                                },
-                                "Region": "",
-                                "StateFlag": 183,
-                                "RenderSearch": 2,
-                                "Children": null
-                            },
-                            {
-                                "Type": "PatchTextureLite1",
-                                "Name": "PatchTextureLite1_1",
-                                "Layout": {
-                                    "Size": {
-                                        "x": 16,
-                                        "y": 86
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Transform": {
-                                    "Ratio": {
-                                        "x": 0.0,
-                                        "y": 0.07
-                                    },
-                                    "RelativePosition": {
-                                        "x": 0,
-                                        "y": 7
-                                    }
-                                },
-                                "Region": "",
-                                "StateFlag": 55,
-                                "RenderSearch": 2,
-                                "Children": null
-                            },
-                            {
-                                "Type": "PatchTextureLite1",
-                                "Name": "PatchTextureLite1_2",
-                                "Layout": {
-                                    "Size": {
-                                        "x": 16,
-                                        "y": 7
-                                    },
-                                    "Origin": "LeftTop"
-                                },
-                                "Transform": {
-                                    "Ratio": {
-                                        "x": 0.0,
-                                        "y": 0.93
-                                    },
-                                    "RelativePosition": {
-                                        "x": 0,
-                                        "y": 93
-                                    }
-                                },
-                                "Region": "",
-                                "StateFlag": 183,
-                                "RenderSearch": 2,
-                                "Children": null
-                            }
-                        ],
-                        "DirectionType": 1
-                    }
-                ],
-                "StateKey": {
-                    "Normal": "ScrollButton3_V_Normal",
-                    "Hovered": "ScrollButton3_V_Hovered",
-                    "Pressed": "ScrollButton3_V_Pressed"
-                },
-                "BehaviorMode": 1
+                "Children": null,
+                "BindKey": "BackImage1",
+                "SourceIndex": 0
             }
         ]
     },
@@ -170,17 +63,7 @@
         "RegionNames": {
             "UIModuleMainEntry": {
                 "Namers": {
-                    "PatchTextureLite1": {
-                        "Namers": 3,
-                        "Recycled": [],
-                        "Deletable": false
-                    },
-                    "TextureSwitcher": {
-                        "Namers": 1,
-                        "Recycled": [],
-                        "Deletable": false
-                    },
-                    "PatchTextureLite3": {
+                    "PatchTextureStd1": {
                         "Namers": 1,
                         "Recycled": [],
                         "Deletable": false

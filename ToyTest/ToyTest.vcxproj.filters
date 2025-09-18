@@ -35,6 +35,10 @@
     <ClCompile Include="UserInterfaceTest\TracyBenchmarkTest.cpp">
       <Filter>UserInterfaceTest</Filter>
     </ClCompile>
+    <ClCompile Include="ToyFixture.cpp" />
+    <ClCompile Include="Mocks\MockRenderer.cpp">
+      <Filter>Mocks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />
@@ -44,6 +48,13 @@
     <ClInclude Include="ToyTestFixture.h" />
     <ClInclude Include="TestUtility.h" />
     <ClInclude Include="TestHelper.h" />
+    <ClInclude Include="ToyFixture.h" />
+    <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h">
+      <Filter>Mocks\Stubs\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Mocks\MockRenderer.h">
+      <Filter>Mocks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -63,6 +74,15 @@
     </Filter>
     <Filter Include="TextureResourceBinderTest">
       <UniqueIdentifier>{e3c60e9c-8593-4b4b-8775-7254584619de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mocks">
+      <UniqueIdentifier>{d282f695-392c-4846-ad3a-0aabc2ee8151}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mocks\Stubs">
+      <UniqueIdentifier>{15f7f71f-e9d1-44e8-bf22-19260aedbe62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mocks\Stubs\Include">
+      <UniqueIdentifier>{7a1395a0-7c26-46a8-84cc-28aeb905c270}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

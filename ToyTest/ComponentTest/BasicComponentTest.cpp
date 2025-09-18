@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "../ToyTestFixture.h"
+#include "../ToyFixture.h"
 #include "../IMockRenderer.h"
 #include "../TestHelper.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
@@ -28,6 +29,38 @@ namespace UserInterfaceTest
 	}
 
 	////////////////////////////////////////////////////////
+
+	TEST_F(ToyFixture, PatchTextureStd1)
+	{
+		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
+		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
+		m_uiModule->BindTextureResources();
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, img1Ptr);
+
+		EXPECT_TRUE((img1Ptr->GetSize() == XMUINT2{ 64, 64 }));
+		img1Ptr->ChangeOrigin(Origin::Center);
+
+		EXPECT_EQ(*img1Ptr->GetTextureSlice(), TextureSlice::One);
+		vector<RECT> exDest = { { 368, 268, 432, 332 } };
+		TestMockRender(2, exDest, "BackImage1");
+
+		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
+		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, false);
+		img1Ptr->ChangeSize({ 128, 64 });
+		TestMockRender(2, exDest, "BackImage1");
+
+		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, false);
+		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
+		img1Ptr->ChangeSize({ 64, 128 });
+		TestMockRender(2, exDest, "BackImage1");
+
+		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
+		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
+		img1Ptr->ChangeSize({ 128, 128 });
+		TestMockRender(2, exDest, "BackImage1");
+
+		FitToTextureSourceTest<PatchTextureStd1*>(m_main, "PatchTextureStd1", "BackImage1", GetResBinder());
+	}
 
 	TEST_F(BasicComponentTest, PatchTextureStd1)
 	{
