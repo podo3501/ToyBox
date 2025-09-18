@@ -8,6 +8,12 @@ public:
 	virtual bool LoadFont(const wstring& filename, size_t& outIndex) override;
 };
 
+class MockTextureController : public ITextureControllerStub
+{
+public:
+	virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
+};
+
 class MockRenderer final : public IRendererStub
 {
 public:
@@ -15,7 +21,9 @@ public:
 	MockRenderer();
 
 	virtual bool LoadTextureBinder(ITextureBinder* textureBinder) override;
+	virtual ITextureController* GetTextureController() const noexcept override;
 
 private:
 	unique_ptr<MockTextureLoad> m_mockTextureLoad;
+	unique_ptr<MockTextureController> m_mockTextureController;
 };

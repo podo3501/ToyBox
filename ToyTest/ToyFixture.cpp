@@ -67,6 +67,23 @@ void ToyFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, co
 	curComponent->ProcessRender(&mockRender);
 }
 
+//TextArea용 CallMockRender
+void ToyFixture::CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
+{
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
+	component->ProcessUpdate(m_timer);
+	component->ProcessRender(&mockRender);
+}
+
+void ToyFixture::CallMockRender(function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
+{
+	MockRender mockRender;
+	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
+	m_main->ProcessUpdate(m_timer);
+	m_main->ProcessRender(&mockRender);
+}
+
 void ToyFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 { //마우스의 상태값은 업데이트를 계속해도 셋팅한 상태값이 계속 들어간다.
 	auto& mouseTracker = const_cast<MouseTracker&>(InputManager::GetMouse());
@@ -75,4 +92,11 @@ void ToyFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 	state.y = mouseY;
 	state.leftButton = leftButton;
 	mouseTracker.Update(state);
+}
+
+void ToyFixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey)
+{
+	unique_ptr<UIComponent> clonePanel = m_main->Clone();
+	TestMockRender(2, expectDest, bindKey, clonePanel.get());
+	WriteReadTest(clonePanel);
 }

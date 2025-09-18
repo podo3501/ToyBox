@@ -1,5 +1,4 @@
 ﻿#include "pch.h"
-#include "../ToyTestFixture.h"
 #include "../ToyFixture.h"
 #include "../IMockRenderer.h"
 #include "../TestHelper.h"
@@ -30,7 +29,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(ToyFixture, PatchTextureStd1)
+	TEST_F(BasicTest, PatchTextureStd1)
 	{
 		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
 		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
@@ -62,42 +61,6 @@ namespace UserInterfaceTest
 		FitToTextureSourceTest<PatchTextureStd1*>(m_main, "PatchTextureStd1", "BackImage1", GetResBinder());
 	}
 
-	TEST_F(BasicComponentTest, PatchTextureStd1)
-	{
-		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
-		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
-		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, img1Ptr);
-
-		EXPECT_TRUE((img1Ptr->GetSize() == XMUINT2{ 64, 64 }));
-		img1Ptr->ChangeOrigin(Origin::Center);
-		
-		EXPECT_EQ(*img1Ptr->GetTextureSlice(), TextureSlice::One);
-		vector<RECT> exDest = { { 368, 268, 432, 332 } };
-		TestMockRender(2, exDest, "BackImage1");
-
-		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
-		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, false);
-		img1Ptr->ChangeSize({ 128, 64 });
-		TestMockRender(2, exDest, "BackImage1");
-
-		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, false);
-		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
-		img1Ptr->ChangeSize({ 64, 128 });
-		TestMockRender(2, exDest, "BackImage1");
-
-		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
-		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
-		img1Ptr->ChangeSize({ 128, 128 });
-		TestMockRender(2, exDest, "BackImage1");
-
-		FitToTextureSourceTest<PatchTextureStd1*>(m_main, "PatchTextureStd1", "BackImage1", GetResBinder());
-
-		//EXPECT_TRUE(img1Ptr->ChangeBindKey(GetResBinder(), "ListBackground1_Normal"));
-		//vector<RECT> exChangeKey = { { 384, 284, 416, 316 } };
-		//TestMockRender(2, exChangeKey, "ListBackground1_Normal");
-	}
-
 	////////////////////////////////////////////////////////
 
 	static bool ModifyTextureSourceInfo(TextureResourceBinder* rb, const string& key, const SourceDivider& srcDivider) noexcept
@@ -111,12 +74,12 @@ namespace UserInterfaceTest
 		return rb->ModifyTextureSourceInfo(key, srcInfo);
 	}
 
-	TEST_F(BasicComponentTest, PatchTextureStd3_Horizontal)
+	TEST_F(BasicTest, PatchTextureStd3_Horizontal)
 	{
 		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd3>(DirectionType::Horizontal, "ScrollButton3_H_Normal"));
 		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, texPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, texPtr);
 
 		EXPECT_TRUE((texPtr->GetSize() == XMUINT2{ 48, 48 }));
 		EXPECT_EQ(*texPtr->GetTextureSlice(), TextureSlice::ThreeH);
@@ -137,7 +100,7 @@ namespace UserInterfaceTest
 		srcDivider.list = { 20, 28 };
 		EXPECT_TRUE(ModifyTextureSourceInfo(GetResBinder(), "ScrollButton3_H_Normal", srcDivider));
 
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, texPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, texPtr);
 		TestMockRender(2, exDestChange, "ScrollButton3_H_Normal");
 		FitToTextureSourceTest<PatchTextureStd3*>(m_main, "PatchTextureStd3", "ScrollButton3_H_Normal", GetResBinder());
 
@@ -148,12 +111,12 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, PatchTextureStd3_Vertical)
+	TEST_F(BasicTest, PatchTextureStd3_Vertical)
 	{
 		auto [tex, img3Ptr] = GetPtrs(CreateComponent<PatchTextureStd3>(DirectionType::Vertical, "ScrollTrack3_V"));
 		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, img3Ptr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, img3Ptr);
 
 		EXPECT_TRUE((img3Ptr->GetSize() == XMUINT2{ 16, 48 }));
 		EXPECT_EQ(*img3Ptr->GetTextureSlice(), TextureSlice::ThreeV);
@@ -173,7 +136,7 @@ namespace UserInterfaceTest
 		srcDivider.list = { 14, 34 };
 		EXPECT_TRUE(ModifyTextureSourceInfo(GetResBinder(), "ScrollTrack3_V", srcDivider));
 
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, img3Ptr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, img3Ptr);
 		TestMockRender(2, exDestChange, "ScrollTrack3_V");
 		FitToTextureSourceTest<PatchTextureStd3*>(m_main, "PatchTextureStd3", "ScrollTrack3_V", GetResBinder());
 
@@ -184,12 +147,12 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicComponentTest, PatchTextureStd9)
+	TEST_F(BasicTest, PatchTextureStd9)
 	{
 		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd9>("BackImage9"));
 		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, texPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, texPtr);
 
 		EXPECT_TRUE((texPtr->GetSize() == XMUINT2{ 64, 64 }));
 		EXPECT_EQ(*texPtr->GetTextureSlice(), TextureSlice::Nine);
@@ -207,7 +170,7 @@ namespace UserInterfaceTest
 			{ 310, 261, 340, 349 }, { 340, 261, 460, 349 }, { 460, 261, 490, 349 },
 			{ 310, 349, 340, 375 }, { 340, 349, 460, 375 }, { 460, 349, 490, 375 } };
 		TestMockRender(2, exDestChange, "BackImage9");
-		
+
 		SourceDivider srcDivider = GetSourceDivider(GetResBinder(), "BackImage9");
 		EXPECT_TRUE((srcDivider.rect == Rectangle{ 10, 10, 64, 64 }));
 		EXPECT_THAT(srcDivider.list, ElementsAre(30, 34, 36, 38));
@@ -216,7 +179,7 @@ namespace UserInterfaceTest
 		srcDivider.list = { 20, 44, 30, 40 };
 		EXPECT_TRUE(ModifyTextureSourceInfo(GetResBinder(), "BackImage9", srcDivider));
 
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, texPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, texPtr);
 		TestMockRender(2, exDestChange, "BackImage9");
 		FitToTextureSourceTest<PatchTextureStd9*>(m_main, "PatchTextureStd9", "BackImage9", GetResBinder());
 
@@ -238,23 +201,31 @@ namespace UserInterfaceTest
 		if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(240.f, 296.75f) && DirectX::XMVector4Equal(color, Colors::Blue));
 	}
 
-	TEST_F(BasicComponentTest, TextArea)
+	static void TestTextAreaMockRender(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color)
+	{
+		if (text == L"테스") EXPECT_TRUE(index == 1 && pos == Vector2(240.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
+		if (text == L"테스트2") EXPECT_TRUE(index == 1 && pos == Vector2(270.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Red));
+		if (text == L"^") EXPECT_TRUE(index == 0 && pos == Vector2(430.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Black));
+		if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(440.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Blue));
+	}
+
+	TEST_F(BasicTest, TextArea)
 	{
 		vector<wstring> bindKeys{ L"Hangle", L"English" };
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";
 		auto [textArea, textAreaPtr] = GetPtrs(CreateComponent<TextArea>(text, bindKeys));
 		UIEx(m_main).AttachComponent(move(textArea), { 400, 300 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, textAreaPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, textAreaPtr);
 
 		EXPECT_TRUE((textAreaPtr->GetSize() == XMUINT2{}));
 		textAreaPtr->ChangeSize(320, 120);
 		textAreaPtr->ChangeOrigin(Origin::Center);
-		CallMockRender(TestTextAreaRender);
+		CallMockRender(TestTextAreaMockRender);
 
 		unique_ptr<UIComponent> clonePanel = m_main->Clone();
-		CallMockRender(clonePanel.get(), TestTextAreaRender);
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, textAreaPtr);
+		CallMockRender(clonePanel.get(), TestTextAreaMockRender);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, textAreaPtr);
 	}
 }
 

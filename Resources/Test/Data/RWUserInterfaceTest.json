@@ -1,75 +1,376 @@
 {
-    "UIComponent": {
-        "Type": "Panel",
-        "Name": "Main",
-        "Layout": {
-            "Size": {
-                "x": 800,
-                "y": 600
-            },
-            "Origin": "LeftTop"
+    "Type": "Panel",
+    "Name": "Main",
+    "Layout": {
+        "Size": {
+            "x": 800,
+            "y": 600
         },
-        "Transform": {
-            "Ratio": {
-                "x": 0.0,
-                "y": 0.0
-            },
-            "RelativePosition": {
-                "x": 0,
-                "y": 0
-            }
-        },
-        "Region": "UIModuleMainEntry",
-        "StateFlag": 55,
-        "RenderSearch": 2,
-        "Children": [
-            {
-                "Type": "PatchTextureStd1",
-                "Name": "PatchTextureStd1",
-                "Layout": {
-                    "Size": {
-                        "x": 64,
-                        "y": 64
-                    },
-                    "Origin": "LeftTop"
-                },
-                "Transform": {
-                    "Ratio": {
-                        "x": 0.5,
-                        "y": 0.5
-                    },
-                    "RelativePosition": {
-                        "x": 400,
-                        "y": 300
-                    }
-                },
-                "Region": "",
-                "StateFlag": 55,
-                "RenderSearch": 2,
-                "Children": null,
-                "BindKey": "BackImage1",
-                "SourceIndex": 0
-            }
-        ]
+        "Origin": "LeftTop"
     },
-    "UINameGenerator": {
-        "RegionGens": {
-            "UIModuleMainEntry": {
-                "Namers": 1,
-                "Recycled": [],
-                "Deletable": false
-            }
+    "Transform": {
+        "Ratio": {
+            "x": 0.0,
+            "y": 0.0
         },
-        "RegionNames": {
-            "UIModuleMainEntry": {
-                "Namers": {
-                    "PatchTextureStd1": {
-                        "Namers": 1,
-                        "Recycled": [],
-                        "Deletable": false
-                    }
-                }
-            }
+        "RelativePosition": {
+            "x": 0,
+            "y": 0
         }
-    }
+    },
+    "Region": "UIModuleMainEntry",
+    "StateFlag": 55,
+    "RenderSearch": 2,
+    "Children": [
+        {
+            "Type": "Container",
+            "Name": "Container",
+            "Layout": {
+                "Size": {
+                    "x": 48,
+                    "y": 150
+                },
+                "Origin": "Center"
+            },
+            "Transform": {
+                "Ratio": {
+                    "x": 0.125,
+                    "y": 0.166667
+                },
+                "RelativePosition": {
+                    "x": 100,
+                    "y": 100
+                }
+            },
+            "Region": "",
+            "StateFlag": 55,
+            "RenderSearch": 2,
+            "Children": [
+                {
+                    "Type": "PatchTextureStd3",
+                    "Name": "PatchTextureStd3",
+                    "Layout": {
+                        "Size": {
+                            "x": 48,
+                            "y": 150
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "Transform": {
+                        "Ratio": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "RelativePosition": {
+                            "x": 0,
+                            "y": 0
+                        }
+                    },
+                    "Region": "",
+                    "StateFlag": 7,
+                    "RenderSearch": 2,
+                    "Children": [
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 7
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.0
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 0
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 183,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Normal",
+                            "SourceIndex": 0
+                        },
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1_1",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 136
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.046667
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 7
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 55,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Normal",
+                            "SourceIndex": 1
+                        },
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1_2",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 7
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.953333
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 143
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 183,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Normal",
+                            "SourceIndex": 2
+                        }
+                    ],
+                    "DirectionType": 1
+                },
+                {
+                    "Type": "PatchTextureStd3",
+                    "Name": "PatchTextureStd3_1",
+                    "Layout": {
+                        "Size": {
+                            "x": 48,
+                            "y": 150
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "Transform": {
+                        "Ratio": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "RelativePosition": {
+                            "x": 0,
+                            "y": 0
+                        }
+                    },
+                    "Region": "",
+                    "StateFlag": 0,
+                    "RenderSearch": 2,
+                    "Children": [
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1_3",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 7
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.0
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 0
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 183,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Hovered",
+                            "SourceIndex": 0
+                        },
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1_4",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 136
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.046667
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 7
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 55,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Hovered",
+                            "SourceIndex": 1
+                        },
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1_5",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 7
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.953333
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 143
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 183,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Hovered",
+                            "SourceIndex": 2
+                        }
+                    ],
+                    "DirectionType": 1
+                },
+                {
+                    "Type": "PatchTextureStd3",
+                    "Name": "PatchTextureStd3_2",
+                    "Layout": {
+                        "Size": {
+                            "x": 48,
+                            "y": 150
+                        },
+                        "Origin": "LeftTop"
+                    },
+                    "Transform": {
+                        "Ratio": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "RelativePosition": {
+                            "x": 0,
+                            "y": 0
+                        }
+                    },
+                    "Region": "",
+                    "StateFlag": 0,
+                    "RenderSearch": 2,
+                    "Children": [
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1_6",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 7
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.0
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 0
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 183,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Pressed",
+                            "SourceIndex": 0
+                        },
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1_7",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 136
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.046667
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 7
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 55,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Pressed",
+                            "SourceIndex": 1
+                        },
+                        {
+                            "Type": "PatchTextureStd1",
+                            "Name": "PatchTextureStd1_8",
+                            "Layout": {
+                                "Size": {
+                                    "x": 48,
+                                    "y": 7
+                                },
+                                "Origin": "LeftTop"
+                            },
+                            "Transform": {
+                                "Ratio": {
+                                    "x": 0.0,
+                                    "y": 0.953333
+                                },
+                                "RelativePosition": {
+                                    "x": 0,
+                                    "y": 143
+                                }
+                            },
+                            "Region": "",
+                            "StateFlag": 183,
+                            "RenderSearch": 2,
+                            "Children": null,
+                            "BindKey": "ScrollButton3_V_Pressed",
+                            "SourceIndex": 2
+                        }
+                    ],
+                    "DirectionType": 1
+                }
+            ]
+        }
+    ]
 }

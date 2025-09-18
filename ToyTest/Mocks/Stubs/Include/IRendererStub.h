@@ -10,6 +10,25 @@ struct ITextureLoadStub : public ITextureLoad
     virtual void AddRef(size_t index) noexcept override {}
 };
 
+struct ITextureControllerStub : public ITextureController
+{
+    virtual ~ITextureControllerStub() {};
+
+    //Text관련
+    virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override { return {}; }
+    virtual float GetLineSpacing(size_t index) const noexcept override { return 0.f; }
+
+    //Texture
+    virtual bool CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset) override { return true; }
+    virtual optional<vector<Rectangle>> GetTextureAreaList(size_t index, const UINT32& bgColor) override { return nullopt; }
+    virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept override {}
+    virtual bool ModifyRenderTextureSize(size_t index, const XMUINT2& size) override { return true; }
+
+    //?!? 밑에 두 함수는 RenderTexture에서 쓰긴 한데.. 없애고 싶긴하다.
+    virtual void ReleaseTexture(size_t idx) noexcept override {}
+    virtual void AddRef(size_t index) noexcept override {}
+};
+
 struct IRendererStub : public IRenderer
 {
 public:

@@ -18,7 +18,12 @@ public:
 
 	void TestMockRender(int expIndex, const vector<RECT>& expectDest, const string& bindKey, UIComponent* component = nullptr);
 
-	void MockMouseInput(int mouseX, int mouseY, bool leftButton);
+	//TextArea
+	void CallMockRender(function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc);
+	void CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc);
+
+	void CloneTest(const vector<RECT>& expectDest, const string& bindKey);
+	void MockMouseInput(int mouseX, int mouseY, bool leftButton = false);
 
 protected:
 	void SetUp() override;
@@ -30,3 +35,9 @@ protected:
 	DX::StepTimer m_timer;
     UIComponent* m_main;
 };
+
+//비주얼 스튜디오 테스트 탐색기에 계층구조 표시하기 위해서 Fixture를 상속받아서 함.
+//namespace 중첩으로는 계층구조로 나타나지 않음. a::b 이런식으로 나타남. 즉, 묶음으로 테스트 하기 어려움
+
+class BasicTest : public ToyFixture {};
+class ContainerTest : public ToyFixture {};

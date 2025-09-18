@@ -43,7 +43,6 @@ protected:
 //namespace 중첩으로는 계층구조로 나타나지 않음. a::b 이런식으로 나타남. 즉, 묶음으로 테스트 하기 어려움
 
 class IRendererTest : public ToyTestFixture {};
-class BasicComponentTest : public ToyTestFixture {};
 class ContainerComponentTest : public ToyTestFixture {};
 class TextureSwitcherComponentTest : public ToyTestFixture 
 {
