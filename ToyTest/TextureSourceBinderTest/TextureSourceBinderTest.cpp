@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../ToyTestFixture.h"
+#include "../ToyFixture.h"
 #include "../IMockRenderer.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/TextureResourceBinder/TextureLoadBinder.h"
@@ -33,7 +33,7 @@ namespace UserInterfaceTest
 		TestSourceBinderWriteRead(resBinder);
 
 		auto newResBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
-		m_renderer->LoadTextureBinder(newResBinder.get());
+		m_mockRenderer->LoadTextureBinder(newResBinder.get());
 
 		EXPECT_EQ(*resBinder, *newResBinder);
 	}
@@ -51,9 +51,9 @@ namespace UserInterfaceTest
 		auto loadBinder = make_unique<TextureLoadBinder>();
 
 		const wstring& sampleFilename = L"UI/SampleTexture/Sample_0.png";
-		TestLoadTextureFromFile(m_renderer.get(), loadBinder.get(), sampleFilename);
+		TestLoadTextureFromFile(m_mockRenderer.get(), loadBinder.get(), sampleFilename);
 
 		const wstring& optionFilename = L"UI/SampleTexture/Option.png";
-		TestLoadTextureFromFile(m_renderer.get(), loadBinder.get(), optionFilename);
+		TestLoadTextureFromFile(m_mockRenderer.get(), loadBinder.get(), optionFilename);
 	}
 }

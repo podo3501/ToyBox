@@ -1,28 +1,30 @@
 #include "pch.h"
+#include "../ToyFixture.h"
+#include "GameConfig.h"
+#include "UserInterface/UIComponent/UIUtility.h"
 #include "UserInterface/UIComponent/UIComponent.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
-#include "ToyTestFixture.h"
 #include "Utils/StlTypeExt.hpp"
 #include "Utils/StlUtil.h"
 
-namespace JsonSerializeTest
+namespace CodeLab
 {
-	class Data
+	class JPData
 	{
 	public:
-		Data() :
+		JPData() :
 			position{}
 		{}
 
-		Data(float x, float y) :
+		JPData(float x, float y) :
 			position{ x, y }
 		{}
 
-		Data(Vector2 pos) :
+		JPData(Vector2 pos) :
 			position(pos)
 		{}
 
-		bool operator==(const Data& other) const noexcept
+		bool operator==(const JPData& other) const noexcept
 		{
 			if (position != other.position) return false;
 
@@ -45,10 +47,10 @@ namespace JsonSerializeTest
 		{
 			if (!insertData) return;
 
-			m_data.emplace_back(Data(0.1f, 0.1f));
-			m_uptrData.emplace_back(make_unique<Data>(0.3f, 0.3f));
-			m_mapData.emplace("1", make_unique<Data>(0.4f, 0.4f));
-			m_svmapData.emplace("2", make_unique<Data>(0.5f, 0.5f));
+			m_data.emplace_back(JPData(0.1f, 0.1f));
+			m_uptrData.emplace_back(make_unique<JPData>(0.3f, 0.3f));
+			m_mapData.emplace("1", make_unique<JPData>(0.4f, 0.4f));
+			m_svmapData.emplace("2", make_unique<JPData>(0.5f, 0.5f));
 
 			m_layout.Set({ 50, 100 }, Origin::Center);
 		}
@@ -74,16 +76,18 @@ namespace JsonSerializeTest
 		}
 
 	private:
-		vector<Data> m_data;
-		vector<unique_ptr<Data>> m_uptrData;
-		map<string, unique_ptr<Data>> m_mapData;
-		unordered_svmap<string, unique_ptr<Data>> m_svmapData;
+		vector<JPData> m_data;
+		vector<unique_ptr<JPData>> m_uptrData;
+		map<string, unique_ptr<JPData>> m_mapData;
+		unordered_svmap<string, unique_ptr<JPData>> m_svmapData;
 		UILayout m_layout;
 	};
 
 	//컨테이너 안에 값이 클래스 또는 스트럭쳐 일 경우 Serialize 테스트
-	TEST_F(ToyTestFixture, TestClassContainer)	
+	TEST(ClientUtility, JsonParser)
 	{
+		InitializeConfig(L"Resources/", { 800.f, 600.f });
+
 		UserComponent wData(true);
 		const auto& serializeTestFilename = L"Test/Data/JsonSerializeTest.json";
 		EXPECT_TRUE(JsonOperation::WriteJsonToFile(wData, serializeTestFilename));
@@ -92,5 +96,14 @@ namespace JsonSerializeTest
 		EXPECT_TRUE(JsonOperation::ReadJsonFromFile(serializeTestFilename, rData));
 
 		EXPECT_TRUE(wData == rData);
+	}
+
+	TEST(ClientUtility, TextAreaParser)
+	{
+		TextProperty textProperty;
+		auto result = Parser(
+			L"<Hangle><Red>테스트, </Red>!@#$%</Hangle><English>Test. ^<Blue>&*</Blue>()</English>",
+			textProperty);
+		EXPECT_TRUE(result);
 	}
 }

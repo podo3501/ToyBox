@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../ToyTestFixture.h"
+#include "../ToyFixture.h"
 #include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
@@ -13,13 +13,14 @@
 namespace UserInterfaceTest
 {
 	static inline PatchTextureLite* GetPatchTextureLite(TextureSwitcher* switcherPtr) noexcept { return switcherPtr->GetPatchTextureLite(); }
-	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite1)
+
+	TEST_F(TextureSwitcherTest, TextureSwitcher_PatchTextureLite1)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::One, 
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::One,
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
 		UIEx(m_main).AttachComponent(move(switcher), { 160, 120 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, switcherPtr);
 
 		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 32, 32 }));
 		switcherPtr->ChangeOrigin(Origin::Center);
@@ -40,13 +41,13 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite3_H)
+	TEST_F(TextureSwitcherTest, TextureSwitcher_PatchTextureLite3_H)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeH, 
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeH,
 			GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
 		UIEx(m_main).AttachComponent(move(switcher), { 160, 120 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, switcherPtr);
 
 		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 48, 48 }));
 		switcherPtr->ChangeOrigin(Origin::Center);
@@ -72,13 +73,13 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite3_V)
+	TEST_F(TextureSwitcherTest, TextureSwitcher_PatchTextureLite3_V)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeV, 
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeV,
 			GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
 		UIEx(m_main).AttachComponent(move(switcher), { 100, 100 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, switcherPtr);
 
 		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 16, 16 }));
 		switcherPtr->ChangeOrigin(Origin::Center);
@@ -104,13 +105,13 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 		
-	TEST_F(TextureSwitcherComponentTest, TextureSwitcher_PatchTextureLite9)
+	TEST_F(TextureSwitcherTest, TextureSwitcher_PatchTextureLite9)
 	{
-		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::Nine, 
+		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::Nine,
 			GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));
 		UIEx(m_main).AttachComponent(move(switcher), { 100, 100 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, switcherPtr);
 
 		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 32, 32 }));
 		switcherPtr->ChangeOrigin(Origin::Center);

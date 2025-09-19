@@ -1,20 +1,23 @@
 #include "pch.h"
 #include "MockRenderer.h"
 #include "../Include/ITextureBinder.h"
+#include "Utils/CommonUtil.h"
 
 struct MockTextureInfo
 {
 	size_t index;
 	XMUINT2 size;
 };
+unordered_map<wstring, MockTextureInfo> g_textureInfos;
 
-unordered_map<wstring, MockTextureInfo> g_textureInfos
+static void InitializeTextureInfos()
 {
-	{L"Resources/UI/Font/CourierNewBoldS18.spritefont", { 0, {} } },
-	{L"Resources/UI/Font/MaleunGothicS16.spritefont", { 1, {} } },
-	{L"Resources/UI/SampleTexture/Sample_0.png", { 2, { 512, 512 } } },
-	{L"Resources/UI/SampleTexture/Option.png", { 3, { 512, 512 } } },
-};
+	g_textureInfos.clear();
+	g_textureInfos.insert({ L"Resources/UI/Font/CourierNewBoldS18.spritefont", { 0, {} } });
+	g_textureInfos.insert({ L"Resources/UI/Font/MaleunGothicS16.spritefont", { 1, {} } });
+	g_textureInfos.insert({ L"Resources/UI/SampleTexture/Sample_0.png", { 2, { 512, 512 } } });
+	g_textureInfos.insert({ L"Resources/UI/SampleTexture/Option.png", { 3, { 512, 512 } } });
+}
 
 bool MockTextureLoad::LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize, UINT64* outGfxMemOffset)
 {
@@ -56,6 +59,19 @@ Rectangle MockTextureController::MeasureText(size_t index, const wstring& text, 
 	};
 }
 
+//렌더 텍스쳐를 만들었다고 가정하고 가짜 렌더텍스쳐 인덱스를 리턴해준다.
+bool MockTextureController::CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset)
+{
+	size_t index = g_textureInfos.size();
+	wstring key = L"RenderTexture_" + to_wstring(index);
+
+	auto [it, inserted] = g_textureInfos.insert({ key, { index, {} } });
+	ReturnIfFalse(inserted);
+
+	outIndex = index;
+	return true;
+}
+
 /////////////////////////////////////////////////////////////////////////////////
 
 MockRenderer::~MockRenderer() {}
@@ -63,6 +79,7 @@ MockRenderer::MockRenderer() :
 	m_mockTextureLoad(make_unique<MockTextureLoad>()),
 	m_mockTextureController(make_unique<MockTextureController>())
 {
+	InitializeTextureInfos();
 }
 
 bool MockRenderer::LoadTextureBinder(ITextureBinder* textureBinder)

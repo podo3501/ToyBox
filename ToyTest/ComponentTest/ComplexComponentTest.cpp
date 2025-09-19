@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../ToyTestFixture.h"
+#include "../ToyFixture.h"
 #include "../IMockRenderer.h"
 #include "../TestHelper.h"
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
@@ -16,12 +16,12 @@
 
 namespace UserInterfaceTest
 {
-	TEST_F(ComplexComponentTest, ListArea)
+	TEST_F(ComplexTest, ListArea)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		UIEx(m_main).AttachComponent(move(listArea), { 400, 300 });
 		EXPECT_TRUE(m_uiModule->BindTextureResources());
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, listAreaPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, listAreaPtr);
 
 		EXPECT_TRUE((listAreaPtr->GetSize() == XMUINT2{ 48, 48 }));
 		listAreaPtr->ChangeSize({ 150, 128 });
@@ -30,7 +30,7 @@ namespace UserInterfaceTest
 		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar");
 		EXPECT_TRUE(UIEx(m_main).IsPositionUpdated());
 
-		EXPECT_TRUE(MakeSampleListAreaData(m_renderer.get(), GetResBinder(), listAreaPtr, 5));
+		EXPECT_TRUE(MakeSampleListAreaData(m_mockRenderer.get(), GetResBinder(), listAreaPtr, 5));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 
@@ -51,7 +51,7 @@ namespace UserInterfaceTest
 		//EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
 	}
 	
-	TEST_F(ComplexComponentTest, ListAreaToolMode)
+	TEST_F(ComplexTest, ListAreaToolMode)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		UIEx(m_main).AttachComponent(move(listArea), { 400, 300 });
@@ -79,14 +79,14 @@ namespace UserInterfaceTest
 		TestCoordinates(2, dest, source, 2, expectDest, expectSource);//값 비교하니까 2을 그냥 넣어줌. 
 	}
 
-	TEST_F(ComplexComponentTest, RenderTexture)
+	TEST_F(ComplexTest, RenderTexture)
 	{
-		auto switcher = CreateComponent<TextureSwitcher>(TextureSlice::One, 
+		auto switcher = CreateComponent<TextureSwitcher>(TextureSlice::One,
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
 		auto [renderTex, renderTexPtr] = GetPtrs(CreateComponent<RenderTexture>(move(switcher)));
 		UIEx(m_main).AttachComponent(move(renderTex), { 100, 100 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, renderTexPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, renderTexPtr);
 
 		EXPECT_TRUE((renderTexPtr->GetSize() == XMUINT2{ 32, 32 }));
 		renderTexPtr->ChangeSize({ 50, 50 });
@@ -109,12 +109,12 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, 2, expectDest, expectSource);
 	}
 
-	TEST_F(ComplexComponentTest, ScrollBar)
+	TEST_F(ComplexTest, ScrollBar)
 	{
 		auto [scrollBar, scrollBarPtr] = GetPtrs(CreateSampleScrollBar({}, DirectionType::Vertical));
 		UIEx(m_main).AttachComponent(move(scrollBar), { 100, 200 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, scrollBarPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, scrollBarPtr);
 
 		EXPECT_TRUE((scrollBarPtr->GetSize() == XMUINT2{ 16, 48 }));
 		scrollBarPtr->ChangeSize({ 16, 200 });
@@ -141,13 +141,13 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(ComplexComponentTest, Switcher_Scroll)
+	TEST_F(ComplexTest, Switcher_Scroll)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(UILayout{ {16, 100}, Origin::Center },
 			TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
 		UIEx(m_main).AttachComponent(move(switcher), { 100, 100 });
 		m_uiModule->BindTextureResources();
-		tie(m_uiModule, m_main) = WriteReadTest(m_renderer.get(), m_uiModule, switcherPtr);
+		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, switcherPtr);
 
 		testing::MockFunction<void(KeyState)> mockOnPress;
 		switcherPtr->AddPressCB(mockOnPress.AsStdFunction());
@@ -163,11 +163,13 @@ namespace UserInterfaceTest
 		TestMockRender(2, exDest, "ScrollButton3_V_Pressed");
 	}
 
-	TEST_F(ComplexComponentTest, UIModuleAsComponent)
+	////////////////////////////////////////////////////////
+
+	TEST_F(ComplexTest, UIModuleAsComponent)
 	{
 		UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 		wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
-		unique_ptr<UIModule> uiModule = CreateUIModule(layout, "Main", m_renderer.get(), srcBinderFilename);
+		unique_ptr<UIModule> uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
 		auto [asComponent, asComponentPtr] = GetPtrs(CreateComponent<UIModuleAsComponent>(move(uiModule)));
 
 		UIModule* module = asComponent->GetUIModule();
@@ -175,7 +177,5 @@ namespace UserInterfaceTest
 
 		UIComponent* main = module->GetComponent();
 		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
-
-		
 	}
 }

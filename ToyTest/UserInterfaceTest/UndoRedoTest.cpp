@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../ToyTestFixture.h"
+#include "../ToyFixture.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"

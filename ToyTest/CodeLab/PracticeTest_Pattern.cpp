@@ -1,6 +1,6 @@
 #include "pch.h"
 
-namespace Practice
+namespace CodeLab
 {
     class NodeTraversalProxy;
 

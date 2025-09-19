@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "../ToyTestFixture.h"
+#include "../ToyFixture.h"
 #include "../IMockRenderer.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
@@ -393,7 +393,7 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(m_uiModule->Write(filename));
 
 		wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
-		unique_ptr<UIModule> read = CreateUIModule(filename, m_renderer.get(), srcBinderFilename);
+		unique_ptr<UIModule> read = CreateUIModule(filename, m_mockRenderer.get(), srcBinderFilename);
 
 		EXPECT_TRUE(Compare(m_uiModule, read));
 

@@ -272,3 +272,8 @@ tracy::ShutdownProfiler();
  그 hpp안에 필요한 헤더 파일이 있다면 pch에서 include 하고 있겠지만 다시 hpp 안에서 include 해야한다.
  그래서 chatgpt를 돌려서 필요한 include가 뭐가 있는지 조사한 다음 헤더에 붙여놨더니 전혀 이 파일과 관련없던 
  cpp 파일의 intellisense가 작동했다. 
+
+
+ tdd 프로젝트에서 struct data와 class data가 둘이 존재하면 원래는 먼저 정의한게 있다면서 컴파일할때 지적해 주는데
+ tdd 프로젝트에서는 이런 지적 없이 heap corruption detected 창이 뜨면서 그냥 프로그램이 죽어 버린다. 메모리 충돌
+ 이니까 이쪽으로 한참 찾았는데 문제는 data가 두개 존재해서 충돌나는건데 이걸 못잡아주기 때문이었다.

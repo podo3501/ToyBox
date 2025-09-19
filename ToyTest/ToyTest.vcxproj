@@ -120,6 +120,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CodeLab\ClientUtility.cpp" />
+    <ClCompile Include="CodeLab\CodeLab.cpp" />
+    <ClCompile Include="CodeLab\PracticeTest_Pattern.cpp" />
     <ClCompile Include="ComponentTest\ContainerComponentTest.cpp" />
     <ClCompile Include="ComponentTest\TextureSwitcherComponentTest.cpp" />
     <ClInclude Include="CoreTestFixture.h" />
@@ -130,7 +133,6 @@
     <ClInclude Include="TestHelper.h" />
     <ClInclude Include="TestMain.h" />
     <ClInclude Include="ToyFixture.h" />
-    <ClInclude Include="ToyTestFixture.h" />
     <ClInclude Include="TestUtility.h" />
   </ItemGroup>
   <ItemGroup>
@@ -139,13 +141,9 @@
     <ClCompile Include="ComponentTest\IntegrationComponentTest.cpp" />
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
-    <ClCompile Include="JsonSerializeTest.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
-    <ClCompile Include="PracticeTest.cpp" />
-    <ClCompile Include="PracticeTest_Pattern.cpp" />
     <ClCompile Include="TestHelper.cpp" />
     <ClCompile Include="TextureSourceBinderTest\TextureSourceBinderTest.cpp" />
-    <ClCompile Include="ToolTest.cpp" />
     <ClCompile Include="ToyFixture.cpp" />
     <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp">
@@ -155,7 +153,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TestMain.cpp" />
-    <ClCompile Include="ToyTestFixture.cpp" />
     <ClCompile Include="UserInterfaceTest\TracyBenchmarkTest.cpp" />
     <ClCompile Include="UserInterfaceTest\UndoRedoTest.cpp" />
     <ClCompile Include="TestUtility.cpp" />

@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "ToyTestFixture.h"
 #include "IMockRenderer.h"
 #include "GameMainLoop.h"
 #include "WindowProcedure.h"

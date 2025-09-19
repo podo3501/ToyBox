@@ -3,16 +3,11 @@
   <ItemGroup>
     <ClCompile Include="CoreTest.cpp" />
     <ClCompile Include="CoreTestFixture.cpp" />
-    <ClCompile Include="PracticeTest.cpp" />
-    <ClCompile Include="ToolTest.cpp" />
     <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="TestMain.cpp" />
-    <ClCompile Include="ToyTestFixture.cpp" />
     <ClCompile Include="TestUtility.cpp" />
     <ClCompile Include="TestHelper.cpp" />
-    <ClCompile Include="JsonSerializeTest.cpp" />
-    <ClCompile Include="PracticeTest_Pattern.cpp" />
     <ClCompile Include="ComponentTest\BasicComponentTest.cpp">
       <Filter>ComponentTest</Filter>
     </ClCompile>
@@ -39,13 +34,21 @@
     <ClCompile Include="Mocks\MockRenderer.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
+    <ClCompile Include="CodeLab\CodeLab.cpp">
+      <Filter>CodeLab</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeLab\PracticeTest_Pattern.cpp">
+      <Filter>CodeLab</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeLab\ClientUtility.cpp">
+      <Filter>CodeLab</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreTestFixture.h" />
     <ClInclude Include="IMockRenderer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestMain.h" />
-    <ClInclude Include="ToyTestFixture.h" />
     <ClInclude Include="TestUtility.h" />
     <ClInclude Include="TestHelper.h" />
     <ClInclude Include="ToyFixture.h" />
@@ -83,6 +86,9 @@
     </Filter>
     <Filter Include="Mocks\Stubs\Include">
       <UniqueIdentifier>{7a1395a0-7c26-46a8-84cc-28aeb905c270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CodeLab">
+      <UniqueIdentifier>{d686dc8f-54b7-43c7-8831-578a839adf89}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
