@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "TestHelper.h"
+#include "Helper.h"
 #include "../Include/IComponent.h"
-#include "../Toy/GameConfig.h"
-#include "../Toy/UserInterface/UIComponent/UIComponent.h"
-#include "../Toy/UserInterface/JsonOperation/JsonOperation.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/Utils/GeometryUtil.h"
+#include "GameConfig.h"
+#include "UserInterface/UIComponent/UIComponent.h"
+#include "UserInterface/JsonOperation/JsonOperation.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "Utils/GeometryUtil.h"
 
 //?!?이 함수는 사라질 예정
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)

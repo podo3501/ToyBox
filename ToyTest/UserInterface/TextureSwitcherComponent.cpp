@@ -1,20 +1,20 @@
 #include "pch.h"
-#include "../ToyFixture.h"
-#include "../Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "../Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
-#include "../Toy/UserInterface/UIComponent/Components/SampleComponent.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
-#include "../Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
-#include "../TestHelper.h"
-#include "../Toy/Utils/CommonUtil.h"
+#include "UIFixture.h"
+#include "Helper.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
+#include "UserInterface/UIComponent/Components/SampleComponent.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
+#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "Utils/CommonUtil.h"
 
-namespace UserInterfaceTest
+namespace a_UserInterface
 {
 	static inline PatchTextureLite* GetPatchTextureLite(TextureSwitcher* switcherPtr) noexcept { return switcherPtr->GetPatchTextureLite(); }
 
-	TEST_F(TextureSwitcherTest, TextureSwitcher_PatchTextureLite1)
+	TEST_F(TextureSwitcherComponent, TextureSwitcher_PatchTextureLite1)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::One,
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
@@ -41,7 +41,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(TextureSwitcherTest, TextureSwitcher_PatchTextureLite3_H)
+	TEST_F(TextureSwitcherComponent, TextureSwitcher_PatchTextureLite3_H)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeH,
 			GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
@@ -73,7 +73,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(TextureSwitcherTest, TextureSwitcher_PatchTextureLite3_V)
+	TEST_F(TextureSwitcherComponent, TextureSwitcher_PatchTextureLite3_V)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeV,
 			GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal));
@@ -105,7 +105,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 		
-	TEST_F(TextureSwitcherTest, TextureSwitcher_PatchTextureLite9)
+	TEST_F(TextureSwitcherComponent, TextureSwitcher_PatchTextureLite9)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::Nine,
 			GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));

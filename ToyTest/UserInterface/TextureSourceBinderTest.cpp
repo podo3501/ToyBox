@@ -1,11 +1,10 @@
 #include "pch.h"
-#include "../ToyFixture.h"
-#include "../IMockRenderer.h"
+#include "UIFixture.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/TextureResourceBinder/TextureLoadBinder.h"
-#include "../TestHelper.h"
+#include "Helper.h"
 
-namespace UserInterfaceTest
+namespace a_UserInterface
 {
 	TEST_F(TextureResourceBinderTest, BasicOperations)
 	{

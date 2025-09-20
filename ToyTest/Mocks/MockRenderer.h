@@ -18,6 +18,16 @@ public:
 	virtual bool CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset) override;
 };
 
+class MockTextureRender : public ITextureRenderStub
+{
+public:
+	virtual ~MockTextureRender() = default;
+
+	MOCK_METHOD(void, Render, (size_t index, const RECT& dest, const RECT* source), (override));
+	MOCK_METHOD(void, DrawString, 
+		(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color), (const override));
+};
+
 class MockRenderer final : public IRendererStub
 {
 public:

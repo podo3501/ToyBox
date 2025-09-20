@@ -10,11 +10,11 @@ class UIModule;
 class UIComponent;
 class TextureResourceBinder;
 
-class ToyFixture : public ::testing::Test
+class UIFixture : public ::testing::Test
 {
 public:
-	ToyFixture();
-	~ToyFixture();
+	UIFixture();
+	~UIFixture();
 
 	void CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times);
 	void CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc,
@@ -42,26 +42,26 @@ protected:
 //비주얼 스튜디오 테스트 탐색기에 계층구조 표시하기 위해서 Fixture를 상속받아서 함.
 //namespace 중첩으로는 계층구조로 나타나지 않음. a::b 이런식으로 나타남. 즉, 묶음으로 테스트 하기 어려움
 
-class BasicTest : public ToyFixture {};
-class ContainerTest : public ToyFixture {};
-class TextureSwitcherTest : public ToyFixture
+class BasicComponent : public UIFixture {};
+class ComplexComponent : public UIFixture {};
+class ContainerComponent : public UIFixture {};
+class Integration : public UIFixture
+{
+protected:
+	bool VerifyClone(unique_ptr<UIComponent> original);
+};
+class TextureResourceBinderTest : public UIFixture {};
+class TextureSwitcherComponent : public UIFixture
 {
 protected:
 	void FitToTextureSourceTest(const string& bindingKey);
 	void CloneTestForSwitcher(const vector<RECT>& expectDest, const string& bindKey); //?!? ToyFixture 클론 함수와 합칠 수 있을꺼 같은데.
 };
-class ComplexTest : public ToyFixture {};
-class IntegrationTest : public ToyFixture
-{
-protected:
-	bool VerifyClone(unique_ptr<UIComponent> original);
-};
-class TextureResourceBinderTest : public ToyFixture {};
-class TracyBenchmarkTest : public ToyFixture {};
+class TracyBenchmark : public UIFixture {};
 
 class UICommandList;
 class TexResCommandList;
-class UndoRedoTest : public ToyFixture
+class UndoRedo : public UIFixture
 {
 protected:
 	void CaptureSnapshot(vector<unique_ptr<UIComponent>>& history);

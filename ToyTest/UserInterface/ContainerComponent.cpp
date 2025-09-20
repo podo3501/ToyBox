@@ -1,12 +1,12 @@
 #include "pch.h"
-#include "../ToyFixture.h"
-#include "../TestHelper.h"
+#include "UIFixture.h"
+#include "Helper.h"
 #include "UserInterface/UIComponent/Components/Container.h"
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 
-namespace UserInterfaceTest
+namespace a_UserInterface
 {
-	TEST_F(ContainerTest, Container_PatchTextureStd1)
+	TEST_F(ContainerComponent, Container_PatchTextureStd1)
 	{
 		UILayout layout{ {32, 32}, Origin::Center };
 		auto [container, containerPtr] = GetPtrs(CreateComponent<Container>(layout, GetComponentKeyMap(layout.GetSize(), "ExitButton1"), BehaviorMode::Normal));
@@ -20,7 +20,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(ContainerTest, Container_PatchTextureStd3_Horizontal)
+	TEST_F(ContainerComponent, Container_PatchTextureStd3_Horizontal)
 	{
 		UILayout layout{ {100, 48}, Origin::Center };
 		auto [container, containerPtr] = GetPtrs(CreateComponent<Container>(layout,
@@ -43,7 +43,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////////////
 
-	TEST_F(ContainerTest, Container_PatchTextureStd3_Vertical)
+	TEST_F(ContainerComponent, Container_PatchTextureStd3_Vertical)
 	{
 		UILayout layout{ {48, 100}, Origin::Center };
 		auto [container, containerPtr] = GetPtrs(CreateComponent<Container>(layout,

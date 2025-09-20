@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "../ToyFixture.h"
+#include "UIFixture.h"
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "UserInterface/UIComponent/Components/ListArea.h"
 
-namespace UserInterfaceTest
+namespace a_UserInterface
 {
-	TEST_F(TracyBenchmarkTest, SimpleTest)
+	TEST_F(TracyBenchmark, MakeListAreaData)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		UIEx(m_main).AttachComponent(move(listArea), { 400, 300 });

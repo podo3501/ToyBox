@@ -1,13 +1,15 @@
 #include "pch.h"
-#include "IMockRenderer.h"
+#include "../Include/IRenderer.h"
 #include "GameMainLoop.h"
 #include "WindowProcedure.h"
 #include "Window.h"
 
-namespace BasicClient
+namespace z_Core
 {
 	//여러번 실행해서 오동작이 나는지 확인한다.
-	TEST(MainLoop, MultipleAppExcute)
+	//이 테스트는 엔진을 띄워서 하는 것이기 때문에 평소에는 이 테스트를 켜지 않는다.
+	//평소에는 DISABLED로 설정하고 한번씩 엔진을 띄워서 테스트 해야 할 경우에는 DISABLED_를 삭제한다.
+	TEST(DISABLED_App, MultipleAppExcute)
 	{
 		for (auto i : std::views::iota(0, 5))
 		{
@@ -34,12 +36,4 @@ namespace BasicClient
 			mainLoop.reset();
 		}
 	}
-
-	//테스트에서도 window창을 띄울 수 있다. 하지만 App 프로젝트에서 실행 가능하기 때문에 주석처리
-	//TEST(MainLoop, RunTest)
-	//{
-	//	GameMainLoop mainLoop;
-	//	EXPECT_TRUE(mainLoop.Initialize(GetModuleHandle(nullptr), L"Resources/", SW_SHOWDEFAULT));
-	//	EXPECT_EQ(mainLoop.Run(), 0);
-	//}
 }

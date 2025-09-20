@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "../ToyFixture.h"
 #include "GameConfig.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 #include "UserInterface/UIComponent/UIComponent.h"
@@ -7,7 +6,7 @@
 #include "Utils/StlTypeExt.hpp"
 #include "Utils/StlUtil.h"
 
-namespace CodeLab
+namespace b_CodeLab
 {
 	class JPData
 	{

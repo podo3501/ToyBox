@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../ToyFixture.h"
+#include "UIFixture.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
@@ -9,9 +9,9 @@
 #include "UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "UserInterface/UIModule.h"
 
-namespace UserInterfaceTest
+namespace a_UserInterface
 {
-	TEST_F(UndoRedoTest, TextureResourceBinder)
+	TEST_F(UndoRedo, TextureResourceBinder)
 	{
 		vector<unique_ptr<TextureResourceBinder>> h;
 		TexResCommandList c(GetResBinder());
@@ -30,7 +30,7 @@ namespace UserInterfaceTest
 	}
 
 	//////////////////////////////////////////////////////////
-	TEST_F(UndoRedoTest, UI_PatchTextureStd1)
+	TEST_F(UndoRedo, UI_PatchTextureStd1)
 	{
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;
@@ -47,7 +47,7 @@ namespace UserInterfaceTest
 	}
 
 	//////////////////////////////////////////////////////////
-	TEST_F(UndoRedoTest, UI_PatchTextureStd9)
+	TEST_F(UndoRedo, UI_PatchTextureStd9)
 	{
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;
@@ -62,7 +62,7 @@ namespace UserInterfaceTest
 	}
 
 	//////////////////////////////////////////////////////////
-	TEST_F(UndoRedoTest, UI_TextureSwitcher)
+	TEST_F(UndoRedo, UI_TextureSwitcher)
 	{
 		UICommandList c;
 		vector<unique_ptr<UIComponent>> h;

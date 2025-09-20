@@ -1,6 +1,6 @@
 #pragma once
-#include "../Toy/UserInterface/UIComponent/UIComponent.h"
-#include "../Toy/UserInterface/UIModule.h"
+#include "UserInterface/UIComponent/UIComponent.h"
+#include "UserInterface/UIModule.h"
 
 struct ITextureLoad;
 class TextureResourceBinder;

@@ -29,6 +29,15 @@ struct ITextureControllerStub : public ITextureController
     virtual void AddRef(size_t index) noexcept override {}
 };
 
+struct ITextureRenderStub : public ITextureRender
+{
+public:
+    virtual ~ITextureRenderStub() {};
+
+    virtual void Render(size_t index, const RECT& dest, const RECT* source) override {}
+    virtual void DrawString(size_t index, const wstring& text, const Vector2& pos, const FXMVECTOR& color) const override {}
+};
+
 struct IRendererStub : public IRenderer
 {
 public:

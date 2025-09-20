@@ -1,11 +1,10 @@
 #include "pch.h"
-#include "ToyFixture.h"
-#include "IMockRenderer.h"
+#include "UIFixture.h"
 #include "GameConfig.h"
 #include "Utils/CommonUtil.h"
 #include "Utils/GeometryUtil.h"
 #include "InputManager.h"
-#include "TestUtility.h"
+#include "Utility.h"
 #include "Utils/StlUtil.h"
 #include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponent/UIType.h"
@@ -15,17 +14,17 @@
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/Command/UICommandList/UICommandList.h"
 #include "UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "TestHelper.h"
+#include "UserInterface/Helper.h"
 
 using ::testing::_;
 using ::testing::Invoke;
 
-ToyFixture::~ToyFixture() = default;
-ToyFixture::ToyFixture() :
+UIFixture::~UIFixture() = default;
+UIFixture::UIFixture() :
 	m_main{ nullptr }
 {}
 
-void ToyFixture::SetUp()
+void UIFixture::SetUp()
 {
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -42,7 +41,7 @@ void ToyFixture::SetUp()
 	TracyStartupProfiler();
 }
 
-void ToyFixture::TearDown()
+void UIFixture::TearDown()
 {
 	TracyShutdownProfiler();
 
@@ -59,64 +58,64 @@ void ToyFixture::TearDown()
 #endif
 }
 
-TextureResourceBinder* ToyFixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
+TextureResourceBinder* UIFixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
 
-void ToyFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times)
+void UIFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times)
 {
-	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _))
+	MockTextureRender mockTexRender;
+	EXPECT_CALL(mockTexRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke([this, testRenderFunc](size_t index, const RECT& dest, const RECT* source) {
 		testRenderFunc(index, dest, source, GetResBinder());
 			}));
 	m_main->ProcessUpdate(m_timer);
-	m_main->ProcessRender(&mockRender);
+	m_main->ProcessRender(&mockTexRender);
 }
 
-void ToyFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc,
+void UIFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc,
 	const string& bindKey, int times)
 {
-	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _))
+	MockTextureRender mockTexRender;
+	EXPECT_CALL(mockTexRender, Render(_, _, _))
 		.Times(times)
 		.WillRepeatedly(Invoke([this, testRenderFunc, &bindKey](size_t index, const RECT& dest, const RECT* source) {
 		testRenderFunc(index, dest, source, GetSources(GetResBinder(), bindKey));
 			}));
 	m_main->ProcessUpdate(m_timer);
-	m_main->ProcessRender(&mockRender);
+	m_main->ProcessRender(&mockTexRender);
 }
 
-void ToyFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, const string& bindKey, UIComponent* component)
+void UIFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, const string& bindKey, UIComponent* component)
 {
-	MockRender mockRender;
-	EXPECT_CALL(mockRender, Render(_, _, _))
+	MockTextureRender mockTexRender;
+	EXPECT_CALL(mockTexRender, Render(_, _, _))
 		.Times(static_cast<int>(expectDest.size()))
 		.WillRepeatedly(Invoke([this, expIndex, &expectDest, &bindKey](size_t index, const RECT& dest, const RECT* source) {
 		TestCoordinates(index, dest, source, expIndex, expectDest, GetSources(GetResBinder(), bindKey));
 			}));
 	UIComponent* curComponent = (component) ? component : m_main;
 	curComponent->ProcessUpdate(m_timer);
-	curComponent->ProcessRender(&mockRender);
+	curComponent->ProcessRender(&mockTexRender);
 }
 
 //TextArea용 CallMockRender
-void ToyFixture::CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
+void UIFixture::CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
 {
-	MockRender mockRender;
-	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
+	MockTextureRender mockTexRender;
+	EXPECT_CALL(mockTexRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
 	component->ProcessUpdate(m_timer);
-	component->ProcessRender(&mockRender);
+	component->ProcessRender(&mockTexRender);
 }
 
-void ToyFixture::CallMockRender(function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
+void UIFixture::CallMockRender(function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
 {
-	MockRender mockRender;
-	EXPECT_CALL(mockRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
+	MockTextureRender mockTexRender;
+	EXPECT_CALL(mockTexRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
 	m_main->ProcessUpdate(m_timer);
-	m_main->ProcessRender(&mockRender);
+	m_main->ProcessRender(&mockTexRender);
 }
 
-void ToyFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
+void UIFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 { //마우스의 상태값은 업데이트를 계속해도 셋팅한 상태값이 계속 들어간다.
 	auto& mouseTracker = const_cast<MouseTracker&>(InputManager::GetMouse());
 	auto state = mouseTracker.GetLastState();
@@ -126,7 +125,7 @@ void ToyFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 	mouseTracker.Update(state);
 }
 
-void ToyFixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey)
+void UIFixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey)
 {
 	unique_ptr<UIComponent> clonePanel = m_main->Clone();
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());
@@ -135,14 +134,14 @@ void ToyFixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey
 
 //////////////////////////////////////////////////////////////////
 
-void TextureSwitcherTest::FitToTextureSourceTest(const string& bindingKey)
+void TextureSwitcherComponent::FitToTextureSourceTest(const string& bindingKey)
 {
 	TextureSwitcher* texSwitcher = UIEx(m_main).FindComponent<TextureSwitcher*>("TextureSwitcher");
 	EXPECT_TRUE(texSwitcher->FitToTextureSource());
 	EXPECT_EQ(texSwitcher->GetSize(), GetSizeOfBindKey(GetResBinder(), bindingKey));
 }
 
-void TextureSwitcherTest::CloneTestForSwitcher(const vector<RECT>& expectDest, const string& bindKey)
+void TextureSwitcherComponent::CloneTestForSwitcher(const vector<RECT>& expectDest, const string& bindKey)
 {
 	unique_ptr<UIComponent> clonePanel = m_main->Clone();
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());
@@ -152,7 +151,7 @@ void TextureSwitcherTest::CloneTestForSwitcher(const vector<RECT>& expectDest, c
 
 //////////////////////////////////////////////////////////////////
 
-bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
+bool Integration::VerifyClone(unique_ptr<UIComponent> original)
 {
 	if (!original) return false;
 	auto resBinder = m_uiModule->GetTexResBinder();
@@ -164,17 +163,17 @@ bool IntegrationTest::VerifyClone(unique_ptr<UIComponent> original)
 
 //////////////////////////////////////////////////////////////////
 
-void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<UIComponent>>& history)
+void UndoRedo::CaptureSnapshot(vector<unique_ptr<UIComponent>>& history)
 {
 	history.emplace_back(m_main->Clone());
 }
 
-void UndoRedoTest::CaptureSnapshot(vector<unique_ptr<TextureResourceBinder>>& history)
+void UndoRedo::CaptureSnapshot(vector<unique_ptr<TextureResourceBinder>>& history)
 {
 	history.emplace_back(make_unique<TextureResourceBinder>(*GetResBinder()));
 }
 
-void UndoRedoTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
+void UndoRedo::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
 {
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
 		cmdList.Undo();
@@ -187,7 +186,7 @@ void UndoRedoTest::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_pt
 		});
 }
 
-void UndoRedoTest::VerifyUndoRedo(TexResCommandList& cmdList, const vector<unique_ptr<TextureResourceBinder>>& history)
+void UndoRedo::VerifyUndoRedo(TexResCommandList& cmdList, const vector<unique_ptr<TextureResourceBinder>>& history)
 {
 	auto resBinder = GetResBinder();
 

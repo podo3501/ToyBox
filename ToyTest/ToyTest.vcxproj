@@ -121,41 +121,38 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CodeLab\ClientUtility.cpp" />
-    <ClCompile Include="CodeLab\CodeLab.cpp" />
-    <ClCompile Include="CodeLab\PracticeTest_Pattern.cpp" />
-    <ClCompile Include="ComponentTest\ContainerComponentTest.cpp" />
-    <ClCompile Include="ComponentTest\TextureSwitcherComponentTest.cpp" />
-    <ClInclude Include="CoreTestFixture.h" />
-    <ClInclude Include="IMockRenderer.h" />
+    <ClCompile Include="CodeLab\CoreUtility.cpp" />
+    <ClCompile Include="CodeLab\CPP.cpp" />
+    <ClCompile Include="CodeLab\Pattern.cpp" />
     <ClInclude Include="Mocks\MockRenderer.h" />
     <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="TestHelper.h" />
-    <ClInclude Include="TestMain.h" />
-    <ClInclude Include="ToyFixture.h" />
-    <ClInclude Include="TestUtility.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="UIFixture.h" />
+    <ClInclude Include="UserInterface\Helper.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ComponentTest\BasicComponentTest.cpp" />
-    <ClCompile Include="ComponentTest\ComplexComponentTest.cpp" />
-    <ClCompile Include="ComponentTest\IntegrationComponentTest.cpp" />
-    <ClCompile Include="CoreTest.cpp" />
-    <ClCompile Include="CoreTestFixture.cpp" />
+    <ClCompile Include="Core\App.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
-    <ClCompile Include="TestHelper.cpp" />
-    <ClCompile Include="TextureSourceBinderTest\TextureSourceBinderTest.cpp" />
-    <ClCompile Include="ToyFixture.cpp" />
-    <ClCompile Include="ToyTest.cpp" />
+    <ClCompile Include="UIFixture.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TestMain.cpp" />
-    <ClCompile Include="UserInterfaceTest\TracyBenchmarkTest.cpp" />
-    <ClCompile Include="UserInterfaceTest\UndoRedoTest.cpp" />
-    <ClCompile Include="TestUtility.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="UserInterface\BasicComponent.cpp" />
+    <ClCompile Include="UserInterface\ComplexComponent.cpp" />
+    <ClCompile Include="UserInterface\ContainerComponent.cpp" />
+    <ClCompile Include="UserInterface\Helper.cpp" />
+    <ClCompile Include="UserInterface\Integration.cpp" />
+    <ClCompile Include="UserInterface\TextureSourceBinderTest.cpp" />
+    <ClCompile Include="UserInterface\TextureSwitcherComponent.cpp" />
+    <ClCompile Include="UserInterface\TracyBenchmark.cpp" />
+    <ClCompile Include="UserInterface\UndoRedo.cpp" />
+    <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.vcxproj">

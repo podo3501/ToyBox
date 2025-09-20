@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
-#include "../ToyFixture.h"
-#include "../IMockRenderer.h"
+#include "UIFixture.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
@@ -14,10 +13,10 @@
 #include "Utils/StlUtil.h"
 #include "GameConfig.h"
 
-namespace UserInterfaceTest
+namespace a_UserInterface
 {
 	//툴에서 임시로 component를 생성할때 module이 생성되지 않은 상태이기 때문에 테스트가 필요
-	TEST_F(IntegrationTest, AttachDetachNoModuleTest)
+	TEST_F(Integration, AttachDetachNoModuleTest)
 	{
 		auto [main, mainPtr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
@@ -43,7 +42,7 @@ namespace UserInterfaceTest
 		return detach != nullptr;
 	}
 
-	TEST_F(IntegrationTest, AttachDetachTest)
+	TEST_F(Integration, AttachDetachTest)
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {200, 100}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_main).AttachComponent(move(tex9), { 80, 60 });
@@ -66,7 +65,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(UIEx(detached).GetChildrenBoundsSize(), XMUINT2(210, 110));
 	}
 
-	TEST_F(IntegrationTest, DetachThenNameTest)
+	TEST_F(Integration, DetachThenNameTest)
 	{
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
@@ -87,7 +86,7 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(UIEx(tex3Ptr).FindComponent("PatchTextureStd1"));
 	}
 
-	TEST_F(IntegrationTest, Clone)
+	TEST_F(Integration, Clone)
 	{
 		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd1>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage1")));
 		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd3>(UILayout{ { 100, 36 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")));
@@ -105,7 +104,7 @@ namespace UserInterfaceTest
 		return components.size();
 	}
 
-	TEST_F(IntegrationTest, GetComponent)
+	TEST_F(Integration, GetComponent)
 	{
 		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
@@ -134,7 +133,7 @@ namespace UserInterfaceTest
 		EXPECT_FALSE(UIEx(tex2Ptr).GetRegionComponent("Region1"));
 	}
 
-	TEST_F(IntegrationTest, GetComponents)
+	TEST_F(Integration, GetComponents)
 	{
 		auto tex9_0 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_main).AttachComponent(move(tex9_0), { 80, 60 });
@@ -152,7 +151,7 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(CheckComponentCount(m_main, { 180, 160 }) == 7);
 	}
 
-	TEST_F(IntegrationTest, GetPosition)
+	TEST_F(Integration, GetPosition)
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		unique_ptr<UIComponent> panel = make_unique<Panel>();
@@ -183,7 +182,7 @@ namespace UserInterfaceTest
 		return !ranges::search(haystack, needle).empty();
 	}
 
-	TEST_F(IntegrationTest, MatchesRenderOrder)
+	TEST_F(Integration, MatchesRenderOrder)
 	{
 		using enum ComponentID;
 
@@ -201,7 +200,7 @@ namespace UserInterfaceTest
 			RenderTexture, ScrollBar, PatchTextureStd3, PatchTextureStd1, TextureSwitcher }));		
 	}
 
-	TEST_F(IntegrationTest, RecursivePosition)
+	TEST_F(Integration, RecursivePosition)
 	{
 		auto [panel1, panel1Ptr] = GetPtrs(CreateComponent<Panel>(UILayout({ 400, 400 }, Origin::Center)));
 		auto [panel2, panel2Ptr] = GetPtrs(CreateComponent<Panel>(UILayout{ { 20, 20 }, Origin::Center }));
@@ -232,7 +231,7 @@ namespace UserInterfaceTest
 	//이름을 구역을 만들어서 다른 구역이면 같은 이름을 쓸 수 있게 한다. 그러면 close 같은 이름이 중복이 되어도
 	//카피 했을때 다른 구역이라면 close 이름을 쓸 수 있다. 리스트 컴포넌트에서 다른 구역으로 지정하면 이름이 
 	//같아도 되니까 코딩할때 이름_1 이런것을 찾지 않아도 된다.
-	TEST_F(IntegrationTest, Region)
+	TEST_F(Integration, Region)
 	{
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
@@ -276,7 +275,7 @@ namespace UserInterfaceTest
 		EXPECT_EQ(tex7Ptr->GetRegion(), "SubRegionName_1");
 	}
 
-	TEST_F(IntegrationTest, Rename)
+	TEST_F(Integration, Rename)
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
 		UIEx(m_main).AttachComponent(move(tex9), { 80, 60 });
@@ -289,7 +288,7 @@ namespace UserInterfaceTest
 		EXPECT_TRUE(failed == nullptr);
 	}
 
-	TEST_F(IntegrationTest, RenameRegion)
+	TEST_F(Integration, RenameRegion)
 	{
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
@@ -320,7 +319,7 @@ namespace UserInterfaceTest
 		EXPECT_FALSE(UIEx(tex2Ptr).RenameRegion(m_main->GetRegion()));	//같은 이름이 있으면 안된다.
 	}
 
-	TEST_F(IntegrationTest, UINameGenerator)
+	TEST_F(Integration, UINameGenerator)
 	{
 		unique_ptr<UINameGenerator> generator = make_unique<UINameGenerator>();
 		string region = "newRegion";
@@ -370,7 +369,7 @@ namespace UserInterfaceTest
 		return texPtr;
 	}
 
-	TEST_F(IntegrationTest, UniqueName)
+	TEST_F(Integration, UniqueName)
 	{
 		auto texPtr = TestAttachName(m_main, "PatchTextureStd1");
 		auto texPtr1 = TestAttachName(m_main, "PatchTextureStd1_1");

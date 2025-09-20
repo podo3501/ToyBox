@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
-#include "../ToyFixture.h"
-#include "../IMockRenderer.h"
-#include "../TestHelper.h"
+#include "UIFixture.h"
+#include "Helper.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
@@ -14,7 +13,7 @@
 
 using testing::ElementsAre;
 
-namespace UserInterfaceTest
+namespace a_UserInterface
 {
 	template<typename T>
 	void FitToTextureSourceTest(UIComponent* panel,
@@ -29,7 +28,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicTest, PatchTextureStd1)
+	TEST_F(BasicComponent, PatchTextureStd1)
 	{
 		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
 		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
@@ -74,7 +73,7 @@ namespace UserInterfaceTest
 		return rb->ModifyTextureSourceInfo(key, srcInfo);
 	}
 
-	TEST_F(BasicTest, PatchTextureStd3_Horizontal)
+	TEST_F(BasicComponent, PatchTextureStd3_Horizontal)
 	{
 		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd3>(DirectionType::Horizontal, "ScrollButton3_H_Normal"));
 		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
@@ -111,7 +110,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicTest, PatchTextureStd3_Vertical)
+	TEST_F(BasicComponent, PatchTextureStd3_Vertical)
 	{
 		auto [tex, img3Ptr] = GetPtrs(CreateComponent<PatchTextureStd3>(DirectionType::Vertical, "ScrollTrack3_V"));
 		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
@@ -147,7 +146,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(BasicTest, PatchTextureStd9)
+	TEST_F(BasicComponent, PatchTextureStd9)
 	{
 		auto [tex, texPtr] = GetPtrs(CreateComponent<PatchTextureStd9>("BackImage9"));
 		UIEx(m_main).AttachComponent(move(tex), { 400, 300 });
@@ -209,7 +208,7 @@ namespace UserInterfaceTest
 		if (text == L"&*") EXPECT_TRUE(index == 0 && pos == Vector2(440.f, 240.f) && DirectX::XMVector4Equal(color, Colors::Blue));
 	}
 
-	TEST_F(BasicTest, TextArea)
+	TEST_F(BasicComponent, TextArea)
 	{
 		vector<wstring> bindKeys{ L"Hangle", L"English" };
 		wstring text = L"<Hangle><Red>테스<br>트, 테스트2</Red>!@#$% </Hangle><English>Test. ^<Blue>&*</Blue>() End</English>";

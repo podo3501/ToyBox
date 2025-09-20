@@ -1,7 +1,6 @@
 #include "pch.h"
-#include "../ToyFixture.h"
-#include "../IMockRenderer.h"
-#include "../TestHelper.h"
+#include "UIFixture.h"
+#include "Helper.h"
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "UserInterface/UIComponent/Components/ScrollBar.h"
 #include "UserInterface/UIComponent/Components/RenderTexture.h"
@@ -14,9 +13,9 @@
 #include "GameConfig.h"
 #include "Utils/GeometryUtil.h"
 
-namespace UserInterfaceTest
+namespace a_UserInterface
 {
-	TEST_F(ComplexTest, ListArea)
+	TEST_F(ComplexComponent, ListArea)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		UIEx(m_main).AttachComponent(move(listArea), { 400, 300 });
@@ -51,7 +50,7 @@ namespace UserInterfaceTest
 		//EXPECT_FALSE(listAreaPtr->RemoveContainer(0));
 	}
 	
-	TEST_F(ComplexTest, ListAreaToolMode)
+	TEST_F(ComplexComponent, ListAreaToolMode)
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		UIEx(m_main).AttachComponent(move(listArea), { 400, 300 });
@@ -79,7 +78,7 @@ namespace UserInterfaceTest
 		TestCoordinates(2, dest, source, 2, expectDest, expectSource);//값 비교하니까 2을 그냥 넣어줌. 
 	}
 
-	TEST_F(ComplexTest, RenderTexture)
+	TEST_F(ComplexComponent, RenderTexture)
 	{
 		auto switcher = CreateComponent<TextureSwitcher>(TextureSlice::One,
 			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal);
@@ -109,7 +108,7 @@ namespace UserInterfaceTest
 		TestCoordinates(index, dest, source, 2, expectDest, expectSource);
 	}
 
-	TEST_F(ComplexTest, ScrollBar)
+	TEST_F(ComplexComponent, ScrollBar)
 	{
 		auto [scrollBar, scrollBarPtr] = GetPtrs(CreateSampleScrollBar({}, DirectionType::Vertical));
 		UIEx(m_main).AttachComponent(move(scrollBar), { 100, 200 });
@@ -141,7 +140,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(ComplexTest, Switcher_Scroll)
+	TEST_F(ComplexComponent, Switcher_Scroll)
 	{
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(UILayout{ {16, 100}, Origin::Center },
 			TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
@@ -165,7 +164,7 @@ namespace UserInterfaceTest
 
 	////////////////////////////////////////////////////////
 
-	TEST_F(ComplexTest, UIModuleAsComponent)
+	TEST_F(ComplexComponent, UIModuleAsComponent)
 	{
 		UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 		wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";

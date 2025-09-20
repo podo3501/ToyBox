@@ -1,62 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="CoreTest.cpp" />
-    <ClCompile Include="CoreTestFixture.cpp" />
-    <ClCompile Include="ToyTest.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="TestMain.cpp" />
-    <ClCompile Include="TestUtility.cpp" />
-    <ClCompile Include="TestHelper.cpp" />
-    <ClCompile Include="ComponentTest\BasicComponentTest.cpp">
-      <Filter>ComponentTest</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentTest\ComplexComponentTest.cpp">
-      <Filter>ComponentTest</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentTest\IntegrationComponentTest.cpp">
-      <Filter>ComponentTest</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterfaceTest\UndoRedoTest.cpp">
-      <Filter>UserInterfaceTest</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureSourceBinderTest\TextureSourceBinderTest.cpp" />
-    <ClCompile Include="ComponentTest\TextureSwitcherComponentTest.cpp">
-      <Filter>ComponentTest</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentTest\ContainerComponentTest.cpp">
-      <Filter>ComponentTest</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterfaceTest\TracyBenchmarkTest.cpp">
-      <Filter>UserInterfaceTest</Filter>
-    </ClCompile>
-    <ClCompile Include="ToyFixture.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="UIFixture.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
-    <ClCompile Include="CodeLab\CodeLab.cpp">
-      <Filter>CodeLab</Filter>
-    </ClCompile>
-    <ClCompile Include="CodeLab\PracticeTest_Pattern.cpp">
+    <ClCompile Include="CodeLab\CoreUtility.cpp">
       <Filter>CodeLab</Filter>
     </ClCompile>
     <ClCompile Include="CodeLab\ClientUtility.cpp">
       <Filter>CodeLab</Filter>
     </ClCompile>
+    <ClCompile Include="Core\App.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\BasicComponent.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\ComplexComponent.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\ContainerComponent.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Helper.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Integration.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureSourceBinderTest.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureSwitcherComponent.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TracyBenchmark.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UndoRedo.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeLab\Pattern.cpp">
+      <Filter>CodeLab</Filter>
+    </ClCompile>
+    <ClCompile Include="CodeLab\CPP.cpp">
+      <Filter>CodeLab</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoreTestFixture.h" />
-    <ClInclude Include="IMockRenderer.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="TestMain.h" />
-    <ClInclude Include="TestUtility.h" />
-    <ClInclude Include="TestHelper.h" />
-    <ClInclude Include="ToyFixture.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Utility.h" />
+    <ClInclude Include="UIFixture.h" />
     <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h">
       <Filter>Mocks\Stubs\Include</Filter>
     </ClInclude>
     <ClInclude Include="Mocks\MockRenderer.h">
       <Filter>Mocks</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Helper.h">
+      <Filter>UserInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -69,15 +76,6 @@
     <Filter Include="Resources\Test\Data">
       <UniqueIdentifier>{0f7f180e-4b95-4726-8d63-07cc408c7dd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ComponentTest">
-      <UniqueIdentifier>{e41c47f8-ef45-4072-97e0-377ca418d8cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserInterfaceTest">
-      <UniqueIdentifier>{199ab388-f9e5-450b-a195-7b017ca0e336}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TextureResourceBinderTest">
-      <UniqueIdentifier>{e3c60e9c-8593-4b4b-8775-7254584619de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Mocks">
       <UniqueIdentifier>{d282f695-392c-4846-ad3a-0aabc2ee8151}</UniqueIdentifier>
     </Filter>
@@ -89,6 +87,12 @@
     </Filter>
     <Filter Include="CodeLab">
       <UniqueIdentifier>{d686dc8f-54b7-43c7-8831-578a839adf89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{5fece6f7-172a-4e72-a032-06cacc2e494b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface">
+      <UniqueIdentifier>{5ad40a19-cd2d-47fa-a2e9-9262e19f4a13}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
