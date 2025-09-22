@@ -45,7 +45,7 @@ namespace a_UserInterface
 		EXPECT_TRUE(sourceInfo);
 	}
 
-	TEST_F(TextureResourceBinderTest, TextureFileLoadingTest)
+	TEST_F(TextureResourceBinderTest, TextureFileLoading)
 	{
 		auto loadBinder = make_unique<TextureLoadBinder>();
 

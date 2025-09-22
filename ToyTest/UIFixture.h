@@ -61,6 +61,7 @@ class TracyBenchmark : public UIFixture {};
 
 class UICommandList;
 class TexResCommandList;
+class UIModuleConnection : public UIFixture {};
 class UndoRedo : public UIFixture
 {
 protected:

@@ -50,6 +50,9 @@
     <ClCompile Include="CodeLab\CPP.cpp">
       <Filter>CodeLab</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\UIModuleConnection.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

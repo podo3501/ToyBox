@@ -34,6 +34,7 @@ public:
 	~MockRenderer();
 	MockRenderer();
 
+	MOCK_METHOD(void, AddRenderComponent, (IComponent* component), (override));
 	virtual bool LoadTextureBinder(ITextureBinder* textureBinder) override;
 	virtual ITextureController* GetTextureController() const noexcept override;
 

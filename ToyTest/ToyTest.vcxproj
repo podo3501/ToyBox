@@ -92,6 +92,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);$(SolutionDir)Toy\;$(SolutionDir)Tracy\public\tracy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -111,6 +112,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(ProjectDir);$(SolutionDir)Toy\;$(SolutionDir)Tracy\public\tracy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -151,6 +153,7 @@
     <ClCompile Include="UserInterface\TextureSourceBinderTest.cpp" />
     <ClCompile Include="UserInterface\TextureSwitcherComponent.cpp" />
     <ClCompile Include="UserInterface\TracyBenchmark.cpp" />
+    <ClCompile Include="UserInterface\UIModuleConnection.cpp" />
     <ClCompile Include="UserInterface\UndoRedo.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
