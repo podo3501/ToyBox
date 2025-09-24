@@ -17,6 +17,7 @@ protected:
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept;
 	virtual void ImplementRender(ITextureRender* render) const override;
+	virtual const vector<unique_ptr<UIComponent>>& GetChildren() const noexcept override;
 
 public:
 	bool Setup(unique_ptr<UIModule> module) noexcept;

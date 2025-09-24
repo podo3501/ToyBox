@@ -27,3 +27,8 @@ void UIModuleAsComponent::ImplementRender(ITextureRender* render) const
 {
 	m_module->Render(render);
 }
+
+const vector<unique_ptr<UIComponent>>& UIModuleAsComponent::GetChildren() const noexcept
+{
+	return m_module->GetUniquePtrComponent();
+}

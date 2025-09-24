@@ -32,6 +32,7 @@ public:
 	bool EnableToolMode(bool enable);
 	UIComponent* FindComponent(const string& name) const noexcept;
 	UIComponent* GetComponent() const noexcept;
+	const vector<unique_ptr<UIComponent>>& GetUniquePtrComponent() const noexcept;
 	inline TextureResourceBinder* GetTexResBinder() const noexcept { return m_resBinder.get(); }
 	inline UINameGenerator* GetNameGenerator() const noexcept { return m_generator.get(); }
 	inline const wstring& GetFilename() const noexcept { return m_filename; }
@@ -42,7 +43,8 @@ private:
 	UIComponent* FindComponentInRegion(const string& regionName, const string& name) const noexcept;
 
 	unique_ptr<UINameGenerator> m_generator;
-	unique_ptr<UIComponent> m_panel;
+	//unique_ptr<UIComponent> m_panel;
+	vector<unique_ptr<UIComponent>> m_children;	//children이지만 panel만 들어가 있다.
 	unique_ptr<TextureResourceBinder> m_resBinder;
 	IRenderer* m_renderer;
 

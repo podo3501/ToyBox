@@ -32,8 +32,10 @@ private:
 	void ForEachRenderChildDFS(function<void(UIComponent*)> Func) noexcept;
 
 protected:
+	virtual const vector<unique_ptr<UIComponent>>& GetChildren() const noexcept { return m_children; }
+
 	UIComponent* m_parent{ nullptr };
-	vector<unique_ptr<T>> m_children;
+	vector<unique_ptr<UIComponent>> m_children;
 };
 
 template<typename T>

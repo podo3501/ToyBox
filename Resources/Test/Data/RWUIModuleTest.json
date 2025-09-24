@@ -1,111 +1,113 @@
 {
-    "UIComponent": {
-        "Type": "Panel",
-        "Name": "Main",
-        "Layout": {
-            "Size": {
-                "x": 800,
-                "y": 600
+    "Children": [
+        {
+            "Type": "Panel",
+            "Name": "Main",
+            "Layout": {
+                "Size": {
+                    "x": 800,
+                    "y": 600
+                },
+                "Origin": "LeftTop"
             },
-            "Origin": "LeftTop"
-        },
-        "Transform": {
-            "Ratio": {
-                "x": 0.0,
-                "y": 0.0
+            "Transform": {
+                "Ratio": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "RelativePosition": {
+                    "x": 0,
+                    "y": 0
+                }
             },
-            "RelativePosition": {
-                "x": 0,
-                "y": 0
-            }
-        },
-        "Region": "UIModuleMainEntry",
-        "StateFlag": 55,
-        "RenderSearch": 2,
-        "Children": [
-            {
-                "Type": "PatchTextureStd1",
-                "Name": "NoMatchComponentType",
-                "Layout": {
-                    "Size": {
-                        "x": 64,
-                        "y": 64
+            "Region": "UIModuleMainEntry",
+            "StateFlag": 55,
+            "RenderSearch": 2,
+            "Children": [
+                {
+                    "Type": "PatchTextureStd1",
+                    "Name": "NoMatchComponentType",
+                    "Layout": {
+                        "Size": {
+                            "x": 64,
+                            "y": 64
+                        },
+                        "Origin": "LeftTop"
                     },
-                    "Origin": "LeftTop"
-                },
-                "Transform": {
-                    "Ratio": {
-                        "x": 0.5,
-                        "y": 0.5
+                    "Transform": {
+                        "Ratio": {
+                            "x": 0.5,
+                            "y": 0.5
+                        },
+                        "RelativePosition": {
+                            "x": 400,
+                            "y": 300
+                        }
                     },
-                    "RelativePosition": {
-                        "x": 400,
-                        "y": 300
-                    }
+                    "Region": "",
+                    "StateFlag": 55,
+                    "RenderSearch": 2,
+                    "Children": null,
+                    "BindKey": "BackImage1",
+                    "SourceIndex": 0
                 },
-                "Region": "",
-                "StateFlag": 55,
-                "RenderSearch": 2,
-                "Children": null,
-                "BindKey": "BackImage1",
-                "SourceIndex": 0
-            },
-            {
-                "Type": "PatchTextureStd1",
-                "Name": "PatchTextureStd1_2",
-                "Layout": {
-                    "Size": {
-                        "x": 64,
-                        "y": 64
+                {
+                    "Type": "PatchTextureStd1",
+                    "Name": "PatchTextureStd1_2",
+                    "Layout": {
+                        "Size": {
+                            "x": 64,
+                            "y": 64
+                        },
+                        "Origin": "LeftTop"
                     },
-                    "Origin": "LeftTop"
-                },
-                "Transform": {
-                    "Ratio": {
-                        "x": 0.5,
-                        "y": 0.5
+                    "Transform": {
+                        "Ratio": {
+                            "x": 0.5,
+                            "y": 0.5
+                        },
+                        "RelativePosition": {
+                            "x": 400,
+                            "y": 300
+                        }
                     },
-                    "RelativePosition": {
-                        "x": 400,
-                        "y": 300
-                    }
+                    "Region": "",
+                    "StateFlag": 55,
+                    "RenderSearch": 2,
+                    "Children": null,
+                    "BindKey": "BackImage1",
+                    "SourceIndex": 0
                 },
-                "Region": "",
-                "StateFlag": 55,
-                "RenderSearch": 2,
-                "Children": null,
-                "BindKey": "BackImage1",
-                "SourceIndex": 0
-            },
-            {
-                "Type": "PatchTextureStd1",
-                "Name": "PatchTextureStd1",
-                "Layout": {
-                    "Size": {
-                        "x": 64,
-                        "y": 64
+                {
+                    "Type": "PatchTextureStd1",
+                    "Name": "PatchTextureStd1",
+                    "Layout": {
+                        "Size": {
+                            "x": 64,
+                            "y": 64
+                        },
+                        "Origin": "LeftTop"
                     },
-                    "Origin": "LeftTop"
-                },
-                "Transform": {
-                    "Ratio": {
-                        "x": 0.5,
-                        "y": 0.5
+                    "Transform": {
+                        "Ratio": {
+                            "x": 0.5,
+                            "y": 0.5
+                        },
+                        "RelativePosition": {
+                            "x": 400,
+                            "y": 300
+                        }
                     },
-                    "RelativePosition": {
-                        "x": 400,
-                        "y": 300
-                    }
-                },
-                "Region": "",
-                "StateFlag": 55,
-                "RenderSearch": 2,
-                "Children": null,
-                "BindKey": "BackImage1",
-                "SourceIndex": 0
-            }
-        ]
-    },
+                    "Region": "",
+                    "StateFlag": 55,
+                    "RenderSearch": 2,
+                    "Children": null,
+                    "BindKey": "BackImage1",
+                    "SourceIndex": 0
+                }
+            ]
+        }
+    ],
     "UINameGenerator": {
         "RegionGens": {
             "UIModuleMainEntry": {

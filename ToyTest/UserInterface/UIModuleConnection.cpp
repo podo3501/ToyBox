@@ -15,6 +15,14 @@ using ::testing::Exactly;
 
 namespace a_UserInterface
 {
+	//RenderTexture + UIModuleAsComponent => 툴에서 쓰는 방식
+	//UIModule + RenderTexture + UIModuleAsComponent => 클라이언트에서 쓰는 방식
+	//결론적으로 RenderTexture + UIModuleAsComponent는 같은 동작을 해야 해서 툴에서 쓰는 방식과 클라이언트에서 쓰는 방식은 다르지 않다.
+	//그래서 다르지 않도록 코딩을 해야 한다.
+	//2가지 테스트를 통해서 업데이트 및 Render가 잘 되는지 확인한다.
+	//툴에서 쓸때에는 AddRender를 하지 않아야 한다. UIModule이 UIModuleAsComponent로 붙을때 Remove를 해서 Render에서 제거하면 될 것 같다.
+	//ImplementRender와 ImplementUpdate	는 mock으로 처리.
+	//위치값은 이전 위치값과 이후 위치값을 비교하는 것으로 처리.
 	TEST_F(UIModuleConnection, AttachUIModuleToRenderTexture)
 	{
 		//Imgui에서 RenderTexture로 texture를 받기 때문에 따로 Render에 등록하지 않는다. 그래서 0값.

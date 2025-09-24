@@ -4,6 +4,11 @@
 #include "UIComponentEx.h"
 #include "Utils/CommonUtil.h"
 
+//const vector<unique_ptr<UIComponent>>& UIHierarchy<UIComponent>::GetChildren() const noexcept
+//{ 
+//	return m_children; 
+//}
+
 UIComponent* UIHierarchy<UIComponent>::GetThis() const noexcept
 {
 	UIHierarchy<UIComponent>* hierarchy = const_cast<UIHierarchy<UIComponent>*>(this);
