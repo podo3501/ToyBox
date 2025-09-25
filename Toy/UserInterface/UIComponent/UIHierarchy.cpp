@@ -80,7 +80,7 @@ void UIHierarchy<UIComponent>::ForEachRenderChildBFS(function<void(UIComponent*)
 		Func(current);
 		if (current->HasStateFlag(StateFlag::RenderTexture)) continue;
 
-		for (const auto& child : current->m_children)
+		for (const auto& child : current->GetChildren())
 		{
 			if (!child) continue;
 			PushChild(child.get());
@@ -95,7 +95,7 @@ void UIHierarchy<T>::ForEachRenderChildDFS(function<void(UIComponent*)> Func) no
 	Func(current);
 	if (current->HasStateFlag(StateFlag::RenderTexture)) return;
 
-	for (auto& child : m_children)
+	for (auto& child : GetChildren())
 	{
 		if (!child) continue;
 		child->ForEachRenderChildDFS(Func);

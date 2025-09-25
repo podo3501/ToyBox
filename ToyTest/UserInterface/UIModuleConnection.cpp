@@ -34,12 +34,12 @@ namespace a_UserInterface
 		auto [uiModule, uiModulePtr] = GetPtrs(CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename));
 		auto [asComponent, asComponentPtr] = GetPtrs(CreateComponent<UIModuleAsComponent>(move(uiModule)));
 
-		UIComponent* main = uiModulePtr->GetComponent();
+		UIComponent* main = uiModulePtr->GetMainPanel();
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeH,
 			GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
 		UIEx(main).AttachComponent(move(switcher), { 100, 100 });
 		
-		bool toolMode{ false };
+		bool toolMode{ true };
 		UIModule* module = asComponent->GetUIModule();
 		EXPECT_TRUE(module->EnableToolMode(toolMode)); //tool모드 일때에는 active update(ImplementUpdate)는 돌지 않아도 위치 업데이트(그냥 update 즉, ProcessUpdate)는 돌아야 한다.
 
@@ -73,7 +73,7 @@ namespace a_UserInterface
 		UIModule* module = asComponent->GetUIModule();
 		EXPECT_TRUE(module->EnableToolMode(true));
 
-		UIComponent* main = module->GetComponent();
+		UIComponent* main = module->GetMainPanel();
 		auto [tex, img1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>("BackImage1"));
 	}
 }

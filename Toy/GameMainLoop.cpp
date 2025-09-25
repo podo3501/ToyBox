@@ -49,7 +49,7 @@ bool GameMainLoop::AttachComponentToPanel(unique_ptr<UIComponent> component, con
 {
     if (!component) return false;
 
-    UIComponent* main = m_uiModule->GetComponent();
+    UIComponent* main = m_uiModule->GetMainPanel();
     UIEx(main).AttachComponent(move(component), position);
 
     return true;
@@ -66,7 +66,7 @@ bool GameMainLoop::LoadResources()
     AttachComponentToPanel(CreateSampleListArea({ {200, 170}, Origin::Center }), { 600, 200 });
     ReturnIfFalse(m_uiModule->BindTextureResources());
 
-    ListArea* list = UIEx(m_uiModule->GetComponent()).FindComponent<ListArea*>("ListArea");
+    ListArea* list = UIEx(m_uiModule->GetMainPanel()).FindComponent<ListArea*>("ListArea");
     MakeSampleListAreaData(m_renderer, m_uiModule->GetTexResBinder(), list, 13);
     
     return true;

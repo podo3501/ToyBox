@@ -25,16 +25,16 @@ MainWindow::MainWindow(IRenderer* renderer) :
 
 ImVec2 MainWindow::GetPanelSize() const noexcept
 {
-	UIComponent* component = GetUIModule()->GetComponent();
+	UIComponent* component = GetUIModule()->GetMainPanel();
 	return XMUINT2ToImVec2(component->GetSize());
 }
 
 bool MainWindow::SetupProperty(unique_ptr<UIModule> uiModule)
 {
 	m_controller = make_unique<ComponentController>(m_renderer, uiModule->GetTexResBinder(),
-		uiModule->GetComponent(), GetName());
+		uiModule->GetMainPanel(), GetName());
 
-	UIComponent* mainComponent = uiModule->GetComponent();
+	UIComponent* mainComponent = uiModule->GetMainPanel();
 	unique_ptr<UIModuleAsComponent> asComponent = CreateComponent<UIModuleAsComponent>(move(uiModule));
 	m_mainRenderTexture = CreateComponent<RenderTexture>(
 		UILayout{ mainComponent->GetSize(), Origin::LeftTop }, move(asComponent));

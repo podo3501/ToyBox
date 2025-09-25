@@ -36,7 +36,7 @@ void UIFixture::SetUp()
 	InitializeConfig(L"Resources/", { 800.f, 600.f });
 	m_mockRenderer = make_unique<MockRenderer>();
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
-	m_main = m_uiModule->GetComponent();
+	m_main = m_uiModule->GetMainPanel();
 
 	TracyStartupProfiler();
 }

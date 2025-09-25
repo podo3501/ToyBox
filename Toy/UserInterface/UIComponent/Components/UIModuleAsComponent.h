@@ -15,8 +15,7 @@ public:
 protected:
 	virtual unique_ptr<UIComponent> CreateClone() const;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept;
-	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept;
-	virtual void ImplementRender(ITextureRender* render) const override;
+	//GetChildren으로 UIModule의 자식들을 연결해 주기 때문에 이 클래스에 Update와 Render 함수가 필요 없다.
 	virtual const vector<unique_ptr<UIComponent>>& GetChildren() const noexcept override;
 
 public:

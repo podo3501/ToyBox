@@ -10,23 +10,20 @@
 
 UIModule::~UIModule()
 {
-	//Assert(m_panel); //m_component는 꼭 만들어져야 한다.
-	//m_renderer->RemoveRenderComponent(m_panel.get());
+	auto panel = GetMainPanel();
+	Assert(panel);//panel은 꼭 만들어져야 한다.
 
-	Assert(!m_children.empty());
-	m_renderer->RemoveRenderComponent(m_children.front().get());
+	m_renderer->RemoveRenderComponent(panel);
 }
 
 UIModule::UIModule() noexcept :
 	m_generator{ make_unique<UINameGenerator>() },
-	//m_panel{ nullptr },
 	m_renderer{ nullptr }
 {}
 
 bool UIModule::operator==(const UIModule& other) const noexcept
 {
 	ReturnIfFalse(Compare(m_generator, other.m_generator));
-	//ReturnIfFalse(Compare(m_panel, other.m_panel));
 	ReturnIfFalse(Compare(m_children.front(), other.m_children.front()));
 
 	return true;
@@ -36,18 +33,12 @@ bool UIModule::operator==(const UIModule& other) const noexcept
 bool UIModule::SetupMainComponent(const UILayout& layout, const string& name, 
 	IRenderer* renderer, const wstring& srcBinderFilename)
 {
-	//m_panel = CreateComponent<Panel>(layout);
-	//ReturnIfFalse(UIEx(m_panel).Rename(name));
-	//ReturnIfFalse(UIEx(m_panel).RenameRegion("UIModuleMainEntry"));
-	//Panel* panel = ComponentCast<Panel*>(m_panel.get());
-	//panel->SetUIModule(this);
 	unique_ptr<Panel> panel = CreateComponent<Panel>(layout);
 	ReturnIfFalse(UIEx(panel).Rename(name));
 	ReturnIfFalse(UIEx(panel).RenameRegion("UIModuleMainEntry"));
 	panel->SetUIModule(this);
 	m_children.push_back(move(panel));
 
-	//renderer->AddRenderComponent(m_component.get());
 	m_resBinder = CreateSourceBinder(srcBinderFilename);
 	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
 	m_renderer = renderer;
@@ -70,45 +61,49 @@ bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, 
 
 void UIModule::AddRenderer() noexcept
 {
-	//m_renderer->AddRenderComponent(m_panel.get());
-	m_renderer->AddRenderComponent(m_children.front().get());
+	if (auto panel = GetMainPanel())
+		m_renderer->AddRenderComponent(panel);
 }
 
 bool UIModule::BindTextureResources() noexcept
 {
-	/*ReturnIfFalse(m_resBinder);
-	ReturnIfFalse(m_panel);
-	ReturnIfFalse(m_panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));*/
+	auto* panel = GetMainPanel();
+	ReturnIfFalse(panel);
 
 	ReturnIfFalse(m_resBinder);
 	ReturnIfFalse(!m_children.empty());
-	ReturnIfFalse(m_children.front()->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
+	ReturnIfFalse(panel->BindTextureSourceInfo(m_resBinder.get(), m_renderer->GetTextureController()));
 
 	return true;
 }
 
 bool UIModule::Update(const DX::StepTimer& timer) noexcept
 {
-	//return m_panel->ProcessUpdate(timer);
-	return m_children.front()->ProcessUpdate(timer);
+	auto* panel = GetMainPanel();
+	ReturnIfFalse(panel);
+
+	return panel->ProcessUpdate(timer);
 }
 
 void UIModule::Render(ITextureRender* render) const
 {
-	//return m_panel->ProcessRender(render);
-	return m_children.front()->ProcessRender(render);
+	auto* panel = GetMainPanel();
+	Assert(panel);
+
+	panel->ProcessRender(render);
 }
 
 void UIModule::ReloadDatas() noexcept
 {
-	//Panel* panel = ComponentCast<Panel*>(m_panel.get());
-	Panel* panel = ComponentCast<Panel*>(m_children.front().get());
-	panel->SetUIModule(this);
+	auto* panel = GetMainPanel();
+	Assert(panel);
+
+	Panel* castPanel = ComponentCast<Panel*>(panel);
+	castPanel->SetUIModule(this);
 }
 
 void UIModule::SerializeIO(JsonOperation& operation)
 {
-	//operation.Process("UIComponent", m_panel);
 	operation.Process("Children", m_children);
 	operation.Process("UINameGenerator", m_generator);
 
@@ -136,27 +131,40 @@ bool UIModule::Read(const wstring& filename) noexcept
 
 bool UIModule::EnableToolMode(bool enable)
 {
-	//return m_panel->EnableToolMode(enable);
-	return m_children.front()->EnableToolMode(enable);
+	auto* panel = GetMainPanel();
+	ReturnIfFalse(panel);
+
+	return panel->EnableToolMode(enable);
 }
 
 UIComponent* UIModule::FindComponent(const string& name) const noexcept
 {
-	//return UIEx(m_panel).FindComponent(name);
-	return UIEx(m_children.front()).FindComponent(name);
+	auto* panel = GetMainPanel();
+	if(!panel) return nullptr;
+
+	return UIEx(panel).FindComponent(name);
 }
 
 UIComponent* UIModule::FindComponentInRegion(const string& regionName, const string& name) const noexcept
 {
-	//UIComponent* regionRoot = UIEx(m_panel).GetRegionComponent(regionName);
-	UIComponent* regionRoot = UIEx(m_children.front()).GetRegionComponent(regionName);
+	auto* panel = GetMainPanel();
+	if (!panel) return nullptr;
+
+	UIComponent* regionRoot = UIEx(panel).GetRegionComponent(regionName);
 	if (!regionRoot) return nullptr;
 
 	return UIEx(regionRoot).FindComponent(name);
 }
 
-UIComponent* UIModule::GetComponent() const noexcept { return m_children.front().get(); }
-const vector<unique_ptr<UIComponent>>& UIModule::GetUniquePtrComponent() const noexcept { return m_children; }
+UIComponent* UIModule::GetMainPanel() const noexcept 
+{ 
+	if (m_children.empty())
+		return nullptr;
+
+	return m_children.front().get(); 
+}
+
+const vector<unique_ptr<UIComponent>>& UIModule::GetChildren() const noexcept { return m_children; }
 
 unique_ptr<UIModule> CreateUIModule(const UILayout& layout, const string& mainUIName, 
 	IRenderer* renderer, const wstring& srcBinderFilename)

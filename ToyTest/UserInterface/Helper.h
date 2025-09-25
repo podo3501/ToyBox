@@ -23,9 +23,9 @@ template<typename T>
 pair<unique_ptr<UIModule>, UIComponent*> WriteReadTest(IRenderer* renderer, unique_ptr<UIModule>& write, T& component, const wstring& filename = L"Test/Data/RWUserInterfaceTest.json")
 {
 	auto read = WriteReadTest(renderer, write, filename);
-	component = UIEx(read->GetComponent()).FindComponent<T>(component->GetName());
+	component = UIEx(read->GetMainPanel()).FindComponent<T>(component->GetName());
 
-	return { move(read), read->GetComponent() };
+	return { move(read), read->GetMainPanel() };
 }
 
 unique_ptr<UIComponent> WriteReadTest(TextureResourceBinder* binder,
