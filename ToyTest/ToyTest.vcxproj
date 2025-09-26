@@ -135,6 +135,7 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CodeLab\SDL3.cpp" />
     <ClCompile Include="Core\App.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
     <ClCompile Include="UIFixture.cpp" />

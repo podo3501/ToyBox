@@ -53,6 +53,9 @@
     <ClCompile Include="UserInterface\UIModuleConnection.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="CodeLab\SDL3.cpp">
+      <Filter>CodeLab</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
