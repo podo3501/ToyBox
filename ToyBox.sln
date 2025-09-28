@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루�
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoogleTestLib", "GoogleTestLib\GoogleTestLib.vcxproj", "{D35ACB5A-C588-45C9-AE36-D6802A812A75}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToyTest", "ToyTest\ToyTest.vcxproj", "{6AF974ED-793D-4358-8050-718DB6D37275}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToyUnit", "ToyUnit\ToyUnit.vcxproj", "{6AF974ED-793D-4358-8050-718DB6D37275}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C6B3E223-6088-38D8-97B8-0D1316A11012} = {C6B3E223-6088-38D8-97B8-0D1316A11012}
 	EndProjectSection
