@@ -27,6 +27,12 @@ mock이 포함되어 있지 않아서이다. 그리고 main을 작성해 준다.
 6. GoogletTestLib을 참조로 연결
 7. main함수 작성
 
+google test 프로젝트로 만들면 config 파일이 자동적으로 생기는데 Nuget에서 google test를 지우면 config
+파일이 삭제된다. 임의로 지울 경우 Nuget 패키지에서 찾을수 없어 google test를 지울 수 없으니까 조심.
+지우는 이유는 mock이 없기 때문에 mock 버전으로 다시 쓰기 위해서이다.
+invoke_main이 없다고 나오면, main을 넣어주어야 할 것이다. google main을 새로 작성해서 넣는 방법을 추천
+한다.
+
 message에서 PostQuitMessage 메세지가 남아있어서 다음 테스트에 영향을 미치는듯 하다.
 Destroy함수가 불리면 WM_DESTROY를 부르고 거기서 WM_QUIT메세지가 큐에 담긴다. 이 메세지는 다
 음 테스트에 작동되면서 테스트 종료를 일으킨다. 끝낼때에는 Message Queue의 내용을 지워서 테스트

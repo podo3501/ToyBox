@@ -13,7 +13,7 @@
 using ::testing::_;
 using ::testing::Exactly;
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	//RenderTexture + UIModuleAsComponent => 툴에서 쓰는 방식
 	//UIModule + RenderTexture + UIModuleAsComponent => 클라이언트에서 쓰는 방식

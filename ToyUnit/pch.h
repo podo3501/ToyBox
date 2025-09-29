@@ -147,13 +147,3 @@ using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
 #define Bookmark EXPECT_FALSE("BOOKMARK")
-
-#pragma comment(lib, "Winmm.lib")
-#pragma comment(lib, "Setupapi.lib")
-#pragma comment(lib, "Version.lib")
-
-#ifdef _DEBUG
-#pragma comment(lib, "../Lib/SDL3/x64/Debug/SDL3-static.lib")
-#else
-#pragma comment(lib, "../Lib/SDL3/x64/Release/SDL3-static.lib")
-#endif

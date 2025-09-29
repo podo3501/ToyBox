@@ -8,15 +8,6 @@
     <ClCompile Include="Mocks\MockRenderer.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
-    <ClCompile Include="CodeLab\CoreUtility.cpp">
-      <Filter>CodeLab</Filter>
-    </ClCompile>
-    <ClCompile Include="CodeLab\ClientUtility.cpp">
-      <Filter>CodeLab</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\App.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\BasicComponent.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
@@ -44,17 +35,8 @@
     <ClCompile Include="UserInterface\UndoRedo.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="CodeLab\Pattern.cpp">
-      <Filter>CodeLab</Filter>
-    </ClCompile>
-    <ClCompile Include="CodeLab\CPP.cpp">
-      <Filter>CodeLab</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIModuleConnection.cpp">
       <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="CodeLab\SDL3.cpp">
-      <Filter>CodeLab</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -90,12 +72,6 @@
     </Filter>
     <Filter Include="Mocks\Stubs\Include">
       <UniqueIdentifier>{7a1395a0-7c26-46a8-84cc-28aeb905c270}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="CodeLab">
-      <UniqueIdentifier>{d686dc8f-54b7-43c7-8831-578a839adf89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{5fece6f7-172a-4e72-a032-06cacc2e494b}</UniqueIdentifier>
     </Filter>
     <Filter Include="UserInterface">
       <UniqueIdentifier>{5ad40a19-cd2d-47fa-a2e9-9262e19f4a13}</UniqueIdentifier>

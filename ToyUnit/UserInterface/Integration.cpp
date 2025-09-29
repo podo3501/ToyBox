@@ -13,7 +13,7 @@
 #include "Utils/StlUtil.h"
 #include "GameConfig.h"
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	//툴에서 임시로 component를 생성할때 module이 생성되지 않은 상태이기 때문에 테스트가 필요
 	TEST_F(Integration, AttachDetachNoModuleTest)

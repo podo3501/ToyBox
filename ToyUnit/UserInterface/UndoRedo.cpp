@@ -9,7 +9,7 @@
 #include "UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "UserInterface/UIModule.h"
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	TEST_F(UndoRedo, TextureResourceBinder)
 	{

@@ -8,7 +8,7 @@
 #include "UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "InputManager.h"
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	TEST_F(ComplexComponent, ListArea)
 	{

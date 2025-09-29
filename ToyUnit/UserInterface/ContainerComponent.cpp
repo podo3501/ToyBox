@@ -4,7 +4,7 @@
 #include "UserInterface/UIComponent/Components/Container.h"
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	TEST_F(ContainerComponent, Container_PatchTextureStd1)
 	{

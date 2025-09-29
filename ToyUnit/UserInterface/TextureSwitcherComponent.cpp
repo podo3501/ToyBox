@@ -10,7 +10,7 @@
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Utils/CommonUtil.h"
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	static inline PatchTextureLite* GetPatchTextureLite(TextureSwitcher* switcherPtr) noexcept { return switcherPtr->GetPatchTextureLite(); }
 

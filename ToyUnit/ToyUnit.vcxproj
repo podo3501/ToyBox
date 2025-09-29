@@ -122,10 +122,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CodeLab\ClientUtility.cpp" />
-    <ClCompile Include="CodeLab\CoreUtility.cpp" />
-    <ClCompile Include="CodeLab\CPP.cpp" />
-    <ClCompile Include="CodeLab\Pattern.cpp" />
     <ClInclude Include="Mocks\MockRenderer.h" />
     <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h" />
     <ClInclude Include="pch.h" />
@@ -135,8 +131,6 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CodeLab\SDL3.cpp" />
-    <ClCompile Include="Core\App.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
     <ClCompile Include="UIFixture.cpp" />
     <ClCompile Include="pch.cpp">

@@ -4,7 +4,7 @@
 #include "UserInterface/TextureResourceBinder/TextureLoadBinder.h"
 #include "Helper.h"
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	TEST_F(TextureResourceBinderTest, BasicOperations)
 	{

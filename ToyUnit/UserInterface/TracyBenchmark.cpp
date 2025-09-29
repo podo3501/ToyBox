@@ -3,7 +3,7 @@
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "UserInterface/UIComponent/Components/ListArea.h"
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	TEST_F(TracyBenchmark, MakeListAreaData)
 	{

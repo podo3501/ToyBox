@@ -13,7 +13,7 @@
 
 using testing::ElementsAre;
 
-namespace a_UserInterface
+namespace UserInterface
 {
 	template<typename T>
 	void FitToTextureSourceTest(UIComponent* panel,
