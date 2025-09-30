@@ -279,7 +279,14 @@ tracy::ShutdownProfiler();
  그래서 chatgpt를 돌려서 필요한 include가 뭐가 있는지 조사한 다음 헤더에 붙여놨더니 전혀 이 파일과 관련없던 
  cpp 파일의 intellisense가 작동했다. 
 
-
  tdd 프로젝트에서 struct data와 class data가 둘이 존재하면 원래는 먼저 정의한게 있다면서 컴파일할때 지적해 주는데
  tdd 프로젝트에서는 이런 지적 없이 heap corruption detected 창이 뜨면서 그냥 프로그램이 죽어 버린다. 메모리 충돌
  이니까 이쪽으로 한참 찾았는데 문제는 data가 두개 존재해서 충돌나는건데 이걸 못잡아주기 때문이었다.
+
+ 가끔씩 pdb warning이 날때가 있는데 lib를 뽑을때 pdb의 위치를 저장하는 듯 하다. 그래서 lib를 생성하고 카피하면
+ warning이 날때가 있는데 프로젝트 속성에서 lib가 출력될 output폴더를 맞춰주고 lib와 pdb를 뽑으면 warning이 
+ 없어진다. 
+
+ lib 프로젝트는 링크에러가 안나고 exe나 dll 프로젝트인 경우에는 링크 에러가 나는데 lib는 여기에 있을 것이다 마킹만
+ 해 놓고 넘어가서 에러가 안나지만 exe 프로젝트는 실제로 있는지 확인하는데 이때 없으면 에러가 난다. 그래서 참조한
+ 프로젝트에 lib를 올려놓았어도 exe 프로젝트에 다시 lib를 올려 놔야 한다.

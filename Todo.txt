@@ -168,6 +168,7 @@
 --region을 1로 해 놓고 그걸 다시 그 노드에 붙였을때 region은 1_1 이 아니라 1로 붙음.
 --Tracy 깃헙에 올리기
 
+@sdl과 tracy output 맞추기 및 srcs로 옮기기.
 @테스트 프로젝트 정리
     ThirdParty 부분 정리
     Tracy 및 ThirdParty 프로젝트 떼어내고 lib로 연결하게끔 수정

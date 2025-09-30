@@ -21,10 +21,15 @@
     <ClCompile Include="Integration\Application.cpp">
       <Filter>Integration</Filter>
     </ClCompile>
+    <ClCompile Include="UIFixture.cpp" />
+    <ClCompile Include="Integration\TracyBenchmark.cpp">
+      <Filter>Integration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="UIFixture.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">

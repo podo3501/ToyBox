@@ -29,9 +29,6 @@
     <ClCompile Include="UserInterface\TextureSwitcherComponent.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\TracyBenchmark.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UndoRedo.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>

@@ -97,37 +97,36 @@
 #include <windowsx.h>
 
 //DirectXTK12 include
-#include "../DirectXTK12/Inc/Audio.h"
-#include "../DirectXTK12/Inc/BufferHelpers.h"
-#include "../DirectXTK12/Inc/CommonStates.h"
-#include "../DirectXTK12/Inc/DirectXHelpers.h"
-#include "../DirectXTK12/Inc/DDSTextureLoader.h"
-#include "../DirectXTK12/Inc/DescriptorHeap.h"
-#include "../DirectXTK12/Inc/Effects.h"
-#include "../DirectXTK12/Inc/GamePad.h"
-#include "../DirectXTK12/Inc/GeometricPrimitive.h"
-#include "../DirectXTK12/Inc/GraphicsMemory.h"
-#include "../DirectXTK12/Inc/Keyboard.h"
-#include "../DirectXTK12/Inc/Model.h"
-#include "../DirectXTK12/Inc/Mouse.h"
-#include "../DirectXTK12/Inc/PrimitiveBatch.h"
-#include "../DirectXTK12/Inc/ResourceUploadBatch.h"
-#include "../DirectXTK12/Inc/RenderTargetState.h"
-#include "../DirectXTK12/Inc/SimpleMath.h"
-#include "../DirectXTK12/Inc/SpriteBatch.h"
-#include "../DirectXTK12/Inc/SpriteFont.h" 
-#include "../DirectXTK12/Inc/VertexTypes.h"
-#include "../DirectXTK12/Inc/WICTextureLoader.h"
+#include "DirectXTK12/Audio.h"
+#include "DirectXTK12/BufferHelpers.h"
+#include "DirectXTK12/CommonStates.h"
+#include "DirectXTK12/DirectXHelpers.h"
+#include "DirectXTK12/DDSTextureLoader.h"
+#include "DirectXTK12/DescriptorHeap.h"
+#include "DirectXTK12/Effects.h"
+#include "DirectXTK12/GamePad.h"
+#include "DirectXTK12/GeometricPrimitive.h"
+#include "DirectXTK12/GraphicsMemory.h"
+#include "DirectXTK12/Keyboard.h"
+#include "DirectXTK12/Model.h"
+#include "DirectXTK12/Mouse.h"
+#include "DirectXTK12/PrimitiveBatch.h"
+#include "DirectXTK12/ResourceUploadBatch.h"
+#include "DirectXTK12/RenderTargetState.h"
+#include "DirectXTK12/SimpleMath.h"
+#include "DirectXTK12/SpriteBatch.h"
+#include "DirectXTK12/SpriteFont.h" 
+#include "DirectXTK12/VertexTypes.h"
+#include "DirectXTK12/WICTextureLoader.h"
 
 //json
 #include "../Include/nlohmann/json.hpp"
 
 //Immediate Mode GUI include
-#include "../Imgui/imgui.h"
-#include "../Imgui/imgui_impl_win32.h"
-#include "../Imgui/imgui_impl_dx12.h"
-
-#include "../Imgui/imgui_internal.h"
+#include "Imgui/imgui.h"
+#include "Imgui/imgui_impl_win32.h"
+#include "Imgui/imgui_impl_dx12.h"
+#include "Imgui/imgui_internal.h"
 
 #ifdef _DEBUG
 #define DX12_ENABLE_DEBUG_LAYER
@@ -162,7 +161,15 @@ inline void PIXEndEvent(T*) {}
 #define TRACY_NO_CODE_TRANSFER //코드를 전송하지 않음. 전송했을때 종료시 시간이 많이 소요됨
 #define TRACY_DELAYED_INIT
 #define TRACY_MANUAL_LIFETIME //두 옵션은 profile할 구역을 지정할 수 있게 함. 지정하지 않으면 측정시 시간소요가 조금 더 일어남
-#include "Tracy.hpp"
+#include "Tracy/tracy/Tracy.hpp"
+
+#ifdef TRACY_ENABLE
+	#ifdef _DEBUG
+		#pragma comment(lib, "../ThirdParty/Libs/TracyClient_Debug.lib")
+	#else
+		#pragma comment(lib, "../ThirdParty/Libs/TracyClient_Release.lib")
+	#endif
+#endif
 
 #include "../Common/Assert.h"
 #include "Utils/StlTypeExt.hpp"
