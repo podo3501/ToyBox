@@ -57,7 +57,7 @@
 
 #define D3DX12_NO_STATE_OBJECT_HELPERS
 #define D3DX12_NO_CHECK_FEATURE_SUPPORT_CLASS
-#include "../Include/d3dx12.h"
+#include "d3dx12.h"
 
 #include <algorithm>
 #include <array>
@@ -117,12 +117,6 @@
 // To use graphics and CPU markup events with the latest version of PIX, change this to include <pix3.h>
 // then add the NuGet package WinPixEventRuntime to the project.
 #include <pix.h>
-
-//Immediate Mode GUI include
-#include "Imgui/imgui.h"
-#include "Imgui/imgui_impl_win32.h"
-#include "Imgui/imgui_impl_dx12.h"
-#include "Imgui/imgui_internal.h"
 
 #ifdef _DEBUG
 #define DX12_ENABLE_DEBUG_LAYER

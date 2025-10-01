@@ -1,5 +1,5 @@
 #pragma once
-#include "../Include/TypeAliases.h"
+#include "TypeAliases.h"
 
 enum class TextureSlice;
 struct SourceDivider;

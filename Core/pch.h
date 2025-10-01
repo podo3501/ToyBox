@@ -49,7 +49,7 @@
 #else
 #include <d3d12.h>
 
-#include "../Include/d3dx12.h"
+#include "Public/d3dx12.h"
 #endif
 
 #include <dxgi1_6.h>
@@ -124,11 +124,6 @@
 #endif
 
 //Immediate Mode GUI include
-#include "Imgui/imgui.h"
-#include "Imgui/imgui_impl_win32.h"
-#include "Imgui/imgui_impl_dx12.h"
-#include "Imgui/imgui_internal.h"
-
 #ifdef _DEBUG
 #pragma comment(lib, "Imgui_Debug.lib")
 #else
@@ -230,7 +225,7 @@ inline void PIXEndEvent(T*) {}
 #include <pix.h>
 #endif
 
-#include "../Common/Assert.h"
+#include "../Shared/Common.h"
 
 using namespace std;
 using namespace DirectX;

@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "FloatingComponent.h"
-#include "../Include/IRenderer.h"
-#include "Utils/CommonUtil.h"
+#include "IRenderer.h"
 #include "UserInterface/UIComponent/Components/RenderTexture.h"
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "UserInterface/UIComponent/Components/TextArea.h"

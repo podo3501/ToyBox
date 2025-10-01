@@ -5,7 +5,6 @@
 #include "ScrollBar.h"
 #include "TextureSwitcher.h"
 #include "InputManager.h"
-#include "Utils/CommonUtil.h"
 #include "StepTimer.h"
 
 ListArea::~ListArea() = default;

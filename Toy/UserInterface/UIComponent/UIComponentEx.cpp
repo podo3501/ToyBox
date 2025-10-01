@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Utils/GeometryUtil.h"
 #include "UIComponent.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "../TextureResourceBinder/TextureResourceBinder.h"
 #include "Components/UIModuleAsComponent.h"
 #include "Components/Panel.h"

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "UIModule.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "UIComponent/UIComponent.h"
 #include "UINameGenerator/UINameGenerator.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"

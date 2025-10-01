@@ -15,13 +15,22 @@ void DrawRectangle(const ImGuiWindow* window, const Rectangle& rect,
 void DrawRectangles(const ImGuiWindow* window, const vector<Rectangle>& rects,
 	optional<ImU32> outlineColor = nullopt, optional<ImU32> fillColor = nullopt);
 
-inline XMUINT2 ImVec2ToXMUINT2(const ImVec2& vec)
-{
+inline ImVec2 operator+(const ImVec2& a, const ImVec2& b) noexcept { return ImVec2(a.x + b.x, a.y + b.y); }
+inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) noexcept { return ImVec2(a.x - b.x, a.y - b.y); }
+
+inline XMINT2 ImVec2ToXMINT2(const ImVec2& rhs) noexcept {
+	return { static_cast<int32_t>(rhs.x), static_cast<int32_t>(rhs.y) };
+}
+
+inline ImVec2 XMINT2ToImVec2(const XMINT2& rhs) noexcept {
+	return { static_cast<float>(rhs.x), static_cast<float>(rhs.y) };
+}
+
+inline XMUINT2 ImVec2ToXMUINT2(const ImVec2& vec) {
 	return { static_cast<uint32_t>(vec.x), static_cast<uint32_t>(vec.y) };
 }
 
-inline ImVec2 XMUINT2ToImVec2(const XMUINT2& uint2)
-{
+inline ImVec2 XMUINT2ToImVec2(const XMUINT2& uint2) {
 	return { static_cast<float>(uint2.x), static_cast<float>(uint2.y) };
 }
 

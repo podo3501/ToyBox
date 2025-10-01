@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "SampleComponent.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "../UIComponent.h"
 #include "../UILayout.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"

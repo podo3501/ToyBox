@@ -167,19 +167,22 @@
 --UIEx쪽 리팩토링
 --region을 1로 해 놓고 그걸 다시 그 노드에 붙였을때 region은 1_1 이 아니라 1로 붙음.
 --Tracy 깃헙에 올리기
+--sdl과 tracy output 맞추기 및 srcs로 옮기기.
+--Tracy 및 ThirdParty 프로젝트 떼어내고 lib로 연결하게끔 수정
+--ToyExpr에서 Core돌리는 Fixture 만들어 연결해서 Tracy 돌리기
+--Imgui를 ThirdParty로 옮기면서 툴에서 Imvec쓰는 확장 Helper 만들기
+--공통부분 Shared 프로젝트로 옮기기
+--pch 정리. unit 프로젝트에는 대부분 떼어내고 필요한 것만 넣어놓을 예정    
 
-@sdl과 tracy output 맞추기 및 srcs로 옮기기.
-@테스트 프로젝트 정리
-    ThirdParty 부분 정리
-    Tracy 및 ThirdParty 프로젝트 떼어내고 lib로 연결하게끔 수정
-        그렇게 된다면 딱 필요한 프로젝트만 보이게끔 할 수 있을 것 같다.
-    ToyExpr에서 Core돌리는 Fixture 만들어 연결해서 Tracy 돌리기
-    Imgui를 ThirdParty로 옮기면서 툴에서 Imvec쓰는 확장 Helper 만들기
-    pch 정리. unit 프로젝트에는 대부분 떼어내고 필요한 것만 넣어놓을 예정
+@프로젝트 정리   
+    깃헙에서 다운 받아서 동작하는지 확인
+    깃헙에서 readme에 프로젝트 내용 기술 및 실행 방법 기술
+    클라이언트 Utility를 Shared로 옮기기
 
 @툴에서 리스트 할 수 있게끔
     컨테이너 간격 셋팅 
     UIModule로 바꾸고 나서 생긴 버그들 수정
+        likely로 바꿔야 할듯
 
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔

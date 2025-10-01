@@ -1,5 +1,7 @@
 #include "pch.h"
-#include "CommonUtil.h"
+#include "Profiler.h"
+#include <chrono>
+#include <thread>
 
 //Startup 및 Shutdown을 해 주는 이유는 tdd할때 속도문제 때문이다. tdd가 느리면 테스트를 귀찮게 여길 수 있기 때문이다.
 void TracyStartupProfiler()

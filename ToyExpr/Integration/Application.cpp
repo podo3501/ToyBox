@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "GameMainLoop.h"
 #include "WindowProcedure.h"
 #include "Window.h"

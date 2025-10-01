@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "TexResCommandList.h"
 #include "TexResCommandRegistry.h"
-#include "Utils/CommonUtil.h"
 
 TexResCommandList::~TexResCommandList() = default;
 TexResCommandList::TexResCommandList(TextureResourceBinder* resBinder) noexcept :

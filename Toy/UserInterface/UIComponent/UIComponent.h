@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Include/IComponent.h"
+#include "IComponent.h"
 #include "UILayout.h"
 #include "UITransform.h"
 #include "UIComponentEx.h"

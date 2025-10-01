@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UIFixture.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
+#include "../Shared/Profiler.h"
 #include "../Toy/Window.h"
 #include "../Toy/GameConfig.h"
 #include "../Toy/UserInterface/UIComponent/UIComponent.h"

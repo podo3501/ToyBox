@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TextArea.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "Utils/GeometryUtil.h"
 #include "GameConfig.h"
 #include "../UIUtility.h"

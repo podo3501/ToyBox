@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ToolMainLoop.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "Window.h"
 #include "WindowProcedure.h"
 

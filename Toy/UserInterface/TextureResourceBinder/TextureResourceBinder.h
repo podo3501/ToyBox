@@ -1,5 +1,5 @@
 #pragma once
-#include "../Include/ITextureBinder.h"
+#include "ITextureBinder.h"
 #include "TextureSourceInfo.h"
 #include "TextureFontInfo.h"
 #include "TextureBinderHelper.h"

@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "UIFixture.h"
 #include "GameConfig.h"
-#include "Utils/CommonUtil.h"
 #include "Utils/GeometryUtil.h"
 #include "InputManager.h"
 #include "Utility.h"
@@ -37,14 +36,10 @@ void UIFixture::SetUp()
 	m_mockRenderer = make_unique<MockRenderer>();
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetMainPanel();
-
-	TracyStartupProfiler();
 }
 
 void UIFixture::TearDown()
 {
-	TracyShutdownProfiler();
-
 	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.
 	//메모리 안 새게 지워준다. 강제로 지우는 이유는 아직 끝나지 않아서 메모리가 남아 있는데
 	//ReportLiveObjects 함수가 메모리가 안 지워 졌다고 메세지를 띄우기 때문이다.

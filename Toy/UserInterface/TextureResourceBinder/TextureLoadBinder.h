@@ -1,6 +1,6 @@
 #pragma once
-#include "../Include/TypeAliases.h"
-#include "../Include/ITextureBinder.h"
+#include "TypeAliases.h"
+#include "ITextureBinder.h"
 #include "TextureSourceInfo.h"
 
 struct ITextureLoad;

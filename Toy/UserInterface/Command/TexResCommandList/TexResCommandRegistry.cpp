@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "TexResCommandRegistry.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
-#include "Utils/CommonUtil.h"
 
 AddFontKeyCommand::AddFontKeyCommand(TextureResourceBinder* rb, const wstring& key, const TextureFontInfo& info) noexcept :
 	TexResCommand{ rb }, m_key{ key }, m_record{ info }

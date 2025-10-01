@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TextureInfo.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 
 TextureInfo::~TextureInfo()
 {

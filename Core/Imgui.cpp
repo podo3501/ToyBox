@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "Imgui.h"
+#include "Imgui/imgui.h"
+#include "Imgui/imgui_impl_win32.h"
+#include "Imgui/imgui_impl_dx12.h"
 #include "../Toy/Window.h"
 #include "../Core/Renderer.h"
-#include "../Toy/Utils/CommonUtil.h"
 
 constexpr int NUM_FRAMES_IN_FLIGHT = 2;
 
@@ -17,6 +19,13 @@ Imgui::~Imgui()
     ImGui_ImplDX12_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+}
+
+static string GetExePath()
+{
+    char buffer[MAX_PATH];
+    GetModuleFileNameA(NULL, buffer, MAX_PATH);
+    return filesystem::path(buffer).parent_path().string();
 }
 
 bool Imgui::Initialize(ID3D12Device* device, DescriptorHeap* descHeap, DXGI_FORMAT format, size_t srvOffset)
@@ -44,8 +53,9 @@ bool Imgui::Initialize(ID3D12Device* device, DescriptorHeap* descHeap, DXGI_FORM
         descHeap->GetCpuHandle(srvOffset),
         descHeap->GetGpuHandle(srvOffset)));
 
+    auto exePath = GetExePath(); //임시로 exe가 있는 위치를 가지고 와서 리소스를 찾는다. tool exe배포하게 되면 이 부분을 수정해야 한다.
     //폰트 설정(제일 위에 있는 폰트가 index 0를 가지며 default 폰트이다.
-    string ttfFilename = "ThirdParty/Srcs/Imgui/misc/fonts/DroidSans.ttf";
+    string ttfFilename = exePath + "/" + "../../ThirdParty/Srcs/Imgui/misc/fonts/DroidSans.ttf";
     auto font = m_io->Fonts;
     font->AddFontFromFileTTF(ttfFilename.c_str(), 15.0f);
     font->AddFontFromFileTTF(ttfFilename.c_str(), 18.0f);

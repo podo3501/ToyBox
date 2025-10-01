@@ -2,8 +2,6 @@
 #include "TextureResourceBinder.h"
 #include "../JsonOperation/JsonOperation.h"
 #include "../UIComponent/UIUtility.h"
-#include "Utils/CommonUtil.h"
-
 
 TextureResourceBinder::~TextureResourceBinder() = default;
 TextureResourceBinder::TextureResourceBinder()

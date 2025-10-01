@@ -5,6 +5,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Public">
+      <UniqueIdentifier>{a1f8cd62-f503-4c43-84fd-b0f7a5ae35c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeviceResources.cpp" />
@@ -56,6 +59,21 @@
     </ClInclude>
     <ClInclude Include="TextureRepository\TextureHelper.h">
       <Filter>TextureRepository</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\d3dx12.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\IComponent.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\IRenderer.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\ITextureBinder.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\TypeAliases.h">
+      <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

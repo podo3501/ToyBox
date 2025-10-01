@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "Utils/CommonUtil.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()

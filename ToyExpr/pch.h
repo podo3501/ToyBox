@@ -50,7 +50,7 @@
 #else
 #include <d3d12.h>
 
-#include "../Include/d3dx12.h"
+#include "d3dx12.h"
 #endif
 
 #include <dxgi1_6.h>
@@ -120,13 +120,7 @@
 #include "DirectXTK12/WICTextureLoader.h"
 
 //json
-#include "../Include/nlohmann/json.hpp"
-
-//Immediate Mode GUI include
-#include "Imgui/imgui.h"
-#include "Imgui/imgui_impl_win32.h"
-#include "Imgui/imgui_impl_dx12.h"
-#include "Imgui/imgui_internal.h"
+#include "nlohmann/json.hpp"
 
 #ifdef _DEBUG
 #define DX12_ENABLE_DEBUG_LAYER
@@ -137,7 +131,7 @@
 #pragma comment(lib, "dxguid.lib")
 #endif
 
-#include "../Common/Assert.h"
+#include "../Shared/Common.h"
 
 using namespace std;
 using namespace DirectX;

@@ -1,10 +1,9 @@
 #include "pch.h"
 #include "TextureSourceInfo.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "GameConfig.h"
 #include "../JsonOperation/JsonOperation.h"
 #include "../UIComponent/UIType.h"
-#include "Utils/CommonUtil.h"
 
 TextureSourceInfo::~TextureSourceInfo() = default;
 TextureSourceInfo::TextureSourceInfo() noexcept :

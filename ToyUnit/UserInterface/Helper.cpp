@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Helper.h"
-#include "../Include/IComponent.h"
+#include "IComponent.h"
 #include "GameConfig.h"
 #include "UserInterface/UIComponent/UIComponent.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"

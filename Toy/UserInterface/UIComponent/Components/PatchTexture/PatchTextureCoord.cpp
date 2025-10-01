@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "PatchTextureCoord.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "UserInterface/UIComponent/UIComponent.h"
 #include "Utils/GeometryUtil.h"
 

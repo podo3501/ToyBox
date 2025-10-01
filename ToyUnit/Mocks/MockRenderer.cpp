@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "MockRenderer.h"
-#include "../Include/ITextureBinder.h"
-#include "Utils/CommonUtil.h"
+#include "ITextureBinder.h"
 
 struct MockTextureInfo
 {

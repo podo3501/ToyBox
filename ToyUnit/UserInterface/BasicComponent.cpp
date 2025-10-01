@@ -9,7 +9,6 @@
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/UIModule.h"
-#include "Utils/CommonUtil.h"
 
 using testing::ElementsAre;
 

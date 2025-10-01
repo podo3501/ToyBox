@@ -14,21 +14,6 @@ public:
     int LineNumber = -1;
 };
 
-#ifndef ReturnIfFalse
-#define ReturnIfFalse(x) \
-	do{ \
-		if(!(x)) return false; \
-	} while (0)
-#endif
-
-#ifndef ReturnIfFailed
-#define ReturnIfFailed(x) \
-	do{ \
-		if(FAILED(x)) \
-			return false; \
-	} while (0)
-#endif
-
 template <typename E>
 constexpr auto
 Ev(E enumerator) noexcept

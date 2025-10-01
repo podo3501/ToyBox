@@ -1,6 +1,7 @@
 #pragma once
 
 struct IImguiComponent;
+struct ImGuiIO;
 class Renderer;
 class Window;
 

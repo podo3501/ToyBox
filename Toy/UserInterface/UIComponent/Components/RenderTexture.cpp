@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "RenderTexture.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "Utils/GeometryUtil.h"
 #include "../../JsonOperation/JsonOperation.h"
 #include "InputManager.h"

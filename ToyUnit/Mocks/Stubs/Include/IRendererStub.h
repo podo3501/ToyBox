@@ -1,4 +1,4 @@
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 
 struct ITextureLoadStub : public ITextureLoad
 {

@@ -2,7 +2,6 @@
 #include "UIHierarchy.h"
 #include "UIComponent.h"
 #include "UIComponentEx.h"
-#include "Utils/CommonUtil.h"
 
 //const vector<unique_ptr<UIComponent>>& UIHierarchy<UIComponent>::GetChildren() const noexcept
 //{ 

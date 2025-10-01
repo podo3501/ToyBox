@@ -2,7 +2,7 @@
 #include "TextureSwitcher.h"
 #include "PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
-#include "../Include/IRenderer.h"
+#include "IRenderer.h"
 #include "InputManager.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
 #include "Utils/GeometryUtil.h"

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../Include/IRenderer.h"
+#include "Public/IRenderer.h"
 #include "IDeviceNotify.h"
 
 struct IImgui;

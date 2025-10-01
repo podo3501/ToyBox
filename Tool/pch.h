@@ -49,7 +49,7 @@
 #else
 #include <d3d12.h>
 
-#include "../Include/d3dx12.h"
+#include "d3dx12.h"
 #endif
 
 #include <dxgi1_6.h>
@@ -119,7 +119,7 @@
 #include "DirectXTK12/WICTextureLoader.h"
 
 //json
-#include "../Include/nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 
 //Immediate Mode GUI include
 #include "Imgui/imgui.h"
@@ -154,7 +154,7 @@ inline void PIXEndEvent(T*) {}
 #include <pix.h>
 #endif
 
-#include "../Common/Assert.h"
+#include "../Shared/Common.h"
 
 using namespace std;
 using namespace DirectX;

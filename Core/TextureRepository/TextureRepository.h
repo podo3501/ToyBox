@@ -1,5 +1,5 @@
 #pragma once
-#include "../Include/IRenderer.h"
+#include "Public/IRenderer.h"
 #include "Setting.h"
 
 class Texture;

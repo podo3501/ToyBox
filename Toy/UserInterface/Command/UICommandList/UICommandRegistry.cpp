@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "UICommandRegistry.h"
-#include "Utils/CommonUtil.h"
+#include "IRenderer.h"
 #include "../../UIModule.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
@@ -8,7 +8,6 @@
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
 #include "../../UIComponent/Components/TextureSwitcher.h"
 #include "../../UIComponent/Components/TextArea.h"
-#include "../Include/IRenderer.h"
 
 AttachComponentCommand::AttachComponentCommand(UIComponent* parent,
 	unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept :

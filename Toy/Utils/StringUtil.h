@@ -1,5 +1,4 @@
 #pragma once
-#include "CommonUtil.h"
 
 wstring StringToWString(const string& str) noexcept;
 //string RemoveNullTerminator(const string& str) noexcept;

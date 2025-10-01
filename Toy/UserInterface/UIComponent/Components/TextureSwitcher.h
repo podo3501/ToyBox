@@ -1,6 +1,6 @@
 #pragma once
 #include "../UIComponent.h"
-#include "../Include/TypeAliases.h"
+#include "TypeAliases.h"
 
 enum class KeyState;
 struct TextureSourceInfo;

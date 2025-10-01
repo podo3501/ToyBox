@@ -1,5 +1,4 @@
 #pragma once
-#include "CommonUtil.h"
 
 inline bool CompareEpsilon(float a, float b, float epsilon = 1e-6f) noexcept
 {
@@ -18,19 +17,10 @@ inline XMINT2 operator/(const XMINT2& a, const XMINT2& b) noexcept {
 	return XMINT2((b.x != 0) ? a.x / b.x : 0, (b.y != 0) ? a.y / b.y : 0);
 }
 
-inline ImVec2 operator+(const ImVec2& a, const ImVec2& b) noexcept { return ImVec2(a.x + b.x, a.y + b.y); }
-inline ImVec2 operator-(const ImVec2& a, const ImVec2& b) noexcept { return ImVec2(a.x - b.x, a.y - b.y); }
-
 inline XMINT2 Vector2ToXMINT2(const Vector2& rhs) noexcept {
 	return { static_cast<int32_t>(rhs.x), static_cast<int32_t>(rhs.y) };
 }
 inline Vector2 XMINT2ToVector2(const XMINT2& rhs) noexcept {
-	return { static_cast<float>(rhs.x), static_cast<float>(rhs.y) };
-}
-inline XMINT2 ImVec2ToXMINT2(const ImVec2& rhs) noexcept {
-	return { static_cast<int32_t>(rhs.x), static_cast<int32_t>(rhs.y) };
-}
-inline ImVec2 XMINT2ToImVec2(const XMINT2& rhs) noexcept {
 	return { static_cast<float>(rhs.x), static_cast<float>(rhs.y) };
 }
 
