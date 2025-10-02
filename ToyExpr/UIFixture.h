@@ -1,5 +1,5 @@
 #pragma once
-#include "../Toy/MainLoop.h"
+#include "Toy/MainLoop.h"
 
 class Window;
 class UIComponent;

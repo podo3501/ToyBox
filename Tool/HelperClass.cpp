@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "HelperClass.h"
-#include "Utils/StringUtil.h"
+#include "Shared/Utils/StringExt.h"
 #include "Utility.h"
 
 void RenameNotifier::EditName(const string& nameLabel, const string& currName, function<bool(const string&)> RenameFunc) noexcept

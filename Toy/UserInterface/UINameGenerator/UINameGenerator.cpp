@@ -4,8 +4,8 @@
 #include "ComponentNameGenerator.h"
 #include "../UIComponent/UIType.h"
 #include "../JsonOperation/JsonOperation.h"
-#include "Utils/StringUtil.h"
-#include "Utils/StlUtil.h"
+#include "Shared/Utils/StringExt.h"
+#include "Shared/Utils/StlExt.h"
 
 UINameGenerator::~UINameGenerator() = default;
 UINameGenerator::UINameGenerator() = default;

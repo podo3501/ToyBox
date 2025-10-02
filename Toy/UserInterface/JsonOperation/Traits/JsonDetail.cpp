@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "JsonDetail.hpp"
-#include "Utils/StringUtil.h"
+#include "Shared/Utils/StringExt.h"
 #include "../../UIComponent/UIType.h"
 
 namespace json_detail

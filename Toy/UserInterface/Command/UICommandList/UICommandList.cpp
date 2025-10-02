@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "UICommandList.h"
 #include "UICommandRegistry.h"
-#include "../../UIComponent/UIComponent.h"
-#include "../../UIComponent/UIType.h"
+#include "Toy/UserInterface/UIComponent/UIComponent.h"
+#include "Toy/UserInterface/UIComponent/UIType.h"
 
 UICommandList::~UICommandList() = default;
 UICommandList::UICommandList() = default;

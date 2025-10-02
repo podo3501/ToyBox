@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "UIFixture.h"
-#include "Utils/GeometryUtil.h"
+#include "Shared/Utils/GeometryExt.h"
 #include "Helper.h"
-#include "GameConfig.h"
-#include "UserInterface/UIComponent/Components/UIModuleAsComponent.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
-#include "UserInterface/UIComponent/Components/RenderTexture.h"
-#include "UserInterface/UIComponent/Components/TextureSwitcher.h"
-#include "UserInterface/UIComponent/UIComponentEx.h"
-#include "UserInterface/UIComponent/Components/SampleComponent.h"
+#include "Toy/GameConfig.h"
+#include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
+#include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "Toy/UserInterface/UIComponent/UIComponentEx.h"
+#include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 
 using ::testing::_;
 using ::testing::Exactly;

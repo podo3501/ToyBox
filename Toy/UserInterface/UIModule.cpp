@@ -6,7 +6,7 @@
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
 #include "UIComponent/Components/Panel.h"
-#include "Utils/StlUtil.h"
+#include "Shared/Utils/StlExt.h"
 
 UIModule::~UIModule()
 {

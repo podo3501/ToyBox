@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Editbutton.h"
-#include "UserInterface/UIComponent/Components/Button.h"
+#include "Toy/UserInterface/UIComponent/Components/Button.h"
 
 EditButton::~EditButton() {};
 EditButton::EditButton(Button* button, UICommandList* cmdList) noexcept :

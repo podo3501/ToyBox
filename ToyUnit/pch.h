@@ -137,7 +137,7 @@
 #pragma comment(lib, "dxguid.lib")
 #endif
 
-#include "../Shared/Common.h"
+#include "Shared/Utils/Common.h"
 
 using namespace std;
 using namespace DirectX;

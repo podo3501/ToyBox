@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "AutoNamer.h"
 #include "ComponentNameGenerator.h"
-#include "Utils/StringUtil.h"
-#include "Utils/StlUtil.h"
+#include "Shared/Utils/StringExt.h"
+#include "Shared/Utils/StlExt.h"
 #include "../JsonOperation/JsonOperation.h"
 
 ComponentNameGenerator::~ComponentNameGenerator() = default;

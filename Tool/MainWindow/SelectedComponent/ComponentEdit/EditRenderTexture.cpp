@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "EditRenderTexture.h"
-#include "UserInterface/UIComponent/Components/RenderTexture.h"
+#include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 
 EditRenderTexture::~EditRenderTexture() = default;
 EditRenderTexture::EditRenderTexture(RenderTexture* renderTexture, UICommandList* cmdList) noexcept :

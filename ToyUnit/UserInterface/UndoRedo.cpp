@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "UIFixture.h"
-#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
-#include "UserInterface/UIComponent/Components/TextureSwitcher.h"
-#include "UserInterface/UIComponent/Components/SampleComponent.h"
-#include "UserInterface/Command/UICommandList/UICommandList.h"
-#include "UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "UserInterface/UIModule.h"
+#include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
+#include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "Toy/UserInterface/Command/UICommandList/UICommandList.h"
+#include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "Toy/UserInterface/UIModule.h"
 
 namespace UserInterface
 {

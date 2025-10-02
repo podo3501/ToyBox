@@ -1,5 +1,24 @@
 ﻿#pragma once
 
+// Use the C++ standard templated min/max
+#define NOMINMAX
+
+// DirectX apps don't need GDI
+#define NODRAWTEXT
+#define NOGDI
+#define NOBITMAP
+
+#include <algorithm>
+#include <cmath>
+#include <optional>
+#include <ranges>
+#include <string>
+#include <string_view>
+
+//DirectXTK12 include
+#include "DirectXTK12/SimpleMath.h"
+#include "DirectXTK12/Mouse.h"
+
 //Tracy Profiler
 //Define을 먼저 정의해 주어야 Tracy.hpp가 컴파일될때 그에 맞게 코드가 적용된다.
 //#define TRACY_ENABLE
@@ -16,4 +35,10 @@
 	#endif
 #endif
 
+#include "Utils/Common.h"
+
 using namespace std;
+using namespace DirectX;
+using namespace DirectX::SimpleMath;
+
+

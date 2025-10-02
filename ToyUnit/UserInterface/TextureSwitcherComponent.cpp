@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "UIFixture.h"
 #include "Helper.h"
-#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "UserInterface/UIComponent/Components/TextureSwitcher.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
-#include "UserInterface/UIComponent/Components/SampleComponent.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"
+#include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 
 namespace UserInterface
 {

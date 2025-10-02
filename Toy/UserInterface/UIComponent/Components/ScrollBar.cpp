@@ -6,7 +6,7 @@
 #include "Button.h"
 #include "InputManager.h"
 #include "../../JsonOperation/JsonOperation.h"
-#include "Utils/GeometryUtil.h"
+#include "Shared/Utils/GeometryExt.h"
 
 ScrollBar::~ScrollBar() = default;
 ScrollBar::ScrollBar() :

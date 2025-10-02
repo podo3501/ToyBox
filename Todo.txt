@@ -173,11 +173,17 @@
 --Imgui를 ThirdParty로 옮기면서 툴에서 Imvec쓰는 확장 Helper 만들기
 --공통부분 Shared 프로젝트로 옮기기
 --pch 정리. unit 프로젝트에는 대부분 떼어내고 필요한 것만 넣어놓을 예정    
+--깃헙에서 다운 받아서 동작하는지 확인
+--클라이언트 Utility를 Shared로 옮기기
+--window를 Shared로 옮기기
+--깃헙에서 readme에 프로젝트 내용 기술 및 실행 방법 기술
 
 @프로젝트 정리   
-    깃헙에서 다운 받아서 동작하는지 확인
-    깃헙에서 readme에 프로젝트 내용 기술 및 실행 방법 기술
-    클라이언트 Utility를 Shared로 옮기기
+    Json을 UI말고도 다른데서 활용할 수 있도록 UI쪽 데이터와 분리해서 공통부분은 Shared에 올리기.
+    InputManager를 System/Input으로 바꿈
+    SDL 사운드를 System/Audio로 할 예정.
+    MainLoop 폴더를 만들고 Main.cpp에서 윈도우 초기화와 initialize함. App에서는 Main을 만들고 Run만 해주는 식으로 수정
+    Config은 환경설정, 그래픽, 키보드 등등 여러가지 설정이 있을 수 있으니 Config안에 여러개의 파일들이 나올수 있으니까 폴더를 만들고 거기에 넣는거를 고려.
 
 @툴에서 리스트 할 수 있게끔
     컨테이너 간격 셋팅 

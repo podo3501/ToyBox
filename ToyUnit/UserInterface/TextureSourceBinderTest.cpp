@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "UIFixture.h"
-#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "UserInterface/TextureResourceBinder/TextureLoadBinder.h"
+#include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
 #include "Helper.h"
 
 namespace UserInterface

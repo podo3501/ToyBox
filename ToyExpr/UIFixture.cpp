@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "UIFixture.h"
 #include "IRenderer.h"
-#include "../Shared/Profiler.h"
-#include "../Toy/Window.h"
-#include "../Toy/GameConfig.h"
-#include "../Toy/UserInterface/UIComponent/UIComponent.h"
-#include "../Toy/UserInterface/UIModule.h"
-#include "../Toy/InputManager.h"
-#include "../Toy/Utils/GeometryUtil.h"
+#include "Shared/Utils/Profiler.h"
+#include "Shared/Window/Window.h"
+#include "Shared/Utils/GeometryExt.h"
+#include "Toy/GameConfig.h"
+#include "Toy/UserInterface/UIComponent/UIComponent.h"
+#include "Toy/UserInterface/UIModule.h"
+#include "Toy/InputManager.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()

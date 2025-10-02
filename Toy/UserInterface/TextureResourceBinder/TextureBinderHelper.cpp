@@ -3,7 +3,7 @@
 #include "TextureResourceBinder.h"
 #include "../UIComponent/UIUtility.h"
 #include "../UIComponent/UIType.h"
-#include "Utils/GeometryUtil.h"
+#include "Shared/Utils/GeometryExt.h"
 
 optionalRef<vector<Rectangle>> GetSourcesOfBindKey(TextureResourceBinder* rb, const string& key) noexcept
 {

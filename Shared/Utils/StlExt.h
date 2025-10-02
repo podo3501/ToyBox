@@ -1,5 +1,5 @@
 #pragma once
-#include "StlUtilTraitsConcepts.hpp"
+#include "StlExtTraitsConcepts.hpp"
 
 //set, unordered_set, map, unordered_map 에 insert를 할때 없으면 insert 있으면 false를 리턴하는 stl 헬퍼함수(이걸 쓰면 속도가 빠르다)
 //다른 stl은 리턴값이 다르거나 multixxx 같은 경우는 중복키를 포함하기 때문에 리턴값이 true만 나오니 불필요하다.
@@ -93,7 +93,7 @@ Assoc CopyAssoc(const Assoc& src)
 
 	Assoc dst{};
 	for (const auto& [key, value] : src)
-		dst.emplace(key, value ? StlUtilDetail::SmartMake<MappedType>::make(*value) : nullptr);
+		dst.emplace(key, value ? StlExtDetail::SmartMake<MappedType>::make(*value) : nullptr);
 
 	return dst;
 }
@@ -108,7 +108,7 @@ auto& TryEmplaceAssoc(Assoc& map, const Key& key, Args&&... args)
 	if constexpr (!SmartPointerLike<MappedType>)
 		return map.try_emplace(key, MappedType(std::forward<Args>(args)...)).first->second;
 
-	return map.try_emplace(key, StlUtilDetail::SmartMake<MappedType>::make(std::forward<Args>(args)...)).first->second;
+	return map.try_emplace(key, StlExtDetail::SmartMake<MappedType>::make(std::forward<Args>(args)...)).first->second;
 }
 
 //원소가 몇번째에 있는지 확인

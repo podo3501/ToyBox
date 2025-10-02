@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MainLoop.h"
 #include "IRenderer.h"
-#include "Window.h"
+#include "Shared/Window/Window.h"
 
 LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

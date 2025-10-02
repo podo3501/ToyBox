@@ -56,9 +56,6 @@
     <Filter Include="UserInterface\JsonOperation\Traits">
       <UniqueIdentifier>{bdbe2f3b-a5fc-4c2b-a1dc-f2816d7c26ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{20c09a70-3f20-4355-a47c-95afb2fff7d7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UserInterface\UINameGenerator">
       <UniqueIdentifier>{f4569c6f-77f4-4758-a897-59e37b1e9875}</UniqueIdentifier>
     </Filter>
@@ -72,9 +69,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="GameMainLoop.h" />
-    <ClInclude Include="Window.h" />
-    <ClInclude Include="WindowProcedure.h" />
-    <ClInclude Include="Locator.h" />
     <ClInclude Include="MainLoop.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="InputManager.h" />
@@ -231,12 +225,6 @@
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\StlTypeExt.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\StringUtil.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UINameGenerator\AutoNamer.h">
       <Filter>UserInterface\UINameGenerator</Filter>
     </ClInclude>
@@ -246,21 +234,10 @@
     <ClInclude Include="UserInterface\UINameGenerator\UINameGenerator.h">
       <Filter>UserInterface\UINameGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\StlUtil.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\GeometryUtil.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\StlUtilTraitsConcepts.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="GameMainLoop.cpp" />
-    <ClCompile Include="Window.cpp" />
-    <ClCompile Include="WindowProcedure.cpp" />
     <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="MainLoop.cpp" />
     <ClCompile Include="GameConfig.cpp" />
@@ -403,9 +380,6 @@
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponent.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\StringUtil.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UINameGenerator\AutoNamer.cpp">
       <Filter>UserInterface\UINameGenerator</Filter>
     </ClCompile>
@@ -414,12 +388,6 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UINameGenerator\UINameGenerator.cpp">
       <Filter>UserInterface\UINameGenerator</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\StlUtil.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\GeometryUtil.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

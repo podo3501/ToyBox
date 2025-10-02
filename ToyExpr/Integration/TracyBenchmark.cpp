@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "UIFixture.h"
-#include "UserInterface/UIComponent/Components/SampleComponent.h"
-#include "UserInterface/UIComponent/Components/ListArea.h"
+#include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "Toy/UserInterface/UIComponent/Components/ListArea.h"
 
 namespace Integration
 {

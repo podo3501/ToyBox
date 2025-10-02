@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/StlTypeExt.hpp"
+#include "Shared/Utils/StlTypeExt.hpp"
 
 class JsonOperation;
 class AutoNamer;

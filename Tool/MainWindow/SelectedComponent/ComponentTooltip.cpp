@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ComponentTooltip.h"
-#include "UserInterface/UIComponent/Components/Panel.h"
-#include "Utils/GeometryUtil.h"
+#include "Toy/UserInterface/UIComponent/Components/Panel.h"
+#include "Shared/Utils/GeometryExt.h"
 #include "Utility.h"
 
 ComponentTooltip::~ComponentTooltip() = default;

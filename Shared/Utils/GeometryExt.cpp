@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "GeometryUtil.h"
+#include "GeometryExt.h"
 
 Rectangle CombineRectangles(const vector<Rectangle>& rectangles) noexcept
 {

@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "FileTab.h"
 #include "Dialog.h"
-#include "Window.h"
-#include "Utils/StringUtil.h"
 #include "ToolSystem.h"
 #include "MainWindow/MainWindow.h"
 #include "TextureResBinderWindow/TextureResBinderWindow.h"
 #include "MenuHelper.h"
 #include "RecentFiles.h"
 #include "ToolConfig.h"
+#include "Shared/Window/Window.h"
+#include "Shared/Utils/StringExt.h"
 
 using namespace Tool;
 

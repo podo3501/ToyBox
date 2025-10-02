@@ -1,14 +1,14 @@
 ﻿#include "pch.h"
 #include "UIFixture.h"
 #include "Helper.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
-#include "UserInterface/UIComponent/Components/Container.h"
-#include "UserInterface/UIComponent/Components/TextArea.h"
-#include "UserInterface/UIComponent/Components/SampleComponent.h"
-#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "UserInterface/UIModule.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
+#include "Toy/UserInterface/UIComponent/Components/Container.h"
+#include "Toy/UserInterface/UIComponent/Components/TextArea.h"
+#include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "Toy/UserInterface/UIModule.h"
 
 using testing::ElementsAre;
 

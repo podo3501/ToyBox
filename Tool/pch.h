@@ -154,7 +154,7 @@ inline void PIXEndEvent(T*) {}
 #include <pix.h>
 #endif
 
-#include "../Shared/Common.h"
+#include "Shared/Utils/Common.h"
 
 using namespace std;
 using namespace DirectX;

@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "UIComponent.h"
-#include "Utils/StlUtil.h"
-#include "Utils/GeometryUtil.h"
+#include "Shared/Utils/StlExt.h"
+#include "Shared/Utils/GeometryExt.h"
 #include "../JsonOperation/JsonOperation.h"
 #include "GameConfig.h"
 

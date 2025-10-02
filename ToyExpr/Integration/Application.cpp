@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "IRenderer.h"
-#include "GameMainLoop.h"
-#include "WindowProcedure.h"
-#include "Window.h"
+#include "Toy/GameMainLoop.h"
+#include "Shared/Window/WindowProcedure.h"
+#include "Shared/Window/Window.h"
 
 namespace Integration
 {

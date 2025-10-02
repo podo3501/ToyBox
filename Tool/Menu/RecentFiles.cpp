@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "RecentFiles.h"
-#include "UserInterface/JsonOperation/JsonOperation.h"
-#include "Utils/StringUtil.h"
+#include "Shared/Utils/StringExt.h"
+#include "Toy/UserInterface/JsonOperation/JsonOperation.h"
 #include "FileTab.h"
 
 RecentFiles::RecentFiles()

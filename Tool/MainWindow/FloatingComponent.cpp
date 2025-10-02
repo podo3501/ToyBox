@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "FloatingComponent.h"
 #include "IRenderer.h"
-#include "UserInterface/UIComponent/Components/RenderTexture.h"
-#include "UserInterface/UIComponent/Components/SampleComponent.h"
-#include "UserInterface/UIComponent/Components/TextArea.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
-#include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
-#include "UserInterface/UIComponent/Components/ListArea.h"
-#include "UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
+#include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "Toy/UserInterface/UIComponent/Components/TextArea.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
+#include "Toy/UserInterface/UIComponent/Components/ListArea.h"
+#include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, TextureResourceBinder* resBinder, const string& mainWndName) noexcept :
 	m_renderer{ renderer },

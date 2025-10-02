@@ -2,11 +2,11 @@
 #include "MainWindow.h"
 #include "Utility.h"
 #include "ComponentController.h"
-#include "UserInterface/UIComponent/Components/RenderTexture.h"
-#include "UserInterface/UIComponent/Components/UIModuleAsComponent.h"
-#include "UserInterface/UIModule.h"
-#include "InputManager.h"
-#include "StepTimer.h"
+#include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
+#include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
+#include "Toy/UserInterface/UIModule.h"
+#include "Toy/InputManager.h"
+#include "Toy/StepTimer.h"
 
 int MainWindow::m_mainWindowIndex = 0;
 

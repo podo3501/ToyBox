@@ -5,7 +5,7 @@
 #include "IRenderer.h"
 #include "InputManager.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
-#include "Utils/GeometryUtil.h"
+#include "Shared/Utils/GeometryExt.h"
 
 using enum InteractState;
 

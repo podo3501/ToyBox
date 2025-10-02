@@ -1,10 +1,10 @@
 ﻿#include "pch.h"
 #include "MainLoop.h"
 #include "IRenderer.h"
-#include "../Shared/Profiler.h"
+#include "Shared/Utils/Profiler.h"
 #include "GameConfig.h"
-#include "Window.h"
-#include "WindowProcedure.h"
+#include "Shared/Window/Window.h"
+#include "Shared/Window/WindowProcedure.h"
 #include "InputManager.h"
 
 MainLoop::~MainLoop()

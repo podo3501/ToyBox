@@ -4,7 +4,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace StlUtilDetail //이왕이면 StlUtil에서만 쓸려고 namespace 함.
+namespace StlExtDetail //이왕이면 StlUtil에서만 쓸려고 namespace 함.
 {
 	template<typename T>
 	struct IsSmartPointer : std::false_type {};
@@ -49,7 +49,7 @@ template <typename T>
 concept RawPointerLike = std::is_pointer_v<T>;
 
 template <typename SmartPtr>
-concept SmartPointerLike = StlUtilDetail::IsSmartPointer<SmartPtr>::value;
+concept SmartPointerLike = StlExtDetail::IsSmartPointer<SmartPtr>::value;
 
 template <typename T>
-concept PointerLike = RawPointerLike<T> || StlUtilDetail::IsSmartPointer<T>::value;
+concept PointerLike = RawPointerLike<T> || StlExtDetail::IsSmartPointer<T>::value;

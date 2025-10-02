@@ -1,10 +1,10 @@
 #include "pch.h"
-#include "GameConfig.h"
-#include "UserInterface/UIComponent/UIUtility.h"
-#include "UserInterface/UIComponent/UIComponent.h"
-#include "UserInterface/JsonOperation/JsonOperation.h"
-#include "Utils/StlTypeExt.hpp"
-#include "Utils/StlUtil.h"
+#include "Toy/GameConfig.h"
+#include "Toy/UserInterface/UIComponent/UIUtility.h"
+#include "Toy/UserInterface/UIComponent/UIComponent.h"
+#include "Toy/UserInterface/JsonOperation/JsonOperation.h"
+#include "Shared/Utils/StlTypeExt.hpp"
+#include "Shared/Utils/StlExt.h"
 
 namespace Utility
 {

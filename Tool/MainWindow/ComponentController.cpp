@@ -2,9 +2,9 @@
 #include "ComponentController.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
-#include "UserInterface/UIComponent/Components/Panel.h"
-#include "InputManager.h"
-#include "UserInterface/Command/UICommandList/UICommandList.h"
+#include "Toy/UserInterface/UIComponent/Components/Panel.h"
+#include "Toy/InputManager.h"
+#include "Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "Dialog.h"
 #include "Utility.h"
 

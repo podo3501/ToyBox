@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "UIFixture.h"
 #include "Helper.h"
-#include "UserInterface/UIComponent/Components/SampleComponent.h"
-#include "UserInterface/UIComponent/Components/ScrollBar.h"
-#include "UserInterface/UIComponent/Components/RenderTexture.h"
-#include "UserInterface/UIComponent/Components/ListArea.h"
-#include "UserInterface/UIComponent/Components/TextureSwitcher.h"
-#include "InputManager.h"
+#include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
+#include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
+#include "Toy/UserInterface/UIComponent/Components/ListArea.h"
+#include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "Toy/InputManager.h"
 
 namespace UserInterface
 {

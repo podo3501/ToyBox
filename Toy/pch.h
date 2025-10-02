@@ -165,8 +165,8 @@ inline void PIXEndEvent(T*) {}
 	#endif
 #endif
 
-#include "../Shared/Common.h"
-#include "Utils/StlTypeExt.hpp"
+#include "Shared/Utils/Common.h"
+#include "Shared/Utils/StlTypeExt.hpp"
 
 using namespace std;
 using namespace DirectX;

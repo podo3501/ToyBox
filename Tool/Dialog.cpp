@@ -2,8 +2,8 @@
 #include "Dialog.h"
 #include <shobjidl.h>
 #include <wrl/wrappers/corewrappers.h>
-#include "UserInterface/UIComponent/EnumUtility.h"
-#include "GameConfig.h"
+#include "Toy/UserInterface/UIComponent/EnumUtility.h"
+#include "Toy/GameConfig.h"
 
 template<>
 constexpr size_t EnumSize<DialogType>() { return 4; }
