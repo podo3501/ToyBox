@@ -2,8 +2,8 @@
 #include "RenderTexture.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Shared/System/Input.h"
 #include "../../JsonOperation/JsonOperation.h"
-#include "InputManager.h"
 
 RenderTexture::~RenderTexture() 
 { 
@@ -116,7 +116,7 @@ bool RenderTexture::Setup(unique_ptr<UIComponent> component) noexcept
 
 void RenderTexture::CheckMouseInArea() noexcept
 {
-	m_mouseInArea = Contains(GetArea(), InputManager::GetMouse().GetPosition());
+	m_mouseInArea = Contains(GetArea(), Input::GetMouse().GetPosition());
 }
 
 void RenderTexture::CheckEnterLeave() noexcept

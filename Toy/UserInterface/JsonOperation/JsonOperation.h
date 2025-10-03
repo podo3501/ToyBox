@@ -1,9 +1,6 @@
 #pragma once
 #include "JsonConcepts.h"
 
-class UIComponent;
-class UINameGenerator;
-
 class JsonOperation
 {
 public:

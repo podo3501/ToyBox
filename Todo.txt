@@ -177,13 +177,15 @@
 --클라이언트 Utility를 Shared로 옮기기
 --window를 Shared로 옮기기
 --깃헙에서 readme에 프로젝트 내용 기술 및 실행 방법 기술
+--InputManager를 Shared/System/Input으로 바꿈
+--Config을 Environment와 config 두개로 분리하고 Environment는 app이 기동할때 최소한의 정보를 넣는다.
+--Shared/Framework를 만들고 AppLoop를 여기에 두고 exe 프로젝트가 상속받아서 loop돌리게끔 수정
 
 @프로젝트 정리   
     Json을 UI말고도 다른데서 활용할 수 있도록 UI쪽 데이터와 분리해서 공통부분은 Shared에 올리기.
-    InputManager를 System/Input으로 바꿈
-    SDL 사운드를 System/Audio로 할 예정.
-    MainLoop 폴더를 만들고 Main.cpp에서 윈도우 초기화와 initialize함. App에서는 Main을 만들고 Run만 해주는 식으로 수정
-    Config은 환경설정, 그래픽, 키보드 등등 여러가지 설정이 있을 수 있으니 Config안에 여러개의 파일들이 나올수 있으니까 폴더를 만들고 거기에 넣는거를 고려.
+    Command부분을 알기쉽게 이름 리팩토링 CommandHistory같은.
+    SDL 사운드를 Shared/System/Audio로 할 예정.
+    툴 root 정리
 
 @툴에서 리스트 할 수 있게끔
     컨테이너 간격 셋팅 

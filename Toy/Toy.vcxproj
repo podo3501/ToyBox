@@ -225,11 +225,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="GameConfig.h" />
-    <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="GameMainLoop.h" />
-    <ClInclude Include="MainLoop.h" />
+    <ClInclude Include="GameLoop.h" />
     <ClInclude Include="UserInterface\Command\Command.h" />
     <ClInclude Include="UserInterface\Command\CommandList.h" />
     <ClInclude Include="UserInterface\Command\CommandType.h" />
@@ -240,9 +236,12 @@
     <ClInclude Include="UserInterface\JsonOperation\JsonConcepts.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h" />
     <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp" />
-    <ClInclude Include="UserInterface\JsonOperation\JsonSerializationHelper.hpp" />
+    <ClInclude Include="UserInterface\JsonOperation\JsonSerializer.h" />
+    <ClInclude Include="UserInterface\JsonOperation\JsonSerializer.hpp" />
     <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp" />
+    <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetailExt.h" />
     <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.h" />
+    <ClInclude Include="UserInterface\JsonOperation\Traits\TraitsExt.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureBinderHelper.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureFontInfo.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureInfo.h" />
@@ -285,21 +284,18 @@
     <ClInclude Include="UserInterface\UINameGenerator\ComponentNameGenerator.h" />
     <ClInclude Include="UserInterface\UINameGenerator\UINameGenerator.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="StepTimer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameConfig.cpp" />
-    <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="MainLoop.cpp" />
-    <ClCompile Include="MainLoopWndProc.cpp" />
     <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandList.cpp" />
     <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.cpp" />
     <ClCompile Include="UserInterface\Command\UICommandList\UICommandList.cpp" />
     <ClCompile Include="UserInterface\Command\UICommandList\UICommandRegistry.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\JsonSerializationHelper.cpp" />
+    <ClCompile Include="UserInterface\JsonOperation\JsonSerializer.cpp" />
+    <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetailExt.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\Traits\Traits.cpp" />
     <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetail.cpp" />
+    <ClCompile Include="UserInterface\JsonOperation\Traits\TraitsExt.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureBinderHelper.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureFontInfo.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureInfo.cpp" />
@@ -341,7 +337,7 @@
     <ClCompile Include="UserInterface\UINameGenerator\AutoNamer.cpp" />
     <ClCompile Include="UserInterface\UINameGenerator\ComponentNameGenerator.cpp" />
     <ClCompile Include="UserInterface\UINameGenerator\UINameGenerator.cpp" />
-    <ClCompile Include="GameMainLoop.cpp" />
+    <ClCompile Include="GameLoop.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -350,26 +346,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="resource.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="directx.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Manifest Include="settings.manifest" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">
       <Project>{60e13bba-4299-40f7-8fc1-c9e1928486f4}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Shared\Shared.vcxproj">
       <Project>{a9d428f9-8ced-42b2-ad67-3e2a3e8c08ff}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Resources\Tool\Config.json" />
-    <None Include="..\Resources\Tool\OpenRecentFiles.json" />
-    <None Include="..\Resources\UI\Texture\ExtractTexture.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

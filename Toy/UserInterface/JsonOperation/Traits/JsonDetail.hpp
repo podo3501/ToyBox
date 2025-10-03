@@ -10,8 +10,6 @@
 	};
 #endif //DECLARE_KEY_CONVERTER
 
-enum class InteractState;
-enum class ComponentID;
 namespace json_detail
 {
 	//Key 변환 헬퍼
@@ -24,8 +22,6 @@ namespace json_detail
 	//Key 특수화
 	DECLARE_KEY_CONVERTER(int)
 	DECLARE_KEY_CONVERTER(wstring)
-	DECLARE_KEY_CONVERTER(InteractState)
-	DECLARE_KEY_CONVERTER(ComponentID)
 
 	template<typename K> string ToKeyString(const K& key) { return KeyConverter<K>::ToKey(key); }
 	template<typename K> K FromKeyString(const string& key) { return KeyConverter<K>::FromKey(key); }

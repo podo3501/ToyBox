@@ -29,6 +29,18 @@
     <ClInclude Include="Window\WindowProcedure.h">
       <Filter>Window</Filter>
     </ClInclude>
+    <ClInclude Include="System\Input.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\StepTimer.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\AppLoop.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Environment.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -50,6 +62,18 @@
     <ClCompile Include="Window\WindowProcedure.cpp">
       <Filter>Window</Filter>
     </ClCompile>
+    <ClCompile Include="System\Input.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\AppLoop.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\AppLoopWndProc.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Environment.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -57,6 +81,12 @@
     </Filter>
     <Filter Include="Window">
       <UniqueIdentifier>{7ce5a08c-2bc0-4572-9fcc-40c1356c1caa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{542fe64b-3dd4-4d25-b7ec-219e29079105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{70d3aad2-e44a-404e-8f32-76e91bc2e76f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

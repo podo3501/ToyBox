@@ -1,28 +1,28 @@
 ﻿#include "pch.h"
-#include "MainLoop.h"
-#include "IRenderer.h"
-#include "Shared/Utils/Profiler.h"
-#include "GameConfig.h"
-#include "Shared/Window/Window.h"
-#include "Shared/Window/WindowProcedure.h"
-#include "InputManager.h"
+#include "AppLoop.h"
+#include "Core/Public/IRenderer.h"
+#include "Utils/Profiler.h"
+#include "Environment.h"
+#include "Window/Window.h"
+#include "Window/WindowProcedure.h"
+#include "System/Input.h"
 
-MainLoop::~MainLoop()
+AppLoop::~AppLoop()
 {
     TracyShutdownProfiler();
 }
 
-MainLoop::MainLoop(Window* window, IRenderer* renderer) :
+AppLoop::AppLoop(Window* window, IRenderer* renderer) :
     m_window{ window },
     m_renderer{ renderer }
 {
     TracyStartupProfiler();
-    InputManager::Initialize(m_window->GetHandle());
+    Input::Initialize(m_window->GetHandle());
 }
 
-bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
+bool AppLoop::Initialize(const wstring& resPath, const Vector2& resolution)
 {
-    InitializeConfig(resPath, resolution);
+    InitializeEnvironment(resPath, resolution);
     
     ReturnIfFalse(InitializeClass());
     ReturnIfFalse(InitializeDerived());
@@ -33,7 +33,7 @@ bool MainLoop::Initialize(const wstring& resPath, const Vector2& resolution)
     return true;
 }
 
-bool MainLoop::InitializeClass()
+bool AppLoop::InitializeClass()
 {
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
@@ -45,7 +45,7 @@ bool MainLoop::InitializeClass()
     return true;
 }
 
-void MainLoop::AddWinProcListener() noexcept
+void AppLoop::AddWinProcListener() noexcept
 {
     m_window->AddWndProcListener([mainLoop = this](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
         return mainLoop->WndProc(wnd, msg, wp, lp); });
@@ -53,7 +53,7 @@ void MainLoop::AddWinProcListener() noexcept
         return MouseProc(wnd, msg, wp, lp); });
 }
 
-int MainLoop::Run()
+int AppLoop::Run()
 {
     // Main message loop
     MSG msg = {};
@@ -73,9 +73,9 @@ int MainLoop::Run()
     return static_cast<int>(msg.wParam);
 }
 
-void MainLoop::Tick()
+void AppLoop::Tick()
 {
-    InputManager::Update();
+    Input::Update();
 
     m_timer.Tick([&, this]()
         {
@@ -89,7 +89,7 @@ void MainLoop::Tick()
     m_renderer->Draw(); //Scene(Component의 집합)을 렌더링
 }
 
-void MainLoop::OnResuming()
+void AppLoop::OnResuming()
 {
     m_timer.ResetElapsedTime();
 

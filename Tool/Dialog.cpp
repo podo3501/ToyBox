@@ -3,7 +3,7 @@
 #include <shobjidl.h>
 #include <wrl/wrappers/corewrappers.h>
 #include "Toy/UserInterface/UIComponent/EnumUtility.h"
-#include "Toy/GameConfig.h"
+#include "Shared/Framework/Environment.h"
 
 template<>
 constexpr size_t EnumSize<DialogType>() { return 4; }

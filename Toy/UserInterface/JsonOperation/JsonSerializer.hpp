@@ -2,8 +2,6 @@
 #include "Traits/Traits.h"
 #include "JsonConcepts.h"
 
-class UIComponent;
-
 template<typename T>
 inline void SerializeClassIO_GenerateJson(T& data, nlohmann::ordered_json& outWriteJ)
 {
@@ -16,7 +14,6 @@ inline void SerializeClassIO_GenerateJson(T& data, nlohmann::ordered_json& outWr
 
 template<typename T>
 void SerializeClassIO_Internal(T& data, nlohmann::ordered_json& j) { SerializeClassIO_GenerateJson(data, j); }
-void SerializeClassIO_Internal(UIComponent& data, nlohmann::ordered_json& j);
 
 template<typename T>
 void SerializeClassIO(T& data, nlohmann::ordered_json& j) { SerializeClassIO_Internal(data, j); }
@@ -47,8 +44,6 @@ void DeserializeClassIO(const nlohmann::json& j, unique_ptr<T>& data)
 	data = make_unique<T>();
 	DeserializeClassIO_Internal(j, *data);
 }
-
-void DeserializeClassIO(const nlohmann::json& j, unique_ptr<UIComponent>& data);
 
 template<typename T>
 nlohmann::ordered_json SerializeByType(T& v)

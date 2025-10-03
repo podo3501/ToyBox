@@ -4,11 +4,11 @@
 #include "EditSourceTexture.h"
 #include "Utility.h"
 #include "Shared/Utils/StringExt.h"
+#include "Shared/System/Input.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "Toy/InputManager.h"
 
 TextureResBinderWindow::~TextureResBinderWindow()
 {

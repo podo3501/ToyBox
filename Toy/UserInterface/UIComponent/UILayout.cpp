@@ -3,6 +3,7 @@
 #include "UIType.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "../JsonOperation/JsonOperation.h"
+#include "../JsonOperation/Traits/TraitsExt.h"
 
 UILayout::~UILayout() = default;
 UILayout::UILayout() :

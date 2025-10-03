@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "MainLoop.h"
-#include "IRenderer.h"
-#include "Shared/Window/Window.h"
+#include "AppLoop.h"
+#include "Core/Public/IRenderer.h"
+#include "Window/Window.h"
 
-LRESULT MainLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT AppLoop::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {

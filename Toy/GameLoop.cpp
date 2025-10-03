@@ -1,8 +1,8 @@
 ﻿#include "pch.h"
-#include "GameMainLoop.h"
+#include "GameLoop.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "GameConfig.h"
+#include "Shared/Framework/Environment.h"
 #include "UserInterface/UIComponent/Components/ListArea.h"
 #include "UserInterface/UIComponent/Components/Button.h"
 #include "UserInterface/UIComponent/Components/TextArea.h"
@@ -28,14 +28,14 @@ extern "C"
 }
 #endif
 
-GameMainLoop::~GameMainLoop() = default;
-GameMainLoop::GameMainLoop(Window* window, IRenderer* renderer) :
-    ::MainLoop(window, renderer),
+GameLoop::~GameLoop() = default;
+GameLoop::GameLoop(Window* window, IRenderer* renderer) :
+    ::AppLoop(window, renderer),
     m_window{ window },
     m_renderer{ renderer }
 {}
 
-bool GameMainLoop::InitializeDerived()
+bool GameLoop::InitializeDerived()
 {
     UILayout layout{ GetSizeFromRectangle(GetRectResolution()) };
     m_uiModule = CreateUIModule(layout, "Main", m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
@@ -45,7 +45,7 @@ bool GameMainLoop::InitializeDerived()
     return true;
 }
 
-bool GameMainLoop::AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept
+bool GameLoop::AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept
 {
     if (!component) return false;
 
@@ -55,7 +55,7 @@ bool GameMainLoop::AttachComponentToPanel(unique_ptr<UIComponent> component, con
     return true;
 }
 
-bool GameMainLoop::LoadResources()
+bool GameLoop::LoadResources()
 {
     AttachComponentToPanel(CreateComponent<TextureSwitcher>(UILayout{ {32, 32}, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal), { 100, 100 });
     AttachComponentToPanel(CreateComponent<TextureSwitcher>(UILayout{ {180, 48}, Origin::Center }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 300 });
@@ -72,7 +72,7 @@ bool GameMainLoop::LoadResources()
     return true;
 }
 
-void GameMainLoop::Update(const DX::StepTimer& timer)
+void GameLoop::Update(const DX::StepTimer& timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 

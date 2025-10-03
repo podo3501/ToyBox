@@ -2,7 +2,7 @@
 #include "IRenderer.h"
 #include "Shared/Window/Window.h"
 #include "Shared/Window/WindowProcedure.h"
-#include "Toy/GameMainLoop.h"
+#include "Toy/GameLoop.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()
@@ -62,13 +62,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		if (not renderer)
 			return 1;
 
-		auto mainLoop = make_unique<GameMainLoop>(&window, renderer.get());
-		result = mainLoop->Initialize(L"../Resources/", outputSize);
+		unique_ptr<AppLoop> appLoop = make_unique<GameLoop>(&window, renderer.get());
+		result = appLoop->Initialize(L"../Resources/", outputSize);
 		if (not result)
 			return 1;
 
-		nResult = mainLoop->Run();
-		mainLoop.reset();
+		nResult = appLoop->Run();
+		appLoop.reset();
 	}
 
 #if defined(DEBUG) | defined(_DEBUG)

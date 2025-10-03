@@ -5,6 +5,7 @@
 #include "UINameGenerator/UINameGenerator.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
+#include "UserInterface/JsonOperation/JsonSerializer.h"
 #include "UIComponent/Components/Panel.h"
 #include "Shared/Utils/StlExt.h"
 

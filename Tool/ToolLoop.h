@@ -1,5 +1,5 @@
 #pragma once
-#include "Toy/MainLoop.h"
+#include "Shared/Framework/AppLoop.h"
 
 struct IRenderer;
 class Window;
@@ -8,12 +8,12 @@ class TestImgui;
 class ToolSystem;
 class GuiWidget;
 
-class ToolMainLoop final : public MainLoop
+class ToolLoop final : public AppLoop
 {
 public:
-	ToolMainLoop() = delete;
-	ToolMainLoop(Window* window, IRenderer* renderer);
-	virtual ~ToolMainLoop();
+	ToolLoop() = delete;
+	ToolLoop(Window* window, IRenderer* renderer);
+	virtual ~ToolLoop();
 
 protected:
 	virtual bool InitializeDerived() override;

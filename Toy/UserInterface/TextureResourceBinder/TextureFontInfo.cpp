@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "TextureFontInfo.h"
 #include "IRenderer.h"
+#include "Shared/Framework/Environment.h"
 #include "../JsonOperation/JsonOperation.h"
-#include "GameConfig.h"
 
 TextureFontInfo::~TextureFontInfo() = default;
 TextureFontInfo::TextureFontInfo() noexcept = default;

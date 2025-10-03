@@ -2,8 +2,8 @@
 #include "ComponentController.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
+#include "Shared/System/Input.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "Toy/InputManager.h"
 #include "Toy/UserInterface/Command/UICommandList/UICommandList.h"
 #include "Dialog.h"
 #include "Utility.h"
@@ -34,7 +34,7 @@ bool ComponentController::CheckAttachComponent() noexcept
 	if (!m_floater->IsComponent()) return false;
 	if (!IsInputAction(Keyboard::LeftShift, MouseButton::Left)) return false;
 
-	const XMINT2& mousePosition = InputManager::GetMouse().GetPosition();
+	const XMINT2& mousePosition = Input::GetMouse().GetPosition();
 	AttachSelectedComponent(m_cmdList.get(), m_selector.get(), m_floater.get(), mousePosition);
 
 	return true;

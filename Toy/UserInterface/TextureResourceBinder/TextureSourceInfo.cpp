@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TextureSourceInfo.h"
 #include "IRenderer.h"
-#include "GameConfig.h"
+#include "Shared/Framework/Environment.h"
 #include "../JsonOperation/JsonOperation.h"
 #include "../UIComponent/UIType.h"
 

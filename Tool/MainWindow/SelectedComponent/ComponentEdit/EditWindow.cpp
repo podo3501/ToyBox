@@ -2,7 +2,7 @@
 #include "EditWindow.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "Toy/InputManager.h"
+#include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "EditUtility/EditUtility.h"
 #include "HelperClass.h"
@@ -75,7 +75,7 @@ bool EditWindow::IsUpdateSizeOnDrag() const noexcept
 
 void EditWindow::UpdateDragState(OnDrag dragState, XMINT2& outStartPos) noexcept
 {
-    const auto& mouseState = InputManager::GetMouse().GetLastState();
+    const auto& mouseState = Input::GetMouse().GetLastState();
 
     if (IsInputAction(MouseButton::Left, KeyState::Pressed) && dragState != OnDrag::Normal)
     {
@@ -117,7 +117,7 @@ void EditWindow::ResizeComponentOnClick() noexcept
 {
     if (!m_component) return;
 
-    const XMINT2& mousePos = InputManager::GetMouse().GetPosition();
+    const XMINT2& mousePos = Input::GetMouse().GetPosition();
     OnDrag dragState = IsMouseOverResizeZone(mousePos, m_component);
     Tool::MouseCursor::SetType(GetCursorImage(dragState));
 
@@ -126,7 +126,7 @@ void EditWindow::ResizeComponentOnClick() noexcept
 
     if (IsUpdateSizeOnDrag())
     {
-        const auto& mouseTracker = InputManager::GetMouse();
+        const auto& mouseTracker = Input::GetMouse();
         const auto& mouseState = mouseTracker.GetLastState();
         ResizeComponent(startPos, mouseState);
         startPos = { mouseState.x, mouseState.y };

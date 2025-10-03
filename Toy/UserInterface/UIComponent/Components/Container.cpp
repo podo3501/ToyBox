@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "Container.h"
-#include "InputManager.h"
+#include "Shared/System/Input.h"
 #include "../../JsonOperation/JsonOperation.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
@@ -100,7 +100,7 @@ void Container::SetState(InteractState curState) noexcept
 
 void Container::NormalMode(bool isPressed, bool isHeld) noexcept
 {
-	if (!Contains(GetArea(), InputManager::GetMouse().GetPosition()))
+	if (!Contains(GetArea(), Input::GetMouse().GetPosition()))
 	{
 		SetState(Normal);
 		return;

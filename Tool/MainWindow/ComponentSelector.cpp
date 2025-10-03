@@ -5,7 +5,7 @@
 #include "SelectedComponent/EditWindowFactory.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "Toy/InputManager.h"
+#include "Shared/System/Input.h"
 #include "Shared/Utils/StlExt.h"
 #include "Dialog.h"
 #include "Utility.h"
@@ -54,7 +54,7 @@ void ComponentSelector::SelectComponent() noexcept
 	if (!IsInputAction(MouseButton::Left, KeyState::Pressed)) return;
 
 	static vector<UIComponent*> preComponentList{ nullptr };
-	const XMINT2& pos = InputManager::GetMouse().GetPosition();
+	const XMINT2& pos = Input::GetMouse().GetPosition();
 	vector<UIComponent*> componentList = UIEx(m_mainComponent).GetRenderComponents(pos);
 	if (componentList.empty()) return;
 

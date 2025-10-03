@@ -4,8 +4,8 @@
 #include "RenderTexture.h"
 #include "ScrollBar.h"
 #include "TextureSwitcher.h"
-#include "InputManager.h"
-#include "StepTimer.h"
+#include "Shared/System/StepTimer.h"
+#include "Shared/System/Input.h"
 
 ListArea::~ListArea() = default;
 ListArea::ListArea() noexcept :

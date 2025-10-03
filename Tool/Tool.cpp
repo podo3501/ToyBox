@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "ToolMainLoop.h"
+#include "ToolLoop.h"
 #include "IRenderer.h"
 #include "Shared/Window/Window.h"
 #include "Shared/Window/WindowProcedure.h"
@@ -62,13 +62,13 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance,
 		if (not renderer)
 			return 1;
 
-		unique_ptr<MainLoop> mainLoop = make_unique<ToolMainLoop>(&window, renderer.get());
-		result = mainLoop->Initialize(L"../Resources/", outputSize);
+		unique_ptr<AppLoop> appLoop = make_unique<ToolLoop>(&window, renderer.get());
+		result = appLoop->Initialize(L"../Resources/", outputSize);
 		if (not result)
 			return 1;
 
-		nResult = mainLoop->Run();
-		mainLoop.reset();
+		nResult = appLoop->Run();
+		appLoop.reset();
 	}
 
 #if defined(DEBUG) | defined(_DEBUG)

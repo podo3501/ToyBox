@@ -4,7 +4,7 @@
 //그리고 IRenderer를 쓰지 않고 IRenderer를 상속받은 MockRenderer로 해야 하는게 이론상 타당하다.
 
 #include "Mocks/MockRenderer.h"
-#include "Toy/StepTimer.h"
+#include "Shared/System/StepTimer.h"
 
 class UIModule;
 class UIComponent;

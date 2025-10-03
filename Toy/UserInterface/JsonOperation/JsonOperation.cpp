@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "JsonOperation.h"
-#include "GameConfig.h"
-#include "../UIComponent/UIComponent.h"
+#include "Shared/Framework/Environment.h"
 
 JsonOperation::~JsonOperation() = default;
 JsonOperation::JsonOperation() noexcept :

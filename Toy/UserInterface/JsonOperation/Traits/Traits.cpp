@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Traits.h"
-#include "../../UIComponent/UIType.h"
 #include "Shared/Utils/StringExt.h"
 
 nlohmann::ordered_json JsonTraitsBase<XMINT2>::SerializeToJson(const XMINT2& data) { return json_detail::SerializeXY(data); }
@@ -33,15 +32,6 @@ Rectangle JsonTraitsBase<Rectangle>::DeserializeFromJson(const nlohmann::json& d
 	return json_detail::CreateAndFill<Rectangle>([&dataJ](Rectangle& data) {
 		json_detail::DeserializeXY(data, dataJ);
 		json_detail::DeserializeRectExtra(data, dataJ); });
-}
-
-/////////////////////////////////////////////////////////////////
-
-nlohmann::ordered_json JsonTraitsBase<Origin>::SerializeToJson(const Origin& data) { return EnumToString(data); }
-Origin JsonTraitsBase<Origin>::DeserializeFromJson(const nlohmann::json& dataJ)
-{
-	return json_detail::CreateAndFill<Origin>([&dataJ](Origin& data) {
-		data = *StringToEnum<Origin>(dataJ); });
 }
 
 /////////////////////////////////////////////////////////////////

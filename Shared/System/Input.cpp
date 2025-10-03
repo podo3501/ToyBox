@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "InputManager.h"
+#include "Input.h"
 
 XMINT2 MouseTracker::GetPosition() const noexcept
 {
@@ -13,20 +13,20 @@ bool __cdecl KeyboardTracker::IsKeyHeld(Keyboard::Keys key) const noexcept
 
 ///////////////////////////////////////////////////////
 
-KeyboardTracker InputManager::m_keyboardTracker;
-Keyboard InputManager::m_keyboard;
+KeyboardTracker Input::m_keyboardTracker;
+Keyboard Input::m_keyboard;
 
-MouseTracker InputManager::m_mouseTracker;
-Mouse InputManager::m_mouse;
+MouseTracker Input::m_mouseTracker;
+Mouse Input::m_mouse;
 
-optional<XMINT2> InputManager::m_startOffset = nullopt;
+optional<XMINT2> Input::m_startOffset = nullopt;
 
-void InputManager::Initialize(HWND hwnd)
+void Input::Initialize(HWND hwnd)
 {
     m_mouse.SetWindow(hwnd);
 }
 
-void InputManager::Update() noexcept
+void Input::Update() noexcept
 {
     m_keyboardTracker.Update(m_keyboard.GetState());
     const auto& state = m_mouse.GetState();

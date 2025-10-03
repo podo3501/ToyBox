@@ -2,8 +2,9 @@
 #include "UIComponent.h"
 #include "Shared/Utils/StlExt.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Shared/Framework/Environment.h"
 #include "../JsonOperation/JsonOperation.h"
-#include "GameConfig.h"
+#include "../JsonOperation/JsonSerializer.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :

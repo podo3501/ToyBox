@@ -3,7 +3,7 @@
 #include "Shared/Utils/StringExt.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
-#include "Toy/GameConfig.h"
+#include "Shared/Framework/Environment.h"
 #include "HelperClass.h"
 #include "EditUtility/EditUtility.h"
 

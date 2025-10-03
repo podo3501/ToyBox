@@ -2,10 +2,10 @@
 #include "UIFixture.h"
 #include "UserInterface/Helper.h"
 #include "Utility.h"
-#include "Toy/GameConfig.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
-#include "Toy/InputManager.h"
+#include "Shared/System/Input.h"
+#include "Shared/Framework/Environment.h"
 #include "Toy/UserInterface/UIModule.h"
 #include "Toy/UserInterface/UIComponent/UIType.h"
 #include "Toy/UserInterface/UIComponent/UILayout.h"
@@ -32,7 +32,7 @@ void UIFixture::SetUp()
 	Rectangle rc{ 0, 0, 800, 600 };
 	UILayout layout{ GetSizeFromRectangle(rc), Origin::LeftTop };
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
-	InitializeConfig(L"Resources/", { 800.f, 600.f });
+	InitializeEnvironment(L"Resources/", { 800.f, 600.f });
 	m_mockRenderer = make_unique<MockRenderer>();
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetMainPanel();
@@ -112,7 +112,7 @@ void UIFixture::CallMockRender(function<void(size_t, const wstring&, const Vecto
 
 void UIFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 { //마우스의 상태값은 업데이트를 계속해도 셋팅한 상태값이 계속 들어간다.
-	auto& mouseTracker = const_cast<MouseTracker&>(InputManager::GetMouse());
+	auto& mouseTracker = const_cast<MouseTracker&>(Input::GetMouse());
 	auto state = mouseTracker.GetLastState();
 	state.x = mouseX;
 	state.y = mouseY;

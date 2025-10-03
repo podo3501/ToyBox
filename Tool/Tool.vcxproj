@@ -198,7 +198,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tool.cpp" />
-    <ClCompile Include="ToolMainLoop.cpp" />
+    <ClCompile Include="ToolLoop.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -235,7 +235,7 @@
     <ClInclude Include="TextureResBinderWindow\TextureResBinderWindow.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="ToolMainLoop.h" />
+    <ClInclude Include="ToolLoop.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>

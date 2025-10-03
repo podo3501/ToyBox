@@ -1,12 +1,11 @@
 #include "pch.h"
-#include "GameConfig.h"
-#include "UserInterface/UIComponent/UIType.h"
+#include "Environment.h"
 
 static wstring g_fontPath{ L"UI/Font/" };
 static wstring g_resourcePath{};
 static Vector2 g_resolution{};
 
-void InitializeConfig(const wstring& resourcePath, const Vector2& resolution) noexcept
+void InitializeEnvironment(const wstring& resourcePath, const Vector2& resolution) noexcept
 {
 	g_resourcePath = resourcePath;
 	g_resolution = resolution;

@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "Helper.h"
 #include "IComponent.h"
-#include "Toy/GameConfig.h"
+#include "Shared/Framework/Environment.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/JsonOperation/JsonOperation.h"
+#include "Toy/UserInterface/JsonOperation/JsonSerializer.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Shared/Utils/GeometryExt.h"
 

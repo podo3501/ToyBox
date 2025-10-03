@@ -6,7 +6,7 @@
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
-#include "Toy/InputManager.h"
+#include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Utility.h"
 #include "HelperClass.h"
@@ -123,7 +123,7 @@ void ImageSelector::CheckSourcePartition() noexcept
 {
     if (!m_sourceTexture) return;
 
-    const XMINT2& pos = InputManager::GetMouse().GetPosition();
+    const XMINT2& pos = Input::GetMouse().GetPosition();
     m_hoveredAreas = GetAreas(m_cmdList->GetReceiver(), m_sourceTexture->GetFilename(), m_selectImagePart, pos);
     if (!m_hoveredAreas.empty()) return; //먼저 저장돼 있는 것을 찾아보고 없으면 새로운걸 만든다.
 

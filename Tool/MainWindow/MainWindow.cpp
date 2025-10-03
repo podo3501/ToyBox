@@ -5,8 +5,8 @@
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
 #include "Toy/UserInterface/UIModule.h"
-#include "Toy/InputManager.h"
-#include "Toy/StepTimer.h"
+#include "Shared/System/StepTimer.h"
+#include "Shared/System/Input.h"
 
 int MainWindow::m_mainWindowIndex = 0;
 

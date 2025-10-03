@@ -35,7 +35,7 @@ namespace DirectX
 //이 클래스는 정적 클래스라 소멸자가 호출되지 않는다. 그래서 TDD에서는 여러개의 테스트를 할때 이 클래스는
 // 소멸되지 않고 프로그램이 종료될때 한번 소멸된다. 명시적으로 소멸하는 방법이 있으나, unique_ptr을
 //사용하는 방법인데 cache에 영향이 있을 수 있어서 이 클래스에는 포인터를 사용하고 싶지 않았다.
-class InputManager
+class Input
 {
 public:
     static void Initialize(HWND hwnd);
@@ -90,19 +90,19 @@ inline Mouse::ButtonStateTracker::ButtonState GetMouseKeyState(KeyState keyState
 
 inline bool IsInputAction(MouseButton mouseButton, KeyState keyState) noexcept
 {
-    const auto& mouseTracker = InputManager::GetMouse();
+    const auto& mouseTracker = Input::GetMouse();
     return IsMouseButtonState(mouseTracker, mouseButton, GetMouseKeyState(keyState));
 }
 
 static int LastMouseWheelValue{ 0 };
 inline void ResetMouseWheelValue() noexcept
 {
-    LastMouseWheelValue = InputManager::GetMouse().GetLastState().scrollWheelValue;
+    LastMouseWheelValue = Input::GetMouse().GetLastState().scrollWheelValue;
 }
 
 inline int GetMouseWheelValue() noexcept
 {
-    const auto& mouseTracker = InputManager::GetMouse();
+    const auto& mouseTracker = Input::GetMouse();
     const int& curWheelValue = mouseTracker.GetLastState().scrollWheelValue;
     int delta = ( curWheelValue - LastMouseWheelValue ) / 120 ;
     LastMouseWheelValue = curWheelValue;
@@ -125,7 +125,7 @@ constexpr ActionFunc KeyActions[] =
 
 inline bool IsInputAction(Keyboard::Keys key, KeyState keyState) noexcept
 {
-    const auto& keyboard = InputManager::GetKeyboard();
+    const auto& keyboard = Input::GetKeyboard();
     return KeyActions[static_cast<size_t>(keyState)](keyboard, key);
 }
 

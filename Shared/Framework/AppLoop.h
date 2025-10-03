@@ -1,5 +1,5 @@
 #pragma once
-#include "StepTimer.h"
+#include "Shared/System/StepTimer.h"
 
 class Window;
 class MouseTracker;
@@ -7,12 +7,12 @@ struct IRenderer;
 struct IImguiItem;
 struct ITextureController;
 
-class MainLoop
+class AppLoop
 {
 public:
-    MainLoop() = delete;
-    MainLoop(Window* window, IRenderer* renderer);
-    virtual ~MainLoop();
+    AppLoop() = delete;
+    AppLoop(Window* window, IRenderer* renderer);
+    virtual ~AppLoop();
 
     bool Initialize(const wstring& resPath, const Vector2& resolution);
     int Run();

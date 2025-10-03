@@ -4,8 +4,8 @@
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextureSwitcher.h"
 #include "Button.h"
-#include "InputManager.h"
 #include "../../JsonOperation/JsonOperation.h"
+#include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
 
 ScrollBar::~ScrollBar() = default;
@@ -122,7 +122,7 @@ ReturnType ScrollBar::GetMaxScrollRange() const noexcept
 
 void ScrollBar::OnPressCB(KeyState keyState)
 {
-	int32_t mPosY = InputManager::GetMouse().GetPosition().y;
+	int32_t mPosY = Input::GetMouse().GetPosition().y;
 	if (keyState == KeyState::Pressed)
 	{
 		m_pressContainerPos = m_scrollButton->GetRelativePosition();

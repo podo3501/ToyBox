@@ -10,8 +10,8 @@
 #include "Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "Toy/UserInterface/UINameGenerator/UINameGenerator.h"
 #include "Toy/UserInterface/UIModule.h"
+#include "Shared/Framework/Environment.h"
 #include "Shared/Utils/StlExt.h"
-#include "Toy/GameConfig.h"
 
 namespace UserInterface
 {

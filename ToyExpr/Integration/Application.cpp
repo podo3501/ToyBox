@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "IRenderer.h"
-#include "Toy/GameMainLoop.h"
+#include "Toy/GameLoop.h"
 #include "Shared/Window/WindowProcedure.h"
 #include "Shared/Window/Window.h"
 
@@ -31,9 +31,9 @@ namespace Integration
 				static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), bImgui);
 			EXPECT_TRUE(renderer != nullptr);
 
-			unique_ptr<MainLoop> mainLoop = make_unique<GameMainLoop>(&window, renderer.get());
-			EXPECT_TRUE(mainLoop->Initialize(L"Resources/", outputSize));
-			mainLoop.reset();
+			unique_ptr<GameLoop> gameLoop = make_unique<GameLoop>(&window, renderer.get());
+			EXPECT_TRUE(gameLoop->Initialize(L"Resources/", outputSize));
+			gameLoop.reset();
 		}
 	}
 }

@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "TextureSwitcher.h"
+#include "IRenderer.h"
 #include "PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
-#include "IRenderer.h"
-#include "InputManager.h"
 #include "UserInterface/JsonOperation/JsonOperation.h"
+#include "UserInterface/JsonOperation/Traits/JsonDetailExt.h"
+#include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
 
 using enum InteractState;
@@ -120,7 +121,7 @@ bool TextureSwitcher::ChangeBindKey(TextureResourceBinder* resBinder, const stri
 
 void TextureSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
 {
-	if (!Contains(GetArea(), InputManager::GetMouse().GetPosition()))
+	if (!Contains(GetArea(), Input::GetMouse().GetPosition()))
 	{
 		ChangeState(Normal);
 		return;

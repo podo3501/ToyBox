@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "ToolMainLoop.h"
+#include "ToolLoop.h"
 #include "ToolSystem.h"
 
 #ifdef __clang__
@@ -18,31 +18,31 @@ extern "C"
 }
 #endif
 
-ToolMainLoop::~ToolMainLoop() = default;
-ToolMainLoop::ToolMainLoop(Window* window, IRenderer* renderer) :
-    ::MainLoop(window, renderer),
+ToolLoop::~ToolLoop() = default;
+ToolLoop::ToolLoop(Window* window, IRenderer* renderer) :
+    ::AppLoop(window, renderer),
     m_window{ window },
     m_renderer{ renderer }
 {}
 
-bool ToolMainLoop::InitializeDerived()
+bool ToolLoop::InitializeDerived()
 {
     m_toolSystem = make_unique<ToolSystem>(m_renderer);
 
     return true;
 }
 
-bool ToolMainLoop::LoadResources()
+bool ToolLoop::LoadResources()
 {
     return true;
 }
 
-bool ToolMainLoop::PostLoaded(ITextureController* texController)
+bool ToolLoop::PostLoaded(ITextureController* texController)
 {
     return true;
 }
 
-void ToolMainLoop::Update(const DX::StepTimer& timer)
+void ToolLoop::Update(const DX::StepTimer& timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 

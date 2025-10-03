@@ -35,7 +35,7 @@
   <ItemGroup>
     <ClCompile Include="Tool.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="ToolMainLoop.cpp" />
+    <ClCompile Include="ToolLoop.cpp" />
     <ClCompile Include="ToolSystem.cpp" />
     <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="Menu\MenuBar.cpp">
@@ -126,7 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="ToolMainLoop.h" />
+    <ClInclude Include="ToolLoop.h" />
     <ClInclude Include="ToolSystem.h" />
     <ClInclude Include="Dialog.h" />
     <ClInclude Include="Menu\MenuBar.h">

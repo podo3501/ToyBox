@@ -3,7 +3,7 @@
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "GameConfig.h"
+#include "Shared/Framework/Environment.h"
 #include "../UIUtility.h"
 #include "../../JsonOperation/JsonOperation.h"
 

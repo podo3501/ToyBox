@@ -1,15 +1,15 @@
 #pragma once
-#include "MainLoop.h"
+#include "Shared/Framework/AppLoop.h"
 
 class UIComponent;
 class UIModule;
 
-class GameMainLoop final : public MainLoop
+class GameLoop final : public AppLoop
 {
 public:
-	GameMainLoop() = delete;
-	GameMainLoop(Window* window, IRenderer* renderer);
-	virtual ~GameMainLoop();
+	GameLoop() = delete;
+	GameLoop(Window* window, IRenderer* renderer);
+	virtual ~GameLoop();
 
 protected:
 	virtual bool InitializeDerived() override;

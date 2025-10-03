@@ -4,10 +4,10 @@
 #include "Shared/Utils/Profiler.h"
 #include "Shared/Window/Window.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Toy/GameConfig.h"
+#include "Shared/System/Input.h"
+#include "Shared/Framework/Environment.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/UIModule.h"
-#include "Toy/InputManager.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()
@@ -47,9 +47,9 @@ void UIFixture::SetUp()
 	RECT rc{ 0, 0, 800, 600 };
 	EXPECT_TRUE(m_window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
 	const auto& outputSize = m_window->GetOutputSize();
-	InitializeConfig(L"Resources/", outputSize);
+	InitializeEnvironment(L"Resources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
-	InputManager::Initialize(hwnd);
+	Input::Initialize(hwnd);
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
@@ -83,7 +83,7 @@ TextureResourceBinder* UIFixture::GetResBinder() const noexcept
 
 void UIFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 { //마우스의 상태값은 업데이트를 계속해도 셋팅한 상태값이 계속 들어간다.
-	auto& mouseTracker = const_cast<MouseTracker&>(InputManager::GetMouse());
+	auto& mouseTracker = const_cast<MouseTracker&>(Input::GetMouse());
 	auto state = mouseTracker.GetLastState();
 	state.x = mouseX;
 	state.y = mouseY;

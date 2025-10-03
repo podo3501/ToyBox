@@ -1,5 +1,5 @@
 #pragma once
-#include "Toy/MainLoop.h"
+#include "Shared/System/StepTimer.h"
 
 class Window;
 class UIComponent;
