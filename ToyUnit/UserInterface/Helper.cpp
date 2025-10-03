@@ -1,20 +1,20 @@
 #include "pch.h"
 #include "Helper.h"
 #include "IComponent.h"
-#include "Shared/Framework/Environment.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
-#include "Toy/UserInterface/JsonOperation/JsonOperation.h"
-#include "Toy/UserInterface/JsonOperation/JsonSerializer.h"
+#include "Toy/UserInterface/SerializerIO/ClassSerializeIO.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "Shared/Framework/Environment.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 
 //?!?이 함수는 사라질 예정
 unique_ptr<UIComponent> WriteReadTest(unique_ptr<UIComponent>& write, const wstring& filename)
 {
-	JsonOperation::WriteJsonToFile(write, filename);
+	SerializerIO::WriteJsonToFile(write, filename);
 	
 	unique_ptr<UIComponent> read;
-	JsonOperation::ReadJsonFromFile(filename, read);
+	SerializerIO::ReadJsonFromFile(filename, read);
 	
 	EXPECT_TRUE(*write == *read);
 
@@ -34,10 +34,10 @@ unique_ptr<UIModule> WriteReadTest(IRenderer* renderer, unique_ptr<UIModule>& wr
 unique_ptr<UIComponent> WriteReadTest(TextureResourceBinder* binder,
 	unique_ptr<UIComponent>& write, const wstring& filename)
 {
-	JsonOperation::WriteJsonToFile(write, filename);
+	SerializerIO::WriteJsonToFile(write, filename);
 
 	unique_ptr<UIComponent> read;
-	JsonOperation::ReadJsonFromFile(filename, read);
+	SerializerIO::ReadJsonFromFile(filename, read);
 	EXPECT_TRUE(read->BindTextureSourceInfo(binder, nullptr));
 	EXPECT_TRUE(*write == *read);
 

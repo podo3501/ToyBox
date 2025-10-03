@@ -3,8 +3,8 @@
 #include "IRenderer.h"
 #include "PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
-#include "UserInterface/JsonOperation/JsonOperation.h"
-#include "UserInterface/JsonOperation/Traits/JsonDetailExt.h"
+#include "UserInterface/SerializerIO/KeyConverter.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
 
@@ -195,13 +195,13 @@ void TextureSwitcher::SetState(InteractState state) noexcept
 	m_state = state;
 }
 
-void TextureSwitcher::SerializeIO(JsonOperation& operation)
+void TextureSwitcher::ProcessIO(SerializerIO& serializer)
 {
-	UIComponent::SerializeIO(operation);
-	operation.Process("StateKey", m_stateKeys);
-	operation.Process("BehaviorMode", m_behaviorMode);
+	UIComponent::ProcessIO(serializer);
+	serializer.Process("StateKey", m_stateKeys);
+	serializer.Process("BehaviorMode", m_behaviorMode);
 
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	ReloadDatas();
 }
 

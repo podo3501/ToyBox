@@ -1,7 +1,7 @@
 #pragma once
 #include "IRenderer.h"
 
-class MainWindow;
+class UserInterfaceWindow;
 class TextureResBinderWindow;
 
 namespace DX
@@ -29,9 +29,9 @@ public:
     //virtual void Update() override;
     virtual void Render(ImGuiIO* io) override;
 
-    MainWindow* GetFocusMainWindow() const noexcept;
+    UserInterfaceWindow* GetFocusUIWindow() const noexcept;
     TextureResBinderWindow* GetFocusTextureResBinderWindow() const noexcept;
-    void SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept;
+    void SetUIWindow(unique_ptr<UserInterfaceWindow> uiWindow) noexcept;
     void SetTextureWindow(unique_ptr<TextureResBinderWindow> textureWindow) noexcept;
     IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
@@ -44,6 +44,6 @@ private:
 
     XMUINT2 m_size{};
 
-    vector<unique_ptr<MainWindow>> m_mainWindows;
+    vector<unique_ptr<UserInterfaceWindow>> m_uiWindows;
     vector<unique_ptr<TextureResBinderWindow>> m_textureWindows;
 };

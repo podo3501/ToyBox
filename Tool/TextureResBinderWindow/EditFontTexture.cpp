@@ -2,14 +2,14 @@
 #include "EditFontTexture.h"
 #include "Shared/Utils/StringExt.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 #include "Shared/Framework/Environment.h"
 #include "HelperClass.h"
 #include "EditUtility/EditUtility.h"
 
 EditFontTexture::~EditFontTexture() = default;
 EditFontTexture::EditFontTexture() :
-    m_cmdList{ nullptr },
+    m_cmdHistory{ nullptr },
     m_listboxFont{ make_unique<EditListBox>("Font Bind Key", 4) },
     m_renameNotifier{ make_unique<RenameNotifier>() }
 {}
@@ -53,13 +53,13 @@ void EditFontTexture::Render()
 {
     m_listboxFont->Render([this](int index) { m_fontIndex = index; });
 
-    auto binder = m_cmdList->GetReceiver();
+    auto binder = m_cmdHistory->GetReceiver();
     const wstring& fontFilename = GetSelectFontFile();
     const wstring& bindingKey = binder->GetFontKey(fontFilename);
     m_renameNotifier->EditName("Font Bind Key", WStringToString(bindingKey), [this, &bindingKey, &fontFilename](const string& newKey) {
         wstring wstrNewKey = StringToWString(newKey);
-        if (bindingKey.empty()) return m_cmdList->AddFontKey(wstrNewKey, TextureFontInfo{ fontFilename });
-        if (wstrNewKey.empty()) return m_cmdList->RemoveKeyByFilename(fontFilename);
-        return m_cmdList->RenameFontKey(bindingKey, wstrNewKey);
+        if (bindingKey.empty()) return m_cmdHistory->AddFontKey(wstrNewKey, TextureFontInfo{ fontFilename });
+        if (wstrNewKey.empty()) return m_cmdHistory->RemoveKeyByFilename(fontFilename);
+        return m_cmdHistory->RenameFontKey(bindingKey, wstrNewKey);
         });
 }

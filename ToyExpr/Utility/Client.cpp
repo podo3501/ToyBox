@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Shared/Framework/Environment.h"
-#include "Shared/Utils/StlTypeExt.hpp"
-#include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
-#include "Toy/UserInterface/JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
+#include "Shared/Utils/StlTypeExt.hpp"
+#include "Shared/Utils/StlExt.h"
 
 namespace Utility
 {
@@ -30,9 +30,9 @@ namespace Utility
 			return true;
 		}
 
-		void SerializeIO(JsonOperation& operation)
+		void ProcessIO(SerializerIO& serializer)
 		{
-			operation.Process("Position", position);
+			serializer.Process("Position", position);
 		}
 
 	private:
@@ -65,13 +65,13 @@ namespace Utility
 			return true;
 		}
 
-		void SerializeIO(JsonOperation& operation)
+		void ProcessIO(SerializerIO& serializer)
 		{
-			operation.Process("Data", m_data);
-			operation.Process("UPtrData", m_uptrData);
-			operation.Process("MapData", m_mapData);
-			operation.Process("SVMapData", m_svmapData);
-			operation.Process("Layout", m_layout);
+			serializer.Process("Data", m_data);
+			serializer.Process("UPtrData", m_uptrData);
+			serializer.Process("MapData", m_mapData);
+			serializer.Process("SVMapData", m_svmapData);
+			serializer.Process("Layout", m_layout);
 		}
 
 	private:
@@ -89,10 +89,10 @@ namespace Utility
 
 		UserComponent wData(true);
 		const auto& serializeTestFilename = L"Test/Data/JsonSerializeTest.json";
-		EXPECT_TRUE(JsonOperation::WriteJsonToFile(wData, serializeTestFilename));
+		EXPECT_TRUE(SerializerIO::WriteJsonToFile(wData, serializeTestFilename));
 
 		UserComponent rData(false);
-		EXPECT_TRUE(JsonOperation::ReadJsonFromFile(serializeTestFilename, rData));
+		EXPECT_TRUE(SerializerIO::ReadJsonFromFile(serializeTestFilename, rData));
 
 		EXPECT_TRUE(wData == rData);
 	}

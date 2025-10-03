@@ -1,7 +1,7 @@
 #pragma once
 #include "Shared/Utils/StlTypeExt.hpp"
 
-class JsonOperation;
+class SerializerIO;
 class AutoNamer;
 class ComponentNameGenerator;
 enum class ComponentID;
@@ -26,7 +26,7 @@ public:
     bool RemoveName(const string& region, const string& name) noexcept;
     bool IsUnusedName(string_view region, string_view name) noexcept;
 
-    void SerializeIO(JsonOperation& operation);
+    void ProcessIO(SerializerIO& serializer);
 
 private:
     ComponentNameGenerator* GetComponentNameGen(string_view region) const noexcept;

@@ -1,7 +1,7 @@
 #pragma once
 
 class FileTab;
-class JsonOperation;
+class SerializerIO;
 
 class RecentFiles
 {
@@ -15,7 +15,7 @@ public:
     void AddFile(const wstring& filename);
     bool OpenFile(FileTab& menuBar);
     bool Show();
-    void SerializeIO(JsonOperation& jsonOp);
+    void ProcessIO(SerializerIO& serializer);
 
 private:
     void ShowMoreMenu();

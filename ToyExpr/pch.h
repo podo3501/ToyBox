@@ -119,9 +119,6 @@
 #include "DirectXTK12/VertexTypes.h"
 #include "DirectXTK12/WICTextureLoader.h"
 
-//json
-#include "nlohmann/json.hpp"
-
 #ifdef _DEBUG
 #define DX12_ENABLE_DEBUG_LAYER
 #endif

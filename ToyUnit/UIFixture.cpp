@@ -12,8 +12,8 @@
 #include "Toy/UserInterface/TextureResourceBinder/TextureBinderHelper.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
+#include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -168,30 +168,30 @@ void UndoRedo::CaptureSnapshot(vector<unique_ptr<TextureResourceBinder>>& histor
 	history.emplace_back(make_unique<TextureResourceBinder>(*GetResBinder()));
 }
 
-void UndoRedo::VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history)
+void UndoRedo::VerifyUndoRedo(UICommandHistory& cmdHistory, const vector<unique_ptr<UIComponent>>& history)
 {
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
-		cmdList.Undo();
+		cmdHistory.Undo();
 		EXPECT_TRUE(*m_main == *snapshot);
 		});
 
 	for_each(history.begin() + 1, history.end(), [&](const auto& snapshot) {
-		cmdList.Redo();
+		cmdHistory.Redo();
 		EXPECT_TRUE(*m_main == *snapshot);
 		});
 }
 
-void UndoRedo::VerifyUndoRedo(TexResCommandList& cmdList, const vector<unique_ptr<TextureResourceBinder>>& history)
+void UndoRedo::VerifyUndoRedo(TexResCommandHistory& cmdHistory, const vector<unique_ptr<TextureResourceBinder>>& history)
 {
 	auto resBinder = GetResBinder();
 
 	for_each(history.rbegin() + 1, history.rend(), [&](const auto& snapshot) {
-		cmdList.Undo();
+		cmdHistory.Undo();
 		EXPECT_TRUE(*resBinder == *snapshot);
 		});
 
 	for_each(history.begin() + 1, history.end(), [&](const auto& snapshot) {
-		cmdList.Redo();
+		cmdHistory.Redo();
 		EXPECT_TRUE(*resBinder == *snapshot);
 		});
 }

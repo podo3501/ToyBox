@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "UITransform.h"
 #include "UILayout.h"
-#include "../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 
 UITransform::UITransform() = default;
@@ -52,8 +52,8 @@ void UITransform::AdjustPosition(const XMUINT2& size, bool lockPosition) noexcep
 		m_ratio = CalcRatio(size, m_relativePosition);
 }
 
-void UITransform::SerializeIO(JsonOperation& operation)
+void UITransform::ProcessIO(SerializerIO& serializer)
 {
-	operation.Process("Ratio", m_ratio);
-	operation.Process("RelativePosition", m_relativePosition);
+	serializer.Process("Ratio", m_ratio);
+	serializer.Process("RelativePosition", m_relativePosition);
 }

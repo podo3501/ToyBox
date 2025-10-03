@@ -1,7 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
-class JsonOperation;
+class SerializerIO;
 
 class Dialog : public UIComponent
 {

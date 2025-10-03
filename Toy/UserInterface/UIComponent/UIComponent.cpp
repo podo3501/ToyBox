@@ -3,8 +3,8 @@
 #include "Shared/Utils/StlExt.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
-#include "../JsonOperation/JsonOperation.h"
-#include "../JsonOperation/JsonSerializer.h"
+#include "Shared/SerializerIO/SerializerIO.h"
+#include "../SerializerIO/ClassSerializeIO.h"
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -196,17 +196,17 @@ bool UIComponent::EnableToolMode(bool enable) noexcept
 	return true;
 }
 
-void UIComponent::SerializeIO(JsonOperation& operation)
+void UIComponent::ProcessIO(SerializerIO& serializer)
 {
-	operation.Process("Name", m_name);
-	operation.Process("Layout", m_layout);
-	operation.Process("Transform", m_transform);
-	operation.Process("Region", m_region);
-	operation.Process("StateFlag", m_stateFlag);
-	operation.Process("RenderSearch", m_renderTraversal);
-	operation.Process("Children", m_children);
+	serializer.Process("Name", m_name);
+	serializer.Process("Layout", m_layout);
+	serializer.Process("Transform", m_transform);
+	serializer.Process("Region", m_region);
+	serializer.Process("StateFlag", m_stateFlag);
+	serializer.Process("RenderSearch", m_renderTraversal);
+	serializer.Process("Children", m_children);
 	
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	ranges::for_each(m_children, [this](auto& child) {
 		child->SetParent(this);
 		});

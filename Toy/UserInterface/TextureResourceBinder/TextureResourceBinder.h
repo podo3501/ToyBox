@@ -6,7 +6,7 @@
 
 enum class TextureSlice : int;
 struct ITextureLoad;
-class JsonOperation;
+class SerializerIO;
 class TextureResourceBinder : public ITextureBinder
 {
 public:
@@ -40,7 +40,7 @@ public:
 	vector<wstring> GetTextureFiles() const noexcept;
 
 	vector<TextureSourceInfo> GetTotalAreas(const wstring& filename) const noexcept;
-	void SerializeIO(JsonOperation& operation);
+	void ProcessIO(SerializerIO& serializer);
 
 private:
 	wstring m_jsonFilename;

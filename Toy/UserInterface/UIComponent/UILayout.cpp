@@ -2,8 +2,8 @@
 #include "UILayout.h"
 #include "UIType.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "../JsonOperation/JsonOperation.h"
-#include "../JsonOperation/Traits/TraitsExt.h"
+#include "Shared/SerializerIO/SerializerIO.h"
+#include "../SerializerIO/Traits.h"
 
 UILayout::~UILayout() = default;
 UILayout::UILayout() :
@@ -70,11 +70,11 @@ XMINT2 UILayout::GetPosition(const XMINT2& relativePosition) const noexcept
 	return relativePosition - m_originPoint;
 }
 
-void UILayout::SerializeIO(JsonOperation& operation)
+void UILayout::ProcessIO(SerializerIO& serializer)
 {
-	operation.Process("Size", m_size);
-	operation.Process("Origin", m_origin);
+	serializer.Process("Size", m_size);
+	serializer.Process("Origin", m_origin);
 
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	m_originPoint = GetOriginPoint(m_origin);	//load 했을때에는 m_originPoint를 계산해준다.
 }

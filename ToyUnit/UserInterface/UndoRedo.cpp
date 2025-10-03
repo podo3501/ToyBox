@@ -5,8 +5,8 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
-#include "Toy/UserInterface/Command/UICommandList/UICommandList.h"
-#include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
+#include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 #include "Toy/UserInterface/UIModule.h"
 
 namespace UserInterface
@@ -14,7 +14,7 @@ namespace UserInterface
 	TEST_F(UndoRedo, TextureResourceBinder)
 	{
 		vector<unique_ptr<TextureResourceBinder>> h;
-		TexResCommandList c(GetResBinder());
+		TexResCommandHistory c(GetResBinder());
 
 		CaptureSnapshot(h);
 		ExecuteAndCapture(h, [&] { c.AddFontKey(L"TestFontKey", TextureFontInfo{ L"TestFontKey.spritefont" }); });
@@ -32,7 +32,7 @@ namespace UserInterface
 	//////////////////////////////////////////////////////////
 	TEST_F(UndoRedo, UI_PatchTextureStd1)
 	{
-		UICommandList c;
+		UICommandHistory c;
 		vector<unique_ptr<UIComponent>> h;
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::Center }, "BackImage1"));
 
@@ -49,7 +49,7 @@ namespace UserInterface
 	//////////////////////////////////////////////////////////
 	TEST_F(UndoRedo, UI_PatchTextureStd9)
 	{
-		UICommandList c;
+		UICommandHistory c;
 		vector<unique_ptr<UIComponent>> h;
 		auto [tex9, tex9Ptr] = GetPtrs(CreateComponent<PatchTextureStd9>(UILayout{ {100, 100}, Origin::Center }, "BackImage9"));
 		UIEx(m_main).AttachComponent(move(tex9), { 250, 250 });
@@ -64,7 +64,7 @@ namespace UserInterface
 	//////////////////////////////////////////////////////////
 	TEST_F(UndoRedo, UI_TextureSwitcher)
 	{
-		UICommandList c;
+		UICommandHistory c;
 		vector<unique_ptr<UIComponent>> h;
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(UILayout{ {100, 100}, Origin::Center },
 			TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal));

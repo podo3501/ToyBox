@@ -2,7 +2,7 @@
 #include "TextureSourceInfo.h"
 #include "IRenderer.h"
 #include "Shared/Framework/Environment.h"
-#include "../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "../UIComponent/UIType.h"
 
 TextureSourceInfo::~TextureSourceInfo() = default;
@@ -47,9 +47,9 @@ bool TextureSourceInfo::LoadResource(ITextureLoad* load)
     return true;
 }
 
-void TextureSourceInfo::SerializeIO(JsonOperation& operation)
+void TextureSourceInfo::ProcessIO(SerializerIO& serializer)
 {
-    operation.Process("Filename", filename);
-    operation.Process("TextureSlice", texSlice);
-    operation.Process("Sources", sources);
+    serializer.Process("Filename", filename);
+    serializer.Process("TextureSlice", texSlice);
+    serializer.Process("Sources", sources);
 }

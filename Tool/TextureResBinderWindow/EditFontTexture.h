@@ -1,7 +1,7 @@
 #pragma once
 
 enum class PendingAction;
-class TexResCommandList;
+class TexResCommandHistory;
 class EditListBox;
 class RenameNotifier;
 class EditFontTexture
@@ -12,13 +12,13 @@ public:
 
 	void Update() noexcept;
 	void Render();
-	void SetCommandList(TexResCommandList* cmdList) noexcept { m_cmdList = cmdList; }
+	void SetCommandHistory(TexResCommandHistory* cmdHistory) noexcept { m_cmdHistory = cmdHistory; }
 
 private:
 	inline bool IsVaildFontIndex() const noexcept { return m_fontIndex >= 0 && m_fontIndex < m_fontFiles.size(); }
 	wstring GetSelectFontFile() const noexcept;
 
-	TexResCommandList* m_cmdList;
+	TexResCommandHistory* m_cmdHistory;
 	vector<wstring> m_fontFiles;
 	int m_fontIndex{ -1 };
 	unique_ptr<EditListBox> m_listboxFont;

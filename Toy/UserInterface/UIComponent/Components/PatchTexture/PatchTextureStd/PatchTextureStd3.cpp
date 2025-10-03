@@ -3,7 +3,7 @@
 #include "PatchTextureStd1.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/UIComponent/UIUtility.h"
-#include "UserInterface/JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 PatchTextureStd3::~PatchTextureStd3() = default;
 PatchTextureStd3::PatchTextureStd3() noexcept :
@@ -61,11 +61,11 @@ Rectangle PatchTextureStd3::GetSource() const noexcept
     return tex1->GetSource();
 }
 
-void PatchTextureStd3::SerializeIO(JsonOperation& operation)
+void PatchTextureStd3::ProcessIO(SerializerIO& serializer)
 {
-    UIComponent::SerializeIO(operation); 
-    operation.Process("DirectionType", m_dirType);
+    UIComponent::ProcessIO(serializer);
+    serializer.Process("DirectionType", m_dirType);
 
-    if (operation.IsWrite()) return;
+    if (serializer.IsWrite()) return;
     SetTextureSlice(DirTypeToTextureSlice(m_dirType));
 }

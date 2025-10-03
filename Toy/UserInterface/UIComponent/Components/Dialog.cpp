@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Dialog.h"
-#include "../../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 Dialog::~Dialog() = default;
 Dialog::Dialog()

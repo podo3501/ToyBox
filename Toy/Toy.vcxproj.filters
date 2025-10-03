@@ -4,26 +4,14 @@
     <Filter Include="UserInterface">
       <UniqueIdentifier>{7d2930d3-03cc-4bfc-956f-bf8ef99a4472}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface\Command">
-      <UniqueIdentifier>{8095bd22-dd9e-443e-ac7d-edbdc3d9bae5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UserInterface\UIComponent">
       <UniqueIdentifier>{699c8739-a17a-426b-919d-a41c2a0720e0}</UniqueIdentifier>
     </Filter>
     <Filter Include="UserInterface\UIComponent\Components">
       <UniqueIdentifier>{38daeccc-4d6c-4764-af27-14352fe2742c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface\JsonOperation">
-      <UniqueIdentifier>{020a7932-c2c6-4920-a17c-83730d5afeb3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserInterface\Command\UICommandList">
-      <UniqueIdentifier>{de39c0e5-0931-4d4a-9551-cd7c988bb33c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UserInterface\TextureResourceBinder">
       <UniqueIdentifier>{ad970e99-99e5-45d5-9313-ad0034f6e4dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserInterface\Command\TexResCommandList">
-      <UniqueIdentifier>{a3e5db05-a9d1-43c1-ab9f-521e59c11b04}</UniqueIdentifier>
     </Filter>
     <Filter Include="UserInterface\UIComponent\Components\PatchTexture">
       <UniqueIdentifier>{a66eb273-6dfc-452e-9c11-241024693edb}</UniqueIdentifier>
@@ -34,22 +22,25 @@
     <Filter Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd">
       <UniqueIdentifier>{7a3c1d34-9d41-408e-8ecf-951fb5069abf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface\JsonOperation\Traits">
-      <UniqueIdentifier>{bdbe2f3b-a5fc-4c2b-a1dc-f2816d7c26ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UserInterface\UINameGenerator">
       <UniqueIdentifier>{f4569c6f-77f4-4758-a897-59e37b1e9875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\SerializerIO">
+      <UniqueIdentifier>{e8893605-b286-4553-a291-e0537d05b55a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\CommandHistory">
+      <UniqueIdentifier>{fdac42c1-45de-4313-8c6a-afa030454313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\CommandHistory\TextureResource">
+      <UniqueIdentifier>{8a404295-d53a-4966-922b-8037564743a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\CommandHistory\UserInterface">
+      <UniqueIdentifier>{fcc3e183-7060-4c68-b4b8-eb0b5d40bbff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameLoop.h" />
-    <ClInclude Include="UserInterface\Command\Command.h">
-      <Filter>UserInterface\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\CommandType.h">
-      <Filter>UserInterface\Command</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\Button.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
@@ -110,21 +101,6 @@
     <ClInclude Include="UserInterface\UIComponent\EnumUtility.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h">
-      <Filter>UserInterface\JsonOperation</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp">
-      <Filter>UserInterface\JsonOperation</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\CommandList.h">
-      <Filter>UserInterface\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\UICommandList\UICommandList.h">
-      <Filter>UserInterface\Command\UICommandList</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\UICommandList\UICommandRegistry.h">
-      <Filter>UserInterface\Command\UICommandList</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureBinderHelper.h">
       <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClInclude>
@@ -142,12 +118,6 @@
     </ClInclude>
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureSourceInfo.h">
       <Filter>UserInterface\TextureResourceBinder</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\TexResCommandList\TexResCommandList.h">
-      <Filter>UserInterface\Command\TexResCommandList</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.h">
-      <Filter>UserInterface\Command\TexResCommandList</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
@@ -182,18 +152,6 @@
     <ClInclude Include="UserInterface\UIModule.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.h">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\JsonSerializer.hpp">
-      <Filter>UserInterface\JsonOperation</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\JsonConcepts.h">
-      <Filter>UserInterface\JsonOperation</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
@@ -206,14 +164,35 @@
     <ClInclude Include="UserInterface\UINameGenerator\UINameGenerator.h">
       <Filter>UserInterface\UINameGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\JsonSerializer.h">
-      <Filter>UserInterface\JsonOperation</Filter>
+    <ClInclude Include="UserInterface\SerializerIO\ClassSerializeIO.h">
+      <Filter>UserInterface\SerializerIO</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetailExt.h">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
+    <ClInclude Include="UserInterface\SerializerIO\KeyConverter.h">
+      <Filter>UserInterface\SerializerIO</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\JsonOperation\Traits\TraitsExt.h">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
+    <ClInclude Include="UserInterface\SerializerIO\Traits.h">
+      <Filter>UserInterface\SerializerIO</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\Command.h">
+      <Filter>UserInterface\CommandHistory</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\CommandHistory.h">
+      <Filter>UserInterface\CommandHistory</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\CommandType.h">
+      <Filter>UserInterface\CommandHistory</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\TextureResource\TexResCommandHistory.h">
+      <Filter>UserInterface\CommandHistory\TextureResource</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\TextureResource\TexResCommandRegistry.h">
+      <Filter>UserInterface\CommandHistory\TextureResource</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\UserInterface\UICommandHistory.h">
+      <Filter>UserInterface\CommandHistory\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\UserInterface\UICommandRegistry.h">
+      <Filter>UserInterface\CommandHistory\UserInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -279,15 +258,6 @@
     <ClCompile Include="UserInterface\UIComponent\EnumUtility.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp">
-      <Filter>UserInterface\JsonOperation</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Command\UICommandList\UICommandList.cpp">
-      <Filter>UserInterface\Command\UICommandList</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Command\UICommandList\UICommandRegistry.cpp">
-      <Filter>UserInterface\Command\UICommandList</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureBinderHelper.cpp">
       <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClCompile>
@@ -305,12 +275,6 @@
     </ClCompile>
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureSourceInfo.cpp">
       <Filter>UserInterface\TextureResourceBinder</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandList.cpp">
-      <Filter>UserInterface\Command\TexResCommandList</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.cpp">
-      <Filter>UserInterface\Command\TexResCommandList</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTexture.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture</Filter>
@@ -345,15 +309,6 @@
     <ClCompile Include="UserInterface\UIModule.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetail.cpp">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\Traits\Traits.cpp">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\JsonSerializer.cpp">
-      <Filter>UserInterface\JsonOperation</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponent.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
@@ -366,11 +321,26 @@
     <ClCompile Include="UserInterface\UINameGenerator\UINameGenerator.cpp">
       <Filter>UserInterface\UINameGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetailExt.cpp">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
+    <ClCompile Include="UserInterface\SerializerIO\ClassSerializeIO.cpp">
+      <Filter>UserInterface\SerializerIO</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\JsonOperation\Traits\TraitsExt.cpp">
-      <Filter>UserInterface\JsonOperation\Traits</Filter>
+    <ClCompile Include="UserInterface\SerializerIO\KeyConverter.cpp">
+      <Filter>UserInterface\SerializerIO</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\SerializerIO\Traits.cpp">
+      <Filter>UserInterface\SerializerIO</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandHistory.cpp">
+      <Filter>UserInterface\CommandHistory\TextureResource</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandRegistry.cpp">
+      <Filter>UserInterface\CommandHistory\TextureResource</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\CommandHistory\UserInterface\UICommandHistory.cpp">
+      <Filter>UserInterface\CommandHistory\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\CommandHistory\UserInterface\UICommandRegistry.cpp">
+      <Filter>UserInterface\CommandHistory\UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

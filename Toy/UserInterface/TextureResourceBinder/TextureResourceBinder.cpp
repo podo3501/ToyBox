@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TextureResourceBinder.h"
-#include "../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "../UIComponent/UIUtility.h"
 
 TextureResourceBinder::~TextureResourceBinder() = default;
@@ -29,7 +29,7 @@ bool TextureResourceBinder::LoadResources(ITextureLoad* load)
 
 bool TextureResourceBinder::Load(const wstring& jsonFilename)
 {
-    ReturnIfFalse(JsonOperation::ReadJsonFromFile(jsonFilename, *this));
+    ReturnIfFalse(SerializerIO::ReadJsonFromFile(jsonFilename, *this));
     m_jsonFilename = jsonFilename;
 
     return true;
@@ -37,7 +37,7 @@ bool TextureResourceBinder::Load(const wstring& jsonFilename)
 
 bool TextureResourceBinder::Save(const wstring& jsonFilename)
 {
-    ReturnIfFalse(JsonOperation::WriteJsonToFile(*this, jsonFilename));
+    ReturnIfFalse(SerializerIO::WriteJsonToFile(*this, jsonFilename));
     m_jsonFilename = jsonFilename;
 
     return true;
@@ -201,10 +201,10 @@ vector<TextureSourceInfo> TextureResourceBinder::GetTotalAreas(const wstring& fi
     return filteredTextures;
 }
 
-void TextureResourceBinder::SerializeIO(JsonOperation& operation)
+void TextureResourceBinder::ProcessIO(SerializerIO& serializer)
 {
-    operation.Process("BindingFontTable", m_bindingFontTable);
-    operation.Process("BindingTexTable", m_bindingTexTable);
+    serializer.Process("BindingFontTable", m_bindingFontTable);
+    serializer.Process("BindingTexTable", m_bindingTexTable);
 }
 
 /////////////////////////////////////////////////////////////////////////

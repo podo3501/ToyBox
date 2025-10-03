@@ -2,7 +2,7 @@
 #include "TextureInfo.h"
 
 struct ITextureLoad;
-class JsonOperation;
+class SerializerIO;
 struct TextureFontInfo : public TextureInfo
 {
 	~TextureFontInfo();
@@ -12,7 +12,7 @@ struct TextureFontInfo : public TextureInfo
 	bool operator==(const TextureFontInfo& o) const noexcept;
 
 	bool LoadResource(ITextureLoad* load);
-	void SerializeIO(JsonOperation& operation);
+	void ProcessIO(SerializerIO& serializer);
 
 	using TextureInfo::GetIndex;
 

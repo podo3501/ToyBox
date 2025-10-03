@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ToolSystem.h"
-#include "MainWindow/MainWindow.h"
+#include "UserInterfaceWindow/UserInterfaceWindow.h"
 #include "TextureResBinderWindow/TextureResBinderWindow.h"
 #include "Menu/MenuBar.h"
 #include "Dialog.h"
@@ -15,9 +15,9 @@ ToolSystem::ToolSystem(IRenderer* renderer) :
     m_renderer->AddImguiComponent(this);
 }
 
-void ToolSystem::SetMainWindow(unique_ptr<MainWindow> mainWindow) noexcept
+void ToolSystem::SetUIWindow(unique_ptr<UserInterfaceWindow> uiWindow) noexcept
 {
-    m_mainWindows.emplace_back(move(mainWindow));
+    m_uiWindows.emplace_back(move(uiWindow));
 }
 
 void ToolSystem::SetTextureWindow(unique_ptr<TextureResBinderWindow> textureWindow) noexcept
@@ -42,9 +42,9 @@ static InnerWindow* GetFocusWindow(const vector<unique_ptr<InnerWindow>>& window
     return it->get();
 }
 
-MainWindow* ToolSystem::GetFocusMainWindow() const noexcept
+UserInterfaceWindow* ToolSystem::GetFocusUIWindow() const noexcept
 {
-    return GetFocusWindow(m_mainWindows);
+    return GetFocusWindow(m_uiWindows);
 }
 
 TextureResBinderWindow* ToolSystem::GetFocusTextureResBinderWindow() const noexcept
@@ -56,8 +56,8 @@ void ToolSystem::Update(const DX::StepTimer& timer)
 {
     m_menuBar->Update();
 
-    erase_if(m_mainWindows, [](auto& wnd) { return !wnd->IsOpen(); });
-    ranges::for_each(m_mainWindows, [&timer](const auto& wnd) {
+    erase_if(m_uiWindows, [](auto& wnd) { return !wnd->IsOpen(); });
+    ranges::for_each(m_uiWindows, [&timer](const auto& wnd) {
         wnd->Update(timer);
         });
 

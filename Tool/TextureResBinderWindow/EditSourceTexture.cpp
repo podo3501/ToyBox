@@ -5,7 +5,7 @@
 #include "Shared/Utils/StringExt.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
-#include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "EditUtility/EditUtility.h"
 #include "Dialog.h"
@@ -22,7 +22,7 @@ EditSourceTexture::EditSourceTexture(IRenderer* renderer, TextureResBinderWindow
     m_renderer{ renderer },
     m_textureWindow{ textureWindow },
     m_textureLoader{ make_unique<TextureLoadBinder>() },
-    m_cmdList{ nullptr },
+    m_cmdHistory{ nullptr },
     m_imageSelector{ make_unique<ImageSelector>(textureWindow) },
     m_listboxTexture{ make_unique<EditListBox>("Texture List", 4) }
 {}
@@ -47,12 +47,12 @@ bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
     return true;
 }
 
-bool EditSourceTexture::SetCommandList(TexResCommandList* cmdList) noexcept
+bool EditSourceTexture::SetCommandHistory(TexResCommandHistory* cmHistory) noexcept
 {
-    m_cmdList = cmdList;
-    m_imageSelector->SetCommandList(m_cmdList);
+    m_cmdHistory = cmHistory;
+    m_imageSelector->SetCommandHistory(m_cmdHistory);
     
-    auto binder = m_cmdList->GetReceiver();
+    auto binder = m_cmdHistory->GetReceiver();
     const auto& texFiles = binder->GetTextureFiles();
     if (texFiles.empty()) return true;
 
@@ -97,7 +97,7 @@ void EditSourceTexture::CheckTextureByUndoRedo()
 
     vector<wstring> toolFiles;
     for (auto& texFile : m_textureFiles) toolFiles.emplace_back(texFile->GetFilename());
-    auto binder = m_cmdList->GetReceiver();
+    auto binder = m_cmdHistory->GetReceiver();
     auto binderFiles = binder->GetTextureFiles();
 
     for (const auto& filename : toolFiles)
@@ -159,7 +159,7 @@ bool EditSourceTexture::DeleteTextureFile() noexcept
 {
     ReturnIfFalse(IsVaildTextureIndex());
 
-    m_cmdList->RemoveKeyByFilename(m_textureFiles[m_texIndex]->GetFilename());
+    m_cmdHistory->RemoveKeyByFilename(m_textureFiles[m_texIndex]->GetFilename());
     RemoveTexture(m_texIndex);
     SelectTextureFile();
 

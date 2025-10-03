@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ToolConfig.h"
-#include "Toy/UserInterface/JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 using namespace Tool;
 
@@ -11,7 +11,7 @@ Config* Config::m_Instance = nullptr;
 Config::Config()
 {
 	m_Instance = this;
-	JsonOperation::ReadJsonFromFile(ResolutionFilename, *this);
+	SerializerIO::ReadJsonFromFile(ResolutionFilename, *this);
 }
 
 Config::~Config()
@@ -23,7 +23,7 @@ void Config::SetResolution(ResolutionType type) noexcept
 		return;
 
 	m_resolutionType = type;
-	JsonOperation::WriteJsonToFile(*m_Instance, ResolutionFilename);
+	SerializerIO::WriteJsonToFile(*m_Instance, ResolutionFilename);
 }
 
 ResolutionType Config::GetResolution() noexcept
@@ -46,7 +46,7 @@ XMUINT2 Config::GetResolutionInCoordinate() noexcept
 	return XMUINT2{ 800, 600 };
 }
 
-void Config::SerializeIO(JsonOperation& jsonOp)
+void Config::ProcessIO(SerializerIO& serializer)
 {
-    jsonOp.Process("Resolution", m_resolutionType);
+	serializer.Process("Resolution", m_resolutionType);
 }

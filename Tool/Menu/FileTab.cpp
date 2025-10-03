@@ -2,7 +2,7 @@
 #include "FileTab.h"
 #include "Dialog.h"
 #include "ToolSystem.h"
-#include "MainWindow/MainWindow.h"
+#include "UserInterfaceWindow/UserInterfaceWindow.h"
 #include "TextureResBinderWindow/TextureResBinderWindow.h"
 #include "MenuHelper.h"
 #include "RecentFiles.h"
@@ -77,11 +77,11 @@ bool FileTab::Excute()
     {
     case NewUIFile: result = CreateNewUIFile();  break;
     case NewTextureFile: result = CreateTextureResBinderWindow(); break;
-    case OpenUIFile: result = CreateMainWindow(); break;
+    case OpenUIFile: result = CreateUIWindow(); break;
     case OpenTextureFile: result = CreateTextureWindow(); break;
     case OpenRecent: result = m_recentFiles->OpenFile(*this); break;
-    case SaveFile: result = SaveMainWindow(); break;
-    case SaveAsFile: result = SaveAsMainWindow(); break;
+    case SaveFile: result = SaveFocusWindow(); break;
+    case SaveAsFile: result = SaveAsFocusWindow(); break;
     case Resolution: result = SetResolution(); break;
 
     case Quit: Window::ExitGame(); break;
@@ -95,11 +95,11 @@ bool FileTab::Excute()
 
 bool FileTab::CreateNewUIFile() noexcept
 {
-    auto mainWindow = std::make_unique<MainWindow>(m_toolSystem->GetRenderer());
+    auto uiWindow = make_unique<UserInterfaceWindow>(m_toolSystem->GetRenderer());
     const XMUINT2& resolution = Config::GetResolutionInCoordinate();
-    ReturnIfFalse(mainWindow->CreateScene(resolution));
+    ReturnIfFalse(uiWindow->CreateScene(resolution));
 
-    m_toolSystem->SetMainWindow(move(mainWindow));
+    m_toolSystem->SetUIWindow(move(uiWindow));
 
     return true;
 }
@@ -118,27 +118,27 @@ bool FileTab::CreateTextureResBinderWindow(const wstring& filename)
     return true;
 }
 
-bool FileTab::CreateMainWindowFromFile(const wstring& filename)
+bool FileTab::CreateUIWindowFromFile(const wstring& filename)
 {
-    auto mainWindow = make_unique<MainWindow>(m_toolSystem->GetRenderer());
-    if (!mainWindow->CreateScene(filename))
+    auto uiWindow = make_unique<UserInterfaceWindow>(m_toolSystem->GetRenderer());
+    if (!uiWindow->CreateScene(filename))
     {
         Tool::Dialog::ShowInfoDialog(DialogType::Error, "Failed to open the UI file. Please check the file path.");
         return false;
     }
 
-    m_toolSystem->SetMainWindow(move(mainWindow));
+    m_toolSystem->SetUIWindow(move(uiWindow));
 
     return true;
 }
 
-bool FileTab::CreateMainWindow()
+bool FileTab::CreateUIWindow()
 {
     wstring relativePath{};
     GetRelativePathFromDialog(relativePath);
     if (relativePath.empty()) return true;
 
-    auto create = CreateMainWindowFromFile(relativePath);
+    auto create = CreateUIWindowFromFile(relativePath);
     if (create)
         m_recentFiles->AddFile(relativePath);
 
@@ -168,11 +168,11 @@ static optional<bool> CompareFocusOrder(InnerWindow* lhs, InnerWindow* rhs)
 
 InnerWindow* FileTab::GetFocusWindow() const noexcept //?!? 이건 ToolSystem에 넣자.
 {
-    MainWindow* mainWindow = m_toolSystem->GetFocusMainWindow();
+    UserInterfaceWindow* uiWindow = m_toolSystem->GetFocusUIWindow();
     TextureResBinderWindow* mainTextureWindow = m_toolSystem->GetFocusTextureResBinderWindow();
-    auto order = CompareFocusOrder(mainWindow, mainTextureWindow);
+    auto order = CompareFocusOrder(uiWindow, mainTextureWindow);
     if (!order) return nullptr;
-    return *order ? static_cast<InnerWindow*>(mainWindow) : static_cast<InnerWindow*>(mainTextureWindow);
+    return *order ? static_cast<InnerWindow*>(uiWindow) : static_cast<InnerWindow*>(mainTextureWindow);
 }
 
 bool FileTab::Save(InnerWindow* focusWnd, const wstring& filename) const 
@@ -190,7 +190,7 @@ bool FileTab::Save(InnerWindow* focusWnd, const wstring& filename) const
     return result;
 }
 
-bool FileTab::SaveMainWindow()
+bool FileTab::SaveFocusWindow()
 {
     InnerWindow* focusWnd = GetFocusWindow();
     if (focusWnd == nullptr)
@@ -202,7 +202,7 @@ bool FileTab::SaveMainWindow()
     return Save(focusWnd);
 }
 
-bool FileTab::SaveAsMainWindow()
+bool FileTab::SaveAsFocusWindow()
 {
     InnerWindow* focusWnd = GetFocusWindow();
     if (focusWnd == nullptr)
@@ -221,7 +221,7 @@ bool FileTab::SaveAsMainWindow()
 
 bool FileTab::SetResolution()
 {
-    //MainWindow* focusWnd = GetFocusWindow();
+    //UserInterfaceWindow* focusWnd = GetFocusWindow();
     //if (focusWnd == nullptr)
     //    return true;
 

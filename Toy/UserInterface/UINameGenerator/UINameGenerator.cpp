@@ -3,7 +3,7 @@
 #include "AutoNamer.h"
 #include "ComponentNameGenerator.h"
 #include "../UIComponent/UIType.h"
-#include "../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/StringExt.h"
 #include "Shared/Utils/StlExt.h"
 
@@ -112,8 +112,8 @@ ComponentNameGenerator* UINameGenerator::GetComponentNameGen(string_view region)
     return find->second.get();
 }
 
-void UINameGenerator::SerializeIO(JsonOperation& operation)
+void UINameGenerator::ProcessIO(SerializerIO& serializer)
 {
-    operation.Process("RegionGens", m_regionGens);
-    operation.Process("RegionNames", m_componentNameGens);
+    serializer.Process("RegionGens", m_regionGens);
+    serializer.Process("RegionNames", m_componentNameGens);
 }

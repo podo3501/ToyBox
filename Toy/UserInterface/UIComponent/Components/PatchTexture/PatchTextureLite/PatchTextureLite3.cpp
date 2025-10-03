@@ -2,7 +2,7 @@
 #include "PatchTextureLite3.h"
 #include "PatchTextureLite1.h"
 #include "UserInterface/UIComponent/UIUtility.h"
-#include "UserInterface/JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 PatchTextureLite3::~PatchTextureLite3() = default;
 PatchTextureLite3::PatchTextureLite3() noexcept :
@@ -77,11 +77,11 @@ Rectangle PatchTextureLite3::GetSource() const noexcept
 	return tex1->GetSource();
 }
 
-void PatchTextureLite3::SerializeIO(JsonOperation& operation)
+void PatchTextureLite3::ProcessIO(SerializerIO& serializer)
 {
-	UIComponent::SerializeIO(operation);
-	operation.Process("DirectionType", m_dirType);
+	UIComponent::ProcessIO(serializer);
+	serializer.Process("DirectionType", m_dirType);
 
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	SetTextureSlice(DirTypeToTextureSlice(m_dirType));
 }

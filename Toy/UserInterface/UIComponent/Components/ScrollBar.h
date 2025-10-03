@@ -14,7 +14,7 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ScrollBar; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
-	virtual void SerializeIO(JsonOperation& operation) override;
+	virtual void ProcessIO(SerializerIO& serializer) override;
 
 	void AddScrollChangedCB(function<void(float)> callback) { m_onScrollChangedCB = callback; }
 	void RestoreDefault() noexcept;

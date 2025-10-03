@@ -3,7 +3,7 @@
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/System/Input.h"
-#include "../../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 RenderTexture::~RenderTexture() 
 { 
@@ -150,11 +150,11 @@ void RenderTexture::ImplementRender(ITextureRender* render) const
 	return;
 }
 
-void RenderTexture::SerializeIO(JsonOperation& operation)
+void RenderTexture::ProcessIO(SerializerIO& serializer)
 {
-	UIComponent::SerializeIO(operation);
-	operation.Process("MouseEvents", m_mouseEvents);
+	UIComponent::ProcessIO(serializer);
+	serializer.Process("MouseEvents", m_mouseEvents);
 
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	ReloadDatas();
 }

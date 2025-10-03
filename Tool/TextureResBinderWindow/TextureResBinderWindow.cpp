@@ -8,7 +8,7 @@
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 
 TextureResBinderWindow::~TextureResBinderWindow()
 {
@@ -35,29 +35,29 @@ bool TextureResBinderWindow::Create(const wstring& filename)
 {
     m_resBinder = CreateSourceBinder(filename);
     ReturnIfFalse(m_resBinder);
-    m_cmdList = make_unique<TexResCommandList>(m_resBinder.get());
+    m_cmdHistory = make_unique<TexResCommandHistory>(m_resBinder.get());
 
-    m_editFontTexture->SetCommandList(m_cmdList.get());
-    m_editSourceTexture->SetCommandList(m_cmdList.get());
+    m_editFontTexture->SetCommandHistory(m_cmdHistory.get());
+    m_editSourceTexture->SetCommandHistory(m_cmdHistory.get());
     m_isOpen = true;
     return true;
 }
 
-static bool CheckUndo(TexResCommandList* cmdList)
+static bool CheckUndo(TexResCommandHistory* cmdHistory)
 {
     if (!IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
-    return cmdList->Undo();
+    return cmdHistory->Undo();
 }
 
-static bool CheckRedo(TexResCommandList* cmdList)
+static bool CheckRedo(TexResCommandHistory* cmdHistory)
 {
     if (!IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
-    return cmdList->Redo();
+    return cmdHistory->Redo();
 }
 
 bool TextureResBinderWindow::CheckUndoRedo()
 {
-    auto result = CheckUndo(m_cmdList.get()) || CheckRedo(m_cmdList.get());
+    auto result = CheckUndo(m_cmdHistory.get()) || CheckRedo(m_cmdHistory.get());
     ReturnIfFalse(result);
 
     m_editSourceTexture->CheckTextureByUndoRedo();

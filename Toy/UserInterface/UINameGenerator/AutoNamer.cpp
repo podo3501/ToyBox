@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "AutoNamer.h"
 #include "Shared/Utils/StlExt.h"
-#include "../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 AutoNamer::~AutoNamer() = default;
 AutoNamer::AutoNamer() = default;
@@ -43,9 +43,9 @@ bool AutoNamer::IsUsed(int id) const noexcept
     return generated && notRecycled;
 }
 
-void AutoNamer::SerializeIO(JsonOperation& operation)
+void AutoNamer::ProcessIO(SerializerIO& serializer)
 {
-    operation.Process("Namers", m_nextID);
-    operation.Process("Recycled", m_recycled);
-    operation.Process("Deletable", m_isDeletable);
+    serializer.Process("Namers", m_nextID);
+    serializer.Process("Recycled", m_recycled);
+    serializer.Process("Deletable", m_isDeletable);
 }

@@ -76,8 +76,8 @@ inline ImColor ToColor(const XMVECTORF32& color, float alpha = 1.f) noexcept {
 }
 
 class UIComponent;
-class UICommandList;
+class UICommandHistory;
 class FloatingComponent;
 class UIModule;
-bool AddComponentFromScreenPos(UICommandList* cmdList, UIComponent* parent, FloatingComponent* floater, const XMINT2& pos) noexcept;
+bool AddComponentFromScreenPos(UICommandHistory* cmdHistory, UIComponent* parent, FloatingComponent* floater, const XMINT2& pos) noexcept;
 wstring ReplaceFileExtension(const wstring& filename, const wstring& newExtension);

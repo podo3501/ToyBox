@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "RecentFiles.h"
-#include "Shared/Utils/StringExt.h"
-#include "Toy/UserInterface/JsonOperation/JsonOperation.h"
 #include "FileTab.h"
+#include "Shared/Utils/StringExt.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 RecentFiles::RecentFiles()
 {
-    JsonOperation::ReadJsonFromFile(RecentFilename, *this);
+    SerializerIO::ReadJsonFromFile(RecentFilename, *this);
 }
 
 void RecentFiles::AddFile(const wstring& filename)
@@ -19,12 +19,12 @@ void RecentFiles::AddFile(const wstring& filename)
     if (m_recentFiles.size() > MaxRecentFiles)
         m_recentFiles.pop_back();
 
-    JsonOperation::WriteJsonToFile(*this, RecentFilename);
+    SerializerIO::WriteJsonToFile(*this, RecentFilename);
 }
 
 bool RecentFiles::OpenFile(FileTab& menuBar)
 {
-    auto result = menuBar.CreateMainWindowFromFile(m_file);
+    auto result = menuBar.CreateUIWindowFromFile(m_file);
     if(result)
         AddFile(m_file);
 
@@ -32,9 +32,9 @@ bool RecentFiles::OpenFile(FileTab& menuBar)
     return result;
 }
 
-void RecentFiles::SerializeIO(JsonOperation& jsonOp)
+void RecentFiles::ProcessIO(SerializerIO& serializer)
 {
-    jsonOp.Process("RecentFiles", m_recentFiles);
+    serializer.Process("RecentFiles", m_recentFiles);
 }
 
 bool RecentFiles::Show()

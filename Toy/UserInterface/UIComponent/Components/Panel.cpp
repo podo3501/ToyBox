@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Panel.h"
 #include "IRenderer.h"
-#include "../../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 Panel::~Panel() = default;
 Panel::Panel() : 
@@ -29,9 +29,9 @@ bool Panel::Setup(const UILayout& layout)
     return true;
 }
 
-void Panel::SerializeIO(JsonOperation& operation)
+void Panel::ProcessIO(SerializerIO& serializer)
 {
-    UIComponent::SerializeIO(operation);
+    UIComponent::ProcessIO(serializer);
 }
 
 unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer)

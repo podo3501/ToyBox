@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Utility.h"
-#include "MainWindow/FloatingComponent.h"
+#include "UserInterfaceWindow/FloatingComponent.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
-#include "Toy/UserInterface/Command/UICommandList/UICommandList.h"
+#include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/System/Input.h"
 
@@ -87,11 +87,11 @@ void DrawRectangles(const ImGuiWindow* window, const vector<Rectangle>& rects,
 		});
 }
 
-bool AddComponentFromScreenPos(UICommandList* cmdList, UIComponent* parent, FloatingComponent* floater, const XMINT2& pos) noexcept
+bool AddComponentFromScreenPos(UICommandHistory* cmdHistory, UIComponent* parent, FloatingComponent* floater, const XMINT2& pos) noexcept
 {
 	const XMINT2& comPos = parent->GetPosition();
 	XMINT2 relativePos = pos - comPos;
-	unique_ptr<UIComponent> failed = cmdList->AttachComponent(parent, floater->GetComponent(), relativePos);
+	unique_ptr<UIComponent> failed = cmdHistory->AttachComponent(parent, floater->GetComponent(), relativePos);
 	if (failed) //제대로 붙지 않았다면 인자로 보낸 Component가 리턴값으로 돌아온다.
 	{
 		floater->SetComponent(move(failed));

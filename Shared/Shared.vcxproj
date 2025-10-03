@@ -22,6 +22,13 @@
     <ClInclude Include="Framework\AppLoop.h" />
     <ClInclude Include="Framework\Environment.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SerializerIO\ClassSerializeIO.hpp" />
+    <ClInclude Include="SerializerIO\Concepts.h" />
+    <ClInclude Include="SerializerIO\KeyConverter\KeyConverter.hpp" />
+    <ClInclude Include="SerializerIO\SerializerIO.h" />
+    <ClInclude Include="SerializerIO\SerializerIO.hpp" />
+    <ClInclude Include="SerializerIO\Traits\Traits.h" />
+    <ClInclude Include="SerializerIO\Traits\TraitsHelper.hpp" />
     <ClInclude Include="System\Input.h" />
     <ClInclude Include="System\StepTimer.h" />
     <ClInclude Include="Utils\Common.h" />
@@ -44,6 +51,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SerializerIO\KeyConverter\KeyConverter.cpp" />
+    <ClCompile Include="SerializerIO\SerializerIO.cpp" />
+    <ClCompile Include="SerializerIO\Traits\Traits.cpp" />
     <ClCompile Include="System\Input.cpp" />
     <ClCompile Include="Utils\GeometryExt.cpp" />
     <ClCompile Include="Utils\Profiler.cpp" />

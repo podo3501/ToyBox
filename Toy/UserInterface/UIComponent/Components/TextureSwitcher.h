@@ -15,7 +15,7 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::TextureSwitcher; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
-	virtual void SerializeIO(JsonOperation& operation) override;
+	virtual void ProcessIO(SerializerIO& serializer) override;
 
 	bool Setup(const UILayout& layout, TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
 	inline bool Setup(TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode) { return Setup({}, texSlice, stateKeys, behaviorMode); }

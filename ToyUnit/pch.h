@@ -125,9 +125,6 @@
 	#pragma comment(lib, "DirectXTK12_Release.lib")
 #endif
 
-//json
-#include "nlohmann/json.hpp"
-
 #ifdef _DEBUG
 #define DX12_ENABLE_DEBUG_LAYER
 #endif

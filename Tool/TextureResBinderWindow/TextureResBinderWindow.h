@@ -6,7 +6,7 @@ class RenderTexture;
 class PatchTextureStd1;
 class MainSourceExtractor;
 class TextureResourceBinder;
-class TexResCommandList;
+class TexResCommandHistory;
 class EditFontTexture;
 class EditSourceTexture;
 
@@ -34,7 +34,7 @@ private:
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
     unique_ptr<TextureResourceBinder> m_resBinder;
-    unique_ptr<TexResCommandList> m_cmdList;
+    unique_ptr<TexResCommandHistory> m_cmdHistory;
     unique_ptr<RenderTexture> m_renderTex; //InnerWindow를 그리는 텍스쳐
     PatchTextureStd1* m_sourceTexture; //작업할 텍스쳐
     unique_ptr<EditFontTexture> m_editFontTexture;

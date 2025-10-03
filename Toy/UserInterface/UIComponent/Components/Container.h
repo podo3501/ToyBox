@@ -12,7 +12,7 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::Container; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
-	virtual void SerializeIO(JsonOperation& operation) override;
+	virtual void ProcessIO(SerializerIO& serializer) override;
 
 	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
 	bool Setup(const UILayout& layout, 

@@ -2,11 +2,11 @@
 #include "UIModule.h"
 #include "IRenderer.h"
 #include "UIComponent/UIComponent.h"
-#include "UINameGenerator/UINameGenerator.h"
-#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "UserInterface/JsonOperation/JsonOperation.h"
-#include "UserInterface/JsonOperation/JsonSerializer.h"
 #include "UIComponent/Components/Panel.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/SerializerIO/ClassSerializeIO.h"
+#include "UINameGenerator/UINameGenerator.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/StlExt.h"
 
 UIModule::~UIModule()
@@ -103,19 +103,19 @@ void UIModule::ReloadDatas() noexcept
 	castPanel->SetUIModule(this);
 }
 
-void UIModule::SerializeIO(JsonOperation& operation)
+void UIModule::ProcessIO(SerializerIO& serializer)
 {
-	operation.Process("Children", m_children);
-	operation.Process("UINameGenerator", m_generator);
+	serializer.Process("Children", m_children);
+	serializer.Process("UINameGenerator", m_generator);
 
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	ReloadDatas();
 }
 
 bool UIModule::Write(const wstring& filename) noexcept
 {
 	const wstring& curFilename = !filename.empty() ? filename : m_filename;
-	JsonOperation::WriteJsonToFile(*this, curFilename);
+	SerializerIO::WriteJsonToFile(*this, curFilename);
 	m_filename = curFilename;
 
 	return true;
@@ -124,7 +124,7 @@ bool UIModule::Write(const wstring& filename) noexcept
 bool UIModule::Read(const wstring& filename) noexcept
 {
 	const wstring& curFilename = !filename.empty() ? filename : m_filename;
-	JsonOperation::ReadJsonFromFile(curFilename, *this);
+	SerializerIO::ReadJsonFromFile(curFilename, *this);
 	m_filename = curFilename;
 
 	return true;

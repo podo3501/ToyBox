@@ -41,6 +41,27 @@
     <ClInclude Include="Framework\Environment.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="SerializerIO\ClassSerializeIO.hpp">
+      <Filter>SerializerIO</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\Concepts.h">
+      <Filter>SerializerIO</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\SerializerIO.h">
+      <Filter>SerializerIO</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\SerializerIO.hpp">
+      <Filter>SerializerIO</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\KeyConverter\KeyConverter.hpp">
+      <Filter>SerializerIO\KeyConverter</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\Traits\Traits.h">
+      <Filter>SerializerIO\Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\Traits\TraitsHelper.hpp">
+      <Filter>SerializerIO\Traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -74,6 +95,15 @@
     <ClCompile Include="Framework\Environment.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="SerializerIO\SerializerIO.cpp">
+      <Filter>SerializerIO</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializerIO\KeyConverter\KeyConverter.cpp">
+      <Filter>SerializerIO\KeyConverter</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializerIO\Traits\Traits.cpp">
+      <Filter>SerializerIO\Traits</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -87,6 +117,15 @@
     </Filter>
     <Filter Include="Framework">
       <UniqueIdentifier>{70d3aad2-e44a-404e-8f32-76e91bc2e76f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SerializerIO">
+      <UniqueIdentifier>{a297c79b-d98f-4b24-94f6-f4d9edce9b9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SerializerIO\KeyConverter">
+      <UniqueIdentifier>{7f717356-9e2f-4394-9927-95ee27997740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SerializerIO\Traits">
+      <UniqueIdentifier>{6d2e918d-00e6-4641-b670-00c0ac0dcc32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

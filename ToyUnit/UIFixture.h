@@ -59,16 +59,16 @@ protected:
 };
 class TracyBenchmark : public UIFixture {};
 
-class UICommandList;
-class TexResCommandList;
+class UICommandHistory;
+class TexResCommandHistory;
 class UIModuleConnection : public UIFixture {};
 class UndoRedo : public UIFixture
 {
 protected:
 	void CaptureSnapshot(vector<unique_ptr<UIComponent>>& history);
 	void CaptureSnapshot(vector<unique_ptr<TextureResourceBinder>>& history);
-	void VerifyUndoRedo(UICommandList& cmdList, const vector<unique_ptr<UIComponent>>& history);
-	void VerifyUndoRedo(TexResCommandList& cmdList, const vector<unique_ptr<TextureResourceBinder>>& history);
+	void VerifyUndoRedo(UICommandHistory& cmdHistory, const vector<unique_ptr<UIComponent>>& history);
+	void VerifyUndoRedo(TexResCommandHistory& cmdHistory, const vector<unique_ptr<TextureResourceBinder>>& history);
 
 	template <typename History, typename Func>
 	void ExecuteAndCapture(History& history, Func&& func)

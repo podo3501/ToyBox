@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "ListArea.h"
-#include "../../JsonOperation/JsonOperation.h"
 #include "RenderTexture.h"
 #include "ScrollBar.h"
 #include "TextureSwitcher.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/System/StepTimer.h"
 #include "Shared/System/Input.h"
 
@@ -307,11 +307,11 @@ bool ListArea::ExitToolMode() noexcept
 	return UpdateScrollBar();
 }
 
-void ListArea::SerializeIO(JsonOperation& operation)
+void ListArea::ProcessIO(SerializerIO& serializer)
 {
-	UIComponent::SerializeIO(operation);
-	operation.Process("ScrollPadding", m_scrollPadding);
+	UIComponent::ProcessIO(serializer);
+	serializer.Process("ScrollPadding", m_scrollPadding);
 
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	ReloadDatas();
 }

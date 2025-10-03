@@ -4,7 +4,7 @@
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextureSwitcher.h"
 #include "Button.h"
-#include "../../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
 
@@ -104,11 +104,11 @@ bool ScrollBar::ImplementUpdate(const DX::StepTimer& timer) noexcept
 	return true;
 }
 
-void ScrollBar::SerializeIO(JsonOperation& operation)
+void ScrollBar::ProcessIO(SerializerIO& serializer)
 {
-	UIComponent::SerializeIO(operation);
+	UIComponent::ProcessIO(serializer);
 
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	ReloadDatas();
 }
 

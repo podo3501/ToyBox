@@ -4,7 +4,7 @@ enum class PendingAction;
 struct IRenderer;
 class PatchTextureStd1;
 class TextureLoadBinder;
-class TexResCommandList;
+class TexResCommandHistory;
 class TextureResBinderWindow;
 class EditListBox;
 class RenameNotifier;
@@ -18,7 +18,7 @@ public:
 
     void Update() noexcept;
     void Render();
-    bool SetCommandList(TexResCommandList* cmdList) noexcept;
+    bool SetCommandHistory(TexResCommandHistory* cmdHistory) noexcept;
     void CheckTextureByUndoRedo();
 
 private:
@@ -39,7 +39,7 @@ private:
     IRenderer* m_renderer;
     TextureResBinderWindow* m_textureWindow;
     unique_ptr<TextureLoadBinder> m_textureLoader;
-    TexResCommandList* m_cmdList;
+    TexResCommandHistory* m_cmdHistory;
     unique_ptr<ImageSelector> m_imageSelector;
     int m_texIndex{ -1 };
     unique_ptr<EditListBox> m_listboxTexture;

@@ -226,22 +226,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameLoop.h" />
-    <ClInclude Include="UserInterface\Command\Command.h" />
-    <ClInclude Include="UserInterface\Command\CommandList.h" />
-    <ClInclude Include="UserInterface\Command\CommandType.h" />
-    <ClInclude Include="UserInterface\Command\TexResCommandList\TexResCommandList.h" />
-    <ClInclude Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.h" />
-    <ClInclude Include="UserInterface\Command\UICommandList\UICommandList.h" />
-    <ClInclude Include="UserInterface\Command\UICommandList\UICommandRegistry.h" />
-    <ClInclude Include="UserInterface\JsonOperation\JsonConcepts.h" />
-    <ClInclude Include="UserInterface\JsonOperation\JsonOperation.h" />
-    <ClInclude Include="UserInterface\JsonOperation\JsonOperation.hpp" />
-    <ClInclude Include="UserInterface\JsonOperation\JsonSerializer.h" />
-    <ClInclude Include="UserInterface\JsonOperation\JsonSerializer.hpp" />
-    <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetail.hpp" />
-    <ClInclude Include="UserInterface\JsonOperation\Traits\JsonDetailExt.h" />
-    <ClInclude Include="UserInterface\JsonOperation\Traits\Traits.h" />
-    <ClInclude Include="UserInterface\JsonOperation\Traits\TraitsExt.h" />
+    <ClInclude Include="UserInterface\CommandHistory\Command.h" />
+    <ClInclude Include="UserInterface\CommandHistory\CommandHistory.h" />
+    <ClInclude Include="UserInterface\CommandHistory\CommandType.h" />
+    <ClInclude Include="UserInterface\CommandHistory\TextureResource\TexResCommandHistory.h" />
+    <ClInclude Include="UserInterface\CommandHistory\TextureResource\TexResCommandRegistry.h" />
+    <ClInclude Include="UserInterface\CommandHistory\UserInterface\UICommandHistory.h" />
+    <ClInclude Include="UserInterface\CommandHistory\UserInterface\UICommandRegistry.h" />
+    <ClInclude Include="UserInterface\SerializerIO\ClassSerializeIO.h" />
+    <ClInclude Include="UserInterface\SerializerIO\KeyConverter.h" />
+    <ClInclude Include="UserInterface\SerializerIO\Traits.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureBinderHelper.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureFontInfo.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureInfo.h" />
@@ -286,16 +280,13 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandList.cpp" />
-    <ClCompile Include="UserInterface\Command\TexResCommandList\TexResCommandRegistry.cpp" />
-    <ClCompile Include="UserInterface\Command\UICommandList\UICommandList.cpp" />
-    <ClCompile Include="UserInterface\Command\UICommandList\UICommandRegistry.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\JsonOperation.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\JsonSerializer.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetailExt.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\Traits\Traits.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\Traits\JsonDetail.cpp" />
-    <ClCompile Include="UserInterface\JsonOperation\Traits\TraitsExt.cpp" />
+    <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandHistory.cpp" />
+    <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandRegistry.cpp" />
+    <ClCompile Include="UserInterface\CommandHistory\UserInterface\UICommandHistory.cpp" />
+    <ClCompile Include="UserInterface\CommandHistory\UserInterface\UICommandRegistry.cpp" />
+    <ClCompile Include="UserInterface\SerializerIO\ClassSerializeIO.cpp" />
+    <ClCompile Include="UserInterface\SerializerIO\KeyConverter.cpp" />
+    <ClCompile Include="UserInterface\SerializerIO\Traits.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureBinderHelper.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureFontInfo.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureInfo.cpp" />

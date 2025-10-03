@@ -2,7 +2,7 @@
 
 enum class TextureSlice;
 class TextureResBinderWindow;
-class TexResCommandList;
+class TexResCommandHistory;
 struct TextureSourceInfo;
 class PatchTextureStd1;
 class RenameNotifier;
@@ -15,7 +15,7 @@ public:
 	void Update();
 	void Render();
 	void SetTexture(PatchTextureStd1* pTex1) noexcept;
-	void SetCommandList(TexResCommandList* cmdList) noexcept { m_cmdList = cmdList; }
+	void SetCommandHistory(TexResCommandHistory* cmdHistory) noexcept { m_cmdHistory = cmdHistory; }
 	bool DeselectArea() noexcept;
 
 private:
@@ -32,7 +32,7 @@ private:
 	
 
 	PatchTextureStd1* m_sourceTexture;
-	TexResCommandList* m_cmdList;
+	TexResCommandHistory* m_cmdHistory;
 	TextureResBinderWindow* m_textureWindow;
 	unique_ptr<RenameNotifier> m_renameNotifier;
 	TextureSlice m_selectImagePart;

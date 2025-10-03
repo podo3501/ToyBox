@@ -1,6 +1,6 @@
 #pragma once
 
-class JsonOperation;
+class SerializerIO;
 
 namespace Tool
 {
@@ -24,7 +24,7 @@ namespace Tool
 		static ResolutionType GetResolution() noexcept;
 		static XMUINT2 GetResolutionInCoordinate() noexcept;
 
-		void SerializeIO(JsonOperation& jsonOp);
+		void ProcessIO(SerializerIO& serializer);
 
 	private:
 		static ResolutionType m_resolutionType;

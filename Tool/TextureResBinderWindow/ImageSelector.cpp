@@ -4,7 +4,7 @@
 #include "EditUtility/EditUtility.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "Toy/UserInterface/Command/TexResCommandList/TexResCommandList.h"
+#include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
@@ -14,7 +14,7 @@
 ImageSelector::~ImageSelector() = default;
 ImageSelector::ImageSelector(TextureResBinderWindow* textureWindow) :
     m_sourceTexture{ nullptr },
-    m_cmdList{ nullptr },
+    m_cmdHistory{ nullptr },
     m_textureWindow{ textureWindow },
     m_renameNotifier{ make_unique<RenameNotifier>() },
     m_selectImagePart{ TextureSlice::One }
@@ -57,10 +57,10 @@ bool ImageSelector::RemoveArea() noexcept
 {
     if (!m_selectedArea) return false;
 
-    auto binder = m_cmdList->GetReceiver();
+    auto binder = m_cmdHistory->GetReceiver();
     const string& bindingKey = binder->GetBindingKey(*m_selectedArea);
     if (bindingKey.empty()) return false;
-    m_cmdList->RemoveTextureKey(bindingKey);
+    m_cmdHistory->RemoveTextureKey(bindingKey);
 
     return DeselectArea();
 }
@@ -124,7 +124,7 @@ void ImageSelector::CheckSourcePartition() noexcept
     if (!m_sourceTexture) return;
 
     const XMINT2& pos = Input::GetMouse().GetPosition();
-    m_hoveredAreas = GetAreas(m_cmdList->GetReceiver(), m_sourceTexture->GetFilename(), m_selectImagePart, pos);
+    m_hoveredAreas = GetAreas(m_cmdHistory->GetReceiver(), m_sourceTexture->GetFilename(), m_selectImagePart, pos);
     if (!m_hoveredAreas.empty()) return; //먼저 저장돼 있는 것을 찾아보고 없으면 새로운걸 만든다.
 
     if(auto currRectangle = FindAreaFromMousePos(pos); currRectangle)
@@ -177,7 +177,7 @@ void ImageSelector::RenderLabeledAreas() const
     const auto& wnd = m_textureWindow->GetWindow();
     const auto& filename = m_sourceTexture->GetFilename();
 
-    auto binder = m_cmdList->GetReceiver();
+    auto binder = m_cmdHistory->GetReceiver();
     DrawTextureAreas(wnd, binder->GetTotalAreas(filename), ToColor(Colors::DarkSlateBlue));
     DrawTextureAreas(wnd, GetAreas(binder, filename, m_selectImagePart), ToColor(Colors::Blue));
 }
@@ -186,18 +186,18 @@ void ImageSelector::EditSelectArea()
 {
     if (!m_selectedArea) return;
 
-    auto binder = m_cmdList->GetReceiver();
+    auto binder = m_cmdHistory->GetReceiver();
     const string& bindingKey = binder->GetBindingKey(*m_selectedArea);
     SourceDivider sourceDivider = GetSourceDivider(*m_selectedArea);
     if (EditSourceAndDivider("Source Area", "Deviders", sourceDivider))
     {
         m_selectedArea->sources = GetSources(m_selectImagePart, sourceDivider);
-        if (!bindingKey.empty()) m_cmdList->ModifyTextureSourceInfo(bindingKey, *m_selectedArea);
+        if (!bindingKey.empty()) m_cmdHistory->ModifyTextureSourceInfo(bindingKey, *m_selectedArea);
     }
         
     m_renameNotifier->EditName("Tex Bind Key", bindingKey, [this, &bindingKey](const string& newKey) {
-        if (bindingKey.empty()) return m_cmdList->AddTextureKey(newKey, *m_selectedArea);
+        if (bindingKey.empty()) return m_cmdHistory->AddTextureKey(newKey, *m_selectedArea);
         if (newKey.empty()) return RemoveArea();
-        return m_cmdList->RenameTextureKey(bindingKey, newKey);
+        return m_cmdHistory->RenameTextureKey(bindingKey, newKey);
         });
 }

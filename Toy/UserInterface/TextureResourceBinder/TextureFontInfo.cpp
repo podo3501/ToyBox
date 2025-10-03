@@ -2,7 +2,7 @@
 #include "TextureFontInfo.h"
 #include "IRenderer.h"
 #include "Shared/Framework/Environment.h"
-#include "../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 TextureFontInfo::~TextureFontInfo() = default;
 TextureFontInfo::TextureFontInfo() noexcept = default;
@@ -32,7 +32,7 @@ bool TextureFontInfo::LoadResource(ITextureLoad* load)
     return true;
 }
 
-void TextureFontInfo::SerializeIO(JsonOperation& operation)
+void TextureFontInfo::ProcessIO(SerializerIO& serializer)
 {
-    operation.Process("Filename", filename);
+    serializer.Process("Filename", filename);
 }

@@ -3,7 +3,7 @@
 #include "IRenderer.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/UIComponent/UIUtility.h"
-#include "UserInterface/JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 PatchTextureStd1::~PatchTextureStd1() = default;
 PatchTextureStd1::PatchTextureStd1() : 
@@ -97,9 +97,9 @@ optional<vector<Rectangle>> PatchTextureStd1::GetTextureAreaList()
 	return nullopt;
 }
 
-void PatchTextureStd1::SerializeIO(JsonOperation& operation)
+void PatchTextureStd1::ProcessIO(SerializerIO& serializer)
 {
-	UIComponent::SerializeIO(operation);
-	operation.Process("BindKey", m_bindKey);
-	operation.Process("SourceIndex", m_sourceIndex);
+	UIComponent::ProcessIO(serializer);
+	serializer.Process("BindKey", m_bindKey);
+	serializer.Process("SourceIndex", m_sourceIndex);
 }

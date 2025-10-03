@@ -17,7 +17,7 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ListArea; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
-	virtual void SerializeIO(JsonOperation& operation) override;
+	virtual void ProcessIO(SerializerIO& serializer) override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 		unique_ptr<TextureSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept;

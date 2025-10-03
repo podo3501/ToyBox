@@ -5,7 +5,7 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
 #include "../UIUtility.h"
-#include "../../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
@@ -128,10 +128,10 @@ void TextArea::ImplementRender(ITextureRender* render) const
 			XMLoadFloat4(&word.color));
 }
 
-void TextArea::SerializeIO(JsonOperation& operation)
+void TextArea::ProcessIO(SerializerIO& serializer)
 {
-	operation.Process("BindKeys", m_bindKeys);
-	operation.Process("Text", m_text);
+	serializer.Process("BindKeys", m_bindKeys);
+	serializer.Process("Text", m_text);
 
-	UIComponent::SerializeIO(operation);
+	UIComponent::ProcessIO(serializer);
 }

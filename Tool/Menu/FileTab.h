@@ -2,7 +2,6 @@
 
 class ToolSystem;
 class RecentFiles;
-class MainWindow;
 class ResolutionSetting;
 class InnerWindow;
 enum class FileMenuAction;
@@ -15,18 +14,18 @@ public:
 
 	void Show();
 	bool Excute();
-	bool CreateMainWindowFromFile(const wstring& filename);
+	bool CreateUIWindowFromFile(const wstring& filename);
 
 private:
 	InnerWindow* GetFocusWindow() const noexcept;
 	void HandleFileMenuAction(FileMenuAction action);
 	bool CreateNewUIFile() noexcept;
-	bool CreateMainWindow();
+	bool CreateUIWindow();
 	bool CreateTextureResBinderWindow(const wstring& filename = L"");
 	bool CreateTextureWindow();
 	bool Save(InnerWindow* focusWnd, const wstring& filename = L"") const;
-	bool SaveMainWindow();
-	bool SaveAsMainWindow();
+	bool SaveFocusWindow();
+	bool SaveAsFocusWindow();
 	bool SetResolution();
 
 	ToolSystem* m_toolSystem;

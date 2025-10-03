@@ -7,7 +7,7 @@ class UIComponent;
 class Panel;
 class UINameGenerator;
 class TextureResourceBinder;
-class JsonOperation;
+class SerializerIO;
 namespace DX { class StepTimer; }
 class UIModule
 {
@@ -27,7 +27,7 @@ public:
 	//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	//unique_ptr<UIComponent> AttachComponent(const string& regionName, const string& name,
 	//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
-	void SerializeIO(JsonOperation& operation);
+	void ProcessIO(SerializerIO& serializer);
 	bool Write(const wstring& filename = L"") noexcept;
 	bool EnableToolMode(bool enable);
 	UIComponent* FindComponent(const string& name) const noexcept;

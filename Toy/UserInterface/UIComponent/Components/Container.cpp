@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "Container.h"
 #include "Shared/System/Input.h"
-#include "../../JsonOperation/JsonOperation.h"
+#include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
 
@@ -139,10 +139,10 @@ bool Container::ImplementUpdate(const DX::StepTimer&) noexcept
 	return true;
 }
 
-void Container::SerializeIO(JsonOperation& operation)
+void Container::ProcessIO(SerializerIO& serializer)
 {
-	UIComponent::SerializeIO(operation);
+	UIComponent::ProcessIO(serializer);
 
-	if (operation.IsWrite()) return;
+	if (serializer.IsWrite()) return;
 	ReloadDatas();
 }

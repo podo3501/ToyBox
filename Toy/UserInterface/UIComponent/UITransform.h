@@ -1,7 +1,7 @@
 #pragma once
 
 class UILayout;
-class JsonOperation;
+class SerializerIO;
 
 class UITransform
 {
@@ -13,7 +13,7 @@ public:
 	XMINT2 GetUpdatedPosition(const UILayout& layout, const XMINT2& parentPos) noexcept;
 	void SetRelativePosition(const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	void AdjustPosition(const XMUINT2& size, bool lockPosition) noexcept;
-	void SerializeIO(JsonOperation& operation);
+	void ProcessIO(SerializerIO& serializer);
 
 	inline const Vector2& GetRatio() const noexcept { return m_ratio; }
 	inline const XMINT2& GetRelativePosition() const noexcept { return m_relativePosition; }

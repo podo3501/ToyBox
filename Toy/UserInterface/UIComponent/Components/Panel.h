@@ -2,7 +2,7 @@
 #include "../UIComponent.h"
 
 struct IRenderer;
-class JsonOperation;
+class SerializerIO;
 class UIModule;
 
 class Panel : public UIComponent
@@ -14,7 +14,7 @@ public:
 
     static ComponentID GetTypeStatic() { return ComponentID::Panel; }
     virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
-    virtual void SerializeIO(JsonOperation& operation) override;
+    virtual void ProcessIO(SerializerIO& serializer) override;
 
     bool Setup(const UILayout& layout);
     void SetUIModule(UIModule* uiModule) noexcept { m_uiModule = uiModule; }
