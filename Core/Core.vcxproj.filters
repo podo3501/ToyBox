@@ -8,13 +8,19 @@
     <Filter Include="Public">
       <UniqueIdentifier>{a1f8cd62-f503-4c43-84fd-b0f7a5ae35c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{d30f20d5-a210-4101-bd73-fac6421dc1db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{d897fc28-4cea-4eaa-8dab-66249307a858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{76079a37-302f-4e27-8acf-e83b9d4e9da1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="Imgui.cpp" />
     <ClCompile Include="TextureRepository\Font.cpp">
       <Filter>TextureRepository</Filter>
     </ClCompile>
@@ -33,15 +39,19 @@
     <ClCompile Include="TextureRepository\TextureHelper.cpp">
       <Filter>TextureRepository</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Common.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="External\DeviceResources.cpp">
+      <Filter>External</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Imgui.cpp">
+      <Filter>External</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Utility.h" />
-    <ClInclude Include="IDeviceNotify.h" />
-    <ClInclude Include="Imgui.h" />
-    <ClInclude Include="Setting.h" />
     <ClInclude Include="TextureRepository\Font.h">
       <Filter>TextureRepository</Filter>
     </ClInclude>
@@ -74,6 +84,21 @@
     </ClInclude>
     <ClInclude Include="Public\TypeAliases.h">
       <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Common.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="External\DeviceResources.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="External\IDeviceNotify.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Imgui.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\Setting.h">
+      <Filter>Config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

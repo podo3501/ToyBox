@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "Renderer.h"
-#include "DeviceResources.h"
 #include "Public/IComponent.h"
 #include "Public/ITextureBinder.h"
 #include "TextureRepository/TextureRepository.h"
 #include "TextureRepository/TextureRenderTarget.h"
-#include "Imgui.h"
-#include "Utility.h"
-#include "Setting.h"
+#include "External/DeviceResources.h"
+#include "External/Imgui.h"
+#include "Utils/Common.h"
+#include "Config/Setting.h"
 
 using namespace DirectX;
 

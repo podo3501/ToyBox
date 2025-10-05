@@ -3,8 +3,8 @@
 #include "Texture.h"
 #include "TextureRenderTarget.h"
 #include "Font.h"
-#include "../DeviceResources.h"
-#include "../Utility.h"
+#include "External/DeviceResources.h"
+#include "Utils/Common.h"
 
 TextureRepository::~TextureRepository()
 {

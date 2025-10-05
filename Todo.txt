@@ -182,14 +182,16 @@
 --Shared/Framework를 만들고 AppLoop를 여기에 두고 exe 프로젝트가 상속받아서 loop돌리게끔 수정
 --Json을 UI말고도 다른데서 활용할 수 있도록 UI쪽 데이터와 분리해서 공통부분은 Shared에 올리기.
 --Command부분을 알기쉽게 이름 리팩토링 CommandHistory같은.
+--Window 폴더를 만들어서 정리.
+--Utility 폴더를 만들어서 정리
+--Config 폴더 만들기
 
 @프로젝트 정리   
     SDL 사운드를 Shared/System/Audio로 할 예정.
     툴 root 정리
-        MainWindow 폴더를 만들어서 정리.
-        Utility 폴더를 만들어서 정리
         ToolLoop와 ToolSystem 합칠 수 있는지 확인
-        Config 폴더 만들기
+    void ReportLiveObjects() 함수 Shared로 올리기
+        
     Core 프로젝트 root 정리
 
 @툴에서 리스트 할 수 있게끔

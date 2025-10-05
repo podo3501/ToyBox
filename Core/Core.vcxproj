@@ -159,8 +159,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DeviceResources.cpp" />
-    <ClCompile Include="Imgui.cpp" />
+    <ClCompile Include="External\DeviceResources.cpp" />
+    <ClCompile Include="External\Imgui.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -174,12 +174,13 @@
     <ClCompile Include="TextureRepository\TextureHelper.cpp" />
     <ClCompile Include="TextureRepository\TextureRepository.cpp" />
     <ClCompile Include="TextureRepository\TextureResource.cpp" />
-    <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="Utils\Common.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DeviceResources.h" />
-    <ClInclude Include="IDeviceNotify.h" />
-    <ClInclude Include="Imgui.h" />
+    <ClInclude Include="Config\Setting.h" />
+    <ClInclude Include="External\DeviceResources.h" />
+    <ClInclude Include="External\IDeviceNotify.h" />
+    <ClInclude Include="External\Imgui.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Public\d3dx12.h" />
     <ClInclude Include="Public\IComponent.h" />
@@ -187,14 +188,13 @@
     <ClInclude Include="Public\ITextureBinder.h" />
     <ClInclude Include="Public\TypeAliases.h" />
     <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Setting.h" />
     <ClInclude Include="TextureRepository\Font.h" />
     <ClInclude Include="TextureRepository\TextureRenderTarget.h" />
     <ClInclude Include="TextureRepository\Texture.h" />
     <ClInclude Include="TextureRepository\TextureHelper.h" />
     <ClInclude Include="TextureRepository\TextureRepository.h" />
     <ClInclude Include="TextureRepository\TextureResource.h" />
-    <ClInclude Include="Utility.h" />
+    <ClInclude Include="Utils\Common.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.vcxproj">

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Texture.h"
 #include "TextureHelper.h"
-#include "../Utility.h"
+#include "Utils/Common.h"
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;

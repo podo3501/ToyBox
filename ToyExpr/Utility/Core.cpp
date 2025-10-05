@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../Core/Utility.h"
+#include "Core/Utils/Common.h"
 
 namespace Utility
 {

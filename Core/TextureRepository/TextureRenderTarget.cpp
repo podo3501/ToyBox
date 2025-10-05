@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "TextureRenderTarget.h"
 #include "Public/IComponent.h"
-#include "../DeviceResources.h"
-#include "../Utility.h"
+#include "External/DeviceResources.h"
+#include "Utils/Common.h"
 
 constexpr FLOAT ClearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 

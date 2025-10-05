@@ -1,6 +1,6 @@
 #pragma once
 #include "Public/IRenderer.h"
-#include "Setting.h"
+#include "Config/Setting.h"
 
 class Texture;
 class CFont;

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TextureHelper.h"
-#include "../DeviceResources.h"
-#include "../Utility.h"
+#include "External/DeviceResources.h"
+#include "Utils/Common.h"
 
 using Microsoft::WRL::ComPtr;
 

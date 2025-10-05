@@ -18,9 +18,9 @@ public:
     int Run();
 
 protected:
-    virtual bool InitializeDerived() = 0;
-    virtual bool LoadResources() = 0;
-    virtual bool PostLoaded(ITextureController* texController) = 0;
+    virtual bool InitializeDerived() { return true; }
+    virtual bool LoadResources() { return true; }
+    virtual bool PostLoaded(ITextureController*) { return true; }
     virtual void Update(const DX::StepTimer& timer) = 0;
 
 private:

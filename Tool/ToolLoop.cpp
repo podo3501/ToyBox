@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "ToolLoop.h"
-#include "ToolSystem.h"
+#include "Window/UserInterface/UserInterfaceWindow.h"
+#include "Window/TextureResourceBinder/TextureResBinderWindow.h"
+#include "Window/Menu/MenuBar.h"
+#include "Window/Dialog.h"
+#include "Config/Config.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -23,31 +27,72 @@ ToolLoop::ToolLoop(Window* window, IRenderer* renderer) :
     ::AppLoop(window, renderer),
     m_window{ window },
     m_renderer{ renderer }
-{}
-
-bool ToolLoop::InitializeDerived()
 {
-    m_toolSystem = make_unique<ToolSystem>(m_renderer);
-
-    return true;
+    m_menuBar = make_unique<MenuBar>(this);
+    m_renderer->AddImguiComponent(this);
 }
 
-bool ToolLoop::LoadResources()
+void ToolLoop::SetUIWindow(unique_ptr<UserInterfaceWindow> uiWindow) noexcept
 {
-    return true;
+    m_uiWindows.emplace_back(move(uiWindow));
 }
 
-bool ToolLoop::PostLoaded(ITextureController* texController)
+void ToolLoop::SetTextureWindow(unique_ptr<TextureResBinderWindow> textureWindow) noexcept
 {
-    return true;
+    m_textureWindows.emplace_back(move(textureWindow));
+}
+
+template <typename InnerWindow>
+static InnerWindow* GetFocusWindow(const vector<unique_ptr<InnerWindow>>& windows) noexcept
+{
+    auto it = ranges::max_element(
+        windows,
+        [](const auto& rhs, const auto& lhs) {
+            const ImGuiWindow* wRhs = rhs->GetImGuiWindow();
+            const ImGuiWindow* wlhs = lhs->GetImGuiWindow();
+            return wRhs->FocusOrder < wlhs->FocusOrder;
+        });
+
+    if (it == windows.end())
+        return nullptr;
+
+    return it->get();
+}
+
+UserInterfaceWindow* ToolLoop::GetFocusUIWindow() const noexcept
+{
+    return GetFocusWindow(m_uiWindows);
+}
+
+TextureResBinderWindow* ToolLoop::GetFocusTextureResBinderWindow() const noexcept
+{
+    return GetFocusWindow(m_textureWindows);
 }
 
 void ToolLoop::Update(const DX::StepTimer& timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
-
     UNREFERENCED_PARAMETER(timer);
-    m_toolSystem->Update(timer);
+
+    m_menuBar->Update();
+
+    erase_if(m_uiWindows, [](auto& wnd) { return !wnd->IsOpen(); });
+    ranges::for_each(m_uiWindows, [&timer](const auto& wnd) {
+        wnd->Update(timer);
+        });
+
+    erase_if(m_textureWindows, [](auto& texWnd) { return !texWnd->IsOpen(); });
+    ranges::for_each(m_textureWindows, [](const auto& texWnd) {
+        texWnd->Update();
+        });
 
     PIXEndEvent();
+}
+
+void ToolLoop::Render(ImGuiIO* io)
+{
+    Tool::Dialog::Render();
+    m_menuBar->Render();
+
+    return;
 }
