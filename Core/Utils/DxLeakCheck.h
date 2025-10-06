@@ -1,5 +1,5 @@
 #pragma once
 
 #if defined(DEBUG) | defined(_DEBUG)
-void ReportLiveObjects();
+void CheckDirectxLeaks();
 #endif

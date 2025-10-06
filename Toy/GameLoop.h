@@ -8,7 +8,7 @@ class GameLoop final : public AppLoop
 {
 public:
 	GameLoop() = delete;
-	GameLoop(Window* window, IRenderer* renderer);
+	GameLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer);
 	virtual ~GameLoop();
 
 protected:
@@ -20,7 +20,6 @@ protected:
 private:
 	bool AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept;
 
-	Window* m_window;
 	IRenderer* m_renderer;
 	unique_ptr<UIModule> m_uiModule;
 };

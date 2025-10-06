@@ -12,9 +12,10 @@ AppLoop::~AppLoop()
     TracyShutdownProfiler();
 }
 
-AppLoop::AppLoop(Window* window, IRenderer* renderer) :
-    m_window{ window },
-    m_renderer{ renderer }
+
+AppLoop::AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer) :
+    m_window{ move(window) },
+    m_renderer{ move(renderer) }
 {
     TracyStartupProfiler();
     Input::Initialize(m_window->GetHandle());
@@ -95,3 +96,5 @@ void AppLoop::OnResuming()
 
     m_renderer->OnResuming();
 }
+
+IRenderer* AppLoop::GetRenderer() const noexcept { return m_renderer.get(); }

@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
+
 // Use the C++ standard templated min/max
 #define NOMINMAX
 

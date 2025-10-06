@@ -11,7 +11,7 @@ class AppLoop
 {
 public:
     AppLoop() = delete;
-    AppLoop(Window* window, IRenderer* renderer);
+    AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer);
     virtual ~AppLoop();
 
     bool Initialize(const wstring& resPath, const Vector2& resolution);
@@ -22,6 +22,7 @@ protected:
     virtual bool LoadResources() { return true; }
     virtual bool PostLoaded(ITextureController*) { return true; }
     virtual void Update(const DX::StepTimer& timer) = 0;
+    IRenderer* GetRenderer() const noexcept;
 
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -36,7 +37,7 @@ private:
     bool m_fullscreen{ false };
     
     wstring m_resourcePath;
-    Window* m_window;
-    IRenderer* m_renderer;
+    unique_ptr<Window> m_window;
+    unique_ptr<IRenderer> m_renderer;
     DX::StepTimer m_timer;
 };

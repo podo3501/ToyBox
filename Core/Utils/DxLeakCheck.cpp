@@ -2,7 +2,7 @@
 #include "DxLeakCheck.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
-void ReportLiveObjects()
+void CheckDirectxLeaks()
 {
 	HMODULE dxgidebugdll = GetModuleHandleW(L"dxgidebug.dll");
 	if (dxgidebugdll == NULL) return;

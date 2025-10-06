@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ToolLoop.h"
+#include "Shared/Window/Window.h"
 #include "Window/UserInterface/UserInterfaceWindow.h"
 #include "Window/TextureResourceBinder/TextureResBinderWindow.h"
 #include "Window/Menu/MenuBar.h"
@@ -23,10 +24,9 @@ extern "C"
 #endif
 
 ToolLoop::~ToolLoop() = default;
-ToolLoop::ToolLoop(Window* window, IRenderer* renderer) :
-    ::AppLoop(window, renderer),
-    m_window{ window },
-    m_renderer{ renderer }
+ToolLoop::ToolLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer) :
+    ::AppLoop(move(window), move(renderer)),
+    m_renderer{ AppLoop::GetRenderer() }
 {
     m_menuBar = make_unique<MenuBar>(this);
     m_renderer->AddImguiComponent(this);

@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "IRenderer.h"
 #include "Toy/GameLoop.h"
-#include "Shared/Window/WindowProcedure.h"
-#include "Shared/Window/Window.h"
+#include "Shared/Framework/Initializer/Application.h"
 
 namespace Integration
 {
@@ -13,26 +12,11 @@ namespace Integration
 	{
 		for (auto i : std::views::iota(0, 5))
 		{
-			auto result = XMVerifyCPUSupport();
-			EXPECT_TRUE(result);
+			RECT windowRect = { 0, 0, 800, 600 };
+			std::wstring resourcePath = L"Resources/";
+			auto gameLoop = CreateAppLoop<GameLoop>(GetModuleHandle(nullptr), SW_HIDE, windowRect, resourcePath, false);
+			EXPECT_TRUE(gameLoop != nullptr);
 
-			Window window;
-			HWND hwnd{};
-			result = window.Create(GetModuleHandle(nullptr), SW_HIDE, { 0, 0, 800, 600 }, hwnd);
-			EXPECT_TRUE(result);
-
-			bool bImgui = true;
-			if (bImgui)
-				window.AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp)->LRESULT {
-				return ImguiWndProc(wnd, msg, wp, lp); });
-
-			const auto& outputSize = window.GetOutputSize();
-			unique_ptr<IRenderer> renderer = CreateRenderer(hwnd,
-				static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), bImgui);
-			EXPECT_TRUE(renderer != nullptr);
-
-			unique_ptr<GameLoop> gameLoop = make_unique<GameLoop>(&window, renderer.get());
-			EXPECT_TRUE(gameLoop->Initialize(L"Resources/", outputSize));
 			gameLoop.reset();
 		}
 	}

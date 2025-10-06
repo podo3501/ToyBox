@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "GameLoop.h"
+#include "Shared/Window/Window.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
@@ -29,10 +30,9 @@ extern "C"
 #endif
 
 GameLoop::~GameLoop() = default;
-GameLoop::GameLoop(Window* window, IRenderer* renderer) :
-    ::AppLoop(window, renderer),
-    m_window{ window },
-    m_renderer{ renderer }
+GameLoop::GameLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer) :
+    ::AppLoop(move(window), move(renderer)),
+    m_renderer{ AppLoop::GetRenderer() }
 {}
 
 bool GameLoop::InitializeDerived()

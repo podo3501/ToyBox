@@ -26,7 +26,7 @@ class ToolLoop final : public AppLoop, public IImguiComponent
 {
 public:
 	ToolLoop() = delete;
-	ToolLoop(Window* window, IRenderer* renderer);
+	ToolLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer);
 	virtual ~ToolLoop();
 	virtual void Render(ImGuiIO* io) override;
 
@@ -40,7 +40,6 @@ protected:
 	virtual void Update(const DX::StepTimer& timer) override;
 
 private:
-	Window* m_window;
 	IRenderer* m_renderer;
 
 	unique_ptr<Tool::Config> m_config;
