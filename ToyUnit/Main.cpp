@@ -6,12 +6,15 @@ GlobalEnv::~GlobalEnv() = default;
 
 void GlobalEnv::SetUp()
 {
-	//메모리 릭을 잡기 위한 옵션
+#if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 }
 
 void GlobalEnv::TearDown()
-{}
+{
+	//Dx 메모리릭을 테스트 하지 않는 이유는 Dx를 안띄우기 때문이다.
+}
 
 //GlobalEnv 클래스의 SetUp을 해주기 위해서.
 int main(int argc, char** argv)

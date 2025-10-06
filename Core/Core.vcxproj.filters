@@ -48,6 +48,9 @@
     <ClCompile Include="External\Imgui.cpp">
       <Filter>External</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\DxLeakCheck.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -99,6 +102,9 @@
     </ClInclude>
     <ClInclude Include="Config\Setting.h">
       <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\DxLeakCheck.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

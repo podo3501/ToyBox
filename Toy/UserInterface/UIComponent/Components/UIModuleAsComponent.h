@@ -8,7 +8,7 @@ public:
 	~UIModuleAsComponent();
 	UIModuleAsComponent();
 
-	static ComponentID GetTypeStatic() { return ComponentID::TextureSwitcher; }
+	static ComponentID GetTypeStatic() { return ComponentID::UIModuleAsComponent; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	inline UIModule* GetUIModule() const noexcept { return m_module.get(); }
 

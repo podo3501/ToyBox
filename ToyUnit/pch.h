@@ -120,18 +120,9 @@
 #include "DirectXTK12/WICTextureLoader.h"
 
 #ifdef _DEBUG
-	#pragma comment(lib, "DirectXTK12_Debug.lib")
+#pragma comment(lib, "DirectXTK12_Debug.lib")
 #else
-	#pragma comment(lib, "DirectXTK12_Release.lib")
-#endif
-
-#ifdef _DEBUG
-#define DX12_ENABLE_DEBUG_LAYER
-#endif
-
-#ifdef DX12_ENABLE_DEBUG_LAYER
-#include <dxgidebug.h>
-#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "DirectXTK12_Release.lib")
 #endif
 
 #include "Shared/Utils/Common.h"

@@ -185,19 +185,20 @@
 --Window 폴더를 만들어서 정리.
 --Utility 폴더를 만들어서 정리
 --Config 폴더 만들기
+--void ReportLiveObjects() 함수 Core로 올리기
+--Core 프로젝트 root 정리
+--툴 root 정리
+--Test 프로젝트 root 정리
 
 @프로젝트 정리   
     SDL 사운드를 Shared/System/Audio로 할 예정.
-    툴 root 정리
-        ToolLoop와 ToolSystem 합칠 수 있는지 확인
-    void ReportLiveObjects() 함수 Shared로 올리기
-        
-    Core 프로젝트 root 정리
 
 @툴에서 리스트 할 수 있게끔
     컨테이너 간격 셋팅 
     UIModule로 바꾸고 나서 생긴 버그들 수정
         likely로 바꿔야 할듯
+
+@메인씬과 게임씬 만들기
 
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔

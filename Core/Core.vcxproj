@@ -175,6 +175,7 @@
     <ClCompile Include="TextureRepository\TextureRepository.cpp" />
     <ClCompile Include="TextureRepository\TextureResource.cpp" />
     <ClCompile Include="Utils\Common.cpp" />
+    <ClCompile Include="Utils\DxLeakCheck.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config\Setting.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="TextureRepository\TextureRepository.h" />
     <ClInclude Include="TextureRepository\TextureResource.h" />
     <ClInclude Include="Utils\Common.h" />
+    <ClInclude Include="Utils\DxLeakCheck.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.vcxproj">

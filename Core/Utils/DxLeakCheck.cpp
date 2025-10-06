@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "DxLeakCheck.h"
 
 #if defined(DEBUG) | defined(_DEBUG)
 void ReportLiveObjects()

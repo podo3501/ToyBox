@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "UIFixture.h"
+#include "Fixture/FixtureSuite.h"
 #include "Helper.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"

@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "UIFixture.h"
+#include "Fixture/FixtureSuite.h"
 #include "Helper.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"

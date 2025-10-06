@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "UIFixture.h"
+#include "Fixture/FixtureSuite.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
 #include "Helper.h"

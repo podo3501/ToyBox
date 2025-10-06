@@ -21,17 +21,24 @@
     <ClCompile Include="Integration\Application.cpp">
       <Filter>Integration</Filter>
     </ClCompile>
-    <ClCompile Include="UIFixture.cpp" />
     <ClCompile Include="Integration\TracyBenchmark.cpp">
       <Filter>Integration</Filter>
+    </ClCompile>
+    <ClCompile Include="Fixture\Fixture.cpp">
+      <Filter>Fixture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="UIFixture.h" />
     <ClInclude Include="CodeLab\Locator.h">
       <Filter>CodeLab</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixture\Fixture.h">
+      <Filter>Fixture</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixture\FixtureSuite.h">
+      <Filter>Fixture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +53,9 @@
     </Filter>
     <Filter Include="Integration">
       <UniqueIdentifier>{d60127f4-3b09-4ce7-8f78-499ee134be62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fixture">
+      <UniqueIdentifier>{6d06ef55-3c7a-457e-abf2-f26e6f51d34c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

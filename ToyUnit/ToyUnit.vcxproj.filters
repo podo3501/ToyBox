@@ -3,8 +3,6 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="UIFixture.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
@@ -35,12 +33,16 @@
     <ClCompile Include="UserInterface\UIModuleConnection.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="Fixture\Fixture.cpp">
+      <Filter>Fixture</Filter>
+    </ClCompile>
+    <ClCompile Include="Fixture\FixtureSuite.cpp">
+      <Filter>Fixture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Utility.h" />
-    <ClInclude Include="UIFixture.h" />
     <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h">
       <Filter>Mocks\Stubs\Include</Filter>
     </ClInclude>
@@ -50,17 +52,14 @@
     <ClInclude Include="UserInterface\Helper.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="Fixture\Fixture.h">
+      <Filter>Fixture</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixture\FixtureSuite.h">
+      <Filter>Fixture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{e8227c53-de4b-46e8-9bc0-fc4e2cffa886}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Test">
-      <UniqueIdentifier>{ada32c62-fb7c-44b8-a2b1-d2111482cacd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Test\Data">
-      <UniqueIdentifier>{0f7f180e-4b95-4726-8d63-07cc408c7dd1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Mocks">
       <UniqueIdentifier>{d282f695-392c-4846-ad3a-0aabc2ee8151}</UniqueIdentifier>
     </Filter>
@@ -73,13 +72,8 @@
     <Filter Include="UserInterface">
       <UniqueIdentifier>{5ad40a19-cd2d-47fa-a2e9-9262e19f4a13}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Resources\Test\Data\JOPTest.json">
-      <Filter>Resources\Test\Data</Filter>
-    </None>
-    <None Include="..\Resources\Test\Data\JsonSerializeTest.json">
-      <Filter>Resources\Test\Data</Filter>
-    </None>
+    <Filter Include="Fixture">
+      <UniqueIdentifier>{a7f4fcab-b052-41ca-86cd-ad21fbe7fad6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
