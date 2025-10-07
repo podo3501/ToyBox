@@ -4,6 +4,8 @@
 #include "Shared/Window/WindowProcedure.h"
 #include "Shared/Window/Window.h"
 
+unique_ptr<IRenderer> CreateRendererInstance(Window* window, bool bImgui);
+
 template<typename LoopType>
 unique_ptr<AppLoop> CreateAppLoop(HINSTANCE hInstance, int nShowCmd,
 	const RECT& windowRect, const wstring& resourcePath, bool bImgui)
@@ -11,33 +13,18 @@ unique_ptr<AppLoop> CreateAppLoop(HINSTANCE hInstance, int nShowCmd,
 	if (!XMVerifyCPUSupport())
 		return nullptr;
 
-	// 扩档快 积己
-	auto window = make_unique<Window>();
-	HWND hwnd{};
-	if (!window->Create(hInstance, nShowCmd, windowRect, hwnd))
+	auto window = CreateWindowInstance(hInstance, nShowCmd, windowRect);
+	if (!window)
 		return nullptr;
 
-	// ImGui 荤侩 咯何
-	if (bImgui)
-	{
-		window->AddWndProcListener([](HWND wnd, UINT msg, WPARAM wp, LPARAM lp) -> LRESULT {
-			return ImguiWndProc(wnd, msg, wp, lp);
-			});
-	}
-
-	// 坊歹矾 积己
-	const auto& outputSize = window->GetOutputSize();
-	auto renderer = CreateRenderer(hwnd,
-		static_cast<int>(outputSize.x),
-		static_cast<int>(outputSize.y),
-		bImgui);
+	auto renderer = CreateRendererInstance(window.get(), bImgui);
 	if (!renderer)
 		return nullptr;
 
-	// 风橇 积己
-	auto appLoop = make_unique<LoopType>(move(window), move(renderer));
-	if (!appLoop->Initialize(resourcePath, outputSize))
+	Vector2 windowSize = window->GetOutputSize();
+	auto appLoop = CreateAppLoop<LoopType>(move(window), move(renderer), windowSize, resourcePath);
+	if (!appLoop)
 		return nullptr;
 
-	return move(appLoop);
+	return appLoop;
 }

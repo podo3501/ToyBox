@@ -12,7 +12,6 @@ AppLoop::~AppLoop()
     TracyShutdownProfiler();
 }
 
-
 AppLoop::AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer) :
     m_window{ move(window) },
     m_renderer{ move(renderer) }

@@ -36,8 +36,19 @@ private:
     bool m_minimized{ false };
     bool m_fullscreen{ false };
     
-    wstring m_resourcePath;
     unique_ptr<Window> m_window;
     unique_ptr<IRenderer> m_renderer;
+    wstring m_resourcePath;
     DX::StepTimer m_timer;
 };
+
+template<typename LoopType>
+unique_ptr<AppLoop> CreateAppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer,
+    const Vector2& windowSize, const wstring& resourcePath)
+{
+    auto loop = make_unique<LoopType>(move(window), move(renderer));
+    if (!loop->Initialize(resourcePath, windowSize))
+        return nullptr;
+
+    return loop;
+}

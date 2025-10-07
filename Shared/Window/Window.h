@@ -35,3 +35,5 @@ inline DirectX::SimpleMath::Vector2 Window::GetOutputSize() const noexcept{
     return { static_cast<float>(m_outputSize.right + m_outputSize.left), 
         static_cast<float>(m_outputSize.bottom + m_outputSize.top) }; }
 inline void Window::OnWindowSizeChanged(const RECT& size) noexcept { m_outputSize = size; }
+
+unique_ptr<Window> CreateWindowInstance(HINSTANCE hInstance, int nShowCmd, const RECT& rect);

@@ -39,6 +39,9 @@
     <ClCompile Include="Fixture\FixtureSuite.cpp">
       <Filter>Fixture</Filter>
     </ClCompile>
+    <ClCompile Include="Prototype\Scene.cpp">
+      <Filter>Prototype</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -74,6 +77,9 @@
     </Filter>
     <Filter Include="Fixture">
       <UniqueIdentifier>{a7f4fcab-b052-41ca-86cd-ad21fbe7fad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototype">
+      <UniqueIdentifier>{c6227d32-c0d1-4eb8-bedb-d41c0c0f6dad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

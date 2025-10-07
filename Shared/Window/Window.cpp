@@ -144,3 +144,12 @@ void Window::ExitGame() noexcept
     PostMessage(gWindow->m_wnd, WM_CLOSE, 0, 0);
 }
 
+unique_ptr<Window> CreateWindowInstance(HINSTANCE hInstance, int nShowCmd, const RECT& rect)
+{
+    auto window = make_unique<Window>();
+    HWND hwnd{};
+    if (!window->Create(hInstance, nShowCmd, rect, hwnd))
+        return nullptr;
+    return window;
+}
+
