@@ -226,6 +226,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameLoop.h" />
+    <ClInclude Include="Interfaces\ISceneManager.h" />
+    <ClInclude Include="SceneManager\Scene.h" />
+    <ClInclude Include="SceneManager\SceneManager.h" />
+    <ClInclude Include="SceneManager\Scenes\TestScene.h" />
     <ClInclude Include="UserInterface\CommandHistory\Command.h" />
     <ClInclude Include="UserInterface\CommandHistory\CommandHistory.h" />
     <ClInclude Include="UserInterface\CommandHistory\CommandType.h" />
@@ -280,6 +284,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SceneManager\SceneManager.cpp" />
+    <ClCompile Include="SceneManager\Scenes\TestScene.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandHistory.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandRegistry.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\UserInterface\UICommandHistory.cpp" />

@@ -23,6 +23,7 @@
     <ClInclude Include="Framework\Environment.h" />
     <ClInclude Include="Framework\Initializer\Application.h" />
     <ClInclude Include="Framework\Initializer\GoogleTest.h" />
+    <ClInclude Include="Framework\Locator.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SerializerIO\ClassSerializeIO.hpp" />
     <ClInclude Include="SerializerIO\Concepts.h" />

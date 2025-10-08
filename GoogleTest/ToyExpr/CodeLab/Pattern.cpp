@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Locator.h"
+#include "Shared/Framework/Locator.h"
 
 namespace CodeLab
 {
@@ -91,13 +91,13 @@ namespace CodeLab
 		{
 			auto audio = make_unique<Audio>();
 			Locator<Audio>::Provide(audio.get());
-			const Audio* curAudio = Locator<Audio>::GetService();
+			Audio* curAudio = Locator<Audio>::GetService();
 		}
 
 		{
 			auto budio = make_unique<Budio>();
 			Locator<Budio>::Provide(budio.get());
-			const Budio* curBudio = Locator<Budio>::GetService();
+			Budio* curBudio = Locator<Budio>::GetService();
 		}
 	}
 }

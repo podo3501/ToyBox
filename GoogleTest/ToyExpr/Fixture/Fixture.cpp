@@ -23,7 +23,7 @@ void Fixture::SetUp()
 	RECT rc{ 0, 0, 800, 600 };
 	EXPECT_TRUE(m_window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
 	const auto& outputSize = m_window->GetOutputSize();
-	InitializeEnvironment(L"Resources/", outputSize);
+	InitializeEnvironment(L"../Resources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 	Input::Initialize(hwnd);
 

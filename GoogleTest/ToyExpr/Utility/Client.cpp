@@ -85,7 +85,7 @@ namespace Utility
 	//컨테이너 안에 값이 클래스 또는 스트럭쳐 일 경우 Serialize 테스트
 	TEST(Client, JsonParser)
 	{
-		InitializeEnvironment(L"Resources/", { 800.f, 600.f });
+		InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 
 		UserComponent wData(true);
 		const auto& serializeTestFilename = L"Test/Data/JsonSerializeTest.json";

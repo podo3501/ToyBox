@@ -18,7 +18,7 @@ void Fixture::SetUp()
 	Rectangle rc{ 0, 0, 800, 600 };
 	UILayout layout{ GetSizeFromRectangle(rc), Origin::LeftTop };
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
-	InitializeEnvironment(L"Resources/", { 800.f, 600.f });
+	InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 	m_mockRenderer = make_unique<MockRenderer>();
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetMainPanel();

@@ -4,7 +4,7 @@ template<typename T>
 class Locator
 {
 public:
-	static const T* GetService() noexcept { return m_service; }
+	static T* GetService() noexcept { return m_service; }
 	static void Provide(T* service) { m_service = service; }
 
 private:

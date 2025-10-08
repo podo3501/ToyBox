@@ -8,6 +8,10 @@ GlobalEnv::~GlobalEnv() = default;
 
 void GlobalEnv::SetUp()
 {
+#ifdef DISABLE_ToyExpr
+	exit(0);
+#endif
+
 	//메모리 릭을 잡기 위한 옵션
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -24,5 +28,5 @@ void GlobalEnv::TearDown()
 //GlobalEnv 클래스의 SetUp을 해주기 위해서.
 int main(int argc, char** argv)
 {
-	return CreateGoogleTest(argc, argv, L"Toy Experiment", new GlobalEnv);
+	return CreateGoogleTest(argc, argv, L"Toy Experiment", new GlobalEnv, false);
 }

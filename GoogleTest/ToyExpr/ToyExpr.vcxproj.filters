@@ -31,9 +31,6 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="CodeLab\Locator.h">
-      <Filter>CodeLab</Filter>
-    </ClInclude>
     <ClInclude Include="Fixture\Fixture.h">
       <Filter>Fixture</Filter>
     </ClInclude>

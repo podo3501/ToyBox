@@ -34,15 +34,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>D:\ProgrammingStudy\ToyBox\gmock.1.11.0\lib\native\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)GoogleTest\x64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>D:\ProgrammingStudy\ToyBox\gmock.1.11.0\lib\native\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)GoogleTest\x64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>D:\ProgrammingStudy\ToyBox\gmock.1.11.0\lib\native\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)GoogleTest\x64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>D:\ProgrammingStudy\ToyBox\gmock.1.11.0\lib\native\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)GoogleTest\x64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="Fixture\Fixture.h" />
     <ClInclude Include="Fixture\FixtureSuite.h" />
+    <ClInclude Include="Mocks\MockClasses.h" />
     <ClInclude Include="Mocks\MockRenderer.h" />
     <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h" />
     <ClInclude Include="pch.h" />
@@ -157,13 +162,13 @@
     <ClCompile Include="UserInterface\UndoRedo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.vcxproj">
+    <ProjectReference Include="..\..\Core\Core.vcxproj">
       <Project>{60e13bba-4299-40f7-8fc1-c9e1928486f4}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Shared\Shared.vcxproj">
+    <ProjectReference Include="..\..\Shared\Shared.vcxproj">
       <Project>{a9d428f9-8ced-42b2-ad67-3e2a3e8c08ff}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Toy\Toy.vcxproj">
+    <ProjectReference Include="..\..\Toy\Toy.vcxproj">
       <Project>{ce88cfb8-f480-4ead-b13e-d54c92e8fde8}</Project>
     </ProjectReference>
   </ItemGroup>

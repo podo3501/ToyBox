@@ -13,8 +13,8 @@ namespace Integration
 		for (auto i : std::views::iota(0, 5))
 		{
 			RECT windowRect = { 0, 0, 800, 600 };
-			std::wstring resourcePath = L"Resources/";
-			auto gameLoop = CreateAppLoop<GameLoop>(GetModuleHandle(nullptr), SW_HIDE, windowRect, resourcePath, false);
+			std::wstring resourcePath = L"../Resources/";
+			auto gameLoop = CreateAppLoop<GameLoop>(GetModuleHandle(nullptr), SW_HIDE, windowRect, resourcePath, true);
 			EXPECT_TRUE(gameLoop != nullptr);
 
 			gameLoop.reset();

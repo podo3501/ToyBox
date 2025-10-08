@@ -12,10 +12,10 @@ unordered_map<wstring, MockTextureInfo> g_textureInfos;
 static void InitializeTextureInfos()
 {
 	g_textureInfos.clear();
-	g_textureInfos.insert({ L"Resources/UI/Font/CourierNewBoldS18.spritefont", { 0, {} } });
-	g_textureInfos.insert({ L"Resources/UI/Font/MaleunGothicS16.spritefont", { 1, {} } });
-	g_textureInfos.insert({ L"Resources/UI/SampleTexture/Sample_0.png", { 2, { 512, 512 } } });
-	g_textureInfos.insert({ L"Resources/UI/SampleTexture/Option.png", { 3, { 512, 512 } } });
+	g_textureInfos.insert({ L"../Resources/UI/Font/CourierNewBoldS18.spritefont", { 0, {} } });
+	g_textureInfos.insert({ L"../Resources/UI/Font/MaleunGothicS16.spritefont", { 1, {} } });
+	g_textureInfos.insert({ L"../Resources/UI/SampleTexture/Sample_0.png", { 2, { 512, 512 } } });
+	g_textureInfos.insert({ L"../Resources/UI/SampleTexture/Option.png", { 3, { 512, 512 } } });
 }
 
 bool MockTextureLoad::LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize, UINT64* outGfxMemOffset)
