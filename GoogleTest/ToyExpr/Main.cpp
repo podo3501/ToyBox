@@ -28,5 +28,5 @@ void GlobalEnv::TearDown()
 //GlobalEnv 클래스의 SetUp을 해주기 위해서.
 int main(int argc, char** argv)
 {
-	return CreateGoogleTest(argc, argv, L"Toy Experiment", new GlobalEnv, false);
+	return CreateGoogleTest(argc, argv, L"Toy Experiment", new GlobalEnv);
 }

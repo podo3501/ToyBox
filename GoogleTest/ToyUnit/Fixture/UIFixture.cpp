@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Fixture.h"
+#include "UIFixture.h"
 #include "UserInterface/Helper.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/System/Input.h"
@@ -8,12 +8,12 @@
 using ::testing::_;
 using ::testing::Invoke;
 
-Fixture::~Fixture() = default;
-Fixture::Fixture() :
+UIFixture::~UIFixture() = default;
+UIFixture::UIFixture() :
 	m_main{ nullptr }
 {}
 
-void Fixture::SetUp()
+void UIFixture::SetUp()
 {
 	Rectangle rc{ 0, 0, 800, 600 };
 	UILayout layout{ GetSizeFromRectangle(rc), Origin::LeftTop };
@@ -24,14 +24,14 @@ void Fixture::SetUp()
 	m_main = m_uiModule->GetMainPanel();
 }
 
-void Fixture::TearDown()
+void UIFixture::TearDown()
 {
 	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.
 }
 
-TextureResourceBinder* Fixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
+TextureResourceBinder* UIFixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
 
-void Fixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times)
+void UIFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times)
 {
 	MockTextureRender mockTexRender;
 	EXPECT_CALL(mockTexRender, Render(_, _, _))
@@ -43,7 +43,7 @@ void Fixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, Tex
 	m_main->ProcessRender(&mockTexRender);
 }
 
-void Fixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc,
+void UIFixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc,
 	const string& bindKey, int times)
 {
 	MockTextureRender mockTexRender;
@@ -56,7 +56,7 @@ void Fixture::CallMockRender(function<void(size_t, const RECT&, const RECT*, con
 	m_main->ProcessRender(&mockTexRender);
 }
 
-void Fixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, const string& bindKey, UIComponent* component)
+void UIFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, const string& bindKey, UIComponent* component)
 {
 	MockTextureRender mockTexRender;
 	EXPECT_CALL(mockTexRender, Render(_, _, _))
@@ -70,7 +70,7 @@ void Fixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, const
 }
 
 //TextArea용 CallMockRender
-void Fixture::CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
+void UIFixture::CallMockRender(UIComponent* component, function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
 {
 	MockTextureRender mockTexRender;
 	EXPECT_CALL(mockTexRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
@@ -78,7 +78,7 @@ void Fixture::CallMockRender(UIComponent* component, function<void(size_t, const
 	component->ProcessRender(&mockTexRender);
 }
 
-void Fixture::CallMockRender(function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
+void UIFixture::CallMockRender(function<void(size_t, const wstring&, const Vector2&, const FXMVECTOR&)> testRenderFunc)
 {
 	MockTextureRender mockTexRender;
 	EXPECT_CALL(mockTexRender, DrawString(_, _, _, _)).WillRepeatedly(Invoke(testRenderFunc));
@@ -86,7 +86,7 @@ void Fixture::CallMockRender(function<void(size_t, const wstring&, const Vector2
 	m_main->ProcessRender(&mockTexRender);
 }
 
-void Fixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
+void UIFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 { //마우스의 상태값은 업데이트를 계속해도 셋팅한 상태값이 계속 들어간다.
 	auto& mouseTracker = const_cast<MouseTracker&>(Input::GetMouse());
 	auto state = mouseTracker.GetLastState();
@@ -96,7 +96,7 @@ void Fixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
 	mouseTracker.Update(state);
 }
 
-void Fixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey)
+void UIFixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey)
 {
 	unique_ptr<UIComponent> clonePanel = m_main->Clone();
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());

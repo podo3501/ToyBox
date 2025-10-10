@@ -33,6 +33,7 @@ public:
 	UIComponent* FindComponent(const string& name) const noexcept;
 	UIComponent* GetMainPanel() const noexcept;
 	const vector<unique_ptr<UIComponent>>& GetChildren() const noexcept;
+	inline IRenderer* GetRenderer() const noexcept { return m_renderer; }
 	inline TextureResourceBinder* GetTexResBinder() const noexcept { return m_resBinder.get(); }
 	inline UINameGenerator* GetNameGenerator() const noexcept { return m_generator.get(); }
 	inline const wstring& GetFilename() const noexcept { return m_filename; }

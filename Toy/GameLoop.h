@@ -1,6 +1,7 @@
 #pragma once
 #include "Shared/Framework/AppLoop.h"
 
+class ISceneManager;
 class UIComponent;
 class UIModule;
 
@@ -13,13 +14,13 @@ public:
 
 protected:
 	virtual bool InitializeDerived() override;
-	virtual bool LoadResources() override;
-	virtual bool PostLoaded(ITextureController*) override { return true; }
+	virtual bool DoPrepare() override;
 	virtual void Update(const DX::StepTimer& timer) override;
 
 private:
 	bool AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept;
 
 	IRenderer* m_renderer;
+	unique_ptr<ISceneManager> m_sceneManager;
 	unique_ptr<UIModule> m_uiModule;
 };

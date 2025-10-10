@@ -53,12 +53,15 @@ bool Imgui::Initialize(ID3D12Device* device, DescriptorHeap* descHeap, DXGI_FORM
         descHeap->GetCpuHandle(srvOffset),
         descHeap->GetGpuHandle(srvOffset)));
 
-    auto exePath = GetExePath(); //임시로 exe가 있는 위치를 가지고 와서 리소스를 찾는다. tool exe배포하게 되면 이 부분을 수정해야 한다.
+    //임시로 폰트 위치를 넣어준다.
     //폰트 설정(제일 위에 있는 폰트가 index 0를 가지며 default 폰트이다.
-    string ttfFilename = exePath + "/" + "../../../ThirdParty/Srcs/Imgui/misc/fonts/DroidSans.ttf";
+    string ttfFilename = + "../ThirdParty/Srcs/Imgui/misc/fonts/DroidSans.ttf";
     auto font = m_io->Fonts;
-    font->AddFontFromFileTTF(ttfFilename.c_str(), 15.0f);
-    font->AddFontFromFileTTF(ttfFilename.c_str(), 18.0f);
+    ImFont* font15 = font->AddFontFromFileTTF(ttfFilename.c_str(), 15.0f);
+    if (font15 == NULL) return false;
+    
+    ImFont* font18 = font->AddFontFromFileTTF(ttfFilename.c_str(), 18.0f);
+    if (font18 == NULL) return false;
     
     return true;
 }

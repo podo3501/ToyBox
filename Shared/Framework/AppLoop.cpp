@@ -28,7 +28,7 @@ bool AppLoop::Initialize(const wstring& resPath, const Vector2& resolution)
     ReturnIfFalse(InitializeDerived());
     AddWinProcListener();
 
-    ReturnIfFalse(LoadResources());
+    ReturnIfFalse(DoPrepare());
 
     return true;
 }

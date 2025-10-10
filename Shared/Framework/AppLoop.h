@@ -19,8 +19,7 @@ public:
 
 protected:
     virtual bool InitializeDerived() { return true; }
-    virtual bool LoadResources() { return true; }
-    virtual bool PostLoaded(ITextureController*) { return true; }
+    virtual bool DoPrepare() { return true; }
     virtual void Update(const DX::StepTimer& timer) = 0;
     IRenderer* GetRenderer() const noexcept;
 

@@ -10,11 +10,11 @@ class UIModule;
 class UIComponent;
 class TextureResourceBinder;
 
-class Fixture : public ::testing::Test
+class UIFixture : public ::testing::Test
 {
 public:
-	Fixture();
-	~Fixture();
+	UIFixture();
+	~UIFixture();
 
 	void CallMockRender(function<void(size_t, const RECT&, const RECT*, TextureResourceBinder*)> testRenderFunc, int times);
 	void CallMockRender(function<void(size_t, const RECT&, const RECT*, const vector<RECT>&)> testRenderFunc,

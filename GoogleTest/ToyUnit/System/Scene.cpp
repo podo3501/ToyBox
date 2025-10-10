@@ -2,18 +2,17 @@
 #include "Shared/Framework/Locator.h"
 #include "Toy/Interfaces/ISceneManager.h"
 #include "Toy/SceneManager/SceneManager.h"
+#include "Fixture/FixtureSuite.h"
 #include "Mocks/MockClasses.h"
 
-namespace Prototype
+namespace System
 {
-	TEST(SceneManager, CreateScene)
+	TEST_F(SceneManagerTest, CreateScene)
 	{
-		auto createSceneManager = CreateSceneManager();
-		Locator<ISceneManager>::Provide(createSceneManager.get());
 		ISceneManager* sceneManager = Locator<ISceneManager>::GetService();
 
-		EXPECT_TRUE(sceneManager->CreateScene(make_unique<MockScene>("MockScene1")));
-		EXPECT_TRUE(sceneManager->CreateScene(make_unique<MockScene>("MockScene2")));
+		EXPECT_TRUE(sceneManager->CreateScene(make_unique<MockScene>("MockScene1", nullptr)));
+		EXPECT_TRUE(sceneManager->CreateScene(make_unique<MockScene>("MockScene2", nullptr)));
 
 		MockScene* mockScene1 = static_cast<MockScene*>(sceneManager->FindScene("MockScene1"));
 		MockScene* mockScene2 = static_cast<MockScene*>(sceneManager->FindScene("MockScene2"));
@@ -25,5 +24,10 @@ namespace Prototype
 
 		EXPECT_TRUE(sceneManager->Transition("MockScene1"));
 		EXPECT_TRUE(sceneManager->Transition("MockScene2"));
+
+		EXPECT_CALL(*mockScene1, Update(::testing::_)).Times(0);
+		EXPECT_CALL(*mockScene2, Update(::testing::_)).Times(1);
+		DX::StepTimer timer;
+		sceneManager->Update(timer);
 	}
 }

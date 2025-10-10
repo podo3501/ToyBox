@@ -43,8 +43,8 @@
     <Filter Include="SceneManager">
       <UniqueIdentifier>{48dd8944-8152-490a-a2a4-0e1336f20b58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SceneManager\Scenes">
-      <UniqueIdentifier>{4360c33a-3470-447b-85f5-6ead0a4bab21}</UniqueIdentifier>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{cf7fad67-ed75-46c8-b3c5-155e5fd82d28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -206,14 +206,14 @@
     <ClInclude Include="Interfaces\ISceneManager.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager\Scene.h">
-      <Filter>SceneManager</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager\SceneManager.h">
       <Filter>SceneManager</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager\Scenes\TestScene.h">
-      <Filter>SceneManager\Scenes</Filter>
+    <ClInclude Include="Scenes\TestScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -366,8 +366,8 @@
     <ClCompile Include="SceneManager\SceneManager.cpp">
       <Filter>SceneManager</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager\Scenes\TestScene.cpp">
-      <Filter>SceneManager\Scenes</Filter>
+    <ClCompile Include="Scenes\TestScene.cpp">
+      <Filter>Scenes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

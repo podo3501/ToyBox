@@ -33,14 +33,17 @@
     <ClCompile Include="UserInterface\UIModuleConnection.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="Fixture\Fixture.cpp">
+    <ClCompile Include="Fixture\UIFixture.cpp">
       <Filter>Fixture</Filter>
     </ClCompile>
     <ClCompile Include="Fixture\FixtureSuite.cpp">
       <Filter>Fixture</Filter>
     </ClCompile>
-    <ClCompile Include="Prototype\Scene.cpp">
-      <Filter>Prototype</Filter>
+    <ClCompile Include="Fixture\SystemFixture.cpp">
+      <Filter>Fixture</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Scene.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -55,7 +58,7 @@
     <ClInclude Include="UserInterface\Helper.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="Fixture\Fixture.h">
+    <ClInclude Include="Fixture\UIFixture.h">
       <Filter>Fixture</Filter>
     </ClInclude>
     <ClInclude Include="Fixture\FixtureSuite.h">
@@ -63,6 +66,9 @@
     </ClInclude>
     <ClInclude Include="Mocks\MockClasses.h">
       <Filter>Mocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixture\SystemFixture.h">
+      <Filter>Fixture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -81,8 +87,8 @@
     <Filter Include="Fixture">
       <UniqueIdentifier>{a7f4fcab-b052-41ca-86cd-ad21fbe7fad6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Prototype">
-      <UniqueIdentifier>{c6227d32-c0d1-4eb8-bedb-d41c0c0f6dad}</UniqueIdentifier>
+    <Filter Include="System">
+      <UniqueIdentifier>{e26b9376-3546-4bbd-b65b-a9e687755dbd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

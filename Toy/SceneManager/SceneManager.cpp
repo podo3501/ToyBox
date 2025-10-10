@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "SceneManager.h"
-#include "Scene.h"
+#include "Scenes/Scene.h"
 
 SceneManager::~SceneManager() = default;
 SceneManager::SceneManager() :
@@ -29,6 +29,12 @@ bool SceneManager::Transition(const string& newSceneName)
 	m_currentScene->Enter();
 
 	return true;
+}
+
+void SceneManager::Update(const DX::StepTimer& timer)
+{
+	if (!m_currentScene) return;
+	m_currentScene->Update(timer);
 }
 
 Scene* SceneManager::FindScene(const string& sceneName) const noexcept
