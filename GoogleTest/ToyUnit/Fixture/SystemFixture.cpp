@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SystemFixture.h"
 #include "Shared/Framework/Locator.h"
-#include "Toy/SceneManager/SceneManager.h"
+#include "Toy/System/SceneManager.h"
 
 using ::testing::_;
 using ::testing::Invoke;

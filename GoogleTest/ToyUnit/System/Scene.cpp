@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Shared/Framework/Locator.h"
 #include "Toy/Interfaces/ISceneManager.h"
-#include "Toy/SceneManager/SceneManager.h"
+#include "Toy/System/SceneManager.h"
 #include "Fixture/FixtureSuite.h"
 #include "Mocks/MockClasses.h"
 

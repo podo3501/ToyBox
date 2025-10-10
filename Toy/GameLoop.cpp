@@ -5,7 +5,7 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Locator.h"
 #include "Shared/Framework/Environment.h"
-#include "SceneManager/SceneManager.h"
+#include "System/SceneManager.h"
 #include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponent/UILayout.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
