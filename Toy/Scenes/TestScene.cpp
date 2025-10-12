@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "TestScene.h"
+#include "IRenderer.h"
+#include "Shared/Utils/GeometryExt.h"
+#include "Shared/Framework/Environment.h"
 #include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponent/Components/ListArea.h"
 #include "UserInterface/UIComponent/Components/Button.h"
@@ -9,13 +12,18 @@
 #include "UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 
-TestScene::TestScene(const string& name, UIModule* uiModule) :
-	Scene(name, uiModule),
-    m_uiModule{ uiModule }
-{}
+TestScene::TestScene(const string& name, IRenderer* renderer) :
+	Scene(name, renderer)
+{} 
 
 bool TestScene::Enter()
 {
+    IRenderer* renderer = GetRenderer();
+    UILayout layout{ GetSizeFromRectangle(GetRectResolution()) };
+    m_uiModule = CreateUIModule(layout, "Main", renderer, L"UI/SampleTexture/SampleTextureBinder.json");
+    m_uiModule->AddRenderer();
+    renderer->LoadTextureBinder(m_uiModule->GetTexResBinder());
+
     return LoadResources();
 }
 

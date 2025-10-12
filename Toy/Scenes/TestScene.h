@@ -1,12 +1,11 @@
 #pragma once
 #include "Scene.h"
 
-class UIModule;
 class UIComponent;
 class TestScene : public Scene
 {
 public:
-	TestScene(const string& name, UIModule* uiModule);
+	TestScene(const string& name, IRenderer* renderer);
 	
 	virtual bool Enter() override;
 	virtual bool Leave() override;
@@ -16,6 +15,5 @@ private:
 	bool LoadResources();
 	bool AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept;
 
-	UIModule* m_uiModule;
-
+	unique_ptr<UIModule> m_uiModule;
 };

@@ -13,6 +13,9 @@ protected:
 	void SetUp() override;
 	void TearDown() override;
 
+protected:
+	unique_ptr<MockRenderer> m_mockRenderer;
+
 private:
 	unique_ptr<ISceneManager> m_sceneManager;
 };

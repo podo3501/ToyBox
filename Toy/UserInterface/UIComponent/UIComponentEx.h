@@ -57,12 +57,6 @@ bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept;
 bool ChangeSizeY(UIComponent* component, uint32_t value) noexcept;
 bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept;
 
-template<typename PointerType>
-inline pair<unique_ptr<PointerType>, PointerType*> GetPtrs(unique_ptr<PointerType> uniquePtr)
-{
-	return make_pair(move(uniquePtr), uniquePtr.get());
-}
-
 //Setup함수가 있어야 하며 인자가 일치 해야 한다. Args는 암묵적 캐스팅이 되지 않는다.
 template<typename T, typename... Args>
 unique_ptr<T> CreateComponent(Args&&... args)

@@ -7,6 +7,7 @@
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Shared/Utils/StlExt.h"
 
 using enum InteractState;
 

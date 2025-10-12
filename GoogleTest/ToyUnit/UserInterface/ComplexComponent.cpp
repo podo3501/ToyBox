@@ -6,6 +6,7 @@
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "Shared/Utils/StlExt.h"
 #include "Shared/System/Input.h"
 
 namespace UserInterface

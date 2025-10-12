@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Fixture/FixtureSuite.h"
 #include "Helper.h"
+#include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/UIComponent/Components/Container.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 

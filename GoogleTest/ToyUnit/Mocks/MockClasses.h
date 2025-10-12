@@ -4,8 +4,8 @@
 class MockScene : public Scene
 {
 public:
-	MockScene(const std::string& name, UIModule* uiModule)
-		: Scene(name, uiModule)
+	MockScene(const std::string& name, IRenderer* renderer)
+		: Scene(name, renderer)
 	{}
 
 	MOCK_METHOD(bool, Enter, (), (override));

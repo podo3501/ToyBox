@@ -6,6 +6,7 @@
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/System/StepTimer.h"
 #include "Shared/System/Input.h"
+#include "Shared/Utils/StlExt.h"
 
 ListArea::~ListArea() = default;
 ListArea::ListArea() noexcept :

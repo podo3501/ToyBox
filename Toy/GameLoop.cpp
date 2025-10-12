@@ -38,19 +38,12 @@ bool GameLoop::InitializeDerived()
     m_sceneManager = CreateSceneManager();
     Locator<ISceneManager>::Provide(m_sceneManager.get());
 
-    UILayout layout{ GetSizeFromRectangle(GetRectResolution()) };
-    m_uiModule = CreateUIModule(layout, "Main", m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
-    m_uiModule->AddRenderer();
-    m_renderer->LoadTextureBinder(m_uiModule->GetTexResBinder());
-
-    m_sceneManager->CreateScene(make_unique<TestScene>("Test", m_uiModule.get()));
-
     return true;
 }
 
 bool GameLoop::DoPrepare()
 {
-    m_sceneManager->Transition("Test");
+    m_sceneManager->Transition(make_unique<TestScene>("Test", m_renderer));
 
     return true;
 }

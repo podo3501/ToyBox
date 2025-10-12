@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Fixture/FixtureSuite.h"
+#include "Shared/Utils/StlExt.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
 #include "Helper.h"

@@ -10,14 +10,11 @@ public:
 	SceneManager(const SceneManager&) = delete;
 	SceneManager& operator=(SceneManager const&) = delete;
 
-	virtual bool CreateScene(unique_ptr<Scene> scene) override;
-	virtual bool Transition(const string& newSceneName) override;
+	virtual bool Transition(unique_ptr<Scene> newScene) override;
 	virtual void Update(const DX::StepTimer& timer) override;
-	virtual Scene* FindScene(const string& sceneName) const noexcept override;
 
 private:
-	unordered_map<string, unique_ptr<Scene>> m_sceneList;
-	Scene* m_currentScene;
+	unique_ptr<Scene> m_currentScene;
 };
 
 unique_ptr<ISceneManager> CreateSceneManager();

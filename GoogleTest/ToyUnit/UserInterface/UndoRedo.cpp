@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Fixture/FixtureSuite.h"
+#include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"

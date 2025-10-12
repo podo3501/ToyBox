@@ -1,6 +1,12 @@
 #pragma once
 #include "StlExtTraitsConcepts.hpp"
 
+template<typename PointerType>
+inline pair<unique_ptr<PointerType>, PointerType*> GetPtrs(unique_ptr<PointerType> uniquePtr)
+{
+	return make_pair(move(uniquePtr), uniquePtr.get());
+}
+
 //set, unordered_set, map, unordered_map 에 insert를 할때 없으면 insert 있으면 false를 리턴하는 stl 헬퍼함수(이걸 쓰면 속도가 빠르다)
 //다른 stl은 리턴값이 다르거나 multixxx 같은 경우는 중복키를 포함하기 때문에 리턴값이 true만 나오니 불필요하다.
 template<typename Container, typename... Args>
