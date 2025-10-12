@@ -6,6 +6,7 @@
 
 class BasicComponent : public UIFixture {};
 class ComplexComponent : public UIFixture {};
+class ComponentEvent : public UIFixture {};
 class ContainerComponent : public UIFixture {};
 class Integration : public UIFixture
 {

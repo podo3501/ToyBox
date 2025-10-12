@@ -1,12 +1,14 @@
 #pragma once
-#include "Scene.h"
+#include "../Scene.h"
 
 class UIComponent;
-class TestScene : public Scene
+class ComponentTestScene : public Scene
 {
 public:
-	TestScene(const string& name, IRenderer* renderer);
-	
+	ComponentTestScene(IRenderer* renderer);
+	static SceneID GetTypeStatic() { return SceneID::ComponentTest; }
+	virtual SceneID GetTypeID() const noexcept override { return GetTypeStatic(); }
+
 	virtual bool Enter() override;
 	virtual bool Leave() override;
 	virtual void Update(const DX::StepTimer& timer) override;

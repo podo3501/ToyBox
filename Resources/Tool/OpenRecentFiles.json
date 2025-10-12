@@ -1,22 +1,8 @@
 {
     "RecentFiles": [
-        "UI/Texture/UIModule.json",
-        "UI/SampleTexture/SampleTextureBinder.json",
-        "UI/SampleTexture/ExtractTexture.json",
-        "UI/SampleTexture/SampleTextureBinder_a.json",
-        "UI/Texture/ExtractTexture.json",
-        "UI/SampleTexture/SampleTextureBinder_SaveTest.json",
-        "UI/Texture/TextureResourceBinder.json",
-        "UI/Texture/test.json",
-        "D:\\ProgrammingStudy\\ToyBox\\Resources\\UI\\Texture\\ExtractTexture.json",
-        "D:\\ProgrammingStudy\\ToyBox\\ToyTest\\TestResources\\UI\\Data\\JOPTest.json",
-        "D:\\ProgrammingStudy\\ToyBox\\ToyTest\\TestResources\\UI\\Data\\testScene.json",
-        "D:\\ProgrammingStudy\\ToyBox\\Resources\\Tool\\test.json",
-        "D:\\ProgrammingStudy\\ToyBox\\Resources\\Tool\\addDialog.json",
-        "D:\\ProgrammingStudy\\ToyBox\\Resources\\Tool\\strange.json",
-        "D:\\ProgrammingStudy\\ToyBox\\ToyTest\\TestResources\\UI\\Data\\JOPTest2.json",
-        "D:\\ProgrammingStudy\\ToyBox\\Resources\\Tool\\save_02.json",
-        "test0.json",
-        "D:\\ProgrammingStudy\\ToyBox\\Resources\\Tool\\save_01.json"
+        "UI/Scene/TestScene2.json",
+        "UI/Scene/TestScene1.json",
+        "UI/Scene/TestScene.json",
+        ""
     ]
 }

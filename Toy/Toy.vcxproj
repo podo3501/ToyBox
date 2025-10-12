@@ -228,7 +228,9 @@
     <ClInclude Include="GameLoop.h" />
     <ClInclude Include="Interfaces\ISceneManager.h" />
     <ClInclude Include="Scenes\Scene.h" />
-    <ClInclude Include="Scenes\TestScene.h" />
+    <ClInclude Include="Scenes\SceneType.h" />
+    <ClInclude Include="Scenes\Test\ComponentTestScene.h" />
+    <ClInclude Include="Scenes\Test\TestScene1.h" />
     <ClInclude Include="System\SceneManager.h" />
     <ClInclude Include="UserInterface\CommandHistory\Command.h" />
     <ClInclude Include="UserInterface\CommandHistory\CommandHistory.h" />
@@ -284,7 +286,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Scenes\TestScene.cpp" />
+    <ClCompile Include="Scenes\Test\ComponentTestScene.cpp" />
+    <ClCompile Include="Scenes\Test\TestScene1.cpp" />
     <ClCompile Include="System\SceneManager.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandHistory.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandRegistry.cpp" />

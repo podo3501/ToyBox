@@ -156,6 +156,7 @@
     <ClCompile Include="UserInterface\BasicComponent.cpp" />
     <ClCompile Include="UserInterface\ComplexComponent.cpp" />
     <ClCompile Include="UserInterface\ContainerComponent.cpp" />
+    <ClCompile Include="UserInterface\ComponentEvent.cpp" />
     <ClCompile Include="UserInterface\Helper.cpp" />
     <ClCompile Include="UserInterface\Integration.cpp" />
     <ClCompile Include="UserInterface\TextureSourceBinderTest.cpp" />

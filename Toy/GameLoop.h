@@ -3,8 +3,6 @@
 
 class ISceneManager;
 class UIComponent;
-class UIModule;
-
 class GameLoop final : public AppLoop
 {
 public:
@@ -22,5 +20,4 @@ private:
 
 	IRenderer* m_renderer;
 	unique_ptr<ISceneManager> m_sceneManager;
-	unique_ptr<UIModule> m_uiModule;
 };

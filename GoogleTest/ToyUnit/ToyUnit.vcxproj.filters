@@ -45,6 +45,9 @@
     <ClCompile Include="System\Scene.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\ComponentEvent.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

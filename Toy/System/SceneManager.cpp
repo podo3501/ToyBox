@@ -9,7 +9,7 @@ SceneManager::SceneManager() :
 
 bool SceneManager::Transition(unique_ptr<Scene> newScene)
 {
-	if (m_currentScene && m_currentScene->GetName() == newScene->GetName())
+	if (m_currentScene && m_currentScene->GetTypeID() == newScene->GetTypeID())
 		return true;
 
 	if (m_currentScene)

@@ -2,14 +2,10 @@
 #include "GameLoop.h"
 #include "IRenderer.h"
 #include "Shared/Window/Window.h"
-#include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Locator.h"
-#include "Shared/Framework/Environment.h"
 #include "System/SceneManager.h"
-#include "UserInterface/UIModule.h"
-#include "UserInterface/UIComponent/UILayout.h"
-#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "Scenes/TestScene.h"
+#include "Scenes/Test/ComponentTestScene.h"
+#include "Scenes/Test/TestScene1.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -43,7 +39,8 @@ bool GameLoop::InitializeDerived()
 
 bool GameLoop::DoPrepare()
 {
-    m_sceneManager->Transition(make_unique<TestScene>("Test", m_renderer));
+    //m_sceneManager->Transition(make_unique<ComponentTestScene>(m_renderer));
+    m_sceneManager->Transition(make_unique<TestScene1>(m_renderer));
 
     return true;
 }

@@ -46,6 +46,9 @@
     <Filter Include="System">
       <UniqueIdentifier>{52b8b38f-bbdb-42d2-8db8-87740983e705}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Test">
+      <UniqueIdentifier>{49e93b6a-2698-4a0d-8ef0-9a2f44274533}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -206,14 +209,20 @@
     <ClInclude Include="Interfaces\ISceneManager.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\TestScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="System\SceneManager.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SceneType.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Test\ComponentTestScene.h">
+      <Filter>Scenes\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Test\TestScene1.h">
+      <Filter>Scenes\Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -363,11 +372,14 @@
     <ClCompile Include="UserInterface\CommandHistory\UserInterface\UICommandRegistry.cpp">
       <Filter>UserInterface\CommandHistory\UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\TestScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="System\SceneManager.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Test\ComponentTestScene.cpp">
+      <Filter>Scenes\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Test\TestScene1.cpp">
+      <Filter>Scenes\Test</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

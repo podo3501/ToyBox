@@ -128,6 +128,12 @@ void TextureSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
 		return;
 	}
 
+	bool isReleased = IsInputAction(MouseButton::Left, KeyState::Released);
+	if (m_state == Pressed && isReleased)
+	{
+		int a = 1;
+	}
+
 	ChangeState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hovered);
 }
 

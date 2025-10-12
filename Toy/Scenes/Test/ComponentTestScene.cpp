@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "TestScene.h"
+#include "ComponentTestScene.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
@@ -12,11 +12,11 @@
 #include "UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 
-TestScene::TestScene(const string& name, IRenderer* renderer) :
-	Scene(name, renderer)
+ComponentTestScene::ComponentTestScene(IRenderer* renderer) :
+	Scene(renderer)
 {} 
 
-bool TestScene::Enter()
+bool ComponentTestScene::Enter()
 {
     IRenderer* renderer = GetRenderer();
     UILayout layout{ GetSizeFromRectangle(GetRectResolution()) };
@@ -27,12 +27,12 @@ bool TestScene::Enter()
     return LoadResources();
 }
 
-bool TestScene::Leave()
+bool ComponentTestScene::Leave()
 {
 	return true;
 }
 
-bool TestScene::LoadResources()
+bool ComponentTestScene::LoadResources()
 {
     AttachComponentToPanel(CreateComponent<TextureSwitcher>(UILayout{ {32, 32}, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal), { 100, 100 });
     AttachComponentToPanel(CreateComponent<TextureSwitcher>(UILayout{ {180, 48}, Origin::Center }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal), { 400, 300 });
@@ -49,7 +49,7 @@ bool TestScene::LoadResources()
     return true;
 }
 
-bool TestScene::AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept
+bool ComponentTestScene::AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept
 {
     if (!component) return false;
 
@@ -59,7 +59,7 @@ bool TestScene::AttachComponentToPanel(unique_ptr<UIComponent> component, const 
     return true;
 }
 
-void TestScene::Update(const DX::StepTimer& timer)
+void ComponentTestScene::Update(const DX::StepTimer& timer)
 {
     m_uiModule->Update(timer);
 }
