@@ -6,6 +6,7 @@
 #include "System/SceneManager.h"
 #include "Scenes/Test/ComponentTestScene.h"
 #include "Scenes/Test/TestScene1.h"
+#include "Scenes/Test/TestScene2.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"

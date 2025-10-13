@@ -1,13 +1,14 @@
 #include "pch.h"
 #include "TextureSwitcher.h"
 #include "IRenderer.h"
-#include "PatchTexture/PatchTextureLite/PatchTextureLite.h"
-#include "../../TextureResourceBinder/TextureResourceBinder.h"
-#include "UserInterface/SerializerIO/KeyConverter.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
+#include "PatchTexture/PatchTextureLite/PatchTextureLite.h"
+#include "../../TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/SerializerIO/KeyConverter.h"
+#include "System/EventDispatcher.h"
 
 using enum InteractState;
 
@@ -130,9 +131,7 @@ void TextureSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
 
 	bool isReleased = IsInputAction(MouseButton::Left, KeyState::Released);
 	if (m_state == Pressed && isReleased)
-	{
-		int a = 1;
-	}
+		EventDispatcher::Dispatch(GetRegion(), GetName(), UIEvent::Clicked);
 
 	ChangeState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hovered);
 }

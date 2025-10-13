@@ -10,6 +10,7 @@ namespace System
 {
 	TEST_F(SceneManagerTest, CreateScene)
 	{
+		DX::StepTimer timer;
 		ISceneManager* sceneManager = Locator<ISceneManager>::GetService();
 
 		//씬이 전환될때 Enter와 Leave가 제대로 호출되는지 확인한다.
@@ -17,14 +18,12 @@ namespace System
 		auto [scene2, scene2Ptr] = GetPtrs(make_unique<MockScene2>(m_mockRenderer.get()));
 
 		EXPECT_CALL(*scene1Ptr, Enter()).Times(1);
-		EXPECT_CALL(*scene1Ptr, Leave()).Times(1);
-		EXPECT_TRUE(sceneManager->Transition(move(scene1)));
-		
-		EXPECT_CALL(*scene2Ptr, Enter()).Times(1);
-		EXPECT_CALL(*scene2Ptr, Update(::testing::_)).Times(1);
-		EXPECT_TRUE(sceneManager->Transition(move(scene2)));
+		sceneManager->Transition(move(scene1));
+		sceneManager->Update(timer);
 
-		DX::StepTimer timer;
+		EXPECT_CALL(*scene1Ptr, Leave()).Times(1);
+		EXPECT_CALL(*scene2Ptr, Enter()).Times(1);
+		sceneManager->Transition(move(scene2));
 		sceneManager->Update(timer);
 	}
 }

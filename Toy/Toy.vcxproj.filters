@@ -224,6 +224,12 @@
     <ClInclude Include="Scenes\Test\TestScene1.h">
       <Filter>Scenes\Test</Filter>
     </ClInclude>
+    <ClInclude Include="System\EventDispatcher.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Test\TestScene2.h">
+      <Filter>Scenes\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -379,6 +385,12 @@
       <Filter>Scenes\Test</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\Test\TestScene1.cpp">
+      <Filter>Scenes\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="System\EventDispatcher.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Test\TestScene2.cpp">
       <Filter>Scenes\Test</Filter>
     </ClCompile>
   </ItemGroup>
