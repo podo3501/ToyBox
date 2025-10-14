@@ -36,6 +36,7 @@
     <ClInclude Include="System\StepTimer.h" />
     <ClInclude Include="Utils\Common.h" />
     <ClInclude Include="Utils\GeometryExt.h" />
+    <ClInclude Include="Utils\Memory.h" />
     <ClInclude Include="Utils\Profiler.h" />
     <ClInclude Include="Utils\StlExt.h" />
     <ClInclude Include="Utils\StlExtTraitsConcepts.hpp" />

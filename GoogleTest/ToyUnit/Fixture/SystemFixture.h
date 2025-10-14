@@ -2,7 +2,7 @@
 #include "Mocks/MockRenderer.h"
 #include "Shared/System/StepTimer.h"
 
-class ISceneManager;
+struct ISceneManager;
 class SystemFixture : public ::testing::Test
 {
 public:

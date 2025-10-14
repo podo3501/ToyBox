@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Toy/UserInterface/UIComponent/UILayout.h"
+#include "Shared/Utils/Memory.h"
 
 namespace CodeLab
 {
@@ -106,5 +107,13 @@ namespace CodeLab
 		//2중반복문에 한해서 사용하는게 좋을 듯 싶다.
 		NestedForLoops loops;
 		EXPECT_EQ(loops.Excute(), 10);
+	}
+
+	TEST(CPP, RefCounted)
+	{
+		RefCounted<vector<int>> data;
+		data.IncRef();
+		EXPECT_TRUE(data.DecRef());
+		EXPECT_FALSE(data.DecRef());
 	}
 }

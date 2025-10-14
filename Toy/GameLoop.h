@@ -1,7 +1,7 @@
 #pragma once
 #include "Shared/Framework/AppLoop.h"
 
-class ISceneManager;
+struct ISceneManager;
 class UIComponent;
 class GameLoop final : public AppLoop
 {
