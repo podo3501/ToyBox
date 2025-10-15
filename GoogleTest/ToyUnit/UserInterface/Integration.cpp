@@ -100,7 +100,7 @@ namespace UserInterface
 
 	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
 	{
-		vector<UIComponent*> components = UIEx(panel).GetRenderComponents(position);
+		vector<UIComponent*> components = UIEx(panel).FindRenderComponents(position);
 		return components.size();
 	}
 
@@ -191,7 +191,7 @@ namespace UserInterface
 		m_uiModule->BindTextureResources();
 		m_main->EnableToolMode(true);
 
-		auto components = UIEx(m_main).GetRenderComponents({ 196, 40 });
+		auto components = UIEx(m_main).FindRenderComponents({ 196, 40 });
 		auto ids = GetComponentIDs(components);
 
 		//렌더링 옵션을 바꿔서 BFS 탐색을 하다가 DFS 탐색으로 전환하는 식으로 만든다.
@@ -210,14 +210,14 @@ namespace UserInterface
 		m_uiModule->BindTextureResources();
 		m_uiModule->Update(m_timer);
 
-		vector<UIComponent*> outList = UIEx(m_main).GetRenderComponents({ 240, 140 });
+		vector<UIComponent*> outList = UIEx(m_main).FindRenderComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
 		panel2Ptr->ChangeOrigin(Origin::LeftTop);
 		m_main->ProcessUpdate(m_timer);
 
 		outList.clear();
-		outList = UIEx(m_main).GetRenderComponents({ 239, 140 });
+		outList = UIEx(m_main).FindRenderComponents({ 239, 140 });
 		EXPECT_EQ(outList.size(), 2);
 
 		panel1Ptr->ChangeSize(800, 800); //크기 400에 40위치를 했기 때문에 ratio는 0.1이 된다. 그래서 80

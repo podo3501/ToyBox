@@ -27,6 +27,9 @@
     <ClCompile Include="Fixture\Fixture.cpp">
       <Filter>Fixture</Filter>
     </ClCompile>
+    <ClCompile Include="ThirdParty\DirectXTK12.cpp">
+      <Filter>ThirdParty</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />

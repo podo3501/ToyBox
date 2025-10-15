@@ -115,5 +115,7 @@ namespace CodeLab
 		data.IncRef();
 		EXPECT_TRUE(data.DecRef());
 		EXPECT_FALSE(data.DecRef());
+		EXPECT_FALSE(data.DecRef());
+		EXPECT_EQ(data.GetRefCount(), 0);
 	}
 }

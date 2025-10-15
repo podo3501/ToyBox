@@ -46,9 +46,10 @@ const string& UIHierarchy<UIComponent>::GetMyRegion() const noexcept
 	return GetRegionRoot()->GetRegion();
 }
 
-void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> Func) noexcept
+void UIHierarchy<UIComponent>::ForEachChildBool(function<TraverseResult(UIComponent*)> Func) noexcept
 {
-	if (Func(GetThis()) == CResult::SkipChildren)
+	auto result = Func(GetThis());
+	if (result == TraverseResult::Found || result == TraverseResult::Skip)
 		return;
 
 	for (auto& child : m_children)
@@ -58,7 +59,7 @@ void UIHierarchy<UIComponent>::ForEachChildBool(function<CResult(UIComponent*)> 
 	}
 }
 
-void UIHierarchy<UIComponent>::ForEachRenderChildBFS(function<void(UIComponent*)> Func) noexcept
+void UIHierarchy<UIComponent>::ForEachRenderChildBFS(function<TraverseResult(UIComponent*)> Func) noexcept
 {
 	queue<UIComponent*> cQueue;
 	auto PushChild = [&cQueue](UIComponent* c) { if (c->HasStateFlag(StateFlag::Render)) cQueue.push(c); };
@@ -76,7 +77,8 @@ void UIHierarchy<UIComponent>::ForEachRenderChildBFS(function<void(UIComponent*)
 			continue;
 		}
 
-		Func(current);
+		auto result = Func(current);
+		if (result == TraverseResult::Found || result == TraverseResult::Skip) return;
 		if (current->HasStateFlag(StateFlag::RenderTexture)) continue;
 
 		for (const auto& child : current->GetChildren())
@@ -88,10 +90,11 @@ void UIHierarchy<UIComponent>::ForEachRenderChildBFS(function<void(UIComponent*)
 }
 
 template<typename T>
-void UIHierarchy<T>::ForEachRenderChildDFS(function<void(UIComponent*)> Func) noexcept
+void UIHierarchy<T>::ForEachRenderChildDFS(function<TraverseResult(UIComponent*)> Func) noexcept
 {
 	UIComponent* current = GetThis();
-	Func(current);
+	auto result = Func(current);
+	if (result == TraverseResult::Found || result == TraverseResult::Skip) return;
 	if (current->HasStateFlag(StateFlag::RenderTexture)) return;
 
 	for (auto& child : GetChildren())
@@ -101,7 +104,7 @@ void UIHierarchy<T>::ForEachRenderChildDFS(function<void(UIComponent*)> Func) no
 	}
 }
 
-void UIHierarchy<UIComponent>::ForEachChildToRender(function<void(UIComponent*)> Func) noexcept
+void UIHierarchy<UIComponent>::ForEachChildToRender(function<TraverseResult(UIComponent*)> Func) noexcept
 {
 	UIComponent* current = GetThis();
 	RenderTraversal traversal = current->GetRenderSearchType();

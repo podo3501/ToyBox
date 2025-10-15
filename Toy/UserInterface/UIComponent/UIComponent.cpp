@@ -133,6 +133,7 @@ void UIComponent::ProcessRender(ITextureRender* render)
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
 	ForEachChildToRender([render](UIComponent* component) {
 		component->ImplementRender(render);
+		return TraverseResult::Continue;
 		});
 }
 

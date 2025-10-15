@@ -20,6 +20,7 @@
 #include <string_view>
 
 //DirectXTK12 include
+#include "DirectXTK12/Audio.h"
 #include "DirectXTK12/SimpleMath.h"
 #include "DirectXTK12/Keyboard.h"
 #include "DirectXTK12/Mouse.h"

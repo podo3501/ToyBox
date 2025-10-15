@@ -179,15 +179,15 @@ UIComponent* UIComponentEx::FindComponent(const string& name) noexcept
 
 	root->ForEachChildBool([this, &foundComponent, &name, &region](UIComponent* component) {
 		const string& curRegion = component->GetRegion();
-		if (!curRegion.empty() && region != curRegion) return CResult::SkipChildren; //Region 루트가 아닌 새로운 region이 나왔을때 
+		if (!curRegion.empty() && region != curRegion) return TraverseResult::Skip; //Region 루트가 아닌 새로운 region이 나왔을때 
 
 		if (component->GetName() == name)
 		{
 			foundComponent = component;
-			return CResult::SkipChildren;
+			return TraverseResult::Found;
 		}
 
-		return CResult::Success;
+		return TraverseResult::Continue;
 		});
 
 	return foundComponent;
@@ -202,17 +202,17 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 
 	root->ForEachChildBool([&foundComponent, &rootRegion, &findRegion](UIComponent* component) {
 		const string& curRegion = component->GetRegion();
-		if (curRegion.empty()) return CResult::Success;
+		if (curRegion.empty()) return TraverseResult::Continue;
 
 		if (curRegion == findRegion)
 		{
 			foundComponent = component;
-			return CResult::SkipChildren;
+			return TraverseResult::Found;
 		}
 
-		if (rootRegion != curRegion) return CResult::SkipChildren; //Region 루트가 아닌 새로운 region이 나왔을때
+		if (rootRegion != curRegion) return TraverseResult::Skip; //Region 루트가 아닌 새로운 region이 나왔을때
 
-		return CResult::Success;
+		return TraverseResult::Continue;
 		});
 
 	return foundComponent;
@@ -226,14 +226,29 @@ UIComponent* UIComponentEx::FindComponent(const string& region, const string& na
 	return UIEx(component).FindComponent(name);
 }
 
-vector<UIComponent*> UIComponentEx::GetRenderComponents(const XMINT2& pos) noexcept
+vector<UIComponent*> UIComponentEx::FindRenderComponents(const XMINT2& pos) noexcept
 {
 	vector<UIComponent*> findList;
 	m_component->ForEachChildToRender([&findList, &pos](UIComponent* comp) {
 		if(Contains(comp->GetArea(), pos))
 			findList.push_back(comp);
+		return TraverseResult::Continue;
 		});
 	return findList;
+}
+
+UIComponent* UIComponentEx::FindTopRenderComponent(const XMINT2& pos) noexcept
+{
+	UIComponent* findComponent{ nullptr };
+	m_component->ForEachChildToRender([&findComponent, &pos](UIComponent* comp) {
+		if (Contains(comp->GetArea(), pos))
+		{
+			findComponent = comp;
+			return TraverseResult::Found;
+		}
+		return TraverseResult::Continue;
+		});
+	return findComponent;
 }
 
 XMUINT2 UIComponentEx::GetChildrenBoundsSize() const noexcept

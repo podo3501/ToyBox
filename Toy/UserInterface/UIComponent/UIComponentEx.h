@@ -35,7 +35,8 @@ public:
 	}
 
 	UIComponent* GetRegionComponent(const string& regionName) noexcept;
-	vector<UIComponent*> GetRenderComponents(const XMINT2& pos) noexcept;
+	vector<UIComponent*> FindRenderComponents(const XMINT2& pos) noexcept;
+	UIComponent* FindTopRenderComponent(const XMINT2& pos) noexcept;
 	XMUINT2 GetChildrenBoundsSize() const noexcept;
 	bool IsPositionUpdated() const noexcept;
 

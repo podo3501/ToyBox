@@ -74,6 +74,12 @@
     <ClInclude Include="Utils\Memory.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="System\Audio\AudioManager.h">
+      <Filter>System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Public\IAudioManager.h">
+      <Filter>System\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -122,6 +128,9 @@
     <ClCompile Include="Framework\Initializer\GoogleTest.cpp">
       <Filter>Framework\Initializer</Filter>
     </ClCompile>
+    <ClCompile Include="System\Audio\AudioManager.cpp">
+      <Filter>System\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -147,6 +156,12 @@
     </Filter>
     <Filter Include="Framework\Initializer">
       <UniqueIdentifier>{53758de4-1b63-40d8-8388-5c346338bf23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Audio">
+      <UniqueIdentifier>{d9d7f270-abe4-445f-889a-23f415f65653}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Public">
+      <UniqueIdentifier>{345623cb-0546-404b-ad64-ba49bf4967d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

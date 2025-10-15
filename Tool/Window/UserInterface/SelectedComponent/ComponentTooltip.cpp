@@ -19,7 +19,7 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 {
 	const ImVec2& windowMousePos = GetWindowIGMousePos(window);
 
-	vector<UIComponent*> componentList = UIEx(m_panel).GetRenderComponents(ImVec2ToXMINT2(windowMousePos));
+	vector<UIComponent*> componentList = UIEx(m_panel).FindRenderComponents(ImVec2ToXMINT2(windowMousePos));
 	if (componentList.empty()) return;
 
 	const ImVec2& padding = ImGui::GetStyle().WindowPadding;

@@ -3,6 +3,7 @@
 #include "Shared/Utils/StlExt.h"
 #include "Helper.h"
 #include "Toy/UserInterface/UIModule.h"
+#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/System/EventDispatcher.h"
@@ -40,5 +41,20 @@ namespace UserInterface
 		m_main->ProcessUpdate(m_timer);
 		MockMouseInput(100, 100, false);	//Released
 		m_main->ProcessUpdate(m_timer);
+	}
+
+	class MockPatchTextureStd1 : public PatchTextureStd1 
+	{
+	public:
+		MOCK_METHOD(bool, OnHover, (), (noexcept));
+	};
+	TEST_F(ComponentEvent, MouseEvent)
+	{
+		auto [mockComp, mockCompPtr] = GetPtrs(CreateComponent<MockPatchTextureStd1>("BackImage1"));
+		UIEx(m_main).AttachComponent(move(mockComp), { 400, 300 });
+		m_uiModule->BindTextureResources();
+
+		//마우스를 올리고 클릭할때 함수가 호출되는지 확인한다.
+		//EXPECT_CALL(*mockCompPtr, OnHover()).Times(1);
 	}
 }

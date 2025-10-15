@@ -55,7 +55,7 @@ void ComponentSelector::SelectComponent() noexcept
 
 	static vector<UIComponent*> preComponentList{ nullptr };
 	const XMINT2& pos = Input::GetMouse().GetPosition();
-	vector<UIComponent*> componentList = UIEx(m_mainComponent).GetRenderComponents(pos);
+	vector<UIComponent*> componentList = UIEx(m_mainComponent).FindRenderComponents(pos);
 	if (componentList.empty()) return;
 
 	if (preComponentList == componentList)

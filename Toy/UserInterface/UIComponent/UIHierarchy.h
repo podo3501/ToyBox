@@ -20,16 +20,16 @@ public:
 	void ForEachChildDFS(function<void(UIComponent*)> Func) noexcept;
 	bool ForEachChildUntilFail(predicate<UIComponent*> auto&& Func) noexcept; //리턴값을 반환하는 재귀(로딩함수같은)
 	bool ForEachChildPostUntilFail(predicate<UIComponent*> auto&& Func) noexcept; //후위 순회로 리턴값 반환 재귀(binder에사용)
-	void ForEachChildBool(function<CResult(UIComponent*)> Func) noexcept; //무언가를 찾았으면 bool 반환으로 그만 하라는 함수
+	void ForEachChildBool(function<TraverseResult(UIComponent*)> Func) noexcept; //무언가를 찾았으면 bool 반환으로 그만 하라는 함수
 	void ForEachChildConst(invocable<const UIComponent*> auto&& Func) const noexcept; //읽기전용
 	bool ForEachChildWithRegion(const string& parentRegion, function<bool(const string&, UIComponent*, bool)> Func) noexcept; //소속된 region을 알려주면서 foreach
 	void ForEachChildInSameRegion(function<void(UIComponent*)> Func) noexcept; //소속된 region만 도는 foreach
-	void ForEachChildToRender(function<void(UIComponent*)> Func) noexcept;
+	void ForEachChildToRender(function<TraverseResult(UIComponent*)> Func) noexcept;
 
 private:
 	UIComponent* GetThis() const noexcept;
-	void ForEachRenderChildBFS(function<void(UIComponent*)> Func) noexcept;
-	void ForEachRenderChildDFS(function<void(UIComponent*)> Func) noexcept;
+	void ForEachRenderChildBFS(function<TraverseResult(UIComponent*)> Func) noexcept;
+	void ForEachRenderChildDFS(function<TraverseResult(UIComponent*)> Func) noexcept;
 
 protected:
 	//대부분은 직접적으로 m_children을 쓰고 UIModuleAsComponent의 children을 가지고 올때는 UIModule에서

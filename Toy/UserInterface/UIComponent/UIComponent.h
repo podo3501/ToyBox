@@ -25,6 +25,8 @@ protected:
 	virtual bool ImplementChangeSize(const XMUINT2&, bool) noexcept { return true; } //사이즈 바꿀때
 	virtual bool EnterToolMode() noexcept { return true;	}
 	virtual bool ExitToolMode() noexcept { return true; }
+	//마우스 관련 event
+	virtual bool OnHover() noexcept { return true; }
 
 	//상속되어지는 함수는 구현한다.
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;

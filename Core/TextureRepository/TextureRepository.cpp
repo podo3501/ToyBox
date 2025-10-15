@@ -19,8 +19,6 @@ TextureRepository::TextureRepository(DX::DeviceResources* deviceRes, DescriptorH
     m_sprite{ sprite }
 {}
 
-
-
 void TextureRepository::AddRef(size_t index) noexcept
 {
     m_refCount[index]++;

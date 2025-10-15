@@ -106,11 +106,11 @@ enum class BehaviorMode : int //컨테이너의 동작방식
 
 ///////////////////////////////////////////////////////////////
 
-enum class CResult : int
+enum class TraverseResult : int
 {
-	Failure,
-	Success,
-	SkipChildren,
+	Found,	//찾았을때(대부분 탐색을 멈춘다)
+	Continue, //계속 탐색한다.
+	Skip, //자식을 스킵. 찾지 못했지만 탐색을 멈추고 싶을때.
 };
 
 //bit enum을 템플릿화 해서 다른 bit enum들도 동일하게 함수를 사용하게끔 한다.
