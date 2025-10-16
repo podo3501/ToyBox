@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "TestScene1.h"
 #include "IRenderer.h"
-#include "System/EventDispatcher.h"
 #include "Shared/Framework/Locator.h"
+#include "Shared/System/Input.h"
+#include "System/EventDispatcher.h"
 #include "System/SceneManager.h"
 #include "UserInterface/UIModule.h"
 #include "TestScene2.h"
@@ -38,4 +39,5 @@ bool TestScene1::Leave()
 void TestScene1::Update(const DX::StepTimer& timer)
 {
 	m_uiModule->Update(timer);
+	m_uiModule->UpdateMouseState();
 }

@@ -41,6 +41,7 @@ public:
     static void Initialize(HWND hwnd);
     static void Update() noexcept;
     
+    static inline Mouse::State GetMouseState() noexcept { return m_mouse.GetState(); }
     static inline const KeyboardTracker& GetKeyboard() noexcept { return m_keyboardTracker; }
     static inline const MouseTracker& GetMouse() noexcept { return m_mouseTracker; }
     static inline void SetMouseStartOffset(const XMINT2& offset) noexcept { m_startOffset = offset; }

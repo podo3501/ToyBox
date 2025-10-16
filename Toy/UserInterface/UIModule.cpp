@@ -8,6 +8,7 @@
 #include "UINameGenerator/UINameGenerator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/StlExt.h"
+#include "Shared/System/Input.h"
 
 UIModule::~UIModule()
 {
@@ -84,6 +85,41 @@ bool UIModule::Update(const DX::StepTimer& timer) noexcept
 	ReturnIfFalse(panel);
 
 	return panel->ProcessUpdate(timer);
+}
+
+bool UIModule::UpdateMouseState() noexcept
+{
+	auto mouseState = Input::GetMouseState();
+	auto components = UIEx(GetMainPanel()).FindRenderComponents({ mouseState.x, mouseState.y });
+	for (auto& component : components)
+		component->OnHover();
+
+	if (!mouseState.leftButton)
+	{
+		if (m_capture)
+		{
+			m_capture->OnRelease();
+			m_capture = nullptr;
+		}
+		return true;
+	}
+
+	if (m_capture)
+	{
+		m_capture->OnHold();
+		return true;
+	}
+
+	for (auto& component : components)
+	{
+		if (component->OnPress())
+		{
+			m_capture = component;
+			break;
+		}
+	}
+
+	return true;
 }
 
 void UIModule::Render(ITextureRender* render) const
