@@ -4,6 +4,9 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/System/Input.h"
 #include "Shared/Framework/Environment.h"
+#include "Shared/Framework/Locator.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Mocks/MockInputManager.h"
 
 using ::testing::_;
 using ::testing::Invoke;
@@ -20,6 +23,8 @@ void UIFixture::SetUp()
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
 	InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 	m_mockRenderer = make_unique<MockRenderer>();
+	m_mockInputManager = make_unique<MockInputManager>();
+	Locator<IInputManager>::Provide(m_mockInputManager.get());
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetMainPanel();
 }

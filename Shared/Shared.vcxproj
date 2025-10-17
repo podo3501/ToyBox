@@ -34,7 +34,9 @@
     <ClInclude Include="SerializerIO\Traits\TraitsHelper.hpp" />
     <ClInclude Include="System\Audio\AudioManager.h" />
     <ClInclude Include="System\Input.h" />
+    <ClInclude Include="System\Input\InputManager.h" />
     <ClInclude Include="System\Public\IAudioManager.h" />
+    <ClInclude Include="System\Public\IInputManager.h" />
     <ClInclude Include="System\StepTimer.h" />
     <ClInclude Include="Utils\Common.h" />
     <ClInclude Include="Utils\GeometryExt.h" />
@@ -64,6 +66,7 @@
     <ClCompile Include="SerializerIO\Traits\Traits.cpp" />
     <ClCompile Include="System\Audio\AudioManager.cpp" />
     <ClCompile Include="System\Input.cpp" />
+    <ClCompile Include="System\Input\InputManager.cpp" />
     <ClCompile Include="Utils\GeometryExt.cpp" />
     <ClCompile Include="Utils\Profiler.cpp" />
     <ClCompile Include="Utils\StlExt.cpp" />

@@ -5,7 +5,9 @@ class Window;
 class MouseTracker;
 struct IRenderer;
 struct IImguiItem;
+struct IInputManager;
 struct ITextureController;
+struct abc;
 
 class AppLoop
 {
@@ -37,6 +39,7 @@ private:
     
     unique_ptr<Window> m_window;
     unique_ptr<IRenderer> m_renderer;
+    unique_ptr<IInputManager> m_inputManager;
     wstring m_resourcePath;
     DX::StepTimer m_timer;
 };

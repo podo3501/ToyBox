@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Fixture/FixtureSuite.h"
 #include "Helper.h"
+#include "Mocks/MockInputManager.h"
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
@@ -27,7 +28,7 @@ namespace UserInterface
 		switcherPtr->ChangeSize({ 50, 50 });
 
 		EXPECT_EQ(GetPatchTextureLite(switcherPtr)->GetTextureSlice(), TextureSlice::One);
-		MockMouseInput(144, 120, true);	//Pressed
+		m_mockInputManager->SetMouseState(144, 120, InputState::Pressed);
 		vector<RECT> exDest = { { 135, 95, 185, 145 } };
 		TestMockRender(2, exDest, "ExitButton1_Pressed");
 		EXPECT_EQ(*switcherPtr->GetState(), InteractState::Pressed);

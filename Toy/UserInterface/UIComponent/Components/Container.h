@@ -1,7 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
-enum class KeyState;
+enum class InputState;
 namespace DX { class StepTimer; }
 class Container : public UIComponent
 {
@@ -14,7 +14,7 @@ public:
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual void ProcessIO(SerializerIO& serializer) override;
 
-	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
+	void AddPressCB(function<void(InputState)> callback) { m_onPressCB = callback; }
 	bool Setup(const UILayout& layout, 
 		map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode) noexcept;
 	void ClearInteraction() noexcept;
@@ -38,5 +38,5 @@ private:
 	optional<InteractState> m_state;
 
 	BehaviorMode m_behaviorMode{ BehaviorMode::Normal };
-	function<void(KeyState)> m_onPressCB;
+	function<void(InputState)> m_onPressCB;
 };

@@ -2,7 +2,7 @@
 #include "../UIComponent.h"
 #include "TypeAliases.h"
 
-enum class KeyState;
+enum class InputState;
 struct TextureSourceInfo;
 class PatchTextureLite;
 namespace DX { class StepTimer; }
@@ -19,7 +19,7 @@ public:
 
 	bool Setup(const UILayout& layout, TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
 	inline bool Setup(TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode) { return Setup({}, texSlice, stateKeys, behaviorMode); }
-	void AddPressCB(function<void(KeyState)> callback) { m_onPressCB = callback; }
+	void AddPressCB(function<void(InputState)> callback) { m_onPressCB = callback; }
 	unique_ptr<UIComponent> AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	void ClearInteraction() noexcept;
 	bool FitToTextureSource() noexcept;
@@ -51,7 +51,7 @@ private:
 	map<InteractState, size_t> m_indexes;
 	PatchTextureLite* m_patchTexL;
 	optional<InteractState> m_state;
-	function<void(KeyState)> m_onPressCB;
+	function<void(InputState)> m_onPressCB;
 };
 
 //utility

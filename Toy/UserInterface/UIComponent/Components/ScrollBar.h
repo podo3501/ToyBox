@@ -2,7 +2,7 @@
 #include "../UIComponent.h"
 #include "../UIHelperClass.h"
 
-enum class KeyState;
+enum class InputState;
 class PatchTextureStd3;
 class TextureSwitcher;
 
@@ -36,7 +36,7 @@ private:
 	void SetScrollContainerSize(float ratio) noexcept;
 	template<typename ReturnType>
 	inline ReturnType GetMaxScrollRange() const noexcept;
-	void OnPressCB(KeyState keyState);
+	void OnPressCB(InputState inputState);
 
 	PatchTextureStd3* m_scrollTrack;
 	TextureSwitcher* m_scrollButton;

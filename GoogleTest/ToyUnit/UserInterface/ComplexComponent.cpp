@@ -8,6 +8,7 @@
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Shared/Utils/StlExt.h"
 #include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
 
 namespace UserInterface
 {
@@ -144,11 +145,11 @@ namespace UserInterface
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, switcherPtr);
 
-		testing::MockFunction<void(KeyState)> mockOnPress;
+		testing::MockFunction<void(InputState)> mockOnPress;
 		switcherPtr->AddPressCB(mockOnPress.AsStdFunction());
 
-		EXPECT_CALL(mockOnPress, Call(KeyState::Pressed)).Times(1); //Pressed 인자를 넣어서 한번 호출할 것을 기대
-		EXPECT_CALL(mockOnPress, Call(KeyState::Held)).Times(1);
+		EXPECT_CALL(mockOnPress, Call(InputState::Pressed)).Times(1); //Pressed 인자를 넣어서 한번 호출할 것을 기대
+		EXPECT_CALL(mockOnPress, Call(InputState::Held)).Times(1);
 
 		MockMouseInput(100, 100, true); //Pressed
 		vector<RECT> exDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };

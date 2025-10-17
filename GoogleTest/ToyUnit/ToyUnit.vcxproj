@@ -134,7 +134,9 @@
     <ClInclude Include="Fixture\UIFixture.h" />
     <ClInclude Include="Fixture\FixtureSuite.h" />
     <ClInclude Include="Mocks\MockClasses.h" />
+    <ClInclude Include="Mocks\MockInputManager.h" />
     <ClInclude Include="Mocks\MockRenderer.h" />
+    <ClInclude Include="Mocks\Stubs\IInputManagerStub.h" />
     <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
@@ -144,6 +146,7 @@
     <ClCompile Include="Fixture\SystemFixture.cpp" />
     <ClCompile Include="Fixture\UIFixture.cpp" />
     <ClCompile Include="Fixture\FixtureSuite.cpp" />
+    <ClCompile Include="Mocks\MockInputManager.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

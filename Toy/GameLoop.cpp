@@ -40,8 +40,8 @@ bool GameLoop::InitializeDerived()
 
 bool GameLoop::DoPrepare()
 {
-    //m_sceneManager->Transition(make_unique<ComponentTestScene>(m_renderer));
-    m_sceneManager->Transition(make_unique<TestScene1>(m_renderer));
+    m_sceneManager->Transition(make_unique<ComponentTestScene>(m_renderer));
+    //m_sceneManager->Transition(make_unique<TestScene1>(m_renderer));
 
     return true;
 }

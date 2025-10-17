@@ -48,6 +48,9 @@
     <ClCompile Include="UserInterface\ComponentEvent.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="Mocks\MockInputManager.cpp">
+      <Filter>Mocks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -72,6 +75,12 @@
     </ClInclude>
     <ClInclude Include="Fixture\SystemFixture.h">
       <Filter>Fixture</Filter>
+    </ClInclude>
+    <ClInclude Include="Mocks\Stubs\IInputManagerStub.h">
+      <Filter>Mocks\Stubs</Filter>
+    </ClInclude>
+    <ClInclude Include="Mocks\MockInputManager.h">
+      <Filter>Mocks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

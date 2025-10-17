@@ -8,6 +8,7 @@
 
 class UIModule;
 class UIComponent;
+class MockInputManager;
 class TextureResourceBinder;
 
 class UIFixture : public ::testing::Test
@@ -34,6 +35,7 @@ protected:
 	TextureResourceBinder* GetResBinder() const noexcept;
 
 	unique_ptr<MockRenderer> m_mockRenderer;
+	unique_ptr<MockInputManager> m_mockInputManager;
 	unique_ptr<UIModule> m_uiModule;
 	DX::StepTimer m_timer;
     UIComponent* m_main;

@@ -29,9 +29,6 @@
     <ClInclude Include="Window\WindowProcedure.h">
       <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="System\Input.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="System\StepTimer.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -80,6 +77,15 @@
     <ClInclude Include="System\Public\IAudioManager.h">
       <Filter>System\Public</Filter>
     </ClInclude>
+    <ClInclude Include="System\Input.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Input\InputManager.h">
+      <Filter>System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Public\IInputManager.h">
+      <Filter>System\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -100,9 +106,6 @@
     </ClCompile>
     <ClCompile Include="Window\WindowProcedure.cpp">
       <Filter>Window</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Input.cpp">
-      <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Framework\AppLoop.cpp">
       <Filter>Framework</Filter>
@@ -130,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="System\Audio\AudioManager.cpp">
       <Filter>System\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Input.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Input\InputManager.cpp">
+      <Filter>System\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +171,9 @@
     </Filter>
     <Filter Include="System\Public">
       <UniqueIdentifier>{345623cb-0546-404b-ad64-ba49bf4967d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Input">
+      <UniqueIdentifier>{94771c7d-10b2-4979-b871-e3940786ece1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

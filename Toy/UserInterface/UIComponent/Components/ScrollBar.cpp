@@ -5,7 +5,9 @@
 #include "TextureSwitcher.h"
 #include "Button.h"
 #include "Shared/SerializerIO/SerializerIO.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
+//#include "Shared/System/Input.h"
 #include "Shared/Utils/GeometryExt.h"
 
 ScrollBar::~ScrollBar() = default;
@@ -29,7 +31,7 @@ void ScrollBar::ReloadDatas() noexcept
 	vector<UIComponent*> componentList = GetChildComponents();
 	m_scrollTrack = ComponentCast<PatchTextureStd3*>(componentList[0]);
 	m_scrollButton = ComponentCast<TextureSwitcher*>(componentList[1]);
-	m_scrollButton->AddPressCB([this](KeyState keystate) { OnPressCB(keystate); });
+	m_scrollButton->AddPressCB([this](InputState inputState) { OnPressCB(inputState); });
 }
 
 bool ScrollBar::operator==(const UIComponent& rhs) const noexcept
@@ -65,7 +67,7 @@ bool ScrollBar::Setup(const UILayout& layout,
 	UIEx(this).AttachComponent(move(scrollTrack), {});
 
 	m_scrollButton = scrollButton.get();
-	m_scrollButton->AddPressCB([this](KeyState keystate) { OnPressCB(keystate); });
+	m_scrollButton->AddPressCB([this](InputState inputState) { OnPressCB(inputState); });
 	UIEx(this).AttachComponent(move(scrollButton), {});
 
 	DirectionType dirType = m_scrollTrack->GetDirectionType();
@@ -91,9 +93,11 @@ bool ScrollBar::ImplementBindSourceInfo(TextureResourceBinder*, ITextureControll
 
 bool ScrollBar::ImplementUpdate(const DX::StepTimer& timer) noexcept
 {
+	auto inputManager = Locator<IInputManager>::GetService();
+
 	int wheelValue{ 0 };
 	if (m_isWheelEnabled)
-		wheelValue = GetMouseWheelValue();
+		wheelValue = inputManager->GetMouseWheelValue();
 
 	if (!m_bounded.ValidateRange(wheelValue, timer)) return true;
 
@@ -120,16 +124,17 @@ ReturnType ScrollBar::GetMaxScrollRange() const noexcept
 	return static_cast<ReturnType>(trackSize.y - containerSize.y);
 }
 
-void ScrollBar::OnPressCB(KeyState keyState)
+void ScrollBar::OnPressCB(InputState inputState)
 {
-	int32_t mPosY = Input::GetMouse().GetPosition().y;
-	if (keyState == KeyState::Pressed)
+	auto inputManager = Locator<IInputManager>::GetService();
+	int32_t mPosY = inputManager->GetPosition().y;
+	if (inputState == InputState::Pressed)
 	{
 		m_pressContainerPos = m_scrollButton->GetRelativePosition();
 		m_pressMousePos = mPosY;
 		return;
 	}
-	if (keyState != KeyState::Held) return;
+	if (inputState != InputState::Held) return;
 
 	int32_t moved = mPosY - m_pressMousePos;
 	auto maxRange = GetMaxScrollRange<int32_t>();
@@ -199,6 +204,7 @@ void ScrollBar::SetPositionRatio(float positionRatio) noexcept
 
 void ScrollBar::SetEnableWheel(bool enable) noexcept
 {
-	if(!m_isWheelEnabled && enable) ResetMouseWheelValue();
+	auto inputManager = Locator<IInputManager>::GetService();
+	if(!m_isWheelEnabled && enable) inputManager->ResetMouseWheelValue();
 	m_isWheelEnabled = enable;
 }

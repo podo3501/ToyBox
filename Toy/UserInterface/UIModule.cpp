@@ -8,7 +8,8 @@
 #include "UINameGenerator/UINameGenerator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/StlExt.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 
 UIModule::~UIModule()
 {
@@ -86,11 +87,13 @@ bool UIModule::Update(const DX::StepTimer& timer) noexcept
 
 	return panel->ProcessUpdate(timer);
 }
-
+//OnHold에 inside 인자를 넣어서 안인지 밖인지 구분한다.
+//Release에서 inside가 false이면 그냥 무시할지 인자를 넣어서 호출할지 생각해보자.
 bool UIModule::UpdateMouseState() noexcept
 {
-	auto mouseState = Input::GetMouseState();
-	auto components = UIEx(GetMainPanel()).FindRenderComponents({ mouseState.x, mouseState.y });
+	auto inputManager = Locator<IInputManager>::GetService();
+	auto mouseState = inputManager->GetMouseState();
+	auto components = UIEx(GetMainPanel()).FindRenderComponents(mouseState.pos);
 	for (auto& component : components)
 		component->OnHover();
 

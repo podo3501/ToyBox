@@ -2,7 +2,8 @@
 #include "RenderTexture.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 
 RenderTexture::~RenderTexture() 
@@ -116,7 +117,8 @@ bool RenderTexture::Setup(unique_ptr<UIComponent> component) noexcept
 
 void RenderTexture::CheckMouseInArea() noexcept
 {
-	m_mouseInArea = Contains(GetArea(), Input::GetMouse().GetPosition());
+	auto inputManager = Locator<IInputManager>::GetService();
+	m_mouseInArea = Contains(GetArea(), inputManager->GetPosition());
 }
 
 void RenderTexture::CheckEnterLeave() noexcept

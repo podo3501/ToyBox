@@ -46,6 +46,9 @@ public:
     static inline const MouseTracker& GetMouse() noexcept { return m_mouseTracker; }
     static inline void SetMouseStartOffset(const XMINT2& offset) noexcept { m_startOffset = offset; }
 
+    static inline Keyboard& GetK() noexcept { return m_keyboard; }
+    static inline Mouse& GetM() noexcept { return m_mouse; }
+
 private:
     static KeyboardTracker m_keyboardTracker;
     static Keyboard m_keyboard;
@@ -88,6 +91,8 @@ inline Mouse::ButtonStateTracker::ButtonState GetMouseKeyState(KeyState keyState
     //두 enum의 값이 동일하다.
     return static_cast<Mouse::ButtonStateTracker::ButtonState>(keyState);
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 inline bool IsInputAction(MouseButton mouseButton, KeyState keyState) noexcept
 {
