@@ -4,7 +4,8 @@
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 
 ImGuiMouseCursor_ Tool::MouseCursor::m_mouseCursor = ImGuiMouseCursor_Arrow;
 
@@ -19,10 +20,10 @@ ImVec2 GetWindowIGMousePos(const ImGuiWindow* window) noexcept
 	return mousePos - GetWindowStartPosition(window);
 }
 
-void SetMouseStartOffset(const ImGuiWindow* window) noexcept
+void SetMouseStartOffset(IInputManager* inputManager, const ImGuiWindow* window) noexcept
 {
 	const ImVec2& offset = GetWindowStartPosition(window);
-	Input::SetMouseStartOffset({ static_cast<int>(offset.x), static_cast<int>(offset.y) });
+	inputManager->SetMouseStartOffset({ static_cast<int>(offset.x), static_cast<int>(offset.y) });
 }
 
 bool IsWindowFocus(const ImGuiWindow* window) noexcept

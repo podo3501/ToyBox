@@ -7,6 +7,7 @@
 #include "UserInterface/SerializerIO/ClassSerializeIO.h"
 #include "UINameGenerator/UINameGenerator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
+#include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
 #include "Shared/System/Public/IInputManager.h"
 #include "Shared/Framework/Locator.h"
@@ -87,32 +88,30 @@ bool UIModule::Update(const DX::StepTimer& timer) noexcept
 
 	return panel->ProcessUpdate(timer);
 }
-//OnHold에 inside 인자를 넣어서 안인지 밖인지 구분한다.
-//Release에서 inside가 false이면 그냥 무시할지 인자를 넣어서 호출할지 생각해보자.
+
 bool UIModule::UpdateMouseState() noexcept
 {
-	auto inputManager = Locator<IInputManager>::GetService();
-	auto mouseState = inputManager->GetMouseState();
+	//hover는 공통으로 호출
+	auto input = Locator<IInputManager>::GetService();
+	auto mouseState = input->GetMouseState();
 	auto components = UIEx(GetMainPanel()).FindRenderComponents(mouseState.pos);
 	for (auto& component : components)
 		component->OnHover();
 
-	if (!mouseState.leftButton)
-	{
-		if (m_capture)
-		{
-			m_capture->OnRelease();
-			m_capture = nullptr;
-		}
-		return true;
-	}
-
 	if (m_capture)
 	{
-		m_capture->OnHold();
+		bool inside = Contains(m_capture->GetArea(), mouseState.pos);
+		if (!mouseState.leftButton) //3. 마우스를 떼면 release호출하고 캡쳐해제
+		{
+			m_capture->OnRelease(inside);
+			m_capture = nullptr;
+		}
+		else
+			m_capture->OnHold(inside); //2. 캡쳐한걸 hold로 호출한다.
 		return true;
 	}
 
+	//1. 클릭하면 캡쳐하고 press호출
 	for (auto& component : components)
 	{
 		if (component->OnPress())

@@ -5,7 +5,8 @@
 #include "SelectedComponent/EditWindowFactory.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 #include "Shared/Utils/StlExt.h"
 #include "../Dialog.h"
 #include "Window/Utils/Common.h"
@@ -48,13 +49,13 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 	m_tooltip->SetComponent(component);
 }
 
-void ComponentSelector::SelectComponent() noexcept
+void ComponentSelector::SelectComponent(IInputManager* input) noexcept
 {
 	if (!m_uiWindow) return;
-	if (!IsInputAction(MouseButton::Left, KeyState::Pressed)) return;
+	if (!input->IsInputAction(MouseButton::Left, InputState::Pressed)) return;
 
 	static vector<UIComponent*> preComponentList{ nullptr };
-	const XMINT2& pos = Input::GetMouse().GetPosition();
+	const XMINT2& pos = input->GetPosition();
 	vector<UIComponent*> componentList = UIEx(m_mainComponent).FindRenderComponents(pos);
 	if (componentList.empty()) return;
 
@@ -69,16 +70,17 @@ void ComponentSelector::SelectComponent() noexcept
 
 void ComponentSelector::Update() noexcept
 {
-	if (HandleEscapeKey()) return;
+	auto input = Locator<IInputManager>::GetService();
+	if (HandleEscapeKey(input)) return;
 	if (UpdateEditWindow()) return;
 
 	if (IsWindowFocus(m_uiWindow))
-		SelectComponent();
+		SelectComponent(input);
 }
 
-bool ComponentSelector::HandleEscapeKey() noexcept
+bool ComponentSelector::HandleEscapeKey(IInputManager* input) noexcept
 {
-	if (!IsInputAction(Keyboard::Escape, KeyState::Pressed)) return false;
+	if (!input->IsInputAction(Keyboard::Escape, InputState::Pressed)) return false;
 	
 	SetComponent(nullptr);
 	return true;

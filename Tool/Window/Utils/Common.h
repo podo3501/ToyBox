@@ -1,6 +1,8 @@
 #pragma once
 #include "Toy/UserInterface/UIComponent/UIType.h"
 
+struct IInputManager;
+
 inline float GetFrameHeight()
 {
 	return ImGui::GetStyle().FramePadding.y * 2 + ImGui::GetFontSize();
@@ -8,7 +10,7 @@ inline float GetFrameHeight()
 
 ImVec2 GetWindowStartPosition(const ImGuiWindow* window) noexcept;
 ImVec2 GetWindowIGMousePos(const ImGuiWindow* window) noexcept;
-void SetMouseStartOffset(const ImGuiWindow* window) noexcept;
+void SetMouseStartOffset(IInputManager* inputManger, const ImGuiWindow* window) noexcept;
 bool IsWindowFocus(const ImGuiWindow* window) noexcept;
 void DrawRectangle(const ImGuiWindow* window, const Rectangle& rect, 
 	optional<ImU32> outlineColor = nullopt, optional<ImU32> fillColor = nullopt);

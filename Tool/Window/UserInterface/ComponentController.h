@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+struct IInputManager;
 class TextureResourceBinder;
 class UIModule;
 class UIComponent;
@@ -23,12 +24,12 @@ public:
 
 private:
 	bool ExecuteShortcutKeyCommands() noexcept;
-	bool CheckAttachComponent() noexcept;
-	bool CheckDetachComponent() noexcept;
-	bool CheckDeleteComponent() noexcept;
-	bool CheckCloneComponent() noexcept;
-	bool CheckUndoComponent() noexcept;
-	bool CheckRedoComponent() noexcept;
+	bool CheckAttachComponent(IInputManager* input) noexcept;
+	bool CheckDetachComponent(IInputManager* input) noexcept;
+	bool CheckDeleteComponent(IInputManager* input) noexcept;
+	bool CheckCloneComponent(IInputManager* input) noexcept;
+	bool CheckUndoComponent(IInputManager* input) noexcept;
+	bool CheckRedoComponent(IInputManager* input) noexcept;
 
 	ImGuiWindow* m_uiWindow;
 	unique_ptr<UICommandHistory> m_cmdHistory;

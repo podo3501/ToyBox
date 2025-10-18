@@ -2,7 +2,8 @@
 #include "EditWindow.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Window/Utils/EditUtility.h"
 #include "Window/HelperClass.h"
@@ -72,27 +73,25 @@ bool EditWindow::IsUpdateSizeOnDrag() const noexcept
     return (m_dragState != OnDrag::Normal);
 }
 
-void EditWindow::UpdateDragState(OnDrag dragState, XMINT2& outStartPos) noexcept
+void EditWindow::UpdateDragState(IInputManager* input, OnDrag dragState, XMINT2& outStartPos) noexcept
 {
-    const auto& mouseState = Input::GetMouse().GetLastState();
-
-    if (IsInputAction(MouseButton::Left, KeyState::Pressed) && dragState != OnDrag::Normal)
+    if (input->IsInputAction(MouseButton::Left, InputState::Pressed) && dragState != OnDrag::Normal)
     {
         m_dragState = dragState;
-        outStartPos = { mouseState.x, mouseState.y };
+        outStartPos = input->GetPosition();
     }
 
-    if (IsInputAction(MouseButton::Left, KeyState::Released))
+    if (input->IsInputAction(MouseButton::Left, InputState::Released))
     {
         m_dragState = OnDrag::Normal;
         outStartPos = {};
     }
 }
 
-void EditWindow::ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept
+void EditWindow::ResizeComponent(const XMINT2& startPos, const XMINT2& currPos) noexcept
 {
-    const int deltaX = mouseState.x - startPos.x;
-    const int deltaY = mouseState.y - startPos.y;
+    const int deltaX = currPos.x - startPos.x;
+    const int deltaY = currPos.y - startPos.y;
 
     const XMUINT2& size = m_component->GetSize();
     XMUINT2 modifySize{ size };
@@ -116,19 +115,19 @@ void EditWindow::ResizeComponentOnClick() noexcept
 {
     if (!m_component) return;
 
-    const XMINT2& mousePos = Input::GetMouse().GetPosition();
+    auto input = Locator<IInputManager>::GetService();
+    const XMINT2& mousePos = input->GetPosition();
     OnDrag dragState = IsMouseOverResizeZone(mousePos, m_component);
     Tool::MouseCursor::SetType(GetCursorImage(dragState));
 
     static XMINT2 startPos{};
-    UpdateDragState(dragState, startPos);
+    UpdateDragState(input, dragState, startPos);
 
     if (IsUpdateSizeOnDrag())
     {
-        const auto& mouseTracker = Input::GetMouse();
-        const auto& mouseState = mouseTracker.GetLastState();
-        ResizeComponent(startPos, mouseState);
-        startPos = { mouseState.x, mouseState.y };
+        const auto& currPos = input->GetPosition();
+        ResizeComponent(startPos, currPos);
+        startPos = currPos;
     }
 }
 

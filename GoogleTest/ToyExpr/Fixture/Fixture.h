@@ -13,7 +13,6 @@ class Fixture : public ::testing::Test
 public:
 	Fixture();
 	~Fixture();
-	void MockMouseInput(int mouseX, int mouseY, bool leftButton = false);
 
 protected:
 	void SetUp() override;

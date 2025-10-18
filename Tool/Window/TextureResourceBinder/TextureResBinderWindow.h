@@ -2,6 +2,7 @@
 #include "../InnerWindow.h"
 
 struct IRenderer;
+struct IInputManager;
 class RenderTexture;
 class PatchTextureStd1;
 class MainSourceExtractor;
@@ -27,7 +28,7 @@ public:
     ImGuiWindow* GetWindow() noexcept { return m_window; }
 
 private:
-    bool CheckUndoRedo();
+    bool CheckUndoRedo(IInputManager* input);
     ImVec2 GetWindowSize() const noexcept;
     void RenderResourceWindow();
 

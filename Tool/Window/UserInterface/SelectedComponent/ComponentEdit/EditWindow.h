@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+struct IInputManager;
 class UICommandHistory;
 class UIComponent;
 class TextureResourceBinder;
@@ -35,8 +36,8 @@ protected:
 private:
 	void RenderCommon();
 	void ResizeComponentOnClick() noexcept;
-	void UpdateDragState(OnDrag dragState, XMINT2& outStartPos) noexcept;
-	void ResizeComponent(const XMINT2& startPos, const Mouse::State& mouseState) noexcept;
+	void UpdateDragState(IInputManager* input, OnDrag dragState, XMINT2& outStartPos) noexcept;
+	void ResizeComponent(const XMINT2& startPos, const XMINT2& currPos) noexcept;
 
 	UIComponent* m_component;
 	UICommandHistory* m_cmdHistory;

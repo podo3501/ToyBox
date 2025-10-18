@@ -4,7 +4,8 @@
 #include "EditSourceTexture.h"
 #include "Window/Utils/Common.h"
 #include "Shared/Utils/StringExt.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
@@ -43,21 +44,21 @@ bool TextureResBinderWindow::Create(const wstring& filename)
     return true;
 }
 
-static bool CheckUndo(TexResCommandHistory* cmdHistory)
+static bool CheckUndo(IInputManager* input, TexResCommandHistory* cmdHistory)
 {
-    if (!IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
+    if (!input->IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
     return cmdHistory->Undo();
 }
 
-static bool CheckRedo(TexResCommandHistory* cmdHistory)
+static bool CheckRedo(IInputManager* input, TexResCommandHistory* cmdHistory)
 {
-    if (!IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
+    if (!input->IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
     return cmdHistory->Redo();
 }
 
-bool TextureResBinderWindow::CheckUndoRedo()
+bool TextureResBinderWindow::CheckUndoRedo(IInputManager* input)
 {
-    auto result = CheckUndo(m_cmdHistory.get()) || CheckRedo(m_cmdHistory.get());
+    auto result = CheckUndo(input, m_cmdHistory.get()) || CheckRedo(input, m_cmdHistory.get());
     ReturnIfFalse(result);
 
     m_editSourceTexture->CheckTextureByUndoRedo();
@@ -67,9 +68,11 @@ bool TextureResBinderWindow::CheckUndoRedo()
 void TextureResBinderWindow::Update()
 {
     if (!m_window) return;
-    SetMouseStartOffset(m_window);
 
-    CheckUndoRedo();
+    auto input = Locator<IInputManager>::GetService();
+    SetMouseStartOffset(input, m_window);
+    CheckUndoRedo(input);
+
     m_editFontTexture->Update();
     m_editSourceTexture->Update();
 }

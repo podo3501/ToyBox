@@ -77,9 +77,6 @@
     <ClInclude Include="System\Public\IAudioManager.h">
       <Filter>System\Public</Filter>
     </ClInclude>
-    <ClInclude Include="System\Input.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="System\Input\InputManager.h">
       <Filter>System\Input</Filter>
     </ClInclude>
@@ -133,9 +130,6 @@
     </ClCompile>
     <ClCompile Include="System\Audio\AudioManager.cpp">
       <Filter>System\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Input.cpp">
-      <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="System\Input\InputManager.cpp">
       <Filter>System\Input</Filter>

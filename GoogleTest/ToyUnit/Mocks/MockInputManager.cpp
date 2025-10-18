@@ -1,10 +1,17 @@
 #include "pch.h"
 #include "MockInputManager.h"
-#include "Shared/System/Input.h"
 
 const DirectX::XMINT2& MockInputManager::GetPosition() const noexcept
 {
 	return m_position;
+}
+
+MouseState MockInputManager::GetMouseState() const noexcept
+{
+	MouseState state;
+	state.pos = m_position;
+	state.leftButton = (m_inputState == InputState::Pressed || m_inputState == InputState::Held);
+	return state;
 }
 
 bool MockInputManager::IsInputAction(MouseButton mouseButton, InputState inputState) noexcept

@@ -8,7 +8,8 @@
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 #include "Shared/Utils/GeometryExt.h"
 
 ImageSelector::~ImageSelector() = default;
@@ -67,9 +68,10 @@ bool ImageSelector::RemoveArea() noexcept
 
 void ImageSelector::CheckSelectArea() noexcept
 {
-    if (IsInputAction(MouseButton::Left, KeyState::Pressed)) SelectArea();
-    if (IsInputAction(Keyboard::Escape, KeyState::Pressed)) DeselectArea();
-    if (IsInputAction(Keyboard::Delete, KeyState::Pressed)) RemoveArea();
+    auto inputManager = Locator<IInputManager>::GetService();
+    if (inputManager->IsInputAction(MouseButton::Left, InputState::Pressed)) SelectArea();
+    if (inputManager->IsInputAction(Keyboard::Escape, InputState::Pressed)) DeselectArea();
+    if (inputManager->IsInputAction(Keyboard::Delete, InputState::Pressed)) RemoveArea();
 }
 
 optional<Rectangle> ImageSelector::FindAreaFromMousePos(const XMINT2& pos) const noexcept
@@ -123,7 +125,8 @@ void ImageSelector::CheckSourcePartition() noexcept
 {
     if (!m_sourceTexture) return;
 
-    const XMINT2& pos = Input::GetMouse().GetPosition();
+    auto inputManager = Locator<IInputManager>::GetService();
+    const XMINT2& pos = inputManager->GetPosition();
     m_hoveredAreas = GetAreas(m_cmdHistory->GetReceiver(), m_sourceTexture->GetFilename(), m_selectImagePart, pos);
     if (!m_hoveredAreas.empty()) return; //먼저 저장돼 있는 것을 찾아보고 없으면 새로운걸 만든다.
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Fixture/FixtureSuite.h"
+#include "Mocks/MockInputManager.h"
 #include "Shared/Utils/StlExt.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
@@ -55,7 +56,7 @@ namespace UserInterface
 		renderTexPtr->ChangeSize({ 50, 50 });
 		renderTexPtr->ChangeOrigin(Origin::Center);
 
-		MockMouseInput(10, 10);	//렌더텍스쳐 안에 마우스 위치시킴
+		m_mockInput->SetMouseState(10, 10); //렌더텍스쳐 안에 마우스 위치시킴
 		renderTexPtr->ProcessUpdate(m_timer);
 
 		UIComponent* tex1 = UIEx(switcherPtr).FindComponent("PatchTextureLite1_2");

@@ -6,7 +6,8 @@
 #include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
 #include "Toy/UserInterface/UIModule.h"
 #include "Shared/System/StepTimer.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 
 int UserInterfaceWindow::m_uiWindowIndex = 0;
 
@@ -92,25 +93,25 @@ void UserInterfaceWindow::ToggleToolMode() noexcept
 	m_controller->SetActive(m_isTool);
 }
 
-void UserInterfaceWindow::CheckActiveUpdate() noexcept
+void UserInterfaceWindow::CheckActiveUpdate(IInputManager* input) noexcept
 {
-	if (!IsInputAction(Keyboard::F5, KeyState::Pressed)) return;
+	if (!input->IsInputAction(Keyboard::F5, InputState::Pressed)) return;
 	
 	ToggleToolMode();
 }
 
-void UserInterfaceWindow::CheckChangeWindow(const ImGuiWindow* window)
+void UserInterfaceWindow::CheckChangeWindow(IInputManager* input)
 {
 	static ImVec2 startSize{};
-	if (IsInputAction(MouseButton::Left, KeyState::Pressed))
-		startSize = window->Size;
+	if (input->IsInputAction(MouseButton::Left, InputState::Pressed))
+		startSize = m_window->Size;
 
-	if (!IsInputAction(MouseButton::Left, KeyState::Released))
+	if (!input->IsInputAction(MouseButton::Left, InputState::Released))
 		return;
 	
-	if(startSize != window->Size && !window->Collapsed)
+	if(startSize != m_window->Size && !m_window->Collapsed)
 	{
-		ImVec2 newWndSize{ window->Size.x, window->Size.y - GetFrameHeight()};
+		ImVec2 newWndSize{ m_window->Size.x, m_window->Size.y - GetFrameHeight()};
 		ChangeWindowSize(newWndSize);
 	}
 }
@@ -118,10 +119,11 @@ void UserInterfaceWindow::CheckChangeWindow(const ImGuiWindow* window)
 void UserInterfaceWindow::Update(const DX::StepTimer& timer)
 {
 	if (!m_window) return;
-	SetMouseStartOffset(m_window);
-	CheckChangeWindow(m_window); //창이 변했을때 RenderTexture를 다시 만들어준다.
 
-	CheckActiveUpdate();
+	auto input = Locator<IInputManager>::GetService();
+	SetMouseStartOffset(input, m_window);
+	CheckChangeWindow(input); //창이 변했을때 RenderTexture를 다시 만들어준다.
+	CheckActiveUpdate(input);
 		
 	m_controller->Update();
 	m_mainRenderTexture->ProcessUpdate(timer);

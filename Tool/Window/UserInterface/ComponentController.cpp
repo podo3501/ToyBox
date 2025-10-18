@@ -2,7 +2,8 @@
 #include "ComponentController.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
-#include "Shared/System/Input.h"
+#include "Shared/System/Public/IInputManager.h"
+#include "Shared/Framework/Locator.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Window/Dialog.h"
@@ -28,22 +29,22 @@ void ComponentController::SetUIWindow(ImGuiWindow* mainWnd) noexcept
 	m_selector->SetUIWindow(mainWnd);
 }
 
-bool ComponentController::CheckAttachComponent() noexcept
+bool ComponentController::CheckAttachComponent(IInputManager* input) noexcept
 {
 	if (!m_uiWindow) return false;
 	if (!m_floater->IsComponent()) return false;
-	if (!IsInputAction(Keyboard::LeftShift, MouseButton::Left)) return false;
+	if (!input->IsInputAction(Keyboard::LeftShift, MouseButton::Left)) return false;
 
-	const XMINT2& mousePosition = Input::GetMouse().GetPosition();
+	const XMINT2& mousePosition = input->GetPosition();
 	AttachSelectedComponent(m_cmdHistory.get(), m_selector.get(), m_floater.get(), mousePosition);
 
 	return true;
 }
 
-bool ComponentController::CheckDetachComponent() noexcept
+bool ComponentController::CheckDetachComponent(IInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(Keyboard::D, KeyState::Pressed)) return false;
+	if (!input->IsInputAction(Keyboard::D, InputState::Pressed)) return false;
 
 	auto detachComponent = DetachSelectedComponent(m_cmdHistory.get(), m_selector.get());
 	if (!detachComponent)
@@ -59,36 +60,36 @@ bool ComponentController::CheckDetachComponent() noexcept
 	return true;
 }
 
-bool ComponentController::CheckDeleteComponent() noexcept
+bool ComponentController::CheckDeleteComponent(IInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(Keyboard::Delete, KeyState::Pressed)) return false;
+	if (!input->IsInputAction(Keyboard::Delete, InputState::Pressed)) return false;
 
 	DetachSelectedComponent(m_cmdHistory.get(), m_selector.get());
 
 	return true;
 }
 
-bool ComponentController::CheckUndoComponent() noexcept
+bool ComponentController::CheckUndoComponent(IInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
+	if (!input->IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
 
 	return m_cmdHistory->Undo();
 }
 
-bool ComponentController::CheckRedoComponent() noexcept
+bool ComponentController::CheckRedoComponent(IInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
+	if (!input->IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
 
 	return m_cmdHistory->Redo();
 }
 
-bool ComponentController::CheckCloneComponent() noexcept
+bool ComponentController::CheckCloneComponent(IInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
-	if (!IsInputAction(Keyboard::B, KeyState::Pressed)) return false;
+	if (!input->IsInputAction(Keyboard::B, InputState::Pressed)) return false;
 	UIComponent* component = m_selector->GetComponent();
 	if (!component) return false;
 
@@ -117,12 +118,13 @@ bool ComponentController::ExecuteShortcutKeyCommands() noexcept
 {
 	if (!IsWindowFocus(m_uiWindow)) return false;
 
-	return CheckDetachComponent() ||
-		CheckDeleteComponent() ||
-		CheckCloneComponent() ||
-		CheckUndoComponent() ||
-		CheckRedoComponent() ||
-		CheckAttachComponent();
+	auto input = Locator<IInputManager>::GetService();
+	return CheckDetachComponent(input) ||
+		CheckDeleteComponent(input) ||
+		CheckCloneComponent(input) ||
+		CheckUndoComponent(input) ||
+		CheckRedoComponent(input) ||
+		CheckAttachComponent(input);
 }
 
 bool ComponentController::Update() noexcept

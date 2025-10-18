@@ -191,17 +191,20 @@
 --Test 프로젝트 root 정리
 --CreateAppLoop 리팩토링
 --App용 테스트 씬 만들기
+--점진적으로 IInput으로 바꿀 예정
 
-@ImplementUpdate를 밖에서 호출하게 한다. 툴에서는 편집모드면 업데이트를 호출하지 않게 하면 될것 같다.
+@Component에서 마우스 이벤트 받는 부분을 UIModule에서 한번만 하고 컴포넌트에 전파하는 방식으로 개선
+    각 컴포넌트에서 마우스 이벤트 부분을 event 함수에서 처리하는 것으로 변경
+    ImplementUpdate를 밖에서 호출하게 한다. 툴에서는 편집모드면 업데이트를 호출하지 않게 하면 될것 같다.
     ImplementUpdate가 마우스 이벤트인 부분이 많기 때문에 마우스 이벤트 함수가 추가되면 아마 많이 가벼워질것 같다.
     Update 함수에 if를 지울 수 있을것 같다.
-    option에서 active? 인가 이거 삭제 할수 있지 않을까?
-    점진적으로 IInput으로 바꿀 예정
+    UIComponent에 option중에서 active? 인가 이거 삭제 할수 있지 않을까?
+@Component에서 이벤트 받아서 사운드 출력되게끔.
+@Stub 폴더 정리. include 폴더 없앨지 고민
 
 @IME로 한글 입력되게
 @인트로 화면 만들기
 @게임 화면 만들기
-@UI에 사운드 달기
 @씬 전환시 메모리 잘 내려가는지 확인
 
 @프로젝트 정리   

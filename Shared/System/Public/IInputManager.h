@@ -12,7 +12,13 @@ struct MouseState
     bool leftButton{ false };
 };
 
-enum class MouseButton;
+enum class MouseButton
+{
+    Left,
+    Right,
+    Middle
+};
+
 enum class InputState
 {
     Up,

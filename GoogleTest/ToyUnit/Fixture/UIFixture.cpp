@@ -2,7 +2,6 @@
 #include "UIFixture.h"
 #include "UserInterface/Helper.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/System/Input.h"
 #include "Shared/Framework/Environment.h"
 #include "Shared/Framework/Locator.h"
 #include "Shared/System/Public/IInputManager.h"
@@ -23,16 +22,14 @@ void UIFixture::SetUp()
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
 	InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 	m_mockRenderer = make_unique<MockRenderer>();
-	m_mockInputManager = make_unique<MockInputManager>();
-	Locator<IInputManager>::Provide(m_mockInputManager.get());
+	m_mockInput = make_unique<MockInputManager>();
+	Locator<IInputManager>::Provide(m_mockInput.get());
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetMainPanel();
 }
 
 void UIFixture::TearDown()
-{
-	MockMouseInput(-1, -1, false); //키보드, 마우스는 stataic 클래스 이기 때문에 데이터를 초기화 시킨다.
-}
+{}
 
 TextureResourceBinder* UIFixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
 
@@ -91,19 +88,27 @@ void UIFixture::CallMockRender(function<void(size_t, const wstring&, const Vecto
 	m_main->ProcessRender(&mockTexRender);
 }
 
-void UIFixture::MockMouseInput(int mouseX, int mouseY, bool leftButton)
-{ //마우스의 상태값은 업데이트를 계속해도 셋팅한 상태값이 계속 들어간다.
-	auto& mouseTracker = const_cast<MouseTracker&>(Input::GetMouse());
-	auto state = mouseTracker.GetLastState();
-	state.x = mouseX;
-	state.y = mouseY;
-	state.leftButton = leftButton;
-	mouseTracker.Update(state);
-}
-
 void UIFixture::CloneTest(const vector<RECT>& expectDest, const string& bindKey)
 {
 	unique_ptr<UIComponent> clonePanel = m_main->Clone();
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());
 	WriteReadTest(clonePanel);
+}
+
+void UIFixture::SimulateMouse(const XMINT2& pos, InputState state) noexcept
+{
+	SimulateMouse(pos.x, pos.y, state);
+}
+
+void UIFixture::SimulateMouse(int x, int y, InputState state) noexcept
+{
+	m_mockInput->SetMouseState(x, y, state);
+	m_uiModule->UpdateMouseState();
+}
+
+void UIFixture::SimulateClick(const XMINT2& startPos, const XMINT2& endPos) noexcept
+{
+	SimulateMouse(startPos, InputState::Pressed);
+	SimulateMouse(endPos, InputState::Held);
+	SimulateMouse(endPos, InputState::Released);
 }

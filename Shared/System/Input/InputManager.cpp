@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "InputManager.h"
-#include "../Input.h"
 
 //속도를 위해서 function대신에 함수 포인터를 사용함
 using InputActionFunc = bool(*)(const Keyboard::KeyboardStateTracker&, Keyboard::Keys);
@@ -50,10 +49,13 @@ static bool IsMouseButtonState(
 
 /////////////////////////////////////////////////////////////////////////////
 
-//Input::GetM() 을 Mouse g_mouse; 로 바꾸던지 해야한다. 지금은 테스트 이기 때문에 Input에서 가져온다.
+//키보드와 마우스는 한번만 생성되어야 하기 때문에 이렇게 생성한다.
+DirectX::Keyboard g_keyboard;
+DirectX::Mouse g_mouse;
+
 void InputManager::Initialize(HWND hwnd)
 {
-    Input::GetM().SetWindow(hwnd);
+    g_mouse.SetWindow(hwnd);
 }
 
 void InputManager::SetMouseStartOffset(const XMINT2& offset) noexcept
@@ -63,8 +65,8 @@ void InputManager::SetMouseStartOffset(const XMINT2& offset) noexcept
 
 void InputManager::Update() noexcept
 {
-    m_keyboardTracker.Update(Input::GetK().GetState());
-    DirectX::Mouse::State offset(Input::GetM().GetState());
+    m_keyboardTracker.Update(g_keyboard.GetState());
+    DirectX::Mouse::State offset(g_mouse.GetState());
     offset.x -= m_startOffset.x;
     offset.y -= m_startOffset.y;
     SetPosition({ offset.x, offset.y });
@@ -73,7 +75,7 @@ void InputManager::Update() noexcept
 
 MouseState InputManager::GetMouseState() const noexcept
 {
-    auto dxState = Input::GetM().GetState();
+    auto dxState = g_mouse.GetState();
     return { m_position, dxState.leftButton };
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+struct IInputManager;
 class UIComponent;
 class ComponentTooltip;
 class TextureResourceBinder;
@@ -23,8 +24,8 @@ public:
 
 private:
 	void RepeatedSelection(const vector<UIComponent*>& componentList) noexcept;
-	void SelectComponent() noexcept;
-	bool HandleEscapeKey() noexcept;
+	void SelectComponent(IInputManager* input) noexcept;
+	bool HandleEscapeKey(IInputManager* input) noexcept;
 	bool UpdateEditWindow() noexcept;
 
 	IRenderer* m_renderer;

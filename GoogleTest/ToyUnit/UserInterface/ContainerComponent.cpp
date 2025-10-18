@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Fixture/FixtureSuite.h"
 #include "Helper.h"
+#include "Mocks/MockInputManager.h"
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/UIComponent/Components/Container.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
@@ -15,7 +16,7 @@ namespace UserInterface
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, containerPtr);
 
-		MockMouseInput(144, 120, true);	//Pressed
+		m_mockInput->SetMouseState(144, 120, InputState::Pressed);
 		TestMockRender(2, { { 144, 104, 176, 136 } }, "ExitButton1_Pressed");
 	}
 
@@ -30,12 +31,12 @@ namespace UserInterface
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, containerPtr);
 
-		MockMouseInput(110, 96);	//Hover
+		m_mockInput->SetMouseState(110, 96); //Hover
 		vector<RECT> exDest = { { 110, 96, 132, 144 }, { 132, 96, 188, 144 }, {188, 96, 210, 144} };
 		TestMockRender(2, exDest, "ScrollButton3_H_Hovered");
 
 		containerPtr->ChangeSize({ 150, 48 });
-		MockMouseInput(0, 0);	//Normal
+		m_mockInput->SetMouseState(0, 0); //Normal
 		vector<RECT> exDestChange = { { 85, 96, 107, 144 }, { 107, 96, 213, 144 }, {213, 96, 235, 144} };
 		TestMockRender(2, exDestChange, "ScrollButton3_H_Normal");
 
@@ -53,12 +54,12 @@ namespace UserInterface
 		m_uiModule->BindTextureResources();
 		tie(m_uiModule, m_main) = WriteReadTest(m_mockRenderer.get(), m_uiModule, containerPtr);
 
-		MockMouseInput(77, 51);	//Hover
+		m_mockInput->SetMouseState(77, 51); //Hover
 		vector<RECT> exDest = { { 76, 50, 124, 57 }, { 76, 57, 124, 143 }, {76, 143, 124, 150} };
 		TestMockRender(2, exDest, "ScrollButton3_V_Hovered");
 
 		containerPtr->ChangeSize({ 48, 150 });
-		MockMouseInput(0, 0);	//Normal
+		m_mockInput->SetMouseState(0, 0); //Normal
 		vector<RECT> exDestChange = { { 76, 25, 124, 32 }, { 76, 32, 124, 168 }, {76, 168, 124, 175} };
 		TestMockRender(2, exDestChange, "ScrollButton3_V_Normal");
 

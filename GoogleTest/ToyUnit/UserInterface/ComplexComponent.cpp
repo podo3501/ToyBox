@@ -7,8 +7,7 @@
 #include "Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Shared/Utils/StlExt.h"
-#include "Shared/System/Input.h"
-#include "Shared/System/Public/IInputManager.h"
+#include "Mocks/MockInputManager.h"
 
 namespace UserInterface
 {
@@ -128,10 +127,10 @@ namespace UserInterface
 
 		EXPECT_CALL(mockOnScrollChanged, Call(testing::FloatEq(85.f / 150.f))).Times(1);
 
-		MockMouseInput(100, 200, true); //Pressed
+		m_mockInput->SetMouseState(100, 200, InputState::Pressed);
 		m_main->ProcessUpdate(m_timer);
 
-		MockMouseInput(110, 210, true); //벗어났지만 Pressed가 되어야한다.
+		m_mockInput->SetMouseState(110, 210, InputState::Held);
 		m_main->ProcessUpdate(m_timer);
 	}
 
@@ -151,11 +150,11 @@ namespace UserInterface
 		EXPECT_CALL(mockOnPress, Call(InputState::Pressed)).Times(1); //Pressed 인자를 넣어서 한번 호출할 것을 기대
 		EXPECT_CALL(mockOnPress, Call(InputState::Held)).Times(1);
 
-		MockMouseInput(100, 100, true); //Pressed
+		m_mockInput->SetMouseState(100, 100, InputState::Pressed); //Pressed
 		vector<RECT> exDest = { { 92, 50, 108, 57 }, { 92, 57, 108, 143 }, { 92, 143, 108, 150 } };
 		TestMockRender(2, exDest, "ScrollButton3_V_Pressed");
 
-		MockMouseInput(110, 110, true); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Pressed가 되어야한다.
+		m_mockInput->SetMouseState(110, 110, InputState::Held); //영역에는 벗어났지만 holdToKeepPressed 옵션이 있기 때문에 Pressed가 되어야한다.
 		TestMockRender(2, exDest, "ScrollButton3_V_Pressed");
 	}
 }

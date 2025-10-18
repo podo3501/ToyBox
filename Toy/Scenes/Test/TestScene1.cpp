@@ -2,7 +2,6 @@
 #include "TestScene1.h"
 #include "IRenderer.h"
 #include "Shared/Framework/Locator.h"
-#include "Shared/System/Input.h"
 #include "System/EventDispatcher.h"
 #include "System/SceneManager.h"
 #include "UserInterface/UIModule.h"
