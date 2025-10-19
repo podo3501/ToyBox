@@ -1,17 +1,15 @@
 #include "pch.h"
-#include "Shared/Framework/Locator.h"
-#include "Toy/Interfaces/ISceneManager.h"
-#include "Toy/System/SceneManager.h"
 #include "Fixture/FixtureSuite.h"
 #include "Mocks/MockClasses.h"
 #include "Shared/Utils/StlExt.h"
+#include "Toy/Locator/SceneLocator.h"
 
 namespace System
 {
 	TEST_F(SceneManagerTest, CreateScene)
 	{
 		DX::StepTimer timer;
-		ISceneManager* sceneManager = Locator<ISceneManager>::GetService();
+		ISceneManager* sceneManager = SceneLocator::GetService();
 
 		//씬이 전환될때 Enter와 Leave가 제대로 호출되는지 확인한다.
 		auto [scene1, scene1Ptr] = GetPtrs(make_unique<MockScene1>(m_mockRenderer.get()));

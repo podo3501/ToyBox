@@ -3,10 +3,9 @@
 #include "SelectedComponent/ComponentEdit/EditWindow.h"
 #include "SelectedComponent/ComponentTooltip.h"
 #include "SelectedComponent/EditWindowFactory.h"
+#include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
 #include "Shared/Utils/StlExt.h"
 #include "../Dialog.h"
 #include "Window/Utils/Common.h"
@@ -70,7 +69,7 @@ void ComponentSelector::SelectComponent(IInputManager* input) noexcept
 
 void ComponentSelector::Update() noexcept
 {
-	auto input = Locator<IInputManager>::GetService();
+	auto input = InputLocator::GetService();
 	if (HandleEscapeKey(input)) return;
 	if (UpdateEditWindow()) return;
 

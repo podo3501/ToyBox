@@ -2,12 +2,11 @@
 #include "UserInterfaceWindow.h"
 #include "Window/Utils/Common.h"
 #include "ComponentController.h"
+#include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
 #include "Toy/UserInterface/UIModule.h"
 #include "Shared/System/StepTimer.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
 
 int UserInterfaceWindow::m_uiWindowIndex = 0;
 
@@ -120,7 +119,7 @@ void UserInterfaceWindow::Update(const DX::StepTimer& timer)
 {
 	if (!m_window) return;
 
-	auto input = Locator<IInputManager>::GetService();
+	auto input = InputLocator::GetService();
 	SetMouseStartOffset(input, m_window);
 	CheckChangeWindow(input); //창이 변했을때 RenderTexture를 다시 만들어준다.
 	CheckActiveUpdate(input);

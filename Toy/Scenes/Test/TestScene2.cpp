@@ -1,10 +1,9 @@
 #include "pch.h"
 #include "TestScene2.h"
 #include "IRenderer.h"
+#include "Locator/SceneLocator.h"
+#include "Locator/EventDispatcherLocator.h"
 #include "UserInterface/UIModule.h"
-#include "System/EventDispatcher.h"
-#include "Shared/Framework/Locator.h"
-#include "System/SceneManager.h"
 #include "TestScene1.h"
 
 TestScene2::TestScene2(IRenderer* renderer) :
@@ -17,10 +16,11 @@ bool TestScene2::Enter()
 		GetRenderer(), L"UI/SampleTexture/SampleTextureBinder.json");
 	m_uiModule->AddRenderer();
 
-	ISceneManager* sceneManager = Locator<ISceneManager>::GetService();
-	EventDispatcher::Subscribe("", "TextureSwitcher", [this, sceneManager](UIEvent event) {
+	auto scene = SceneLocator::GetService();
+	auto eventDispatcher = EventDispatcherLocator::GetService();
+	eventDispatcher->Subscribe("", "TextureSwitcher", [this, scene](UIEvent event) {
 		if (event == UIEvent::Clicked)
-			sceneManager->Transition(make_unique<TestScene1>(GetRenderer()));
+			scene->Transition(make_unique<TestScene1>(GetRenderer()));
 		});
 
 	return true;
@@ -28,7 +28,9 @@ bool TestScene2::Enter()
 
 bool TestScene2::Leave()
 {
-	EventDispatcher::Clear();
+	auto eventDispatcher = EventDispatcherLocator::GetService();
+	eventDispatcher->Clear();
+
 	return true;
 }
 

@@ -136,8 +136,10 @@
     <ClInclude Include="Mocks\MockClasses.h" />
     <ClInclude Include="Mocks\MockInputManager.h" />
     <ClInclude Include="Mocks\MockRenderer.h" />
+    <ClInclude Include="Mocks\MockUtils.h" />
     <ClInclude Include="Mocks\Stubs\IInputManagerStub.h" />
     <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h" />
+    <ClInclude Include="Mocks\Stubs\UIComponentStub.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="UserInterface\Helper.h" />
@@ -148,6 +150,7 @@
     <ClCompile Include="Fixture\FixtureSuite.cpp" />
     <ClCompile Include="Mocks\MockInputManager.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
+    <ClCompile Include="Mocks\MockUtils.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -164,6 +167,7 @@
     <ClCompile Include="UserInterface\Integration.cpp" />
     <ClCompile Include="UserInterface\TextureSourceBinderTest.cpp" />
     <ClCompile Include="UserInterface\TextureSwitcherComponent.cpp" />
+    <ClCompile Include="UserInterface\UIComponentT.cpp" />
     <ClCompile Include="UserInterface\UIModuleConnection.cpp" />
     <ClCompile Include="UserInterface\UndoRedo.cpp" />
   </ItemGroup>

@@ -37,9 +37,6 @@
     <Filter Include="UserInterface\CommandHistory\UserInterface">
       <UniqueIdentifier>{fcc3e183-7060-4c68-b4b8-eb0b5d40bbff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Interfaces">
-      <UniqueIdentifier>{bfdda8ab-9642-4001-b391-635a1f6683ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{cf7fad67-ed75-46c8-b3c5-155e5fd82d28}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,9 @@
     </Filter>
     <Filter Include="Scenes\Test">
       <UniqueIdentifier>{49e93b6a-2698-4a0d-8ef0-9a2f44274533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Locator">
+      <UniqueIdentifier>{c5a95ad5-e274-42af-9830-e977bf2336f4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -206,9 +206,6 @@
     <ClInclude Include="UserInterface\CommandHistory\UserInterface\UICommandRegistry.h">
       <Filter>UserInterface\CommandHistory\UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="Interfaces\ISceneManager.h">
-      <Filter>Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -224,11 +221,29 @@
     <ClInclude Include="Scenes\Test\TestScene1.h">
       <Filter>Scenes\Test</Filter>
     </ClInclude>
-    <ClInclude Include="System\EventDispatcher.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="Scenes\Test\TestScene2.h">
       <Filter>Scenes\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Locator\SceneLocator.h">
+      <Filter>Locator</Filter>
+    </ClInclude>
+    <ClInclude Include="Locator\InputLocator.h">
+      <Filter>Locator</Filter>
+    </ClInclude>
+    <ClInclude Include="Locator\AudioLocator.h">
+      <Filter>Locator</Filter>
+    </ClInclude>
+    <ClInclude Include="System\EventDispatcherManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Locator\EventDispatcherLocator.h">
+      <Filter>Locator</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IEventDispatcherManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ISceneManager.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -387,11 +402,11 @@
     <ClCompile Include="Scenes\Test\TestScene1.cpp">
       <Filter>Scenes\Test</Filter>
     </ClCompile>
-    <ClCompile Include="System\EventDispatcher.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="Scenes\Test\TestScene2.cpp">
       <Filter>Scenes\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="System\EventDispatcherManager.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

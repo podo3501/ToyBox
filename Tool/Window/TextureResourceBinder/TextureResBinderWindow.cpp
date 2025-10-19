@@ -4,8 +4,7 @@
 #include "EditSourceTexture.h"
 #include "Window/Utils/Common.h"
 #include "Shared/Utils/StringExt.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
+#include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
@@ -69,7 +68,7 @@ void TextureResBinderWindow::Update()
 {
     if (!m_window) return;
 
-    auto input = Locator<IInputManager>::GetService();
+    auto input = InputLocator::GetService();
     SetMouseStartOffset(input, m_window);
     CheckUndoRedo(input);
 

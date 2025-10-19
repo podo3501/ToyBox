@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "SystemFixture.h"
-#include "Shared/Framework/Locator.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
-#include "Toy/System/SceneManager.h"
+#include "Toy/Locator/SceneLocator.h"
 #include "Toy/UserInterface/UIComponent/UIType.h"
 #include "Toy/UserInterface/UIComponent/UILayout.h"
 
@@ -22,7 +21,7 @@ void SystemFixture::SetUp()
 	m_mockRenderer = make_unique<MockRenderer>();
 
 	m_sceneManager = CreateSceneManager();
-	Locator<ISceneManager>::Provide(m_sceneManager.get());
+	SceneLocator::Provide(m_sceneManager.get());
 }
 
 void SystemFixture::TearDown()

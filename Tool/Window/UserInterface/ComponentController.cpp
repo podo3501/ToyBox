@@ -2,8 +2,7 @@
 #include "ComponentController.h"
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
+#include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Window/Dialog.h"
@@ -118,7 +117,7 @@ bool ComponentController::ExecuteShortcutKeyCommands() noexcept
 {
 	if (!IsWindowFocus(m_uiWindow)) return false;
 
-	auto input = Locator<IInputManager>::GetService();
+	auto input = InputLocator::GetService();
 	return CheckDetachComponent(input) ||
 		CheckDeleteComponent(input) ||
 		CheckCloneComponent(input) ||

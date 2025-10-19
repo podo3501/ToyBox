@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "RenderTexture.h"
 #include "IRenderer.h"
+#include "Locator/InputLocator.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 
 RenderTexture::~RenderTexture() 
@@ -117,8 +116,8 @@ bool RenderTexture::Setup(unique_ptr<UIComponent> component) noexcept
 
 void RenderTexture::CheckMouseInArea() noexcept
 {
-	auto inputManager = Locator<IInputManager>::GetService();
-	m_mouseInArea = Contains(GetArea(), inputManager->GetPosition());
+	auto input = InputLocator::GetService();
+	m_mouseInArea = Contains(GetArea(), input->GetPosition());
 }
 
 void RenderTexture::CheckEnterLeave() noexcept

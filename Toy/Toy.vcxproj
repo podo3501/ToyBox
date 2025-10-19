@@ -226,13 +226,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameLoop.h" />
-    <ClInclude Include="Interfaces\ISceneManager.h" />
+    <ClInclude Include="Locator\AudioLocator.h" />
+    <ClInclude Include="Locator\EventDispatcherLocator.h" />
+    <ClInclude Include="Locator\InputLocator.h" />
+    <ClInclude Include="Locator\SceneLocator.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneType.h" />
     <ClInclude Include="Scenes\Test\ComponentTestScene.h" />
     <ClInclude Include="Scenes\Test\TestScene1.h" />
     <ClInclude Include="Scenes\Test\TestScene2.h" />
-    <ClInclude Include="System\EventDispatcher.h" />
+    <ClInclude Include="System\EventDispatcherManager.h" />
+    <ClInclude Include="System\IEventDispatcherManager.h" />
+    <ClInclude Include="System\ISceneManager.h" />
     <ClInclude Include="System\SceneManager.h" />
     <ClInclude Include="UserInterface\CommandHistory\Command.h" />
     <ClInclude Include="UserInterface\CommandHistory\CommandHistory.h" />
@@ -291,7 +296,7 @@
     <ClCompile Include="Scenes\Test\ComponentTestScene.cpp" />
     <ClCompile Include="Scenes\Test\TestScene1.cpp" />
     <ClCompile Include="Scenes\Test\TestScene2.cpp" />
-    <ClCompile Include="System\EventDispatcher.cpp" />
+    <ClCompile Include="System\EventDispatcherManager.cpp" />
     <ClCompile Include="System\SceneManager.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandHistory.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TextureResource\TexResCommandRegistry.cpp" />

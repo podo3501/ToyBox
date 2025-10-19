@@ -2,6 +2,7 @@
 #include "Shared/Framework/AppLoop.h"
 
 struct ISceneManager;
+struct IEventDispatcherManager;
 class UIComponent;
 class GameLoop final : public AppLoop
 {
@@ -20,4 +21,5 @@ private:
 
 	IRenderer* m_renderer;
 	unique_ptr<ISceneManager> m_sceneManager;
+	unique_ptr<IEventDispatcherManager> m_eventDispatcherManager;
 };

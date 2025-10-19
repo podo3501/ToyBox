@@ -1,12 +1,11 @@
 #include "pch.h"
 #include "ScrollBar.h"
+#include "Locator/InputLocator.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextureSwitcher.h"
 #include "Button.h"
 #include "Shared/SerializerIO/SerializerIO.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
 #include "Shared/Utils/GeometryExt.h"
 
 ScrollBar::~ScrollBar() = default;
@@ -92,11 +91,11 @@ bool ScrollBar::ImplementBindSourceInfo(TextureResourceBinder*, ITextureControll
 
 bool ScrollBar::ImplementUpdate(const DX::StepTimer& timer) noexcept
 {
-	auto inputManager = Locator<IInputManager>::GetService();
+	auto input = InputLocator::GetService();
 
 	int wheelValue{ 0 };
 	if (m_isWheelEnabled)
-		wheelValue = inputManager->GetMouseWheelValue();
+		wheelValue = input->GetMouseWheelValue();
 
 	if (!m_bounded.ValidateRange(wheelValue, timer)) return true;
 
@@ -125,8 +124,8 @@ ReturnType ScrollBar::GetMaxScrollRange() const noexcept
 
 void ScrollBar::OnPressCB(InputState inputState)
 {
-	auto inputManager = Locator<IInputManager>::GetService();
-	int32_t mPosY = inputManager->GetPosition().y;
+	auto input = InputLocator::GetService();
+	int32_t mPosY = input->GetPosition().y;
 	if (inputState == InputState::Pressed)
 	{
 		m_pressContainerPos = m_scrollButton->GetRelativePosition();
@@ -203,7 +202,7 @@ void ScrollBar::SetPositionRatio(float positionRatio) noexcept
 
 void ScrollBar::SetEnableWheel(bool enable) noexcept
 {
-	auto inputManager = Locator<IInputManager>::GetService();
-	if(!m_isWheelEnabled && enable) inputManager->ResetMouseWheelValue();
+	auto input = InputLocator::GetService();
+	if(!m_isWheelEnabled && enable) input->ResetMouseWheelValue();
 	m_isWheelEnabled = enable;
 }

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UIModule.h"
 #include "IRenderer.h"
+#include "Locator/InputLocator.h"
 #include "UIComponent/UIComponent.h"
 #include "UIComponent/Components/Panel.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
@@ -9,8 +10,6 @@
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
 
 UIModule::~UIModule()
 {
@@ -92,7 +91,7 @@ bool UIModule::Update(const DX::StepTimer& timer) noexcept
 bool UIModule::UpdateMouseState() noexcept
 {
 	//hover는 공통으로 호출
-	auto input = Locator<IInputManager>::GetService();
+	auto input = InputLocator::GetService();
 	auto mouseState = input->GetMouseState();
 	auto components = UIEx(GetMainPanel()).FindRenderComponents(mouseState.pos);
 	for (auto& component : components)

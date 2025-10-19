@@ -30,13 +30,13 @@ public:
 	void CloneTest(const vector<RECT>& expectDest, const string& bindKey);
 
 protected:
-	void SetUp() override;
-	void TearDown() override;
+	virtual void SetUp() override;
+	virtual void TearDown() override;
 	TextureResourceBinder* GetResBinder() const noexcept;
 
 	void SimulateMouse(const XMINT2& pos, InputState state) noexcept;
 	void SimulateMouse(int x, int y, InputState state) noexcept;
-	void SimulateClick(const XMINT2& startPos, const XMINT2& endPos) noexcept;
+	void SimulateClick(const XMINT2& startPos, optional<XMINT2> endPosOpt = nullopt) noexcept;
 
 	unique_ptr<MockRenderer> m_mockRenderer;
 	unique_ptr<MockInputManager> m_mockInput;

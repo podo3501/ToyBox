@@ -1,11 +1,10 @@
 #include "pch.h"
 #include "Common.h"
 #include "Window/UserInterface/FloatingComponent.h"
+#include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
 
 ImGuiMouseCursor_ Tool::MouseCursor::m_mouseCursor = ImGuiMouseCursor_Arrow;
 

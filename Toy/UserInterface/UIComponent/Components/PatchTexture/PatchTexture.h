@@ -31,6 +31,4 @@ private:
 	bool ForEach(predicate<PatchTexture*, size_t> auto&& Each);
 
 	optional<TextureSlice> m_texSlice{ nullopt };
-
-	friend class PatchTextureImpl;
 };

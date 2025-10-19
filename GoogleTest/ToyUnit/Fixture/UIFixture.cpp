@@ -3,8 +3,7 @@
 #include "UserInterface/Helper.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
-#include "Shared/Framework/Locator.h"
-#include "Shared/System/Public/IInputManager.h"
+#include "Toy/Locator/InputLocator.h"
 #include "Mocks/MockInputManager.h"
 
 using ::testing::_;
@@ -23,7 +22,7 @@ void UIFixture::SetUp()
 	InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 	m_mockRenderer = make_unique<MockRenderer>();
 	m_mockInput = make_unique<MockInputManager>();
-	Locator<IInputManager>::Provide(m_mockInput.get());
+	InputLocator::Provide(m_mockInput.get());
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
 	m_main = m_uiModule->GetMainPanel();
 }
@@ -106,8 +105,10 @@ void UIFixture::SimulateMouse(int x, int y, InputState state) noexcept
 	m_uiModule->UpdateMouseState();
 }
 
-void UIFixture::SimulateClick(const XMINT2& startPos, const XMINT2& endPos) noexcept
+void UIFixture::SimulateClick(const XMINT2& startPos, optional<XMINT2> endPosOpt) noexcept
 {
+	XMINT2 endPos = endPosOpt.value_or(startPos);
+
 	SimulateMouse(startPos, InputState::Pressed);
 	SimulateMouse(endPos, InputState::Held);
 	SimulateMouse(endPos, InputState::Released);

@@ -1,5 +1,5 @@
 #pragma once
-#include "Toy/Interfaces/ISceneManager.h"
+#include "ISceneManager.h"
 
 class Scene;
 class SceneManager : public ISceneManager
@@ -19,5 +19,3 @@ private:
 	unique_ptr<Scene> m_currentScene;
 	unique_ptr<Scene> m_pendingScene;
 };
-
-unique_ptr<ISceneManager> CreateSceneManager();

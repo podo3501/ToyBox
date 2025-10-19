@@ -39,24 +39,6 @@ namespace UserInterface
 		img1Ptr->ChangeOrigin(Origin::Center);
 
 		EXPECT_EQ(*img1Ptr->GetTextureSlice(), TextureSlice::One);
-		vector<RECT> exDest = { { 368, 268, 432, 332 } };
-		TestMockRender(2, exDest, "BackImage1");
-
-		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
-		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, false);
-		img1Ptr->ChangeSize({ 128, 64 });
-		TestMockRender(2, exDest, "BackImage1");
-
-		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, false);
-		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
-		img1Ptr->ChangeSize({ 64, 128 });
-		TestMockRender(2, exDest, "BackImage1");
-
-		img1Ptr->SetStateFlag(StateFlag::X_SizeLocked, true);
-		img1Ptr->SetStateFlag(StateFlag::Y_SizeLocked, true);
-		img1Ptr->ChangeSize({ 128, 128 });
-		TestMockRender(2, exDest, "BackImage1");
-
 		FitToTextureSourceTest<PatchTextureStd1*>(m_main, "PatchTextureStd1", "BackImage1", GetResBinder());
 	}
 

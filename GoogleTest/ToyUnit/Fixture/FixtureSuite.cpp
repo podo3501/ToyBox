@@ -2,10 +2,38 @@
 #include "FixtureSuite.h"
 #include "UserInterface/Helper.h"
 #include "Shared/Utils/StlExt.h"
+#include "Toy/Locator/EventDispatcherLocator.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
+
+bool Integration::VerifyClone(unique_ptr<UIComponent> original)
+{
+	if (!original) return false;
+	auto resBinder = m_uiModule->GetTexResBinder();
+	EXPECT_TRUE(original->BindTextureSourceInfo(resBinder, m_mockRenderer->GetTextureController()));
+	auto clone = original->Clone();
+
+	return Compare(original, clone);
+}
+
+//////////////////////////////////////////////////////////////////
+
+void ComponentEvent::SetUp()
+{
+	UIFixture::SetUp();
+
+	m_eventDispatcherManager = CreateEventDispatcherManager();
+	EventDispatcherLocator::Provide(m_eventDispatcherManager.get());
+}
+
+void ComponentEvent::TearDown()
+{
+	UIFixture::TearDown();
+}
+
+//////////////////////////////////////////////////////////////////
 
 void TextureSwitcherComponent::FitToTextureSourceTest(const string& bindingKey)
 {
@@ -20,18 +48,6 @@ void TextureSwitcherComponent::CloneTestForSwitcher(const vector<RECT>& expectDe
 	TestMockRender(2, expectDest, bindKey, clonePanel.get());
 	WriteReadTest(GetResBinder(), clonePanel);
 	//WriteReadTest(m_resBinder.get(), clonePanel);
-}
-
-//////////////////////////////////////////////////////////////////
-
-bool Integration::VerifyClone(unique_ptr<UIComponent> original)
-{
-	if (!original) return false;
-	auto resBinder = m_uiModule->GetTexResBinder();
-	EXPECT_TRUE(original->BindTextureSourceInfo(resBinder, m_mockRenderer->GetTextureController()));
-	auto clone = original->Clone();
-
-	return Compare(original, clone);
 }
 
 //////////////////////////////////////////////////////////////////

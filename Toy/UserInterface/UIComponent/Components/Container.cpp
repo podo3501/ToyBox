@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 #include "Container.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
+#include "Locator/InputLocator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
@@ -101,8 +100,8 @@ void Container::SetState(InteractState curState) noexcept
 
 void Container::NormalMode(bool isPressed, bool isHeld) noexcept
 {
-	auto inputManager = Locator<IInputManager>::GetService();
-	if (!Contains(GetArea(), inputManager->GetPosition()))
+	auto input = InputLocator::GetService();
+	if (!Contains(GetArea(), input->GetPosition()))
 	{
 		SetState(Normal);
 		return;
@@ -129,9 +128,9 @@ bool Container::ImplementUpdate(const DX::StepTimer&) noexcept
 {
 	if (!m_state.has_value()) return true; //로드 하지 않았다면 값이 셋팅되지 않는다.
 	//이 두값이 이전프레임과 비교해서 달라졌다면 실행하게 한다면 좀 더 빠르게 된다.
-	auto inputManager = Locator<IInputManager>::GetService();
-	bool isPressed = inputManager->IsInputAction(MouseButton::Left, InputState::Pressed);
-	bool isHeld = inputManager->IsInputAction(MouseButton::Left, InputState::Held);
+	auto input = InputLocator::GetService();
+	bool isPressed = input->IsInputAction(MouseButton::Left, InputState::Pressed);
+	bool isHeld = input->IsInputAction(MouseButton::Left, InputState::Held);
 
 	switch (m_behaviorMode) //이 부분은 배열에 함수포인터로 하면 더 빨라지는데 추후 다양한 behavior가 생기면 인자가 달라질수 있기 때문에 일단 보류한다.
 	{

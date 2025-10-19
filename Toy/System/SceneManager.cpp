@@ -36,6 +36,8 @@ void SceneManager::DoTransition()
 	m_currentScene->Enter();
 }
 
+/////////////////////////////////////////////////////////////////////////////
+
 unique_ptr<ISceneManager> CreateSceneManager()
 {
 	return make_unique<SceneManager>();

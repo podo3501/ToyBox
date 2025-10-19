@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "TestScene1.h"
 #include "IRenderer.h"
-#include "Shared/Framework/Locator.h"
-#include "System/EventDispatcher.h"
-#include "System/SceneManager.h"
+#include "Locator/SceneLocator.h"
+#include "Locator/EventDispatcherLocator.h"
 #include "UserInterface/UIModule.h"
 #include "TestScene2.h"
 
@@ -20,10 +19,11 @@ bool TestScene1::Enter()
 
 	//씬이 시작될때 등록하고 씬이 나갈때 해제한다.
 	//여기서 하면 씬 이름까지 넣어줘야 한다.
-	ISceneManager* sceneManager = Locator<ISceneManager>::GetService();
-	EventDispatcher::Subscribe("", "TextureSwitcher", [this, sceneManager](UIEvent event) {
+	auto scene = SceneLocator::GetService();
+	auto eventDispatcher = EventDispatcherLocator::GetService();
+	eventDispatcher->Subscribe("", "TextureSwitcher", [this, scene](UIEvent event) {
 		if (event == UIEvent::Clicked)
-			sceneManager->Transition(make_unique<TestScene2>(GetRenderer()));
+			scene->Transition(make_unique<TestScene2>(GetRenderer()));
 		});
 
 	return true;
@@ -31,7 +31,9 @@ bool TestScene1::Enter()
 
 bool TestScene1::Leave()
 {
-	EventDispatcher::Clear();
+	auto eventDispatcher = EventDispatcherLocator::GetService();
+	eventDispatcher->Clear();
+
 	return true;
 }
 

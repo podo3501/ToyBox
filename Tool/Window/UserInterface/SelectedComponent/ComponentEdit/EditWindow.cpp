@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "EditWindow.h"
+#include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
-#include "Shared/System/Public/IInputManager.h"
-#include "Shared/Framework/Locator.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Window/Utils/EditUtility.h"
 #include "Window/HelperClass.h"
@@ -115,7 +114,7 @@ void EditWindow::ResizeComponentOnClick() noexcept
 {
     if (!m_component) return;
 
-    auto input = Locator<IInputManager>::GetService();
+    auto input = InputLocator::GetService();
     const XMINT2& mousePos = input->GetPosition();
     OnDrag dragState = IsMouseOverResizeZone(mousePos, m_component);
     Tool::MouseCursor::SetType(GetCursorImage(dragState));
