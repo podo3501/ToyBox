@@ -34,7 +34,7 @@ public:
 		return ComponentCast<T>(find);
 	}
 
-	UIComponent* GetRegionComponent(const string& regionName) noexcept;
+	UIComponent* FindRegionComponent(const string& regionName) noexcept;
 	vector<UIComponent*> FindRenderComponents(const XMINT2& pos) noexcept;
 	UIComponent* FindTopRenderComponent(const XMINT2& pos) noexcept;
 	XMUINT2 GetChildrenBoundsSize() const noexcept;

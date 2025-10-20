@@ -188,7 +188,7 @@ UIComponent* UIModule::FindComponentInRegion(const string& regionName, const str
 	auto* panel = GetMainPanel();
 	if (!panel) return nullptr;
 
-	UIComponent* regionRoot = UIEx(panel).GetRegionComponent(regionName);
+	UIComponent* regionRoot = UIEx(panel).FindRegionComponent(regionName);
 	if (!regionRoot) return nullptr;
 
 	return UIEx(regionRoot).FindComponent(name);

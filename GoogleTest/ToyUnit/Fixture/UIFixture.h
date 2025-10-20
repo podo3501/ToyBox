@@ -36,7 +36,7 @@ protected:
 
 	void SimulateMouse(const XMINT2& pos, InputState state) noexcept;
 	void SimulateMouse(int x, int y, InputState state) noexcept;
-	void SimulateClick(const XMINT2& startPos, optional<XMINT2> endPosOpt = nullopt) noexcept;
+	void SimulateClick(const XMINT2& startPos, const optionalRef<XMINT2>& endPos = nullopt) noexcept;
 
 	unique_ptr<MockRenderer> m_mockRenderer;
 	unique_ptr<MockInputManager> m_mockInput;

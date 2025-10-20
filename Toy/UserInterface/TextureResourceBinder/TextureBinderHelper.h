@@ -1,5 +1,4 @@
 #pragma once
-#include "TypeAliases.h"
 
 enum class TextureSlice;
 struct SourceDivider;

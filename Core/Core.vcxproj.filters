@@ -85,9 +85,6 @@
     <ClInclude Include="Public\ITextureBinder.h">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="Public\TypeAliases.h">
-      <Filter>Public</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Common.h">
       <Filter>Utils</Filter>
     </ClInclude>

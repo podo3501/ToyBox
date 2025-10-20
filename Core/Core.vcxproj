@@ -187,7 +187,6 @@
     <ClInclude Include="Public\IComponent.h" />
     <ClInclude Include="Public\IRenderer.h" />
     <ClInclude Include="Public\ITextureBinder.h" />
-    <ClInclude Include="Public\TypeAliases.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="TextureRepository\Font.h" />
     <ClInclude Include="TextureRepository\TextureRenderTarget.h" />

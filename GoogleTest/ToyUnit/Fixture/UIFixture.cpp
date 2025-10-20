@@ -105,11 +105,11 @@ void UIFixture::SimulateMouse(int x, int y, InputState state) noexcept
 	m_uiModule->UpdateMouseState();
 }
 
-void UIFixture::SimulateClick(const XMINT2& startPos, optional<XMINT2> endPosOpt) noexcept
+void UIFixture::SimulateClick(const XMINT2& startPos, const optionalRef<XMINT2>& endPos) noexcept
 {
-	XMINT2 endPos = endPosOpt.value_or(startPos);
+	const XMINT2& realEndPos = endPos ? endPos->get() : startPos;
 
 	SimulateMouse(startPos, InputState::Pressed);
-	SimulateMouse(endPos, InputState::Held);
-	SimulateMouse(endPos, InputState::Released);
+	SimulateMouse(realEndPos, InputState::Held);
+	SimulateMouse(realEndPos, InputState::Released);
 }

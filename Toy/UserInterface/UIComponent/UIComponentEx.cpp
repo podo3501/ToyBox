@@ -193,7 +193,7 @@ UIComponent* UIComponentEx::FindComponent(const string& name) noexcept
 	return foundComponent;
 }
 
-UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcept
+UIComponent* UIComponentEx::FindRegionComponent(const string& findRegion) noexcept
 {
 	UIComponent* root = m_component->GetRegionRoot();
 	if (!root) root = m_component->GetRoot();
@@ -220,7 +220,7 @@ UIComponent* UIComponentEx::GetRegionComponent(const string& findRegion) noexcep
 
 UIComponent* UIComponentEx::FindComponent(const string& region, const string& name) noexcept
 {
-	UIComponent* component = GetRegionComponent(region);
+	UIComponent* component = FindRegionComponent(region);
 	if (component == nullptr) return nullptr;
 
 	return UIEx(component).FindComponent(name);

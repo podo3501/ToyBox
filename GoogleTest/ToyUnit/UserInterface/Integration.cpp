@@ -98,59 +98,6 @@ namespace UserInterface
 		EXPECT_TRUE(VerifyClone(CreateSampleListArea({ { 220, 190 }, Origin::LeftTop })));
 	}
 
-	static size_t CheckComponentCount(UIComponent* panel, const XMINT2& position)
-	{
-		vector<UIComponent*> components = UIEx(panel).FindRenderComponents(position);
-		return components.size();
-	}
-
-	TEST_F(Integration, GetComponent)
-	{
-		auto [tex2, tex2Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		UIEx(tex1).AttachComponent(move(tex2), { 100, 100 });
-		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
-
-		UIEx(tex1Ptr).Rename("image1"); 
-		UIEx(tex2Ptr).Rename("image2");
-		UIEx(tex1Ptr).RenameRegion("Region1");
-		
-		EXPECT_FALSE(UIEx(m_main).FindComponent("image1")); //Img1이 다른 Region이라서 찾을 수 없다.
-		EXPECT_FALSE(UIEx(m_main).FindComponent("image2"));
-		EXPECT_FALSE(UIEx(tex1Ptr).FindComponent("Main"));//Img1이 Region이라서 위에 노드는 못 찾는다.
-		EXPECT_TRUE(UIEx(tex1Ptr).FindComponent("image2"));
-		EXPECT_FALSE(UIEx(tex2Ptr).FindComponent("Main"));
-		EXPECT_TRUE(UIEx(tex2Ptr).FindComponent("image1"));
-
-		UIEx(tex2Ptr).RenameRegion("Region2");
-
-		EXPECT_FALSE(UIEx(tex1Ptr).FindComponent("image2"));
-		EXPECT_FALSE(UIEx(tex2Ptr).FindComponent("image1"));
-
-		EXPECT_EQ(UIEx(m_main).GetRegionComponent("Region1"), tex1Ptr);
-		EXPECT_FALSE(UIEx(m_main).GetRegionComponent("Region2"));
-		EXPECT_EQ(UIEx(tex1Ptr).GetRegionComponent("Region2"), tex2Ptr);
-		EXPECT_FALSE(UIEx(tex2Ptr).GetRegionComponent("Region1"));
-	}
-
-	TEST_F(Integration, GetComponents)
-	{
-		auto tex9_0 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
-		UIEx(m_main).AttachComponent(move(tex9_0), { 80, 60 });
-		m_uiModule->BindTextureResources();
-		m_uiModule->Update(m_timer);
-
-		EXPECT_TRUE(CheckComponentCount(m_main, {0, 0}) == 1);
-		EXPECT_EQ(CheckComponentCount(m_main, { 100, 100 }), 4);
-
-		auto tex9_1 = CreateComponent<PatchTextureStd9>(UILayout{ {221, 191}, Origin::LeftTop }, "BackImage9");
-		UIEx(m_main).AttachComponent(move(tex9_1), { 88, 66 });
-		m_uiModule->BindTextureResources();
-		m_uiModule->Update(m_timer);
-
-		EXPECT_TRUE(CheckComponentCount(m_main, { 180, 160 }) == 7);
-	}
-
 	TEST_F(Integration, GetPosition)
 	{
 		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");

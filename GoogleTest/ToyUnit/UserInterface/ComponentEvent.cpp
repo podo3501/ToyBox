@@ -35,60 +35,51 @@ namespace UserInterface
 {
 	TEST_F(ComponentEvent, EventDispatch)
 	{
-		auto eventDispatcher = EventDispatcherLocator::GetService();
-
-		constexpr XMINT2 compPos{ 400, 300 };
-		auto [comp, compPtr] = CreateMockComponent<MockMouseClicked>();
-		UIEx(m_main).AttachComponent(move(comp), compPos);
+		auto comp = CreateOneLevelComponent<MockMouseClicked>(m_main);
 
 		testing::MockFunction<void(UIEvent)> mockCallback;
 		EXPECT_CALL(mockCallback, Call(UIEvent::Clicked)).Times(1);
+
+		auto eventDispatcher = EventDispatcherLocator::GetService();
 		eventDispatcher->Subscribe("region", "MockMouseClicked", mockCallback.AsStdFunction());
 
-		SimulateClick(compPos);
+		SimulateClick(comp->GetPosition());
 	}
 
 	TEST_F(ComponentEvent, MouseClickedInside) //안에서 클릭해서 안에서 뗄때.
 	{
-		constexpr XMINT2 compPos{ 400, 300 };
-		auto [comp, compPtr] = CreateMockComponent<MockMouseClicked>();
-		UIEx(m_main).AttachComponent(move(comp), compPos);
+		auto comp = CreateOneLevelComponent<MockMouseClicked>(m_main);
 
 		testing::InSequence seq; //호출순서 검증
-		EXPECT_CALL(*compPtr, OnPress()).Times(1);
-		EXPECT_CALL(*compPtr, OnHold(true)).Times(1);
-		EXPECT_CALL(*compPtr, OnRelease(true)).Times(1);
+		EXPECT_CALL(*comp, OnPress()).Times(1);
+		EXPECT_CALL(*comp, OnHold(true)).Times(1);
+		EXPECT_CALL(*comp, OnRelease(true)).Times(1);
 
-		SimulateClick(compPos);
+		SimulateClick(comp->GetPosition());
 	}
 
 	TEST_F(ComponentEvent, MouseClickedOutside) //안에서 클릭해서 밖에서 버튼을 뗄때.
 	{
-		constexpr XMINT2 compPos{ 400, 300 }, outsidePos{ 0, 0 };
-		auto [comp, compPtr] = CreateMockComponent<MockMouseClicked>();
-		UIEx(m_main).AttachComponent(move(comp), compPos);
+		XMINT2 outsidePos{ 0, 0 };
+		auto comp = CreateOneLevelComponent<MockMouseClicked>(m_main);
 		
 		testing::InSequence seq; //호출순서 검증
-		EXPECT_CALL(*compPtr, OnPress()).Times(1);
-		EXPECT_CALL(*compPtr, OnHold(false)).Times(1);
-		EXPECT_CALL(*compPtr, OnRelease(false)).Times(1);
+		EXPECT_CALL(*comp, OnPress()).Times(1);
+		EXPECT_CALL(*comp, OnHold(false)).Times(1);
+		EXPECT_CALL(*comp, OnRelease(false)).Times(1);
 
-		SimulateClick(compPos, outsidePos);
+		SimulateClick(comp->GetPosition(), outsidePos);
 	}
 
 	TEST_F(ComponentEvent, MouseHover)
 	{
-		constexpr XMINT2 compPos{ 400, 300 };
-		auto [comp1, comp1Ptr] = CreateMockComponent<MockMouseClicked>();
-		auto [comp2, comp2Ptr] = CreateMockComponent<MockMouseClicked>();
-		UIEx(comp1).AttachComponent(move(comp2), { 0, 0 });
-		UIEx(m_main).AttachComponent(move(comp1), { 400, 300 });
+		auto [parent, child] = CreateTwoLevelComponents<MockMouseClicked>(m_main);
 
 		//마우스를 올리고 hover 되는지 확인.
-		EXPECT_CALL(*comp1Ptr, OnHover()).Times(1);
-		EXPECT_CALL(*comp2Ptr, OnHover()).Times(1);
+		EXPECT_CALL(*parent, OnHover()).Times(1);
+		EXPECT_CALL(*child, OnHover()).Times(1);
 
-		SimulateMouse(compPos, InputState::Pressed);
+		SimulateMouse(child->GetPosition(), InputState::Pressed);
 	}
 
 	//?!? 이건 나중에 TextureSwitcher 컴포넌트 테스트에 넣어야 한다.

@@ -1,5 +1,4 @@
 #pragma once
-#include "TypeAliases.h"
 #include "ITextureBinder.h"
 #include "TextureSourceInfo.h"
 

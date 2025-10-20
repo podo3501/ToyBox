@@ -101,7 +101,7 @@ private:
 	UILayout m_layout;
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
 	StateFlag::Type m_stateFlag{ StateFlag::Default };
-	string m_region; //UI에서 네임스페이스 역할을 한다. GetRegionComponent로 찾을 수 있다.
+	string m_region; //UI에서 네임스페이스 역할을 한다. FindRegionComponent로 찾을 수 있다.
 	RenderTraversal m_renderTraversal{ RenderTraversal::Inherited }; //이건 mode이기 때문에 flag와 성격이 맞지 않아서 따로 만듦. 지금은 2개뿐이라 flag에 넣어도 되긴한데, 추후 확장성을 고려해서 일단 이렇게 놔두기로 하자.
 
 	bool m_toolMode{ false };
