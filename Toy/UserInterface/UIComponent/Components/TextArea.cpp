@@ -121,10 +121,10 @@ bool TextArea::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextur
 
 void TextArea::ImplementRender(ITextureRender* render) const
 {
-	const auto& position = XMINT2ToVector2(GetPosition());
+	const auto& leftTop = XMINT2ToVector2(GetLeftTop());
 	for (const auto& word : m_lines)
 		render->DrawString(m_font.at(word.fontStyle), 
-			word.text, position + word.position,
+			word.text, leftTop + word.position,
 			XMLoadFloat4(&word.color));
 }
 

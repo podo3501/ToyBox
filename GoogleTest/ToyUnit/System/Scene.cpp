@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Fixture/FixtureSuite.h"
+#include "Fixtures/FixtureSuite.h"
 #include "Mocks/MockClasses.h"
 #include "Shared/Utils/StlExt.h"
 #include "Toy/Locator/SceneLocator.h"

@@ -40,7 +40,7 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	}
 
 	child->SetParent(m_component);
-	child->m_transform.SetRelativePosition(
+	child->m_transform.ChangeRelativePosition(
 		m_component->m_layout.GetSize(), relativePos);
 	m_component->m_children.emplace_back(move(child));
 	m_component->UpdatePositionsManually(true);
@@ -272,7 +272,7 @@ bool UIComponentEx::IsPositionUpdated() const noexcept //?!? 이건 뭐할때 쓰는 함
 	return m_component->ForEachChildUntilFail([&clone](const UIComponent* child) {
 		UIComponent* cloneComponent = UIEx(clone).FindComponent(child->GetMyRegion(), child->GetName());
 		if (cloneComponent == nullptr) return false;
-		return cloneComponent->GetPosition() == child->GetPosition();
+		return cloneComponent->GetLeftTop() == child->GetLeftTop();
 		});
 }
 

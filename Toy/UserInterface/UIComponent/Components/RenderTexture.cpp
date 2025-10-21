@@ -71,7 +71,7 @@ bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 void RenderTexture::ImplementPositionUpdated() noexcept
 {
 	if (m_texController && m_index)
-		m_texController->ModifyRenderTexturePosition(*m_index, GetPosition());
+		m_texController->ModifyRenderTexturePosition(*m_index, GetLeftTop());
 }
 
 //?!? rendertexture를 등록하는 것을 bind를 통해서 넣으면 텍스쳐 관리를 한군데에 몰아서 할 수 있을꺼 같은데.
@@ -84,7 +84,7 @@ bool RenderTexture::ImplementBindSourceInfo(TextureResourceBinder*, ITextureCont
 	
 	size_t index{ 0 };
 	UpdatePositionsManually(true);
-	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetSize(), GetPosition(), index, &m_gfxOffset));
+	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetArea(), index, &m_gfxOffset));
 
 	m_index = index;
 	m_texController = texController;
@@ -138,15 +138,12 @@ bool RenderTexture::ImplementUpdate(const DX::StepTimer&) noexcept
 
 void RenderTexture::ImplementRender(ITextureRender* render) const
 {
-	const auto& position = GetPosition();
 	if (m_texController && m_index)
-		m_texController->ModifyRenderTexturePosition(*m_index, position); //?!? 좌표가 바뀌면 RenderTexture 안에 좌표가 갱신이 되지 않아서 이상해진다. update에 넣고 싶은데 툴에서는 update가 돌지 않는다.
+		m_texController->ModifyRenderTexturePosition(*m_index, GetLeftTop()); //?!? 좌표가 바뀌면 RenderTexture 안에 좌표가 갱신이 되지 않아서 이상해진다. update에 넣고 싶은데 툴에서는 update가 돌지 않는다.
 
 	const auto& size = GetSize();
-	Rectangle destination(position.x, position.y, size.x, size.y);
-
 	RECT source{ 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };
-	render->Render(m_index.value(), destination, &source);
+	render->Render(m_index.value(), GetArea(), &source);
 
 	return;
 }

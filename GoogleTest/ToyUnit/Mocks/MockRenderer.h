@@ -15,7 +15,7 @@ public:
 	virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
 
 	//Texture
-	virtual bool CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset) override;
+	virtual bool CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override;
 };
 
 class MockTextureRender : public ITextureRenderStub

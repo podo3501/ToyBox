@@ -106,7 +106,7 @@ bool ListArea::ChangeScrollBarSizeAndPos(const XMUINT2& size) noexcept
 {
 	ReturnIfFalse(ChangeSizeY(m_scrollBar, size.y - (m_scrollPadding * 2)));
 	XMINT2 pos{ static_cast<int32_t>(size.x - m_scrollPadding), static_cast<int32_t>(m_scrollPadding) };
-	return m_scrollBar->SetRelativePosition(pos);
+	return m_scrollBar->ChangeRelativePosition(pos);
 }
 
 bool ListArea::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
@@ -162,7 +162,7 @@ bool ListArea::ResizeContainerForScrollbar() noexcept
 //
 //	const auto& containerHeight = GetContainerHeight();
 //	cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
-//	cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
+//	cloneContainerPtr->ChangeRelativePosition({ 0, containerHeight });
 //	if (!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
 //	m_containers.emplace_back(cloneContainerPtr);
 //
@@ -185,7 +185,7 @@ UIComponent* ListArea::PrepareContainer()
 	{
 		ZoneScopedN("SetInitialState");
 		cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
-		cloneContainerPtr->SetRelativePosition({ 0, containerHeight });
+		cloneContainerPtr->ChangeRelativePosition({ 0, containerHeight });
 		if (!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
 	}
 	
@@ -236,7 +236,7 @@ void ListArea::MoveContainers(int32_t targetPos) noexcept
 	ranges::for_each(m_containers, [idx{ 0u }, targetPos, containerHeight](auto& container) mutable {
 		XMINT2 pos = container->GetRelativePosition();
 		pos.y = targetPos + ((idx++) * containerHeight);
-		container->SetRelativePosition(pos);
+		container->ChangeRelativePosition(pos);
 		});
 }
 

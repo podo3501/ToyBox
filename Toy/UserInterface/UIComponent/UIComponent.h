@@ -58,16 +58,16 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual void ProcessIO(SerializerIO& serializer);
 
 	bool BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept;
-	bool ChangeSize(const XMUINT2& size, bool isForce = false) noexcept;
+	bool ChangeSize(const XMUINT2& size, bool isForce = false) noexcept; //isForce는 크기가 변함이 없더라도 끝까지 실행시킨다.
 	inline bool ChangeSize(uint32_t x, uint32_t y, bool isForce = false) noexcept { return ChangeSize({ x, y }, isForce); }
 	bool UpdatePositionsManually(bool root = false) noexcept;
 	bool ProcessUpdate(const DX::StepTimer& timer) noexcept;
 	
-	inline const XMINT2& GetPosition() const noexcept { return m_transform.GetAbsolutePosition(); }
+	inline const XMINT2& GetLeftTop() const noexcept { return m_transform.GetAbsolutePosition(); }
 	inline const XMINT2& GetRelativePosition() const noexcept { return m_transform.GetRelativePosition(); }
 	Rectangle GetArea() const noexcept;
 	const XMUINT2& GetSize() const noexcept;
-	bool SetRelativePosition(const XMINT2& relativePos) noexcept;
+	bool ChangeRelativePosition(const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); }
 	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); }
 	bool EnableToolMode(bool enable) noexcept;

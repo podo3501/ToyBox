@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Fixture/FixtureSuite.h"
+#include "Fixtures/FixtureSuite.h"
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
@@ -39,7 +39,7 @@ namespace UserInterface
 
 		CaptureSnapshot(h);
 		ExecuteAndCapture(h, [&] { c.AttachComponent(m_main, move(tex1), {111, 222}); });
-		ExecuteAndCapture(h, [&] { c.SetRelativePosition(tex1Ptr, { 123, 234 }); });
+		ExecuteAndCapture(h, [&] { c.ChangeRelativePosition(tex1Ptr, { 123, 234 }); });
 		ExecuteAndCapture(h, [&] { c.SetSize(tex1Ptr, { 32, 32 }); });
 		ExecuteAndCapture(h, [&] { c.RenameRegion(tex1Ptr, "region"); }); //기존의 region으로 돌아오면서 PatchTextureStd1의 이름을 등록 시켰어야 한다.
 		ExecuteAndCapture(h, [&] { c.Rename(tex1Ptr, "tex1"); });

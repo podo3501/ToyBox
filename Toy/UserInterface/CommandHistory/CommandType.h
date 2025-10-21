@@ -4,7 +4,7 @@ enum class UICommandID : int
 {
 	AttachComponent,
 	DetachComponent,
-	SetRelativePosition,
+	ChangeRelativePosition,
 	SetSize,
 	SetRegion,
 	Rename,

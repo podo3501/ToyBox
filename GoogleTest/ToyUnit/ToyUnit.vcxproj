@@ -130,10 +130,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Fixture\SystemFixture.h" />
-    <ClInclude Include="Fixture\UIFixture.h" />
-    <ClInclude Include="Fixture\FixtureSuite.h" />
+    <ClInclude Include="Fixtures\FixtureSuite.h" />
+    <ClInclude Include="Fixtures\SystemFixture.h" />
+    <ClInclude Include="Fixtures\UIComponent\UIComponentFixture.h" />
+    <ClInclude Include="Fixtures\UIFixture.h" />
     <ClInclude Include="Mocks\MockClasses.h" />
+    <ClInclude Include="Mocks\MockComponents.h" />
     <ClInclude Include="Mocks\MockInputManager.h" />
     <ClInclude Include="Mocks\MockRenderer.h" />
     <ClInclude Include="Mocks\MockUtils.h" />
@@ -145,9 +147,10 @@
     <ClInclude Include="UserInterface\Helper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Fixture\SystemFixture.cpp" />
-    <ClCompile Include="Fixture\UIFixture.cpp" />
-    <ClCompile Include="Fixture\FixtureSuite.cpp" />
+    <ClCompile Include="Fixtures\FixtureSuite.cpp" />
+    <ClCompile Include="Fixtures\SystemFixture.cpp" />
+    <ClCompile Include="Fixtures\UIComponent\UIComponentFixture.cpp" />
+    <ClCompile Include="Fixtures\UIFixture.cpp" />
     <ClCompile Include="Mocks\MockInputManager.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
     <ClCompile Include="Mocks\MockUtils.cpp" />

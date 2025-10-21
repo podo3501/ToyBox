@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Fixture/FixtureSuite.h"
+#include "Fixtures/FixtureSuite.h"
 #include "Mocks/MockInputManager.h"
 #include "Mocks/Stubs/UIComponentStub.h"
 #include "Mocks/MockUtils.h"
@@ -43,7 +43,7 @@ namespace UserInterface
 		auto eventDispatcher = EventDispatcherLocator::GetService();
 		eventDispatcher->Subscribe("region", "MockMouseClicked", mockCallback.AsStdFunction());
 
-		SimulateClick(comp->GetPosition());
+		SimulateClick(comp->GetLeftTop());
 	}
 
 	TEST_F(ComponentEvent, MouseClickedInside) //안에서 클릭해서 안에서 뗄때.
@@ -55,7 +55,7 @@ namespace UserInterface
 		EXPECT_CALL(*comp, OnHold(true)).Times(1);
 		EXPECT_CALL(*comp, OnRelease(true)).Times(1);
 
-		SimulateClick(comp->GetPosition());
+		SimulateClick(comp->GetLeftTop());
 	}
 
 	TEST_F(ComponentEvent, MouseClickedOutside) //안에서 클릭해서 밖에서 버튼을 뗄때.
@@ -68,7 +68,7 @@ namespace UserInterface
 		EXPECT_CALL(*comp, OnHold(false)).Times(1);
 		EXPECT_CALL(*comp, OnRelease(false)).Times(1);
 
-		SimulateClick(comp->GetPosition(), outsidePos);
+		SimulateClick(comp->GetLeftTop(), outsidePos);
 	}
 
 	TEST_F(ComponentEvent, MouseHover)
@@ -79,7 +79,7 @@ namespace UserInterface
 		EXPECT_CALL(*parent, OnHover()).Times(1);
 		EXPECT_CALL(*child, OnHover()).Times(1);
 
-		SimulateMouse(child->GetPosition(), InputState::Pressed);
+		SimulateMouse(child->GetLeftTop(), InputState::Pressed);
 	}
 
 	//?!? 이건 나중에 TextureSwitcher 컴포넌트 테스트에 넣어야 한다.

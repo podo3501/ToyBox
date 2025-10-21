@@ -17,6 +17,18 @@ inline XMINT2 operator/(const XMINT2& a, const XMINT2& b) noexcept {
 	return XMINT2((b.x != 0) ? a.x / b.x : 0, (b.y != 0) ? a.y / b.y : 0);
 }
 
+inline bool operator==(const Vector2& lhs, const XMINT2& rhs) noexcept
+{
+	return
+		CompareEpsilon(lhs.x, static_cast<float>(rhs.x)) &&
+		CompareEpsilon(lhs.y, static_cast<float>(rhs.y));
+}
+
+inline bool operator==(const XMINT2& lhs, const Vector2& rhs) noexcept
+{
+	return rhs == lhs;
+}
+
 inline XMINT2 Vector2ToXMINT2(const Vector2& rhs) noexcept {
 	return { static_cast<int32_t>(rhs.x), static_cast<int32_t>(rhs.y) };
 }

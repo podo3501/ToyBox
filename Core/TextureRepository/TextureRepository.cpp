@@ -62,11 +62,13 @@ bool TextureRepository::LoadTexture(const wstring& filename, size_t& outIndex, X
 }
 
 bool TextureRepository::CreateRenderTexture(IComponent* component, 
-    const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset)
+    const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
 {
     auto renderTex = make_unique<TextureRenderTarget>(m_deviceResources, m_descHeap);
 
     auto format = m_deviceResources->GetBackBufferFormat();
+    XMUINT2 size{ static_cast<uint32_t>(targetRect.width), static_cast<uint32_t>(targetRect.height) };
+    XMINT2 position{ targetRect.x, targetRect.y };
     auto offset = AllocateDescriptor();
     if (!renderTex->Create(format, size, position, offset, component))
     {
@@ -80,8 +82,8 @@ bool TextureRepository::CreateRenderTexture(IComponent* component,
     return true;
 }
 
-void TextureRepository::ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept {
-    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifyPosition(position); }
+void TextureRepository::ModifyRenderTexturePosition(size_t index, const XMINT2& leftTop) noexcept {
+    return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifyPosition(leftTop); }
 
 bool TextureRepository::ModifyRenderTextureSize(size_t index, const XMUINT2& size) {
     return ToType<TextureRenderTarget*>(m_texResources[index].get())->ModifySize(size); }

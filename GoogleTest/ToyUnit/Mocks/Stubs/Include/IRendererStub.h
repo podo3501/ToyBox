@@ -19,9 +19,9 @@ struct ITextureControllerStub : public ITextureController
     virtual float GetLineSpacing(size_t index) const noexcept override { return 0.f; }
 
     //Texture
-    virtual bool CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset) override { return true; }
+    virtual bool CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override { return true; }
     virtual optional<vector<Rectangle>> GetTextureAreaList(size_t index, const UINT32& bgColor) override { return nullopt; }
-    virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept override {}
+    virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& leftTop) noexcept override {}
     virtual bool ModifyRenderTextureSize(size_t index, const XMUINT2& size) override { return true; }
 
     //?!? 밑에 두 함수는 RenderTexture에서 쓰긴 한데.. 없애고 싶긴하다.

@@ -51,17 +51,17 @@ private:
 	pair<unique_ptr<UIComponent>, UIComponent*> m_result;
 };
 
-class SetRelativePositionCommand : public UICommand
+class ChangeRelativePositionCommand : public UICommand
 {
 public:
-	SetRelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept;
+	ChangeRelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept;
 
 	virtual bool Execute() override;
 	virtual bool Undo() override;
 	virtual bool Redo() override;
 
 protected:
-	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::SetRelativePosition; }
+	virtual UICommandID GetTypeID() const noexcept override { return UICommandID::ChangeRelativePosition; }
 	virtual void PostMerge(unique_ptr<UICommand> other) noexcept override;
 
 private:

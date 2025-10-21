@@ -137,7 +137,7 @@ void ScrollBar::OnPressCB(InputState inputState)
 	int32_t moved = mPosY - m_pressMousePos;
 	auto maxRange = GetMaxScrollRange<int32_t>();
 	auto curY = std::clamp(m_pressContainerPos.y + moved, 0, maxRange);
-	m_scrollButton->SetRelativePosition({ m_pressContainerPos.x, curY });
+	m_scrollButton->ChangeRelativePosition({ m_pressContainerPos.x, curY });
 
 	auto ratio = static_cast<float>(curY) / static_cast<float>(maxRange);
 	m_bounded.SetPositionRatio(ratio);
@@ -197,7 +197,7 @@ void ScrollBar::SetPositionRatio(float positionRatio) noexcept
 
 	auto relativePosY = static_cast<int32_t>(GetMaxScrollRange<float>() * positionRatio);
 	const auto& curPos = m_scrollButton->GetRelativePosition();
-	m_scrollButton->SetRelativePosition({ curPos.x, relativePosY });
+	m_scrollButton->ChangeRelativePosition({ curPos.x, relativePosY });
 }
 
 void ScrollBar::SetEnableWheel(bool enable) noexcept

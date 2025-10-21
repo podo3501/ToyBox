@@ -59,7 +59,7 @@ Rectangle MockTextureController::MeasureText(size_t index, const wstring& text, 
 }
 
 //렌더 텍스쳐를 만들었다고 가정하고 가짜 렌더텍스쳐 인덱스를 리턴해준다.
-bool MockTextureController::CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset)
+bool MockTextureController::CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
 {
 	size_t index = g_textureInfos.size();
 	wstring key = L"RenderTexture_" + to_wstring(index);

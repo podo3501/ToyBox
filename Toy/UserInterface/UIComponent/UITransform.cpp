@@ -34,7 +34,7 @@ static inline Vector2 CalcRatio(const XMUINT2& size, const XMINT2& pos) noexcept
 	};
 }
 
-void UITransform::SetRelativePosition(const XMUINT2& size, const XMINT2& relativePos) noexcept
+void UITransform::ChangeRelativePosition(const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
 	m_ratio = CalcRatio(size, relativePos);
 	m_relativePosition = relativePos;

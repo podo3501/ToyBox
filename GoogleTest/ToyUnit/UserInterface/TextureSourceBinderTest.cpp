@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Fixture/FixtureSuite.h"
+#include "Fixtures/FixtureSuite.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
 #include "Helper.h"

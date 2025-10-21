@@ -2,23 +2,13 @@
 #include "FixtureSuite.h"
 #include "UserInterface/Helper.h"
 #include "Shared/Utils/StlExt.h"
+#include "Mocks/MockComponents.h"
+#include "Mocks/MockUtils.h"
 #include "Toy/Locator/EventDispatcherLocator.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
-
-bool Integration::VerifyClone(unique_ptr<UIComponent> original)
-{
-	if (!original) return false;
-	auto resBinder = m_uiModule->GetTexResBinder();
-	EXPECT_TRUE(original->BindTextureSourceInfo(resBinder, m_mockRenderer->GetTextureController()));
-	auto clone = original->Clone();
-
-	return Compare(original, clone);
-}
-
-//////////////////////////////////////////////////////////////////
 
 void ComponentEvent::SetUp()
 {
@@ -31,6 +21,18 @@ void ComponentEvent::SetUp()
 void ComponentEvent::TearDown()
 {
 	UIFixture::TearDown();
+}
+
+//////////////////////////////////////////////////////////////////
+
+bool Integration::VerifyClone(unique_ptr<UIComponent> original)
+{
+	if (!original) return false;
+	auto resBinder = m_uiModule->GetTexResBinder();
+	EXPECT_TRUE(original->BindTextureSourceInfo(resBinder, m_mockRenderer->GetTextureController()));
+	auto clone = original->Clone();
+
+	return Compare(original, clone);
 }
 
 //////////////////////////////////////////////////////////////////

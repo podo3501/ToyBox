@@ -7,7 +7,7 @@ struct IEventDispatcherManager;
 
 class BasicComponent : public UIFixture {};
 class ComplexComponent : public UIFixture {};
-class ComponentEvent : public UIFixture 
+class ComponentEvent : public UIFixture
 {
 protected:
 	virtual void SetUp() override;
@@ -33,7 +33,6 @@ class TracyBenchmark : public UIFixture {};
 
 class UICommandHistory;
 class TexResCommandHistory;
-class UIComponentT : public UIFixture {};
 class UIModuleConnection : public UIFixture {};
 class UndoRedo : public UIFixture
 {

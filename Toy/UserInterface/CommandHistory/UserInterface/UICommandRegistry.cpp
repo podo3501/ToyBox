@@ -101,25 +101,25 @@ pair<unique_ptr<UIComponent>, UIComponent*> DetachComponentCommand::GetResult() 
 
 //////////////////////////////////////////////////////////////////
 
-SetRelativePositionCommand::SetRelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept :
+ChangeRelativePositionCommand::ChangeRelativePositionCommand(UIComponent* component, const XMINT2& relativePos) noexcept :
 	UICommand{ component }, m_record{ relativePos }
 {}
 
-bool SetRelativePositionCommand::Execute()
+bool ChangeRelativePositionCommand::Execute()
 {
 	const auto& prevPos = GetTarget()->GetRelativePosition();
 	m_record.previous = prevPos;
-	ReturnIfFalse(GetTarget()->SetRelativePosition(m_record.current));
+	ReturnIfFalse(GetTarget()->ChangeRelativePosition(m_record.current));
 
 	return true;
 }
 
-bool SetRelativePositionCommand::Undo() { return GetTarget()->SetRelativePosition(m_record.previous); }
-bool SetRelativePositionCommand::Redo() { return GetTarget()->SetRelativePosition(m_record.current); }
+bool ChangeRelativePositionCommand::Undo() { return GetTarget()->ChangeRelativePosition(m_record.previous); }
+bool ChangeRelativePositionCommand::Redo() { return GetTarget()->ChangeRelativePosition(m_record.current); }
 
-void SetRelativePositionCommand::PostMerge(unique_ptr<UICommand> other) noexcept
+void ChangeRelativePositionCommand::PostMerge(unique_ptr<UICommand> other) noexcept
 {
-	auto otherCmd = static_cast<SetRelativePositionCommand*>(other.get());
+	auto otherCmd = static_cast<ChangeRelativePositionCommand*>(other.get());
 	m_record.current = otherCmd->m_record.current;
 }
 

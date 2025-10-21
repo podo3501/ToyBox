@@ -171,7 +171,7 @@ bool UIComponent::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 bool UIComponent::ChangePosition(size_t index, const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
 	if (index >= m_children.size()) return false;
-	GetTransform(m_children[index].get()).SetRelativePosition(size, relativePos);
+	GetTransform(m_children[index].get()).ChangeRelativePosition(size, relativePos);
 	return true;
 }
 
@@ -213,18 +213,18 @@ void UIComponent::ProcessIO(SerializerIO& serializer)
 		});
 }
 
-bool UIComponent::SetRelativePosition(const XMINT2& relativePos) noexcept
+bool UIComponent::ChangeRelativePosition(const XMINT2& relativePos) noexcept
 {
 	if (!m_parent) return false;
-	m_transform.SetRelativePosition(m_parent->GetSize(), relativePos);
+	m_transform.ChangeRelativePosition(m_parent->GetSize(), relativePos);
 	return true;
 }
 
 Rectangle UIComponent::GetArea() const noexcept
 {
-	const XMINT2& curPosition = GetPosition();
+	const XMINT2& curLeftTop = GetLeftTop();
 	const XMUINT2& curSize = GetSize();
-	return Rectangle(curPosition.x, curPosition.y, curSize.x, curSize.y);
+	return Rectangle(curLeftTop.x, curLeftTop.y, curSize.x, curSize.y);
 }
    
 const XMUINT2& UIComponent::GetSize() const noexcept

@@ -33,15 +33,6 @@
     <ClCompile Include="UserInterface\UIModuleConnection.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="Fixture\UIFixture.cpp">
-      <Filter>Fixture</Filter>
-    </ClCompile>
-    <ClCompile Include="Fixture\FixtureSuite.cpp">
-      <Filter>Fixture</Filter>
-    </ClCompile>
-    <ClCompile Include="Fixture\SystemFixture.cpp">
-      <Filter>Fixture</Filter>
-    </ClCompile>
     <ClCompile Include="System\Scene.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -57,6 +48,18 @@
     <ClCompile Include="Mocks\MockUtils.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
+    <ClCompile Include="Fixtures\FixtureSuite.cpp">
+      <Filter>Fixtures</Filter>
+    </ClCompile>
+    <ClCompile Include="Fixtures\SystemFixture.cpp">
+      <Filter>Fixtures</Filter>
+    </ClCompile>
+    <ClCompile Include="Fixtures\UIFixture.cpp">
+      <Filter>Fixtures</Filter>
+    </ClCompile>
+    <ClCompile Include="Fixtures\UIComponent\UIComponentFixture.cpp">
+      <Filter>Fixtures\UIComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -70,17 +73,8 @@
     <ClInclude Include="UserInterface\Helper.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="Fixture\UIFixture.h">
-      <Filter>Fixture</Filter>
-    </ClInclude>
-    <ClInclude Include="Fixture\FixtureSuite.h">
-      <Filter>Fixture</Filter>
-    </ClInclude>
     <ClInclude Include="Mocks\MockClasses.h">
       <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="Fixture\SystemFixture.h">
-      <Filter>Fixture</Filter>
     </ClInclude>
     <ClInclude Include="Mocks\Stubs\IInputManagerStub.h">
       <Filter>Mocks\Stubs</Filter>
@@ -93,6 +87,21 @@
     </ClInclude>
     <ClInclude Include="Mocks\MockUtils.h">
       <Filter>Mocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Mocks\MockComponents.h">
+      <Filter>Mocks</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixtures\FixtureSuite.h">
+      <Filter>Fixtures</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixtures\SystemFixture.h">
+      <Filter>Fixtures</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixtures\UIFixture.h">
+      <Filter>Fixtures</Filter>
+    </ClInclude>
+    <ClInclude Include="Fixtures\UIComponent\UIComponentFixture.h">
+      <Filter>Fixtures\UIComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,11 +117,14 @@
     <Filter Include="UserInterface">
       <UniqueIdentifier>{5ad40a19-cd2d-47fa-a2e9-9262e19f4a13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fixture">
-      <UniqueIdentifier>{a7f4fcab-b052-41ca-86cd-ad21fbe7fad6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{e26b9376-3546-4bbd-b65b-a9e687755dbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fixtures">
+      <UniqueIdentifier>{a3c5f77b-3cc7-486e-955c-dd373170a231}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fixtures\UIComponent">
+      <UniqueIdentifier>{768f1e79-c09e-4a11-8d99-0cd8f5414a77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

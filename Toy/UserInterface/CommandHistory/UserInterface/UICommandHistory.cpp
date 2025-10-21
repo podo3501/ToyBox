@@ -34,8 +34,8 @@ pair<unique_ptr<UIComponent>, UIComponent*> UICommandHistory::DetachComponent(UI
 	return { move(detached), parent };
 }
 
-bool UICommandHistory::SetRelativePosition(UIComponent* component, const XMINT2& relativePos)
-{ return ApplyCommand<SetRelativePositionCommand>(component, relativePos); }
+bool UICommandHistory::ChangeRelativePosition(UIComponent* component, const XMINT2& relativePos)
+{ return ApplyCommand<ChangeRelativePositionCommand>(component, relativePos); }
 
 bool UICommandHistory::SetSize(UIComponent* component, const XMUINT2& size)
 { return ApplyCommand<SetSizeCommand>(component, size); }

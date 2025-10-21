@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Fixture/FixtureSuite.h"
+#include "Fixtures/FixtureSuite.h"
 #include "Mocks/MockInputManager.h"
 #include "Shared/Utils/StlExt.h"
 #include "Shared/Utils/GeometryExt.h"
@@ -49,7 +49,7 @@ namespace UserInterface
 		EXPECT_TRUE(renderTexPtr->BindTextureSourceInfo(nullptr, m_mockRenderer->GetTextureController()));
 
 		UIComponent* tex0 = UIEx(switcherPtr).FindComponent("PatchTextureLite1_2");
-		XMINT2 pos = tex0->GetPosition();
+		XMINT2 leftTop = tex0->GetLeftTop();
 
 		switcherPtr->ChangeSize({ 100, 48 }); //크기를 바꾼다. 
 		renderTexPtr->EnableChildMouseEvents(!toolMode); //false로 셋팅하면 마우스가 영역에 들어왔을때 업데이트를 호출하는 코드가 돌지 않는다.
@@ -60,9 +60,9 @@ namespace UserInterface
 		renderTexPtr->ProcessUpdate(m_timer);
 
 		UIComponent* tex1 = UIEx(switcherPtr).FindComponent("PatchTextureLite1_2");
-		XMINT2 pos2 = tex1->GetPosition();
+		XMINT2 leftTop2 = tex1->GetLeftTop();
 
-		EXPECT_FALSE(pos == pos2);
+		EXPECT_FALSE(leftTop == leftTop2);
 	}
 
 	TEST_F(UIModuleConnection, UIModuleAsComponent)

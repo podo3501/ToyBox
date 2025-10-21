@@ -17,7 +17,7 @@ public:
 	unique_ptr<UIComponent> AttachComponent(UIComponent* parent, 
 		unique_ptr<UIComponent> component, const XMINT2& relativePos);
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* detach);
-	bool SetRelativePosition(UIComponent* component, const XMINT2& relativePos);
+	bool ChangeRelativePosition(UIComponent* component, const XMINT2& relativePos);
 	bool SetSize(UIComponent* component, const XMUINT2& size);
 	bool RenameRegion(UIComponent* component, const string& region);
 	bool Rename(UIComponent* component, const string& name);

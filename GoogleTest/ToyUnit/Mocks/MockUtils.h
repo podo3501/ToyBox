@@ -1,6 +1,7 @@
 #pragma once
 #include "Toy/UserInterface/UIComponent/UILayout.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
+#include "Toy/UserInterface/UIComponent/UIComponentEx.h"
 
 struct ComponentDesc
 {
@@ -24,39 +25,47 @@ namespace mock_defaults
 }
 
 template<typename ComponetType>
-static pair<unique_ptr<ComponetType>, ComponetType*> CreateMockComponent(const optionalRef<UILayout>& layout = nullopt)
+pair<unique_ptr<ComponetType>, ComponetType*> CreateMockComponent(const UILayout& layout = mock_defaults::defaultLayout)
 {
-	const auto& currLayout = layout ? layout->get() : mock_defaults::defaultLayout;
-
 	auto comp = make_unique<ComponetType>();
-	comp->SetLayout(currLayout);
+	comp->SetLayout(layout);
 
 	return make_pair(move(comp), comp.get());
 }
 
 template<typename ComponentType>
-ComponentType* CreateOneLevelComponent(UIComponent* root, const optionalRef<ComponentDesc>& compDesc = nullopt)
+ComponentType* CreateOneLevelComponent(UIComponent* root, const ComponentDesc& compDesc = mock_defaults::mockDesc)
 {
-	const auto& currCompDesc = compDesc ? compDesc->get() : mock_defaults::mockDesc;
-
-	auto [comp, compPtr] = CreateMockComponent<ComponentType>(currCompDesc.layout);
-	UIEx(root).AttachComponent(move(comp), currCompDesc.position);
+	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
+	UIEx(root).AttachComponent(move(comp), compDesc.position);
 	return compPtr;
 }
 
 template<typename ComponentType>
 pair<ComponentType*, ComponentType*> CreateTwoLevelComponents(UIComponent* root,
-	const optionalRef<ComponentDesc>& parentDesc = nullopt,
-	const optionalRef<ComponentDesc>& childDesc = nullopt)
+	const ComponentDesc& parentDesc = mock_defaults::parentDesc,
+	const ComponentDesc& childDesc = mock_defaults::childDesc)
 {
-	const auto& currParentDesc = parentDesc ? parentDesc->get() : mock_defaults::parentDesc;
-	const auto& currChildDesc = childDesc ? childDesc->get() : mock_defaults::childDesc;
+	auto [parent, parentPtr] = CreateMockComponent<ComponentType>(parentDesc.layout);
+	auto [child, childPtr] = CreateMockComponent<ComponentType>(childDesc.layout);
 
-	auto [parent, parentPtr] = CreateMockComponent<ComponentType>(currParentDesc.layout);
-	auto [child, childPtr] = CreateMockComponent<ComponentType>(currChildDesc.layout);
-
-	UIEx(parent).AttachComponent(move(child), currChildDesc.position);
-	UIEx(root).AttachComponent(move(parent), currParentDesc.position);
+	UIEx(parent).AttachComponent(move(child), childDesc.position);
+	UIEx(root).AttachComponent(move(parent), parentDesc.position);
 
 	return { parentPtr, childPtr };
+}
+
+template <typename Func>
+auto ExecuteAndUpdate(UIComponent* component, Func&& func) noexcept
+{
+	if constexpr (is_void_v<decltype(func())>) {
+		func();
+		component->UpdatePositionsManually(true);
+	}
+	else
+	{
+		auto result = func();
+		component->UpdatePositionsManually(true);
+		return result;
+	}
 }

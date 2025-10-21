@@ -145,7 +145,7 @@ void EditWindow::RenderCommon()
 
     XMINT2 relativePosition = m_component->GetRelativePosition();   
     if(EditPosition(relativePosition))
-        m_cmdHistory->SetRelativePosition(m_component, relativePosition);
+        m_cmdHistory->ChangeRelativePosition(m_component, relativePosition);
 
     XMUINT2 size{ m_component->GetSize() };
     if (EditSize(size))

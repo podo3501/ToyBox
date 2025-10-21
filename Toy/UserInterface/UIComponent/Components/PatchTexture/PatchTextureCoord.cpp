@@ -25,12 +25,8 @@ bool PatchTextureCoord::operator==(const PatchTextureCoord& rhs) const noexcept
 
 void PatchTextureCoord::Render(ITextureRender* render) const
 {
-	const auto& position = m_component->GetPosition();
-	const auto& size = m_component->GetSize();
-	Rectangle destination(position.x, position.y, size.x, size.y);
-
 	RECT source = RectangleToRect(m_source);
-	render->Render(*m_index, destination, &source);
+	render->Render(*m_index, m_component->GetArea(), &source);
 }
 
 void PatchTextureCoord::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept

@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "Fixture/FixtureSuite.h"
+#include "Fixtures/FixtureSuite.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
@@ -96,23 +96,6 @@ namespace UserInterface
 		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 220, 190 }, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)));
 		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 48, 100 }, Origin::Center }, TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal)));
 		EXPECT_TRUE(VerifyClone(CreateSampleListArea({ { 220, 190 }, Origin::LeftTop })));
-	}
-
-	TEST_F(Integration, GetPosition)
-	{
-		auto tex9 = CreateComponent<PatchTextureStd9>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage9");
-		unique_ptr<UIComponent> panel = make_unique<Panel>();
-		panel->SetLayout({ { 400, 300 }, Origin::Center });
-		UIEx(panel).AttachComponent(move(tex9), { 40, 30 });
-
-		UIEx(m_main).AttachComponent(move(panel), { 400, 300 });
-		m_uiModule->BindTextureResources();
-		m_uiModule->Update(m_timer);
-
-		UIComponent* component = m_uiModule->FindComponent("PatchTextureStd1_4");
-		XMINT2 pos = component->GetPosition();
-		EXPECT_EQ(pos, XMINT2(270, 216));
-		EXPECT_EQ(component->GetArea(), Rectangle(270, 216, 160, 128));
 	}
 
 	static vector<ComponentID> GetComponentIDs(const vector<UIComponent*>& components)

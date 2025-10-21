@@ -22,12 +22,12 @@ public:
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) override;
 
     //ITextureController
-    virtual bool CreateRenderTexture(IComponent* component, const XMUINT2& size, const XMINT2& position, size_t& outIndex, UINT64* outGfxMemOffset) override;
+    virtual bool CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override;
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
     virtual float GetLineSpacing(size_t index) const noexcept override;
     virtual optional<vector<Rectangle>> GetTextureAreaList(size_t index, const UINT32& bgColor) override;
     virtual void ReleaseTexture(size_t idx) noexcept override;
-    virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& position) noexcept override;
+    virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& leftTop) noexcept override;
     virtual bool ModifyRenderTextureSize(size_t index, const XMUINT2& size) override;
     virtual void AddRef(size_t index) noexcept override;
 

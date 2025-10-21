@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Fixture/FixtureSuite.h"
+#include "Fixtures/FixtureSuite.h"
 #include "Helper.h"
 #include "Mocks/MockInputManager.h"
 #include "Shared/Utils/StlExt.h"
