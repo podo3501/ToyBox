@@ -132,7 +132,6 @@
   <ItemGroup>
     <ClInclude Include="Fixtures\FixtureSuite.h" />
     <ClInclude Include="Fixtures\SystemFixture.h" />
-    <ClInclude Include="Fixtures\UIComponent\UIComponentFixture.h" />
     <ClInclude Include="Fixtures\UIFixture.h" />
     <ClInclude Include="Mocks\MockClasses.h" />
     <ClInclude Include="Mocks\MockComponents.h" />
@@ -144,12 +143,14 @@
     <ClInclude Include="Mocks\Stubs\UIComponentStub.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="UserInterface\Helper.h" />
+    <ClInclude Include="Tests\Helper.h" />
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
+    <ClInclude Include="UserInterface\UIComponent\UIComponentSingleT.h" />
+    <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Fixtures\FixtureSuite.cpp" />
     <ClCompile Include="Fixtures\SystemFixture.cpp" />
-    <ClCompile Include="Fixtures\UIComponent\UIComponentFixture.cpp" />
     <ClCompile Include="Fixtures\UIFixture.cpp" />
     <ClCompile Include="Mocks\MockInputManager.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
@@ -162,17 +163,19 @@
     </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="System\Scene.cpp" />
-    <ClCompile Include="UserInterface\BasicComponent.cpp" />
-    <ClCompile Include="UserInterface\ComplexComponent.cpp" />
-    <ClCompile Include="UserInterface\ContainerComponent.cpp" />
-    <ClCompile Include="UserInterface\ComponentEvent.cpp" />
-    <ClCompile Include="UserInterface\Helper.cpp" />
-    <ClCompile Include="UserInterface\Integration.cpp" />
-    <ClCompile Include="UserInterface\TextureSourceBinderTest.cpp" />
-    <ClCompile Include="UserInterface\TextureSwitcherComponent.cpp" />
-    <ClCompile Include="UserInterface\UIComponentT.cpp" />
-    <ClCompile Include="UserInterface\UIModuleConnection.cpp" />
-    <ClCompile Include="UserInterface\UndoRedo.cpp" />
+    <ClCompile Include="Tests\BasicComponent.cpp" />
+    <ClCompile Include="Tests\ComplexComponent.cpp" />
+    <ClCompile Include="Tests\ComponentEvent.cpp" />
+    <ClCompile Include="Tests\ContainerComponent.cpp" />
+    <ClCompile Include="Tests\Helper.cpp" />
+    <ClCompile Include="Tests\Integration.cpp" />
+    <ClCompile Include="Tests\TextureSourceBinderTest.cpp" />
+    <ClCompile Include="Tests\TextureSwitcherComponent.cpp" />
+    <ClCompile Include="Tests\UIModuleConnection.cpp" />
+    <ClCompile Include="Tests\UndoRedo.cpp" />
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\UIComponentSingleT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.vcxproj">

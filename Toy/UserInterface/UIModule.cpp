@@ -36,27 +36,26 @@ bool UIModule::operator==(const UIModule& other) const noexcept
 bool UIModule::SetupMainComponent(const UILayout& layout, const string& name, 
 	IRenderer* renderer, const wstring& srcBinderFilename)
 {
+	m_resBinder = CreateTextureResourceBinder(srcBinderFilename);
+	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
+	m_renderer = renderer;
+
 	unique_ptr<Panel> panel = CreateComponent<Panel>(layout);
 	ReturnIfFalse(UIEx(panel).Rename(name));
 	ReturnIfFalse(UIEx(panel).RenameRegion("UIModuleMainEntry"));
 	panel->SetUIModule(this);
 	m_children.push_back(move(panel));
 
-	m_resBinder = CreateSourceBinder(srcBinderFilename);
-	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
-	m_renderer = renderer;
-
 	return true;
 }
 
 bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename)
 {
-	ReturnIfFalse(Read(filename));
-
-	m_resBinder = CreateSourceBinder(srcBinderFilename);
+	m_resBinder = CreateTextureResourceBinder(srcBinderFilename);
 	ReturnIfFalse(renderer->LoadTextureBinder(m_resBinder.get()));
 	m_renderer = renderer;
 
+	ReturnIfFalse(Read(filename));
 	ReturnIfFalse(BindTextureResources());
 
 	return true;

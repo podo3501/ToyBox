@@ -48,4 +48,4 @@ private:
 	unordered_map<string, TextureSourceInfo> m_bindingTexTable;
 };
 
-unique_ptr<TextureResourceBinder> CreateSourceBinder(const wstring& jsonFilename = L"");
+unique_ptr<TextureResourceBinder> CreateTextureResourceBinder(const wstring& jsonFilename = L"");

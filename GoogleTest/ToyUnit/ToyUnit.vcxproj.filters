@@ -6,44 +6,11 @@
     <ClCompile Include="Mocks\MockRenderer.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\BasicComponent.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\ComplexComponent.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\ContainerComponent.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Helper.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\Integration.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\TextureSourceBinderTest.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\TextureSwitcherComponent.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UndoRedo.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIModuleConnection.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="System\Scene.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\ComponentEvent.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="Mocks\MockInputManager.cpp">
       <Filter>Mocks</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponentT.cpp">
-      <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="Mocks\MockUtils.cpp">
       <Filter>Mocks</Filter>
@@ -57,8 +24,44 @@
     <ClCompile Include="Fixtures\UIFixture.cpp">
       <Filter>Fixtures</Filter>
     </ClCompile>
-    <ClCompile Include="Fixtures\UIComponent\UIComponentFixture.cpp">
-      <Filter>Fixtures\UIComponent</Filter>
+    <ClCompile Include="Tests\BasicComponent.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\ComplexComponent.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\ComponentEvent.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\ContainerComponent.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Helper.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Integration.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\TextureSourceBinderTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\TextureSwitcherComponent.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\UIModuleConnection.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\UndoRedo.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIComponentSingleT.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,9 +72,6 @@
     </ClInclude>
     <ClInclude Include="Mocks\MockRenderer.h">
       <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\Helper.h">
-      <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="Mocks\MockClasses.h">
       <Filter>Mocks</Filter>
@@ -100,8 +100,17 @@
     <ClInclude Include="Fixtures\UIFixture.h">
       <Filter>Fixtures</Filter>
     </ClInclude>
-    <ClInclude Include="Fixtures\UIComponent\UIComponentFixture.h">
-      <Filter>Fixtures\UIComponent</Filter>
+    <ClInclude Include="Tests\Helper.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIComponentSingleT.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIComponentT.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,17 +123,23 @@
     <Filter Include="Mocks\Stubs\Include">
       <UniqueIdentifier>{7a1395a0-7c26-46a8-84cc-28aeb905c270}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface">
-      <UniqueIdentifier>{5ad40a19-cd2d-47fa-a2e9-9262e19f4a13}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{e26b9376-3546-4bbd-b65b-a9e687755dbd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fixtures">
       <UniqueIdentifier>{a3c5f77b-3cc7-486e-955c-dd373170a231}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fixtures\UIComponent">
-      <UniqueIdentifier>{768f1e79-c09e-4a11-8d99-0cd8f5414a77}</UniqueIdentifier>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{dd6bf8c4-e29c-4acb-9ef2-41d2a32d6c3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface">
+      <UniqueIdentifier>{5df43ce2-18fd-4638-a9f7-b520d586ad65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent">
+      <UniqueIdentifier>{a0f47978-4e66-4021-94a1-3ac7ad076f1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\TextureResourceBinder">
+      <UniqueIdentifier>{db5dc585-8032-47a5-befe-7651e490a5cf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

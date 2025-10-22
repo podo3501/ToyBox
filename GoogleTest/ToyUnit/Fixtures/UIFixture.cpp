@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "UIFixture.h"
-#include "UserInterface/Helper.h"
+#include "Tests/Helper.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/Environment.h"
 #include "Toy/Locator/InputLocator.h"

@@ -209,7 +209,7 @@ void TextureResourceBinder::ProcessIO(SerializerIO& serializer)
 
 /////////////////////////////////////////////////////////////////////////
 
-unique_ptr<TextureResourceBinder> CreateSourceBinder(const wstring& jsonFilename)
+unique_ptr<TextureResourceBinder> CreateTextureResourceBinder(const wstring& jsonFilename)
 {
     auto resBinder = make_unique<TextureResourceBinder>();
     if (jsonFilename.empty()) return move(resBinder);

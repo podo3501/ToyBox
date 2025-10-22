@@ -14,7 +14,7 @@ class UIComponentEx
 public:
 	UIComponentEx(UIComponent* component) noexcept;
 
-	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
+	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
 	unique_ptr<UIComponent> AttachComponent(const string& region, const string& name,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;

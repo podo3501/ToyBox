@@ -1,7 +1,5 @@
 #include "pch.h"
-#include "Fixtures/UIComponent/UIComponentFixture.h"
-#include "Mocks/MockComponents.h"
-#include "Mocks/MockUtils.h"
+#include "UIComponentT.h"
 
 namespace UserInterface
 {
@@ -53,7 +51,6 @@ namespace UserInterface
 		);
 	}
 
-
 	TEST_F(UIComponentT, FindComponent)
 	{
 		UIEx(m_parent).RenameRegion("Region1");
@@ -87,20 +84,19 @@ namespace UserInterface
 	TEST_F(UIComponentT, FindRenderComponents)
 	{
 		vector<UIComponent*> compAtParent = UIEx(m_main).FindRenderComponents(m_parent->GetLeftTop());
-		EXPECT_EQ(compAtParent[0], m_main);
+		EXPECT_EQ(compAtParent[0], m_main.get());
 		EXPECT_EQ(compAtParent[1], m_parent);
 
 		vector<UIComponent*> compAtChild = UIEx(m_main).FindRenderComponents(m_child->GetLeftTop());
 		EXPECT_EQ(compAtChild[2], m_child);
 	}
 
-	TEST_F(UIComponentT, LockedSize)
+	TEST_F(UIComponentT, GetChildrenBoundsSize)
 	{
-		XMUINT2 curSize{ m_child->GetSize() }, newSize{128, 128};
-		m_child->SetStateFlag(StateFlag::X_SizeLocked, true);
-		m_child->SetStateFlag(StateFlag::Y_SizeLocked, true);
-		m_child->ChangeSize(newSize);
-
-		EXPECT_EQ(m_child->GetSize(), curSize);
+		XMUINT2 preSize = UIEx(m_parent).GetChildrenBoundsSize();
+		auto [detached, parent] = UIEx(m_parent).DetachComponent(); //detached´Â m_parent, parent´Â m_main
+		detached->UpdatePositionsManually(true);
+		
+		EXPECT_EQ(UIEx(detached).GetChildrenBoundsSize(), preSize);
 	}
 }

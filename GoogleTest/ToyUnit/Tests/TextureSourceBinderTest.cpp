@@ -31,7 +31,7 @@ namespace UserInterface
 
 		TestSourceBinderWriteRead(resBinder);
 
-		auto newResBinder = CreateSourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
+		auto newResBinder = CreateTextureResourceBinder(L"UI/SampleTexture/SampleTextureBinder.json");
 		m_mockRenderer->LoadTextureBinder(newResBinder.get());
 
 		EXPECT_EQ(*resBinder, *newResBinder);

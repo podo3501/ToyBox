@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "FixtureSuite.h"
-#include "UserInterface/Helper.h"
+#include "Tests/Helper.h"
 #include "Shared/Utils/StlExt.h"
 #include "Mocks/MockComponents.h"
 #include "Mocks/MockUtils.h"

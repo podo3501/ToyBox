@@ -33,7 +33,7 @@ void TextureResBinderWindow::SetTexture(PatchTextureStd1* pTex1) noexcept
 
 bool TextureResBinderWindow::Create(const wstring& filename)
 {
-    m_resBinder = CreateSourceBinder(filename);
+    m_resBinder = CreateTextureResourceBinder(filename);
     ReturnIfFalse(m_resBinder);
     m_cmdHistory = make_unique<TexResCommandHistory>(m_resBinder.get());
 
