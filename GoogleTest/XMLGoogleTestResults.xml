@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="16" failures="0" disabled="0" errors="0" time="2.037" timestamp="2025-10-23T00:21:27.461" name="AllTests">
-  <testsuite name="CPP" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-10-23T00:21:27.461">
-    <testcase name="CRTP" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:27.461" classname="CPP" />
-    <testcase name="Move" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:27.461" classname="CPP" />
-    <testcase name="NestedForLoops" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:27.461" classname="CPP" />
-    <testcase name="RefCounted" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:27.461" classname="CPP" />
+<testsuites tests="16" failures="0" disabled="0" errors="0" time="1.954" timestamp="2025-10-24T00:45:07.231" name="AllTests">
+  <testsuite name="CPP" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-10-24T00:45:07.231">
+    <testcase name="CRTP" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:07.231" classname="CPP" />
+    <testcase name="Move" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:07.231" classname="CPP" />
+    <testcase name="NestedForLoops" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:07.231" classname="CPP" />
+    <testcase name="RefCounted" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:07.231" classname="CPP" />
   </testsuite>
-  <testsuite name="Pattern" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-10-23T00:21:27.461">
-    <testcase name="Composite" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:27.461" classname="Pattern" />
-    <testcase name="Locator" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:27.461" classname="Pattern" />
+  <testsuite name="Pattern" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-10-24T00:45:07.231">
+    <testcase name="Composite" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:07.231" classname="Pattern" />
+    <testcase name="Locator" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:07.231" classname="Pattern" />
   </testsuite>
-  <testsuite name="Application" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="1.532" timestamp="2025-10-23T00:21:27.461">
-    <testcase name="MultipleAppExcute" status="run" result="completed" time="1.531" timestamp="2025-10-23T00:21:27.461" classname="Application" />
+  <testsuite name="Application" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="1.477" timestamp="2025-10-24T00:45:07.231">
+    <testcase name="MultipleAppExcute" status="run" result="completed" time="1.477" timestamp="2025-10-24T00:45:07.231" classname="Application" />
   </testsuite>
-  <testsuite name="TracyBenchmark" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.334" timestamp="2025-10-23T00:21:28.993">
-    <testcase name="MakeListAreaData" status="run" result="completed" time="0.334" timestamp="2025-10-23T00:21:28.993" classname="TracyBenchmark" />
+  <testsuite name="TracyBenchmark" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.305" timestamp="2025-10-24T00:45:08.709">
+    <testcase name="MakeListAreaData" status="run" result="completed" time="0.305" timestamp="2025-10-24T00:45:08.709" classname="TracyBenchmark" />
   </testsuite>
-  <testsuite name="DirectXTK12" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.168" timestamp="2025-10-23T00:21:29.328">
-    <testcase name="Mouse" status="run" result="completed" time="0.003" timestamp="2025-10-23T00:21:29.328" classname="DirectXTK12" />
-    <testcase name="Sound" status="run" result="completed" time="0.165" timestamp="2025-10-23T00:21:29.331" classname="DirectXTK12" />
+  <testsuite name="DirectXTK12" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.169" timestamp="2025-10-24T00:45:09.014">
+    <testcase name="Mouse" status="run" result="completed" time="0.002" timestamp="2025-10-24T00:45:09.014" classname="DirectXTK12" />
+    <testcase name="Sound" status="run" result="completed" time="0.166" timestamp="2025-10-24T00:45:09.016" classname="DirectXTK12" />
   </testsuite>
-  <testsuite name="SDL3" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-10-23T00:21:29.496">
-    <testcase name="Initialize" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:29.496" classname="SDL3" />
+  <testsuite name="SDL3" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-10-24T00:45:09.183">
+    <testcase name="Initialize" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:09.183" classname="SDL3" />
   </testsuite>
-  <testsuite name="Client" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-10-23T00:21:29.496">
-    <testcase name="JsonParser" status="run" result="completed" time="0.001" timestamp="2025-10-23T00:21:29.496" classname="Client" />
-    <testcase name="TextAreaParser" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:29.498" classname="Client" />
+  <testsuite name="Client" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-10-24T00:45:09.183">
+    <testcase name="JsonParser" status="run" result="completed" time="0.001" timestamp="2025-10-24T00:45:09.183" classname="Client" />
+    <testcase name="TextAreaParser" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:09.185" classname="Client" />
   </testsuite>
-  <testsuite name="Core" tests="3" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-10-23T00:21:29.498">
-    <testcase name="FindRectangles" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:29.498" classname="Core" />
-    <testcase name="MergeRectangles" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:29.498" classname="Core" />
-    <testcase name="CycleIterator" status="run" result="completed" time="0" timestamp="2025-10-23T00:21:29.498" classname="Core" />
+  <testsuite name="Core" tests="3" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-10-24T00:45:09.185">
+    <testcase name="FindRectangles" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:09.185" classname="Core" />
+    <testcase name="MergeRectangles" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:09.185" classname="Core" />
+    <testcase name="CycleIterator" status="run" result="completed" time="0" timestamp="2025-10-24T00:45:09.185" classname="Core" />
   </testsuite>
 </testsuites>

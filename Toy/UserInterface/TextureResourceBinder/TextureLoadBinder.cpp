@@ -1,15 +1,15 @@
 #include "pch.h"
 #include "TextureLoadBinder.h"
+#include "IRenderer.h"
 
 bool TextureLoadBinder::LoadResources(ITextureLoad* load)
 {
-	for (auto& texture : m_textures)
-	{
-		auto curIndex = texture.GetIndex();
-		if (curIndex) continue; // 이 클래스는 자주 로딩 할 수 있기 때문에 한번 로딩 했으면 두번 하지 않는다.
+	if (m_pending == TextureSourceInfo{})
+		return false;
 
-		ReturnIfFalse(texture.LoadResource(load));
-	}
+	ReturnIfFalse(m_pending.LoadResource(load));
+	m_textures.emplace_back(m_pending);
+	m_pending = TextureSourceInfo{};
 
 	return true;
 }
@@ -21,12 +21,12 @@ auto TextureLoadBinder::FindTextureByFilename(const wstring& filename) const noe
 		});
 }
 
-void TextureLoadBinder::AddTexture(const wstring& filename) noexcept
+bool TextureLoadBinder::LoadTexture(IRenderer* renderer, const wstring& filename)
 {
-	auto it = FindTextureByFilename(filename);
-	if (it != m_textures.end()) return;
+	if (FindTextureByFilename(filename) != m_textures.end()) return true;
 
-	m_textures.emplace_back(TextureSourceInfo{ filename });
+	m_pending = TextureSourceInfo{ filename };
+	return renderer->LoadTextureBinder(this);
 }
 
 optionalRef<TextureSourceInfo> TextureLoadBinder::GetSourceInfo(const wstring& filename) const noexcept

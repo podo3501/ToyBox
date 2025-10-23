@@ -21,6 +21,11 @@ void UIFixture::SetUp()
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
 	InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 	m_mockRenderer = make_unique<MockRenderer>();
+	m_mockRenderer->RegisterMockTextureInfo(L"../Resources/UI/Font/CourierNewBoldS18.spritefont", {});
+	m_mockRenderer->RegisterMockTextureInfo(L"../Resources/UI/Font/MaleunGothicS16.spritefont", {});
+	m_mockRenderer->RegisterMockTextureInfo(L"../Resources/UI/SampleTexture/Sample_0.png", { 512, 512 });
+	m_mockRenderer->RegisterMockTextureInfo(L"../Resources/UI/SampleTexture/Option.png", { 512, 512 });
+
 	m_mockInput = make_unique<MockInputManager>();
 	InputLocator::Provide(m_mockInput.get());
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
@@ -28,7 +33,9 @@ void UIFixture::SetUp()
 }
 
 void UIFixture::TearDown()
-{}
+{
+	InitializeEnvironment(L"", {});
+}
 
 TextureResourceBinder* UIFixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
 

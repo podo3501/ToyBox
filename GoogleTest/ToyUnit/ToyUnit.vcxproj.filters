@@ -42,9 +42,6 @@
     <ClCompile Include="Tests\Integration.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\TextureSourceBinderTest.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
     <ClCompile Include="Tests\TextureSwitcherComponent.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -61,6 +58,9 @@
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp">
       <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,6 +110,9 @@
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h">
       <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClInclude>
   </ItemGroup>

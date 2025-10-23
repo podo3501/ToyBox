@@ -44,7 +44,7 @@ bool UIComponentT::Has(ChangeExpect v, ChangeExpect f) noexcept
 {
     return (static_cast<int>(v) & static_cast<int>(f)) != 0;
 }
-
+//이전의 상태와 action 한 이후에 어떤게 바뀌었는지 확인. ChangeExpect enum 값으로 확인
 void UIComponentT::VerifyTransformChange(function<void()> action, ChangeExpect expect) noexcept
 {
     const XMINT2 preParentLeftTop = m_parent->GetLeftTop();

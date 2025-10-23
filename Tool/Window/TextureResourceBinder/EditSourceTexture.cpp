@@ -35,8 +35,7 @@ void EditSourceTexture::ApplyTexture(PatchTextureStd1* tex) const noexcept
 
 bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
 {
-    m_textureLoader->AddTexture(filename);
-    m_renderer->LoadTextureBinder(m_textureLoader.get());
+    m_textureLoader->LoadTexture(m_renderer, filename);
     auto sourceInfo = m_textureLoader->GetSourceInfo(filename);
     ReturnIfFalse(sourceInfo);
 

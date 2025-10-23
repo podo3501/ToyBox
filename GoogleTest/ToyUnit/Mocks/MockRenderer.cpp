@@ -2,46 +2,60 @@
 #include "MockRenderer.h"
 #include "ITextureBinder.h"
 
-struct MockTextureInfo
+bool MockTextureTable::AddTextureInfo(const wstring& filename, const XMUINT2& size) noexcept
 {
-	size_t index;
-	XMUINT2 size;
-};
-unordered_map<wstring, MockTextureInfo> g_textureInfos;
+	if (m_textureInfos.find(filename) != m_textureInfos.end())
+		return false;
 
-static void InitializeTextureInfos()
-{
-	g_textureInfos.clear();
-	g_textureInfos.insert({ L"../Resources/UI/Font/CourierNewBoldS18.spritefont", { 0, {} } });
-	g_textureInfos.insert({ L"../Resources/UI/Font/MaleunGothicS16.spritefont", { 1, {} } });
-	g_textureInfos.insert({ L"../Resources/UI/SampleTexture/Sample_0.png", { 2, { 512, 512 } } });
-	g_textureInfos.insert({ L"../Resources/UI/SampleTexture/Option.png", { 3, { 512, 512 } } });
+	MockTextureInfo info{ m_textureInfos.size(), size };
+	m_textureInfos.insert({ filename, info });
+	return true;
 }
+
+optionalRef<MockTextureInfo> MockTextureTable::GetTextureInfo(const wstring& filename) const noexcept
+{
+	auto it = m_textureInfos.find(filename);
+	if (it == m_textureInfos.end()) return nullopt;
+
+	return cref(it->second);
+}
+
+size_t MockTextureTable::GetSize() const noexcept
+{
+	return m_textureInfos.size();
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+MockTextureLoad::MockTextureLoad(MockTextureTable* texTable) :
+	m_texTable{ texTable }
+{}
 
 bool MockTextureLoad::LoadTexture(const wstring& filename, size_t& outIndex, XMUINT2* outSize, UINT64* outGfxMemOffset)
 {
-	auto it = g_textureInfos.find(filename);
-	if (it == g_textureInfos.end())
-		return false;
-
-	outIndex = it->second.index;
-	if (outSize)
-		*outSize = it->second.size;
+	auto texInfo = m_texTable->GetTextureInfo(filename);
+	ReturnIfFalse(texInfo);
+	
+	outIndex = texInfo->get().index;
+	if (outSize) *outSize = texInfo->get().size;
 
 	return true;
 }
 
 bool MockTextureLoad::LoadFont(const wstring& filename, size_t& outIndex)
 {
-	auto it = g_textureInfos.find(filename);
-	if (it == g_textureInfos.end())
-		return false;
+	auto texInfo = m_texTable->GetTextureInfo(filename);
+	ReturnIfFalse(texInfo);
 
-	outIndex = it->second.index;
+	outIndex = texInfo->get().index;
 	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
+
+MockTextureController::MockTextureController(MockTextureTable* texTable) :
+	m_texTable{ texTable }
+{}
 
 Rectangle MockTextureController::MeasureText(size_t index, const wstring& text, const Vector2& position)
 {
@@ -61,11 +75,10 @@ Rectangle MockTextureController::MeasureText(size_t index, const wstring& text, 
 //렌더 텍스쳐를 만들었다고 가정하고 가짜 렌더텍스쳐 인덱스를 리턴해준다.
 bool MockTextureController::CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
 {
-	size_t index = g_textureInfos.size();
+	size_t index = m_texTable->GetSize();
 	wstring key = L"RenderTexture_" + to_wstring(index);
 
-	auto [it, inserted] = g_textureInfos.insert({ key, { index, {} } });
-	ReturnIfFalse(inserted);
+	ReturnIfFalse(m_texTable->AddTextureInfo(key, {} ));
 
 	outIndex = index;
 	return true;
@@ -75,10 +88,14 @@ bool MockTextureController::CreateRenderTexture(IComponent* component, const Rec
 
 MockRenderer::~MockRenderer() {}
 MockRenderer::MockRenderer() :
-	m_mockTextureLoad(make_unique<MockTextureLoad>()),
-	m_mockTextureController(make_unique<MockTextureController>())
+	m_mockTextureTable(make_unique<MockTextureTable>()),
+	m_mockTextureLoad(make_unique<MockTextureLoad>(m_mockTextureTable.get())),
+	m_mockTextureController(make_unique<MockTextureController>(m_mockTextureTable.get()))
+{}
+
+bool MockRenderer::RegisterMockTextureInfo(const wstring& filename, const XMUINT2& size) noexcept
 {
-	InitializeTextureInfos();
+	return m_mockTextureTable->AddTextureInfo(filename, size);
 }
 
 bool MockRenderer::LoadTextureBinder(ITextureBinder* textureBinder)
