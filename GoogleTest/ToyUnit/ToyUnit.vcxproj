@@ -146,6 +146,7 @@
     <ClInclude Include="Tests\Helper.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd1T.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentSingleT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
   </ItemGroup>
@@ -175,6 +176,7 @@
     <ClCompile Include="Tests\UndoRedo.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd1T.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentSingleT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
   </ItemGroup>

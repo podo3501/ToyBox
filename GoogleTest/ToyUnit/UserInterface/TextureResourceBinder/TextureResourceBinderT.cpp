@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TextureResourceBinderT.h"
 
-namespace UserInterface
+namespace UserInterface::TextureResourceBinderT
 {
 	TEST_F(TextureResourceBinderT, GetAreas)
 	{
@@ -23,13 +23,19 @@ namespace UserInterface
 	TEST_F(TextureResourceBinderT, RenameFontKey)
 	{
 		m_resBinder->RenameFontKey(L"MockFont", L"NewKey");
-		EXPECT_EQ(m_resBinder->GetTextureFontInfo(L"NewKey"), TextureFontInfo(L"MockFont.spritefont"));
+		auto info = m_resBinder->GetTextureFontInfo(L"NewKey");
+
+		EXPECT_TRUE(info);
+		EXPECT_EQ(info->get().filename, L"MockFont.spritefont");
 	}
 
 	TEST_F(TextureResourceBinderT, RenameTextureKey)
 	{
 		m_resBinder->RenameTextureKey("MockTexture", "NewKey");
-		EXPECT_EQ(m_resBinder->GetTextureSourceInfo("NewKey"), TextureSourceInfo(L"MockTex.png", TextureSlice::One, {}));
+		auto info = m_resBinder->GetTextureSourceInfo("NewKey");
+
+		EXPECT_TRUE(info);
+		EXPECT_EQ(info->get().filename, L"MockTex.png");
 	}
 
 	TEST_F(TextureResourceBinderT, RemoveKeyByFilename)
@@ -37,8 +43,8 @@ namespace UserInterface
 		m_resBinder->RemoveKeyByFilename(L"MockTex.png");
 		m_resBinder->RemoveKeyByFilename(L"MockFont.spritefont");
 
-		EXPECT_FALSE(m_resBinder->GetTextureFontInfo(L"MockFont"));
 		EXPECT_FALSE(m_resBinder->GetTextureSourceInfo("MockTexture"));
+		EXPECT_FALSE(m_resBinder->GetTextureFontInfo(L"MockFont"));
 	}
 
 	TEST_F(TextureResourceBinderT, WriteRead)

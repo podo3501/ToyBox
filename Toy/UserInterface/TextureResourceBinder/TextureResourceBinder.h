@@ -4,6 +4,7 @@
 #include "TextureFontInfo.h"
 #include "TextureBinderHelper.h"
 
+struct IRenderer;
 enum class TextureSlice : int;
 struct ITextureLoad;
 class SerializerIO;
@@ -30,6 +31,7 @@ public:
 	bool RenameTextureKey(const string& preKey, const string& newKey) noexcept;
 	
 	optionalRef<TextureSourceInfo> GetTextureSourceInfo(const string& key) const noexcept;
+	vector<const TextureSourceInfo*> GetTextureSourceInfos() const noexcept;
 	optionalRef<TextureFontInfo> GetTextureFontInfo(const wstring& key) const noexcept;
 
 	string GetBindingKey(const TextureSourceInfo& sourceAreas) const noexcept;
@@ -47,5 +49,5 @@ private:
 	unordered_map<wstring, TextureFontInfo> m_bindingFontTable;
 	unordered_map<string, TextureSourceInfo> m_bindingTexTable;
 };
-
-unique_ptr<TextureResourceBinder> CreateTextureResourceBinder(const wstring& jsonFilename = L"");
+//renderer가 nullptr 이면 텍스쳐를 메모리에 올리지 않는다.
+unique_ptr<TextureResourceBinder> CreateTextureResourceBinder(const wstring& jsonFilename = L"", IRenderer* renderer = nullptr);

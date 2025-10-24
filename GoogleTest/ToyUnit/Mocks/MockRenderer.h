@@ -66,6 +66,7 @@ public:
 	virtual bool LoadTextureBinder(ITextureBinder* textureBinder) override;
 	virtual ITextureController* GetTextureController() const noexcept override;
 	bool RegisterMockTextureInfo(const wstring& filename, const XMUINT2& size) noexcept;
+	bool RegisterMockTextureInfos(const vector<pair<wstring, XMUINT2>>& texInfos) noexcept;
 
 private:
 	unique_ptr<MockTextureTable> m_mockTextureTable; //가짜 텍스쳐 정보를 담고 있는 클래스

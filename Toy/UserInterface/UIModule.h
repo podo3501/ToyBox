@@ -54,5 +54,5 @@ private:
 };
 
 unique_ptr<UIModule> CreateUIModule(const UILayout& layout, const string& mainUIName,
-	IRenderer* renderer, const wstring& srcBinderFilename);
-unique_ptr<UIModule> CreateUIModule(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename);
+	IRenderer* renderer, const wstring& srcBinderFilename = L"");
+unique_ptr<UIModule> CreateUIModule(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename = L"");

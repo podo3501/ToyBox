@@ -98,6 +98,14 @@ bool MockRenderer::RegisterMockTextureInfo(const wstring& filename, const XMUINT
 	return m_mockTextureTable->AddTextureInfo(filename, size);
 }
 
+bool MockRenderer::RegisterMockTextureInfos(const vector<pair<wstring, XMUINT2>>& texInfos) noexcept
+{
+	for (const auto& [filename, size] : texInfos)
+		ReturnIfFalse(RegisterMockTextureInfo(filename, size));
+
+	return true;
+}
+
 bool MockRenderer::LoadTextureBinder(ITextureBinder* textureBinder)
 {
 	return textureBinder->LoadResources(m_mockTextureLoad.get());

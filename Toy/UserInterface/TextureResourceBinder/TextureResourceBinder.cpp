@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TextureResourceBinder.h"
+#include "IRenderer.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "../UIComponent/UIUtility.h"
 
@@ -182,6 +183,15 @@ optionalRef<TextureSourceInfo> TextureResourceBinder::GetTextureSourceInfo(const
     return cref(it->second);
 }
 
+vector<const TextureSourceInfo*> TextureResourceBinder::GetTextureSourceInfos() const noexcept
+{
+    vector<const TextureSourceInfo*> infos;
+    infos.reserve(m_bindingTexTable.size());
+    for (const auto& [key, value] : m_bindingTexTable)
+        infos.push_back(&value);
+    return infos;
+}
+
 optionalRef<TextureFontInfo> TextureResourceBinder::GetTextureFontInfo(const wstring& key) const noexcept
 {
     auto it = m_bindingFontTable.find(key);
@@ -209,10 +219,16 @@ void TextureResourceBinder::ProcessIO(SerializerIO& serializer)
 
 /////////////////////////////////////////////////////////////////////////
 
-unique_ptr<TextureResourceBinder> CreateTextureResourceBinder(const wstring& jsonFilename)
+unique_ptr<TextureResourceBinder> CreateTextureResourceBinder(const wstring& jsonFilename, IRenderer* renderer)
 {
     auto resBinder = make_unique<TextureResourceBinder>();
-    if (jsonFilename.empty()) return move(resBinder);
+    if (jsonFilename.empty()) return resBinder;
 
-    return resBinder->Load(jsonFilename) ? move(resBinder) : nullptr;
+    if (!resBinder->Load(jsonFilename)) 
+        return nullptr;
+
+    if (renderer && !renderer->LoadTextureBinder(resBinder.get())) 
+        return nullptr;
+
+    return resBinder;
 }

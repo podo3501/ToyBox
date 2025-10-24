@@ -192,9 +192,12 @@
 --CreateAppLoop 리팩토링
 --App용 테스트 씬 만들기
 --점진적으로 IInput으로 바꿀 예정
+--TextureResourceBinder를 DI로 바꾸기(DI로 바꾸는 목적이 빈 클래스 만드는건데 기본인자를 L""을 넣어서 빈 클래스 생성하게끔 수정)
 
 @environment 이거 locator로 바꿔야 하지 않을까?
-@TextureResourceBinder를 DI로 바꾸기
+@TextureResourceBinder가 로딩할때 원소 갯수만큼 돌면서 텍스쳐를 로딩하는데 엔진에서 중복로딩하면 인덱스 넘겨주기
+    때문에 괜찮았는데, 이렇게 많이 로딩 되면 안된다. 텍스쳐를 저장하는 공간을 두고 로딩할때 이 텍스쳐만 로딩하게끔 수정
+    해야겠다. 마지막 원소가 사라지면 텍스트도 사라지고 이런식이 되어야 할 것같다. 
 @wstring filename = L"Test/Data/RWSourceBinderTest.json"; 이것처럼 tdd에서 세이브 되는 데이터는 한곳으로 모으자.
 @알아먹기 쉽도록 테스트 코드 재작성
     테스트 코드를 딱 봤을때 코드를 분석하고 있으면 안된다. 그만큼 심플하고 간단하게. 20줄이 안넘도록
@@ -242,3 +245,40 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 getchild 해서 한다면 재귀호출함수에 getchild를 사용한다.
 component를 떼서 붙이거나 하면 세이브나 이런것도 다 바꿔야 하기 때문에 귀찮다.
 조금 느려질텐데 거의 상관 없다니 가상함수 테이블 사용하는 방식으로 해 보자.
+
+////////////////////////////////////////////////////////
+
+bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
+{
+    m_textureLoader->LoadTexture(m_renderer, filename);
+    auto sourceInfo = m_textureLoader->GetSourceInfo(filename);
+    ReturnIfFalse(sourceInfo);
+
+    unique_ptr<PatchTextureStd1> texture = make_unique<PatchTextureStd1>();
+    texture->SetSourceInfo(*sourceInfo, m_renderer->GetTextureController());
+    AddTexture(move(texture));
+
+    return true;
+}
+
+bool EditSourceTexture::SetCommandHistory(TexResCommandHistory* cmHistory) noexcept
+{
+    m_cmdHistory = cmHistory;
+    m_imageSelector->SetCommandHistory(m_cmdHistory);
+    
+    auto binder = m_cmdHistory->GetReceiver();
+    const auto& texFiles = binder->GetTextureFiles();
+    if (texFiles.empty()) return true;
+
+    for (auto& texFile : texFiles)
+        ReturnIfFalse(LoadTextureFromFile(texFile));
+    
+    SelectDefaultTextureFile();
+    return true;
+}
+
+미리 로드했다면 SetCommandHistory에서 LoadTextureFromFile 이걸 할 필요가 없으니까 이걸 안하는
+버전으로 만들고 미리 로드하는 식으로 수정한다음 TextureResourceBinder 만들때 Renderer를 넘겨서
+로딩 하는 걸로 만들고 이게 완성되면 DI로 변경한다.
+DI로 변경하면 테스트쪽을 수정하고, 데이터를 셋팅할 수 있게 되었으니까 UIComponent를 하나씩 차례
+대로 새로운 TDD 형식으로 수정한다. 
