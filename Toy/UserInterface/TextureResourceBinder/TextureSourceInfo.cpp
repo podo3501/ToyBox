@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TextureSourceInfo.h"
 #include "IRenderer.h"
-#include "Shared/Framework/Environment.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "../UIComponent/UIType.h"
 

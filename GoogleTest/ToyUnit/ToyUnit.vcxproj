@@ -144,6 +144,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Tests\Helper.h" />
+    <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd1T.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Tests\TextureSwitcherComponent.cpp" />
     <ClCompile Include="Tests\UIModuleConnection.cpp" />
     <ClCompile Include="Tests\UndoRedo.cpp" />
+    <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd1T.cpp" />

@@ -7,7 +7,6 @@
 #include "Components/Panel.h"
 #include "../UINameGenerator/UINameGenerator.h"
 #include "../UIModule.h"
-#include "Shared/Framework/Environment.h"
 
 UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 	m_component{ component },

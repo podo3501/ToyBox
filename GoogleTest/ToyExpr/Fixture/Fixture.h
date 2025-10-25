@@ -2,6 +2,7 @@
 #include "Shared/System/StepTimer.h"
 
 class Window;
+class Environment;
 class UIComponent;
 class UIModule;
 class TextureResourceBinder;
@@ -20,6 +21,7 @@ protected:
 	TextureResourceBinder* GetResBinder() const noexcept;
 
 	unique_ptr<Window> m_window;
+	unique_ptr<Environment> m_environment;
 	unique_ptr<IRenderer> m_renderer;
 	DX::StepTimer m_timer;
 	unique_ptr<UIModule> m_uiModule;

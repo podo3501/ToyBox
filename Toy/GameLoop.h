@@ -8,7 +8,8 @@ class GameLoop final : public AppLoop
 {
 public:
 	GameLoop() = delete;
-	GameLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer);
+	GameLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer,
+		const wstring& resourcePath, const Vector2& windowSize);
 	virtual ~GameLoop();
 
 protected:

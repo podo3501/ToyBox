@@ -41,8 +41,10 @@ bool PatchTextureStd1::operator==(const UIComponent& rhs) const noexcept
 	return result;
 }
 
-void PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
+bool PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
 {
+	if (!sourceInfo.GetIndex()) return false;
+
 	m_filename = sourceInfo.filename;
 	m_coord.SetIndexedSource(*sourceInfo.GetIndex(), { sourceInfo.GetSource(m_sourceIndex) });
 	if (auto gfxOffset = sourceInfo.GetGfxOffset(); gfxOffset)
@@ -50,7 +52,9 @@ void PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextu
 	m_texController = texController;
 
 	if (GetSize() == XMUINT2{}) //사이즈가 없다면 source 사이즈로 초기화 한다.
-		FitToTextureSource();
+		ReturnIfFalse(FitToTextureSource());
+
+	return true;
 }
 
 bool PatchTextureStd1::Setup(const UILayout& layout, const string& bindKey, size_t sourceIndex) noexcept
@@ -70,16 +74,14 @@ bool PatchTextureStd1::ImplementBindSourceInfo(TextureResourceBinder* resBinder,
 	ReturnIfFalse(sourceInfoRef);
 
 	const auto& srcInfo = sourceInfoRef->get();
-	SetSourceInfo(srcInfo, nullptr);
-
-	return true;
+	return SetSourceInfo(srcInfo, nullptr);
 }
 
-void PatchTextureStd1::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
+bool PatchTextureStd1::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
 {
 	m_bindKey = key;
 	m_sourceIndex = sourceIndex;
-	SetSourceInfo(sourceInfo, nullptr);
+	return SetSourceInfo(sourceInfo, nullptr);
 }
 
 static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)

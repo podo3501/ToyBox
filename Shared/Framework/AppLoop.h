@@ -3,6 +3,7 @@
 
 class Window;
 class MouseTracker;
+class Environment;
 struct IRenderer;
 struct IImguiItem;
 struct IInputManager;
@@ -13,10 +14,10 @@ class AppLoop
 {
 public:
     AppLoop() = delete;
-    AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer);
+    AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer, const wstring& resPath, const Vector2& resolution);
     virtual ~AppLoop();
 
-    bool Initialize(const wstring& resPath, const Vector2& resolution);
+    bool Initialize();
     int Run();
 
 protected:
@@ -39,8 +40,8 @@ private:
     
     unique_ptr<Window> m_window;
     unique_ptr<IRenderer> m_renderer;
+    unique_ptr<Environment> m_environment;
     unique_ptr<IInputManager> m_inputManager;
-    wstring m_resourcePath;
     DX::StepTimer m_timer;
 };
 
@@ -48,8 +49,8 @@ template<typename LoopType>
 unique_ptr<AppLoop> CreateAppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer,
     const Vector2& windowSize, const wstring& resourcePath)
 {
-    auto loop = make_unique<LoopType>(move(window), move(renderer));
-    if (!loop->Initialize(resourcePath, windowSize))
+    auto loop = make_unique<LoopType>(move(window), move(renderer), resourcePath, windowSize);
+    if (!loop->Initialize())
         return nullptr;
 
     return loop;

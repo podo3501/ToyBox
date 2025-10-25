@@ -2,12 +2,12 @@
 #include "MockRenderer.h"
 #include "ITextureBinder.h"
 
-bool MockTextureTable::AddTextureInfo(const wstring& filename, const XMUINT2& size) noexcept
+bool MockTextureTable::AddTextureInfo(const wstring& filename, size_t index, const XMUINT2& size) noexcept
 {
 	if (m_textureInfos.find(filename) != m_textureInfos.end())
 		return false;
 
-	MockTextureInfo info{ m_textureInfos.size(), size };
+	MockTextureInfo info{ index, size };
 	m_textureInfos.insert({ filename, info });
 	return true;
 }
@@ -78,7 +78,7 @@ bool MockTextureController::CreateRenderTexture(IComponent* component, const Rec
 	size_t index = m_texTable->GetSize();
 	wstring key = L"RenderTexture_" + to_wstring(index);
 
-	ReturnIfFalse(m_texTable->AddTextureInfo(key, {} ));
+	ReturnIfFalse(m_texTable->AddTextureInfo(key, index, {} ));
 
 	outIndex = index;
 	return true;
@@ -93,15 +93,15 @@ MockRenderer::MockRenderer() :
 	m_mockTextureController(make_unique<MockTextureController>(m_mockTextureTable.get()))
 {}
 
-bool MockRenderer::RegisterMockTextureInfo(const wstring& filename, const XMUINT2& size) noexcept
+bool MockRenderer::RegisterMockTextureInfo(const wstring& filename, size_t index, const XMUINT2& size) noexcept
 {
-	return m_mockTextureTable->AddTextureInfo(filename, size);
+	return m_mockTextureTable->AddTextureInfo(filename, index, size);
 }
 
-bool MockRenderer::RegisterMockTextureInfos(const vector<pair<wstring, XMUINT2>>& texInfos) noexcept
+bool MockRenderer::RegisterMockTextureInfos(const vector<tuple<wstring, size_t, XMUINT2>>& texInfos) noexcept
 {
-	for (const auto& [filename, size] : texInfos)
-		ReturnIfFalse(RegisterMockTextureInfo(filename, size));
+	for (const auto& [filename, index, size] : texInfos)
+		ReturnIfFalse(RegisterMockTextureInfo(filename, index, size));
 
 	return true;
 }

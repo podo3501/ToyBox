@@ -12,7 +12,7 @@ class MockTextureTable
 public:
 	~MockTextureTable() {};
 	MockTextureTable() {};
-	bool AddTextureInfo(const wstring& filename, const XMUINT2& size) noexcept;
+	bool AddTextureInfo(const wstring& filename, size_t index, const XMUINT2& size) noexcept;
 	optionalRef<MockTextureInfo> GetTextureInfo(const wstring& filename) const noexcept;
 	size_t GetSize() const noexcept;
 
@@ -65,8 +65,8 @@ public:
 	MOCK_METHOD(void, AddRenderComponent, (IComponent* component), (override));
 	virtual bool LoadTextureBinder(ITextureBinder* textureBinder) override;
 	virtual ITextureController* GetTextureController() const noexcept override;
-	bool RegisterMockTextureInfo(const wstring& filename, const XMUINT2& size) noexcept;
-	bool RegisterMockTextureInfos(const vector<pair<wstring, XMUINT2>>& texInfos) noexcept;
+	bool RegisterMockTextureInfo(const wstring& filename, size_t index, const XMUINT2& size) noexcept;
+	bool RegisterMockTextureInfos(const vector<tuple<wstring, size_t, XMUINT2>>& texInfos) noexcept;
 
 private:
 	unique_ptr<MockTextureTable> m_mockTextureTable; //가짜 텍스쳐 정보를 담고 있는 클래스

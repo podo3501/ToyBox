@@ -134,3 +134,21 @@ TargetType ComponentCast(UIComponent* component)
 
 	return nullptr;
 }
+
+//파생 vs 부모, 부모 vs 파생, 파생 vs 파생 비교 할 수 있게끔 헬퍼 함수.
+template<typename L, typename R>
+bool CompareDerived(const unique_ptr<L>& lhs, const unique_ptr<R>& rhs)
+{
+	static_assert(std::is_base_of_v<UIComponent, L>, "CompareDerived: L은 UIComponent 파생이어야 함");
+	static_assert(std::is_base_of_v<UIComponent, R>, "CompareDerived: R은 UIComponent 파생이어야 함");
+
+	if (lhs->GetTypeID() != rhs->GetTypeID()) return false;
+	if (!lhs && !rhs) return true;
+	if (!lhs || !rhs) return false;
+
+	//부모인 UIComponent&로 업캐스팅 후 비교
+	bool result = static_cast<const UIComponent&>(*lhs) ==
+		static_cast<const UIComponent&>(*rhs);
+	Assert(result);
+	return result;
+}

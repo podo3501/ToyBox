@@ -6,6 +6,7 @@
 #include "Mocks/MockRenderer.h"
 #include "Shared/System/StepTimer.h"
 
+class Environment;
 class UIModule;
 class UIComponent;
 class MockInputManager;
@@ -39,6 +40,7 @@ protected:
 	void SimulateClick(const XMINT2& startPos) noexcept;
 	void SimulateClick(const XMINT2& startPos, const XMINT2& endPos) noexcept;
 
+	unique_ptr<Environment> m_environment;
 	unique_ptr<MockRenderer> m_mockRenderer;
 	unique_ptr<MockInputManager> m_mockInput;
 	unique_ptr<UIModule> m_uiModule;

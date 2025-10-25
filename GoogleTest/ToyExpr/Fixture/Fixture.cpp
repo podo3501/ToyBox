@@ -4,7 +4,7 @@
 #include "Shared/Utils/Profiler.h"
 #include "Shared/Window/Window.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/Framework/Environment.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/UIModule.h"
 
@@ -22,7 +22,7 @@ void Fixture::SetUp()
 	RECT rc{ 0, 0, 800, 600 };
 	EXPECT_TRUE(m_window->Create(GetModuleHandle(nullptr), SW_HIDE, rc, hwnd));
 	const auto& outputSize = m_window->GetOutputSize();
-	InitializeEnvironment(L"../Resources/", outputSize);
+	m_environment = InitializeEnvironment(L"../Resources/", outputSize);
 	m_renderer = CreateRenderer(hwnd, static_cast<int>(outputSize.x), static_cast<int>(outputSize.y), true);
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };

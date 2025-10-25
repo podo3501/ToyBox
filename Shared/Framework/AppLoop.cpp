@@ -2,7 +2,7 @@
 #include "AppLoop.h"
 #include "Core/Public/IRenderer.h"
 #include "Utils/Profiler.h"
-#include "Environment.h"
+#include "EnvironmentLocator.h"
 #include "Window/Window.h"
 #include "Window/WindowProcedure.h"
 #include "System/Public/IInputManager.h"
@@ -13,20 +13,19 @@ AppLoop::~AppLoop()
     TracyShutdownProfiler();
 }
 
-AppLoop::AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer) :
+AppLoop::AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer, const wstring& resPath, const Vector2& resolution) :
     m_window{ move(window) },
     m_renderer{ move(renderer) }
 {
     TracyStartupProfiler();
 
+    m_environment = InitializeEnvironment(resPath, resolution);
     m_inputManager = CreateInputManager(m_window->GetHandle());
     Locator<IInputManager>::Provide(m_inputManager.get());
 }
 
-bool AppLoop::Initialize(const wstring& resPath, const Vector2& resolution)
+bool AppLoop::Initialize()
 {
-    InitializeEnvironment(resPath, resolution);
-    
     ReturnIfFalse(InitializeClass());
     ReturnIfFalse(InitializeDerived());
     AddWinProcListener();

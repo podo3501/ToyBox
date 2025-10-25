@@ -83,6 +83,9 @@
     <ClInclude Include="System\Public\IInputManager.h">
       <Filter>System\Public</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\EnvironmentLocator.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

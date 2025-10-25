@@ -4,7 +4,6 @@
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/SerializerIO/ClassSerializeIO.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "Shared/Framework/Environment.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 

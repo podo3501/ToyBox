@@ -1,5 +1,6 @@
 #pragma once
-#include "Shared/Framework/Environment.h"
+#include "MockTextureResourceBinder.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIComponent/UIType.h"
 
@@ -9,45 +10,21 @@ protected:
 	virtual void SetUp() override;
 	virtual void TearDown() override {};
 
-	unique_ptr<TextureResourceBinder> m_resBinder{ nullptr };
-
-private:
-	void AddFonts() noexcept;
-	void AddTextures() noexcept;
-	void AddMockFont(wstring&& key, wstring&& filename) noexcept;
-	void AddMockTexture(string&& key, wstring&& filename, TextureSlice slice, vector<Rectangle>&& areas) noexcept;
+	unique_ptr<Environment> m_environment;
+	unique_ptr<MockTextureResourceBinder> m_resBinder;
 };
 
 ///////////////////////////////////////////////////////////////
 
 void TextureResourceBinderT::SetUp()
 {
-	InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
-	m_resBinder = CreateTextureResourceBinder();
+	m_environment = InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
+	m_resBinder = make_unique<MockTextureResourceBinder>();
 
-	AddFonts();
-	AddTextures();
-}
-
-void TextureResourceBinderT::AddFonts() noexcept
-{
-	AddMockFont(L"MockFont", L"MockFont.spritefont");
-}
-
-void TextureResourceBinderT::AddTextures() noexcept
-{
-	AddMockTexture("MockTexture", L"MockTex.png", TextureSlice::One, {});
-}
-
-void TextureResourceBinderT::AddMockFont(wstring&& key, wstring&& filename) noexcept
-{
-	TextureFontInfo info{ move(filename) };
-	m_resBinder->AddFontKey(move(key), info);
-}
-
-void TextureResourceBinderT::AddMockTexture(string&& key, wstring&& filename, 
-	TextureSlice slice, vector<Rectangle>&& areas) noexcept
-{
-	TextureSourceInfo info{ move(filename), slice, move(areas) };
-	m_resBinder->AddTextureKey(move(key), info);
+	m_resBinder->RegisterMockFonts({
+		{L"MockFont", TextureFontInfo{L"MockFont.spritefont"}}
+		});
+	m_resBinder->RegisterMockTextures({
+		{"MockTexture", {L"MockTex.png", TextureSlice::One, {}}}
+		});
 }

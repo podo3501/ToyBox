@@ -2,7 +2,6 @@
 #include "UIComponent.h"
 #include "Shared/Utils/StlExt.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/Framework/Environment.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "../SerializerIO/ClassSerializeIO.h"
 
@@ -73,7 +72,7 @@ bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextu
 {
 	auto forEachResult = ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
 		bool result = component->ImplementBindSourceInfo(resBinder, texController);
-		Assert(result);
+		AssertMsg(result, "Failed to load texture");
 		return result;
 		});
 	ReturnIfFalse(forEachResult);

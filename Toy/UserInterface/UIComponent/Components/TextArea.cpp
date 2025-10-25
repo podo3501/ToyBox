@@ -3,7 +3,6 @@
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/Framework/Environment.h"
 #include "../UIUtility.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 

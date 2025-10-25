@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Framework\AppLoop.h" />
     <ClInclude Include="Framework\Environment.h" />
+    <ClInclude Include="Framework\EnvironmentLocator.h" />
     <ClInclude Include="Framework\Initializer\Application.h" />
     <ClInclude Include="Framework\Initializer\GoogleTest.h" />
     <ClInclude Include="Framework\Locator.h" />

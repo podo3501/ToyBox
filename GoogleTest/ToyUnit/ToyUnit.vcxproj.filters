@@ -66,6 +66,9 @@
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd1T.cpp">
       <Filter>UserInterface\UIComponent\Component</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -120,6 +123,9 @@
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd1T.h">
       <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h">
+      <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

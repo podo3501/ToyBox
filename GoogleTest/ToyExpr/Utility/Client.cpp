@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Shared/Framework/Environment.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Shared/SerializerIO/SerializerIO.h"
@@ -85,7 +85,7 @@ namespace Utility
 	//컨테이너 안에 값이 클래스 또는 스트럭쳐 일 경우 Serialize 테스트
 	TEST(Client, JsonParser)
 	{
-		InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
+		unique_ptr<Environment> environment = InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 
 		UserComponent wData(true);
 		const auto& serializeTestFilename = L"Test/Data/JsonSerializeTest.json";

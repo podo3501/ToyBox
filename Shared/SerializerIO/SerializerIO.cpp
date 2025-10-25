@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "SerializerIO.h"
-#include "Shared/Framework/Environment.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 #include <fstream>
 
 SerializerIO::~SerializerIO() = default;

@@ -2,7 +2,7 @@
 #include "ComponentTestScene.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/Framework/Environment.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 #include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponent/Components/ListArea.h"
 #include "UserInterface/UIComponent/Components/Button.h"

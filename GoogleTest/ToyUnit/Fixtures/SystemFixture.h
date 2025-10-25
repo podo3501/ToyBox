@@ -3,6 +3,7 @@
 #include "Shared/System/StepTimer.h"
 
 struct ISceneManager;
+class Environment;
 class SystemFixture : public ::testing::Test
 {
 public:
@@ -14,6 +15,7 @@ protected:
 	void TearDown() override;
 
 protected:
+	unique_ptr<Environment> m_environment;
 	unique_ptr<MockRenderer> m_mockRenderer;
 
 private:

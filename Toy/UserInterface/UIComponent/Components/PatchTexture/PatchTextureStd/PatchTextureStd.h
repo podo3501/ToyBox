@@ -15,7 +15,7 @@ protected:
 	PatchTextureStd();
 	PatchTextureStd(const PatchTextureStd& other) noexcept;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual void ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& info, size_t sourceIndex) noexcept;
+	virtual bool ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& info, size_t sourceIndex) noexcept;
 };
 
 unique_ptr<PatchTextureStd> CreatePatchTexture(const UILayout& layout, TextureSlice texSlice, const string& bindKey);

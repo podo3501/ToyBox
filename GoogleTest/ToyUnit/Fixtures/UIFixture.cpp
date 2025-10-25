@@ -2,7 +2,7 @@
 #include "UIFixture.h"
 #include "Tests/Helper.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/Framework/Environment.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 #include "Toy/Locator/InputLocator.h"
 #include "Mocks/MockInputManager.h"
 
@@ -19,13 +19,13 @@ void UIFixture::SetUp()
 	Rectangle rc{ 0, 0, 800, 600 };
 	UILayout layout{ GetSizeFromRectangle(rc), Origin::LeftTop };
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
-	InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
+	m_environment = InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 	m_mockRenderer = make_unique<MockRenderer>();
 	m_mockRenderer->RegisterMockTextureInfos({
-		{L"../Resources/UI/Font/CourierNewBoldS18.spritefont", {}},
-		{L"../Resources/UI/Font/MaleunGothicS16.spritefont", {}},
-		{L"../Resources/UI/SampleTexture/Sample_0.png", {512, 512}},
-		{L"../Resources/UI/SampleTexture/Option.png", {512, 512}} });
+		{L"../Resources/UI/Font/CourierNewBoldS18.spritefont", 0, {}},
+		{L"../Resources/UI/Font/MaleunGothicS16.spritefont", 1, {}},
+		{L"../Resources/UI/SampleTexture/Sample_0.png", 2, {512, 512}},
+		{L"../Resources/UI/SampleTexture/Option.png", 3, {512, 512}} });
 	m_mockInput = make_unique<MockInputManager>();
 	InputLocator::Provide(m_mockInput.get());
 	m_uiModule = CreateUIModule(layout, "Main", m_mockRenderer.get(), srcBinderFilename);
@@ -33,9 +33,7 @@ void UIFixture::SetUp()
 }
 
 void UIFixture::TearDown()
-{
-	InitializeEnvironment(L"", {});
-}
+{}
 
 TextureResourceBinder* UIFixture::GetResBinder() const noexcept { return m_uiModule->GetTexResBinder(); }
 

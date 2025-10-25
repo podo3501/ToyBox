@@ -3,7 +3,7 @@
 #include "Mocks/MockInputManager.h"
 #include "Shared/Utils/StlExt.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/Framework/Environment.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 #include "Helper.h"
 #include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"

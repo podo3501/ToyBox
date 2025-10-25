@@ -1,53 +1,46 @@
 #include "pch.h"
 #include "Environment.h"
 
-static wstring g_fontPath{ L"UI/Font/" };
-static wstring g_resourcePath{};
-static Vector2 g_resolution{};
+Environment::Environment(const wstring& resourcePath, const Vector2& resolution) :
+	m_fontPath{ L"UI/Font/" },
+	m_resourcePath{ resourcePath },
+	m_resolution{ resolution }
+{}
 
-void InitializeEnvironment(const wstring& resourcePath, const Vector2& resolution) noexcept
+Rectangle Environment::GetRectResolution() const noexcept
 {
-	g_resourcePath = resourcePath;
-	g_resolution = resolution;
-}
-
-wstring GetResourcePath() noexcept { return g_resourcePath; }
-wstring GetResourceFontPath() noexcept { return g_fontPath; }
-const Vector2& GetResolution() noexcept { return g_resolution; }
-Rectangle GetRectResolution() noexcept 
-{ 
-	Rectangle rect{ 0, 0, static_cast<long>(g_resolution.x), static_cast<long>(g_resolution.y) };
+	Rectangle rect{ 0, 0, static_cast<long>(m_resolution.x), static_cast<long>(m_resolution.y) };
 	return rect;
 }
 
-wstring GetResourceFullFilename(const wstring& filename) noexcept
+wstring Environment::GetResourceFullFilename(const wstring& filename) const noexcept
 {
-	if(filesystem::path(filename).is_absolute())
+	if (filesystem::path(filename).is_absolute())
 		return filename;
 
-	if(filename.find(g_resourcePath) == std::wstring::npos)
-		return g_resourcePath + filename;
+	if (filename.find(m_resourcePath) == std::wstring::npos)
+		return m_resourcePath + filename;
 
 	return filename;
 }
 
-static void normalizePath(wstring& path, char targetSeparator = '/') 
+static void NormalizePath(wstring& path, char targetSeparator = '/') 
 {
 	char currentSeparator = (targetSeparator == '/') ? '\\' : '/';
 	std::replace(path.begin(), path.end(), currentSeparator, targetSeparator);
 }
 
-wstring GetRelativePath(const wstring& fullPath) noexcept
+wstring Environment::GetRelativePath(const wstring& fullPath) const noexcept
 {
 	if (fullPath.empty()) return {};
 
 	filesystem::path full = filesystem::absolute(fullPath);
-	filesystem::path base = filesystem::absolute(g_resourcePath);
+	filesystem::path base = filesystem::absolute(m_resourcePath);
 
 	wstring relativePath = fullPath;
 	if (full.wstring().find(base.wstring()) != wstring::npos)
 		relativePath = full.wstring().substr(base.wstring().length());
-	
-	normalizePath(relativePath);
+
+	NormalizePath(relativePath);
 	return relativePath;
 }

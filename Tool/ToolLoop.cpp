@@ -24,8 +24,9 @@ extern "C"
 #endif
 
 ToolLoop::~ToolLoop() = default;
-ToolLoop::ToolLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer) :
-    ::AppLoop(move(window), move(renderer)),
+ToolLoop::ToolLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer,
+    const wstring& resourcePath, const Vector2& windowSize) :
+    ::AppLoop(move(window), move(renderer), resourcePath, windowSize),
     m_renderer{ AppLoop::GetRenderer() }
 {
     m_menuBar = make_unique<MenuBar>(this);

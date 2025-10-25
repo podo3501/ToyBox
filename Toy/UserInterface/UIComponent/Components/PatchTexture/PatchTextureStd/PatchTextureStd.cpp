@@ -33,13 +33,15 @@ bool PatchTextureStd::ChangeBindKey(TextureResourceBinder* resBinder, const stri
     return false;
 }
 
-void PatchTextureStd::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& info, size_t sourceIndex) noexcept
+bool PatchTextureStd::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& info, size_t sourceIndex) noexcept
 {
 	for (size_t index : views::iota(0u, 3u))
 	{
 		PatchTextureStd* child = static_cast<PatchTextureStd*>(GetChildComponent(index));
-		child->ChangeBindKeyWithIndex(key, info, sourceIndex * 3 + index);
+		ReturnIfFalse(child->ChangeBindKeyWithIndex(key, info, sourceIndex * 3 + index));
 	}
+
+	return true;
 }
 
 //////////////////////////////////////////////////////////

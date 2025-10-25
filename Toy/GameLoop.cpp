@@ -25,8 +25,9 @@ extern "C"
 #endif
 
 GameLoop::~GameLoop() = default;
-GameLoop::GameLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer) :
-    ::AppLoop(move(window), move(renderer)),
+GameLoop::GameLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer,
+    const wstring& resourcePath, const Vector2& windowSize) :
+    ::AppLoop(move(window), move(renderer), resourcePath, windowSize),
     m_renderer{ AppLoop::GetRenderer() }
 {}
 
