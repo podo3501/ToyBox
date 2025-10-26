@@ -8,7 +8,7 @@ namespace UserInterface::UIComponentT::ComponentT
 {
 	TEST_F(PatchTextureStd1T, ChangeBindKey)
 	{
-		m_component->ChangeBindKey(m_resBinder.get(), "One64");
+		m_component->ChangeBindKey(GetResBinder(), "One64");
 		EXPECT_EQ(m_component->GetArea(), Rectangle(0, 0, 64, 64));
 	}
 

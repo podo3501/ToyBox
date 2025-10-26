@@ -148,6 +148,11 @@
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd1T.h" />
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd3T_Horizontal.h" />
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd3T_Vertical.h" />
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd9T.h" />
+    <ClInclude Include="UserInterface\UIComponent\Component\ComponentT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Component\TextAreaT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentSingleT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
   </ItemGroup>
@@ -179,6 +184,11 @@
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd1T.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd3T_Horizontal.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd3T_Vertical.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd9T.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Component\ComponentT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Component\TextAreaT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentSingleT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
   </ItemGroup>

@@ -21,10 +21,11 @@ void TextureResourceBinderT::SetUp()
 	m_environment = InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
 	m_resBinder = make_unique<MockTextureResourceBinder>();
 
-	m_resBinder->RegisterMockFonts({
+	m_resBinder->AddMockFontKeys({
 		{L"MockFont", TextureFontInfo{L"MockFont.spritefont"}}
 		});
-	m_resBinder->RegisterMockTextures({
-		{"MockTexture", {L"MockTex.png", TextureSlice::One, {}}}
+	m_resBinder->AddMockTextureKeys({
+		{ "MockTexture", { L"MockTex.png", TextureSlice::One, {} } },
+		{ "ThreeH48", { L"Texture512.png", TextureSlice::ThreeH, { { 0, 0, 22, 48 }, { 22, 0, 4, 48 }, { 26, 0, 22, 48 } } } },
 		});
 }

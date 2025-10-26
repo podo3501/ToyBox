@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.002" timestamp="2025-10-26T01:32:08.127" name="AllTests">
-  <testsuite name="PatchTextureStd1T" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-10-26T01:32:08.127">
-    <testcase name="WriteAndRead" status="run" result="completed" time="0.001" timestamp="2025-10-26T01:32:08.127" classname="PatchTextureStd1T" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.001" timestamp="2025-10-27T01:30:40.556" name="AllTests">
+  <testsuite name="TextAreaT" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-10-27T01:30:40.557">
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-10-27T01:30:40.557" classname="TextAreaT" />
   </testsuite>
 </testsuites>

@@ -101,7 +101,7 @@ vector<Rectangle> GetAreas(TextureResourceBinder* rb, const wstring& filename, T
     return it->sources;
 }
 
-vector<Rectangle> GetSources(TextureSlice texSlice, const SourceDivider& sourceDivider) noexcept
+vector<Rectangle> ComputeSliceRects(TextureSlice texSlice, const SourceDivider& sourceDivider) noexcept
 {
     if (texSlice == TextureSlice::One) return { sourceDivider.rect };
 

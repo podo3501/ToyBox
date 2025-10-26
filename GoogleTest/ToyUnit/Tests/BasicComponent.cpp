@@ -50,7 +50,7 @@ namespace UserInterface
 		if (!infoRef) return false;
 
 		TextureSourceInfo srcInfo{ infoRef->get() };
-		srcInfo.sources = GetSources(srcInfo.texSlice, srcDivider);
+		srcInfo.sources = ComputeSliceRects(srcInfo.texSlice, srcDivider);
 
 		return rb->ModifyTextureSourceInfo(key, srcInfo);
 	}

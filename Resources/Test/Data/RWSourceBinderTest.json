@@ -9,6 +9,30 @@
             "Filename": "MockTex.png",
             "TextureSlice": 0,
             "Sources": null
+        },
+        "ThreeH48": {
+            "Filename": "Texture512.png",
+            "TextureSlice": 1,
+            "Sources": [
+                {
+                    "x": 0,
+                    "y": 0,
+                    "width": 22,
+                    "height": 48
+                },
+                {
+                    "x": 22,
+                    "y": 0,
+                    "width": 4,
+                    "height": 48
+                },
+                {
+                    "x": 26,
+                    "y": 0,
+                    "width": 22,
+                    "height": 48
+                }
+            ]
         }
     }
 }

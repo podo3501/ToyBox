@@ -69,6 +69,21 @@
     <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp">
       <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd3T_Horizontal.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\ComponentT.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd3T_Vertical.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTextureStd9T.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\TextAreaT.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -126,6 +141,21 @@
     </ClInclude>
     <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h">
       <Filter>UserInterface\TextureResourceBinder</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd3T_Horizontal.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\ComponentT.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd3T_Vertical.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTextureStd9T.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\TextAreaT.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

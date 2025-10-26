@@ -15,4 +15,4 @@ vector<pair<string, TextureSourceInfo>> GetTextureSourceInfo(TextureResourceBind
 vector<TextureSourceInfo> GetAreas(TextureResourceBinder* rb, const wstring& filename, TextureSlice part) noexcept;
 vector<Rectangle> GetAreas(TextureResourceBinder* rb, const wstring& filename, TextureSlice texSlice, const XMINT2& position) noexcept;
 
-vector<Rectangle> GetSources(TextureSlice texSlice, const SourceDivider& sourceDivider) noexcept;
+vector<Rectangle> ComputeSliceRects(TextureSlice texSlice, const SourceDivider& sourceDivider) noexcept;

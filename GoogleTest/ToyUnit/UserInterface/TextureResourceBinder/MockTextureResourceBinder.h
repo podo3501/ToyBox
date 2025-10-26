@@ -4,6 +4,6 @@
 class MockTextureResourceBinder : public TextureResourceBinder
 {
 public:
-	void RegisterMockFonts(const vector<pair<wstring, TextureFontInfo>>& infos) noexcept;
-	void RegisterMockTextures(const vector<pair<string, TextureSourceInfo>>& infos) noexcept;
+	void AddMockFontKeys(const vector<pair<wstring, TextureFontInfo>>& infos) noexcept;
+	void AddMockTextureKeys(const vector<pair<string, TextureSourceInfo>>& infos) noexcept;
 };

@@ -193,7 +193,7 @@ void ImageSelector::EditSelectArea()
     SourceDivider sourceDivider = GetSourceDivider(*m_selectedArea);
     if (EditSourceAndDivider("Source Area", "Deviders", sourceDivider))
     {
-        m_selectedArea->sources = GetSources(m_selectImagePart, sourceDivider);
+        m_selectedArea->sources = ComputeSliceRects(m_selectImagePart, sourceDivider);
         if (!bindingKey.empty()) m_cmdHistory->ModifyTextureSourceInfo(bindingKey, *m_selectedArea);
     }
         

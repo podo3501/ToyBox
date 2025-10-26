@@ -59,9 +59,9 @@ MockTextureController::MockTextureController(MockTextureTable* texTable) :
 
 Rectangle MockTextureController::MeasureText(size_t index, const wstring& text, const Vector2& position)
 {
-	//index는 어떤 폰트인지 확인하는 건데 이건 무시.
-	const long fixedWidthPerChar = 10;  // 글자당 고정 폭
-	const long fixedHeight = 20;        // 고정 높이
+	index; //index는 어떤 폰트인지 확인하는 건데 이건 무시. warning 방지
+	const long fixedWidthPerChar = 10;  // 글자당 폭
+	const long fixedHeight = 20;        // 글자당 높이
 	long width = static_cast<long>(text.size()) * fixedWidthPerChar;
 
 	return Rectangle{
@@ -70,6 +70,14 @@ Rectangle MockTextureController::MeasureText(size_t index, const wstring& text, 
 		width,
 		fixedHeight
 	};
+}
+
+float MockTextureController::GetLineSpacing(size_t index) const noexcept
+{
+	index; //인덱스 무시 warning 방지
+	const long fixedHeight = 20;	// 글자당 높이
+	const float lineSpace = 5.f; // 줄간 간격
+	return static_cast<float>(fixedHeight) + lineSpace; //이 함수는 글자높이와 줄간 간격을 더해서 리턴함
 }
 
 //렌더 텍스쳐를 만들었다고 가정하고 가짜 렌더텍스쳐 인덱스를 리턴해준다.
