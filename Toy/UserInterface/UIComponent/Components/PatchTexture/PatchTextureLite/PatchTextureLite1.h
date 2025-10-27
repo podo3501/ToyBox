@@ -15,7 +15,7 @@ public:
 	virtual bool FitToTextureSource() noexcept override { return m_coord.FitToTextureSource(); }
 	virtual UIComponent* GetCenterComponent() noexcept override { return this; }
 	virtual bool BindSourceInfo(size_t index, const vector<Rectangle>& sources) override;
-	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override { m_coord.SetIndexedSource(index, source); }
+	virtual void SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept override;
 
 	bool Setup(const XMUINT2& size = {});
 	inline const Rectangle& GetSource() const noexcept { return m_coord.GetSource(); }

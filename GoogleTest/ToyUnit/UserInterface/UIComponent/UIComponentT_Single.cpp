@@ -1,17 +1,17 @@
 #include "pch.h"
-#include "UIComponentSingleT.h"
+#include "UIComponentT_Single.h"
 
 namespace UserInterface::UIComponentT
 {
 	//Attach 테스트할 예정
-	TEST_F(UIComponentSingleT, Attach)
+	TEST_F(UIComponentT_Single, Attach)
 	{
 		unique_ptr<UIComponent> result = UIEx(m_main).AttachComponent(move(m_mock));
 
 		EXPECT_EQ(result, nullptr);
 	}
 
-	TEST_F(UIComponentSingleT, Detach)
+	TEST_F(UIComponentT_Single, Detach)
 	{
 		UIEx(m_main).AttachComponent(move(m_mock));
 		auto [detach, detachPtr] = UIEx(m_mockPtr).DetachComponent();
@@ -20,7 +20,7 @@ namespace UserInterface::UIComponentT
 		EXPECT_NE(detachPtr, nullptr);
 	}
 
-	TEST_F(UIComponentSingleT, StateFlag_Attach)
+	TEST_F(UIComponentT_Single, StateFlag_Attach)
 	{
 		m_main->SetStateFlag(StateFlag::Attach, false);	//attach 불가라면
 		unique_ptr<UIComponent> result = UIEx(m_main).AttachComponent(move(m_mock));
@@ -28,7 +28,7 @@ namespace UserInterface::UIComponentT
 		EXPECT_NE(result, nullptr);
 	}
 
-	TEST_F(UIComponentSingleT, StateFlag_Detach)
+	TEST_F(UIComponentT_Single, StateFlag_Detach)
 	{
 		UIEx(m_main).AttachComponent(move(m_mock));
 		m_main->SetStateFlag(StateFlag::Detach, false);
@@ -38,7 +38,7 @@ namespace UserInterface::UIComponentT
 		EXPECT_EQ(detachPtr, nullptr);
 	}
 
-	TEST_F(UIComponentSingleT, StateFlag_SizeLocked)
+	TEST_F(UIComponentT_Single, StateFlag_SizeLocked)
 	{
 		XMUINT2 curSize{ m_mock->GetSize() }, newSize{ 128, 128 };
 		m_main->SetStateFlag(StateFlag::X_SizeLocked, true);

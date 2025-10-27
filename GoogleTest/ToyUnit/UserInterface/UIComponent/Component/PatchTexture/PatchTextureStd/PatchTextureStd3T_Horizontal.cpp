@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "PatchTextureStd3T_Horizontal.h"
-#include "Shared/SerializerIO/SerializerIO.h"
+#include "UserInterface/UIComponent/Component/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 
-namespace UserInterface::UIComponentT::ComponentT
+namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
 {
 	TEST_F(PatchTextureStd3T_Horizontal, ChangeBindKey)
 	{
@@ -78,12 +78,6 @@ namespace UserInterface::UIComponentT::ComponentT
 
 	TEST_F(PatchTextureStd3T_Horizontal, WriteAndRead)
 	{
-		wstring filename = L"../Resources/Test/Temp/PatchtextureStd3T_Horizontal_WriteAndRead.json";
-		EXPECT_TRUE(SerializerIO::WriteJsonToFile(m_component, filename));
-
-		unique_ptr<PatchTextureStd3> read;
-		EXPECT_TRUE(SerializerIO::ReadJsonFromFile(filename, read));
-
-		EXPECT_TRUE(CompareDerived(m_component, read));
+		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"PatchTextureStd3T_Horizontal_WR.json"));
 	}
 }

@@ -31,10 +31,10 @@ void PatchTextureCoord::Render(ITextureRender* render) const
 	render->Render(*m_index, dest, &source);
 }
 
-void PatchTextureCoord::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept
+void PatchTextureCoord::SetIndexedSource(size_t index, const Rectangle& source) noexcept
 {
 	m_index = index;
-	m_source = source[0];
+	m_source = source;
 }
 
 bool PatchTextureCoord::FitToTextureSource() noexcept

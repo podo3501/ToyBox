@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "PatchTextureStd9T.h"
-#include "Shared/SerializerIO/SerializerIO.h"
+#include "UserInterface/UIComponent/Component/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 
-namespace UserInterface::UIComponentT::ComponentT
+namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
 {
 	TEST_F(PatchTextureStd9T, ChangeBindKey)
 	{
@@ -80,12 +80,6 @@ namespace UserInterface::UIComponentT::ComponentT
 
 	TEST_F(PatchTextureStd9T, WriteAndRead)
 	{
-		wstring filename = L"../Resources/Test/Temp/PatchtextureStd9T_WriteAndRead.json";
-		EXPECT_TRUE(SerializerIO::WriteJsonToFile(m_component, filename));
-
-		unique_ptr<PatchTextureStd9> read;
-		EXPECT_TRUE(SerializerIO::ReadJsonFromFile(filename, read));
-
-		EXPECT_TRUE(CompareDerived(m_component, read));
+		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"PatchTextureStd9T_WR.json"));
 	}
 }

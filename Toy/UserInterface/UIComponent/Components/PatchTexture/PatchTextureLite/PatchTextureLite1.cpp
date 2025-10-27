@@ -42,3 +42,9 @@ bool PatchTextureLite1::BindSourceInfo(size_t index, const vector<Rectangle>& so
 
 	return true;
 }
+
+void PatchTextureLite1::SetIndexedSource(size_t index, const vector<Rectangle>& source) noexcept 
+{ 
+	AssertMsg(source.size() == 1, "The source size must be 1");
+	m_coord.SetIndexedSource(index, source[0]);
+}

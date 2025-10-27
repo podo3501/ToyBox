@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TextAreaT.h"
-#include "Shared/SerializerIO/SerializerIO.h"
+#include "UserInterface/UIComponent/Component/ComponentHelper.h"
 
 namespace UserInterface::UIComponentT::ComponentT
 {
@@ -10,28 +10,28 @@ namespace UserInterface::UIComponentT::ComponentT
 		EXPECT_TRUE(CompareDerived(m_component, clone));
 	}
 
+	MATCHER_P(ColorEq, expected, "") 
+	{ 
+		return DirectX::XMVector4Equal(arg, expected); 
+	}
+
 	TEST_F(TextAreaT, ProcessRender)
 	{
 		m_component->ChangeSize(100, 150);
 
+		//MockTextureController::MeasureText 및 MockTextureController::GetLineSpacing 참고. 
 		MockTextureRender render;
-		EXPECT_CALL(render, DrawString(::testing::_, ::testing::_, ::testing::_, ::testing::_))
-			.WillRepeatedly([](size_t index, const std::wstring& text, const Vector2& pos, FXMVECTOR color) {
-				int a = 1;
-				});
+		::testing::InSequence seq;
+		EXPECT_CALL(render, DrawString(0, wstring(L"테스트"), Vector2{ 0.f, 0.f }, ColorEq(Colors::Black))).Times(1);
+		EXPECT_CALL(render, DrawString(0, wstring(L"빨강색"), Vector2{ 30.f, 0.f }, ColorEq(Colors::Red))).Times(1);
+		EXPECT_CALL(render, DrawString(1, wstring(L"Test"), Vector2{ 0.f, 25.f }, ColorEq(Colors::Black))).Times(1);
+		EXPECT_CALL(render, DrawString(1, wstring(L"Blue"), Vector2{ 40.f, 25.f }, ColorEq(Colors::Blue))).Times(1);
 
-		m_component->UpdatePositionsManually();
 		m_component->ProcessRender(&render);
 	}
 
 	TEST_F(TextAreaT, WriteAndRead)
 	{
-		wstring filename = L"../Resources/Test/Temp/TextAreaT_WriteAndRead.json";
-		EXPECT_TRUE(SerializerIO::WriteJsonToFile(m_component, filename));
-
-		unique_ptr<TextArea> read;
-		EXPECT_TRUE(SerializerIO::ReadJsonFromFile(filename, read));
-
-		EXPECT_TRUE(CompareDerived(m_component, read));
+		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"TextAreaT_WR.json"));
 	}
 }

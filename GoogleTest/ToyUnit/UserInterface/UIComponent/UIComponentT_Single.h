@@ -2,7 +2,7 @@
 #include "Mocks/MockComponents.h"
 #include "Mocks/MockUtils.h"
 
-class UIComponentSingleT : public ::testing::Test
+class UIComponentT_Single : public ::testing::Test
 {
 protected:
     virtual void SetUp() override;
@@ -15,7 +15,7 @@ protected:
 
 ///////////////////////////////////////////////////////////////
 
-void UIComponentSingleT::SetUp()
+void UIComponentT_Single::SetUp()
 {
     UILayout layout{ {800, 600}, Origin::LeftTop };
     tie(m_main, std::ignore) = CreateMockComponent<MockComponent>(layout);

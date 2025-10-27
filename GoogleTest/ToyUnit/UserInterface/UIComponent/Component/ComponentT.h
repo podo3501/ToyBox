@@ -13,6 +13,7 @@ protected:
 
 	inline ITextureController* GetTextureController() const noexcept { return m_renderer->GetTextureController();	}
 	inline MockTextureResourceBinder* GetResBinder() const noexcept { return m_resBinder.get(); }
+	inline wstring GetTempDir() const noexcept { return L"../Resources/Test/Temp/"; }
 
 private:
 	unique_ptr<Environment> m_environment;
