@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "UIUtility.h"
-#include "UIType.h"
+#include "UIHelperClass.h"
 #include "UIComponent.h"
 #include "Shared/Utils/GeometryExt.h"
 
@@ -285,4 +285,12 @@ bool GetSizeDividedByNine(const SourceDivider& srcDivider, vector<int>& outWidth
 	outWidths = GetDivisions({ divideList.begin(), divideList.begin() + 2 }, rect.width);
 	outHeights = GetDivisions({ divideList.begin() + 2, divideList.begin() + 4 }, rect.height);
 	return true;
+}
+
+map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept
+{
+	return {
+		{ InteractState::Normal, prefix + "_" + EnumToString(InteractState::Normal) },
+		{ InteractState::Hovered, prefix + "_" + EnumToString(InteractState::Hovered) },
+		{ InteractState::Pressed, prefix + "_" + EnumToString(InteractState::Pressed) } };
 }

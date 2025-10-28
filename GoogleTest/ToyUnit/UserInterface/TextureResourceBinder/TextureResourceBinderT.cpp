@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TextureResourceBinderT.h"
+#include "Toy/UserInterface/UIComponent/UIHelperClass.h"
 
 namespace UserInterface::TextureResourceBinderT
 {

@@ -21,8 +21,7 @@ namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
 
 	TEST_F(PatchTextureStd3T_Vertical, Clone)
 	{
-		auto clone = m_component->Clone();
-		EXPECT_TRUE(CompareDerived(m_component, clone));
+		EXPECT_TRUE(TestClone(m_component));
 	}
 
 	TEST_F(PatchTextureStd3T_Vertical, FitToTextureSource)

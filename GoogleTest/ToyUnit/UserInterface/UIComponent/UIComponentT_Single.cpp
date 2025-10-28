@@ -7,7 +7,7 @@ namespace UserInterface::UIComponentT
 	TEST_F(UIComponentT_Single, Attach)
 	{
 		unique_ptr<UIComponent> result = UIEx(m_main).AttachComponent(move(m_mock));
-
+		
 		EXPECT_EQ(result, nullptr);
 	}
 

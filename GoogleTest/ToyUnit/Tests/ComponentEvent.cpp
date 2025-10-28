@@ -6,6 +6,7 @@
 #include "Shared/Utils/StlExt.h"
 #include "Toy/Locator/EventDispatcherLocator.h"
 #include "Toy/UserInterface/UIModule.h"
+#include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 

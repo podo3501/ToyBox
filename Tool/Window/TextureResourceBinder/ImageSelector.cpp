@@ -9,6 +9,7 @@
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
+#include "Toy/UserInterface/UIComponent/UIHelperClass.h"
 #include "Shared/Utils/GeometryExt.h"
 
 ImageSelector::~ImageSelector() = default;

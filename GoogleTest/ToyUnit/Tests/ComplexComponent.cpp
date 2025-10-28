@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Fixtures/FixtureSuite.h"
 #include "Helper.h"
+#include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"

@@ -4,6 +4,7 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "UserInterface/UIModule.h"
+#include "UserInterface/UIComponent/UIUtility.h"
 #include "UserInterface/UIComponent/Components/ListArea.h"
 #include "UserInterface/UIComponent/Components/Button.h"
 #include "UserInterface/UIComponent/Components/TextArea.h"

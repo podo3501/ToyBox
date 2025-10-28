@@ -1,57 +1,62 @@
 #include "pch.h"
-#include "PatchTextureStd9T.h"
+#include "PatchTextureLite9T.h"
 #include "UserInterface/UIComponent/Component/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 
 namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
 {
-	TEST_F(PatchTextureStd9T, ChangeBindKey)
+	TEST_F(PatchTextureLite9T, BindSourceInfo)
 	{
-		m_component->ChangeBindKey(GetResBinder(), "Nine60");
-		EXPECT_EQ(m_component->GetArea(), Rectangle(0, 0, 60, 60));
-	}
+		InitializeBindSourceInfo();
 
-	TEST_F(PatchTextureStd9T, ChangeSize_Bigger)
-	{
-		m_component->ChangeSize({ 80, 80 });
 		auto centerComponent = m_component->GetCenterComponent();
-		EXPECT_EQ(centerComponent->GetSize(), XMUINT2(36, 36)); // 80 - (22 * 2) = 36, 왼쪽 오른쪽 위 아래 사각형 x또는 y길이(22)는 변하지 않는다.
+		EXPECT_EQ(centerComponent->GetSize(), XMUINT2(4, 4)); //BindSourceInfo하면 source 사이즈값으로 맞춘다.
 	}
 
-	//?!? 작게 사이즈를 하면 버그가 생김
-	//TEST_F(PatchTextureStd9T, ChangeSize_Smaller)
-	//{
-		//m_component->ChangeSize({ 30, 30 });
-		//auto preSize = m_component->GetSize();
-	//}
-
-	TEST_F(PatchTextureStd9T, Clone)
+	TEST_F(PatchTextureLite9T, Clone)
 	{
 		EXPECT_TRUE(TestClone(m_component));
 	}
 
-	TEST_F(PatchTextureStd9T, FitToTextureSource)
+	TEST_F(PatchTextureLite9T, ChangeSize_Bigger)
 	{
-		auto preSize = m_component->GetSize();
-		m_component->ChangeSize({ 60, 60 });
+		InitializeBindSourceInfo();
+		m_component->ChangeSize({ 80, 80 });
 
-		m_component->FitToTextureSource();
-		EXPECT_EQ(m_component->GetSize(), preSize);
+		auto centerComponent = m_component->GetCenterComponent();
+		EXPECT_EQ(centerComponent->GetSize(), XMUINT2(36, 36)); // 80 - (22 * 2) = 36, 왼쪽 오른쪽 사각형 x길이는 변하지 않는다.
 	}
 
-	TEST_F(PatchTextureStd9T, GetCenterComponent)
+	//TEST_F(PatchTextureLite3T_Horizontal, ChangeSize_Smaller) ?!?나중에 구현
+
+	TEST_F(PatchTextureLite9T, FitToTextureSource)
+	{
+		vector<Rectangle> srcRects = {
+			{  0,  0, 20, 20 }, { 20,  0, 20, 20 }, { 40,  0, 20, 20 }, // Top row
+			{  0, 20, 20, 20 }, { 20, 20, 20, 20 }, { 40, 20, 20, 20 }, // Middle row
+			{  0, 40, 20, 20 }, { 20, 40, 20, 20 }, { 40, 40, 20, 20 } // Bottom row
+		};
+
+		m_component->SetIndexedSource(0, srcRects); //SetIndexedSource는 BindSourceInfo 처럼 Fit 해주지 않는다.
+		m_component->FitToTextureSource();
+
+		EXPECT_EQ(m_component->GetSize(), XMUINT2(60, 60));
+	}
+
+	TEST_F(PatchTextureLite9T, GetCenterComponent)
 	{
 		auto centerComponent = m_component->GetCenterComponent();
-		EXPECT_EQ(centerComponent->GetArea(), Rectangle(22, 22, 4, 4));
+		EXPECT_EQ(centerComponent->GetArea(), Rectangle{});
 	}
 
-	TEST_F(PatchTextureStd9T, GetTextureSlice)
+	TEST_F(PatchTextureLite9T, GetTextureSlice)
 	{
 		EXPECT_EQ(m_component->GetTextureSlice(), TextureSlice::Nine);
 	}
 
-	TEST_F(PatchTextureStd9T, ProcessRender)
+	TEST_F(PatchTextureLite9T, ProcessRender)
 	{
+		InitializeBindSourceInfo();
 		m_component->ChangeOrigin(Origin::Center);
 		m_component->ChangeSize({ 80, 80 }); //source 좌표와 동일해서 사이즈를 조정했다.
 
@@ -75,10 +80,5 @@ namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
 
 		m_component->UpdatePositionsManually();
 		m_component->ProcessRender(&render);
-	}
-
-	TEST_F(PatchTextureStd9T, WriteAndRead)
-	{
-		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"PatchTextureStd9T_WR.json"));
 	}
 }

@@ -5,19 +5,19 @@
 
 namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
 {
-	TEST_F(PatchTextureLite1T, Clone)
-	{
-		auto clone = m_component->Clone();
-		EXPECT_TRUE(CompareDerived(m_component, clone));
-	}
-
 	TEST_F(PatchTextureLite1T, BindSourceInfo)
 	{
 		//SetIndexedSource와 다른점은 Bind는 바로 쓰는 느낌이고, SetIndexedSource는 정보만 일단 넣는느낌.
 		//3과 9일때 차이가 난다. 그리고 크기가 없다면 기본 크기(source크기)를 셋팅해 준다.
 		//?!?SetIndextedSource와 비슷해서 리팩토링 해야할듯
-		m_component->BindSourceInfo(0, { { 0, 0, 10, 10 } });
-		EXPECT_EQ(m_component->GetSize(), XMUINT2(10, 10));
+		Rectangle source{ 0, 0, 10, 10 };
+		m_component->BindSourceInfo(0, { source });
+		EXPECT_EQ(m_component->GetSource(), source);
+	}
+
+	TEST_F(PatchTextureLite1T, Clone)
+	{
+		EXPECT_TRUE(TestClone(m_component));
 	}
 
 	TEST_F(PatchTextureLite1T, FitToTextureSource)
@@ -51,10 +51,5 @@ namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
 			.Times(1);
 
 		m_component->ProcessRender(&render);
-	}
-
-	TEST_F(PatchTextureLite1T, WriteAndRead)
-	{
-		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"PatchtextureLite1T_WR.json"));
 	}
 }

@@ -90,6 +90,24 @@
     <ClCompile Include="UserInterface\UIComponent\Component\ComponentHelper.cpp">
       <Filter>UserInterface\UIComponent\Component</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.cpp">
+      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.cpp">
+      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite9T.cpp">
+      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\TextureSwitcherT.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\ContainerT.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\ScrollBarT.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -167,6 +185,24 @@
       <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Component\ComponentHelper.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.h">
+      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.h">
+      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite9T.h">
+      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\TextureSwitcherT.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\ContainerT.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\ScrollBarT.h">
       <Filter>UserInterface\UIComponent\Component</Filter>
     </ClInclude>
   </ItemGroup>

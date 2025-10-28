@@ -3,6 +3,7 @@
 struct SourceDivider;
 class UIComponent;
 enum class DirectionType;
+enum class InteractState;
 namespace StateFlag { enum Type : int; }
 
 struct TextData
@@ -41,3 +42,4 @@ vector<Rectangle> GetSourcesFromArea(
 bool IsContains(const vector<Rectangle>& rectangles, const XMINT2& position) noexcept;
 bool GetSizeDividedByThree(DirectionType type, const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights) noexcept;
 bool GetSizeDividedByNine(const SourceDivider& srcDivider, vector<int>& outWidths, vector<int>& outHeights) noexcept;
+map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept;

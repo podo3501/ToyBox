@@ -6,8 +6,7 @@ namespace UserInterface::UIComponentT::ComponentT
 {
 	TEST_F(TextAreaT, Clone)
 	{
-		auto clone = m_component->Clone();
-		EXPECT_TRUE(CompareDerived(m_component, clone));
+		EXPECT_TRUE(TestClone(m_component));
 	}
 
 	MATCHER_P(ColorEq, expected, "") 

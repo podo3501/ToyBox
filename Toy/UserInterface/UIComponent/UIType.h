@@ -190,20 +190,3 @@ enum class DirectionType
 TextureSlice DirTypeToTextureSlice(DirectionType dirType) noexcept;
 optional<DirectionType> TextureSliceToDirType(TextureSlice texSlice) noexcept;
 
-/////////////////////////////////////////////////////////////// 
-
-struct SourceDivider
-{
-	SourceDivider() = default;
-	SourceDivider(const Rectangle& _rect, const vector<int>& _list = {}) noexcept :
-		rect{ _rect }, list{ _list } {}
-	SourceDivider& operator=(const SourceDivider&) = default;
-	bool operator==(const SourceDivider& other) const
-	{
-		return rect == other.rect && list == other.list;
-	}
-	bool Empty() const noexcept { return rect == Rectangle{} && list.empty(); }
-
-	Rectangle rect{};
-	vector<int> list;
-};

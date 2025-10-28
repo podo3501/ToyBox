@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "SampleComponent.h"
 #include "IRenderer.h"
+#include "../UIUtility.h"
 #include "../UIComponent.h"
 #include "../UILayout.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"
@@ -10,14 +11,6 @@
 #include "ScrollBar.h"
 #include "TextureSwitcher.h"
 #include "Shared/Utils/StringExt.h"
-
-map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept
-{
-	return {
-		{ InteractState::Normal, prefix + "_" + EnumToString(InteractState::Normal) },
-		{ InteractState::Hovered, prefix + "_" + EnumToString(InteractState::Hovered) },
-		{ InteractState::Pressed, prefix + "_" + EnumToString(InteractState::Pressed) } };
-}
 
 static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 	const XMUINT2& size, const string& bindKey,

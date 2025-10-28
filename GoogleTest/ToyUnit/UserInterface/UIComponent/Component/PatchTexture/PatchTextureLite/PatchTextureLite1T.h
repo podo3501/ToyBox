@@ -17,6 +17,7 @@ void PatchTextureLite1T::SetUp()
 {
 	ComponentT::SetUp();
 
-	m_component = CreateComponent<PatchTextureLite1>();
+	XMUINT2 size{ 20, 20 };
+	m_component = CreateComponent<PatchTextureLite1>(size);
 }
 

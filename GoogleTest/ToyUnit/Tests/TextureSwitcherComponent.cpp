@@ -3,6 +3,7 @@
 #include "Helper.h"
 #include "Mocks/MockInputManager.h"
 #include "Shared/Utils/StlExt.h"
+#include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTexture.h"

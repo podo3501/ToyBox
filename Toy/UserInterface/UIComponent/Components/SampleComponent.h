@@ -9,7 +9,6 @@ class TextureResourceBinder;
 enum class InteractState;
 enum class DirectionType;
 
-map<InteractState, string> GetStateKeyMap(const string& prefix) noexcept;
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(const XMUINT2& size, const string& bindKey);
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dirType, const XMUINT2& size, const string& bindKey);
 
