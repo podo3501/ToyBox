@@ -26,7 +26,7 @@ namespace UserInterface
 		auto scrollBarPtr = UIEx(listAreaPtr).FindComponent<ScrollBar*>("ScrollBar");
 		EXPECT_TRUE(UIEx(m_main).IsPositionUpdated());
 
-		EXPECT_TRUE(MakeSampleListAreaData(m_mockRenderer.get(), GetResBinder(), listAreaPtr, 5));
+		EXPECT_TRUE(MakeSampleListAreaData(m_mockRenderer->GetTextureController(), GetResBinder(), listAreaPtr, 5));
 		EXPECT_TRUE(scrollBarPtr->HasStateFlag(StateFlag::Active));
 		auto preSizeX = listAreaPtr->GetContainer(0)->GetSize().x;
 

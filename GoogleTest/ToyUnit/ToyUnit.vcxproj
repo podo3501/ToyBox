@@ -144,12 +144,14 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Tests\Helper.h" />
+    <ClInclude Include="UserInterface\CommandHistory\TexResCommandHistoryT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\ComponentHelper.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\ComponentT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\ContainerT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Component\ListAreaT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite1T.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.h" />
@@ -158,11 +160,13 @@
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd3T_Horizontal.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd3T_Vertical.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd9T.h" />
+    <ClInclude Include="UserInterface\UIComponent\Component\RenderTextureT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\ScrollBarT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\TextAreaT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\TextureSwitcherT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT_Single.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
+    <ClInclude Include="UserInterface\UIModuleT.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Fixtures\FixtureSuite.cpp" />
@@ -188,12 +192,14 @@
     <ClCompile Include="Tests\TextureSwitcherComponent.cpp" />
     <ClCompile Include="Tests\UIModuleConnection.cpp" />
     <ClCompile Include="Tests\UndoRedo.cpp" />
+    <ClCompile Include="UserInterface\CommandHistory\TexResCommandHistoryT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\ComponentHelper.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\ComponentT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\ContainerT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Component\ListAreaT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite1T.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.cpp" />
@@ -202,11 +208,13 @@
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd3T_Horizontal.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd3T_Vertical.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd9T.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Component\RenderTextureT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\ScrollBarT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\TextAreaT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\TextureSwitcherT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT_Single.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
+    <ClCompile Include="UserInterface\UIModuleT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.vcxproj">

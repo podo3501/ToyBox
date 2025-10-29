@@ -3,7 +3,7 @@
 #include "UserInterface/UIComponent/Component/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 
-namespace UserInterface::UIComponentT::ComponentT
+namespace UserInterfaceT::UIComponentT::ComponentT
 {
 	TEST_F(ContainerT, Clone)
 	{

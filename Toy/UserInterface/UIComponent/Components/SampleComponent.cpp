@@ -42,31 +42,33 @@ map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dir
 		[dirType](UILayout& layout, const string& key) { return CreateComponent<PatchTextureStd3>(layout, dirType, key); });
 }
 
-unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout, DirectionType dirType)
+unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout, DirectionType dirType,
+	const string& trackKey, const string& buttonKey)
 {
 	UILayout gridLayout{ layout.GetSize() };
 		
 	return CreateComponent<ScrollBar>(layout,
-		CreateComponent<PatchTextureStd3>(gridLayout, dirType, "ScrollTrack3_V"),
-		CreateComponent<TextureSwitcher>(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap("ScrollButton3_V"), BehaviorMode::HoldToKeepPressed));
+		CreateComponent<PatchTextureStd3>(gridLayout, dirType, trackKey),
+		CreateComponent<TextureSwitcher>(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap(buttonKey), BehaviorMode::HoldToKeepPressed));
 }
 
-unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout)
+unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout,
+	const string& backImageKey, const string& switcherKey, const string& scrollTrackKey, const string& scrollButtonKey)
 {
 	return CreateComponent<ListArea>(layout,
-		move(CreateComponent<PatchTextureStd1>(UILayout{ layout.GetSize() }, "ListBackImage1")),
-		move(CreateComponent<TextureSwitcher>(TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal)),
-		move(CreateSampleScrollBar({}, DirectionType::Vertical)));
+		move(CreateComponent<PatchTextureStd1>(UILayout{ layout.GetSize() }, backImageKey)),
+		move(CreateComponent<TextureSwitcher>(TextureSlice::Nine, GetStateKeyMap(switcherKey), BehaviorMode::Normal)),
+		move(CreateSampleScrollBar({}, DirectionType::Vertical, scrollTrackKey, scrollButtonKey)));
 }
 
-bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
+bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
 {
 	ZoneScopedN("MakeSampleListAreaData");
 
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, renderer->GetTextureController()));
+	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, texController));
 	
 	UIEx(protoTextArea).Rename("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();

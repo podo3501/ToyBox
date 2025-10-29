@@ -2,8 +2,7 @@
 #include "ComponentT.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
-#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
-#include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 
 class ScrollBarT : public ComponentT
 {
@@ -19,11 +18,8 @@ void ScrollBarT::SetUp()
 {
 	ComponentT::SetUp();
 
-	//Track과 Button으로 이루어져 있다.
-	m_component = CreateComponent<ScrollBar>(UILayout{},
-		CreateComponent<PatchTextureStd3>(UILayout{}, DirectionType::Vertical, "Track"),
-		CreateComponent<TextureSwitcher>(UILayout{}, DirTypeToTextureSlice(DirectionType::Vertical), 
-			GetStateKeyMap("Button"), BehaviorMode::HoldToKeepPressed));
+	//PatchTextureStd와 TextureSwitcher로 이루어져 있다.
+	m_component = CreateSampleScrollBar({}, DirectionType::Vertical, "Track", "Button");
 	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
 }
 

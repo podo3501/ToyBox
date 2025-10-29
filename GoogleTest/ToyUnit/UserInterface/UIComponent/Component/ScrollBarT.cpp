@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "ScrollBarT.h"
 #include "UserInterface/UIComponent/Component/ComponentHelper.h"
+#include "Shared/Utils/GeometryExt.h"
 
-namespace UserInterface::UIComponentT::ComponentT
+namespace UserInterfaceT::UIComponentT::ComponentT
 {
 	TEST_F(ScrollBarT, Clone)
 	{
@@ -18,44 +19,24 @@ namespace UserInterface::UIComponentT::ComponentT
 	{
 		m_component->ChangeSize({ 20, 100 });
 
+		//화면에 그려지는 부분
+		RECT destTrackBottom{ 0, 95, 20, 100 };
+		RECT destButtonBottom{ 0, 46, 20, 50 };
+
+		//텍스쳐에서 가져오는 영역
+		RECT srcTrackBottom{ 0, 45, 20, 50 };
+		RECT srcButtonBottom{ 0, 16, 20, 20 };
+
+		//총 6번을 Render 호출하지만 그중에 마지막 Bottom만을 검사한다.
 		MockTextureRender render;
-		EXPECT_CALL(render, Render(testing::_, testing::_, testing::_))
-			.WillRepeatedly(RenderLogger(L"ScrollBarT"));
+		EXPECT_CALL(render, Render).Times(::testing::AnyNumber());
+		::testing::InSequence seq;
+		EXPECT_CALL(render, Render(0, destTrackBottom, ::testing::Pointee(srcTrackBottom))).Times(1);
+		EXPECT_CALL(render, Render(0, destButtonBottom, ::testing::Pointee(srcButtonBottom))).Times(1);
 
 		m_component->UpdatePositionsManually();
 		m_component->ProcessRender(&render);
-
-		//dest: (0, 95, 20, 100)
-		//source : (0, 45, 20, 50)
-
-		//dest : (0, 46, 20, 50)
-		//source : (0, 16, 20, 20)
-
-		/*MockTextureRender render;
-		EXPECT_CALL(render, Render(testing::_, testing::_, testing::_))
-			.WillRepeatedly([](int index, const RECT& dest, const RECT* source) {
-				int a = 1;
-				});*/
-
-		//MockTextureRender render;
-		//EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source)))
-		//	.Times(1);
-
-
 	}
-
-
-		//m_component->ChangeSize({ 20, 200 });
-
-		//testing::MockFunction<void(float)> ScrollChangedCB;
-		//m_component->AddScrollChangedCB(ScrollChangedCB.AsStdFunction());
-
-		//uint32_t viewArea = 500;
-		//uint32_t contentSize = 2000;
-		//m_component->UpdateScrollView(viewArea, contentSize); //?!? Update이름이 들어가니까 헷갈리는듯 하다. 이름 수정요망
-		//m_component->SetPositionRatio(0.5f); // 스크롤 버튼을 중간으로 위치시킴
-		
-	//}
 
 	TEST_F(ScrollBarT, WriteAndRead)
 	{

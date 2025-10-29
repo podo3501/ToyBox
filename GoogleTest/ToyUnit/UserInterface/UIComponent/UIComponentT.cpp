@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "UIComponentT.h"
 
-namespace UserInterface::UIComponentT
+namespace UserInterfaceT::UIComponentT
 {
 	TEST_F(UIComponentT, ChangeOrigin)
 	{

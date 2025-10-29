@@ -108,6 +108,18 @@
     <ClCompile Include="UserInterface\UIComponent\Component\ScrollBarT.cpp">
       <Filter>UserInterface\UIComponent\Component</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\RenderTextureT.cpp">
+      <Filter>UserInterface\UIComponent\Component\PatchTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Component\ListAreaT.cpp">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\CommandHistory\TexResCommandHistoryT.cpp">
+      <Filter>UserInterface\CommandHistory</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIModuleT.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -205,6 +217,18 @@
     <ClInclude Include="UserInterface\UIComponent\Component\ScrollBarT.h">
       <Filter>UserInterface\UIComponent\Component</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\RenderTextureT.h">
+      <Filter>UserInterface\UIComponent\Component\PatchTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Component\ListAreaT.h">
+      <Filter>UserInterface\UIComponent\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\TexResCommandHistoryT.h">
+      <Filter>UserInterface\CommandHistory</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIModuleT.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mocks">
@@ -245,6 +269,9 @@
     </Filter>
     <Filter Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite">
       <UniqueIdentifier>{806d7c74-0b04-4753-9443-4cd457c11aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\CommandHistory">
+      <UniqueIdentifier>{3b547da9-b571-45fa-89e0-53fe16c2c1b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -45,7 +45,7 @@ bool ComponentTestScene::LoadResources()
     ReturnIfFalse(m_uiModule->BindTextureResources());
 
     ListArea* list = UIEx(m_uiModule->GetMainPanel()).FindComponent<ListArea*>("ListArea");
-    MakeSampleListAreaData(m_uiModule->GetRenderer(), m_uiModule->GetTexResBinder(), list, 13);
+    MakeSampleListAreaData(GetRenderer()->GetTextureController(), m_uiModule->GetTexResBinder(), list, 13);
 
     return true;
 }

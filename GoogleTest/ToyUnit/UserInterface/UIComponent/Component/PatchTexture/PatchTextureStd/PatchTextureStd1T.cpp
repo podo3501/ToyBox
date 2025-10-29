@@ -4,7 +4,7 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
 
-namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
+namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 {
 	TEST_F(PatchTextureStd1T, ChangeBindKey)
 	{

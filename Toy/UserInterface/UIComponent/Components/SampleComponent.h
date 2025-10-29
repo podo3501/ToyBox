@@ -1,6 +1,6 @@
 #pragma once
 
-struct IRenderer;
+struct ITextureController;
 class UIComponent;
 class UILayout;
 class ListArea;
@@ -12,7 +12,10 @@ enum class DirectionType;
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(const XMUINT2& size, const string& bindKey);
 map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dirType, const XMUINT2& size, const string& bindKey);
 
-unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout, DirectionType dirType);
-unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout);
+unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout, DirectionType dirType,
+	const string& trackKey = "ScrollTrack3_V", const string& buttonKey = "ScrollButton3_V");
+unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout,
+	const string& backImageKey = "ListBackImage1", const string& switcherKey = "ListBackground9",
+	const string& scrollTrackKey = "ScrollTrack3_V", const string& scrollButtonKey = "ScrollButton3_V");
 
-bool MakeSampleListAreaData(IRenderer* renderer, TextureResourceBinder* rb, ListArea* listArea, int itemCount);
+bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBinder* rb, ListArea* listArea, int itemCount);

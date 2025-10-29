@@ -2,7 +2,7 @@
 #include "TextureResourceBinderT.h"
 #include "Toy/UserInterface/UIComponent/UIHelperClass.h"
 
-namespace UserInterface::TextureResourceBinderT
+namespace UserInterfaceT::TextureResourceBinderT
 {
 	TEST_F(TextureResourceBinderT, ComputeSliceRects)
 	{

@@ -2,7 +2,7 @@
 #include "TextAreaT.h"
 #include "UserInterface/UIComponent/Component/ComponentHelper.h"
 
-namespace UserInterface::UIComponentT::ComponentT
+namespace UserInterfaceT::UIComponentT::ComponentT
 {
 	TEST_F(TextAreaT, Clone)
 	{

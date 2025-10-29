@@ -4,7 +4,7 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "Shared/Utils/GeometryExt.h"
 
-namespace UserInterface::UIComponentT::ComponentT
+namespace UserInterfaceT::UIComponentT::ComponentT
 {
 	TEST_F(TextureSwitcherT, ChangeBindKey)
 	{
@@ -51,8 +51,7 @@ namespace UserInterface::UIComponentT::ComponentT
 		RECT source{ 0, 0, 30, 30 };
 
 		MockTextureRender render;
-		EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source)))
-			.Times(1);
+		EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source))).Times(1);
 
 		m_component->ProcessRender(&render);
 	}

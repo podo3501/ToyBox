@@ -3,7 +3,7 @@
 #include "UserInterface/UIComponent/Component/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 
-namespace UserInterface::UIComponentT::ComponentT::PatchTextureT
+namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 {
 	TEST_F(PatchTextureStd3T_Horizontal, ChangeBindKey)
 	{

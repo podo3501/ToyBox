@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "UIComponentT_Single.h"
 
-namespace UserInterface::UIComponentT
+namespace UserInterfaceT::UIComponentT
 {
 	//Attach 테스트할 예정
 	TEST_F(UIComponentT_Single, Attach)
