@@ -18,10 +18,11 @@ int CreateGoogleTest(int argc, char** argv, const wstring& projectName, ::testin
 	::testing::AddGlobalTestEnvironment(env);
 
 	auto silent_run = false;
-	if (silent_run) {
+	if (silent_run)
+	{
 		auto& listeners = ::testing::UnitTest::GetInstance()->listeners();
 		delete listeners.Release(listeners.default_result_printer());
 	}
-
+	
 	return RUN_ALL_TESTS();
 }

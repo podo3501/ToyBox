@@ -1,0 +1,33 @@
+{
+    "Children": [
+        {
+            "Type": "Panel",
+            "Name": "Main",
+            "Layout": {
+                "Size": {
+                    "x": 800,
+                    "y": 600
+                },
+                "Origin": "LeftTop"
+            },
+            "Transform": {
+                "Ratio": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "RelativePosition": {
+                    "x": 0,
+                    "y": 0
+                }
+            },
+            "Region": "UIModuleMainEntry",
+            "StateFlag": 55,
+            "RenderSearch": 2,
+            "Children": null
+        }
+    ],
+    "UINameGenerator": {
+        "RegionGens": null,
+        "RegionNames": null
+    }
+}

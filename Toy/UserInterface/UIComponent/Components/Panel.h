@@ -28,4 +28,4 @@ private:
     UIModule* m_uiModule;
 };
 
-unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer);
+//unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer);

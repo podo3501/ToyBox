@@ -120,6 +120,15 @@
     <ClCompile Include="UserInterface\UIModuleT.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\UINameGenerator\UINameGeneratorT.cpp">
+      <Filter>UserInterface\UINameGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIComponentExT.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\BaseModuleT.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -229,6 +238,15 @@
     <ClInclude Include="UserInterface\UIModuleT.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h">
+      <Filter>UserInterface\UINameGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIComponentExT.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\BaseModuleT.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mocks">
@@ -272,6 +290,9 @@
     </Filter>
     <Filter Include="UserInterface\CommandHistory">
       <UniqueIdentifier>{3b547da9-b571-45fa-89e0-53fe16c2c1b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UINameGenerator">
+      <UniqueIdentifier>{bd4f98b9-797a-4aab-b289-8de0a0beab6f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -144,6 +144,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Tests\Helper.h" />
+    <ClInclude Include="UserInterface\BaseModuleT.h" />
     <ClInclude Include="UserInterface\CommandHistory\TexResCommandHistoryT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
@@ -164,9 +165,11 @@
     <ClInclude Include="UserInterface\UIComponent\Component\ScrollBarT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\TextAreaT.h" />
     <ClInclude Include="UserInterface\UIComponent\Component\TextureSwitcherT.h" />
+    <ClInclude Include="UserInterface\UIComponent\UIComponentExT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT_Single.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
     <ClInclude Include="UserInterface\UIModuleT.h" />
+    <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Fixtures\FixtureSuite.cpp" />
@@ -192,6 +195,7 @@
     <ClCompile Include="Tests\TextureSwitcherComponent.cpp" />
     <ClCompile Include="Tests\UIModuleConnection.cpp" />
     <ClCompile Include="Tests\UndoRedo.cpp" />
+    <ClCompile Include="UserInterface\BaseModuleT.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TexResCommandHistoryT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
@@ -212,9 +216,11 @@
     <ClCompile Include="UserInterface\UIComponent\Component\ScrollBarT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\TextAreaT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Component\TextureSwitcherT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\UIComponentExT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT_Single.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
     <ClCompile Include="UserInterface\UIModuleT.cpp" />
+    <ClCompile Include="UserInterface\UINameGenerator\UINameGeneratorT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.vcxproj">
