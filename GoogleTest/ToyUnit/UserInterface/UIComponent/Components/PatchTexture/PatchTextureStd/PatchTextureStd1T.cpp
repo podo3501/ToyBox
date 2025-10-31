@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "PatchTextureStd1T.h"
-#include "UserInterface/UIComponent/Component/ComponentHelper.h"
+#include "UserInterface/UIComponent/Components/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
 

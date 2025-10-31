@@ -1,5 +1,5 @@
 #pragma once
-#include "UserInterface/UIComponent/Component/ComponentT.h"
+#include "UserInterface/UIComponent/Components/ComponentT.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite9.h"
 
 class PatchTextureLite9T : public ComponentT

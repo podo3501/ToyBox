@@ -15,7 +15,10 @@ namespace UserInterfaceT::UINameGeneratorT
 		EXPECT_TRUE(Compare(m_nameGen, cloneGenerator));
 	}
 
-	TEST_F(UINameGeneratorT, MakeNameOf) //?!? 인자에 ComponentID를 넣지 않고 내부적으로 전체 ComponentID를 돌면서 찾으면 될 것 같다.
+	//?!? 인자에 ComponentID를 넣지 않고 내부적으로 전체 ComponentID를 돌면서 찾으면 될 것 같다. 
+	// 그런데 이 인자가 없으면 기본 이름을 뭘로 할지 알수가 없다. 
+	// 음. 다시보니까 이름이 있을때만 비교하기 때문에 아마도 될꺼 같다.
+	TEST_F(UINameGeneratorT, MakeNameOf) 
 	{
 		//Component 이름이라면 이름과 상관없이 내부적으로 사용가능한 컴포넌트 이름으로 리턴한다.
 		EXPECT_EQ(m_nameGen->MakeNameOf("PatchTextureStd1_35", "region", ComponentID::PatchTextureStd1), 
@@ -30,6 +33,19 @@ namespace UserInterfaceT::UINameGeneratorT
 	{
 		EXPECT_EQ(m_nameGen->MakeRegionOf("region"), "region");
 		EXPECT_EQ(m_nameGen->MakeRegionOf("region"), "region_1"); //같은 Region일때는 _1을 붙여 리턴한다.
+	}
+
+	TEST_F(UINameGeneratorT, RecycleName)
+	{
+		m_nameGen->MakeNameOf("name", "region", ComponentID::PatchTextureStd1);
+		m_nameGen->MakeNameOf("name", "region", ComponentID::PatchTextureStd1); //name_1로 생성됨.
+		m_nameGen->MakeNameOf("name", "region", ComponentID::PatchTextureStd1); //name_2로 생성됨.
+		m_nameGen->RemoveName("region", "name_1"); //name_1을 지움. recycle에 1이 들어감.
+
+		EXPECT_EQ(m_nameGen->MakeNameOf("name", "region", ComponentID::PatchTextureStd1),
+			make_pair("region", "name_1")); //recycle된 1값을 먼저 사용.
+		EXPECT_EQ(m_nameGen->MakeNameOf("name", "region", ComponentID::PatchTextureStd1),
+			make_pair("region", "name_3")); //그다음 순번인 name_3을 만들어줌.
 	}
 
 	TEST_F(UINameGeneratorT, RemoveName)

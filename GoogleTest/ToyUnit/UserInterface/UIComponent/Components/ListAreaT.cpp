@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ListAreaT.h"
-#include "UserInterface/UIComponent/Component/ComponentHelper.h"
+#include "UserInterface/UIComponent/Components/ComponentHelper.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Shared/Utils/GeometryExt.h"

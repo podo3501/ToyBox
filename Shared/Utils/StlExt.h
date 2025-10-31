@@ -26,18 +26,12 @@ template<typename T>
 bool Compare(const T& lhs, const T& rhs)
 {
 	if constexpr (!PointerLike<T>)
-	{
-		bool result = (lhs == rhs);
-		Assert(result);
-		return result;
-	}
+		return (lhs == rhs);
 
 	if (!lhs && !rhs) return true;
 	if (!lhs || !rhs) return false;
 
-	bool result = (*lhs == *rhs);
-	Assert(result);
-	return result;
+	return (*lhs == *rhs);
 }
 
 // 시퀀스 컨테이너 비교

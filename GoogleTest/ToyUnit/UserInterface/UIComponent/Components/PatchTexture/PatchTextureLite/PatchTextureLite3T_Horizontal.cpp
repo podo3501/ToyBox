@@ -1,57 +1,60 @@
 #include "pch.h"
-#include "PatchTextureStd3T_Horizontal.h"
-#include "UserInterface/UIComponent/Component/ComponentHelper.h"
+#include "PatchTextureLite3T_Horizontal.h"
+#include "UserInterface/UIComponent/Components/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 
 namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 {
-	TEST_F(PatchTextureStd3T_Horizontal, ChangeBindKey)
+	TEST_F(PatchTextureLite3T_Horizontal, BindSourceInfo)
 	{
-		m_component->ChangeBindKey(GetResBinder(), "ThreeH60");
-		EXPECT_EQ(m_component->GetArea(), Rectangle(0, 0, 60, 60));
-	}
+		InitializeBindSourceInfo();
 
-	TEST_F(PatchTextureStd3T_Horizontal, ChangeSize_Bigger)
-	{
-		m_component->ChangeSize({ 80, 80 });
 		auto centerComponent = m_component->GetCenterComponent();
-		EXPECT_EQ(centerComponent->GetSize(), XMUINT2(36, 80)); // 80 - (22 * 2) = 36, 왼쪽 오른쪽 사각형 x길이는 변하지 않는다.
+		EXPECT_EQ(centerComponent->GetSize(), XMUINT2(4, 48)); //BindSourceInfo하면 source 사이즈값으로 맞춘다.
 	}
 
-	//?!? 작게 사이즈를 하면 버그가 생김
-	//TEST_F(PatchTextureStd3T, ChangeSize_Smaller)
-	//{
-		//m_component->ChangeSize({ 30, 30 });
-		//auto preSize = m_component->GetSize();
-	//}
-
-	TEST_F(PatchTextureStd3T_Horizontal, Clone)
+	TEST_F(PatchTextureLite3T_Horizontal, Clone)
 	{
 		EXPECT_TRUE(TestClone(m_component));
 	}
 
-	TEST_F(PatchTextureStd3T_Horizontal, FitToTextureSource)
+	TEST_F(PatchTextureLite3T_Horizontal, ChangeSize_Bigger)
 	{
-		auto preSize = m_component->GetSize();
-		m_component->ChangeSize({ 60, 60 });
+		InitializeBindSourceInfo();
+		m_component->ChangeSize({ 80, 80 });
 
-		m_component->FitToTextureSource();
-		EXPECT_EQ(m_component->GetSize(), preSize);
+		auto centerComponent = m_component->GetCenterComponent();
+		EXPECT_EQ(centerComponent->GetSize(), XMUINT2(36, 80)); // 80 - (22 * 2) = 36, 왼쪽 오른쪽 사각형 x길이는 변하지 않는다.
 	}
 
-	TEST_F(PatchTextureStd3T_Horizontal, GetCenterComponent)
+	//TEST_F(PatchTextureLite3T_Horizontal, ChangeSize_Smaller) ?!?나중에 구현
+
+	TEST_F(PatchTextureLite3T_Horizontal, FitToTextureSource)
+	{
+		Rectangle srcLeft{ 0, 0, 20, 60 };
+		Rectangle srcCenter{ 20, 0, 20, 60 };
+		Rectangle srcRight{ 40, 0, 20, 60 };
+
+		m_component->SetIndexedSource(0, { srcLeft, srcCenter, srcRight }); //SetIndexedSource는 BindSourceInfo 처럼 Fit 해주지 않는다.
+		m_component->FitToTextureSource();
+
+		EXPECT_EQ(m_component->GetSize(), XMUINT2(60, 60));
+	}
+
+	TEST_F(PatchTextureLite3T_Horizontal, GetCenterComponent)
 	{
 		auto centerComponent = m_component->GetCenterComponent();
-		EXPECT_EQ(centerComponent->GetArea(), Rectangle(22, 0, 4, 48));
+		EXPECT_EQ(centerComponent->GetArea(), Rectangle{});
 	}
 
-	TEST_F(PatchTextureStd3T_Horizontal, GetTextureSlice)
+	TEST_F(PatchTextureLite3T_Horizontal, GetTextureSlice)
 	{
 		EXPECT_EQ(m_component->GetTextureSlice(), TextureSlice::ThreeH);
 	}
 
-	TEST_F(PatchTextureStd3T_Horizontal, ProcessRender)
+	TEST_F(PatchTextureLite3T_Horizontal, ProcessRender)
 	{
+		InitializeBindSourceInfo();
 		m_component->ChangeOrigin(Origin::Center);
 		m_component->ChangeSize({ 80, 80 }); //source 좌표와 동일해서 사이즈를 조정했다.
 
@@ -73,10 +76,5 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 
 		m_component->UpdatePositionsManually();
 		m_component->ProcessRender(&render);
-	}
-
-	TEST_F(PatchTextureStd3T_Horizontal, WriteAndRead)
-	{
-		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"PatchTextureStd3T_Horizontal_WR.json"));
 	}
 }

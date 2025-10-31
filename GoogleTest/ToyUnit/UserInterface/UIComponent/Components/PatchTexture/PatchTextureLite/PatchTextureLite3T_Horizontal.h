@@ -1,8 +1,8 @@
 #pragma once
-#include "UserInterface/UIComponent/Component/ComponentT.h"
+#include "UserInterface/UIComponent/Components/ComponentT.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite3.h"
 
-class PatchTextureLite3T_Vertical : public ComponentT
+class PatchTextureLite3T_Horizontal : public ComponentT
 {
 protected:
 	virtual void SetUp() override;
@@ -14,18 +14,18 @@ protected:
 	unique_ptr<PatchTextureLite3> m_component;
 };
 
-void PatchTextureLite3T_Vertical::SetUp()
+void PatchTextureLite3T_Horizontal::SetUp()
 {
 	ComponentT::SetUp();
 
 	XMUINT2 size{ 48, 48 };
-	m_component = CreateComponent<PatchTextureLite3>(size, DirectionType::Vertical);
+	m_component = CreateComponent<PatchTextureLite3>(size, DirectionType::Horizontal);
 }
 
-void PatchTextureLite3T_Vertical::InitializeBindSourceInfo()
+void PatchTextureLite3T_Horizontal::InitializeBindSourceInfo()
 {
-	Rectangle srcTop{ 0, 0, 48, 22 };
-	Rectangle srcMiddle{ 0, 22, 48, 4 };
-	Rectangle srcBottom{ 0, 26, 48, 22 };
-	m_component->BindSourceInfo(0, { srcTop, srcMiddle, srcBottom });
+	Rectangle srcLeft{ 0, 0, 22, 48 };
+	Rectangle srcCenter{ 22, 0, 4, 48 };
+	Rectangle srcRight{ 26, 0, 22, 48 };
+	m_component->BindSourceInfo(0, { srcLeft, srcCenter, srcRight });
 }

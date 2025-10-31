@@ -48,8 +48,8 @@ private:
 	unique_ptr<UINameGenerator> m_generator;
 	vector<unique_ptr<UIComponent>> m_children;	//children이지만 panel만 들어가 있다.
 	unique_ptr<TextureResourceBinder> m_resBinder;
-	IRenderer* m_renderer;
-	wstring m_filename{};
+	IRenderer* m_renderer{ nullptr };
+	wstring m_filename;
 	UIComponent* m_capture{ nullptr };
 };
 

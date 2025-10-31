@@ -9,12 +9,18 @@ void BaseModuleT::SetUp()
 	m_environment = InitializeEnvironment(L"", { 800.f, 600.f });
 
 	m_renderer = make_unique<MockRenderer>();
-	m_renderer->RegisterMockTextureInfos({
-		{ L"Texture512.png", 0, {512, 512} }
-		});
+	RegisterRenderTextures(m_renderer.get());
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 	m_uiModule = CreateUIModule(layout, "Main", m_renderer.get());
-	auto resBinder = m_uiModule->GetTexResBinder();
+	RegisterBinderTextures(m_uiModule->GetTexResBinder());
+
 	m_main = m_uiModule->GetMainPanel();
+}
+
+void BaseModuleT::RegisterRenderTextures(MockRenderer* renderer)
+{
+	renderer->RegisterMockTextureInfos({
+		{ L"Texture512.png", 0, {512, 512} }
+		});
 }

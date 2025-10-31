@@ -15,7 +15,7 @@ public:
 	UICommandHistory();
 
 	unique_ptr<UIComponent> AttachComponent(UIComponent* parent, 
-		unique_ptr<UIComponent> component, const XMINT2& relativePos);
+		unique_ptr<UIComponent> component, const XMINT2& relativePos = {});
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* detach);
 	bool ChangeRelativePosition(UIComponent* component, const XMINT2& relativePos);
 	bool SetSize(UIComponent* component, const XMUINT2& size);

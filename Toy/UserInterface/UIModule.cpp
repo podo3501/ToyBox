@@ -20,14 +20,14 @@ UIModule::~UIModule()
 }
 
 UIModule::UIModule() noexcept :
-	m_generator{ make_unique<UINameGenerator>() },
-	m_renderer{ nullptr }
+	m_generator{ make_unique<UINameGenerator>() }
 {}
 
 bool UIModule::operator==(const UIModule& other) const noexcept
 {
 	ReturnIfFalse(Compare(m_generator, other.m_generator));
 	ReturnIfFalse(Compare(m_children.front(), other.m_children.front()));
+	//?!? 다른 멤버변수들도 해 주자.
 
 	return true;
 }

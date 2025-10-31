@@ -13,7 +13,10 @@ public:
 	inline optional<size_t> GetGfxOffset() const noexcept { return m_gfxOffset; }
 
 protected:
-	inline void SetIndex(size_t index) noexcept { m_index = index; }
+	inline void SetIndex(size_t index) noexcept 
+	{
+		m_index = index; 
+	}
 	inline void SetGfxOffset(UINT64 gfxOffset) noexcept { m_gfxOffset = gfxOffset; }
 	inline void SetTextureLoader(ITextureLoad* load) noexcept { m_texLoader = load; }
 	void Release() noexcept;

@@ -6,9 +6,6 @@
     <ClCompile Include="Mocks\MockRenderer.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
-    <ClCompile Include="System\Scene.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="Mocks\MockInputManager.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
@@ -66,54 +63,6 @@
     <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp">
       <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\ComponentT.cpp">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\TextAreaT.cpp">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd1T.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd3T_Horizontal.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd3T_Vertical.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd9T.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite1T.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\ComponentHelper.cpp">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite9T.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\TextureSwitcherT.cpp">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\ContainerT.cpp">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\ScrollBarT.cpp">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\RenderTextureT.cpp">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Component\ListAreaT.cpp">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\CommandHistory\TexResCommandHistoryT.cpp">
       <Filter>UserInterface\CommandHistory</Filter>
     </ClCompile>
@@ -129,6 +78,63 @@
     <ClCompile Include="UserInterface\BaseModuleT.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.cpp">
+      <Filter>UserInterface\CommandHistory</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SceneManagerT.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ComponentHelper.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ComponentT.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ContainerT.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ListAreaT.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\RenderTextureT.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\ScrollBarT.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\TextAreaT.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\TextureSwitcherT.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.cpp">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd1T.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3T_Horizontal.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3T_Vertical.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd9T.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1T.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite9T.cpp">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -137,9 +143,6 @@
       <Filter>Mocks\Stubs\Include</Filter>
     </ClInclude>
     <ClInclude Include="Mocks\MockRenderer.h">
-      <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="Mocks\MockClasses.h">
       <Filter>Mocks</Filter>
     </ClInclude>
     <ClInclude Include="Mocks\Stubs\IInputManagerStub.h">
@@ -184,54 +187,6 @@
     <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h">
       <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\ComponentT.h">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\TextAreaT.h">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd1T.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd3T_Horizontal.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd3T_Vertical.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd\PatchTextureStd9T.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite1T.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\ComponentHelper.h">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite\PatchTextureLite9T.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\TextureSwitcherT.h">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\ContainerT.h">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\ScrollBarT.h">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\RenderTextureT.h">
-      <Filter>UserInterface\UIComponent\Component\PatchTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Component\ListAreaT.h">
-      <Filter>UserInterface\UIComponent\Component</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\CommandHistory\TexResCommandHistoryT.h">
       <Filter>UserInterface\CommandHistory</Filter>
     </ClInclude>
@@ -246,6 +201,63 @@
     </ClInclude>
     <ClInclude Include="UserInterface\BaseModuleT.h">
       <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.h">
+      <Filter>UserInterface\CommandHistory</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SceneManagerT.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ComponentHelper.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ComponentT.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ContainerT.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ListAreaT.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\RenderTextureT.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\ScrollBarT.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\TextAreaT.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\TextureSwitcherT.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.h">
+      <Filter>UserInterface\UIComponent\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd1T.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3T_Horizontal.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3T_Vertical.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd9T.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1T.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite9T.h">
+      <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -276,23 +288,23 @@
     <Filter Include="UserInterface\TextureResourceBinder">
       <UniqueIdentifier>{db5dc585-8032-47a5-befe-7651e490a5cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UserInterface\UIComponent\Component">
-      <UniqueIdentifier>{45aa971d-5722-466a-a49e-d79c35346f5e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserInterface\UIComponent\Component\PatchTexture">
-      <UniqueIdentifier>{20cc366d-8dfe-4d11-bd42-a7e7d6fad333}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureStd">
-      <UniqueIdentifier>{abfae4f9-5e64-40c5-b729-3bdfb2dc6cfa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserInterface\UIComponent\Component\PatchTexture\PatchTextureLite">
-      <UniqueIdentifier>{806d7c74-0b04-4753-9443-4cd457c11aad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UserInterface\CommandHistory">
       <UniqueIdentifier>{3b547da9-b571-45fa-89e0-53fe16c2c1b2}</UniqueIdentifier>
     </Filter>
     <Filter Include="UserInterface\UINameGenerator">
       <UniqueIdentifier>{bd4f98b9-797a-4aab-b289-8de0a0beab6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent\Components">
+      <UniqueIdentifier>{6c5e1436-ebb9-487a-8282-634eef9f2313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent\Components\PatchTexture">
+      <UniqueIdentifier>{db2afc63-1bc5-42b6-bdd2-9cafa5f92a0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite">
+      <UniqueIdentifier>{61d1bcfc-a30a-49da-88a4-f06d0161299b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd">
+      <UniqueIdentifier>{739b4106-bedc-4824-be82-801c56675d39}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
