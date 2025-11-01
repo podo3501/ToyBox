@@ -15,10 +15,16 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual void ProcessIO(SerializerIO& serializer) override;
+	virtual bool OnNormal() noexcept override;
+	virtual bool OnHover() noexcept override;
+	virtual bool OnPress() noexcept override;
+	virtual bool OnHold(bool inside) noexcept override;
+	virtual bool OnRelease(bool inside) noexcept override;
 
 	bool Setup(const UILayout& layout, TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
 	inline bool Setup(TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode) { return Setup({}, texSlice, stateKeys, behaviorMode); }
 	void AddPressCB(function<void(InputState)> callback) { m_onPressCB = callback; }
+	void SetPressStateCB(function<void(InteractState)> callback) { m_onPressStateCB = callback; }
 	unique_ptr<UIComponent> AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	void ClearInteraction() noexcept;
 	bool FitToTextureSource() noexcept;
@@ -51,6 +57,7 @@ private:
 	PatchTextureLite* m_patchTexL;
 	optional<InteractState> m_state;
 	function<void(InputState)> m_onPressCB;
+	function<void(InteractState)> m_onPressStateCB;
 };
 
 //utility

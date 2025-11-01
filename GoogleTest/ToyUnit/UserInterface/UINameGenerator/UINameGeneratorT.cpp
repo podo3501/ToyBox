@@ -11,8 +11,8 @@ namespace UserInterfaceT::UINameGeneratorT
 		m_nameGen->MakeRegionOf("region");
 		m_nameGen->MakeNameOf("name", "region", ComponentID::PatchTextureStd1);
 
-		unique_ptr<UINameGenerator> cloneGenerator = m_nameGen->Clone();
-		EXPECT_TRUE(Compare(m_nameGen, cloneGenerator));
+		auto clone = m_nameGen->Clone();
+		EXPECT_TRUE(Compare(m_nameGen, clone));
 	}
 
 	//?!? 인자에 ComponentID를 넣지 않고 내부적으로 전체 ComponentID를 돌면서 찾으면 될 것 같다. 

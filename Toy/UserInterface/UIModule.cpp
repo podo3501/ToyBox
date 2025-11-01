@@ -23,6 +23,18 @@ UIModule::UIModule() noexcept :
 	m_generator{ make_unique<UINameGenerator>() }
 {}
 
+UIModule::UIModule(const UIModule& other)
+{
+	m_generator = other.m_generator->Clone();
+	m_resBinder = make_unique<TextureResourceBinder>(*other.m_resBinder);
+	m_renderer = other.m_renderer;
+	m_filename = other.m_filename;
+	
+	ranges::transform(other.m_children, back_inserter(m_children), [this, &other](const auto& child) {
+		return move(child->Clone());
+		});
+}
+
 bool UIModule::operator==(const UIModule& other) const noexcept
 {
 	ReturnIfFalse(Compare(m_generator, other.m_generator));
@@ -30,6 +42,11 @@ bool UIModule::operator==(const UIModule& other) const noexcept
 	//?!? 다른 멤버변수들도 해 주자.
 
 	return true;
+}
+
+unique_ptr<UIModule> UIModule::Clone() const
+{
+	return unique_ptr<UIModule>(new UIModule(*this));
 }
 
 //?!? 두 SetupMainComponent 함수 리팩토링 해야 함
@@ -86,39 +103,59 @@ bool UIModule::Update(const DX::StepTimer& timer) noexcept
 	return panel->ProcessUpdate(timer);
 }
 
-bool UIModule::UpdateMouseState() noexcept
+void UIModule::UpdateMouseState() noexcept
 {
 	//hover는 공통으로 호출
 	auto input = InputLocator::GetService();
 	auto mouseState = input->GetMouseState();
 	auto components = UIEx(GetMainPanel()).FindRenderComponents(mouseState.pos);
-	for (auto& component : components)
-		component->OnHover();
 
-	if (m_capture)
+	UpdateHoverState(components);
+	ProcessCaptureComponent(mouseState); //캡쳐된 컴포넌트를 마우스 입력에 따라 처리
+	CaptureComponent(mouseState.leftButton);	//클릭하면 캡쳐하고 press호출
+}
+
+void UIModule::UpdateHoverState(vector<UIComponent*> components) noexcept
+{
+	for (auto& component : components)
+		component->OnHover(); //일단 다 호출하고나서
+
+	for (auto& prevComp : m_hoveredComponents)
 	{
-		bool inside = Contains(m_capture->GetArea(), mouseState.pos);
-		if (!mouseState.leftButton) //3. 마우스를 떼면 release호출하고 캡쳐해제
-		{
-			m_capture->OnRelease(inside);
-			m_capture = nullptr;
-		}
-		else
-			m_capture->OnHold(inside); //2. 캡쳐한걸 hold로 호출한다.
-		return true;
+		if (ranges::find(components, prevComp) == components.end())
+			prevComp->OnNormal(); //영역이 아닌 애들은 OnNormal 호출
 	}
 
-	//1. 클릭하면 캡쳐하고 press호출
-	for (auto& component : components)
+	m_hoveredComponents = components;
+}
+
+void UIModule::ProcessCaptureComponent(const MouseState& mouseState) noexcept
+{
+	if (!m_capture) return;
+
+	bool inside = Contains(m_capture->GetArea(), mouseState.pos);
+	if (!mouseState.leftButton) //3. 마우스를 떼면 release호출하고 캡쳐해제
 	{
-		if (component->OnPress())
+		m_capture->OnRelease(inside);
+		m_capture = nullptr;
+	}
+	else
+		m_capture->OnHold(inside); //2. 캡쳐한걸 hold로 호출한다.
+}
+
+void UIModule::CaptureComponent(bool leftButton) noexcept
+{
+	if (m_capture) return;
+	if (!leftButton) return;
+
+	for (auto& component : m_hoveredComponents)
+	{
+		if (component->OnPress()) //윗 컴포넌트부터 처리하다가 처리가 됏다면 그 밑에는 안한다.
 		{
 			m_capture = component;
 			break;
 		}
 	}
-
-	return true;
 }
 
 void UIModule::Render(ITextureRender* render) const

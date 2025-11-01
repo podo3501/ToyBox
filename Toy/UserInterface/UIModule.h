@@ -2,6 +2,7 @@
 
 struct IRenderer;
 struct ITextureRender;
+struct MouseState;
 class UILayout;
 class UIComponent;
 class Panel;
@@ -12,10 +13,14 @@ class MouseTracker;
 namespace DX { class StepTimer; }
 class UIModule
 {
+protected:
+	UIModule(const UIModule& other);
+
 public:
 	~UIModule();
 	UIModule() noexcept;
 	bool operator==(const UIModule& other) const noexcept;
+	unique_ptr<UIModule> Clone() const;
 
 	bool SetupMainComponent(const UILayout& layout, const string& name,
 		IRenderer* renderer, const wstring& srcBinderFilename);
@@ -23,7 +28,7 @@ public:
 	void AddRenderer() noexcept;
 	bool BindTextureResources() noexcept;
 	bool Update(const DX::StepTimer& timer) noexcept;
-	bool UpdateMouseState() noexcept;
+	void UpdateMouseState() noexcept;
 	void Render(ITextureRender* render) const;
 	//unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
 	//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
@@ -43,6 +48,9 @@ public:
 private:
 	bool Read(const wstring& filename = L"") noexcept;
 	void ReloadDatas() noexcept;
+	void UpdateHoverState(vector<UIComponent*> components) noexcept;
+	void ProcessCaptureComponent(const MouseState& mouseState) noexcept;
+	void CaptureComponent(bool leftButton) noexcept;
 	UIComponent* FindComponentInRegion(const string& regionName, const string& name) const noexcept;
 
 	unique_ptr<UINameGenerator> m_generator;
@@ -50,6 +58,7 @@ private:
 	unique_ptr<TextureResourceBinder> m_resBinder;
 	IRenderer* m_renderer{ nullptr };
 	wstring m_filename;
+	vector<UIComponent*> m_hoveredComponents; //이전 호버된 컴포넌트와 비교해서 OnNormal 호출함.
 	UIComponent* m_capture{ nullptr };
 };
 

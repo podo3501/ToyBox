@@ -48,7 +48,8 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	//IComponent virtual function(Core에서 컴포넌트를 사용할때 쓰는 함수. 로드때나 랜더링 때에는 콜백처럼 불려야 하기 때문이다. 그냥 클라이언트 값을 얻겠다고 함수를 추가하지 말자.)
 	virtual void ProcessRender(ITextureRender* render) override final;
 	//마우스 관련 event
-	virtual bool OnHover() noexcept { return false; } 
+	virtual bool OnNormal() noexcept { return false; }
+	virtual bool OnHover() noexcept { return false; }
 	virtual bool OnPress() noexcept { return false; }
 	virtual bool OnHold(bool inside) noexcept { inside;  return false; }
 	virtual bool OnRelease(bool inside) noexcept { inside; return false; }

@@ -16,6 +16,7 @@ public:
 		ON_CALL(*this, OnRelease(testing::_)).WillByDefault(testing::Return(true));
 	}
 
+	MOCK_METHOD(bool, OnNormal, (), (noexcept));
 	MOCK_METHOD(bool, OnHover, (), (noexcept));
 	MOCK_METHOD(bool, OnPress, (), (noexcept));
 	MOCK_METHOD(bool, OnHold, (bool inside), (noexcept));
@@ -44,8 +45,16 @@ public:
 	MOCK_METHOD(void, ImplementRender, (ITextureRender*), (const)); //화면에 보여주는 부분
 };
 
+/////////////////////////////////////////////////////////
+
 namespace UserInterfaceT
 {
+	TEST_F(UIModuleT, Clone)
+	{
+		auto clone = m_uiModule->Clone();
+		EXPECT_TRUE(Compare(m_uiModule, clone));
+	}
+
 	TEST_F(UIModuleT, EnableToolMode)
 	{
 		auto comp = CreateOneLevelComponent<MockToolMode>(m_main);
@@ -96,6 +105,7 @@ namespace UserInterfaceT
 		testing::InSequence seq; //호출순서 검증
 		EXPECT_CALL(*comp, OnHover()).Times(1); //안에 있을때만 불리기 때문에 한번
 		EXPECT_CALL(*comp, OnPress()).Times(1);
+		EXPECT_CALL(*comp, OnNormal()).Times(1); //영역 밖으로 나오면서 호출을 한번 한다.
 		EXPECT_CALL(*comp, OnHold(false)).Times(1);
 		EXPECT_CALL(*comp, OnRelease(false)).Times(1);
 
@@ -104,13 +114,21 @@ namespace UserInterfaceT
 
 	TEST_F(UIModuleT, UpdateMouseState_MouseHover)
 	{
-		auto [parent, child] = CreateTwoLevelComponents<MockClickable>(m_main);
+		ComponentDesc desc{ 10, 10, UILayout({ 50, 50 }) };
+		auto parent = CreateOneLevelComponent<MockClickable>(m_main, desc);		
+		auto child = CreateOneLevelComponent<MockClickable>(parent, desc);
 
 		//마우스를 올리고 hover 되는지 확인.
 		EXPECT_CALL(*parent, OnHover()).Times(1);
 		EXPECT_CALL(*child, OnHover()).Times(1);
 
-		SimulateMouse(child->GetLeftTop(), InputState::Pressed); //다른걸 캡쳐(눌리고)하고 있어도 hover는 동작해야함.
+		SimulateMouse(child->GetLeftTop(), InputState::Up);
+
+		//parent로 이동하면 child가 OnNormal이 호출되고 parent는 OnHover가 호출되어야 함.
+		EXPECT_CALL(*parent, OnHover()).Times(1);
+		EXPECT_CALL(*child, OnNormal()).Times(1);
+
+		SimulateMouse(parent->GetLeftTop(), InputState::Up);
 	}
 
 	TEST_F(UIModuleT, WriteAndRead)

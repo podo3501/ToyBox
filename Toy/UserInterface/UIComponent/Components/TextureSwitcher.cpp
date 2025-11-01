@@ -48,6 +48,35 @@ bool TextureSwitcher::operator==(const UIComponent& rhs) const noexcept
 	return tie(m_stateKeys, m_behaviorMode) == tie(o->m_stateKeys, o->m_behaviorMode);
 }
 
+bool TextureSwitcher::OnNormal() noexcept
+{
+	ChangeState(InteractState::Normal);
+	return true;
+}
+
+bool TextureSwitcher::OnHover() noexcept 
+{ 
+	ChangeState(InteractState::Hovered);
+	return true;
+}
+
+bool TextureSwitcher::OnPress() noexcept 
+{ 
+	ChangeState(InteractState::Pressed);
+	m_onPressStateCB(InteractState::Pressed);
+	return true;
+}
+
+bool TextureSwitcher::OnHold(bool inside) noexcept 
+{ 
+	inside;  return true;
+}
+
+bool TextureSwitcher::OnRelease(bool inside) noexcept 
+{ 
+	inside; return true;
+}
+
 bool TextureSwitcher::Setup(const UILayout& layout, TextureSlice texSlice,
 	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
 {

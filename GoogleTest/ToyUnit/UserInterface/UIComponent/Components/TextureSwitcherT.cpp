@@ -45,6 +45,23 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_TRUE((m_component->GetSize() == XMUINT2{ 30, 30 })); //초기셋팅은 Normal source 값을 가지고 와서 Size 크기로 셋팅한다.
 	}
 
+	TEST_F(TextureSwitcherT, OnHover)
+	{
+		m_component->OnHover();
+		EXPECT_EQ(m_component->GetState(), InteractState::Hovered);
+	}
+
+	TEST_F(TextureSwitcherT, OnPress)
+	{
+		testing::MockFunction<void(InteractState)> OnPress;
+		m_component->SetPressStateCB(OnPress.AsStdFunction());
+		EXPECT_CALL(OnPress, Call(InteractState::Pressed)).Times(1);
+
+		m_component->OnPress();
+
+		EXPECT_EQ(m_component->GetState(), InteractState::Pressed);
+	}
+
 	TEST_F(TextureSwitcherT, ProcessRender)
 	{
 		RECT dest = RectangleToRect(m_component->GetArea());
