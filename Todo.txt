@@ -193,8 +193,10 @@
 --App용 테스트 씬 만들기
 --점진적으로 IInput으로 바꿀 예정
 --TextureResourceBinder를 DI로 바꾸기(DI로 바꾸는 목적이 빈 클래스 만드는건데 기본인자를 L""을 넣어서 빈 클래스 생성하게끔 수정)
+--environment 이거 locator로 바꿔야 하지 않을까?
 
-@environment 이거 locator로 바꿔야 하지 않을까?
+@툴에서 RenderTexture->AsComponent->Module->Panel로 넘어가야 하는데 Module을 거치지 않고 넘어가고 있다.
+
 @TextureResourceBinder가 로딩할때 원소 갯수만큼 돌면서 텍스쳐를 로딩하는데 엔진에서 중복로딩하면 인덱스 넘겨주기
     때문에 괜찮았는데, 이렇게 많이 로딩 되면 안된다. 텍스쳐를 저장하는 공간을 두고 로딩할때 이 텍스쳐만 로딩하게끔 수정
     해야겠다. 마지막 원소가 사라지면 텍스트도 사라지고 이런식이 되어야 할 것같다. 

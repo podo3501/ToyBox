@@ -20,8 +20,13 @@ bool MockInputManager::IsInputAction(MouseButton mouseButton, InputState inputSt
 	return (m_inputState == inputState);
 }
 
+void MockInputManager::SetMouseState(const XMINT2& pos, InputState inputState) noexcept
+{
+	m_position = pos;
+	m_inputState = inputState;
+}
+
 void MockInputManager::SetMouseState(int x, int y, InputState inputState) noexcept
 {
-	m_position = { x, y };
-	m_inputState = inputState;
+	SetMouseState({ x, y }, inputState);
 }

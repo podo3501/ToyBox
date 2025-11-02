@@ -111,7 +111,8 @@ bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent> compon
 
 bool RenderTexture::Setup(unique_ptr<UIComponent> component) noexcept
 {
-	return Setup({}, move(component));
+	UILayout layout{ component->GetSize() };
+	return Setup(layout, move(component));
 }
 
 void RenderTexture::CheckMouseInArea() noexcept

@@ -2,6 +2,7 @@
 #include "BaseModuleT.h"
 #include "Mocks/MockInputManager.h"
 #include "Toy/Locator/InputLocator.h"
+#include "Shared/System/StepTimer.h"
 
 class UIModuleT : public BaseModuleT
 {
@@ -31,8 +32,9 @@ void UIModuleT::SimulateMouse(const XMINT2& pos, InputState state) noexcept
 
 void UIModuleT::SimulateMouse(int x, int y, InputState state) noexcept
 {
+	DX::StepTimer timer;
 	m_input->SetMouseState(x, y, state);
-	m_uiModule->UpdateMouseState();
+	m_uiModule->Update(timer);
 }
 
 void UIModuleT::SimulateClick(const XMINT2& startPos) noexcept

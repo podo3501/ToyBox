@@ -28,7 +28,7 @@ public:
 	unique_ptr<UIComponent> AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	void ClearInteraction() noexcept;
 	bool FitToTextureSource() noexcept;
-	inline void ChangeState(InteractState state) noexcept { if (m_state != state) SetState(state); }
+	void ChangeState(InteractState state, bool force = false) noexcept;
 	bool ChangeBindKey(TextureResourceBinder* resBinder, const string& bindKey) noexcept;
 	inline optional<InteractState> GetState() const noexcept 	{ return m_state; }
 	inline PatchTextureLite* GetPatchTextureLite() const noexcept { return m_patchTexL; }

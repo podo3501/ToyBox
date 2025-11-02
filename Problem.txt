@@ -304,3 +304,7 @@ tracy::ShutdownProfiler();
 
  테스트 프로젝트가 번번히 실행되는게 싫어서 false를 넘겨주면 강제로 끝내게 해서 컴파일은 되지만 테스트 탐색기
  에서는 보이지 않도록 조정했다. 추후에 테스트 탐색기에 이런 기능을 넣어주었으면 좋겠다.
+
+ EXPECT_CALL(*child, OnHover()).Times(1); 
+ 여기서 element_type* _Ptr{nullptr}; 여기서 nullptr이라면서 죽었다. 방금전까지만 해도 잘 돌아가는 것이었기 
+ 때문에 의아했다. 그런데 계속해서 nullptr이라고 자꾸 죽어서 리빌드를 했더니 고쳐졌다..

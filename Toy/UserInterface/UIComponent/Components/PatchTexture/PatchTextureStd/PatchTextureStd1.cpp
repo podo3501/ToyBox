@@ -43,7 +43,7 @@ bool PatchTextureStd1::operator==(const UIComponent& rhs) const noexcept
 
 bool PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
 {
-	if (!sourceInfo.GetIndex()) return false;
+	if (!sourceInfo.GetIndex()) return false; //여기서 리턴되는 건 m_renderer->LoadTextureBinder(resBinder); 이걸 안한 문제일 가능성이 높다.
 
 	m_filename = sourceInfo.filename;
 	m_coord.SetIndexedSource(*sourceInfo.GetIndex(), { sourceInfo.GetSource(m_sourceIndex) });

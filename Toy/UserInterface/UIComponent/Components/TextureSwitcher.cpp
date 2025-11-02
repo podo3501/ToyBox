@@ -69,12 +69,18 @@ bool TextureSwitcher::OnPress() noexcept
 
 bool TextureSwitcher::OnHold(bool inside) noexcept 
 { 
-	inside;  return true;
+	ChangeState(inside ? InteractState::Pressed : InteractState::Normal);
+	return true;
 }
 
 bool TextureSwitcher::OnRelease(bool inside) noexcept 
 { 
-	inside; return true;
+	if (!inside) return true;
+
+	auto eventDispatcher = EventDispatcherLocator::GetService();
+	eventDispatcher->Dispatch(GetRegion(), GetName(), UIEvent::Clicked);
+
+	return true;
 }
 
 bool TextureSwitcher::Setup(const UILayout& layout, TextureSlice texSlice,
@@ -185,6 +191,8 @@ void TextureSwitcher::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcep
 
 bool TextureSwitcher::ImplementUpdate(const DX::StepTimer&) noexcept
 {
+	//return true;
+
 	if (!m_state.has_value()) return true; //로드 하지 않았다면 값이 셋팅되지 않는다.
 	//이 두값이 이전프레임과 비교해서 달라졌다면 실행하게 한다면 좀 더 빠르게 된다.
 	auto input = InputLocator::GetService();
@@ -227,6 +235,13 @@ bool TextureSwitcher::FitToTextureSource() noexcept
 	SetSize(m_patchTexL->GetSize());
 
 	return true; 
+}
+
+void TextureSwitcher::ChangeState(InteractState state, bool force) noexcept 
+{ 
+	if ((!force) && //강제로 바꾸면(true라면) 바뀐다. 하지만, pressed에서 hovered로 바뀌지 않는다.
+		(m_state == InteractState::Pressed && state == InteractState::Hovered)) return;
+	if (m_state != state) SetState(state); 
 }
 
 void TextureSwitcher::SetState(InteractState state) noexcept

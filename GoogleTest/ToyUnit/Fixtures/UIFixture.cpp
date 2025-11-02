@@ -106,8 +106,9 @@ void UIFixture::SimulateMouse(const XMINT2& pos, InputState state) noexcept
 
 void UIFixture::SimulateMouse(int x, int y, InputState state) noexcept
 {
+	DX::StepTimer timer;
 	m_mockInput->SetMouseState(x, y, state);
-	m_uiModule->UpdateMouseState();
+	m_uiModule->Update(timer);
 }
 
 void UIFixture::SimulateClick(const XMINT2& startPos) noexcept

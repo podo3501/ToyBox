@@ -28,7 +28,6 @@ public:
 	void AddRenderer() noexcept;
 	bool BindTextureResources() noexcept;
 	bool Update(const DX::StepTimer& timer) noexcept;
-	void UpdateMouseState() noexcept;
 	void Render(ITextureRender* render) const;
 	//unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
 	//	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
@@ -48,6 +47,8 @@ public:
 private:
 	bool Read(const wstring& filename = L"") noexcept;
 	void ReloadDatas() noexcept;
+	bool UpdateMainPanel(const DX::StepTimer& timer) noexcept;
+	void UpdateMouseState() noexcept;
 	void UpdateHoverState(vector<UIComponent*> components) noexcept;
 	void ProcessCaptureComponent(const MouseState& mouseState) noexcept;
 	void CaptureComponent(bool leftButton) noexcept;

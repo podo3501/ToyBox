@@ -97,10 +97,16 @@ bool UIModule::BindTextureResources() noexcept
 
 bool UIModule::Update(const DX::StepTimer& timer) noexcept
 {
-	auto* panel = GetMainPanel();
-	ReturnIfFalse(panel);
+	ReturnIfFalse(UpdateMainPanel(timer));
+	UpdateMouseState();
 
-	return panel->ProcessUpdate(timer);
+	return true;
+}
+
+bool UIModule::UpdateMainPanel(const DX::StepTimer& timer) noexcept
+{
+	auto* panel = GetMainPanel();
+	return panel && panel->ProcessUpdate(timer);
 }
 
 void UIModule::UpdateMouseState() noexcept
@@ -150,7 +156,7 @@ void UIModule::CaptureComponent(bool leftButton) noexcept
 
 	for (auto& component : m_hoveredComponents)
 	{
-		if (component->OnPress()) //윗 컴포넌트부터 처리하다가 처리가 됏다면 그 밑에는 안한다.
+		if (component->OnPress()) //윗 컴포넌트부터 처리하다가 처리가 됐다면 그 밑에는 안한다.
 		{
 			m_capture = component;
 			break;

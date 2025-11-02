@@ -40,5 +40,4 @@ bool TestScene1::Leave()
 void TestScene1::Update(const DX::StepTimer& timer)
 {
 	m_uiModule->Update(timer);
-	m_uiModule->UpdateMouseState();
 }

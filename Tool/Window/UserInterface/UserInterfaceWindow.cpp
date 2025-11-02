@@ -33,10 +33,8 @@ bool UserInterfaceWindow::SetupProperty(unique_ptr<UIModule> uiModule)
 	m_controller = make_unique<ComponentController>(m_renderer, uiModule->GetTexResBinder(),
 		uiModule->GetMainPanel(), GetName());
 
-	UIComponent* mainComponent = uiModule->GetMainPanel();
 	unique_ptr<UIModuleAsComponent> asComponent = CreateComponent<UIModuleAsComponent>(move(uiModule));
-	m_mainRenderTexture = CreateComponent<RenderTexture>(
-		UILayout{ mainComponent->GetSize(), Origin::LeftTop }, move(asComponent));
+	m_mainRenderTexture = CreateComponent<RenderTexture>(move(asComponent));
 	ReturnIfFalse(m_mainRenderTexture->BindTextureSourceInfo(nullptr, m_renderer->GetTextureController())); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
 
 	ToggleToolMode();
