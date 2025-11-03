@@ -11,6 +11,8 @@ protected:
 	virtual void TearDown() override {};
 	void SimulateMouse(const XMINT2& pos, InputState state) noexcept;
 	void SimulateMouse(int x, int y, InputState state) noexcept;
+	void SimulateMouse(const XMINT2& pos, int wheelValue) noexcept;
+	void SimulateMouse(int x, int y, int wheelValue) noexcept;
 	void SimulateClick(const XMINT2& startPos) noexcept;
 	void SimulateClick(const XMINT2& startPos, const XMINT2& endPos) noexcept;
 
@@ -34,6 +36,19 @@ void UIModuleT::SimulateMouse(int x, int y, InputState state) noexcept
 {
 	DX::StepTimer timer;
 	m_input->SetMouseState(x, y, state);
+	m_uiModule->Update(timer);
+}
+
+void UIModuleT::SimulateMouse(const XMINT2& pos, int wheelValue) noexcept
+{
+	SimulateMouse(pos.x, pos.y, wheelValue);
+}
+
+void UIModuleT::SimulateMouse(int x, int y, int wheelValue) noexcept
+{
+	DX::StepTimer timer;
+	m_input->SetMouseState(x, y, InputState::Up);
+	m_input->SetMouseWheelValue(wheelValue);
 	m_uiModule->Update(timer);
 }
 

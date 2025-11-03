@@ -84,27 +84,27 @@ namespace UserInterface
 	}
 
 	//?!? 이건 나중에 TextureSwitcher 컴포넌트 테스트에 넣어야 한다.
-	TEST_F(ComponentEvent, TextureSwitcher)
-	{
-		auto eventDispatcher = EventDispatcherLocator::GetService();
+	//TEST_F(ComponentEvent, TextureSwitcher)
+	//{
+	//	auto eventDispatcher = EventDispatcherLocator::GetService();
 
-		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::One,
-			GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
-		UIEx(m_main).AttachComponent(move(switcher), { 100, 100 });
-		m_uiModule->BindTextureResources();
+	//	auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::One,
+	//		GetStateKeyMap("ExitButton1"), BehaviorMode::Normal));
+	//	UIEx(m_main).AttachComponent(move(switcher), { 100, 100 });
+	//	m_uiModule->BindTextureResources();
 
-		switcherPtr->ChangeOrigin(Origin::Center);
-		EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 32, 32 }));
+	//	switcherPtr->ChangeOrigin(Origin::Center);
+	//	EXPECT_TRUE((switcherPtr->GetSize() == XMUINT2{ 32, 32 }));
 
-		//이벤트를 등록해서 날라오는지 확인한다.
-		testing::MockFunction<void(UIEvent)> mockCallback;
-		EXPECT_CALL(mockCallback, Call(UIEvent::Clicked)).Times(1);
-		eventDispatcher->Subscribe("", "TextureSwitcher", mockCallback.AsStdFunction());
+	//	//이벤트를 등록해서 날라오는지 확인한다.
+	//	testing::MockFunction<void(UIEvent)> mockCallback;
+	//	EXPECT_CALL(mockCallback, Call(UIEvent::Clicked)).Times(1);
+	//	eventDispatcher->Subscribe("", "TextureSwitcher", mockCallback.AsStdFunction());
 
-		//눌렀다 뗄때 이벤트가 날라간다.
-		m_mockInput->SetMouseState(100, 100, InputState::Pressed);
-		m_main->ProcessUpdate(m_timer);
-		m_mockInput->SetMouseState(100, 100, InputState::Released);
-		m_main->ProcessUpdate(m_timer);
-	}
+	//	//눌렀다 뗄때 이벤트가 날라간다.
+	//	m_mockInput->SetMouseState(100, 100, InputState::Pressed);
+	//	m_main->ProcessUpdate(m_timer);
+	//	m_mockInput->SetMouseState(100, 100, InputState::Released);
+	//	m_main->ProcessUpdate(m_timer);
+	//}
 }

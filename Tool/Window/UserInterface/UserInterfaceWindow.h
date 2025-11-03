@@ -6,6 +6,7 @@ namespace DX
     class StepTimer;
 }
 
+struct IToolInputManager;
 struct IInputManager;
 class Panel;
 class MouseTracker;
@@ -34,8 +35,9 @@ public:
 private:
     bool SetupProperty(unique_ptr<UIModule> uiModule);
     void ToggleToolMode() noexcept;
-    void CheckActiveUpdate(IInputManager* input) noexcept;
-    void CheckChangeWindow(IInputManager* input);
+    void CheckActiveUpdate(IToolInputManager* toolInput) noexcept;
+    void CheckWindowMoved(IToolInputManager* toolInput) noexcept;
+    void CheckWindowResized(IToolInputManager* toolInput);
     UIModule* GetUIModule() const noexcept;
     inline ImVec2 GetPanelSize() const noexcept;
 
@@ -47,12 +49,15 @@ private:
 
     IRenderer* m_renderer;
     ImGuiWindow* m_window{ nullptr };
+    unique_ptr<IInputManager> m_nullInputManager;
+    IInputManager* m_inputManager{ nullptr };
     unique_ptr<ComponentController> m_controller;
     unique_ptr<RenderTexture> m_mainRenderTexture;
 
     bool m_isOpen{ false };
     bool m_isTool{ false };
     float m_fps{ 0.f };
+    ImVec2 m_windowPosition{};
 
     static int m_uiWindowIndex;
 };

@@ -28,7 +28,7 @@ void ComponentController::SetUIWindow(ImGuiWindow* mainWnd) noexcept
 	m_selector->SetUIWindow(mainWnd);
 }
 
-bool ComponentController::CheckAttachComponent(IInputManager* input) noexcept
+bool ComponentController::CheckAttachComponent(IToolInputManager* input) noexcept
 {
 	if (!m_uiWindow) return false;
 	if (!m_floater->IsComponent()) return false;
@@ -40,7 +40,7 @@ bool ComponentController::CheckAttachComponent(IInputManager* input) noexcept
 	return true;
 }
 
-bool ComponentController::CheckDetachComponent(IInputManager* input) noexcept
+bool ComponentController::CheckDetachComponent(IToolInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
 	if (!input->IsInputAction(Keyboard::D, InputState::Pressed)) return false;
@@ -59,7 +59,7 @@ bool ComponentController::CheckDetachComponent(IInputManager* input) noexcept
 	return true;
 }
 
-bool ComponentController::CheckDeleteComponent(IInputManager* input) noexcept
+bool ComponentController::CheckDeleteComponent(IToolInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
 	if (!input->IsInputAction(Keyboard::Delete, InputState::Pressed)) return false;
@@ -69,7 +69,7 @@ bool ComponentController::CheckDeleteComponent(IInputManager* input) noexcept
 	return true;
 }
 
-bool ComponentController::CheckUndoComponent(IInputManager* input) noexcept
+bool ComponentController::CheckUndoComponent(IToolInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
 	if (!input->IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
@@ -77,7 +77,7 @@ bool ComponentController::CheckUndoComponent(IInputManager* input) noexcept
 	return m_cmdHistory->Undo();
 }
 
-bool ComponentController::CheckRedoComponent(IInputManager* input) noexcept
+bool ComponentController::CheckRedoComponent(IToolInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
 	if (!input->IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
@@ -85,7 +85,7 @@ bool ComponentController::CheckRedoComponent(IInputManager* input) noexcept
 	return m_cmdHistory->Redo();
 }
 
-bool ComponentController::CheckCloneComponent(IInputManager* input) noexcept
+bool ComponentController::CheckCloneComponent(IToolInputManager* input) noexcept
 {
 	if (m_floater->IsComponent()) return false;
 	if (!input->IsInputAction(Keyboard::B, InputState::Pressed)) return false;
@@ -117,7 +117,7 @@ bool ComponentController::ExecuteShortcutKeyCommands() noexcept
 {
 	if (!IsWindowFocus(m_uiWindow)) return false;
 
-	auto input = InputLocator::GetService();
+	auto input = ToolInputLocator::GetService();
 	return CheckDetachComponent(input) ||
 		CheckDeleteComponent(input) ||
 		CheckCloneComponent(input) ||

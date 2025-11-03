@@ -10,6 +10,7 @@ struct MouseState
 {
     DirectX::XMINT2 pos{};
     bool leftButton{ false };
+    int wheelValue{ 0 };
 };
 
 enum class MouseButton
@@ -43,4 +44,8 @@ struct IInputManager
     virtual int GetMouseWheelValue() noexcept = 0;
 };
 
+struct IToolInputManager : public IInputManager {};
+
 std::unique_ptr<IInputManager> CreateInputManager(HWND hwnd);
+std::unique_ptr<IInputManager> CreateNullInputManager();
+std::unique_ptr<IToolInputManager> CreateToolInputManager(HWND hwnd);

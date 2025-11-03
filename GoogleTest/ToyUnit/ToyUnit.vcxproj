@@ -142,6 +142,7 @@
     <ClInclude Include="Mocks\Stubs\UIComponentStub.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="System\EventDispatcherManagerT.h" />
     <ClInclude Include="System\SceneManagerT.h" />
     <ClInclude Include="Tests\Helper.h" />
     <ClInclude Include="UserInterface\BaseModuleT.h" />
@@ -187,6 +188,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="System\EventDispatcherManagerT.cpp" />
     <ClCompile Include="System\SceneManagerT.cpp" />
     <ClCompile Include="Tests\BasicComponent.cpp" />
     <ClCompile Include="Tests\ComplexComponent.cpp" />

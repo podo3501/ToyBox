@@ -11,9 +11,11 @@ public:
 	MockClickable()
 	{
 		//리턴을 하지 않으면 UpdateMouseState 함수 안에서 컴포넌트를 capture 하지 않아 함수가 동작하지 않음.
+		//true를 리턴했다는 것은 마우스의 값을 처리했다라고 보고 그 밑에 컴포넌트로 내려가지 않음.
 		ON_CALL(*this, OnPress()).WillByDefault(testing::Return(true));
 		ON_CALL(*this, OnHold(testing::_)).WillByDefault(testing::Return(true));
 		ON_CALL(*this, OnRelease(testing::_)).WillByDefault(testing::Return(true));
+		ON_CALL(*this, OnWheel(testing::_)).WillByDefault(testing::Return(true));
 	}
 
 	MOCK_METHOD(bool, OnNormal, (), (noexcept));
@@ -21,6 +23,7 @@ public:
 	MOCK_METHOD(bool, OnPress, (), (noexcept));
 	MOCK_METHOD(bool, OnHold, (bool inside), (noexcept));
 	MOCK_METHOD(bool, OnRelease, (bool inside), (noexcept));
+	MOCK_METHOD(bool, OnWheel, (int wheelValue), (noexcept));
 };
 
 class MockToolMode : public UIComponentStub
@@ -129,6 +132,16 @@ namespace UserInterfaceT
 		EXPECT_CALL(*child, OnNormal()).Times(1);
 
 		SimulateMouse(parent->GetLeftTop(), InputState::Up);
+	}
+
+	TEST_F(UIModuleT, UpdateMouseState_MouseWheel)
+	{
+		XMINT2 outsidePos{ 0, 0 };
+		auto comp = CreateOneLevelComponent<MockClickable>(m_main);
+
+		EXPECT_CALL(*comp, OnWheel(testing::_)).Times(1);
+
+		SimulateMouse(comp->GetLeftTop(), 120); //120은 휠의 기본 단위. 
 	}
 
 	TEST_F(UIModuleT, WriteAndRead)

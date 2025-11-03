@@ -1,6 +1,7 @@
 #pragma once
 #include "Shared/Framework/AppLoop.h"
 
+struct IInputManager;
 struct ISceneManager;
 struct IEventDispatcherManager;
 class UIComponent;
@@ -21,6 +22,7 @@ private:
 	bool AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept;
 
 	IRenderer* m_renderer;
+	unique_ptr<IInputManager> m_inputManager;
 	unique_ptr<ISceneManager> m_sceneManager;
 	unique_ptr<IEventDispatcherManager> m_eventDispatcherManager;
 };

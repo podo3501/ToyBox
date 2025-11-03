@@ -4,6 +4,7 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "Toy/Locator/EventDispatcherLocator.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Shared/System/Public/IInputManager.h"
 
 class MockEventDispatcherManager : public IEventDispatcherManager
 {
@@ -60,6 +61,19 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_TRUE(TestClone(m_component));
 	}
 
+	TEST_F(TextureSwitcherT, Dispatcher)
+	{
+		auto eventDispatcher = CreateEventDispatcherManager();
+		EventDispatcherLocator::Provide(eventDispatcher.get());
+
+		//이벤트를 등록해서 날라오는지 확인한다.
+		testing::MockFunction<void(UIEvent)> mockCallback;
+		EXPECT_CALL(mockCallback, Call(UIEvent::Clicked)).Times(1);
+		eventDispatcher->Subscribe(m_component->GetRegion(), m_component->GetName(), mockCallback.AsStdFunction());
+
+		m_component->OnRelease(true);
+	}
+
 	TEST_F(TextureSwitcherT, FitToTextureSource)
 	{
 		auto preSize = m_component->GetSize();
@@ -90,9 +104,9 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 
 	TEST_F(TextureSwitcherT, OnPress)
 	{
-		testing::MockFunction<void(InteractState)> OnPress;
-		m_component->SetPressStateCB(OnPress.AsStdFunction());
-		EXPECT_CALL(OnPress, Call(InteractState::Pressed)).Times(1);
+		testing::MockFunction<void(InputState)> OnPress;
+		m_component->AddPressCB(OnPress.AsStdFunction());
+		EXPECT_CALL(OnPress, Call(InputState::Pressed)).Times(1);
 
 		m_component->OnPress();
 
@@ -106,6 +120,15 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 
 		m_component->OnHold(false);
 		EXPECT_EQ(m_component->GetState(), InteractState::Normal);
+
+		m_component->ChangeBehaviorMode(BehaviorMode::HoldToKeepPressed); //마우스가 영역을 이탈해도 눌리는 상태로 지속된다.
+		//콜백등록
+		testing::MockFunction<void(InputState)> OnPress;
+		m_component->AddPressCB(OnPress.AsStdFunction());
+		EXPECT_CALL(OnPress, Call(InputState::Held)).Times(1);
+
+		m_component->OnHold(false);
+		EXPECT_EQ(m_component->GetState(), InteractState::Pressed);
 	}
 
 	TEST_F(TextureSwitcherT, OnRelease)
@@ -113,10 +136,14 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		auto dispatcher = make_unique<MockEventDispatcherManager>();
 		EventDispatcherLocator::Provide(dispatcher.get()); //디스패쳐 등록해서 활성화 시킴
 		UIEx(m_component).Rename("Switcher");
-
 		EXPECT_CALL(*dispatcher, Dispatch("", "Switcher", UIEvent::Clicked)).Times(1);
 
+		testing::MockFunction<void(InputState)> OnPress;
+		m_component->AddPressCB(OnPress.AsStdFunction());
+		EXPECT_CALL(OnPress, Call(InputState::Released)).Times(1);
+
 		m_component->OnRelease(true);
+		EXPECT_EQ(m_component->GetState(), InteractState::Normal);
 	}
 
 	TEST_F(TextureSwitcherT, ProcessRender)

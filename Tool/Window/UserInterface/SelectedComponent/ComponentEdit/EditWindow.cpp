@@ -72,15 +72,15 @@ bool EditWindow::IsUpdateSizeOnDrag() const noexcept
     return (m_dragState != OnDrag::Normal);
 }
 
-void EditWindow::UpdateDragState(IInputManager* input, OnDrag dragState, XMINT2& outStartPos) noexcept
+void EditWindow::UpdateDragState(IToolInputManager* toolInput, OnDrag dragState, XMINT2& outStartPos) noexcept
 {
-    if (input->IsInputAction(MouseButton::Left, InputState::Pressed) && dragState != OnDrag::Normal)
+    if (toolInput->IsInputAction(MouseButton::Left, InputState::Pressed) && dragState != OnDrag::Normal)
     {
         m_dragState = dragState;
-        outStartPos = input->GetPosition();
+        outStartPos = toolInput->GetPosition();
     }
 
-    if (input->IsInputAction(MouseButton::Left, InputState::Released))
+    if (toolInput->IsInputAction(MouseButton::Left, InputState::Released))
     {
         m_dragState = OnDrag::Normal;
         outStartPos = {};
@@ -114,7 +114,7 @@ void EditWindow::ResizeComponentOnClick() noexcept
 {
     if (!m_component) return;
 
-    auto input = InputLocator::GetService();
+    auto input = ToolInputLocator::GetService();
     const XMINT2& mousePos = input->GetPosition();
     OnDrag dragState = IsMouseOverResizeZone(mousePos, m_component);
     Tool::MouseCursor::SetType(GetCursorImage(dragState));

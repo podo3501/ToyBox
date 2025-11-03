@@ -5,8 +5,6 @@
 #include "EnvironmentLocator.h"
 #include "Window/Window.h"
 #include "Window/WindowProcedure.h"
-#include "System/Public/IInputManager.h"
-#include "Framework/Locator.h"
 
 AppLoop::~AppLoop()
 {
@@ -20,8 +18,6 @@ AppLoop::AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer, cons
     TracyStartupProfiler();
 
     m_environment = InitializeEnvironment(resPath, resolution);
-    m_inputManager = CreateInputManager(m_window->GetHandle());
-    Locator<IInputManager>::Provide(m_inputManager.get());
 }
 
 bool AppLoop::Initialize()
@@ -77,8 +73,6 @@ int AppLoop::Run()
 
 void AppLoop::Tick()
 {
-    m_inputManager->Update();
-
     m_timer.Tick([&, this]()
         {
             Update(m_timer);
@@ -99,3 +93,4 @@ void AppLoop::OnResuming()
 }
 
 IRenderer* AppLoop::GetRenderer() const noexcept { return m_renderer.get(); }
+HWND AppLoop::GetWindowHandle() const noexcept { return m_window->GetHandle(); }

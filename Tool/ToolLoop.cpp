@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "ToolLoop.h"
-#include "Shared/Window/Window.h"
+#include "Config/Config.h"
 #include "Window/UserInterface/UserInterfaceWindow.h"
 #include "Window/TextureResourceBinder/TextureResBinderWindow.h"
 #include "Window/Menu/MenuBar.h"
 #include "Window/Dialog.h"
-#include "Config/Config.h"
+#include "Shared/Window/Window.h"
+#include "Toy/Locator/EventDispatcherLocator.h"
+#include "Toy/Locator/InputLocator.h"
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -31,6 +33,22 @@ ToolLoop::ToolLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer,
 {
     m_menuBar = make_unique<MenuBar>(this);
     m_renderer->AddImguiComponent(this);
+}
+
+bool ToolLoop::InitializeDerived()
+{
+    HWND hWnd = GetWindowHandle();
+
+    m_toolInputManager = CreateToolInputManager(hWnd);
+    ToolInputLocator::Provide(m_toolInputManager.get());
+
+    m_inputManager = CreateInputManager(hWnd);
+    InputLocator::Provide(m_inputManager.get());
+
+    m_nullEventDispatcher = CreateNullEventDispatcherManager();
+    EventDispatcherLocator::Provide(m_nullEventDispatcher.get());
+
+    return true;
 }
 
 void ToolLoop::SetUIWindow(unique_ptr<UserInterfaceWindow> uiWindow) noexcept
@@ -75,6 +93,8 @@ void ToolLoop::Update(const DX::StepTimer& timer)
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
     UNREFERENCED_PARAMETER(timer);
 
+    m_toolInputManager->Update();
+    m_inputManager->Update();
     m_menuBar->Update();
 
     erase_if(m_uiWindows, [](auto& wnd) { return !wnd->IsOpen(); });

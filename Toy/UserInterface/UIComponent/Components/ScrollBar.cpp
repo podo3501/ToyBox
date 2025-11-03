@@ -89,6 +89,13 @@ bool ScrollBar::ImplementBindSourceInfo(TextureResourceBinder*, ITextureControll
 	return true;
 }
 
+bool ScrollBar::OnWheel(int wheelValue) noexcept
+{
+	return false;
+	//m_wheelValue = m_isWheelEnabled ? wheelValue : 0;
+	//return true;
+}
+
 bool ScrollBar::ImplementUpdate(const DX::StepTimer& timer) noexcept
 {
 	auto input = InputLocator::GetService();
@@ -104,6 +111,14 @@ bool ScrollBar::ImplementUpdate(const DX::StepTimer& timer) noexcept
 	m_onScrollChangedCB(posRatio);
 
 	return true;
+
+	//if (!m_bounded.ValidateRange(m_wheelValue, timer)) return true;
+
+	//auto posRatio = m_bounded.GetPositionRatio();
+	//SetPositionRatio(posRatio);
+	//m_onScrollChangedCB(posRatio);
+
+	//return true;
 }
 
 void ScrollBar::ProcessIO(SerializerIO& serializer)
@@ -202,7 +217,5 @@ void ScrollBar::SetPositionRatio(float positionRatio) noexcept
 
 void ScrollBar::SetEnableWheel(bool enable) noexcept
 {
-	auto input = InputLocator::GetService();
-	if(!m_isWheelEnabled && enable) input->ResetMouseWheelValue();
 	m_isWheelEnabled = enable;
 }

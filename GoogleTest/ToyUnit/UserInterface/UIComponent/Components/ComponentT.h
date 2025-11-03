@@ -2,6 +2,7 @@
 #include "UserInterface/TextureResourceBinder/MockTextureResourceBinder.h"
 #include "Mocks/MockRenderer.h"
 #include "Shared/Framework/EnvironmentLocator.h"
+#include "Toy/Locator/EventDispatcherLocator.h"
 
 class ComponentT : public ::testing::Test
 {
@@ -19,4 +20,14 @@ private:
 	unique_ptr<Environment> m_environment;
 	unique_ptr<MockRenderer> m_renderer;
 	unique_ptr<MockTextureResourceBinder> m_resBinder;
+	unique_ptr<IEventDispatcherManager> m_nullEventDispatcher;
 };
+
+//unique_ptr<IEventDispatcherManager> m_eventDispatcher;
+//testing::MockFunction<void(UIEvent)> m_mockCallback;
+//};
+//
+//void EventDispatcherManagerT::SetUp()
+//{
+//	m_eventDispatcher = CreateEventDispatcherManager();
+//	EventDispatcherLocator::Provide(m_eventDispatcher.get());

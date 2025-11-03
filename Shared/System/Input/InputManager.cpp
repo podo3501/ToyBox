@@ -133,3 +133,16 @@ unique_ptr<IInputManager> CreateInputManager(HWND hwnd)
     input->Initialize(hwnd);
     return input;
 }
+
+unique_ptr<IInputManager> CreateNullInputManager()
+{
+    auto input = make_unique<NullInputManager>();
+    return input;
+}
+
+unique_ptr<IToolInputManager> CreateToolInputManager(HWND hwnd)
+{
+    auto input = make_unique<InputManager>();
+    input->Initialize(hwnd);
+    return input;
+}

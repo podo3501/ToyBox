@@ -71,7 +71,8 @@ void UIFixture::TestMockRender(int expIndex, const vector<RECT>& expectDest, con
 		TestCoordinates(index, dest, source, expIndex, expectDest, GetSources(GetResBinder(), bindKey));
 			}));
 	UIComponent* curComponent = (component) ? component : m_main;
-	curComponent->ProcessUpdate(m_timer);
+	//curComponent->ProcessUpdate(m_timer);
+	m_uiModule->Update(m_timer);
 	curComponent->ProcessRender(&mockTexRender);
 }
 

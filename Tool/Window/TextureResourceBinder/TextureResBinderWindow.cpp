@@ -43,21 +43,31 @@ bool TextureResBinderWindow::Create(const wstring& filename)
     return true;
 }
 
-static bool CheckUndo(IInputManager* input, TexResCommandHistory* cmdHistory)
+static bool CheckUndo(IToolInputManager* toolInput, TexResCommandHistory* cmdHistory)
 {
-    if (!input->IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
+    if (!toolInput->IsInputAction(Keyboard::LeftControl, Keyboard::Z)) return false;
     return cmdHistory->Undo();
 }
 
-static bool CheckRedo(IInputManager* input, TexResCommandHistory* cmdHistory)
+static bool CheckRedo(IToolInputManager* toolInput, TexResCommandHistory* cmdHistory)
 {
-    if (!input->IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
+    if (!toolInput->IsInputAction(Keyboard::LeftControl, Keyboard::Y)) return false;
     return cmdHistory->Redo();
 }
 
-bool TextureResBinderWindow::CheckUndoRedo(IInputManager* input)
+void TextureResBinderWindow::CheckWindowMoved(IToolInputManager* toolInput) noexcept
 {
-    auto result = CheckUndo(input, m_cmdHistory.get()) || CheckRedo(input, m_cmdHistory.get());
+    if (m_windowPosition == m_window->Pos)
+        return;
+
+    SetMouseStartOffset(toolInput, m_window);
+
+    m_windowPosition = m_window->Pos;
+}
+
+bool TextureResBinderWindow::CheckUndoRedo(IToolInputManager* toolInput)
+{
+    auto result = CheckUndo(toolInput, m_cmdHistory.get()) || CheckRedo(toolInput, m_cmdHistory.get());
     ReturnIfFalse(result);
 
     m_editSourceTexture->CheckTextureByUndoRedo();
@@ -68,9 +78,9 @@ void TextureResBinderWindow::Update()
 {
     if (!m_window) return;
 
-    auto input = InputLocator::GetService();
-    SetMouseStartOffset(input, m_window);
-    CheckUndoRedo(input);
+    auto toolInput = ToolInputLocator::GetService();
+    CheckWindowMoved(toolInput);
+    CheckUndoRedo(toolInput);
 
     m_editFontTexture->Update();
     m_editSourceTexture->Update();
@@ -93,7 +103,10 @@ void TextureResBinderWindow::Render(ImGuiIO* io)
     ImGui::PopStyleVar();   //윈도우 스타일을 지정한다.
 
     if (ImGui::IsWindowAppearing())
+    {
         m_window = GetImGuiWindow();
+        CheckWindowMoved(ToolInputLocator::GetService());
+    }
 
     if (m_sourceTexture)
     {

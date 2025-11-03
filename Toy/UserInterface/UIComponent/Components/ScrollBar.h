@@ -14,6 +14,7 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ScrollBar; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
+	virtual bool OnWheel(int wheelValue) noexcept override;
 	virtual void ProcessIO(SerializerIO& serializer) override;
 
 	void AddScrollChangedCB(function<void(float)> callback) { m_onScrollChangedCB = callback; }
@@ -42,6 +43,7 @@ private:
 	TextureSwitcher* m_scrollButton;
 	BoundedValue m_bounded;
 	bool m_isWheelEnabled{ false };
+	int m_wheelValue{ 0 };
 	int32_t m_pressMousePos{ 0 };
 	XMINT2 m_pressContainerPos{};
 	function<void(float)> m_onScrollChangedCB;

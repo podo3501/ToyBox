@@ -32,10 +32,6 @@ private:
 	void ForEachRenderChildDFS(function<TraverseResult(UIComponent*)> Func) noexcept;
 
 protected:
-	//대부분은 직접적으로 m_children을 쓰고 UIModuleAsComponent의 children을 가지고 올때는 UIModule에서
-	//children을 가져와야 하므로 virtual로 해서 다른 children을 가져오도록 하기 위해서 이 함수가 존재.
-	virtual const vector<unique_ptr<UIComponent>>& GetChildren() const noexcept { return m_children; }
-
 	UIComponent* m_parent{ nullptr };
 	vector<unique_ptr<UIComponent>> m_children;
 };

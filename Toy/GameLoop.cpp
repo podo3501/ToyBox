@@ -2,6 +2,7 @@
 #include "GameLoop.h"
 #include "IRenderer.h"
 #include "Shared/Window/Window.h"
+#include "Shared/System/Public/IInputManager.h"
 #include "Locator/SceneLocator.h"
 #include "Locator/EventDispatcherLocator.h"
 #include "Scenes/Test/ComponentTestScene.h"
@@ -33,6 +34,8 @@ GameLoop::GameLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer,
 
 bool GameLoop::InitializeDerived()
 {
+    m_inputManager = CreateInputManager(GetWindowHandle());
+    Locator<IInputManager>::Provide(m_inputManager.get());
     m_sceneManager = CreateSceneManager();
     SceneLocator::Provide(m_sceneManager.get());
     m_eventDispatcherManager = CreateEventDispatcherManager();
@@ -53,6 +56,7 @@ void GameLoop::Update(const DX::StepTimer& timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
+    m_inputManager->Update();
     m_sceneManager->Update(timer);
 
     PIXEndEvent();

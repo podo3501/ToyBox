@@ -194,8 +194,15 @@
 --점진적으로 IInput으로 바꿀 예정
 --TextureResourceBinder를 DI로 바꾸기(DI로 바꾸는 목적이 빈 클래스 만드는건데 기본인자를 L""을 넣어서 빈 클래스 생성하게끔 수정)
 --environment 이거 locator로 바꿔야 하지 않을까?
+--툴에서 RenderTexture->AsComponent->Module->Panel로 넘어가야 하는데 Module을 거치지 않고 넘어가고 있다.
+--마우스 위치값이 다르다. 처음에 시작 마우스 위치값을 셋팅해야 한다.
+--툴에서 마우스를 Null Locator로 바꾸면 툴 관련 마우스도 작동안하기 때문에, IToolInputLocator를 만들어야함.
+--마우스 생성부분을 Shared에서 Loop로 이동하고 처리해야겠다.
+--툴에서 이 부분이 먼저 되어야 컴포넌트를 하나씩 띄워봤을때 문제가 있는지 통합테스트를 할 수 있다.
 
-@툴에서 RenderTexture->AsComponent->Module->Panel로 넘어가야 하는데 Module을 거치지 않고 넘어가고 있다.
+@마우스 휠이 자기 포커스가 벗어날때 휠 값을 들고 있어서 버그가 나는듯 하다. 이거 체크해서 없애주는 거 처리.
+@마우스 처리 부분을 Update에서 함수 호출로 하나씩 수정하면서 이전의 테스트 코드가 false가 나는 것을 확인해서 옮기거나 삭제한다.
+@UIComponent에 RecursiveUpdate를 수정. RecursivePositionUpdate와 합칠수 있으면 좋다. 
 
 @TextureResourceBinder가 로딩할때 원소 갯수만큼 돌면서 텍스쳐를 로딩하는데 엔진에서 중복로딩하면 인덱스 넘겨주기
     때문에 괜찮았는데, 이렇게 많이 로딩 되면 안된다. 텍스쳐를 저장하는 공간을 두고 로딩할때 이 텍스쳐만 로딩하게끔 수정
@@ -247,40 +254,3 @@ Detach를 눌렀을때 마우스위치에서 Detach 되도록 수정
 getchild 해서 한다면 재귀호출함수에 getchild를 사용한다.
 component를 떼서 붙이거나 하면 세이브나 이런것도 다 바꿔야 하기 때문에 귀찮다.
 조금 느려질텐데 거의 상관 없다니 가상함수 테이블 사용하는 방식으로 해 보자.
-
-////////////////////////////////////////////////////////
-
-bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
-{
-    m_textureLoader->LoadTexture(m_renderer, filename);
-    auto sourceInfo = m_textureLoader->GetSourceInfo(filename);
-    ReturnIfFalse(sourceInfo);
-
-    unique_ptr<PatchTextureStd1> texture = make_unique<PatchTextureStd1>();
-    texture->SetSourceInfo(*sourceInfo, m_renderer->GetTextureController());
-    AddTexture(move(texture));
-
-    return true;
-}
-
-bool EditSourceTexture::SetCommandHistory(TexResCommandHistory* cmHistory) noexcept
-{
-    m_cmdHistory = cmHistory;
-    m_imageSelector->SetCommandHistory(m_cmdHistory);
-    
-    auto binder = m_cmdHistory->GetReceiver();
-    const auto& texFiles = binder->GetTextureFiles();
-    if (texFiles.empty()) return true;
-
-    for (auto& texFile : texFiles)
-        ReturnIfFalse(LoadTextureFromFile(texFile));
-    
-    SelectDefaultTextureFile();
-    return true;
-}
-
-미리 로드했다면 SetCommandHistory에서 LoadTextureFromFile 이걸 할 필요가 없으니까 이걸 안하는
-버전으로 만들고 미리 로드하는 식으로 수정한다음 TextureResourceBinder 만들때 Renderer를 넘겨서
-로딩 하는 걸로 만들고 이게 완성되면 DI로 변경한다.
-DI로 변경하면 테스트쪽을 수정하고, 데이터를 셋팅할 수 있게 되었으니까 UIComponent를 하나씩 차례
-대로 새로운 TDD 형식으로 수정한다. 

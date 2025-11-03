@@ -48,7 +48,7 @@ void ComponentSelector::SetComponent(UIComponent* component) noexcept
 	m_tooltip->SetComponent(component);
 }
 
-void ComponentSelector::SelectComponent(IInputManager* input) noexcept
+void ComponentSelector::SelectComponent(IToolInputManager* input) noexcept
 {
 	if (!m_uiWindow) return;
 	if (!input->IsInputAction(MouseButton::Left, InputState::Pressed)) return;
@@ -69,7 +69,7 @@ void ComponentSelector::SelectComponent(IInputManager* input) noexcept
 
 void ComponentSelector::Update() noexcept
 {
-	auto input = InputLocator::GetService();
+	auto input = ToolInputLocator::GetService();
 	if (HandleEscapeKey(input)) return;
 	if (UpdateEditWindow()) return;
 
@@ -77,7 +77,7 @@ void ComponentSelector::Update() noexcept
 		SelectComponent(input);
 }
 
-bool ComponentSelector::HandleEscapeKey(IInputManager* input) noexcept
+bool ComponentSelector::HandleEscapeKey(IToolInputManager* input) noexcept
 {
 	if (!input->IsInputAction(Keyboard::Escape, InputState::Pressed)) return false;
 	

@@ -2,6 +2,7 @@
 #include "ScrollBarT.h"
 #include "UserInterface/UIComponent/Components/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Shared/System/StepTimer.h"
 
 namespace UserInterfaceT::UIComponentT::ComponentT
 {
@@ -13,6 +14,24 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	TEST_F(ScrollBarT, GetSize)
 	{
 		EXPECT_TRUE((m_component->GetSize() == XMUINT2{ 20, 30 })); //자식들의 크기에서 초기값을 가져온다.
+	}
+
+	TEST_F(ScrollBarT, OnWheel)
+	{
+		m_component->SetEnableWheel(true);
+		m_component->UpdateScrollView(50, 200);
+		m_component->SetPositionRatio(0.5f);
+
+		testing::MockFunction<void(float)> OnScrollChanged;
+		m_component->AddScrollChangedCB(OnScrollChanged.AsStdFunction());
+		EXPECT_CALL(OnScrollChanged, Call(testing::Gt(0.5))).Times(1);
+
+		m_component->OnWheel(10);
+
+		DX::StepTimer timer;
+		this_thread::sleep_for(std::chrono::milliseconds(1));
+		timer.Tick([] {});
+		m_component->ProcessUpdate(timer);
 	}
 
 	TEST_F(ScrollBarT, ProcessRender)

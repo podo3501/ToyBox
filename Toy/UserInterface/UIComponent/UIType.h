@@ -79,7 +79,7 @@ constexpr auto EnumToStringMap<Origin>() -> array<const char*, EnumSize<Origin>(
 
 ///////////////////////////////////////////////////////////////
 
-enum class InteractState : int
+enum class InteractState : int //이미지같은 보여주는 상태 변화 InputState는 키의 상태 변화이기 때문에 비슷해 보여도 둘이 다르다.
 {
 	Normal,
 	Hovered,

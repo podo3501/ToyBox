@@ -2,7 +2,7 @@
 #include "../InnerWindow.h"
 
 struct IRenderer;
-struct IInputManager;
+struct IToolInputManager;
 class RenderTexture;
 class PatchTextureStd1;
 class MainSourceExtractor;
@@ -28,7 +28,8 @@ public:
     ImGuiWindow* GetWindow() noexcept { return m_window; }
 
 private:
-    bool CheckUndoRedo(IInputManager* input);
+    void CheckWindowMoved(IToolInputManager* toolInput) noexcept;
+    bool CheckUndoRedo(IToolInputManager* toolInput);
     ImVec2 GetWindowSize() const noexcept;
     void RenderResourceWindow();
 
@@ -40,6 +41,7 @@ private:
     PatchTextureStd1* m_sourceTexture; //작업할 텍스쳐
     unique_ptr<EditFontTexture> m_editFontTexture;
     unique_ptr<EditSourceTexture> m_editSourceTexture;
+    ImVec2 m_windowPosition{};
     ImVec2 m_size;
     bool m_isOpen{ false };
 };

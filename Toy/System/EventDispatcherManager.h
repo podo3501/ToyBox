@@ -13,3 +13,11 @@ private:
 
 	unordered_map<string, vector<Callback>> m_subscribers{};
 };
+
+class NullEventDispatcherManager : public IEventDispatcherManager
+{
+public:
+	virtual void Subscribe(const string&, const string&, Callback) noexcept override {}
+	virtual void Dispatch(const string&, const string&, UIEvent) noexcept override {}
+	virtual void Clear() noexcept override {}
+};

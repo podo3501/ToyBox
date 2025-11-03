@@ -81,7 +81,7 @@ void UIHierarchy<UIComponent>::ForEachRenderChildBFS(function<TraverseResult(UIC
 		if (result == TraverseResult::Found || result == TraverseResult::Skip) return;
 		if (current->HasStateFlag(StateFlag::RenderTexture)) continue;
 
-		for (const auto& child : current->GetChildren())
+		for (const auto& child : current->m_children)
 		{
 			if (!child) continue;
 			PushChild(child.get());
@@ -97,7 +97,7 @@ void UIHierarchy<T>::ForEachRenderChildDFS(function<TraverseResult(UIComponent*)
 	if (result == TraverseResult::Found || result == TraverseResult::Skip) return;
 	if (current->HasStateFlag(StateFlag::RenderTexture)) return;
 
-	for (auto& child : GetChildren())
+	for (auto& child : m_children)
 	{
 		if (!child) continue;
 		child->ForEachRenderChildDFS(Func);

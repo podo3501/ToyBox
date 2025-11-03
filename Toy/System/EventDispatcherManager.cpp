@@ -34,3 +34,8 @@ unique_ptr<IEventDispatcherManager> CreateEventDispatcherManager()
 {
 	return make_unique<EventDispatcherManager>();
 }
+
+unique_ptr<IEventDispatcherManager> CreateNullEventDispatcherManager()
+{
+	return make_unique<NullEventDispatcherManager>();
+}

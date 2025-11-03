@@ -63,18 +63,40 @@ bool TextureSwitcher::OnHover() noexcept
 bool TextureSwitcher::OnPress() noexcept 
 { 
 	ChangeState(InteractState::Pressed);
-	m_onPressStateCB(InteractState::Pressed);
+	if (m_onPressCB)
+		m_onPressCB(InputState::Pressed);
 	return true;
 }
 
 bool TextureSwitcher::OnHold(bool inside) noexcept 
 { 
-	ChangeState(inside ? InteractState::Pressed : InteractState::Normal);
+	InteractState nextState = InteractState::Normal;
+
+	switch (m_behaviorMode)
+	{
+	case BehaviorMode::Normal: nextState = inside ? InteractState::Pressed : InteractState::Normal; break;
+	case BehaviorMode::HoldToKeepPressed: nextState = InteractState::Pressed; break;
+	default:
+		break;
+	}
+
+	if (nextState == InteractState::Pressed)
+	{
+		if (m_onPressCB)
+			m_onPressCB(InputState::Held);
+	}
+		
+	ChangeState(nextState);
 	return true;
 }
 
 bool TextureSwitcher::OnRelease(bool inside) noexcept 
 { 
+	ChangeState(InteractState::Normal);
+
+	if (m_onPressCB)
+		m_onPressCB(InputState::Released);
+
 	if (!inside) return true;
 
 	auto eventDispatcher = EventDispatcherLocator::GetService();
@@ -187,25 +209,6 @@ void TextureSwitcher::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcep
 	NormalMode(isPressed, isHeld);
 
 	if (m_state == Pressed && isPressed) m_onPressCB(InputState::Pressed);
-}
-
-bool TextureSwitcher::ImplementUpdate(const DX::StepTimer&) noexcept
-{
-	//return true;
-
-	if (!m_state.has_value()) return true; //로드 하지 않았다면 값이 셋팅되지 않는다.
-	//이 두값이 이전프레임과 비교해서 달라졌다면 실행하게 한다면 좀 더 빠르게 된다.
-	auto input = InputLocator::GetService();
-	bool isPressed = input->IsInputAction(MouseButton::Left, InputState::Pressed);
-	bool isHeld = input->IsInputAction(MouseButton::Left, InputState::Held);
-
-	switch (m_behaviorMode) //이 부분은 배열에 함수포인터로 하면 더 빨라지는데 추후 다양한 behavior가 생기면 인자가 달라질수 있기 때문에 일단 보류한다.
-	{
-	case BehaviorMode::Normal: NormalMode(isPressed, isHeld); break;
-	case BehaviorMode::HoldToKeepPressed: HoldToKeepPressedMode(isPressed, isHeld); break;
-	}
-
-	return true;
 }
 
 bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept

@@ -6,7 +6,6 @@ class MouseTracker;
 class Environment;
 struct IRenderer;
 struct IImguiItem;
-struct IInputManager;
 struct ITextureController;
 struct abc;
 
@@ -25,6 +24,7 @@ protected:
     virtual bool DoPrepare() { return true; }
     virtual void Update(const DX::StepTimer& timer) = 0;
     IRenderer* GetRenderer() const noexcept;
+    HWND GetWindowHandle() const noexcept;
 
 private:
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -41,7 +41,6 @@ private:
     unique_ptr<Window> m_window;
     unique_ptr<IRenderer> m_renderer;
     unique_ptr<Environment> m_environment;
-    unique_ptr<IInputManager> m_inputManager;
     DX::StepTimer m_timer;
 };
 

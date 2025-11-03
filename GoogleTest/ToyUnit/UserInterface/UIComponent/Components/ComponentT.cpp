@@ -12,6 +12,9 @@ void ComponentT::SetUp()
 	RegisterBinderTextures(m_resBinder.get());
 
 	m_renderer->LoadTextureBinder(m_resBinder.get());
+	
+	m_nullEventDispatcher = CreateNullEventDispatcherManager();
+	EventDispatcherLocator::Provide(m_nullEventDispatcher.get());
 }
 
 void ComponentT::RegisterRenderTextures(MockRenderer* renderer)

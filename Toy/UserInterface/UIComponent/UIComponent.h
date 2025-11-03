@@ -53,6 +53,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual bool OnPress() noexcept { return false; }
 	virtual bool OnHold(bool inside) noexcept { inside;  return false; }
 	virtual bool OnRelease(bool inside) noexcept { inside; return false; }
+	virtual bool OnWheel(int wheelValue) noexcept { wheelValue; return false; }
 
 	//UIComponent virtual function(상속받은 컴포넌트들의 재정의 함수)
 	virtual bool operator==(const UIComponent& other) const noexcept;

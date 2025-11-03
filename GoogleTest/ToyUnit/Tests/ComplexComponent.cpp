@@ -129,10 +129,10 @@ namespace UserInterface
 		EXPECT_CALL(mockOnScrollChanged, Call(testing::FloatEq(85.f / 150.f))).Times(1);
 
 		m_mockInput->SetMouseState(100, 200, InputState::Pressed);
-		m_main->ProcessUpdate(m_timer);
+		m_uiModule->Update(m_timer);
 
 		m_mockInput->SetMouseState(110, 210, InputState::Held);
-		m_main->ProcessUpdate(m_timer);
+		m_uiModule->Update(m_timer);
 	}
 
 	////////////////////////////////////////////////////////

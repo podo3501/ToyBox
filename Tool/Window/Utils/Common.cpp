@@ -19,10 +19,16 @@ ImVec2 GetWindowIGMousePos(const ImGuiWindow* window) noexcept
 	return mousePos - GetWindowStartPosition(window);
 }
 
-void SetMouseStartOffset(IInputManager* inputManager, const ImGuiWindow* window) noexcept
+void SetMouseStartOffset(IToolInputManager* toolInput, const ImGuiWindow* window) noexcept
 {
 	const ImVec2& offset = GetWindowStartPosition(window);
-	inputManager->SetMouseStartOffset({ static_cast<int>(offset.x), static_cast<int>(offset.y) });
+	toolInput->SetMouseStartOffset({ static_cast<int>(offset.x), static_cast<int>(offset.y) });
+}
+
+void SetMouseStartOffset(IInputManager* input, const ImGuiWindow* window) noexcept
+{
+	const ImVec2& offset = GetWindowStartPosition(window);
+	input->SetMouseStartOffset({ static_cast<int>(offset.x), static_cast<int>(offset.y) });
 }
 
 bool IsWindowFocus(const ImGuiWindow* window) noexcept

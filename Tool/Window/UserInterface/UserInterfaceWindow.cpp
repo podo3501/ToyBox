@@ -19,6 +19,12 @@ UserInterfaceWindow::UserInterfaceWindow(IRenderer* renderer) :
 	InnerWindow{ "UserInterface Window " + to_string(m_uiWindowIndex++) },
 	m_renderer{ renderer }
 {
+	//inputManager를 nullInputManager로 대체해서 마우스가 client 코드만 반응하지 않도록 한다.
+	//툴의 마우스는 ToolInputManager를 통해서 반응하게 된다. 
+	m_inputManager = InputLocator::GetService();
+	m_nullInputManager = CreateNullInputManager();
+	InputLocator::Provide(m_nullInputManager.get());
+
 	m_renderer->AddImguiComponent(this);
 }
 
@@ -88,22 +94,27 @@ void UserInterfaceWindow::ToggleToolMode() noexcept
 	GetUIModule()->EnableToolMode(m_isTool);
 	m_mainRenderTexture->EnableChildMouseEvents(!m_isTool);
 	m_controller->SetActive(m_isTool);
+
+	if(m_isTool)
+		InputLocator::Provide(m_nullInputManager.get());
+	else
+		InputLocator::Provide(m_inputManager);
 }
 
-void UserInterfaceWindow::CheckActiveUpdate(IInputManager* input) noexcept
+void UserInterfaceWindow::CheckActiveUpdate(IToolInputManager* toolInput) noexcept
 {
-	if (!input->IsInputAction(Keyboard::F5, InputState::Pressed)) return;
+	if (!toolInput->IsInputAction(Keyboard::F5, InputState::Pressed)) return;
 	
 	ToggleToolMode();
 }
 
-void UserInterfaceWindow::CheckChangeWindow(IInputManager* input)
+void UserInterfaceWindow::CheckWindowResized(IToolInputManager* toolInput)
 {
 	static ImVec2 startSize{};
-	if (input->IsInputAction(MouseButton::Left, InputState::Pressed))
+	if (toolInput->IsInputAction(MouseButton::Left, InputState::Pressed))
 		startSize = m_window->Size;
 
-	if (!input->IsInputAction(MouseButton::Left, InputState::Released))
+	if (!toolInput->IsInputAction(MouseButton::Left, InputState::Released))
 		return;
 	
 	if(startSize != m_window->Size && !m_window->Collapsed)
@@ -113,14 +124,25 @@ void UserInterfaceWindow::CheckChangeWindow(IInputManager* input)
 	}
 }
 
+void UserInterfaceWindow::CheckWindowMoved(IToolInputManager* toolInput) noexcept
+{	
+	if (m_windowPosition == m_window->Pos)
+		return;
+	
+	SetMouseStartOffset(toolInput, m_window);
+	SetMouseStartOffset(m_inputManager, m_window);
+
+	m_windowPosition = m_window->Pos;
+}
+
 void UserInterfaceWindow::Update(const DX::StepTimer& timer)
 {
 	if (!m_window) return;
-
-	auto input = InputLocator::GetService();
-	SetMouseStartOffset(input, m_window);
-	CheckChangeWindow(input); //창이 변했을때 RenderTexture를 다시 만들어준다.
-	CheckActiveUpdate(input);
+	
+	auto toolInput = ToolInputLocator::GetService();
+	CheckWindowMoved(toolInput); //?!? Check라는 이름을 쓰니까 좀 어색하다 bool 값을 리턴하는 이름이라.
+	CheckWindowResized(toolInput); //창이 변했을때 RenderTexture를 다시 만들어준다.
+	CheckActiveUpdate(toolInput);
 		
 	m_controller->Update();
 	m_mainRenderTexture->ProcessUpdate(timer);
@@ -148,6 +170,8 @@ void UserInterfaceWindow::SetupWindowAppearing() noexcept
 	
 	m_window = GetImGuiWindow();
 	m_controller->SetUIWindow(m_window);
+
+	CheckWindowMoved(ToolInputLocator::GetService());
 }
 
 void UserInterfaceWindow::HandleMouseEvents()

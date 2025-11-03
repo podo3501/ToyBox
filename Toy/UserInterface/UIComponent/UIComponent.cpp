@@ -96,7 +96,7 @@ bool UIComponent::RecursivePositionUpdate(const XMINT2& position) noexcept
 	const auto& startPos = GetTransform(this).GetUpdatedPosition(m_layout, position);
 	ImplementPositionUpdated();
 
-	return ranges::all_of(GetChildren(), [this, &startPos](auto& child) {
+	return ranges::all_of(m_children, [this, &startPos](auto& child) {
 		auto childStartPos = startPos + GetTransform(child.get()).GetRelativePosition();
 		return child->RecursivePositionUpdate(childStartPos);
 		});
@@ -107,13 +107,14 @@ bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& posi
 	if (!HasStateFlag(StateFlag::Update)) return true;
 
 	const auto& startPos = GetTransform(this).GetUpdatedPosition(m_layout, position);
-	if (active)
-	{
-		active = HasStateFlag(StateFlag::ActiveUpdate);
-		if(active) ReturnIfFalse(ImplementUpdate(timer));
-	}
+	//if (active)
+	//{
+		//active = HasStateFlag(StateFlag::ActiveUpdate);
+		//if(active) ReturnIfFalse(ImplementUpdate(timer));
+	//}
+	ReturnIfFalse(ImplementUpdate(timer));
 	
-	bool result = ranges::all_of(GetChildren(), [this, &timer, &startPos, active](auto& child) {
+	bool result = ranges::all_of(m_children, [this, &timer, &startPos, active](auto& child) {
 		auto childStartPos = startPos + GetTransform(child.get()).GetRelativePosition();
 		return child->RecursiveUpdate(timer, childStartPos, active);
 		});

@@ -3,6 +3,9 @@
 #include "Shared/Framework/AppLoop.h"
 
 struct IRenderer;
+struct IToolInputManager;
+struct IInputManager;
+struct IEventDispatcherManager;
 class Window;
 
 class UserInterfaceWindow;
@@ -38,6 +41,7 @@ public:
 	IRenderer* GetRenderer() const noexcept { return m_renderer; }
 
 protected:
+	virtual bool InitializeDerived() override;
 	virtual void Update(const DX::StepTimer& timer) override;
 
 private:
@@ -47,6 +51,9 @@ private:
 	unique_ptr<MenuBar> m_menuBar;
 	ImTextureID m_textureID{};
 
+	unique_ptr<IToolInputManager> m_toolInputManager;
+	unique_ptr<IInputManager> m_inputManager;
+	unique_ptr<IEventDispatcherManager> m_nullEventDispatcher;
 	vector<unique_ptr<UserInterfaceWindow>> m_uiWindows;
 	vector<unique_ptr<TextureResBinderWindow>> m_textureWindows;
 };

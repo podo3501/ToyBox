@@ -68,7 +68,7 @@ bool ImageSelector::RemoveArea() noexcept
 
 void ImageSelector::CheckSelectArea() noexcept
 {
-    auto input = InputLocator::GetService();
+    auto input = ToolInputLocator::GetService();
     if (input->IsInputAction(MouseButton::Left, InputState::Pressed)) SelectArea();
     if (input->IsInputAction(Keyboard::Escape, InputState::Pressed)) DeselectArea();
     if (input->IsInputAction(Keyboard::Delete, InputState::Pressed)) RemoveArea();
@@ -125,7 +125,7 @@ void ImageSelector::CheckSourcePartition() noexcept
 {
     if (!m_sourceTexture) return;
 
-    auto input = InputLocator::GetService();
+    auto input = ToolInputLocator::GetService();
     const XMINT2& pos = input->GetPosition();
     m_hoveredAreas = GetAreas(m_cmdHistory->GetReceiver(), m_sourceTexture->GetFilename(), m_selectImagePart, pos);
     if (!m_hoveredAreas.empty()) return; //먼저 저장돼 있는 것을 찾아보고 없으면 새로운걸 만든다.

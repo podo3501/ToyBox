@@ -135,6 +135,9 @@
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite9T.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
     </ClCompile>
+    <ClCompile Include="System\EventDispatcherManagerT.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -258,6 +261,9 @@
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite9T.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite</Filter>
+    </ClInclude>
+    <ClInclude Include="System\EventDispatcherManagerT.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

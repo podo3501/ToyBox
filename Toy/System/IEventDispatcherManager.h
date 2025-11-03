@@ -19,4 +19,5 @@ struct IEventDispatcherManager
 };
 
 std::unique_ptr<IEventDispatcherManager> CreateEventDispatcherManager();
+std::unique_ptr<IEventDispatcherManager> CreateNullEventDispatcherManager();
 

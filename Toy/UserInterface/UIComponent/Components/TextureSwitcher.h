@@ -24,11 +24,11 @@ public:
 	bool Setup(const UILayout& layout, TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
 	inline bool Setup(TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode) { return Setup({}, texSlice, stateKeys, behaviorMode); }
 	void AddPressCB(function<void(InputState)> callback) { m_onPressCB = callback; }
-	void SetPressStateCB(function<void(InteractState)> callback) { m_onPressStateCB = callback; }
 	unique_ptr<UIComponent> AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	void ClearInteraction() noexcept;
 	bool FitToTextureSource() noexcept;
 	void ChangeState(InteractState state, bool force = false) noexcept;
+	void ChangeBehaviorMode(BehaviorMode behaviorMode) noexcept { m_behaviorMode = behaviorMode; }
 	bool ChangeBindKey(TextureResourceBinder* resBinder, const string& bindKey) noexcept;
 	inline optional<InteractState> GetState() const noexcept 	{ return m_state; }
 	inline PatchTextureLite* GetPatchTextureLite() const noexcept { return m_patchTexL; }
@@ -38,7 +38,6 @@ protected:
 	TextureSwitcher(const TextureSwitcher& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
 
 private:
@@ -57,7 +56,6 @@ private:
 	PatchTextureLite* m_patchTexL;
 	optional<InteractState> m_state;
 	function<void(InputState)> m_onPressCB;
-	function<void(InteractState)> m_onPressStateCB;
 };
 
 //utility
