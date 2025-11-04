@@ -102,6 +102,11 @@ bool ListArea::ImplementBindSourceInfo(TextureResourceBinder*, ITextureControlle
 	return ChangeSize(GetSize(), true);
 }
 
+bool ListArea::OnWheel(int wheelValue) noexcept
+{
+	return m_scrollBar->OnWheel(wheelValue);
+}
+
 bool ListArea::ChangeScrollBarSizeAndPos(const XMUINT2& size) noexcept
 {
 	ReturnIfFalse(ChangeSizeY(m_scrollBar, size.y - (m_scrollPadding * 2)));
@@ -249,11 +254,6 @@ void ListArea::OnScrollChangedCB(float ratio)
 	MoveContainers(startPos);
 }
 
-void ListArea::ScrollContainers(const DX::StepTimer&) noexcept
-{
-	m_scrollBar->SetEnableWheel(m_renderTex->IsMouseInArea());
-}
-
 void ListArea::CheckMouseInteraction() noexcept
 {
 	if (!m_renderTex->OnLeaveArea()) return;
@@ -265,17 +265,16 @@ void ListArea::CheckMouseInteraction() noexcept
 	}
 }
 
-void ListArea::UpdateContainersScroll(const DX::StepTimer& timer) noexcept
+void ListArea::UpdateContainersScroll() noexcept
 {
 	if (m_containers.empty()) return;
 
 	CheckMouseInteraction();
-	ScrollContainers(timer);
 }
 
-bool ListArea::ImplementUpdate(const DX::StepTimer& timer) noexcept
+bool ListArea::ImplementUpdate(const DX::StepTimer&) noexcept
 {
-	UpdateContainersScroll(timer);
+	UpdateContainersScroll();
 
 	return true;
 }

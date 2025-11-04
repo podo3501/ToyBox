@@ -18,6 +18,7 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual void ProcessIO(SerializerIO& serializer) override;
+	virtual bool OnWheel(int wheelValue) noexcept override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 		unique_ptr<TextureSwitcher> switcher, unique_ptr<ScrollBar> scrollBar) noexcept;
@@ -43,8 +44,7 @@ private:
 	bool ResizeContainerForScrollbar() noexcept;
 	bool UpdateScrollBar() noexcept;
 	XMUINT2 GetUsableContentSize() const noexcept;
-	void UpdateContainersScroll(const DX::StepTimer& timer) noexcept;
-	void ScrollContainers(const DX::StepTimer& timer) noexcept;
+	void UpdateContainersScroll() noexcept;
 	void CheckMouseInteraction() noexcept;
 	int32_t GetContainerHeight() const noexcept;
 	void OnScrollChangedCB(float ratio);

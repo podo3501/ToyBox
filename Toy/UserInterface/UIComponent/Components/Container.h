@@ -24,15 +24,12 @@ protected:
 	Container(const Container& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
 
 private:
 	void ReloadDatas() noexcept;
 	void SetState(InteractState state) noexcept;
 	void AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept;
-	void NormalMode(bool isPressed, bool isHeld) noexcept;
-	void HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept;
 
 	map<InteractState, UIComponent*> m_textures;
 	optional<InteractState> m_state;

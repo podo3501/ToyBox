@@ -60,22 +60,22 @@ bool TextureSwitcher::OnHover() noexcept
 	return true;
 }
 
-bool TextureSwitcher::OnPress() noexcept 
+bool TextureSwitcher::OnPress(const XMINT2& position) noexcept 
 { 
 	ChangeState(InteractState::Pressed);
 	if (m_onPressCB)
-		m_onPressCB(InputState::Pressed);
+		m_onPressCB(position, InputState::Pressed);
 	return true;
 }
 
-bool TextureSwitcher::OnHold(bool inside) noexcept 
+bool TextureSwitcher::OnHold(const XMINT2& position, bool inside) noexcept 
 { 
 	InteractState nextState = InteractState::Normal;
 
 	switch (m_behaviorMode)
 	{
 	case BehaviorMode::Normal: nextState = inside ? InteractState::Pressed : InteractState::Normal; break;
-	case BehaviorMode::HoldToKeepPressed: nextState = InteractState::Pressed; break;
+	case BehaviorMode::HoldToKeepPressed: nextState = InteractState::Pressed; break; //마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)
 	default:
 		break;
 	}
@@ -83,7 +83,7 @@ bool TextureSwitcher::OnHold(bool inside) noexcept
 	if (nextState == InteractState::Pressed)
 	{
 		if (m_onPressCB)
-			m_onPressCB(InputState::Held);
+			m_onPressCB(position, InputState::Held);
 	}
 		
 	ChangeState(nextState);
@@ -93,9 +93,6 @@ bool TextureSwitcher::OnHold(bool inside) noexcept
 bool TextureSwitcher::OnRelease(bool inside) noexcept 
 { 
 	ChangeState(InteractState::Normal);
-
-	if (m_onPressCB)
-		m_onPressCB(InputState::Released);
 
 	if (!inside) return true;
 
@@ -176,39 +173,6 @@ bool TextureSwitcher::ChangeBindKey(TextureResourceBinder* resBinder, const stri
 	SetSourceInfo(resBinder, *m_state, bindKey);
 	SetState(*m_state);
 	return FitToTextureSource();
-}
-
-void TextureSwitcher::NormalMode(bool isPressed, bool isHeld) noexcept
-{
-	auto input = InputLocator::GetService();
-	if (!Contains(GetArea(), input->GetPosition()))
-	{
-		ChangeState(Normal);
-		return;
-	}
-
-	bool isReleased = input->IsInputAction(MouseButton::Left, InputState::Released);
-	if (m_state == Pressed && isReleased)
-	{
-		auto eventDispatcher = EventDispatcherLocator::GetService();
-		eventDispatcher->Dispatch(GetRegion(), GetName(), UIEvent::Clicked);
-	}
-
-	ChangeState((isPressed || (m_state == Pressed && isHeld)) ? Pressed : Hovered);
-}
-
-//마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)
-void TextureSwitcher::HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept
-{
-	if (m_state == Pressed && isHeld) //Pressed가 계속 되고 있다면 리턴한다.
-	{
-		m_onPressCB(InputState::Held);
-		return;
-	}
-
-	NormalMode(isPressed, isHeld);
-
-	if (m_state == Pressed && isPressed) m_onPressCB(InputState::Pressed);
 }
 
 bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept

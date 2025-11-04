@@ -11,7 +11,6 @@ MouseState MockInputManager::GetMouseState() const noexcept
 	MouseState state;
 	state.pos = m_position;
 	state.leftButton = (m_inputState == InputState::Pressed || m_inputState == InputState::Held);
-	state.wheelValue = m_wheelValue;
 	return state;
 }
 

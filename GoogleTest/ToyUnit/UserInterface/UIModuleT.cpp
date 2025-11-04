@@ -12,16 +12,16 @@ public:
 	{
 		//리턴을 하지 않으면 UpdateMouseState 함수 안에서 컴포넌트를 capture 하지 않아 함수가 동작하지 않음.
 		//true를 리턴했다는 것은 마우스의 값을 처리했다라고 보고 그 밑에 컴포넌트로 내려가지 않음.
-		ON_CALL(*this, OnPress()).WillByDefault(testing::Return(true));
-		ON_CALL(*this, OnHold(testing::_)).WillByDefault(testing::Return(true));
+		ON_CALL(*this, OnPress(testing::_)).WillByDefault(testing::Return(true));
+		ON_CALL(*this, OnHold(testing::_, testing::_)).WillByDefault(testing::Return(true));
 		ON_CALL(*this, OnRelease(testing::_)).WillByDefault(testing::Return(true));
 		ON_CALL(*this, OnWheel(testing::_)).WillByDefault(testing::Return(true));
 	}
 
 	MOCK_METHOD(bool, OnNormal, (), (noexcept));
 	MOCK_METHOD(bool, OnHover, (), (noexcept));
-	MOCK_METHOD(bool, OnPress, (), (noexcept));
-	MOCK_METHOD(bool, OnHold, (bool inside), (noexcept));
+	MOCK_METHOD(bool, OnPress, (const XMINT2& pos), (noexcept));
+	MOCK_METHOD(bool, OnHold, (const XMINT2& pos, bool inside), (noexcept));
 	MOCK_METHOD(bool, OnRelease, (bool inside), (noexcept));
 	MOCK_METHOD(bool, OnWheel, (int wheelValue), (noexcept));
 };
@@ -93,8 +93,8 @@ namespace UserInterfaceT
 
 		EXPECT_CALL(*comp, OnHover()).Times(3); //UpdateMouseState 불릴때마다 호출
 		testing::InSequence seq;
-		EXPECT_CALL(*comp, OnPress()).Times(1);
-		EXPECT_CALL(*comp, OnHold(true)).Times(1);
+		EXPECT_CALL(*comp, OnPress(testing::_)).Times(1);
+		EXPECT_CALL(*comp, OnHold(testing::_, true)).Times(1);
 		EXPECT_CALL(*comp, OnRelease(true)).Times(1);
 
 		SimulateClick(comp->GetLeftTop());
@@ -107,9 +107,9 @@ namespace UserInterfaceT
 
 		testing::InSequence seq; //호출순서 검증
 		EXPECT_CALL(*comp, OnHover()).Times(1); //안에 있을때만 불리기 때문에 한번
-		EXPECT_CALL(*comp, OnPress()).Times(1);
+		EXPECT_CALL(*comp, OnPress(testing::_)).Times(1);
 		EXPECT_CALL(*comp, OnNormal()).Times(1); //영역 밖으로 나오면서 호출을 한번 한다.
-		EXPECT_CALL(*comp, OnHold(false)).Times(1);
+		EXPECT_CALL(*comp, OnHold(testing::_, false)).Times(1);
 		EXPECT_CALL(*comp, OnRelease(false)).Times(1);
 
 		SimulateClick(comp->GetLeftTop(), outsidePos);

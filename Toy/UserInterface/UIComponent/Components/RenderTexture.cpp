@@ -130,9 +130,9 @@ void RenderTexture::CheckEnterLeave() noexcept
 
 bool RenderTexture::ImplementUpdate(const DX::StepTimer&) noexcept
 {
-	CheckMouseInArea();
-	CheckEnterLeave();	
-	SetChildrenStateFlag(StateFlag::ActiveUpdate, m_mouseInArea && m_mouseEvents);
+	//CheckMouseInArea();
+	//CheckEnterLeave();	
+	//SetChildrenStateFlag(StateFlag::ActiveUpdate, m_mouseInArea && m_mouseEvents);
 
 	return true;
 }

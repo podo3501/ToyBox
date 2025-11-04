@@ -51,7 +51,7 @@ private:
 	void UpdateMouseState() noexcept;
 	void UpdateHoverState(vector<UIComponent*> components) noexcept;
 	void ProcessCaptureComponent(const MouseState& mouseState) noexcept;
-	void CaptureComponent(bool leftButton) noexcept;
+	void CaptureComponent(const MouseState& mouseState) noexcept;
 	void ProcessMouseWheel(int wheelValue) noexcept;
 	UIComponent* FindComponentInRegion(const string& regionName, const string& name) const noexcept;
 

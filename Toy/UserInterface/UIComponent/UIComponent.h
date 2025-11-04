@@ -50,8 +50,8 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	//마우스 관련 event
 	virtual bool OnNormal() noexcept { return false; }
 	virtual bool OnHover() noexcept { return false; }
-	virtual bool OnPress() noexcept { return false; }
-	virtual bool OnHold(bool inside) noexcept { inside;  return false; }
+	virtual bool OnPress(const XMINT2& pos) noexcept { pos; return false; }
+	virtual bool OnHold(const XMINT2& pos, bool inside) noexcept { pos; inside;  return false; }
 	virtual bool OnRelease(bool inside) noexcept { inside; return false; }
 	virtual bool OnWheel(int wheelValue) noexcept { wheelValue; return false; }
 
@@ -76,6 +76,8 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }
+	inline bool IsVisible() const noexcept { return HasStateFlag(StateFlag::Render); }
+	inline void SetVisible(bool visible) noexcept { SetStateFlag(StateFlag::Render, visible); }
 	inline bool SetStateFlag(StateFlag::Type flag, bool enabled) noexcept 
 	{ 
 		return BitEnum::Set(m_stateFlag, flag, enabled); 

@@ -16,7 +16,7 @@
 namespace UserInterface
 {
 	//툴에서 임시로 component를 생성할때 module이 생성되지 않은 상태이기 때문에 테스트가 필요
-	TEST_F(Integration, AttachDetachNoModuleTest)
+	TEST_F(Integration, AttachDetachNoModuleTest) //옮기는거 완료
 	{
 		auto [main, mainPtr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));

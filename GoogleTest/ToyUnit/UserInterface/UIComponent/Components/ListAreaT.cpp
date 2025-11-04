@@ -3,6 +3,7 @@
 #include "UserInterface/UIComponent/Components/ComponentHelper.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+#include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 #include "Shared/Utils/GeometryExt.h"
 
 void ListAreaT::MakeTestPrototype()
@@ -34,6 +35,12 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	TEST_F(ListAreaT, Clone)
 	{
 		EXPECT_TRUE(TestClone(m_component));
+	}
+
+	TEST_F(ListAreaT, Container_MouseHover)
+	{
+		MakeTestData(1);
+		auto container = m_component->GetContainer(0);
 	}
 
 	TEST_F(ListAreaT, GetContainer)
@@ -99,6 +106,23 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 
 		m_component->UpdatePositionsManually();
 		m_component->ProcessRender(&render);
+	}
+
+	TEST_F(ListAreaT, ScrollBarVisible_ChangeSize)
+	{
+		MakeTestData(3);
+		m_component->ChangeSize(200, 200); //사이즈가 커지면 스크롤바는 보이지 않게 된다.
+
+		EXPECT_FALSE(m_scrollBar->IsVisible());
+	}
+
+	TEST_F(ListAreaT, ScrollBarVisible_InsertData)
+	{
+		MakeTestData(2); //데이터가 2개일때부터 스크롤바가 보이기 시작한다.
+		EXPECT_TRUE(m_scrollBar->IsVisible());
+
+		m_component->RemoveContainer(0);
+		EXPECT_FALSE(m_scrollBar->IsVisible());
 	}
 	
 	TEST_F(ListAreaT, WriteAndRead)

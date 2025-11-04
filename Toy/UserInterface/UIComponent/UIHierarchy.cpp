@@ -79,7 +79,7 @@ void UIHierarchy<UIComponent>::ForEachRenderChildBFS(function<TraverseResult(UIC
 
 		auto result = Func(current);
 		if (result == TraverseResult::Found || result == TraverseResult::Skip) return;
-		if (current->HasStateFlag(StateFlag::RenderTexture)) continue;
+		if (current->HasStateFlag(StateFlag::RenderTexture)) continue; //얘 밑에 붙은 것들은 텍스쳐에 다 그려졌기 때문에 밑으로 내려갈 이유가 없다.
 
 		for (const auto& child : current->m_children)
 		{

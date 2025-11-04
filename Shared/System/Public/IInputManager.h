@@ -10,7 +10,6 @@ struct MouseState
 {
     DirectX::XMINT2 pos{};
     bool leftButton{ false };
-    int wheelValue{ 0 };
 };
 
 enum class MouseButton

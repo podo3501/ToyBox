@@ -118,8 +118,8 @@ void UIModule::UpdateMouseState() noexcept
 
 	UpdateHoverState(components);
 	ProcessCaptureComponent(mouseState); //캡쳐된 컴포넌트를 마우스 입력에 따라 처리
-	CaptureComponent(mouseState.leftButton);	//클릭하면 캡쳐하고 press호출
-	ProcessMouseWheel(mouseState.wheelValue);
+	CaptureComponent(mouseState);	//클릭하면 캡쳐하고 press호출
+	ProcessMouseWheel(input->GetMouseWheelValue());
 }
 
 void UIModule::UpdateHoverState(vector<UIComponent*> components) noexcept
@@ -147,17 +147,17 @@ void UIModule::ProcessCaptureComponent(const MouseState& mouseState) noexcept
 		m_capture = nullptr;
 	}
 	else
-		m_capture->OnHold(inside); //2. 캡쳐한걸 hold로 호출한다.
+		m_capture->OnHold(mouseState.pos, inside); //2. 캡쳐한걸 hold로 호출한다.
 }
 
-void UIModule::CaptureComponent(bool leftButton) noexcept
+void UIModule::CaptureComponent(const MouseState& mouseState) noexcept
 {
 	if (m_capture) return;
-	if (!leftButton) return;
+	if (!mouseState.leftButton) return;
 
 	for (auto& component : m_hoveredComponents)
 	{
-		if (component->OnPress()) //위의 컴포넌트가 반응하면 그 밑에 컴포넌트들은 실행하지 않는다.
+		if (component->OnPress(mouseState.pos)) //위의 컴포넌트가 반응하면 그 밑에 컴포넌트들은 실행하지 않는다.
 		{
 			m_capture = component;
 			return;

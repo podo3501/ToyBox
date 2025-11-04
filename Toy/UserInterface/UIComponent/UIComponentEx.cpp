@@ -263,18 +263,6 @@ XMUINT2 UIComponentEx::GetChildrenBoundsSize() const noexcept
 	return GetSizeFromRectangle(totalArea);
 }
 
-bool UIComponentEx::IsPositionUpdated() const noexcept //?!? 이건 뭐할때 쓰는 함수이지? 테스트 용이면 테스트쪽으로 빼자.
-{
-	m_component->UpdatePositionsManually(true);
-	auto clone = m_component->Clone();
-	clone->UpdatePositionsManually(true); //클론을 만들어서 업데이트 시킨후 현재 컴포넌트와 포지션값 비교.
-	return m_component->ForEachChildUntilFail([&clone](const UIComponent* child) {
-		UIComponent* cloneComponent = UIEx(clone).FindComponent(child->GetMyRegion(), child->GetName());
-		if (cloneComponent == nullptr) return false;
-		return cloneComponent->GetLeftTop() == child->GetLeftTop();
-		});
-}
-
 UIModule* UIComponentEx::GetUIModule(UIComponent* start) const
 {
 	UIComponent* current = start;

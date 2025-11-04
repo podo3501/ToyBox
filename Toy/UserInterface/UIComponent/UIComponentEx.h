@@ -38,7 +38,6 @@ public:
 	vector<UIComponent*> FindRenderComponents(const XMINT2& pos) noexcept;
 	UIComponent* FindTopRenderComponent(const XMINT2& pos) noexcept;
 	XMUINT2 GetChildrenBoundsSize() const noexcept;
-	bool IsPositionUpdated() const noexcept;
 
 private:
 	unique_ptr<UIComponent> DetachChild(UIComponent* parent, UIComponent* detach) noexcept;

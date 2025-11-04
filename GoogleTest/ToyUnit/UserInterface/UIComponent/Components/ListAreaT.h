@@ -13,13 +13,14 @@ protected:
 	void MakeTestData(int itemCount);
 
 	unique_ptr<ListArea> m_component;
+	ScrollBar* m_scrollBar{ nullptr };
 };
 
 void ListAreaT::SetUp()
 {
 	ComponentT::SetUp();
 
-	m_component = CreateSampleListArea({}, "BackImage", "ListBackground", "Track", "Button");
+	m_component = CreateSampleListArea({}, "BackImage", "ListBackground", "Track", "Button", &m_scrollBar);
 	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
 }
 

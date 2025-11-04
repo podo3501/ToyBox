@@ -17,13 +17,13 @@ public:
 	virtual void ProcessIO(SerializerIO& serializer) override;
 	virtual bool OnNormal() noexcept override;
 	virtual bool OnHover() noexcept override;
-	virtual bool OnPress() noexcept override;
-	virtual bool OnHold(bool inside) noexcept override;
+	virtual bool OnPress(const XMINT2& pos) noexcept override;
+	virtual bool OnHold(const XMINT2& pos, bool inside) noexcept override;
 	virtual bool OnRelease(bool inside) noexcept override;
 
 	bool Setup(const UILayout& layout, TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode);
 	inline bool Setup(TextureSlice texSlice, const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode) { return Setup({}, texSlice, stateKeys, behaviorMode); }
-	void AddPressCB(function<void(InputState)> callback) { m_onPressCB = callback; }
+	void AddPressCB(function<void(const XMINT2&, InputState)> callback) { m_onPressCB = callback; }
 	unique_ptr<UIComponent> AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	void ClearInteraction() noexcept;
 	bool FitToTextureSource() noexcept;
@@ -44,8 +44,6 @@ private:
 	bool SetSourceInfo(TextureResourceBinder* resBinder, InteractState state, const string& bindKey) noexcept;
 	bool SetupDefaults() noexcept;
 	void ReloadDatas() noexcept;
-	void NormalMode(bool isPressed, bool isHeld) noexcept;
-	void HoldToKeepPressedMode(bool isPressed, bool isHeld) noexcept;
 	void SetState(InteractState state) noexcept;
 
 	map<InteractState, string> m_stateKeys;
@@ -55,7 +53,7 @@ private:
 	map<InteractState, size_t> m_indexes;
 	PatchTextureLite* m_patchTexL;
 	optional<InteractState> m_state;
-	function<void(InputState)> m_onPressCB;
+	function<void(const XMINT2&, InputState)> m_onPressCB;
 };
 
 //utility

@@ -31,7 +31,8 @@ bool Compare(const T& lhs, const T& rhs)
 	if (!lhs && !rhs) return true;
 	if (!lhs || !rhs) return false;
 
-	return (*lhs == *rhs);
+	bool result = (*lhs == *rhs);
+	return result;
 }
 
 // 시퀀스 컨테이너 비교

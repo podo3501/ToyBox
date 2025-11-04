@@ -23,7 +23,6 @@ public:
 	bool Setup(unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<TextureSwitcher> scrollButton);
 	bool UpdateScrollView(uint32_t viewArea, uint32_t contentSize) noexcept;
 	void SetPositionRatio(float positionRatio) noexcept;
-	void SetEnableWheel(bool enable) noexcept;
 
 protected:
 	ScrollBar(const ScrollBar& other);
@@ -37,12 +36,12 @@ private:
 	void SetScrollContainerSize(float ratio) noexcept;
 	template<typename ReturnType>
 	inline ReturnType GetMaxScrollRange() const noexcept;
-	void OnPressCB(InputState inputState);
+	void OnPressCB(const XMINT2& pos, InputState inputState);
+	void ApplyScrollButtonPosition(float postioinRatio) noexcept;
 
 	PatchTextureStd3* m_scrollTrack;
 	TextureSwitcher* m_scrollButton;
 	BoundedValue m_bounded;
-	bool m_isWheelEnabled{ false };
 	int m_wheelValue{ 0 };
 	int32_t m_pressMousePos{ 0 };
 	XMINT2 m_pressContainerPos{};

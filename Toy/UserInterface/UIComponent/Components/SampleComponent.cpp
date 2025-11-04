@@ -43,22 +43,27 @@ map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(DirectionType dir
 }
 
 unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout, DirectionType dirType,
-	const string& trackKey, const string& buttonKey)
+	const string& trackKey, const string& buttonKey, TextureSwitcher** outButton)
 {
 	UILayout gridLayout{ layout.GetSize() };
+
+	auto button = CreateComponent<TextureSwitcher>(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap(buttonKey), BehaviorMode::HoldToKeepPressed);
+	if (outButton) *outButton = button.get();
 		
-	return CreateComponent<ScrollBar>(layout,
-		CreateComponent<PatchTextureStd3>(gridLayout, dirType, trackKey),
-		CreateComponent<TextureSwitcher>(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap(buttonKey), BehaviorMode::HoldToKeepPressed));
+	return CreateComponent<ScrollBar>(layout, CreateComponent<PatchTextureStd3>(gridLayout, dirType, trackKey), move(button));
 }
 
 unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout,
-	const string& backImageKey, const string& switcherKey, const string& scrollTrackKey, const string& scrollButtonKey)
+	const string& backImageKey, const string& switcherKey, const string& scrollTrackKey, const string& scrollButtonKey, 
+	ScrollBar** outScrollBar)
 {
+	auto scrollBar = CreateSampleScrollBar({}, DirectionType::Vertical, scrollTrackKey, scrollButtonKey);
+	if (outScrollBar) *outScrollBar = scrollBar.get();
+
 	return CreateComponent<ListArea>(layout,
-		move(CreateComponent<PatchTextureStd1>(UILayout{ layout.GetSize() }, backImageKey)),
-		move(CreateComponent<TextureSwitcher>(TextureSlice::Nine, GetStateKeyMap(switcherKey), BehaviorMode::Normal)),
-		move(CreateSampleScrollBar({}, DirectionType::Vertical, scrollTrackKey, scrollButtonKey)));
+		CreateComponent<PatchTextureStd1>(UILayout{ layout.GetSize() }, backImageKey),
+		CreateComponent<TextureSwitcher>(TextureSlice::Nine, GetStateKeyMap(switcherKey), BehaviorMode::Normal),
+		move(scrollBar));
 }
 
 bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
