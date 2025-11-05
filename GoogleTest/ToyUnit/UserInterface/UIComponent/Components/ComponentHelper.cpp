@@ -5,7 +5,7 @@
 DX::StepTimer GetTickTimer() noexcept
 {
 	DX::StepTimer timer;
-	this_thread::sleep_for(std::chrono::milliseconds(1)); //조금 틈을 주지 않으면 틱값이 없어서 시간이 흘러가지 않는다.
+	this_thread::sleep_for(std::chrono::milliseconds(3)); //조금 틈을 주지 않으면 틱값이 없어서 시간이 흘러가지 않는다.
 	timer.Tick([] {});
 	return timer;
 }

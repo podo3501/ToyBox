@@ -14,7 +14,7 @@ protected:
 	void SimulateMouse(const XMINT2& pos, int wheelValue) noexcept;
 	void SimulateMouse(int x, int y, int wheelValue) noexcept;
 	void SimulateClick(const XMINT2& startPos) noexcept;
-	void SimulateClick(const XMINT2& startPos, const XMINT2& endPos) noexcept;
+	void SimulateDrag(const XMINT2& startPos, const XMINT2& endPos) noexcept;
 
 	unique_ptr<MockInputManager> m_input;
 };
@@ -54,10 +54,10 @@ void UIModuleT::SimulateMouse(int x, int y, int wheelValue) noexcept
 
 void UIModuleT::SimulateClick(const XMINT2& startPos) noexcept
 {
-	SimulateClick(startPos, startPos);
+	SimulateDrag(startPos, startPos);
 }
 
-void UIModuleT::SimulateClick(const XMINT2& startPos, const XMINT2& endPos) noexcept
+void UIModuleT::SimulateDrag(const XMINT2& startPos, const XMINT2& endPos) noexcept
 {
 	SimulateMouse(startPos, InputState::Pressed);
 	SimulateMouse(endPos, InputState::Held);

@@ -37,7 +37,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		XMINT2 startPos = m_button->GetLeftTop();
 		XMINT2 endPos{ startPos.x, startPos.y + 2 }; //밑으로 y로 2만큼 드래그
 
-		SimulateDrag(m_button, startPos, endPos);
+		SimulateDrag(m_component.get(), startPos, endPos);
 	}
 
 	TEST_F(ScrollBarT, ProcessRender)

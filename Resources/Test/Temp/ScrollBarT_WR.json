@@ -260,8 +260,7 @@
                 "Normal": "Button_Normal",
                 "Hovered": "Button_Hovered",
                 "Pressed": "Button_Pressed"
-            },
-            "BehaviorMode": 1
+            }
         }
     ]
 }

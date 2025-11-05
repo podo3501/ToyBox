@@ -15,21 +15,20 @@ class MockMouseClicked : public UIComponentStub
 public:
 	MockMouseClicked()
 	{
-		ON_CALL(*this, OnPress(testing::_)).WillByDefault(testing::Return(true));
-		ON_CALL(*this, OnHold(testing::_, testing::_)).WillByDefault(testing::Return(true));
+		ON_CALL(*this, OnPress(testing::_)).WillByDefault(testing::Return(InputResult::Propagate));
 		ON_CALL(*this, OnRelease(testing::_)).WillByDefault([this](bool inside) {
 			if (inside)
 			{
 				auto eventDispatcher = EventDispatcherLocator::GetService();
 				eventDispatcher->Dispatch("region", "MockMouseClicked", UIEvent::Clicked);
 			}
-			return true; });
+			});
 	}
 
-	MOCK_METHOD(bool, OnHover, (), (noexcept));
-	MOCK_METHOD(bool, OnPress, (const XMINT2& pos), (noexcept));
-	MOCK_METHOD(bool, OnHold, (const XMINT2& pos, bool inside), (noexcept));
-	MOCK_METHOD(bool, OnRelease, (bool inside), (noexcept));
+	MOCK_METHOD(void, OnHover, (), (noexcept));
+	MOCK_METHOD(InputResult, OnPress, (const XMINT2& pos), (noexcept));
+	MOCK_METHOD(void, OnHold, (const XMINT2& pos, bool inside), (noexcept));
+	MOCK_METHOD(void, OnRelease, (bool inside), (noexcept));
 };
 
 namespace UserInterface

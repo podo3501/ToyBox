@@ -28,6 +28,7 @@ void ScrollBarT::SetUp()
 	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
 	m_component->UpdateScrollView(50, 200); //보여줄 데이터가 화면영역보다 많아야 스크롤바가 생긴다.
 	m_component->SetPositionRatio(0.5f); //중간으로 버튼을 이동힌다.
+	m_component->UpdatePositionsManually();
 }
 
 void ScrollBarT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

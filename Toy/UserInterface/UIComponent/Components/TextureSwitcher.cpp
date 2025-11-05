@@ -20,7 +20,6 @@ TextureSwitcher::TextureSwitcher() :
 TextureSwitcher::TextureSwitcher(const TextureSwitcher& o) :
 	UIComponent{ o },
 	m_stateKeys{ o.m_stateKeys },
-	m_behaviorMode{ o.m_behaviorMode },
 	m_sources{ o.m_sources },
 	m_indexes{ o.m_indexes },
 	m_patchTexL{ nullptr },
@@ -45,72 +44,48 @@ bool TextureSwitcher::operator==(const UIComponent& rhs) const noexcept
 	ReturnIfFalse(UIComponent::operator==(rhs));
 	const TextureSwitcher* o = static_cast<const TextureSwitcher*>(&rhs);
 
-	return tie(m_stateKeys, m_behaviorMode) == tie(o->m_stateKeys, o->m_behaviorMode);
+	return m_stateKeys == o->m_stateKeys;
 }
 
-bool TextureSwitcher::OnNormal() noexcept
+void TextureSwitcher::OnNormal() noexcept
 {
 	ChangeState(InteractState::Normal);
-	return true;
 }
 
-bool TextureSwitcher::OnHover() noexcept 
+void TextureSwitcher::OnHover() noexcept 
 { 
 	ChangeState(InteractState::Hovered);
-	return true;
 }
 
-bool TextureSwitcher::OnPress(const XMINT2& position) noexcept 
+InputResult TextureSwitcher::OnPress(const XMINT2&) noexcept 
 { 
 	ChangeState(InteractState::Pressed);
-	if (m_onPressCB)
-		m_onPressCB(position, InputState::Pressed);
-	return true;
+	return InputResult::Propagate;
 }
 
-bool TextureSwitcher::OnHold(const XMINT2& position, bool inside) noexcept 
+void TextureSwitcher::OnHold(const XMINT2&, bool inside) noexcept 
 { 
-	InteractState nextState = InteractState::Normal;
-
-	switch (m_behaviorMode)
-	{
-	case BehaviorMode::Normal: nextState = inside ? InteractState::Pressed : InteractState::Normal; break;
-	case BehaviorMode::HoldToKeepPressed: nextState = InteractState::Pressed; break; //마우스 왼쪽키가 계속 눌러지고 있으면 영역을 벗어나도 눌러지는 state가 유지된다.(scrollbar에서 사용)
-	default:
-		break;
-	}
-
-	if (nextState == InteractState::Pressed)
-	{
-		if (m_onPressCB)
-			m_onPressCB(position, InputState::Held);
-	}
-		
-	ChangeState(nextState);
-	return true;
+	ChangeState(inside ? InteractState::Pressed : InteractState::Normal);
 }
 
-bool TextureSwitcher::OnRelease(bool inside) noexcept 
+void TextureSwitcher::OnRelease(bool inside) noexcept 
 { 
 	ChangeState(InteractState::Normal);
 
-	if (!inside) return true;
+	if (!inside) return;
 
 	auto eventDispatcher = EventDispatcherLocator::GetService();
 	eventDispatcher->Dispatch(GetRegion(), GetName(), UIEvent::Clicked);
-
-	return true;
 }
 
 bool TextureSwitcher::Setup(const UILayout& layout, TextureSlice texSlice,
-	const map<InteractState, string>& stateKeys, BehaviorMode behaviorMode)
+	const map<InteractState, string>& stateKeys)
 {
 	SetLayout(layout);
 	unique_ptr<PatchTextureLite> pTexL = nullptr;
 	tie(pTexL, m_patchTexL) = GetPtrs(CreatePatchTextureLite(texSlice, layout.GetSize()));
 	UIEx(this).AttachComponent(move(pTexL), {});
 	m_stateKeys = stateKeys;
-	m_behaviorMode = behaviorMode;
 
 	return true;
 }
@@ -221,7 +196,6 @@ void TextureSwitcher::ProcessIO(SerializerIO& serializer)
 {
 	UIComponent::ProcessIO(serializer);
 	serializer.Process("StateKey", m_stateKeys);
-	serializer.Process("BehaviorMode", m_behaviorMode);
 
 	if (serializer.IsWrite()) return;
 	ReloadDatas();

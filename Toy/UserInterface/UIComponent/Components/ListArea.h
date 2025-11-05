@@ -18,6 +18,7 @@ public:
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual void ProcessIO(SerializerIO& serializer) override;
+	virtual void OnMove(const XMINT2& pos) noexcept override;
 	virtual bool OnWheel(int wheelValue) noexcept override;
 
 	bool Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,

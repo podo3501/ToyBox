@@ -9,7 +9,7 @@
 class MockComponent : public UIComponentStub
 {
 public:
-	MOCK_METHOD(bool, OnHover, (), (noexcept));
+	MOCK_METHOD(void, OnHover, (), (noexcept));
 	MOCK_METHOD(void, ImplementRender, (ITextureRender*), (const));
 };
 

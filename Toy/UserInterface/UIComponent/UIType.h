@@ -98,13 +98,15 @@ constexpr auto EnumToStringMap<InteractState>()->array<const char*, EnumSize<Int
 	} };
 }
 
-enum class BehaviorMode : int //컨테이너의 동작방식
-{
-	Normal,
-	HoldToKeepPressed,
-};
-
 ///////////////////////////////////////////////////////////////
+
+//렌더링시 탐색을 바꿔가면서 해야한다. 그렇지 않으면 이미지가 덮혀지거나 순서가 꼬이게 된다.
+enum class RenderTraversal
+{
+	BFS,
+	DFS,
+	Inherited, //윗 노드가 사용한 방식을 따라서.
+};
 
 enum class TraverseResult : int
 {
@@ -173,12 +175,11 @@ namespace StateFlag
 	constexpr StateFlag::Type operator|(StateFlag::Type lhs, StateFlag::Type rhs) { return static_cast<StateFlag::Type>(static_cast<int>(lhs) | static_cast<int>(rhs)); }
 }
 
-//렌더링시 탐색을 바꿔가면서 해야한다. 그렇지 않으면 이미지가 덮혀지거나 순서가 꼬이게 된다.
-enum class RenderTraversal
-{
-	BFS,
-	DFS,
-	Inherited, //윗 노드가 사용한 방식을 따라서.
+enum class InputResult 
+{ 
+	None, //처리안함.
+	Consumed, //완전처리
+	Propagate //처리했지만 부모 후속처리 필요(컴포넌트 캡쳐는 했지만 이벤트는 전파)
 };
 
 enum class DirectionType

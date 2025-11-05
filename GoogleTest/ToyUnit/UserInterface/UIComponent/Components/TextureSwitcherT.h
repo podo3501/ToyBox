@@ -18,8 +18,7 @@ void TextureSwitcherT::SetUp()
 {
 	ComponentT::SetUp();
 
-	m_component = CreateComponent<TextureSwitcher>(TextureSlice::One,
-		GetStateKeyMap("Button32"), BehaviorMode::Normal);
+	m_component = CreateComponent<TextureSwitcher>(TextureSlice::One, GetStateKeyMap("Button32"));
 	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
 }
 

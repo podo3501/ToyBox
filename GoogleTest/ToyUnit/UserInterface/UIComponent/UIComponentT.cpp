@@ -81,7 +81,7 @@ namespace UserInterfaceT::UIComponentT
 		EXPECT_FALSE(UIEx(m_child).FindRegionComponent("Region1"));
 	}
 
-	TEST_F(UIComponentT, FindRenderComponents)
+	TEST_F(UIComponentT, FindRenderComponents) //?!?이 테스트는 필요 없다.
 	{
 		vector<UIComponent*> compAtParent = UIEx(m_main).FindRenderComponents(m_parent->GetLeftTop());
 		EXPECT_EQ(compAtParent[0], m_main.get());
@@ -98,5 +98,13 @@ namespace UserInterfaceT::UIComponentT
 		detached->UpdatePositionsManually(true);
 		
 		EXPECT_EQ(UIEx(detached).GetChildrenBoundsSize(), preSize);
+	}
+
+	TEST_F(UIComponentT, PickComponents)
+	{
+		vector<UIComponent*> compAtChild = UIEx(m_main).PickComponents(m_child->GetLeftTop());
+		EXPECT_EQ(compAtChild[0], m_child);
+		EXPECT_EQ(compAtChild[1], m_parent);
+		EXPECT_EQ(compAtChild[2], m_main.get());
 	}
 }

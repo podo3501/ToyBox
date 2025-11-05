@@ -47,7 +47,7 @@ unique_ptr<ScrollBar> CreateSampleScrollBar(const UILayout& layout, DirectionTyp
 {
 	UILayout gridLayout{ layout.GetSize() };
 
-	auto button = CreateComponent<TextureSwitcher>(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap(buttonKey), BehaviorMode::HoldToKeepPressed);
+	auto button = CreateComponent<TextureSwitcher>(gridLayout, DirTypeToTextureSlice(dirType), GetStateKeyMap(buttonKey));
 	if (outButton) *outButton = button.get();
 		
 	return CreateComponent<ScrollBar>(layout, CreateComponent<PatchTextureStd3>(gridLayout, dirType, trackKey), move(button));
@@ -62,7 +62,7 @@ unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout,
 
 	return CreateComponent<ListArea>(layout,
 		CreateComponent<PatchTextureStd1>(UILayout{ layout.GetSize() }, backImageKey),
-		CreateComponent<TextureSwitcher>(TextureSlice::Nine, GetStateKeyMap(switcherKey), BehaviorMode::Normal),
+		CreateComponent<TextureSwitcher>(TextureSlice::Nine, GetStateKeyMap(switcherKey)),
 		move(scrollBar));
 }
 

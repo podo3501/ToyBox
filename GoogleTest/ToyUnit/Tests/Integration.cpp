@@ -93,8 +93,8 @@ namespace UserInterface
 		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd9>(UILayout{ { 220, 190 }, Origin::LeftTop }, "BackImage9")));
 		vector<wstring> bindFontKeys{ L"Hangle", L"English" };
 		EXPECT_TRUE(VerifyClone(CreateComponent<TextArea>(UILayout{ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>", bindFontKeys)));
-		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 220, 190 }, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)));
-		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 48, 100 }, Origin::Center }, TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"), BehaviorMode::Normal)));
+		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 220, 190 }, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"))));
+		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 48, 100 }, Origin::Center }, TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"))));
 		EXPECT_TRUE(VerifyClone(CreateSampleListArea({ { 220, 190 }, Origin::LeftTop })));
 	}
 
@@ -112,7 +112,7 @@ namespace UserInterface
 		return !ranges::search(haystack, needle).empty();
 	}
 
-	TEST_F(Integration, MatchesRenderOrder)
+	TEST_F(Integration, MatchesRenderOrder) //옮길때 실제로 mock 4-5개 붙여서 순서대로 call 되는지 확인하는걸로 만들어야 한다.
 	{
 		using enum ComponentID;
 

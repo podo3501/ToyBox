@@ -114,18 +114,21 @@ void UIModule::UpdateMouseState() noexcept
 	//hover는 공통으로 호출
 	auto input = InputLocator::GetService();
 	auto mouseState = input->GetMouseState();
-	auto components = UIEx(GetMainPanel()).FindRenderComponents(mouseState.pos);
+	auto components = UIEx(GetMainPanel()).PickComponents(mouseState.pos);
 
-	UpdateHoverState(components);
+	UpdateHoverState(components, mouseState.pos);
 	ProcessCaptureComponent(mouseState); //캡쳐된 컴포넌트를 마우스 입력에 따라 처리
 	CaptureComponent(mouseState);	//클릭하면 캡쳐하고 press호출
 	ProcessMouseWheel(input->GetMouseWheelValue());
 }
 
-void UIModule::UpdateHoverState(vector<UIComponent*> components) noexcept
+void UIModule::UpdateHoverState(vector<UIComponent*> components, const XMINT2& pos) noexcept
 {
 	for (auto& component : components)
+	{
 		component->OnHover(); //일단 다 호출하고나서
+		component->OnMove(pos);
+	}
 
 	for (auto& prevComp : m_hoveredComponents)
 	{
@@ -150,6 +153,12 @@ void UIModule::ProcessCaptureComponent(const MouseState& mouseState) noexcept
 		m_capture->OnHold(mouseState.pos, inside); //2. 캡쳐한걸 hold로 호출한다.
 }
 
+
+static inline bool IsHandled(InputResult result) noexcept
+{
+	return result == InputResult::Consumed || result == InputResult::Propagate;
+}
+
 void UIModule::CaptureComponent(const MouseState& mouseState) noexcept
 {
 	if (m_capture) return;
@@ -157,16 +166,24 @@ void UIModule::CaptureComponent(const MouseState& mouseState) noexcept
 
 	for (auto& component : m_hoveredComponents)
 	{
-		if (component->OnPress(mouseState.pos)) //위의 컴포넌트가 반응하면 그 밑에 컴포넌트들은 실행하지 않는다.
+		const auto result = component->OnPress(mouseState.pos);
+		if (!IsHandled(result)) continue; //처리되지 않았다면 Render상 밑의 컴포넌트
+		
+		if (result == InputResult::Consumed) //이 컴포넌트가 소비하고 다음 컴포넌트로 가지 않는다.
 		{
 			m_capture = component;
-			return;
+			break;
 		}
+
+		if (!m_capture && result == InputResult::Propagate)
+			m_capture = component; //캡쳐된게 없으면 일단 얘를 캡쳐
 	}
 }
 
 void UIModule::ProcessMouseWheel(int wheelValue) noexcept
 {
+	if (!wheelValue) return;
+
 	for (const auto& component : m_hoveredComponents)
 		if (component->OnWheel(wheelValue))
 			return; //위의 컴포넌트가 반응하면 그 밑에 컴포넌트들은 실행하지 않는다.

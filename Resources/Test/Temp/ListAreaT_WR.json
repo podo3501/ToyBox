@@ -436,8 +436,7 @@
                 "Normal": "ListBackground_Normal",
                 "Hovered": "ListBackground_Hovered",
                 "Pressed": "ListBackground_Pressed"
-            },
-            "BehaviorMode": 0
+            }
         },
         {
             "Type": "ScrollBar",
@@ -702,8 +701,7 @@
                         "Normal": "Button_Normal",
                         "Hovered": "Button_Hovered",
                         "Pressed": "Button_Pressed"
-                    },
-                    "BehaviorMode": 1
+                    }
                 }
             ]
         }

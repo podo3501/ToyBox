@@ -49,7 +49,7 @@ private:
 	void ReloadDatas() noexcept;
 	bool UpdateMainPanel(const DX::StepTimer& timer) noexcept;
 	void UpdateMouseState() noexcept;
-	void UpdateHoverState(vector<UIComponent*> components) noexcept;
+	void UpdateHoverState(vector<UIComponent*> components, const XMINT2& pos) noexcept;
 	void ProcessCaptureComponent(const MouseState& mouseState) noexcept;
 	void CaptureComponent(const MouseState& mouseState) noexcept;
 	void ProcessMouseWheel(int wheelValue) noexcept;

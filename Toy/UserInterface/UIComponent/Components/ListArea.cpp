@@ -102,6 +102,12 @@ bool ListArea::ImplementBindSourceInfo(TextureResourceBinder*, ITextureControlle
 	return ChangeSize(GetSize(), true);
 }
 
+void ListArea::OnMove(const XMINT2& pos) noexcept
+{
+	//위치값에 맞는 컨테이너를 찾아서 OnHover를 해 준다.
+	pos;
+}
+
 bool ListArea::OnWheel(int wheelValue) noexcept
 {
 	return m_scrollBar->OnWheel(wheelValue);

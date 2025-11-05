@@ -60,9 +60,9 @@ bool FloatingComponent::Excute()
 	case MPatchTextureStd1: result = LoadComponent(CreateComponent<PatchTextureStd1>(UILayout{ { 64, 64 }, Origin::LeftTop }, "BackImage1")); break;
 	case MPatchTextureStd3: result = LoadComponent(CreateComponent<PatchTextureStd3>(UILayout{ { 48, 48 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")); break;
 	case MPatchTextureStd9: result = LoadComponent(CreateComponent<PatchTextureStd9>(UILayout{ { 170, 120 }, Origin::LeftTop }, "BackImage9")); break;
-	case MTextureSwitcher1: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 32, 32 }, Origin::LeftTop }, TextureSlice::One, GetStateKeyMap("ExitButton1"), BehaviorMode::Normal)); break;
-	case MTextureSwitcher3: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 100, 48 }, Origin::LeftTop }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal)); break;
-	case MTextureSwitcher9: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 100, 100 }, Origin::LeftTop }, TextureSlice::Nine, GetStateKeyMap("ListBackground9"), BehaviorMode::Normal)); break;
+	case MTextureSwitcher1: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 32, 32 }, Origin::LeftTop }, TextureSlice::One, GetStateKeyMap("ExitButton1"))); break;
+	case MTextureSwitcher3: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 100, 48 }, Origin::LeftTop }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"))); break;
+	case MTextureSwitcher9: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 100, 100 }, Origin::LeftTop }, TextureSlice::Nine, GetStateKeyMap("ListBackground9"))); break;
 	case MTextArea: result = LoadComponent(CreateComponent<TextArea>(UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
 	case MListArea: result = LoadComponent(CreateSampleListArea({ { 200, 170 }, Origin::LeftTop })); break;
 	}

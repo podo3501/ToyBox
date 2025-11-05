@@ -225,6 +225,7 @@ UIComponent* UIComponentEx::FindComponent(const string& region, const string& na
 	return UIEx(component).FindComponent(name);
 }
 
+//?!? 이 함수는 딱히 필요가 없다.
 vector<UIComponent*> UIComponentEx::FindRenderComponents(const XMINT2& pos) noexcept
 {
 	vector<UIComponent*> findList;
@@ -248,6 +249,18 @@ UIComponent* UIComponentEx::FindTopRenderComponent(const XMINT2& pos) noexcept
 		return TraverseResult::Continue;
 		});
 	return findComponent;
+}
+
+vector<UIComponent*> UIComponentEx::PickComponents(const XMINT2& pos) noexcept
+{
+	vector<UIComponent*> findList;
+	m_component->ForEachChildToRender([&findList, &pos](UIComponent* comp) {
+		if (Contains(comp->GetArea(), pos))
+			findList.push_back(comp);
+		return TraverseResult::Continue;
+		});
+	reverse(findList.begin(), findList.end()); //앞으로 넣어주는 것보다 push_back 하고 reverse 하는게 더 빠르다. vector가 단순 배열이라 캐쉬가 좋기 때문에 이걸로 한다.
+	return findList;
 }
 
 XMUINT2 UIComponentEx::GetChildrenBoundsSize() const noexcept

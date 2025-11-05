@@ -39,7 +39,7 @@ namespace UserInterface
 
 		UIComponent* main = uiModulePtr->GetMainPanel();
 		auto [switcher, switcherPtr] = GetPtrs(CreateComponent<TextureSwitcher>(TextureSlice::ThreeH,
-			GetStateKeyMap("ScrollButton3_H"), BehaviorMode::Normal));
+			GetStateKeyMap("ScrollButton3_H")));
 		UIEx(main).AttachComponent(move(switcher), { 100, 100 });
 		
 		bool toolMode{ true };

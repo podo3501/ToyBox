@@ -14,6 +14,9 @@ public:
 	static ComponentID GetTypeStatic() { return ComponentID::ScrollBar; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
+	virtual InputResult OnPress(const XMINT2& position) noexcept;
+	virtual void OnHold(const XMINT2& position, bool inside) noexcept;
+	virtual void OnRelease(bool inside) noexcept;
 	virtual bool OnWheel(int wheelValue) noexcept override;
 	virtual void ProcessIO(SerializerIO& serializer) override;
 
@@ -36,7 +39,6 @@ private:
 	void SetScrollContainerSize(float ratio) noexcept;
 	template<typename ReturnType>
 	inline ReturnType GetMaxScrollRange() const noexcept;
-	void OnPressCB(const XMINT2& pos, InputState inputState);
 	void ApplyScrollButtonPosition(float postioinRatio) noexcept;
 
 	PatchTextureStd3* m_scrollTrack;

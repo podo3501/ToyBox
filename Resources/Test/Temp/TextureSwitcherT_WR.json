@@ -51,6 +51,5 @@
         "Normal": "Button32_Normal",
         "Hovered": "Button32_Hovered",
         "Pressed": "Button32_Pressed"
-    },
-    "BehaviorMode": 0
+    }
 }

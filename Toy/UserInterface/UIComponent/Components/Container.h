@@ -14,9 +14,8 @@ public:
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual void ProcessIO(SerializerIO& serializer) override;
 
-	void AddPressCB(function<void(InputState)> callback) { m_onPressCB = callback; }
 	bool Setup(const UILayout& layout, 
-		map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode) noexcept;
+		map<InteractState, unique_ptr<UIComponent>> patchTexList) noexcept;
 	void ClearInteraction() noexcept;
 	const optional<InteractState>& GetState() const noexcept { return m_state; }
 
@@ -33,7 +32,4 @@ private:
 
 	map<InteractState, UIComponent*> m_textures;
 	optional<InteractState> m_state;
-
-	BehaviorMode m_behaviorMode{ BehaviorMode::Normal };
-	function<void(InputState)> m_onPressCB;
 };

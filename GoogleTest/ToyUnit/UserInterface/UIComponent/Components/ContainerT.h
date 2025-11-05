@@ -22,7 +22,7 @@ void ContainerT::SetUp()
 	componentList[InteractState::Hovered] = CreateComponent<PatchTextureStd1>("Button32_Hovered");
 	componentList[InteractState::Pressed] = CreateComponent<PatchTextureStd1>("Button32_Pressed");
 
-	m_component = CreateComponent<Container>(UILayout{}, move(componentList), BehaviorMode::Normal);
+	m_component = CreateComponent<Container>(UILayout{}, move(componentList));
 	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
 }
 

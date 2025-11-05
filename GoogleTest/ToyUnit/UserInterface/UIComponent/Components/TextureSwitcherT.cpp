@@ -104,12 +104,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 
 	TEST_F(TextureSwitcherT, OnPress)
 	{
-		testing::MockFunction<void(const XMINT2&, InputState)> OnPress;
-		m_component->AddPressCB(OnPress.AsStdFunction());
-		EXPECT_CALL(OnPress, Call(testing::_, InputState::Pressed)).Times(1);
-
 		m_component->OnPress({});
-
 		EXPECT_EQ(m_component->GetState(), InteractState::Pressed);
 	}
 
@@ -122,17 +117,17 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_EQ(m_component->GetState(), InteractState::Normal);
 	}
 
-	TEST_F(TextureSwitcherT, OnHold_HoldToKeepPressed)
-	{
-		m_component->ChangeBehaviorMode(BehaviorMode::HoldToKeepPressed); //마우스가 영역을 이탈해도 눌리는 상태로 지속된다.
-		//콜백등록
-		testing::MockFunction<void(const XMINT2&, InputState)> OnPress;
-		m_component->AddPressCB(OnPress.AsStdFunction());
-		EXPECT_CALL(OnPress, Call(testing::_, InputState::Held)).Times(1);
+	//TEST_F(TextureSwitcherT, OnHold_HoldToKeepPressed)
+	//{
+	//	m_component->ChangeBehaviorMode(BehaviorMode::HoldToKeepPressed); //마우스가 영역을 이탈해도 눌리는 상태로 지속된다.
+	//	//콜백등록
+	//	testing::MockFunction<void(const XMINT2&, InputState)> OnPress;
+	//	m_component->AddPressCB(OnPress.AsStdFunction());
+	//	EXPECT_CALL(OnPress, Call(testing::_, InputState::Held)).Times(1);
 
-		m_component->OnHold({}, false);
-		EXPECT_EQ(m_component->GetState(), InteractState::Pressed);
-	}
+	//	m_component->OnHold({}, false);
+	//	EXPECT_EQ(m_component->GetState(), InteractState::Pressed);
+	//}
 
 	TEST_F(TextureSwitcherT, OnRelease)
 	{

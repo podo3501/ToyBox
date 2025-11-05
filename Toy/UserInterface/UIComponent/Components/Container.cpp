@@ -74,10 +74,9 @@ inline static void SetActiveStateFlag(bool condition, UIComponent* component) no
 }
 
 bool Container::Setup(const UILayout& layout, 
-	map<InteractState, unique_ptr<UIComponent>> patchTexList, BehaviorMode behaviorMode) noexcept
+	map<InteractState, unique_ptr<UIComponent>> patchTexList) noexcept
 {
 	SetLayout(layout);
-	m_behaviorMode = behaviorMode;
 
 	for (auto& pTex : patchTexList)
 	{
