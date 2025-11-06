@@ -35,7 +35,7 @@ namespace UserInterface
 {
 	//TEST_F(ComponentEvent, EventDispatch)
 	//{
-	//	auto comp = CreateOneLevelComponent<MockMouseClicked>(m_main);
+	//	auto comp = AttachMockComponent<MockMouseClicked>(m_main);
 
 	//	testing::MockFunction<void(UIEvent)> mockCallback;
 	//	EXPECT_CALL(mockCallback, Call(UIEvent::Clicked)).Times(1);
@@ -48,7 +48,7 @@ namespace UserInterface
 
 	//TEST_F(ComponentEvent, MouseClickedInside) //안에서 클릭해서 안에서 뗄때.
 	//{
-	//	auto comp = CreateOneLevelComponent<MockMouseClicked>(m_main);
+	//	auto comp = AttachMockComponent<MockMouseClicked>(m_main);
 
 	//	testing::InSequence seq; //호출순서 검증
 	//	EXPECT_CALL(*comp, OnPress(testing::_)).Times(1);
@@ -61,7 +61,7 @@ namespace UserInterface
 	//TEST_F(ComponentEvent, MouseClickedOutside) //안에서 클릭해서 밖에서 버튼을 뗄때.
 	//{
 	//	XMINT2 outsidePos{ 0, 0 };
-	//	auto comp = CreateOneLevelComponent<MockMouseClicked>(m_main);
+	//	auto comp = AttachMockComponent<MockMouseClicked>(m_main);
 	//	
 	//	testing::InSequence seq; //호출순서 검증
 	//	EXPECT_CALL(*comp, OnPress(testing::_)).Times(1);

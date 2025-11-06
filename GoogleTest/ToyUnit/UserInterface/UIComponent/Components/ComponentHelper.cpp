@@ -14,5 +14,6 @@ void SimulateDrag(UIComponent* component, const XMINT2& start, const XMINT2& end
 {
 	component->OnPress(start);
 	component->OnHold(end, inside);
+	component->OnRelease(inside);
 }
 

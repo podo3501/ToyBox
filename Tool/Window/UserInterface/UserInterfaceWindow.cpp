@@ -92,7 +92,6 @@ void UserInterfaceWindow::ToggleToolMode() noexcept
 {
 	m_isTool = !m_isTool;
 	GetUIModule()->EnableToolMode(m_isTool);
-	m_mainRenderTexture->EnableChildMouseEvents(!m_isTool);
 	m_controller->SetActive(m_isTool);
 
 	if(m_isTool)

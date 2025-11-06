@@ -35,7 +35,6 @@ protected:
 	ListArea(const ListArea& o) noexcept;
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
 	virtual bool EnterToolMode() noexcept override;
 	virtual bool ExitToolMode() noexcept override;
@@ -45,8 +44,6 @@ private:
 	bool ResizeContainerForScrollbar() noexcept;
 	bool UpdateScrollBar() noexcept;
 	XMUINT2 GetUsableContentSize() const noexcept;
-	void UpdateContainersScroll() noexcept;
-	void CheckMouseInteraction() noexcept;
 	int32_t GetContainerHeight() const noexcept;
 	void OnScrollChangedCB(float ratio);
 	bool SetContainerVisible(bool visible) noexcept;

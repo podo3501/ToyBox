@@ -96,7 +96,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	
 private:
 	void UnlinkAndRefresh() noexcept;
-	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}, bool active = true) noexcept;
+	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}) noexcept;
 	bool RecursivePositionUpdate(const XMINT2& position = {}) noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }

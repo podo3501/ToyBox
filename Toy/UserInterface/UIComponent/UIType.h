@@ -103,16 +103,16 @@ constexpr auto EnumToStringMap<InteractState>()->array<const char*, EnumSize<Int
 //렌더링시 탐색을 바꿔가면서 해야한다. 그렇지 않으면 이미지가 덮혀지거나 순서가 꼬이게 된다.
 enum class RenderTraversal
 {
+	Inherited, //윗 노드가 사용한 방식을 따라서. 기본설정. 이 설정이면 BFS가 돌아간다.
 	BFS,
 	DFS,
-	Inherited, //윗 노드가 사용한 방식을 따라서.
 };
 
 enum class TraverseResult : int
 {
-	Found,	//찾았을때(대부분 탐색을 멈춘다)
 	Continue, //계속 탐색한다.
-	Skip, //자식을 스킵. 찾지 못했지만 탐색을 멈추고 싶을때.
+	Stop, //탐색을 중단하고 싶을때.
+	ChildrenSkip, //자식만 스킵 다른 노드들은 돌아간다.
 };
 
 //bit enum을 템플릿화 해서 다른 bit enum들도 동일하게 함수를 사용하게끔 한다.
@@ -155,20 +155,19 @@ namespace BitEnum
 
 // namespac + enum을 쓰는 이유는 함수 인자로 int를 쓰는 것보다 나아서. enum만 쓰면 쟤들 이름이 흔해서 자꾸 이름 충돌된다.
 // enum class는 오퍼레이터 함수가 많이 생성되고 타입 변환을 계속 해 줘야 해서 귀찮다.
+// 비트플래그는 컴포넌트가 변할 수 있는 '상태'를 표현할때 사용. 예를 들면 pickable 클래스를 상속받았는가?(왜냐면 변하지 않는거니까) 이런걸 여기에 추가하면 안됨.
 namespace StateFlag
 {
 	enum Type : int //갯수는 32개까지 가능. 
 	{
-		Update = 1 << 0, //위치 업데이트 및 ActiveUpdate포함
-		ActiveUpdate = 1 << 1, //Active업데이트(Update함수 실행하는가 아닌가) 실행여부. child들은 이 옵션이 false 되면 그 밑은 전부 돌지 않는다. 
-		Render = 1 << 2, //Render라면 RenderTexture를 동시에 셋팅할 수 있다. RenderTexture에 그려진 것을 Render할때 보여준다.
-		RenderTexture = 1 << 3, //RenderTexture라면 Texture셋팅일때만 그린다.
-		Attach = 1 << 4,
-		Detach = 1 << 5,
-		X_SizeLocked = 1 << 6,
-		Y_SizeLocked = 1 << 7,
-		LockPosOnResize = 1 << 8, //사이즈를 조절할때 자식 클래스의 위치값을 변하지 않게 한다.
-		Active = Update | ActiveUpdate | Render,
+		Update = 1 << 0,
+		Render = 1 << 1,
+		Attach = 1 << 2,
+		Detach = 1 << 3,
+		X_SizeLocked = 1 << 4,
+		Y_SizeLocked = 1 << 5,
+		LockPosOnResize = 1 << 6, //사이즈를 조절할때 자식 클래스의 위치값을 변하지 않게 한다.
+		Active = Update | Render,
 		Default = Active | Attach | Detach, // 기본 옵션(모든 옵션 포함)
 	};
 

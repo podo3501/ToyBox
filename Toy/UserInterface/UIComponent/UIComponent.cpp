@@ -102,21 +102,16 @@ bool UIComponent::RecursivePositionUpdate(const XMINT2& position) noexcept
 		});
 }
 
-bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position, bool active) noexcept
+bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position) noexcept
 {
 	if (!HasStateFlag(StateFlag::Update)) return true;
 
 	const auto& startPos = GetTransform(this).GetUpdatedPosition(m_layout, position);
-	//if (active)
-	//{
-		//active = HasStateFlag(StateFlag::ActiveUpdate);
-		//if(active) ReturnIfFalse(ImplementUpdate(timer));
-	//}
 	ReturnIfFalse(ImplementUpdate(timer));
 	
-	bool result = ranges::all_of(m_children, [this, &timer, &startPos, active](auto& child) {
+	bool result = ranges::all_of(m_children, [this, &timer, &startPos](auto& child) {
 		auto childStartPos = startPos + GetTransform(child.get()).GetRelativePosition();
-		return child->RecursiveUpdate(timer, childStartPos, active);
+		return child->RecursiveUpdate(timer, childStartPos);
 		});
 	
 	return result;
@@ -133,7 +128,10 @@ void UIComponent::ProcessRender(ITextureRender* render)
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
 	ForEachChildToRender([render](UIComponent* component) {
 		component->ImplementRender(render);
-		return TraverseResult::Continue;
+
+		return (component->GetTypeID() != ComponentID::RenderTexture)
+			? TraverseResult::Continue 
+			: TraverseResult::ChildrenSkip; //RenderTexture이면 자식들은 랜더하지 않는다. RenderTexture에 랜더링 됐기 때문에.
 		});
 }
 

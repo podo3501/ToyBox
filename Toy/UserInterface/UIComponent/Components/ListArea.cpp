@@ -68,14 +68,13 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	m_bgImage->SetStateFlag(StateFlag::LockPosOnResize, true);
 
 	auto renderTex = CreateComponent<RenderTexture>(UILayout{ layout.GetSize() }, move(bgImage));
-	renderTex->EnableChildMouseEvents(true);
 	m_renderTex = renderTex.get();
 	UIEx(this).AttachComponent(move(renderTex), {});
 
 	m_prototypeContainer = switcher.get();
 	UIEx(m_prototypeContainer).Rename("Prototype Container");
 	UIEx(m_prototypeContainer).RenameRegion("ListContainer");
-	m_prototypeContainer->SetStateFlag(StateFlag::ActiveUpdate | StateFlag::Render, false); //Prototype를 만드는 컨테이너이기 때문에 비활동적으로 셋팅한다.
+	m_prototypeContainer->SetVisible(false); //Prototype를 만드는 컨테이너이기 때문에 안보이게 셋팅.
 	UIEx(this).AttachComponent(move(switcher), {});
 
 	m_scrollBar = scrollBar.get();
@@ -258,31 +257,6 @@ void ListArea::OnScrollChangedCB(float ratio)
 	auto startPos = -static_cast<int32_t>(ratio * (totalContainerHeight - viewArea));
 
 	MoveContainers(startPos);
-}
-
-void ListArea::CheckMouseInteraction() noexcept
-{
-	if (!m_renderTex->OnLeaveArea()) return;
-
-	for (auto& container : m_containers)
-	{
-		if (TextureSwitcher* cur = ComponentCast<TextureSwitcher*>(container); cur)
-			cur->ClearInteraction();
-	}
-}
-
-void ListArea::UpdateContainersScroll() noexcept
-{
-	if (m_containers.empty()) return;
-
-	CheckMouseInteraction();
-}
-
-bool ListArea::ImplementUpdate(const DX::StepTimer&) noexcept
-{
-	UpdateContainersScroll();
-
-	return true;
 }
 
 bool ListArea::SetContainerVisible(bool visible) noexcept

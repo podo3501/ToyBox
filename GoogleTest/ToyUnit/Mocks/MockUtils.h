@@ -34,25 +34,11 @@ pair<unique_ptr<ComponetType>, ComponetType*> CreateMockComponent(const UILayout
 }
 
 template<typename ComponentType>
-ComponentType* CreateOneLevelComponent(UIComponent* root, const ComponentDesc& compDesc = mock_defaults::mockDesc)
+ComponentType* AttachMockComponent(UIComponent* root, const ComponentDesc& compDesc = mock_defaults::mockDesc)
 {
 	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
 	UIEx(root).AttachComponent(move(comp), compDesc.position);
 	return compPtr;
-}
-
-template<typename ComponentType>
-pair<ComponentType*, ComponentType*> CreateTwoLevelComponents(UIComponent* root,
-	const ComponentDesc& parentDesc = mock_defaults::parentDesc,
-	const ComponentDesc& childDesc = mock_defaults::childDesc)
-{
-	auto [parent, parentPtr] = CreateMockComponent<ComponentType>(parentDesc.layout);
-	auto [child, childPtr] = CreateMockComponent<ComponentType>(childDesc.layout);
-
-	UIEx(parent).AttachComponent(move(child), childDesc.position);
-	UIEx(root).AttachComponent(move(parent), parentDesc.position);
-
-	return { parentPtr, childPtr };
 }
 
 template <typename Func>

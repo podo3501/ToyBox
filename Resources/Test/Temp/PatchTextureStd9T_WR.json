@@ -18,8 +18,8 @@
         }
     },
     "Region": "",
-    "StateFlag": 7,
-    "RenderSearch": 2,
+    "StateFlag": 3,
+    "RenderSearch": 0,
     "Children": [
         {
             "Type": "PatchTextureStd3",
@@ -42,8 +42,8 @@
                 }
             },
             "Region": "",
-            "StateFlag": 135,
-            "RenderSearch": 2,
+            "StateFlag": 35,
+            "RenderSearch": 0,
             "Children": [
                 {
                     "Type": "PatchTextureStd1",
@@ -66,8 +66,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 119,
-                    "RenderSearch": 2,
+                    "StateFlag": 31,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 0
@@ -93,8 +93,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 55,
-                    "RenderSearch": 2,
+                    "StateFlag": 15,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 1
@@ -120,8 +120,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 119,
-                    "RenderSearch": 2,
+                    "StateFlag": 31,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 2
@@ -150,8 +150,8 @@
                 }
             },
             "Region": "",
-            "StateFlag": 7,
-            "RenderSearch": 2,
+            "StateFlag": 3,
+            "RenderSearch": 0,
             "Children": [
                 {
                     "Type": "PatchTextureStd1",
@@ -174,8 +174,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 119,
-                    "RenderSearch": 2,
+                    "StateFlag": 31,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 3
@@ -201,8 +201,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 55,
-                    "RenderSearch": 2,
+                    "StateFlag": 15,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 4
@@ -228,8 +228,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 119,
-                    "RenderSearch": 2,
+                    "StateFlag": 31,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 5
@@ -258,8 +258,8 @@
                 }
             },
             "Region": "",
-            "StateFlag": 135,
-            "RenderSearch": 2,
+            "StateFlag": 35,
+            "RenderSearch": 0,
             "Children": [
                 {
                     "Type": "PatchTextureStd1",
@@ -282,8 +282,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 119,
-                    "RenderSearch": 2,
+                    "StateFlag": 31,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 6
@@ -309,8 +309,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 55,
-                    "RenderSearch": 2,
+                    "StateFlag": 15,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 7
@@ -336,8 +336,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 119,
-                    "RenderSearch": 2,
+                    "StateFlag": 31,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Nine48",
                     "SourceIndex": 8

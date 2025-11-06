@@ -53,7 +53,6 @@ namespace UserInterface
 		XMINT2 leftTop = tex0->GetLeftTop();
 
 		switcherPtr->ChangeSize({ 100, 48 }); //크기를 바꾼다. 
-		renderTexPtr->EnableChildMouseEvents(!toolMode); //false로 셋팅하면 마우스가 영역에 들어왔을때 업데이트를 호출하는 코드가 돌지 않는다.
 		renderTexPtr->ChangeSize({ 50, 50 });
 		renderTexPtr->ChangeOrigin(Origin::Center);
 

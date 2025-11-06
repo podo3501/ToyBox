@@ -10,7 +10,7 @@ MouseState MockInputManager::GetMouseState() const noexcept
 {
 	MouseState state;
 	state.pos = m_position;
-	state.leftButton = (m_inputState == InputState::Pressed || m_inputState == InputState::Held);
+	state.leftButton = m_inputState;
 	return state;
 }
 

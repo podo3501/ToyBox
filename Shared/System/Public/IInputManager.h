@@ -6,12 +6,6 @@
 struct HWND__; 
 typedef HWND__* HWND;
 
-struct MouseState
-{
-    DirectX::XMINT2 pos{};
-    bool leftButton{ false };
-};
-
 enum class MouseButton
 {
     Left,
@@ -25,6 +19,12 @@ enum class InputState
     Held,
     Released,
     Pressed,
+};
+
+struct MouseState
+{
+    DirectX::XMINT2 pos{};
+    InputState leftButton{ InputState::Up };
 };
 
 struct IInputManager

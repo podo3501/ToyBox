@@ -55,14 +55,14 @@ void ComponentSelector::SelectComponent(IToolInputManager* input) noexcept
 
 	static vector<UIComponent*> preComponentList{ nullptr };
 	const XMINT2& pos = input->GetPosition();
-	vector<UIComponent*> componentList = UIEx(m_mainComponent).FindRenderComponents(pos);
+	vector<UIComponent*> componentList = UIEx(m_mainComponent).PickComponents(pos);
 	if (componentList.empty()) return;
 
 	if (preComponentList == componentList)
 		RepeatedSelection(componentList);
 	else //마우스가 다른 컴포넌트를 선택해서 리스트가 바뀌었다면 제일 첫번째 원소를 찍어준다.
 	{
-		SetComponent(componentList.back());
+		SetComponent(componentList.front());
 		preComponentList = move(componentList);
 	}
 }
@@ -114,12 +114,12 @@ void ComponentSelector::RepeatedSelection(const vector<UIComponent*>& componentL
 	auto findIdx = FindIndex(componentList, m_component);
 	if (!findIdx.has_value())
 	{
-		SetComponent(componentList.back());
+		SetComponent(componentList.front());
 		return;
 	}
 
-	int idx = findIdx.value() - 1;
-	if (idx < 0) idx = static_cast<int>(componentList.size() - 1);
+	int idx = findIdx.value() + 1;
+	if (idx >= componentList.size()) idx = 0;
 	SetComponent(componentList[idx]);
 }
 

@@ -200,10 +200,9 @@
 --마우스 생성부분을 Shared에서 Loop로 이동하고 처리해야겠다.
 --툴에서 이 부분이 먼저 되어야 컴포넌트를 하나씩 띄워봤을때 문제가 있는지 통합테스트를 할 수 있다.
 --마우스 휠이 자기 포커스가 벗어날때 휠 값을 들고 있어서 버그가 나는듯 하다. 이거 체크해서 없애주는 거 처리.
+--FindRenderComponents 이거 지워야한다.
+--ScrollBar에서 버튼을 움직이는 것을 ScrollBar가 전부 제어하는 식으로 바꾼다. 즉 콜백을 없앤다.
 
-@FindRenderComponents 이거 지워야한다.
-@ScrollBar에서 버튼을 움직이는 것을 ScrollBar가 전부 제어하는 식으로 바꾼다. 즉 콜백을 없앤다.
-@그러면 스크롤바 tdd에서 버튼을 찾는 부분을 없앨 수 있다. SetUp에서 가져오는데 이부분을 없앨수 있다. 
 @마우스 처리 부분을 Update에서 함수 호출로 하나씩 수정하면서 이전의 테스트 코드가 false가 나는 것을 확인해서 옮기거나 삭제한다.
 @UIComponent에 RecursiveUpdate를 수정. RecursivePositionUpdate와 합칠수 있으면 좋다. 
 

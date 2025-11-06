@@ -69,7 +69,7 @@ namespace UserInterfaceT
 
 	TEST_F(UIModuleT, EnableToolMode)
 	{
-		auto comp = CreateOneLevelComponent<MockToolMode>(m_main);
+		auto comp = AttachMockComponent<MockToolMode>(m_main);
 
 		//툴 모드를 호출하면 모든 컴포넌트에 ToolMode 함수가 호출
 		EXPECT_CALL(*comp, EnterToolMode()).Times(1);
@@ -81,7 +81,7 @@ namespace UserInterfaceT
 
 	TEST_F(UIModuleT, RenderPipeline)
 	{
-		auto component = CreateOneLevelComponent<MockBehaviorComponent>(m_main);
+		auto component = AttachMockComponent<MockBehaviorComponent>(m_main);
 		testing::InSequence seq;
 		EXPECT_CALL(*component, ImplementBindSourceInfo(testing::_, testing::_)).Times(1);
 		EXPECT_CALL(*component, ImplementUpdate(testing::_)).Times(1);
@@ -99,8 +99,8 @@ namespace UserInterfaceT
 	TEST_F(UIModuleT, UpdateMouseState_ComponentCaptured) //클릭했을때 캡쳐해서 그 컴포넌트를 위주로 실행한다.
 	{
 		ComponentDesc desc{ XMINT2{10, 10}, UILayout({ 50, 50 }) };
-		auto parent = CreateOneLevelComponent<testing::NiceMock<MockInputConsume>>(m_main, desc);
-		auto child = CreateOneLevelComponent<testing::NiceMock<MockInputPropagate>>(parent, desc);
+		auto parent = AttachMockComponent<testing::NiceMock<MockInputConsume>>(m_main, desc);
+		auto child = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(parent, desc);
 
 		testing::InSequence seq;
 		EXPECT_CALL(*child, OnPress(testing::_)).Times(1);
@@ -114,7 +114,7 @@ namespace UserInterfaceT
 
 	TEST_F(UIModuleT, UpdateMouseState_MouseClickedInside)
 	{
-		auto comp = CreateOneLevelComponent<MockInputPropagate>(m_main);
+		auto comp = AttachMockComponent<MockInputPropagate>(m_main);
 
 		EXPECT_CALL(*comp, OnHover()).Times(3); //UpdateMouseState 불릴때마다 호출
 		EXPECT_CALL(*comp, OnMove(testing::_)).Times(3);
@@ -128,7 +128,7 @@ namespace UserInterfaceT
 
 	TEST_F(UIModuleT, UpdateMouseState_MouseClickedOutside)
 	{
-		auto comp = CreateOneLevelComponent<MockInputPropagate>(m_main);
+		auto comp = AttachMockComponent<MockInputPropagate>(m_main);
 
 		testing::InSequence seq; //호출순서 검증
 		EXPECT_CALL(*comp, OnHover()).Times(1); //안에 있을때만 불리기 때문에 한번
@@ -146,8 +146,8 @@ namespace UserInterfaceT
 	{
 		//NiceMock을 쓴 이유는 OnMove가 계속 호출된다고 warning을 띄우기 때문이다.
 		ComponentDesc desc{ 10, 10, UILayout({ 50, 50 }) };
-		auto parent = CreateOneLevelComponent<testing::NiceMock<MockInputPropagate>>(m_main, desc);
-		auto child = CreateOneLevelComponent<testing::NiceMock<MockInputPropagate>>(parent, desc);
+		auto parent = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(m_main, desc);
+		auto child = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(parent, desc);
 
 		//마우스를 올리고 hover 되는지 확인.
 		EXPECT_CALL(*parent, OnHover()).Times(1);
@@ -164,7 +164,7 @@ namespace UserInterfaceT
 
 	TEST_F(UIModuleT, UpdateMouseState_MouseMove)
 	{
-		auto comp = CreateOneLevelComponent<testing::NiceMock<MockInputPropagate>>(m_main);
+		auto comp = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(m_main);
 		EXPECT_CALL(*comp, OnMove(testing::_)).Times(1);
 
 		SimulateMouse(comp->GetLeftTop(), InputState::Up);
@@ -173,7 +173,7 @@ namespace UserInterfaceT
 	TEST_F(UIModuleT, UpdateMouseState_MouseWheel)
 	{
 		XMINT2 outsidePos{ 0, 0 };
-		auto comp = CreateOneLevelComponent<testing::NiceMock<MockInputPropagate>>(m_main);
+		auto comp = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(m_main);
 		EXPECT_CALL(*comp, OnWheel(testing::_)).Times(1);
 
 		SimulateMouse(comp->GetLeftTop(), 120); //120은 휠의 기본 단위. 

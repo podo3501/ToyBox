@@ -45,7 +45,7 @@ private:
 	TextureSwitcher* m_scrollButton;
 	BoundedValue m_bounded;
 	int m_wheelValue{ 0 };
-	int32_t m_pressMousePos{ 0 };
-	XMINT2 m_pressContainerPos{};
+	optional<int32_t> m_pressMousePosY;
+	XMINT2 m_pressButtonPos{};
 	function<void(float)> m_onScrollChangedCB;
 };

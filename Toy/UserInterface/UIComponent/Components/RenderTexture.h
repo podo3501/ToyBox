@@ -18,10 +18,6 @@ public:
 	bool Setup(unique_ptr<UIComponent> component) noexcept;
 	inline UINT64 GetGraphicMemoryOffset() const noexcept { return m_gfxOffset; }
 	inline UIComponent* GetRenderedComponent() const noexcept { return m_component; }
-	inline bool IsMouseInArea() const noexcept { return m_mouseInArea; }
-	inline void EnableChildMouseEvents(bool enable) noexcept { m_mouseEvents = enable; }
-	inline bool OnEnterArea() const noexcept { return m_entered; }
-	inline bool OnLeaveArea() const noexcept { return m_left; }
 
 protected:
 	RenderTexture(const RenderTexture& other);
@@ -29,25 +25,16 @@ protected:
 	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual void ImplementPositionUpdated() noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept override;
-	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
 	void AddRef() const noexcept;
 	void Release() noexcept;
 	void ReloadDatas() noexcept;
-	void CheckMouseInArea() noexcept;
-	void CheckEnterLeave() noexcept;
 
 	UIComponent* m_component;
 	ITextureController* m_texController;
 
 	optional<size_t> m_index;
 	UINT64 m_gfxOffset{};
-
-	bool m_mouseEvents{ true };
-	bool m_mouseInArea{ false };
-	bool m_lastMouseInArea{ false };
-	bool m_entered{ false };
-	bool m_left{ false };
 };

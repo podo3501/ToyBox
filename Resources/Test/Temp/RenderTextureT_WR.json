@@ -18,8 +18,8 @@
         }
     },
     "Region": "",
-    "StateFlag": 63,
-    "RenderSearch": 2,
+    "StateFlag": 15,
+    "RenderSearch": 0,
     "Children": [
         {
             "Type": "PatchTextureStd1",
@@ -42,12 +42,11 @@
                 }
             },
             "Region": "",
-            "StateFlag": 55,
-            "RenderSearch": 2,
+            "StateFlag": 15,
+            "RenderSearch": 0,
             "Children": null,
             "BindKey": "One32",
             "SourceIndex": 0
         }
-    ],
-    "MouseEvents": true
+    ]
 }

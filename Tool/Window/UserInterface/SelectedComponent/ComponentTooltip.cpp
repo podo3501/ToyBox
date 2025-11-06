@@ -19,7 +19,7 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 {
 	const ImVec2& windowMousePos = GetWindowIGMousePos(window);
 
-	vector<UIComponent*> componentList = UIEx(m_panel).FindRenderComponents(ImVec2ToXMINT2(windowMousePos));
+	vector<UIComponent*> componentList = UIEx(m_panel).PickComponents(ImVec2ToXMINT2(windowMousePos));
 	if (componentList.empty()) return;
 
 	const ImVec2& padding = ImGui::GetStyle().WindowPadding;
@@ -29,7 +29,7 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 	constexpr float tooltipGap = 5.f; // 툴팁 간 간격
 	float tooltipOffsetY = 20.f; // 초기 Y 오프셋
 
-	for (int idx{ 0 }; UIComponent * curComponent : views::reverse(componentList))
+	for (int idx{ 0 }; UIComponent * curComponent : componentList)
 	{
 		// 툴팁 위치와 크기 계산
 		const std::string& tooltipContext = EnumToString(curComponent->GetTypeID());

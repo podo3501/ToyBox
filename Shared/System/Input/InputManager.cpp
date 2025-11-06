@@ -76,7 +76,7 @@ void InputManager::Update() noexcept
 MouseState InputManager::GetMouseState() const noexcept
 {
     auto dxState = g_mouse.GetState();
-    return { m_position, dxState.leftButton };
+    return { m_position, static_cast<InputState>(m_mouseTracker.leftButton) };
 }
 
 const XMINT2& InputManager::GetPosition() const noexcept

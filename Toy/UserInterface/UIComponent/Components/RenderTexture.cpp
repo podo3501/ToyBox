@@ -13,16 +13,13 @@ RenderTexture::~RenderTexture()
 RenderTexture::RenderTexture() :
 	m_component{ nullptr },
 	m_texController{ nullptr }
-{
-	SetStateFlag(StateFlag::Render | StateFlag::RenderTexture, true);
-}
+{}
 
 RenderTexture::RenderTexture(const RenderTexture& o) :
 	UIComponent{ o },
 	m_component{ nullptr },
 	m_texController{ o.m_texController },
-	m_index{ o.m_index },
-	m_mouseEvents{ o.m_mouseEvents }
+	m_index{ o.m_index }
 {
 	ReloadDatas();
 }
@@ -60,9 +57,8 @@ void RenderTexture::ReloadDatas() noexcept
 bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 {
 	ReturnIfFalse(UIComponent::operator==(rhs));
-	const RenderTexture* o = static_cast<const RenderTexture*>(&rhs);
 
-	ReturnIfFalse(tie(m_mouseEvents) == tie(o->m_mouseEvents));
+	const RenderTexture* o = static_cast<const RenderTexture*>(&rhs);
 	ReturnIfFalse(EqualComponent(m_component, o->m_component));
 
 	return true;
@@ -115,28 +111,6 @@ bool RenderTexture::Setup(unique_ptr<UIComponent> component) noexcept
 	return Setup(layout, move(component));
 }
 
-void RenderTexture::CheckMouseInArea() noexcept
-{
-	auto input = InputLocator::GetService();
-	m_mouseInArea = Contains(GetArea(), input->GetPosition());
-}
-
-void RenderTexture::CheckEnterLeave() noexcept
-{
-	m_entered = !m_lastMouseInArea && m_mouseInArea;
-	m_left = m_lastMouseInArea && !m_mouseInArea;
-	m_lastMouseInArea = m_mouseInArea;
-}
-
-bool RenderTexture::ImplementUpdate(const DX::StepTimer&) noexcept
-{
-	//CheckMouseInArea();
-	//CheckEnterLeave();	
-	//SetChildrenStateFlag(StateFlag::ActiveUpdate, m_mouseInArea && m_mouseEvents);
-
-	return true;
-}
-
 void RenderTexture::ImplementRender(ITextureRender* render) const
 {
 	if (m_texController && m_index)
@@ -152,7 +126,6 @@ void RenderTexture::ImplementRender(ITextureRender* render) const
 void RenderTexture::ProcessIO(SerializerIO& serializer)
 {
 	UIComponent::ProcessIO(serializer);
-	serializer.Process("MouseEvents", m_mouseEvents);
 
 	if (serializer.IsWrite()) return;
 	ReloadDatas();

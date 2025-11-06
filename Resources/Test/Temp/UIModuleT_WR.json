@@ -21,8 +21,8 @@
                 }
             },
             "Region": "UIModuleMainEntry",
-            "StateFlag": 55,
-            "RenderSearch": 2,
+            "StateFlag": 15,
+            "RenderSearch": 0,
             "Children": null
         }
     ],

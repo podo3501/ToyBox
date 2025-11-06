@@ -87,6 +87,47 @@ bool ScrollBar::ImplementBindSourceInfo(TextureResourceBinder*, ITextureControll
 	return true;
 }
 
+InputResult ScrollBar::OnPress(const XMINT2& position) noexcept
+{
+	if (Contains(m_scrollButton->GetArea(), position))
+		m_pressMousePosY = position.y;
+	m_pressButtonPos = m_scrollButton->GetRelativePosition();
+
+	return InputResult::Consumed;
+}
+
+void ScrollBar::OnHold(const XMINT2& position, bool) noexcept
+{
+	auto maxRange = GetMaxScrollRange<int32_t>();
+	int32_t curY{ 0 };
+
+	if (m_pressMousePosY)
+	{
+		int32_t moved = position.y - m_pressMousePosY.value();
+		curY = std::clamp(m_pressButtonPos.y + moved, 0, maxRange);
+	}
+	else
+	{
+		int32_t localY = position.y - GetLeftTop().y;
+		int32_t halfButtonHeight = static_cast<int32_t>(m_scrollButton->GetArea().height / 2);
+		curY = std::clamp(localY - halfButtonHeight, 0, maxRange);
+	}
+
+	m_scrollButton->ChangeRelativePosition({ m_pressButtonPos.x, curY });
+
+	auto ratio = static_cast<float>(curY) / static_cast<float>(maxRange);
+	m_bounded.SetPositionRatio(ratio);
+	m_onScrollChangedCB(ratio);
+
+	m_scrollButton->ChangeState(InteractState::Pressed);
+}
+
+void ScrollBar::OnRelease(bool) noexcept
+{
+	m_pressMousePosY = nullopt;
+	m_scrollButton->ChangeState(InteractState::Normal, true);
+}
+
 bool ScrollBar::OnWheel(int wheelValue) noexcept
 {
 	m_wheelValue = wheelValue;
@@ -119,36 +160,6 @@ ReturnType ScrollBar::GetMaxScrollRange() const noexcept
 	const XMUINT2& trackSize = m_scrollTrack->GetSize();
 	const XMUINT2& containerSize = m_scrollButton->GetSize();
 	return static_cast<ReturnType>(trackSize.y - containerSize.y);
-}
-
-InputResult ScrollBar::OnPress(const XMINT2& position) noexcept
-{
-	if (!Contains(m_scrollButton->GetArea(), position)) 
-		return InputResult::Consumed; //?!?나중에 다른곳에 클릭했을때에도 처리를 하는 코드를 만들 예정.
-	
-	m_pressContainerPos = m_scrollButton->GetRelativePosition();
-	m_pressMousePos = position.y;
-
-	return InputResult::Consumed;
-}
-
-void ScrollBar::OnHold(const XMINT2& position, bool) noexcept
-{
-	int32_t moved = position.y - m_pressMousePos;
-	auto maxRange = GetMaxScrollRange<int32_t>();
-	auto curY = std::clamp(m_pressContainerPos.y + moved, 0, maxRange);
-	m_scrollButton->ChangeRelativePosition({ m_pressContainerPos.x, curY });
-
-	auto ratio = static_cast<float>(curY) / static_cast<float>(maxRange);
-	m_bounded.SetPositionRatio(ratio);
-	m_onScrollChangedCB(ratio);
-
-	m_scrollButton->ChangeState(InteractState::Pressed);
-}
-
-void ScrollBar::OnRelease(bool) noexcept
-{
-	m_scrollButton->ChangeState(InteractState::Normal, true);
 }
 
 //이 함수는 세로만 적용돼 있다.

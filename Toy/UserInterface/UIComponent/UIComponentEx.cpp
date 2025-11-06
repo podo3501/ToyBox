@@ -178,12 +178,12 @@ UIComponent* UIComponentEx::FindComponent(const string& name) noexcept
 
 	root->ForEachChildBool([this, &foundComponent, &name, &region](UIComponent* component) {
 		const string& curRegion = component->GetRegion();
-		if (!curRegion.empty() && region != curRegion) return TraverseResult::Skip; //Region 루트가 아닌 새로운 region이 나왔을때 
+		if (!curRegion.empty() && region != curRegion) return TraverseResult::Stop; //Region 루트가 아닌 새로운 region이 나왔을때 
 
 		if (component->GetName() == name)
 		{
 			foundComponent = component;
-			return TraverseResult::Found;
+			return TraverseResult::Stop;
 		}
 
 		return TraverseResult::Continue;
@@ -206,10 +206,10 @@ UIComponent* UIComponentEx::FindRegionComponent(const string& findRegion) noexce
 		if (curRegion == findRegion)
 		{
 			foundComponent = component;
-			return TraverseResult::Found;
+			return TraverseResult::Stop;
 		}
 
-		if (rootRegion != curRegion) return TraverseResult::Skip; //Region 루트가 아닌 새로운 region이 나왔을때
+		if (rootRegion != curRegion) return TraverseResult::Stop; //Region 루트가 아닌 새로운 region이 나왔을때
 
 		return TraverseResult::Continue;
 		});
@@ -225,38 +225,18 @@ UIComponent* UIComponentEx::FindComponent(const string& region, const string& na
 	return UIEx(component).FindComponent(name);
 }
 
-//?!? 이 함수는 딱히 필요가 없다.
-vector<UIComponent*> UIComponentEx::FindRenderComponents(const XMINT2& pos) noexcept
-{
-	vector<UIComponent*> findList;
-	m_component->ForEachChildToRender([&findList, &pos](UIComponent* comp) {
-		if(Contains(comp->GetArea(), pos))
-			findList.push_back(comp);
-		return TraverseResult::Continue;
-		});
-	return findList;
-}
-
-UIComponent* UIComponentEx::FindTopRenderComponent(const XMINT2& pos) noexcept
-{
-	UIComponent* findComponent{ nullptr };
-	m_component->ForEachChildToRender([&findComponent, &pos](UIComponent* comp) {
-		if (Contains(comp->GetArea(), pos))
-		{
-			findComponent = comp;
-			return TraverseResult::Found;
-		}
-		return TraverseResult::Continue;
-		});
-	return findComponent;
-}
-
 vector<UIComponent*> UIComponentEx::PickComponents(const XMINT2& pos) noexcept
 {
 	vector<UIComponent*> findList;
 	m_component->ForEachChildToRender([&findList, &pos](UIComponent* comp) {
-		if (Contains(comp->GetArea(), pos))
+		const bool inside = Contains(comp->GetArea(), pos);
+
+		if (comp->GetTypeID() == ComponentID::RenderTexture && !inside) 
+			return TraverseResult::ChildrenSkip; // RenderTexture는 영역 밖이면 자식 탐색 중단
+
+		if (inside) // 영역 안이면 리스트에 추가
 			findList.push_back(comp);
+
 		return TraverseResult::Continue;
 		});
 	reverse(findList.begin(), findList.end()); //앞으로 넣어주는 것보다 push_back 하고 reverse 하는게 더 빠르다. vector가 단순 배열이라 캐쉬가 좋기 때문에 이걸로 한다.

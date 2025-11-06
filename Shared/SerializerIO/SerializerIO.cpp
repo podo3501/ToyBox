@@ -7,7 +7,9 @@ SerializerIO::~SerializerIO() = default;
 SerializerIO::SerializerIO() noexcept :
 m_wCurrent{ &m_write },
 m_rCurrent{ &m_read }
-{}
+{
+    int a = 1;
+}
 
 SerializerIO::SerializerIO(nlohmann::ordered_json& write) noexcept { m_wCurrent = &write; }
 SerializerIO::SerializerIO(const nlohmann::json& read) noexcept { m_rCurrent = const_cast<nlohmann::json*>(&read); }

@@ -18,8 +18,8 @@
         }
     },
     "Region": "",
-    "StateFlag": 119,
-    "RenderSearch": 1,
+    "StateFlag": 31,
+    "RenderSearch": 2,
     "Children": [
         {
             "Type": "PatchTextureStd3",
@@ -42,8 +42,8 @@
                 }
             },
             "Region": "",
-            "StateFlag": 7,
-            "RenderSearch": 2,
+            "StateFlag": 3,
+            "RenderSearch": 0,
             "Children": [
                 {
                     "Type": "PatchTextureStd1",
@@ -66,8 +66,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 183,
-                    "RenderSearch": 2,
+                    "StateFlag": 47,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Track",
                     "SourceIndex": 0
@@ -93,8 +93,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 55,
-                    "RenderSearch": 2,
+                    "StateFlag": 15,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Track",
                     "SourceIndex": 1
@@ -120,8 +120,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 183,
-                    "RenderSearch": 2,
+                    "StateFlag": 47,
+                    "RenderSearch": 0,
                     "Children": null,
                     "BindKey": "Track",
                     "SourceIndex": 2
@@ -150,8 +150,8 @@
                 }
             },
             "Region": "",
-            "StateFlag": 55,
-            "RenderSearch": 2,
+            "StateFlag": 15,
+            "RenderSearch": 0,
             "Children": [
                 {
                     "Type": "PatchTextureLite3",
@@ -174,8 +174,8 @@
                         }
                     },
                     "Region": "",
-                    "StateFlag": 7,
-                    "RenderSearch": 2,
+                    "StateFlag": 3,
+                    "RenderSearch": 0,
                     "Children": [
                         {
                             "Type": "PatchTextureLite1",
@@ -198,8 +198,8 @@
                                 }
                             },
                             "Region": "",
-                            "StateFlag": 183,
-                            "RenderSearch": 2,
+                            "StateFlag": 47,
+                            "RenderSearch": 0,
                             "Children": null
                         },
                         {
@@ -223,8 +223,8 @@
                                 }
                             },
                             "Region": "",
-                            "StateFlag": 55,
-                            "RenderSearch": 2,
+                            "StateFlag": 15,
+                            "RenderSearch": 0,
                             "Children": null
                         },
                         {
@@ -248,8 +248,8 @@
                                 }
                             },
                             "Region": "",
-                            "StateFlag": 183,
-                            "RenderSearch": 2,
+                            "StateFlag": 47,
+                            "RenderSearch": 0,
                             "Children": null
                         }
                     ],

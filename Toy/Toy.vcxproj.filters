@@ -49,6 +49,9 @@
     <Filter Include="Locator">
       <UniqueIdentifier>{c5a95ad5-e274-42af-9830-e977bf2336f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserInterface\Input">
+      <UniqueIdentifier>{c6ee3cc2-17fc-4d24-9b62-30e36841a068}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="System\ISceneManager.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Input\IMouseEventReceiver.h">
+      <Filter>UserInterface\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

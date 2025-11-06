@@ -37,25 +37,6 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_TRUE(TestClone(m_component));
 	}
 
-	TEST_F(ListAreaT, Container_MouseHover)
-	{
-		MakeTestData(6);
-		m_component->ChangeSize({ 150, 50 });
-		m_scrollBar->SetPositionRatio(1.f); //?!? Drag를 써서 해야겠다.
-		m_component->UpdatePositionsManually();
-		//auto container = m_component->GetContainer(0);
-		//RenderTexture안에서는 컴포넌트를 찾을 수 없기 때문에 OnMove의 마우스의 위치값으로 
-		//컨테이너를 찾아서 OnHover를 호출해야 한다.
-		//버튼은 자기 혼자일때도 있지만 스크롤바에 속할때도 있다. 그래서 자신은 캡쳐 대상이지만,
-		//이벤트를 부모로 올라가야 할때도 발생한다. 그래서 리턴값을 true, false가 아닌 3가지 이상으로
-		//할 필요성이 있고, 이걸 bubbling이라고 부른다. 부모 즉, 스크롤바는 이벤트를 모두 소비하고 끝낸다.
-		//그렇게 되면 scrollbar에서 버튼 조작이 가능해지고, 굳이 스크롤바에서 버튼을 찾아서 이동시키고 할
-		//필요가 없어진다. 자식은 콜백을 안 써도 되고, 코드가 부모에서 자식 방향으로만 전달된다.
-		m_component->OnMove({ 30, 45 });// 제일 밑의 컨테이너로 마우스를 갖다댄다.
-		auto container = ComponentCast<TextureSwitcher*>(m_component->GetContainer(5));
-		//EXPECT_EQ(container->GetState(), InteractState::Hovered);
-	}
-
 	TEST_F(ListAreaT, GetContainer)
 	{
 		MakeTestData(1);

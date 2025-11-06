@@ -30,7 +30,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		//모듈에 컴포넌트 하나를 붙인다.
 		auto module = m_component->GetUIModule();
 		auto mainPanel = module->GetMainPanel();
-		auto child = CreateOneLevelComponent<MockComponent>(mainPanel);
+		auto child = AttachMockComponent<MockComponent>(mainPanel);
 
 		//마우스를 올리고 hover 되는지 확인.
 		EXPECT_CALL(*child, ImplementRender(testing::_)).Times(1);
@@ -44,7 +44,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		//모듈에 컴포넌트 하나를 붙인다.
 		auto module = m_component->GetUIModule();
 		auto mainPanel = module->GetMainPanel();
-		auto child = CreateOneLevelComponent<MockComponent>(mainPanel);
+		auto child = AttachMockComponent<MockComponent>(mainPanel);
 
 		//마우스를 올리고 hover 되는지 확인.
 		EXPECT_CALL(*child, OnHover()).Times(1);

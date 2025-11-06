@@ -18,8 +18,8 @@
         }
     },
     "Region": "",
-    "StateFlag": 55,
-    "RenderSearch": 2,
+    "StateFlag": 15,
+    "RenderSearch": 0,
     "Children": [
         {
             "Type": "PatchTextureLite1",
@@ -42,8 +42,8 @@
                 }
             },
             "Region": "",
-            "StateFlag": 55,
-            "RenderSearch": 2,
+            "StateFlag": 15,
+            "RenderSearch": 0,
             "Children": null
         }
     ],

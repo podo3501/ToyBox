@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "UIComponentExT.h"
 #include "Mocks/Stubs/UIComponentStub.h"
+#include "Mocks/MockUtils.h"
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
+#include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 
 class MockComponent : public UIComponentStub 
 {
@@ -10,7 +12,7 @@ public:
 	bool Setup() noexcept { return true; } //CreateComponent 할때 필요한 함수.
 };
 
-namespace UserInterfaceT
+namespace UserInterfaceT::UIComponentT
 {
 	TEST_F(UIComponentExT, AttachComponent)
 	{
@@ -37,6 +39,18 @@ namespace UserInterfaceT
 	TEST_F(UIComponentExT, DetachComponent_FindComponent)
 	{
 		//현재는 버그 때문에 추후에 작성 요망
+	}
+
+	TEST_F(UIComponentExT, PickComponents)
+	{
+		UILayout childLayout{ {100, 100}, Origin::LeftTop };
+		UILayout parentLayout{ {50, 50}, Origin::LeftTop };
+		auto [owner, child] = CreateMockComponent<MockComponent>(childLayout);
+		auto parent = CreateComponent<RenderTexture>(parentLayout, move(owner));
+		parent->UpdatePositionsManually();
+
+		EXPECT_EQ(UIEx(parent).PickComponents({ 45, 45 }).size(), 2); //RenderTexture 안쪽이니까 2개가 있어야 한다.
+		EXPECT_EQ(UIEx(parent).PickComponents({ 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.
 	}
 
 	TEST_F(UIComponentExT, Rename)

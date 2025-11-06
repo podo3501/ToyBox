@@ -144,12 +144,13 @@ void UIModule::ProcessCaptureComponent(const MouseState& mouseState) noexcept
 	if (!m_capture) return;
 
 	bool inside = Contains(m_capture->GetArea(), mouseState.pos);
-	if (!mouseState.leftButton) //3. 마우스를 떼면 release호출하고 캡쳐해제
+	if (mouseState.leftButton == InputState::Released) //3. 마우스를 떼면 release호출하고 캡쳐해제
 	{
 		m_capture->OnRelease(inside);
 		m_capture = nullptr;
 	}
-	else
+	
+	if(mouseState.leftButton == InputState::Held)
 		m_capture->OnHold(mouseState.pos, inside); //2. 캡쳐한걸 hold로 호출한다.
 }
 
@@ -162,7 +163,7 @@ static inline bool IsHandled(InputResult result) noexcept
 void UIModule::CaptureComponent(const MouseState& mouseState) noexcept
 {
 	if (m_capture) return;
-	if (!mouseState.leftButton) return;
+	if (mouseState.leftButton != InputState::Pressed) return;
 
 	for (auto& component : m_hoveredComponents)
 	{

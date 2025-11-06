@@ -112,24 +112,6 @@ namespace UserInterface
 		return !ranges::search(haystack, needle).empty();
 	}
 
-	TEST_F(Integration, MatchesRenderOrder) //옮길때 실제로 mock 4-5개 붙여서 순서대로 call 되는지 확인하는걸로 만들어야 한다.
-	{
-		using enum ComponentID;
-
-		auto listArea = CreateSampleListArea({ { 200, 170 }, Origin::LeftTop });
-		UIEx(m_main).AttachComponent(move(listArea), {});
-		m_uiModule->BindTextureResources();
-		m_main->EnableToolMode(true);
-
-		auto components = UIEx(m_main).FindRenderComponents({ 196, 40 });
-		auto ids = GetComponentIDs(components);
-
-		//렌더링 옵션을 바꿔서 BFS 탐색을 하다가 DFS 탐색으로 전환하는 식으로 만든다.
-		//DFS 탐색하다가 BFS 탐색하는 것은 일단 보류
-		EXPECT_TRUE(ContainsSequence(ids, { 
-			RenderTexture, ScrollBar, PatchTextureStd3, PatchTextureStd1, TextureSwitcher }));		
-	}
-
 	TEST_F(Integration, RecursivePosition)
 	{
 		auto [panel1, panel1Ptr] = GetPtrs(CreateComponent<Panel>(UILayout({ 400, 400 }, Origin::Center)));
@@ -140,14 +122,14 @@ namespace UserInterface
 		m_uiModule->BindTextureResources();
 		m_uiModule->Update(m_timer);
 
-		vector<UIComponent*> outList = UIEx(m_main).FindRenderComponents({ 240, 140 });
+		vector<UIComponent*> outList = UIEx(m_main).PickComponents({ 240, 140 });
 		EXPECT_EQ(outList.size(), 3);
 
 		panel2Ptr->ChangeOrigin(Origin::LeftTop);
 		m_main->ProcessUpdate(m_timer);
 
 		outList.clear();
-		outList = UIEx(m_main).FindRenderComponents({ 239, 140 });
+		outList = UIEx(m_main).PickComponents({ 239, 140 });
 		EXPECT_EQ(outList.size(), 2);
 
 		panel1Ptr->ChangeSize(800, 800); //크기 400에 40위치를 했기 때문에 ratio는 0.1이 된다. 그래서 80
