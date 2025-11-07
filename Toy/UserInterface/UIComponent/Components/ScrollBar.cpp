@@ -1,10 +1,7 @@
 #include "pch.h"
 #include "ScrollBar.h"
-#include "Locator/InputLocator.h"
-#include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextureSwitcher.h"
-#include "Button.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 

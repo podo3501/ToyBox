@@ -174,13 +174,6 @@ namespace StateFlag
 	constexpr StateFlag::Type operator|(StateFlag::Type lhs, StateFlag::Type rhs) { return static_cast<StateFlag::Type>(static_cast<int>(lhs) | static_cast<int>(rhs)); }
 }
 
-enum class InputResult 
-{ 
-	None, //처리안함.
-	Consumed, //완전처리
-	Propagate //처리했지만 부모 후속처리 필요(컴포넌트 캡쳐는 했지만 이벤트는 전파)
-};
-
 enum class DirectionType
 {
 	Horizontal,

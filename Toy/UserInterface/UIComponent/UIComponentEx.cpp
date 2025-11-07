@@ -25,10 +25,10 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	{
 		bool success = child->ForEachChildWithRegion(m_component->GetMyRegion(),
 			[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
-				auto [newRegion, newName] = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID(), isNewRegion);
-				if (newName.empty())
-					return false;
-
+				auto namesOpt = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID(), isNewRegion);
+				if (!namesOpt) return false;
+				const auto& [newRegion, newName] = *namesOpt;
+				
 				if (isNewRegion) component->m_region = newRegion;
 				component->m_name = newName;
 				return true;
@@ -119,8 +119,9 @@ bool UIComponentEx::Rename(const string& name) noexcept
 	if (!nameGen->IsUnusedName(region, name)) return false;
 
 	nameGen->RemoveName(region, m_component->GetName());
-	auto [_, newName] = nameGen->MakeNameOf(name, region, m_component->GetTypeID());
-	m_component->m_name = move(newName);
+	auto namesOpt = nameGen->MakeNameOf(name, region, m_component->GetTypeID());
+	if (!namesOpt) return false;
+	m_component->m_name = namesOpt->second;
 
 	return true;
 }
@@ -128,10 +129,10 @@ bool UIComponentEx::Rename(const string& name) noexcept
 void UIComponentEx::AssignNamesInRegion(UIComponent* component, UINameGenerator* nameGen, const string& region) noexcept
 {
 	component->ForEachChildInSameRegion([nameGen, &region, component](UIComponent* curComponent) {
-		auto result = nameGen->MakeNameOf(curComponent->GetName(), region, curComponent->GetTypeID());
-		curComponent->m_name = move(result.second);
+		auto namesOpt = nameGen->MakeNameOf(curComponent->GetName(), region, curComponent->GetTypeID());
+		curComponent->m_name = move(namesOpt->second);
 		if (curComponent == component)
-			curComponent->m_region = move(result.first);
+			curComponent->m_region = move(namesOpt->first);
 		});
 }
 
@@ -144,7 +145,7 @@ bool UIComponentEx::RenameRegion(const string& region) noexcept
 		return true;
 	}
 
-	ReturnIfFalse(nameGen->IsUnusedRegion(region));
+	//ReturnIfFalse(nameGen->IsUnusedRegion(region));
 
 	UIComponent* rootRegionComponent = region.empty() ?
 		m_component->GetParentRegionRoot() :
@@ -239,7 +240,25 @@ vector<UIComponent*> UIComponentEx::PickComponents(const XMINT2& pos) noexcept
 
 		return TraverseResult::Continue;
 		});
-	reverse(findList.begin(), findList.end()); //앞으로 넣어주는 것보다 push_back 하고 reverse 하는게 더 빠르다. vector가 단순 배열이라 캐쉬가 좋기 때문에 이걸로 한다.
+	ranges::reverse(findList); //앞으로 넣어주는 것보다 push_back 하고 reverse 하는게 더 빠르다. vector가 단순 배열이라 캐쉬가 좋기 때문에 이걸로 한다.	 
+	return findList;
+}
+
+vector<IMouseEventReceiver*> UIComponentEx::PickMouseReceivers(const XMINT2& pos) noexcept
+{
+	vector<IMouseEventReceiver*> findList;
+	m_component->ForEachChildToRender([&findList, &pos](UIComponent* comp) {
+		if (comp->GetTypeID() == ComponentID::RenderTexture && !Contains(comp->GetArea(), pos))
+			return TraverseResult::ChildrenSkip; // RenderTexture 영역 밖이면 자식 탐색 중단
+
+		if (auto eventReceiver = comp->AsMouseEventReceiver(); eventReceiver) { // 마우스 이벤트 수신 가능한지 먼저 확인
+			if (Contains(comp->GetArea(), pos))
+				findList.push_back(eventReceiver);
+		}
+
+		return TraverseResult::Continue;
+		});
+	ranges::reverse(findList); //앞으로 넣어주는 것보다 push_back 하고 reverse 하는게 더 빠르다. vector가 단순 배열이라 캐쉬가 좋기 때문에 이걸로 한다.	 
 	return findList;
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+struct IMouseEventReceiver;
 class UIComponent;
 class TextureResourceBinder;
 class UINameGenerator;
@@ -36,6 +37,7 @@ public:
 
 	UIComponent* FindRegionComponent(const string& regionName) noexcept;
 	vector<UIComponent*> PickComponents(const XMINT2& pos) noexcept;
+	vector<IMouseEventReceiver*> PickMouseReceivers(const XMINT2& pos) noexcept;
 	XMUINT2 GetChildrenBoundsSize() const noexcept;
 
 private:

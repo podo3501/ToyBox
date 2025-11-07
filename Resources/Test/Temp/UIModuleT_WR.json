@@ -20,14 +20,30 @@
                     "y": 0
                 }
             },
-            "Region": "UIModuleMainEntry",
+            "Region": "",
             "StateFlag": 15,
             "RenderSearch": 0,
             "Children": null
         }
     ],
     "UINameGenerator": {
-        "RegionGens": null,
-        "RegionNames": null
+        "RegionGens": {
+            "": {
+                "Namers": 1,
+                "Recycled": [],
+                "Deletable": false
+            }
+        },
+        "RegionNames": {
+            "": {
+                "Namers": {
+                    "Main": {
+                        "Namers": 1,
+                        "Recycled": [],
+                        "Deletable": false
+                    }
+                }
+            }
+        }
     }
 }

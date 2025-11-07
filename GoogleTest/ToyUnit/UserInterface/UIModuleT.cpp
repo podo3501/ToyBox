@@ -4,8 +4,9 @@
 #include "Mocks/MockUtils.h"
 #include "Shared/System/StepTimer.h"
 #include "Shared/Utils/StlExt.h"
+#include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 
-class MockInput : public UIComponentStub
+class MockInput : public UIComponentStub, public IMouseEventReceiver
 {
 public:
 	explicit MockInput(InputResult pressResult)
@@ -13,6 +14,7 @@ public:
 		ON_CALL(*this, OnPress(testing::_)).WillByDefault(testing::Return(pressResult));
 		ON_CALL(*this, OnWheel(testing::_)).WillByDefault(testing::Return(true));
 	}
+	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept override { return this; }
 
 	MOCK_METHOD(void, OnNormal, (), (noexcept));
 	MOCK_METHOD(void, OnHover, (), (noexcept));

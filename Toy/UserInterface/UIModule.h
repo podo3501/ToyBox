@@ -3,13 +3,13 @@
 struct IRenderer;
 struct ITextureRender;
 struct MouseState;
+struct IMouseEventReceiver;
 class UILayout;
 class UIComponent;
 class Panel;
 class UINameGenerator;
 class TextureResourceBinder;
 class SerializerIO;
-class MouseTracker;
 namespace DX { class StepTimer; }
 class UIModule
 {
@@ -49,7 +49,7 @@ private:
 	void ReloadDatas() noexcept;
 	bool UpdateMainPanel(const DX::StepTimer& timer) noexcept;
 	void UpdateMouseState() noexcept;
-	void UpdateHoverState(vector<UIComponent*> components, const XMINT2& pos) noexcept;
+	void UpdateHoverState(vector<IMouseEventReceiver*> receivers, const XMINT2& pos) noexcept;
 	void ProcessCaptureComponent(const MouseState& mouseState) noexcept;
 	void CaptureComponent(const MouseState& mouseState) noexcept;
 	void ProcessMouseWheel(int wheelValue) noexcept;
@@ -60,8 +60,8 @@ private:
 	unique_ptr<TextureResourceBinder> m_resBinder;
 	IRenderer* m_renderer{ nullptr };
 	wstring m_filename;
-	vector<UIComponent*> m_hoveredComponents; //이전 호버된 컴포넌트와 비교해서 OnNormal 호출함.
-	UIComponent* m_capture{ nullptr };
+	vector<IMouseEventReceiver*> m_hoveredReceivers; //이전 호버된 컴포넌트와 비교해서 OnNormal 호출함.
+	IMouseEventReceiver* m_capture{ nullptr };
 };
 
 unique_ptr<UIModule> CreateUIModule(const UILayout& layout, const string& mainUIName,

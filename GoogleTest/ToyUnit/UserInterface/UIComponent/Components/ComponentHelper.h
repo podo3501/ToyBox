@@ -56,4 +56,4 @@ auto RenderLogger(const wstring& label = L"")
 //틱값을 3ms 를 넣어서 약간 가게한 timer.
 DX::StepTimer GetTickTimer() noexcept; 
 
-void SimulateDrag(UIComponent* component, const XMINT2& start, const XMINT2& end, bool inside = true) noexcept;
+void SimulateDrag(IMouseEventReceiver* receiver, const XMINT2& start, const XMINT2& end, bool inside = true) noexcept;

@@ -5,10 +5,18 @@
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
+#include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 
 class MockComponent : public UIComponentStub 
 {
 public: 
+	bool Setup() noexcept { return true; } //CreateComponent 할때 필요한 함수.
+};
+
+class MockReceiverComponent : public UIComponentStub, public IMouseEventReceiver
+{
+public:
+	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept override { return this; }
 	bool Setup() noexcept { return true; } //CreateComponent 할때 필요한 함수.
 };
 
@@ -53,13 +61,34 @@ namespace UserInterfaceT::UIComponentT
 		EXPECT_EQ(UIEx(parent).PickComponents({ 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.
 	}
 
+	TEST_F(UIComponentExT, PickMouseReceivers)
+	{
+		UILayout childLayout{ {100, 100}, Origin::LeftTop };
+		UILayout parentLayout{ {50, 50}, Origin::LeftTop };
+		auto [owner, child] = CreateMockComponent<MockReceiverComponent>(childLayout);
+		auto parent = CreateComponent<RenderTexture>(parentLayout, move(owner));
+		parent->UpdatePositionsManually();
+
+		EXPECT_EQ(UIEx(parent).PickMouseReceivers({ 45, 45 }).size(), 1); //RenderTexture 안쪽이니까 1개가 있어야 한다.
+		EXPECT_EQ(UIEx(parent).PickMouseReceivers({ 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.
+	}
+
 	TEST_F(UIComponentExT, Rename)
 	{
 		auto [owner, component] = GetPtrs(CreateComponent<MockComponent>()); 
 		UIEx(m_main).AttachComponent(move(owner)); // attach 할때 이름이 생긴다. name: Unknown
 
 		EXPECT_TRUE(UIEx(component).Rename("NewName"));
-		//?!?현재 root region 및 root name이 nameGenerator에 등록이 안돼 있는 버그가 있다.
-		//EXPECT_FALSE(UIEx(component).Rename("Main")); 이것이 통과 되어야 한다.
+		EXPECT_FALSE(UIEx(component).Rename("Main"));
 	}
+
+	TEST_F(UIComponentExT, RenameRegion_EmptyB)
+	{
+		auto [owner, component] = GetPtrs(CreateComponent<MockComponent>());
+		UIEx(m_main).AttachComponent(move(owner)); // attach 할때 이름이 생긴다. name: Unknown
+
+		UIEx(component).RenameRegion("NewRegion");
+		UIEx(component).RenameRegion("");
+	}
+
 }

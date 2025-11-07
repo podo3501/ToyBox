@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ComponentHelper.h"
 #include "Shared/System/Input/InputManager.h"
+#include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 
 DX::StepTimer GetTickTimer() noexcept
 {
@@ -10,10 +11,10 @@ DX::StepTimer GetTickTimer() noexcept
 	return timer;
 }
 
-void SimulateDrag(UIComponent* component, const XMINT2& start, const XMINT2& end, bool inside) noexcept
+void SimulateDrag(IMouseEventReceiver* receiver, const XMINT2& start, const XMINT2& end, bool inside) noexcept
 {
-	component->OnPress(start);
-	component->OnHold(end, inside);
-	component->OnRelease(inside);
+	receiver->OnPress(start);
+	receiver->OnHold(end, inside);
+	receiver->OnRelease(inside);
 }
 

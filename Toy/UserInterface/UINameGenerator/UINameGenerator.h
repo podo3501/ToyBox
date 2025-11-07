@@ -17,12 +17,12 @@ public:
     unique_ptr<UINameGenerator> Clone() const;
 
     //?!? 두 함수 패턴이 비슷하니 클래스를 만들어서 처리하면 될 것 같다.
-    string MakeRegionOf(const string& region) noexcept;
+    optional<string> MakeRegionOf(const string& region) noexcept;
     bool RemoveRegion(const string& region) noexcept;
     bool IsUnusedRegion(string_view region) noexcept;
 
-    pair<string, string> MakeNameOf(const string& name, const string& region, ComponentID componentID,
-        bool forceUniqueRegion = false) noexcept;
+    optional<pair<string, string>> MakeNameOf(const string& name, const string& region, 
+        ComponentID componentID, bool forceUniqueRegion = false) noexcept;
     bool RemoveName(const string& region, const string& name) noexcept;
     bool IsUnusedName(string_view region, string_view name) noexcept;
 

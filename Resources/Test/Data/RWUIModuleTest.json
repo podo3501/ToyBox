@@ -20,7 +20,7 @@
                     "y": 0
                 }
             },
-            "Region": "UIModuleMainEntry",
+            "Region": "",
             "StateFlag": 15,
             "RenderSearch": 0,
             "Children": [
@@ -110,20 +110,25 @@
     ],
     "UINameGenerator": {
         "RegionGens": {
-            "UIModuleMainEntry": {
+            "": {
                 "Namers": 1,
                 "Recycled": [],
                 "Deletable": false
             }
         },
         "RegionNames": {
-            "UIModuleMainEntry": {
+            "": {
                 "Namers": {
                     "PatchTextureStd1": {
                         "Namers": 3,
                         "Recycled": [
                             1
                         ],
+                        "Deletable": false
+                    },
+                    "Main": {
+                        "Namers": 1,
+                        "Recycled": [],
                         "Deletable": false
                     },
                     "NoMatchComponentType": {

@@ -1,11 +1,12 @@
 #pragma once
 #include "../UIComponent.h"
+#include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 
 enum class InputState;
 struct TextureSourceInfo;
 class PatchTextureLite;
 namespace DX { class StepTimer; }
-class TextureSwitcher : public UIComponent
+class TextureSwitcher : public UIComponent, public IMouseEventReceiver
 {
 public:
 	~TextureSwitcher();
@@ -13,8 +14,10 @@ public:
 
 	static ComponentID GetTypeStatic() { return ComponentID::TextureSwitcher; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
+	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept override { return this; }
 	virtual bool operator==(const UIComponent& o) const noexcept override;
 	virtual void ProcessIO(SerializerIO& serializer) override;
+	//IMouseEventReceiver
 	virtual void OnNormal() noexcept override;
 	virtual void OnHover() noexcept override;
 	virtual InputResult OnPress(const XMINT2& pos) noexcept override;

@@ -29,14 +29,12 @@ unique_ptr<UINameGenerator> UINameGenerator::Clone() const
     return unique_ptr<UINameGenerator>(new UINameGenerator(*this));
 }
 
-string UINameGenerator::MakeRegionOf(const string& region) noexcept
+optional<string> UINameGenerator::MakeRegionOf(const string& region) noexcept
 {
-    auto [name, id] = ExtractNameAndId(region);
-    if (name.empty()) {
-        TryEmplaceAssoc(m_componentNameGens, name); //값이 없는 region은 특별 region이므로, nameGenerator에서 생성하지 않고 그냥 내보낸다.
-        return {};
-    }
+    if (region.empty() && !IsUnusedRegion(region))
+        return nullopt; //region이 ""인 경우는 변형된 region name을 만들지 않는다.
 
+    auto [name, id] = ExtractNameAndId(region);
     auto& nameGenerator = TryEmplaceAssoc(m_regionGens, name);
     string newRegion = AppendIfPresent(name, nameGenerator->Generate());
     if (!IsUnusedRegion(newRegion)) return "";
@@ -74,22 +72,26 @@ static bool IsGeneratedComponentName(const string& name, const string& prefix)
     return curName == prefix;
 }
 
-pair<string, string> UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID, bool forceUniqueRegion) noexcept
+optional<pair<string, string>> UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID, bool forceUniqueRegion) noexcept
 {
     string newRegion{ region }, newName{ name };
     if (IsUnusedRegion(region) || forceUniqueRegion) //붙일 region이 존재하지 않거나, 존재하더라도 유니크이어야 한다면
-        newRegion = MakeRegionOf(region);
+    {
+        auto regionOpt = MakeRegionOf(region);
+        if (!regionOpt) return nullopt;
+        newRegion = regionOpt.value();
+    }
 
     auto nameGen = GetComponentNameGen(newRegion);
-    if (!nameGen) return { "", "" };
+    if (!nameGen) return nullopt;
 
-    const string& strComponent = EnumToString<ComponentID>(componentID);
+    string strComponent = EnumToString<ComponentID>(componentID);
     if (IsGeneratedComponentName(name, strComponent))
         newName = nameGen->MakeNameFromComponent(strComponent);
     else
         newName = nameGen->MakeNameFromBase(name);
 
-    return { newRegion, newName };
+    return make_optional(make_pair(newRegion, newName));
 }
 
 bool UINameGenerator::RemoveName(const string& region, const string& name) noexcept

@@ -4,11 +4,13 @@
 #include "Mocks/MockInputManager.h"
 #include "Mocks/MockUtils.h"
 #include "Toy/Locator/InputLocator.h"
+#include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 #include "Shared/System/StepTimer.h"
 
-class MockComponent : public UIComponentStub
+class MockComponent : public UIComponentStub, public IMouseEventReceiver
 {
 public:
+	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept override { return this; }
 	MOCK_METHOD(void, OnHover, (), (noexcept));
 	MOCK_METHOD(void, ImplementRender, (ITextureRender*), (const));
 };
@@ -58,7 +60,5 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		m_component->ProcessUpdate(timer);
 	}
 
-	
-
-	//UIModule에서 위치값을 셋팅하면 그 위치에서 render 되는지 확인해야한다.
+	//UIModule에 위치값을 셋팅하는거 만들어서 그 위치에서 render 되는지 확인해야한다.
 }

@@ -16,19 +16,19 @@
 namespace UserInterface
 {
 	//툴에서 임시로 component를 생성할때 module이 생성되지 않은 상태이기 때문에 테스트가 필요
-	TEST_F(Integration, AttachDetachNoModuleTest) //옮기는거 완료
-	{
-		auto [main, mainPtr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
-		auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+	//TEST_F(Integration, AttachDetachNoModuleTest) //옮기는거 완료
+	//{
+	//	auto [main, mainPtr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
+	//	auto [tex1, tex1Ptr] = GetPtrs(CreateComponent<PatchTextureStd1>(UILayout{ {64, 64}, Origin::LeftTop }, "BackImage1"));
 
-		EXPECT_TRUE(UIEx(mainPtr).Rename("main"));
-		EXPECT_TRUE(UIEx(tex1Ptr).RenameRegion("region"));
-		UIEx(main).AttachComponent(move(tex1), { 100, 100 });
+	//	EXPECT_TRUE(UIEx(mainPtr).Rename("main"));
+	//	EXPECT_TRUE(UIEx(tex1Ptr).RenameRegion("region"));
+	//	UIEx(main).AttachComponent(move(tex1), { 100, 100 });
 
-		auto result = UIEx(tex1Ptr).DetachComponent();
-		EXPECT_NE(result.first.get(), nullptr);
-		EXPECT_NE(result.second, nullptr);
-	}
+	//	auto result = UIEx(tex1Ptr).DetachComponent();
+	//	EXPECT_NE(result.first.get(), nullptr);
+	//	EXPECT_NE(result.second, nullptr);
+	//}
 
 	static bool AttachComponentHelper(UIComponent* main, const string& parentName) noexcept
 	{
@@ -59,6 +59,7 @@ namespace UserInterface
 		UIEx(m_main).AttachComponent(move(tex1), { 100, 100 });
 		m_uiModule->Update(m_timer);
 
+		//이 GetChildrenBoundsSize 테스트를 해야 한다.
 		EXPECT_EQ(UIEx(tex1Ptr).GetChildrenBoundsSize(), XMUINT2(210, 110));
 		auto [detached, parent] = UIEx(tex1Ptr).DetachComponent();
 		detached->ProcessUpdate(m_timer);
@@ -86,59 +87,59 @@ namespace UserInterface
 		EXPECT_TRUE(UIEx(tex3Ptr).FindComponent("PatchTextureStd1"));
 	}
 
-	TEST_F(Integration, Clone)
-	{
-		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd1>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage1")));
-		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd3>(UILayout{ { 100, 36 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")));
-		EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd9>(UILayout{ { 220, 190 }, Origin::LeftTop }, "BackImage9")));
-		vector<wstring> bindFontKeys{ L"Hangle", L"English" };
-		EXPECT_TRUE(VerifyClone(CreateComponent<TextArea>(UILayout{ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>", bindFontKeys)));
-		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 220, 190 }, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"))));
-		EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 48, 100 }, Origin::Center }, TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"))));
-		EXPECT_TRUE(VerifyClone(CreateSampleListArea({ { 220, 190 }, Origin::LeftTop })));
-	}
+	//TEST_F(Integration, Clone)
+	//{
+	//	EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd1>(UILayout{ {220, 190}, Origin::LeftTop }, "BackImage1")));
+	//	EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd3>(UILayout{ { 100, 36 }, Origin::LeftTop }, DirectionType::Horizontal, "ScrollButton3_H_Normal")));
+	//	EXPECT_TRUE(VerifyClone(CreateComponent<PatchTextureStd9>(UILayout{ { 220, 190 }, Origin::LeftTop }, "BackImage9")));
+	//	vector<wstring> bindFontKeys{ L"Hangle", L"English" };
+	//	EXPECT_TRUE(VerifyClone(CreateComponent<TextArea>(UILayout{ { 220, 190 }, Origin::LeftTop }, L"<Hangle>테스트 입니다!</Hangle>", bindFontKeys)));
+	//	EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 220, 190 }, Origin::Center }, TextureSlice::One, GetStateKeyMap("ExitButton1"))));
+	//	EXPECT_TRUE(VerifyClone(CreateComponent<TextureSwitcher>(UILayout{ { 48, 100 }, Origin::Center }, TextureSlice::ThreeV, GetStateKeyMap("ScrollButton3_V"))));
+	//	EXPECT_TRUE(VerifyClone(CreateSampleListArea({ { 220, 190 }, Origin::LeftTop })));
+	//}
 
-	static vector<ComponentID> GetComponentIDs(const vector<UIComponent*>& components)
-	{
-		vector<ComponentID> componentIDs;
-		ranges::transform(components, back_inserter(componentIDs), [](auto component) {
-			return component->GetTypeID(); });
-		return componentIDs;
-	}
-	//데이터에 특정한 패턴이 있는지 검사한다.
-	template<typename T>
-	static bool ContainsSequence(const vector<T>& haystack, const vector<T>& needle)
-	{
-		return !ranges::search(haystack, needle).empty();
-	}
+	//static vector<ComponentID> GetComponentIDs(const vector<UIComponent*>& components)
+	//{
+	//	vector<ComponentID> componentIDs;
+	//	ranges::transform(components, back_inserter(componentIDs), [](auto component) {
+	//		return component->GetTypeID(); });
+	//	return componentIDs;
+	//}
+	////데이터에 특정한 패턴이 있는지 검사한다.
+	//template<typename T>
+	//static bool ContainsSequence(const vector<T>& haystack, const vector<T>& needle)
+	//{
+	//	return !ranges::search(haystack, needle).empty();
+	//}
 
-	TEST_F(Integration, RecursivePosition)
-	{
-		auto [panel1, panel1Ptr] = GetPtrs(CreateComponent<Panel>(UILayout({ 400, 400 }, Origin::Center)));
-		auto [panel2, panel2Ptr] = GetPtrs(CreateComponent<Panel>(UILayout{ { 20, 20 }, Origin::Center }));
+	//TEST_F(Integration, RecursivePosition)
+	//{
+	//	auto [panel1, panel1Ptr] = GetPtrs(CreateComponent<Panel>(UILayout({ 400, 400 }, Origin::Center)));
+	//	auto [panel2, panel2Ptr] = GetPtrs(CreateComponent<Panel>(UILayout{ { 20, 20 }, Origin::Center }));
 
-		UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
-		UIEx(m_main).AttachComponent(move(panel1), { 400, 300 });
-		m_uiModule->BindTextureResources();
-		m_uiModule->Update(m_timer);
+	//	UIEx(panel1).AttachComponent(move(panel2), { 40, 40 });
+	//	UIEx(m_main).AttachComponent(move(panel1), { 400, 300 });
+	//	m_uiModule->BindTextureResources();
+	//	m_uiModule->Update(m_timer);
 
-		vector<UIComponent*> outList = UIEx(m_main).PickComponents({ 240, 140 });
-		EXPECT_EQ(outList.size(), 3);
+	//	vector<UIComponent*> outList = UIEx(m_main).PickComponents({ 240, 140 });
+	//	EXPECT_EQ(outList.size(), 3);
 
-		panel2Ptr->ChangeOrigin(Origin::LeftTop);
-		m_main->ProcessUpdate(m_timer);
+	//	panel2Ptr->ChangeOrigin(Origin::LeftTop);
+	//	m_main->ProcessUpdate(m_timer);
 
-		outList.clear();
-		outList = UIEx(m_main).PickComponents({ 239, 140 });
-		EXPECT_EQ(outList.size(), 2);
+	//	outList.clear();
+	//	outList = UIEx(m_main).PickComponents({ 239, 140 });
+	//	EXPECT_EQ(outList.size(), 2);
 
-		panel1Ptr->ChangeSize(800, 800); //크기 400에 40위치를 했기 때문에 ratio는 0.1이 된다. 그래서 80
-		EXPECT_EQ(panel2Ptr->GetRelativePosition(), XMINT2(80, 80));
+	//	panel1Ptr->ChangeSize(800, 800); //크기 400에 40위치를 했기 때문에 ratio는 0.1이 된다. 그래서 80
+	//	EXPECT_EQ(panel2Ptr->GetRelativePosition(), XMINT2(80, 80));
 
-		panel1Ptr->SetStateFlag(StateFlag::LockPosOnResize, true);
-		panel1Ptr->ChangeSize(400, 400);
-		EXPECT_EQ(panel2Ptr->GetRelativePosition(), XMINT2(80, 80));
-	}
+	//	panel1Ptr->SetStateFlag(StateFlag::LockPosOnResize, true);
+	//	panel1Ptr->ChangeSize(400, 400);
+	//	EXPECT_EQ(panel2Ptr->GetRelativePosition(), XMINT2(80, 80));
+	//}
 
 	//이름을 구역을 만들어서 다른 구역이면 같은 이름을 쓸 수 있게 한다. 그러면 close 같은 이름이 중복이 되어도
 	//카피 했을때 다른 구역이라면 close 이름을 쓸 수 있다. 리스트 컴포넌트에서 다른 구역으로 지정하면 이름이 

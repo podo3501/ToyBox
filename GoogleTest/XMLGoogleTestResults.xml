@@ -1,35 +1,257 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="16" failures="0" disabled="0" errors="0" time="2.138" timestamp="2025-11-07T00:04:31.740" name="AllTests">
-  <testsuite name="CPP" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T00:04:31.740">
-    <testcase name="CRTP" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:31.740" classname="CPP" />
-    <testcase name="Move" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:31.740" classname="CPP" />
-    <testcase name="NestedForLoops" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:31.740" classname="CPP" />
-    <testcase name="RefCounted" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:31.740" classname="CPP" />
+<testsuites tests="180" failures="2" disabled="0" errors="0" time="0.579" timestamp="2025-11-07T23:40:47.545" name="AllTests">
+  <testsuite name="EventDispatcherManagerT" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T23:40:47.545">
+    <testcase name="Dispatch" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.545" classname="EventDispatcherManagerT" />
+    <testcase name="Clear" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.545" classname="EventDispatcherManagerT" />
   </testsuite>
-  <testsuite name="Pattern" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T00:04:31.740">
-    <testcase name="Composite" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:31.740" classname="Pattern" />
-    <testcase name="Locator" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:31.740" classname="Pattern" />
+  <testsuite name="SceneManagerT" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T23:40:47.545">
+    <testcase name="Transition" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.545" classname="SceneManagerT" />
   </testsuite>
-  <testsuite name="Application" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="1.63" timestamp="2025-11-07T00:04:31.740">
-    <testcase name="MultipleAppExcute" status="run" result="completed" time="1.63" timestamp="2025-11-07T00:04:31.740" classname="Application" />
+  <testsuite name="Integration" tests="7" failures="2" disabled="0" skipped="0" errors="0" time="0.044" timestamp="2025-11-07T23:40:47.546">
+    <testcase name="AttachDetachTest" status="run" result="completed" time="0.006" timestamp="2025-11-07T23:40:47.546" classname="Integration">
+      <failure message="D:\ProgrammingStudy\ToyBox\GoogleTest\ToyUnit\Tests\Integration.cpp:51&#x0A;Value of: DetachComponentHelper(m_main, &quot;PatchTextureStd9&quot;)&#x0A;  Actual: false&#x0A;Expected: true" type=""><![CDATA[D:\ProgrammingStudy\ToyBox\GoogleTest\ToyUnit\Tests\Integration.cpp:51
+Value of: DetachComponentHelper(m_main, "PatchTextureStd9")
+  Actual: false
+Expected: true]]></failure>
+      <failure message="D:\ProgrammingStudy\ToyBox\GoogleTest\ToyUnit\Tests\Integration.cpp:52&#x0A;Value of: AttachComponentHelper(m_main, &quot;Main&quot;)&#x0A;  Actual: false&#x0A;Expected: true" type=""><![CDATA[D:\ProgrammingStudy\ToyBox\GoogleTest\ToyUnit\Tests\Integration.cpp:52
+Value of: AttachComponentHelper(m_main, "Main")
+  Actual: false
+Expected: true]]></failure>
+      <failure message="D:\ProgrammingStudy\ToyBox\GoogleTest\ToyUnit\Tests\Integration.cpp:54&#x0A;Value of: DetachComponentHelper(m_main, &quot;PatchTextureStd1&quot;)&#x0A;  Actual: false&#x0A;Expected: true" type=""><![CDATA[D:\ProgrammingStudy\ToyBox\GoogleTest\ToyUnit\Tests\Integration.cpp:54
+Value of: DetachComponentHelper(m_main, "PatchTextureStd1")
+  Actual: false
+Expected: true]]></failure>
+    </testcase>
+    <testcase name="DetachThenNameTest" status="run" result="completed" time="0.004" timestamp="2025-11-07T23:40:47.552" classname="Integration" />
+    <testcase name="Region" status="run" result="completed" time="0.004" timestamp="2025-11-07T23:40:47.557" classname="Integration" />
+    <testcase name="Rename" status="run" result="completed" time="0.005" timestamp="2025-11-07T23:40:47.562" classname="Integration" />
+    <testcase name="RenameRegion" status="run" result="completed" time="0.006" timestamp="2025-11-07T23:40:47.567" classname="Integration">
+      <failure message="D:\ProgrammingStudy\ToyBox\GoogleTest\ToyUnit\Tests\Integration.cpp:232&#x0A;Value of: UIEx(tex2Ptr).RenameRegion(m_main-&gt;GetRegion())&#x0A;  Actual: true&#x0A;Expected: false" type=""><![CDATA[D:\ProgrammingStudy\ToyBox\GoogleTest\ToyUnit\Tests\Integration.cpp:232
+Value of: UIEx(tex2Ptr).RenameRegion(m_main->GetRegion())
+  Actual: true
+Expected: false]]></failure>
+    </testcase>
+    <testcase name="UINameGenerator" status="run" result="completed" time="0.005" timestamp="2025-11-07T23:40:47.574" classname="Integration" />
+    <testcase name="UniqueName" status="run" result="completed" time="0.011" timestamp="2025-11-07T23:40:47.579" classname="Integration" />
   </testsuite>
-  <testsuite name="TracyBenchmark" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.334" timestamp="2025-11-07T00:04:33.371">
-    <testcase name="MakeListAreaData" status="run" result="completed" time="0.334" timestamp="2025-11-07T00:04:33.371" classname="TracyBenchmark" />
+  <testsuite name="TexResCommandHistoryT" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T23:40:47.591">
+    <testcase name="AddFontKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.591" classname="TexResCommandHistoryT" />
+    <testcase name="AddTextureKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.591" classname="TexResCommandHistoryT" />
+    <testcase name="ModifyTextureSourceInfo" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.591" classname="TexResCommandHistoryT" />
+    <testcase name="RemoveFontKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.592" classname="TexResCommandHistoryT" />
+    <testcase name="RemoveKeyByFilename" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.592" classname="TexResCommandHistoryT" />
+    <testcase name="RemoveTextureKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.592" classname="TexResCommandHistoryT" />
+    <testcase name="RenameFontKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.592" classname="TexResCommandHistoryT" />
+    <testcase name="RenameTextureKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.592" classname="TexResCommandHistoryT" />
   </testsuite>
-  <testsuite name="DirectXTK12" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.17" timestamp="2025-11-07T00:04:33.705">
-    <testcase name="Mouse" status="run" result="completed" time="0.003" timestamp="2025-11-07T00:04:33.705" classname="DirectXTK12" />
-    <testcase name="Sound" status="run" result="completed" time="0.166" timestamp="2025-11-07T00:04:33.709" classname="DirectXTK12" />
+  <testsuite name="UICommandHistoryT_PatchTextureStd1" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.002" timestamp="2025-11-07T23:40:47.593">
+    <testcase name="AttachComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.593" classname="UICommandHistoryT_PatchTextureStd1" />
+    <testcase name="ChangeRelativePosition" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.593" classname="UICommandHistoryT_PatchTextureStd1" />
+    <testcase name="SetSize" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.593" classname="UICommandHistoryT_PatchTextureStd1" />
+    <testcase name="RenameRegion" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.593" classname="UICommandHistoryT_PatchTextureStd1" />
+    <testcase name="Rename" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.594" classname="UICommandHistoryT_PatchTextureStd1" />
+    <testcase name="DetachComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.594" classname="UICommandHistoryT_PatchTextureStd1" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.594" classname="UICommandHistoryT_PatchTextureStd1" />
+    <testcase name="ChangeBindKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.595" classname="UICommandHistoryT_PatchTextureStd1" />
   </testsuite>
-  <testsuite name="SDL3" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T00:04:33.876">
-    <testcase name="Initialize" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:33.876" classname="SDL3" />
+  <testsuite name="TextureLoadBinderT" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T23:40:47.595">
+    <testcase name="LoadTexture" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.595" classname="TextureLoadBinderT" />
   </testsuite>
-  <testsuite name="Client" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T00:04:33.876">
-    <testcase name="JsonParser" status="run" result="completed" time="0.001" timestamp="2025-11-07T00:04:33.876" classname="Client" />
-    <testcase name="TextAreaParser" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:33.878" classname="Client" />
+  <testsuite name="TextureResourceBinderT" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.002" timestamp="2025-11-07T23:40:47.595">
+    <testcase name="ComputeSliceRects" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.595" classname="TextureResourceBinderT" />
+    <testcase name="GetAreas" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.595" classname="TextureResourceBinderT" />
+    <testcase name="GetBindingKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.595" classname="TextureResourceBinderT" />
+    <testcase name="GetTextureKeys" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.595" classname="TextureResourceBinderT" />
+    <testcase name="RenameFontKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.595" classname="TextureResourceBinderT" />
+    <testcase name="RenameTextureKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.596" classname="TextureResourceBinderT" />
+    <testcase name="RemoveKeyByFilename" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.596" classname="TextureResourceBinderT" />
+    <testcase name="WriteRead" status="run" result="completed" time="0.001" timestamp="2025-11-07T23:40:47.596" classname="TextureResourceBinderT" />
   </testsuite>
-  <testsuite name="Core" tests="3" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T00:04:33.878">
-    <testcase name="FindRectangles" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:33.878" classname="Core" />
-    <testcase name="MergeRectangles" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:33.878" classname="Core" />
-    <testcase name="CycleIterator" status="run" result="completed" time="0" timestamp="2025-11-07T00:04:33.878" classname="Core" />
+  <testsuite name="ContainerT" tests="3" failures="0" disabled="0" skipped="0" errors="0" time="0.004" timestamp="2025-11-07T23:40:47.597">
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.597" classname="ContainerT" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.598" classname="ContainerT" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.003" timestamp="2025-11-07T23:40:47.598" classname="ContainerT" />
+  </testsuite>
+  <testsuite name="ListAreaT" tests="11" failures="0" disabled="0" skipped="0" errors="0" time="0.022" timestamp="2025-11-07T23:40:47.602">
+    <testcase name="ClearContainers" status="run" result="completed" time="0.001" timestamp="2025-11-07T23:40:47.602" classname="ListAreaT" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.603" classname="ListAreaT" />
+    <testcase name="GetContainer" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.603" classname="ListAreaT" />
+    <testcase name="GetContainerCount" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.604" classname="ListAreaT" />
+    <testcase name="GetSize" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.605" classname="ListAreaT" />
+    <testcase name="PrepareContainer" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.606" classname="ListAreaT" />
+    <testcase name="RemoveContainer" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.606" classname="ListAreaT" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0.001" timestamp="2025-11-07T23:40:47.607" classname="ListAreaT" />
+    <testcase name="ScrollBarVisible_ChangeSize" status="run" result="completed" time="0.001" timestamp="2025-11-07T23:40:47.609" classname="ListAreaT" />
+    <testcase name="ScrollBarVisible_InsertData" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.610" classname="ListAreaT" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.012" timestamp="2025-11-07T23:40:47.611" classname="ListAreaT" />
+  </testsuite>
+  <testsuite name="PatchTextureLite1T" tests="6" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T23:40:47.624">
+    <testcase name="BindSourceInfo" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.624" classname="PatchTextureLite1T" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.624" classname="PatchTextureLite1T" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.624" classname="PatchTextureLite1T" />
+    <testcase name="GetCenterComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.624" classname="PatchTextureLite1T" />
+    <testcase name="GetTextureSlice" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.624" classname="PatchTextureLite1T" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.624" classname="PatchTextureLite1T" />
+  </testsuite>
+  <testsuite name="PatchTextureLite3T_Horizontal" tests="7" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T23:40:47.625">
+    <testcase name="BindSourceInfo" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.625" classname="PatchTextureLite3T_Horizontal" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.625" classname="PatchTextureLite3T_Horizontal" />
+    <testcase name="ChangeSize_Bigger" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.625" classname="PatchTextureLite3T_Horizontal" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.625" classname="PatchTextureLite3T_Horizontal" />
+    <testcase name="GetCenterComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.625" classname="PatchTextureLite3T_Horizontal" />
+    <testcase name="GetTextureSlice" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.625" classname="PatchTextureLite3T_Horizontal" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.625" classname="PatchTextureLite3T_Horizontal" />
+  </testsuite>
+  <testsuite name="PatchTextureLite3T_Vertical" tests="7" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T23:40:47.626">
+    <testcase name="BindSourceInfo" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.626" classname="PatchTextureLite3T_Vertical" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.626" classname="PatchTextureLite3T_Vertical" />
+    <testcase name="ChangeSize_Bigger" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.626" classname="PatchTextureLite3T_Vertical" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.626" classname="PatchTextureLite3T_Vertical" />
+    <testcase name="GetCenterComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.627" classname="PatchTextureLite3T_Vertical" />
+    <testcase name="GetTextureSlice" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.627" classname="PatchTextureLite3T_Vertical" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.627" classname="PatchTextureLite3T_Vertical" />
+  </testsuite>
+  <testsuite name="PatchTextureLite9T" tests="7" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T23:40:47.627">
+    <testcase name="BindSourceInfo" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.627" classname="PatchTextureLite9T" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.627" classname="PatchTextureLite9T" />
+    <testcase name="ChangeSize_Bigger" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.628" classname="PatchTextureLite9T" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.628" classname="PatchTextureLite9T" />
+    <testcase name="GetCenterComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.628" classname="PatchTextureLite9T" />
+    <testcase name="GetTextureSlice" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.628" classname="PatchTextureLite9T" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.628" classname="PatchTextureLite9T" />
+  </testsuite>
+  <testsuite name="PatchTextureStd1T" tests="7" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T23:40:47.629">
+    <testcase name="ChangeBindKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.629" classname="PatchTextureStd1T" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.629" classname="PatchTextureStd1T" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.629" classname="PatchTextureStd1T" />
+    <testcase name="GetCenterComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.629" classname="PatchTextureStd1T" />
+    <testcase name="GetTextureSlice" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.629" classname="PatchTextureStd1T" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.629" classname="PatchTextureStd1T" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.001" timestamp="2025-11-07T23:40:47.629" classname="PatchTextureStd1T" />
+  </testsuite>
+  <testsuite name="PatchTextureStd3T_Horizontal" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.004" timestamp="2025-11-07T23:40:47.631">
+    <testcase name="ChangeBindKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.631" classname="PatchTextureStd3T_Horizontal" />
+    <testcase name="ChangeSize_Bigger" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.631" classname="PatchTextureStd3T_Horizontal" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.631" classname="PatchTextureStd3T_Horizontal" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.631" classname="PatchTextureStd3T_Horizontal" />
+    <testcase name="GetCenterComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.631" classname="PatchTextureStd3T_Horizontal" />
+    <testcase name="GetTextureSlice" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.631" classname="PatchTextureStd3T_Horizontal" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.632" classname="PatchTextureStd3T_Horizontal" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.003" timestamp="2025-11-07T23:40:47.632" classname="PatchTextureStd3T_Horizontal" />
+  </testsuite>
+  <testsuite name="PatchTextureStd3T_Vertical" tests="7" failures="0" disabled="0" skipped="0" errors="0" time="0.005" timestamp="2025-11-07T23:40:47.635">
+    <testcase name="ChangeSize_Bigger" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.636" classname="PatchTextureStd3T_Vertical" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.636" classname="PatchTextureStd3T_Vertical" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.636" classname="PatchTextureStd3T_Vertical" />
+    <testcase name="GetCenterComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.636" classname="PatchTextureStd3T_Vertical" />
+    <testcase name="GetTextureSlice" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.636" classname="PatchTextureStd3T_Vertical" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.637" classname="PatchTextureStd3T_Vertical" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.003" timestamp="2025-11-07T23:40:47.637" classname="PatchTextureStd3T_Vertical" />
+  </testsuite>
+  <testsuite name="PatchTextureStd9T" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.008" timestamp="2025-11-07T23:40:47.641">
+    <testcase name="ChangeBindKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.641" classname="PatchTextureStd9T" />
+    <testcase name="ChangeSize_Bigger" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.641" classname="PatchTextureStd9T" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.641" classname="PatchTextureStd9T" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.642" classname="PatchTextureStd9T" />
+    <testcase name="GetCenterComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.642" classname="PatchTextureStd9T" />
+    <testcase name="GetTextureSlice" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.642" classname="PatchTextureStd9T" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.643" classname="PatchTextureStd9T" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.005" timestamp="2025-11-07T23:40:47.643" classname="PatchTextureStd9T" />
+  </testsuite>
+  <testsuite name="RenderTextureT" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T23:40:47.649">
+    <testcase name="GetSize" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.649" classname="RenderTextureT" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.650" classname="RenderTextureT" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.650" classname="RenderTextureT" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.001" timestamp="2025-11-07T23:40:47.650" classname="RenderTextureT" />
+  </testsuite>
+  <testsuite name="ScrollBarT" tests="7" failures="0" disabled="0" skipped="0" errors="0" time="0.024" timestamp="2025-11-07T23:40:47.651">
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.651" classname="ScrollBarT" />
+    <testcase name="GetSize" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.652" classname="ScrollBarT" />
+    <testcase name="OnWheel" status="run" result="completed" time="0.017" timestamp="2025-11-07T23:40:47.652" classname="ScrollBarT" />
+    <testcase name="OnPressCB_MouseDrag" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.669" classname="ScrollBarT" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.670" classname="ScrollBarT" />
+    <testcase name="RestoreDefault" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.670" classname="ScrollBarT" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.004" timestamp="2025-11-07T23:40:47.671" classname="ScrollBarT" />
+  </testsuite>
+  <testsuite name="TextAreaT" tests="3" failures="0" disabled="0" skipped="0" errors="0" time="0.002" timestamp="2025-11-07T23:40:47.676">
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.676" classname="TextAreaT" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.676" classname="TextAreaT" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.001" timestamp="2025-11-07T23:40:47.676" classname="TextAreaT" />
+  </testsuite>
+  <testsuite name="TextureSwitcherT" tests="15" failures="0" disabled="0" skipped="0" errors="0" time="0.006" timestamp="2025-11-07T23:40:47.678">
+    <testcase name="ChangeBindKey" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.678" classname="TextureSwitcherT" />
+    <testcase name="ChangeState" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.678" classname="TextureSwitcherT" />
+    <testcase name="ChangeState_ForceChange" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.678" classname="TextureSwitcherT" />
+    <testcase name="ClearInteraction" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.679" classname="TextureSwitcherT" />
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.679" classname="TextureSwitcherT" />
+    <testcase name="Dispatcher" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.679" classname="TextureSwitcherT" />
+    <testcase name="FitToTextureSource" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.679" classname="TextureSwitcherT" />
+    <testcase name="GetSize" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.680" classname="TextureSwitcherT" />
+    <testcase name="OnNormal" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.680" classname="TextureSwitcherT" />
+    <testcase name="OnHover" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.680" classname="TextureSwitcherT" />
+    <testcase name="OnPress" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.680" classname="TextureSwitcherT" />
+    <testcase name="OnHold" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.681" classname="TextureSwitcherT" />
+    <testcase name="OnRelease" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.681" classname="TextureSwitcherT" />
+    <testcase name="ProcessRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.681" classname="TextureSwitcherT" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.002" timestamp="2025-11-07T23:40:47.682" classname="TextureSwitcherT" />
+  </testsuite>
+  <testsuite name="UIModuleAsComponentT" tests="4" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T23:40:47.684">
+    <testcase name="GetUIModule" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.684" classname="UIModuleAsComponentT" />
+    <testcase name="GetSize" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.684" classname="UIModuleAsComponentT" />
+    <testcase name="ImplementRender" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.685" classname="UIModuleAsComponentT" />
+    <testcase name="ImplementUpdate" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:47.685" classname="UIModuleAsComponentT" />
+  </testsuite>
+  <testsuite name="UIComponentExT" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T23:40:48.063">
+    <testcase name="AttachComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.063" classname="UIComponentExT" />
+    <testcase name="AttachComponent_FindComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.064" classname="UIComponentExT" />
+    <testcase name="DetachComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.064" classname="UIComponentExT" />
+    <testcase name="DetachComponent_FindComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.064" classname="UIComponentExT" />
+    <testcase name="PickComponents" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.064" classname="UIComponentExT" />
+    <testcase name="PickMouseReceivers" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.064" classname="UIComponentExT" />
+    <testcase name="Rename" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.064" classname="UIComponentExT" />
+    <testcase name="temporary" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.065" classname="UIComponentExT" />
+  </testsuite>
+  <testsuite name="UIComponentT_Single" tests="5" failures="0" disabled="0" skipped="0" errors="0" time="0.045" timestamp="2025-11-07T23:40:48.065">
+    <testcase name="Attach" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.065" classname="UIComponentT_Single" />
+    <testcase name="Detach" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.110" classname="UIComponentT_Single" />
+    <testcase name="StateFlag_Attach" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.110" classname="UIComponentT_Single" />
+    <testcase name="StateFlag_Detach" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.110" classname="UIComponentT_Single" />
+    <testcase name="StateFlag_SizeLocked" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.110" classname="UIComponentT_Single" />
+  </testsuite>
+  <testsuite name="UIComponentT" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.002" timestamp="2025-11-07T23:40:48.110">
+    <testcase name="ChangeOrigin" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.110" classname="UIComponentT" />
+    <testcase name="ChangeRelativePosition" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.110" classname="UIComponentT" />
+    <testcase name="ChangeSize_Center" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.111" classname="UIComponentT" />
+    <testcase name="ChangeSize_LeftTop" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.111" classname="UIComponentT" />
+    <testcase name="ChangeSize_LockPosOnResize" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.111" classname="UIComponentT" />
+    <testcase name="FindComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.113" classname="UIComponentT" />
+    <testcase name="FindRegionComponent" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.113" classname="UIComponentT" />
+    <testcase name="GetChildrenBoundsSize" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.113" classname="UIComponentT" />
+  </testsuite>
+  <testsuite name="UIHierarchyT" tests="2" failures="0" disabled="0" skipped="0" errors="0" time="0" timestamp="2025-11-07T23:40:48.113">
+    <testcase name="ForEachChildToRender_BFS" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.113" classname="UIHierarchyT" />
+    <testcase name="ForEachChildToRender_DFS" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.113" classname="UIHierarchyT" />
+  </testsuite>
+  <testsuite name="UIModuleT" tests="10" failures="0" disabled="0" skipped="0" errors="0" time="0.008" timestamp="2025-11-07T23:40:48.114">
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.114" classname="UIModuleT" />
+    <testcase name="EnableToolMode" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.114" classname="UIModuleT" />
+    <testcase name="RenderPipeline" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.115" classname="UIModuleT" />
+    <testcase name="UpdateMouseState_ComponentCaptured" status="run" result="completed" time="0.001" timestamp="2025-11-07T23:40:48.116" classname="UIModuleT" />
+    <testcase name="UpdateMouseState_MouseClickedInside" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.117" classname="UIModuleT" />
+    <testcase name="UpdateMouseState_MouseClickedOutside" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.118" classname="UIModuleT" />
+    <testcase name="UpdateMouseState_MouseHover" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.119" classname="UIModuleT" />
+    <testcase name="UpdateMouseState_MouseMove" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.120" classname="UIModuleT" />
+    <testcase name="UpdateMouseState_MouseWheel" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.120" classname="UIModuleT" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.002" timestamp="2025-11-07T23:40:48.120" classname="UIModuleT" />
+  </testsuite>
+  <testsuite name="UINameGeneratorT" tests="8" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-07T23:40:48.123">
+    <testcase name="Clone" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.123" classname="UINameGeneratorT" />
+    <testcase name="MakeNameOf" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.123" classname="UINameGeneratorT" />
+    <testcase name="MakeRegionOf" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.123" classname="UINameGeneratorT" />
+    <testcase name="MakeRegionOf_EmptyRegionName" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.123" classname="UINameGeneratorT" />
+    <testcase name="RecycleName" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.123" classname="UINameGeneratorT" />
+    <testcase name="RemoveName" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.123" classname="UINameGeneratorT" />
+    <testcase name="RemoveRegion" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.123" classname="UINameGeneratorT" />
+    <testcase name="WriteAndRead" status="run" result="completed" time="0" timestamp="2025-11-07T23:40:48.123" classname="UINameGeneratorT" />
   </testsuite>
 </testsuites>

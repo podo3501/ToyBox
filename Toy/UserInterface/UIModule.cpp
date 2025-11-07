@@ -2,13 +2,12 @@
 #include "UIModule.h"
 #include "IRenderer.h"
 #include "Locator/InputLocator.h"
-#include "UIComponent/UIComponent.h"
 #include "UIComponent/Components/Panel.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/SerializerIO/ClassSerializeIO.h"
+#include "UserInterface/Input/IMouseEventReceiver.h"
 #include "UINameGenerator/UINameGenerator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
-#include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
 
 UIModule::~UIModule()
@@ -58,9 +57,9 @@ bool UIModule::SetupMainComponent(const UILayout& layout, const string& name,
 	m_renderer = renderer;
 
 	unique_ptr<Panel> panel = CreateComponent<Panel>(layout);
+	panel->SetUIModule(this);
 	ReturnIfFalse(UIEx(panel).Rename(name));
 	ReturnIfFalse(UIEx(panel).RenameRegion("UIModuleMainEntry"));
-	panel->SetUIModule(this);
 	m_children.push_back(move(panel));
 
 	return true;
@@ -114,36 +113,36 @@ void UIModule::UpdateMouseState() noexcept
 	//hover는 공통으로 호출
 	auto input = InputLocator::GetService();
 	auto mouseState = input->GetMouseState();
-	auto components = UIEx(GetMainPanel()).PickComponents(mouseState.pos);
+	auto receivers = UIEx(GetMainPanel()).PickMouseReceivers(mouseState.pos);
 
-	UpdateHoverState(components, mouseState.pos);
+	UpdateHoverState(receivers, mouseState.pos);
 	ProcessCaptureComponent(mouseState); //캡쳐된 컴포넌트를 마우스 입력에 따라 처리
 	CaptureComponent(mouseState);	//클릭하면 캡쳐하고 press호출
 	ProcessMouseWheel(input->GetMouseWheelValue());
 }
 
-void UIModule::UpdateHoverState(vector<UIComponent*> components, const XMINT2& pos) noexcept
+void UIModule::UpdateHoverState(vector<IMouseEventReceiver*> receivers, const XMINT2& pos) noexcept
 {
-	for (auto& component : components)
+	for (auto& receiver : receivers)
 	{
-		component->OnHover(); //일단 다 호출하고나서
-		component->OnMove(pos);
+		receiver->OnHover(); //일단 다 호출하고나서
+		receiver->OnMove(pos);
 	}
 
-	for (auto& prevComp : m_hoveredComponents)
+	for (auto& prevComp : m_hoveredReceivers)
 	{
-		if (ranges::find(components, prevComp) == components.end())
+		if (ranges::find(receivers, prevComp) == receivers.end())
 			prevComp->OnNormal(); //영역이 아닌 애들은 OnNormal 호출
 	}
 
-	m_hoveredComponents = components;
+	m_hoveredReceivers = receivers;
 }
 
 void UIModule::ProcessCaptureComponent(const MouseState& mouseState) noexcept
 {
 	if (!m_capture) return;
 
-	bool inside = Contains(m_capture->GetArea(), mouseState.pos);
+	bool inside = (ranges::find(m_hoveredReceivers, m_capture) != m_hoveredReceivers.end()); //hovered에서 찾으면 inside.
 	if (mouseState.leftButton == InputState::Released) //3. 마우스를 떼면 release호출하고 캡쳐해제
 	{
 		m_capture->OnRelease(inside);
@@ -165,19 +164,19 @@ void UIModule::CaptureComponent(const MouseState& mouseState) noexcept
 	if (m_capture) return;
 	if (mouseState.leftButton != InputState::Pressed) return;
 
-	for (auto& component : m_hoveredComponents)
+	for (auto& receiver : m_hoveredReceivers)
 	{
-		const auto result = component->OnPress(mouseState.pos);
+		const auto result = receiver->OnPress(mouseState.pos);
 		if (!IsHandled(result)) continue; //처리되지 않았다면 Render상 밑의 컴포넌트
 		
 		if (result == InputResult::Consumed) //이 컴포넌트가 소비하고 다음 컴포넌트로 가지 않는다.
 		{
-			m_capture = component;
+			m_capture = receiver;
 			break;
 		}
 
 		if (!m_capture && result == InputResult::Propagate)
-			m_capture = component; //캡쳐된게 없으면 일단 얘를 캡쳐
+			m_capture = receiver; //캡쳐된게 없으면 일단 얘를 캡쳐
 	}
 }
 
@@ -185,8 +184,8 @@ void UIModule::ProcessMouseWheel(int wheelValue) noexcept
 {
 	if (!wheelValue) return;
 
-	for (const auto& component : m_hoveredComponents)
-		if (component->OnWheel(wheelValue))
+	for (const auto& receiver : m_hoveredReceivers)
+		if (receiver->OnWheel(wheelValue))
 			return; //위의 컴포넌트가 반응하면 그 밑에 컴포넌트들은 실행하지 않는다.
 }
 
