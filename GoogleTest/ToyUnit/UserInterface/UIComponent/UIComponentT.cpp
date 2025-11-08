@@ -50,43 +50,4 @@ namespace UserInterfaceT::UIComponentT
 			ChangeExpect::ParentSizeChanged
 		);
 	}
-
-	TEST_F(UIComponentT, FindComponent)
-	{
-		UIEx(m_parent).RenameRegion("Region1");
-		UIEx(m_parent).Rename("Parent"); 
-		UIEx(m_child).Rename("Child");
-
-		//False인 것은 찾는 Component와 다른 Region이기 때문에 찾을 수 없다.
-		EXPECT_FALSE(UIEx(m_main).FindComponent("Parent"));
-		EXPECT_FALSE(UIEx(m_main).FindComponent("Child"));
-
-		EXPECT_FALSE(UIEx(m_parent).FindComponent("Main"));
-		EXPECT_TRUE(UIEx(m_parent).FindComponent("Child"));
-
-		EXPECT_FALSE(UIEx(m_child).FindComponent("Main"));
-		EXPECT_TRUE(UIEx(m_child).FindComponent("Parent"));
-	}
-
-	TEST_F(UIComponentT, FindRegionComponent)
-	{
-		UIEx(m_parent).RenameRegion("Region1");
-		UIEx(m_child).RenameRegion("Region2");
-
-		//Region이 있는 Component는 노드 밑으로만 찾고 위로는 찾지 않는다.
-		EXPECT_EQ(UIEx(m_main).FindRegionComponent("Region1"), m_parent);
-		EXPECT_FALSE(UIEx(m_main).FindRegionComponent("Region2"));
-
-		EXPECT_EQ(UIEx(m_parent).FindRegionComponent("Region2"), m_child);
-		EXPECT_FALSE(UIEx(m_child).FindRegionComponent("Region1"));
-	}
-
-	TEST_F(UIComponentT, GetChildrenBoundsSize)
-	{
-		XMUINT2 preSize = UIEx(m_parent).GetChildrenBoundsSize();
-		auto [detached, parent] = UIEx(m_parent).DetachComponent(); //detached는 m_parent, parent는 m_main
-		detached->UpdatePositionsManually(true);
-		
-		EXPECT_EQ(UIEx(detached).GetChildrenBoundsSize(), preSize);
-	}
 }

@@ -308,3 +308,8 @@ tracy::ShutdownProfiler();
  EXPECT_CALL(*child, OnHover()).Times(1); 
  여기서 element_type* _Ptr{nullptr}; 여기서 nullptr이라면서 죽었다. 방금전까지만 해도 잘 돌아가는 것이었기 
  때문에 의아했다. 그런데 계속해서 nullptr이라고 자꾸 죽어서 리빌드를 했더니 고쳐졌다..
+
+ cpp에 이름이 같은 class를 만들 경우 어떤 클래스가 선택이 될지는 미정이다. 특히 상속을 받은 경우에 상속이
+ 정상동작 안하는 경우가 있는데, 이것은 ODR 위반이다. tdd에서 주로 mock할때 클래스 이름을 똑같이 사용하는
+ 경우가 빈번한데, 이때 발생하기 쉽다. 따라서 tdd에서도 mock 클래스를 만들때 이름이 겹치지 않도록 주의가
+ 요구된다.

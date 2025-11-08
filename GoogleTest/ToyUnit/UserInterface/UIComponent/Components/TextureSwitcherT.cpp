@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TextureSwitcherT.h"
-#include "UserInterface/UIComponent/Components/ComponentHelper.h"
+#include "../ComponentHelper.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "Toy/Locator/EventDispatcherLocator.h"
 #include "Shared/Utils/GeometryExt.h"

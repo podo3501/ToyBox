@@ -26,9 +26,9 @@ UIComponent* UIHierarchy<UIComponent>::GetRoot() const noexcept
 UIComponent* UIHierarchy<UIComponent>::GetRegionRoot() const noexcept
 {
 	UIComponent* current = GetThis();
-	while (current->GetRegion().empty())
+	while (current->GetRegion().empty()) //값이 있으면 RegionRoot 이다.
 	{
-		if (!current->m_parent) break;
+		if (!current->m_parent) break; //끝까지 올라가서 없으면 root 를 리턴
 		current = current->m_parent;
 	}
 

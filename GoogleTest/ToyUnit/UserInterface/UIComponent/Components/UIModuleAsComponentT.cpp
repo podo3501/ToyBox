@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "UIModuleAsComponentT.h"
+#include "../MockComponent.h"
 #include "Mocks/Stubs/UIComponentStub.h"
 #include "Mocks/MockInputManager.h"
-#include "Mocks/MockUtils.h"
 #include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 #include "Shared/System/StepTimer.h"
 
-class MockComponent : public UIComponentStub, public IMouseEventReceiver
+class MockReceiverComponent : public UIComponentStub, public IMouseEventReceiver
 {
 public:
 	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept override { return this; }
@@ -32,7 +32,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		//모듈에 컴포넌트 하나를 붙인다.
 		auto module = m_component->GetUIModule();
 		auto mainPanel = module->GetMainPanel();
-		auto child = AttachMockComponent<MockComponent>(mainPanel);
+		auto child = AttachMockComponent<MockReceiverComponent>(mainPanel);
 
 		//마우스를 올리고 hover 되는지 확인.
 		EXPECT_CALL(*child, ImplementRender(testing::_)).Times(1);
@@ -46,12 +46,13 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		//모듈에 컴포넌트 하나를 붙인다.
 		auto module = m_component->GetUIModule();
 		auto mainPanel = module->GetMainPanel();
-		auto child = AttachMockComponent<MockComponent>(mainPanel);
+		auto child = AttachMockComponent<MockReceiverComponent>(mainPanel);
 
 		//마우스를 올리고 hover 되는지 확인.
 		EXPECT_CALL(*child, OnHover()).Times(1);
 
-		//마우스 셋팅 및 위치시키기
+		//마우스 셋팅 및 위치시키기 
+		//?!? Helper를 쓰면 마우스나 이런거 될꺼 같다.
 		auto input = make_unique<MockInputManager>();
 		InputLocator::Provide(input.get());
 		input->SetMouseState(child->GetLeftTop(), InputState::Up);

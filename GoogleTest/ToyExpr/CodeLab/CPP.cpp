@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Toy/UserInterface/UIComponent/UILayout.h"
 #include "Shared/Utils/Memory.h"
+#include "Shared/Utils/StlExt.h"
 
 namespace CodeLab
 {

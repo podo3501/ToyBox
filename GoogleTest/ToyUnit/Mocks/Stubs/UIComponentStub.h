@@ -7,5 +7,5 @@ public:
 	virtual ComponentID GetTypeID() const noexcept { return UIComponent::GetTypeStatic(); }
 
 protected:
-	virtual unique_ptr<UIComponent> CreateClone() const { return nullptr; }
+	virtual unique_ptr<UIComponent> CreateClone() const override { return nullptr; }
 };

@@ -1,6 +1,6 @@
 #pragma once
-#include "Mocks/MockComponents.h"
-#include "Mocks/MockUtils.h"
+#include "Mocks/Stubs/UIComponentStub.h"
+#include "MockComponent.h"
 
 class UIComponentT_Single : public ::testing::Test
 {

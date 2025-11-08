@@ -9,45 +9,6 @@
     <ClCompile Include="Mocks\MockInputManager.cpp">
       <Filter>Mocks</Filter>
     </ClCompile>
-    <ClCompile Include="Mocks\MockUtils.cpp">
-      <Filter>Mocks</Filter>
-    </ClCompile>
-    <ClCompile Include="Fixtures\FixtureSuite.cpp">
-      <Filter>Fixtures</Filter>
-    </ClCompile>
-    <ClCompile Include="Fixtures\SystemFixture.cpp">
-      <Filter>Fixtures</Filter>
-    </ClCompile>
-    <ClCompile Include="Fixtures\UIFixture.cpp">
-      <Filter>Fixtures</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\BasicComponent.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\ComplexComponent.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\ComponentEvent.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\ContainerComponent.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\Helper.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\Integration.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\TextureSwitcherComponent.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\UIModuleConnection.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\UndoRedo.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\UIComponentT_Single.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
@@ -83,9 +44,6 @@
     </ClCompile>
     <ClCompile Include="System\SceneManagerT.cpp">
       <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\ComponentHelper.cpp">
-      <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\ComponentT.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
@@ -141,6 +99,12 @@
     <ClCompile Include="UserInterface\UIComponent\UIHierarchyT.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\ComponentHelper.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\MockComponent.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -159,24 +123,6 @@
     </ClInclude>
     <ClInclude Include="Mocks\Stubs\UIComponentStub.h">
       <Filter>Mocks\Stubs</Filter>
-    </ClInclude>
-    <ClInclude Include="Mocks\MockUtils.h">
-      <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="Mocks\MockComponents.h">
-      <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="Fixtures\FixtureSuite.h">
-      <Filter>Fixtures</Filter>
-    </ClInclude>
-    <ClInclude Include="Fixtures\SystemFixture.h">
-      <Filter>Fixtures</Filter>
-    </ClInclude>
-    <ClInclude Include="Fixtures\UIFixture.h">
-      <Filter>Fixtures</Filter>
-    </ClInclude>
-    <ClInclude Include="Tests\Helper.h">
-      <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\UIComponentT_Single.h">
       <Filter>UserInterface\UIComponent</Filter>
@@ -213,9 +159,6 @@
     </ClInclude>
     <ClInclude Include="System\SceneManagerT.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ComponentHelper.h">
-      <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\ComponentT.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
@@ -271,6 +214,12 @@
     <ClInclude Include="UserInterface\UIComponent\UIHierarchyT.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\ComponentHelper.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\MockComponent.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Mocks">
@@ -284,12 +233,6 @@
     </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{e26b9376-3546-4bbd-b65b-a9e687755dbd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fixtures">
-      <UniqueIdentifier>{a3c5f77b-3cc7-486e-955c-dd373170a231}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tests">
-      <UniqueIdentifier>{dd6bf8c4-e29c-4acb-9ef2-41d2a32d6c3c}</UniqueIdentifier>
     </Filter>
     <Filter Include="UserInterface">
       <UniqueIdentifier>{5df43ce2-18fd-4638-a9f7-b520d586ad65}</UniqueIdentifier>

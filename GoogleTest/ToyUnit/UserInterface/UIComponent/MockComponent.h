@@ -1,7 +1,17 @@
 #pragma once
+#include "Mocks/Stubs/UIComponentStub.h"
 #include "Toy/UserInterface/UIComponent/UILayout.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/UIComponent/UIComponentEx.h"
+
+class MockComponent : public UIComponentStub
+{
+public:
+	bool Setup() noexcept; //CreateComponent<T> 할때 필요한 함수.
+
+protected:
+	virtual unique_ptr<UIComponent> CreateClone() const override;
+};
 
 struct ComponentDesc
 {
@@ -39,19 +49,4 @@ ComponentType* AttachMockComponent(UIComponent* root, const ComponentDesc& compD
 	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
 	UIEx(root).AttachComponent(move(comp), compDesc.position);
 	return compPtr;
-}
-
-template <typename Func>
-auto ExecuteAndUpdate(UIComponent* component, Func&& func) noexcept
-{
-	if constexpr (is_void_v<decltype(func())>) {
-		func();
-		component->UpdatePositionsManually(true);
-	}
-	else
-	{
-		auto result = func();
-		component->UpdatePositionsManually(true);
-		return result;
-	}
 }

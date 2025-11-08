@@ -1,6 +1,6 @@
 #pragma once
-#include "Mocks/MockUtils.h"
-#include "Mocks/MockComponents.h"
+#include "MockComponent.h"
+#include "ComponentHelper.h"
 
 enum class ChangeExpect
 {

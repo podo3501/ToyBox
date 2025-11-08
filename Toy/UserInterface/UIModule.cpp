@@ -58,8 +58,9 @@ bool UIModule::SetupMainComponent(const UILayout& layout, const string& name,
 
 	unique_ptr<Panel> panel = CreateComponent<Panel>(layout);
 	panel->SetUIModule(this);
+	//UIEx(panel).Rename(name);
 	ReturnIfFalse(UIEx(panel).Rename(name));
-	ReturnIfFalse(UIEx(panel).RenameRegion("UIModuleMainEntry"));
+	//ReturnIfFalse(UIEx(panel).RenameRegion("UIModuleMainEntry"));
 	m_children.push_back(move(panel));
 
 	return true;

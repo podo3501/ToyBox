@@ -16,7 +16,7 @@ public:
     virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
     virtual void ProcessIO(SerializerIO& serializer) override;
 
-    bool Setup(const UILayout& layout);
+    bool Setup(const UILayout& layout = {});
     void SetUIModule(UIModule* uiModule) noexcept { m_uiModule = uiModule; }
     inline UIModule* GetUIModule() const noexcept { return m_uiModule; }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "PatchTextureLite1T.h"
-#include "UserInterface/UIComponent/Components/ComponentHelper.h"
+#include "UserInterface/UIComponent/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 
 namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT

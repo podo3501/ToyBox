@@ -210,8 +210,11 @@
 --Update 함수에 if를 지울 수 있을것 같다.
 --UIComponent에 option중에서 active? 인가 이거 삭제 할수 있지 않을까?
 --툴에서 위치값 갱신 안되는 버그 수정
+--UIModule에서 panel에 name과 region이 버그가 있다. 이거 수정하고 tdd 쪽 수정하자.
+--UIModule로 바꾸고 나서 생긴 버그들 수정
 
-@UIModule에서 panel에 name과 region이 버그가 있다. 이거 수정하고 tdd 쪽 수정하자.
+@UIModule을 Locator로 바꾸고 내부는 전역에 사용하는 부분과 노드에 사용하는 부분으로 분리
+@UINameGenerator에서 ComponentID가 인자로 들어가는거 있는데 그거 수정.
 @Json을 tdd에서 파일로 쓰는 부분을 DI로 수정하고 메모리에 쓰게끔 수정해서 tdd 속도 및 의존성 줄이기
 @UIComponent에 RecursiveUpdate를 수정. RecursivePositionUpdate와 합칠수 있으면 좋다. 
 
@@ -237,8 +240,6 @@
 
 @툴에서 리스트 할 수 있게끔
     컨테이너 간격 셋팅 
-    UIModule로 바꾸고 나서 생긴 버그들 수정
-        likely로 바꿔야 할듯
 
 @콤보박스 컴포넌트 만들기
 @툴에서 콤보박스 할 수 있게끔

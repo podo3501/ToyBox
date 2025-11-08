@@ -53,6 +53,21 @@ auto RenderLogger(const wstring& label = L"")
 		};
 }
 
+template <typename Func>
+auto ExecuteAndUpdate(UIComponent* component, Func&& func) noexcept
+{
+	if constexpr (is_void_v<decltype(func())>) {
+		func();
+		component->UpdatePositionsManually(true);
+	}
+	else
+	{
+		auto result = func();
+		component->UpdatePositionsManually(true);
+		return result;
+	}
+}
+
 //틱값을 3ms 를 넣어서 약간 가게한 timer.
 DX::StepTimer GetTickTimer() noexcept; 
 

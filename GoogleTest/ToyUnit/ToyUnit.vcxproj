@@ -130,13 +130,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Fixtures\FixtureSuite.h" />
-    <ClInclude Include="Fixtures\SystemFixture.h" />
-    <ClInclude Include="Fixtures\UIFixture.h" />
-    <ClInclude Include="Mocks\MockComponents.h" />
     <ClInclude Include="Mocks\MockInputManager.h" />
     <ClInclude Include="Mocks\MockRenderer.h" />
-    <ClInclude Include="Mocks\MockUtils.h" />
     <ClInclude Include="Mocks\Stubs\IInputManagerStub.h" />
     <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h" />
     <ClInclude Include="Mocks\Stubs\UIComponentStub.h" />
@@ -144,14 +139,13 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="System\EventDispatcherManagerT.h" />
     <ClInclude Include="System\SceneManagerT.h" />
-    <ClInclude Include="Tests\Helper.h" />
     <ClInclude Include="UserInterface\BaseModuleT.h" />
     <ClInclude Include="UserInterface\CommandHistory\TexResCommandHistoryT.h" />
     <ClInclude Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
-    <ClInclude Include="UserInterface\UIComponent\Components\ComponentHelper.h" />
+    <ClInclude Include="UserInterface\UIComponent\ComponentHelper.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ComponentT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ContainerT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ListAreaT.h" />
@@ -168,6 +162,7 @@
     <ClInclude Include="UserInterface\UIComponent\Components\TextAreaT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\TextureSwitcherT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.h" />
+    <ClInclude Include="UserInterface\UIComponent\MockComponent.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentExT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT_Single.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
@@ -176,12 +171,8 @@
     <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Fixtures\FixtureSuite.cpp" />
-    <ClCompile Include="Fixtures\SystemFixture.cpp" />
-    <ClCompile Include="Fixtures\UIFixture.cpp" />
     <ClCompile Include="Mocks\MockInputManager.cpp" />
     <ClCompile Include="Mocks\MockRenderer.cpp" />
-    <ClCompile Include="Mocks\MockUtils.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -191,22 +182,13 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="System\EventDispatcherManagerT.cpp" />
     <ClCompile Include="System\SceneManagerT.cpp" />
-    <ClCompile Include="Tests\BasicComponent.cpp" />
-    <ClCompile Include="Tests\ComplexComponent.cpp" />
-    <ClCompile Include="Tests\ComponentEvent.cpp" />
-    <ClCompile Include="Tests\ContainerComponent.cpp" />
-    <ClCompile Include="Tests\Helper.cpp" />
-    <ClCompile Include="Tests\Integration.cpp" />
-    <ClCompile Include="Tests\TextureSwitcherComponent.cpp" />
-    <ClCompile Include="Tests\UIModuleConnection.cpp" />
-    <ClCompile Include="Tests\UndoRedo.cpp" />
     <ClCompile Include="UserInterface\BaseModuleT.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TexResCommandHistoryT.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\Components\ComponentHelper.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\ComponentHelper.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\ComponentT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\ContainerT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\ListAreaT.cpp" />
@@ -223,6 +205,7 @@
     <ClCompile Include="UserInterface\UIComponent\Components\TextAreaT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\TextureSwitcherT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\MockComponent.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentExT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT_Single.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />

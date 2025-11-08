@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "RenderTextureT.h"
-#include "UserInterface/UIComponent/Components/ComponentHelper.h"
+#include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 
 namespace UserInterfaceT::UIComponentT::ComponentT

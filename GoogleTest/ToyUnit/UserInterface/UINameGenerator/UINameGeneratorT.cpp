@@ -29,6 +29,14 @@ namespace UserInterfaceT::UINameGeneratorT
 			make_pair("region", "name_1")); //같은 Name일때는 _1을 붙여 리턴한다.
 	}
 
+	TEST_F(UINameGeneratorT, MakeNameOf_EmptyRegion)
+	{
+		EXPECT_EQ(m_nameGen->MakeNameOf("name", "", ComponentID::PatchTextureStd1),
+			make_pair("", "name"));
+		EXPECT_EQ(m_nameGen->MakeNameOf("name", "", ComponentID::PatchTextureStd1),
+			make_pair("", "name_1"));
+	}
+
 	TEST_F(UINameGeneratorT, MakeRegionOf)
 	{
 		EXPECT_EQ(m_nameGen->MakeRegionOf("region"), "region");

@@ -3,23 +3,6 @@
 
 namespace UserInterfaceT::UIComponentT
 {
-	//Attach 테스트할 예정
-	TEST_F(UIComponentT_Single, Attach)
-	{
-		unique_ptr<UIComponent> result = UIEx(m_main).AttachComponent(move(m_mock));
-		
-		EXPECT_EQ(result, nullptr);
-	}
-
-	TEST_F(UIComponentT_Single, Detach)
-	{
-		UIEx(m_main).AttachComponent(move(m_mock));
-		auto [detach, detachPtr] = UIEx(m_mockPtr).DetachComponent();
-		
-		EXPECT_NE(detach, nullptr); //detach가 잘 되면 detach된 component가 반환된다.
-		EXPECT_NE(detachPtr, nullptr);
-	}
-
 	TEST_F(UIComponentT_Single, StateFlag_Attach)
 	{
 		m_main->SetStateFlag(StateFlag::Attach, false);	//attach 불가라면

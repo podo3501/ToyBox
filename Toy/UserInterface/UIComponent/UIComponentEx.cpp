@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "UIComponent.h"
 #include "IRenderer.h"
@@ -16,7 +16,7 @@ UIComponentEx::UIComponentEx(UIComponent* component) noexcept :
 unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
-	ZoneScopedN("AttachComponent"); // ÀüÃ¼ ÇÔ¼ö ÃøÁ¤
+	ZoneScopedN("AttachComponent"); // ì „ì²´ í•¨ìˆ˜ ì¸¡ì •
 
 	if (!m_component->HasStateFlag(StateFlag::Attach))
 		return child;
@@ -76,14 +76,14 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponentEx::DetachComponent() noe
 	UIComponent* parent = m_component->m_parent;
 	if (!parent || !parent->HasStateFlag(StateFlag::Detach)) return {};
 
-	if (UINameGenerator* nameGen = GetNameGenerator())	// ÀÌ¸§ Á¦°Å Ã³¸®
+	if (UINameGenerator* nameGen = GetNameGenerator())	// ì´ë¦„ ì œê±° ì²˜ë¦¬
 	{
 		bool allRemoved = m_component->ForEachChildWithRegion(parent->GetMyRegion(),
 			[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
-				if (nameGen->IsUnusedRegion(region)) //regionÀÌ ¾ø´Â °æ¿ì´Â detach ÇÏ´Ù°¡ ºÎ¸ğ ³ëµå¿¡¼­ regionÀ» Áö¿î °æ¿ìÀÌ´Ù.
+				if (nameGen->IsUnusedRegion(region)) //regionì´ ì—†ëŠ” ê²½ìš°ëŠ” detach í•˜ë‹¤ê°€ ë¶€ëª¨ ë…¸ë“œì—ì„œ regionì„ ì§€ìš´ ê²½ìš°ì´ë‹¤.
 					return true;
 
-				if (isNewRegion) //³ëµå°¡ »õ·Î¿î regionÀÌ¸é 
+				if (isNewRegion) //ë…¸ë“œê°€ ìƒˆë¡œìš´ regionì´ë©´ 
 					return nameGen->RemoveRegion(region);
 				return nameGen->RemoveName(region, component->GetName());
 			});
@@ -136,36 +136,75 @@ void UIComponentEx::AssignNamesInRegion(UIComponent* component, UINameGenerator*
 		});
 }
 
-bool UIComponentEx::RenameRegion(const string& region) noexcept
+bool UIComponentEx::RenameRegion(const string& newRegion) noexcept
 {
+	UIComponent* c = m_component;
 	UINameGenerator* nameGen = GetNameGenerator();
-	if (!nameGen)	//ÀÓ½Ã·Î ¸¸µç componentÀÎ °æ¿ì NameGenerator°¡ ¾ø´Ù. ³ªÁß¿¡ UIModule¿¡ attach µÉ¶§ uniqueÀÎÁö È®ÀÎÇÏ°Ô µÇ´Ï±î Áö±İÀº ´Ù¸¥ ³ëµå¿¡ °°Àº region, ¶Ç´Â ÀÌ¸§ÀÌ ÀÖ¾îµµ »ó°ü¾ø´Ù.
+
+	//NameGeneratorê°€ ì—†ìœ¼ë©´ ì„ì‹œ ì»´í¬ë„ŒíŠ¸. ë‹¨ìˆœíˆ ì§€ì—­ ì´ë¦„ë§Œ ë°”ê¾¼ë‹¤.
+	if (!nameGen)
 	{
-		m_component->m_region = region;
+		c->m_region = newRegion;
 		return true;
 	}
 
-	//ReturnIfFalse(nameGen->IsUnusedRegion(region));
+	const string oldRegion = c->GetRegion();
+	if (oldRegion == newRegion)
+		return true;
 
-	UIComponent* rootRegionComponent = region.empty() ?
-		m_component->GetParentRegionRoot() :
-		m_component->GetRegionRoot();
+	UIComponent* parentRoot = c->GetParentRegionRoot();
+	auto Reassign = [&](UIComponent* target, const string& r) {
+		AssignNamesInRegion(target, nameGen, r);
+		};
 
-	const string& rootRegion = rootRegionComponent->GetRegion();
-	ReturnIfFalse(nameGen->RemoveRegion(rootRegion));
-	if (rootRegionComponent != m_component)
+	if (newRegion == "") // regionì´ "" ë¼ë©´ ê¸°ì¡´ regionì„ ì‚­ì œ ì²˜ë¦¬í•œë‹¤.
+		return RemoveAndMergeRegion(c, parentRoot, nameGen, oldRegion);
+
+	//ìƒˆ region ì´ë¦„ì´ ì´ë¯¸ ì¡´ì¬í•˜ë©´ ì¤‘ë³µ ì²˜ë¦¬
+	if (!nameGen->IsUnusedRegion(newRegion))
+		return false;
+
+	return ReplaceAndMergeRegion(c, parentRoot, nameGen, oldRegion, newRegion);
+}
+
+bool UIComponentEx::RemoveAndMergeRegion(UIComponent* c, UIComponent* parentRoot, 
+	UINameGenerator* nameGen, const string& oldRegion) noexcept
+{
+	auto Reassign = [&](UIComponent* target, const string& r) {
+		AssignNamesInRegion(target, nameGen, r);
+		};
+
+	// ê¸°ì¡´ region ì œê±°
+	ReturnIfFalse(nameGen->RemoveRegion(oldRegion));
+	c->m_region.clear();
+
+	// root ì—¬ë¶€ì— ë”°ë¼ ì¬ì •ë ¬ ëŒ€ìƒ ê²°ì •
+	UIComponent* target = (c == parentRoot) ? c : parentRoot;
+	const string& targetRegion = target->GetRegion();
+
+	ReturnIfFalse(nameGen->RemoveRegion(targetRegion));
+	Reassign(target, targetRegion);
+	return true;
+}
+
+bool UIComponentEx::ReplaceAndMergeRegion(UIComponent* c, UIComponent* parentRoot,
+	UINameGenerator* nameGen, const string& oldRegion, const string& newRegion) noexcept
+{
+	auto Reassign = [&](UIComponent* target, const string& r) {
+		AssignNamesInRegion(target, nameGen, r);
+		};
+
+	//ê¸°ì¡´ regionì„ ì œê±°í•˜ê³  ìƒˆ region ì¬í• ë‹¹
+	ReturnIfFalse(nameGen->RemoveRegion(oldRegion));
+	Reassign(c, newRegion);
+
+	//ì´ì „ì— regionì´ ì—†ì—ˆë˜ ê²½ìš° ìƒìœ„ë„ ê°±ì‹ 
+	if (oldRegion == "" && c != parentRoot)
 	{
-		const string& preRegion = m_component->GetRegion();
-		if (!preRegion.empty())
-		{
-			ReturnIfFalse(nameGen->RemoveRegion(preRegion));
-			m_component->m_region.clear();
-		}
-
-		if(!region.empty()) //regionÀÌ °ªÀÌ ¾ø´Ù¸é »óÀ§ region¿¡ ÀÌ¸§ÀÌ Æ÷ÇÔµÇ°Ô µÈ´Ù.
-			AssignNamesInRegion(m_component, nameGen, region);
+		string parentRegion = parentRoot->GetRegion();
+		ReturnIfFalse(nameGen->RemoveRegion(parentRegion));
+		Reassign(parentRoot, parentRegion);
 	}
-	AssignNamesInRegion(rootRegionComponent, nameGen, rootRegion);
 
 	return true;
 }
@@ -173,13 +212,13 @@ bool UIComponentEx::RenameRegion(const string& region) noexcept
 UIComponent* UIComponentEx::FindComponent(const string& name) noexcept
 {
 	UIComponent* root = m_component->GetRegionRoot();
-	if (!root) root = m_component->GetRoot(); //RegionÀÌ ¾øÀ» °æ¿ì root°¡ region root°¡ µÇ°í ""°¡ region nameÀÌ´Ù.
+	if (!root) root = m_component->GetRoot(); //Regionì´ ì—†ì„ ê²½ìš° rootê°€ region rootê°€ ë˜ê³  ""ê°€ region nameì´ë‹¤.
 	const string& region = root->GetRegion();
 	UIComponent* foundComponent = nullptr;
 
 	root->ForEachChildBool([this, &foundComponent, &name, &region](UIComponent* component) {
 		const string& curRegion = component->GetRegion();
-		if (!curRegion.empty() && region != curRegion) return TraverseResult::Stop; //Region ·çÆ®°¡ ¾Æ´Ñ »õ·Î¿î regionÀÌ ³ª¿ÔÀ»¶§ 
+		if (!curRegion.empty() && region != curRegion) return TraverseResult::Stop; //Region ë£¨íŠ¸ê°€ ì•„ë‹Œ ìƒˆë¡œìš´ regionì´ ë‚˜ì™”ì„ë•Œ 
 
 		if (component->GetName() == name)
 		{
@@ -193,25 +232,42 @@ UIComponent* UIComponentEx::FindComponent(const string& name) noexcept
 	return foundComponent;
 }
 
+//UIComponent* UIComponentEx::FindRegionComponent(const string& findRegion) noexcept
+//{
+//	UIComponent* root = m_component->GetRegionRoot();
+//	if (!root) root = m_component->GetRoot();
+//	const string& rootRegion = root->GetRegion();
+//	UIComponent* foundComponent{ nullptr };
+//
+//	root->ForEachChildBool([&foundComponent, &rootRegion, &findRegion](UIComponent* component) {
+//		const string& curRegion = component->GetRegion();
+//		if (curRegion.empty()) return TraverseResult::Continue;
+//
+//		if (curRegion == findRegion)
+//		{
+//			foundComponent = component;
+//			return TraverseResult::Stop;
+//		}
+//
+//		if (rootRegion != curRegion) return TraverseResult::Stop; //Region ë£¨íŠ¸ê°€ ì•„ë‹Œ ìƒˆë¡œìš´ regionì´ ë‚˜ì™”ì„ë•Œ
+//
+//		return TraverseResult::Continue;
+//		});
+//
+//	return foundComponent;
+//}
+
 UIComponent* UIComponentEx::FindRegionComponent(const string& findRegion) noexcept
 {
-	UIComponent* root = m_component->GetRegionRoot();
-	if (!root) root = m_component->GetRoot();
-	const string& rootRegion = root->GetRegion();
-	UIComponent* foundComponent{ nullptr };
+	UIComponent* root = m_component->GetRoot();
+	UIComponent* foundComponent = nullptr;
 
-	root->ForEachChildBool([&foundComponent, &rootRegion, &findRegion](UIComponent* component) {
-		const string& curRegion = component->GetRegion();
-		if (curRegion.empty()) return TraverseResult::Continue;
-
-		if (curRegion == findRegion)
+	root->ForEachChildBool([&](UIComponent* c) {
+		if (c->GetRegion() == findRegion)
 		{
-			foundComponent = component;
+			foundComponent = c;
 			return TraverseResult::Stop;
 		}
-
-		if (rootRegion != curRegion) return TraverseResult::Stop; //Region ·çÆ®°¡ ¾Æ´Ñ »õ·Î¿î regionÀÌ ³ª¿ÔÀ»¶§
-
 		return TraverseResult::Continue;
 		});
 
@@ -233,14 +289,14 @@ vector<UIComponent*> UIComponentEx::PickComponents(const XMINT2& pos) noexcept
 		const bool inside = Contains(comp->GetArea(), pos);
 
 		if (comp->GetTypeID() == ComponentID::RenderTexture && !inside) 
-			return TraverseResult::ChildrenSkip; // RenderTexture´Â ¿µ¿ª ¹ÛÀÌ¸é ÀÚ½Ä Å½»ö Áß´Ü
+			return TraverseResult::ChildrenSkip; // RenderTextureëŠ” ì˜ì—­ ë°–ì´ë©´ ìì‹ íƒìƒ‰ ì¤‘ë‹¨
 
-		if (inside) // ¿µ¿ª ¾ÈÀÌ¸é ¸®½ºÆ®¿¡ Ãß°¡
+		if (inside) // ì˜ì—­ ì•ˆì´ë©´ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
 			findList.push_back(comp);
 
 		return TraverseResult::Continue;
 		});
-	ranges::reverse(findList); //¾ÕÀ¸·Î ³Ö¾îÁÖ´Â °Íº¸´Ù push_back ÇÏ°í reverse ÇÏ´Â°Ô ´õ ºü¸£´Ù. vector°¡ ´Ü¼ø ¹è¿­ÀÌ¶ó Ä³½¬°¡ ÁÁ±â ¶§¹®¿¡ ÀÌ°É·Î ÇÑ´Ù.	 
+	ranges::reverse(findList); //ì•ìœ¼ë¡œ ë„£ì–´ì£¼ëŠ” ê²ƒë³´ë‹¤ push_back í•˜ê³  reverse í•˜ëŠ”ê²Œ ë” ë¹ ë¥´ë‹¤. vectorê°€ ë‹¨ìˆœ ë°°ì—´ì´ë¼ ìºì‰¬ê°€ ì¢‹ê¸° ë•Œë¬¸ì— ì´ê±¸ë¡œ í•œë‹¤.	 
 	return findList;
 }
 
@@ -249,16 +305,16 @@ vector<IMouseEventReceiver*> UIComponentEx::PickMouseReceivers(const XMINT2& pos
 	vector<IMouseEventReceiver*> findList;
 	m_component->ForEachChildToRender([&findList, &pos](UIComponent* comp) {
 		if (comp->GetTypeID() == ComponentID::RenderTexture && !Contains(comp->GetArea(), pos))
-			return TraverseResult::ChildrenSkip; // RenderTexture ¿µ¿ª ¹ÛÀÌ¸é ÀÚ½Ä Å½»ö Áß´Ü
+			return TraverseResult::ChildrenSkip; // RenderTexture ì˜ì—­ ë°–ì´ë©´ ìì‹ íƒìƒ‰ ì¤‘ë‹¨
 
-		if (auto eventReceiver = comp->AsMouseEventReceiver(); eventReceiver) { // ¸¶¿ì½º ÀÌº¥Æ® ¼ö½Å °¡´ÉÇÑÁö ¸ÕÀú È®ÀÎ
+		if (auto eventReceiver = comp->AsMouseEventReceiver(); eventReceiver) { // ë§ˆìš°ìŠ¤ ì´ë²¤íŠ¸ ìˆ˜ì‹  ê°€ëŠ¥í•œì§€ ë¨¼ì € í™•ì¸
 			if (Contains(comp->GetArea(), pos))
 				findList.push_back(eventReceiver);
 		}
 
 		return TraverseResult::Continue;
 		});
-	ranges::reverse(findList); //¾ÕÀ¸·Î ³Ö¾îÁÖ´Â °Íº¸´Ù push_back ÇÏ°í reverse ÇÏ´Â°Ô ´õ ºü¸£´Ù. vector°¡ ´Ü¼ø ¹è¿­ÀÌ¶ó Ä³½¬°¡ ÁÁ±â ¶§¹®¿¡ ÀÌ°É·Î ÇÑ´Ù.	 
+	ranges::reverse(findList); //ì•ìœ¼ë¡œ ë„£ì–´ì£¼ëŠ” ê²ƒë³´ë‹¤ push_back í•˜ê³  reverse í•˜ëŠ”ê²Œ ë” ë¹ ë¥´ë‹¤. vectorê°€ ë‹¨ìˆœ ë°°ì—´ì´ë¼ ìºì‰¬ê°€ ì¢‹ê¸° ë•Œë¬¸ì— ì´ê±¸ë¡œ í•œë‹¤.	 
 	return findList;
 }
 
@@ -266,7 +322,7 @@ XMUINT2 UIComponentEx::GetChildrenBoundsSize() const noexcept
 {
 	if (m_component == nullptr) return {};
 
-	Rectangle totalArea{ m_component->GetArea() }; //ÃÊ±â°ªÀ» ÁöÁ¤ÇÏÁö ¾ÊÀ¸¸é 0, 0 ºÎÅÍ ½ÃÀÛÇÏ´Â Å« »ç°¢ÇüÀÌ unionµÈ´Ù.
+	Rectangle totalArea{ m_component->GetArea() }; //ì´ˆê¸°ê°’ì„ ì§€ì •í•˜ì§€ ì•Šìœ¼ë©´ 0, 0 ë¶€í„° ì‹œì‘í•˜ëŠ” í° ì‚¬ê°í˜•ì´ unionëœë‹¤.
 	m_component->ForEachChildConst([&totalArea](const UIComponent* child) {
 		const auto& area = child->GetArea();
 		totalArea = Rectangle::Union(totalArea, area);
