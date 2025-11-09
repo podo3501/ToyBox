@@ -25,7 +25,8 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 	{
 		bool success = child->ForEachChildWithRegion(m_component->GetMyRegion(),
 			[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
-				auto namesOpt = nameGen->MakeNameOf(component->GetName(), region, component->GetTypeID(), isNewRegion);
+				const string& name = component->GetName().empty() ? EnumToString<ComponentID>(component->GetTypeID()) : component->GetName();
+				auto namesOpt = nameGen->MakeNameOf(region, name, isNewRegion);
 				if (!namesOpt) return false;
 				const auto& [newRegion, newName] = *namesOpt;
 				
@@ -119,7 +120,7 @@ bool UIComponentEx::Rename(const string& name) noexcept
 	if (!nameGen->IsUnusedName(region, name)) return false;
 
 	nameGen->RemoveName(region, m_component->GetName());
-	auto namesOpt = nameGen->MakeNameOf(name, region, m_component->GetTypeID());
+	auto namesOpt = nameGen->MakeNameOf(region, name);
 	if (!namesOpt) return false;
 	m_component->m_name = namesOpt->second;
 
@@ -129,7 +130,7 @@ bool UIComponentEx::Rename(const string& name) noexcept
 void UIComponentEx::AssignNamesInRegion(UIComponent* component, UINameGenerator* nameGen, const string& region) noexcept
 {
 	component->ForEachChildInSameRegion([nameGen, &region, component](UIComponent* curComponent) {
-		auto namesOpt = nameGen->MakeNameOf(curComponent->GetName(), region, curComponent->GetTypeID());
+		auto namesOpt = nameGen->MakeNameOf(region, curComponent->GetName());
 		curComponent->m_name = move(namesOpt->second);
 		if (curComponent == component)
 			curComponent->m_region = move(namesOpt->first);

@@ -1,7 +1,7 @@
 #pragma once
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIModule.h"
-#include "Mocks/MockRenderer.h"
+#include "Internal/MockRenderer.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 
 class BaseModuleT : public ::testing::Test

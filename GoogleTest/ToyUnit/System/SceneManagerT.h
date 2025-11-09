@@ -1,6 +1,6 @@
 #pragma once
 #include "Toy/Locator/SceneLocator.h"
-#include "Mocks/MockRenderer.h"
+#include "Internal/MockRenderer.h"
 
 class SceneManagerT : public ::testing::Test
 {

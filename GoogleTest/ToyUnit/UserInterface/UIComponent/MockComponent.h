@@ -1,8 +1,16 @@
 #pragma once
-#include "Mocks/Stubs/UIComponentStub.h"
 #include "Toy/UserInterface/UIComponent/UILayout.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/UIComponent/UIComponentEx.h"
+
+class UIComponentStub : public UIComponent
+{
+public:
+	virtual ComponentID GetTypeID() const noexcept { return UIComponent::GetTypeStatic(); }
+
+protected:
+	virtual unique_ptr<UIComponent> CreateClone() const override { return nullptr; }
+};
 
 class MockComponent : public UIComponentStub
 {

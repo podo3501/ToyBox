@@ -3,15 +3,6 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Mocks\MockRenderer.cpp">
-      <Filter>Mocks</Filter>
-    </ClCompile>
-    <ClCompile Include="Mocks\MockInputManager.cpp">
-      <Filter>Mocks</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\UIComponentT_Single.cpp">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
@@ -105,28 +96,19 @@
     <ClCompile Include="UserInterface\UIComponent\MockComponent.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
+    <ClCompile Include="Internal\MockInputManager.cpp">
+      <Filter>Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="Internal\MockRenderer.cpp">
+      <Filter>Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\CoreTraverserT.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h">
-      <Filter>Mocks\Stubs\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="Mocks\MockRenderer.h">
-      <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="Mocks\Stubs\IInputManagerStub.h">
-      <Filter>Mocks\Stubs</Filter>
-    </ClInclude>
-    <ClInclude Include="Mocks\MockInputManager.h">
-      <Filter>Mocks</Filter>
-    </ClInclude>
-    <ClInclude Include="Mocks\Stubs\UIComponentStub.h">
-      <Filter>Mocks\Stubs</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\UIComponentT_Single.h">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
@@ -220,17 +202,23 @@
     <ClInclude Include="UserInterface\UIComponent\MockComponent.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
+    <ClInclude Include="Internal\Stubs\IInputManagerStub.h">
+      <Filter>Internal\Stubs</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\Stubs\IRendererStub.h">
+      <Filter>Internal\Stubs</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\MockInputManager.h">
+      <Filter>Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\MockRenderer.h">
+      <Filter>Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\CoreTraverserT.h">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Mocks">
-      <UniqueIdentifier>{d282f695-392c-4846-ad3a-0aabc2ee8151}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mocks\Stubs">
-      <UniqueIdentifier>{15f7f71f-e9d1-44e8-bf22-19260aedbe62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mocks\Stubs\Include">
-      <UniqueIdentifier>{7a1395a0-7c26-46a8-84cc-28aeb905c270}</UniqueIdentifier>
-    </Filter>
     <Filter Include="System">
       <UniqueIdentifier>{e26b9376-3546-4bbd-b65b-a9e687755dbd}</UniqueIdentifier>
     </Filter>
@@ -260,6 +248,12 @@
     </Filter>
     <Filter Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd">
       <UniqueIdentifier>{739b4106-bedc-4824-be82-801c56675d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Internal">
+      <UniqueIdentifier>{2976d131-c0db-4eb4-8bda-80e1a12946df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Internal\Stubs">
+      <UniqueIdentifier>{91d63998-6795-40bd-9ead-795877765793}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

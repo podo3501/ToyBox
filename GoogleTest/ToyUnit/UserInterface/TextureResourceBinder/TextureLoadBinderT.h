@@ -1,6 +1,6 @@
 #pragma once
 #include "Shared/Framework/EnvironmentLocator.h"
-#include "Mocks/MockRenderer.h"
+#include "Internal/MockRenderer.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureLoadBinder.h"
 
 class TextureLoadBinderT : public ::testing::Test

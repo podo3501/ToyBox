@@ -1,5 +1,5 @@
 #pragma once
-#include "Stubs/Include/IRendererStub.h"
+#include "Stubs/IRendererStub.h"
 
 struct MockTextureInfo
 {

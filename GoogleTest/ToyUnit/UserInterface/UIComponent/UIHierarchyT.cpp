@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "UIHierarchyT.h"
-#include "Mocks/Stubs/UIComponentStub.h"
-#include "Mocks/MockUtils.h"
-#include "Mocks/MockRenderer.h"
+#include "MockComponent.h"
+#include "Internal/MockRenderer.h"
 
 class MockRenderTraversal : public UIComponentStub
 {

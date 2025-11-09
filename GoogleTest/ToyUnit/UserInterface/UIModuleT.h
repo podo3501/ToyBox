@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseModuleT.h"
-#include "Mocks/MockInputManager.h"
+#include "Internal/MockInputManager.h"
 #include "Toy/Locator/InputLocator.h"
 #include "Shared/System/StepTimer.h"
 

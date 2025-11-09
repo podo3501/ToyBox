@@ -21,8 +21,8 @@ public:
     bool RemoveRegion(const string& region) noexcept;
     bool IsUnusedRegion(string_view region) noexcept;
 
-    optional<pair<string, string>> MakeNameOf(const string& name, const string& region, 
-        ComponentID componentID, bool forceUniqueRegion = false) noexcept;
+    optional<pair<string, string>> MakeNameOf(const string& region, const string& name, 
+        bool forceUniqueRegion = false) noexcept;
     bool RemoveName(const string& region, const string& name) noexcept;
     bool IsUnusedName(string_view region, string_view name) noexcept;
 

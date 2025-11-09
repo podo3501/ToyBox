@@ -64,15 +64,18 @@ bool UINameGenerator::IsUnusedRegion(string_view region) noexcept
     return m_componentNameGens.find(region) == m_componentNameGens.end();
 }
 
-static bool IsGeneratedComponentName(const string& name, const string& prefix)
+static string GetComponentName(const string& name)
 {
-    if (name.empty()) return true;
+    if (name.empty()) return "";
 
     auto [curName, id] = ExtractNameAndId(name);
-    return curName == prefix;
+    if (!IsValidEnumString<ComponentID>(curName))
+        return "";
+    
+    return curName;
 }
 
-optional<pair<string, string>> UINameGenerator::MakeNameOf(const string& name, const string& region, ComponentID componentID, bool forceUniqueRegion) noexcept
+optional<pair<string, string>> UINameGenerator::MakeNameOf(const string& region, const string& name, bool forceUniqueRegion) noexcept
 {
     string newRegion{ region }, newName{ name };
     if (IsUnusedRegion(region) || forceUniqueRegion) //붙일 region이 존재하지 않거나, 존재하더라도 유니크이어야 한다면
@@ -85,8 +88,8 @@ optional<pair<string, string>> UINameGenerator::MakeNameOf(const string& name, c
     auto nameGen = GetComponentNameGen(newRegion);
     if (!nameGen) return nullopt;
 
-    string strComponent = EnumToString<ComponentID>(componentID);
-    if (IsGeneratedComponentName(name, strComponent))
+    string strComponent = GetComponentName(name);
+    if (!strComponent.empty())
         newName = nameGen->MakeNameFromComponent(strComponent);
     else
         newName = nameGen->MakeNameFromBase(name);

@@ -50,4 +50,34 @@ namespace UserInterfaceT::UIComponentT
 			ChangeExpect::ParentSizeChanged
 		);
 	}
+
+	TEST_F(UIComponentT, StateFlag_Attach)
+	{
+		m_main->SetStateFlag(StateFlag::Attach, false);	//attach 불가
+		auto [owner, _] = CreateMockComponent<MockComponent>();
+		unique_ptr<UIComponent> result = UIEx(m_main).AttachComponent(move(owner));
+
+		EXPECT_NE(result, nullptr); //attach가 안되면 nullptr 값이 아니다.
+	}
+
+	TEST_F(UIComponentT, StateFlag_Detach)
+	{
+		auto [owner, component] = CreateMockComponent<MockComponent>();
+		UIEx(m_main).AttachComponent(move(owner));
+		m_main->SetStateFlag(StateFlag::Detach, false);
+		auto [detach, detachPtr] = UIEx(component).DetachComponent();
+
+		EXPECT_EQ(detach, nullptr); //detach가 안되면 nullptr이 반환된다.
+		EXPECT_EQ(detachPtr, nullptr);
+	}
+
+	TEST_F(UIComponentT, StateFlag_SizeLocked)
+	{
+		m_main->ChangeSize(10, 10);
+		m_main->SetStateFlag(StateFlag::X_SizeLocked, true);
+		m_main->SetStateFlag(StateFlag::Y_SizeLocked, true);
+		m_main->ChangeSize(20, 20);
+
+		EXPECT_EQ(m_main->GetSize(), XMUINT2(10, 10));
+	}
 }

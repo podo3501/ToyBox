@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "UIModuleT.h"
 #include "UIComponent/MockComponent.h"
-#include "Mocks/Stubs/UIComponentStub.h"
 #include "Shared/System/StepTimer.h"
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"

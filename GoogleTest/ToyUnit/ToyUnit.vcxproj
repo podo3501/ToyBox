@@ -130,11 +130,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Mocks\MockInputManager.h" />
-    <ClInclude Include="Mocks\MockRenderer.h" />
-    <ClInclude Include="Mocks\Stubs\IInputManagerStub.h" />
-    <ClInclude Include="Mocks\Stubs\Include\IRendererStub.h" />
-    <ClInclude Include="Mocks\Stubs\UIComponentStub.h" />
+    <ClInclude Include="Internal\MockInputManager.h" />
+    <ClInclude Include="Internal\MockRenderer.h" />
+    <ClInclude Include="Internal\Stubs\IInputManagerStub.h" />
+    <ClInclude Include="Internal\Stubs\IRendererStub.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="System\EventDispatcherManagerT.h" />
@@ -162,17 +161,17 @@
     <ClInclude Include="UserInterface\UIComponent\Components\TextAreaT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\TextureSwitcherT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.h" />
+    <ClInclude Include="UserInterface\UIComponent\CoreTraverserT.h" />
     <ClInclude Include="UserInterface\UIComponent\MockComponent.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentExT.h" />
-    <ClInclude Include="UserInterface\UIComponent\UIComponentT_Single.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIHierarchyT.h" />
     <ClInclude Include="UserInterface\UIModuleT.h" />
     <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Mocks\MockInputManager.cpp" />
-    <ClCompile Include="Mocks\MockRenderer.cpp" />
+    <ClCompile Include="Internal\MockInputManager.cpp" />
+    <ClCompile Include="Internal\MockRenderer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -205,9 +204,9 @@
     <ClCompile Include="UserInterface\UIComponent\Components\TextAreaT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\TextureSwitcherT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\CoreTraverserT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\MockComponent.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentExT.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\UIComponentT_Single.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIHierarchyT.cpp" />
     <ClCompile Include="UserInterface\UIModuleT.cpp" />

@@ -1,6 +1,6 @@
 #pragma once
 #include "UserInterface/TextureResourceBinder/MockTextureResourceBinder.h"
-#include "Mocks/MockRenderer.h"
+#include "Internal/MockRenderer.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "Toy/Locator/EventDispatcherLocator.h"
 
@@ -22,12 +22,3 @@ private:
 	unique_ptr<MockTextureResourceBinder> m_resBinder;
 	unique_ptr<IEventDispatcherManager> m_nullEventDispatcher;
 };
-
-//unique_ptr<IEventDispatcherManager> m_eventDispatcher;
-//testing::MockFunction<void(UIEvent)> m_mockCallback;
-//};
-//
-//void EventDispatcherManagerT::SetUp()
-//{
-//	m_eventDispatcher = CreateEventDispatcherManager();
-//	EventDispatcherLocator::Provide(m_eventDispatcher.get());
