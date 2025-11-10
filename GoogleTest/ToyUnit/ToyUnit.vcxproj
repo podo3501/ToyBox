@@ -161,8 +161,10 @@
     <ClInclude Include="UserInterface\UIComponent\Components\TextAreaT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\TextureSwitcherT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.h" />
-    <ClInclude Include="UserInterface\UIComponent\CoreTraverserT.h" />
     <ClInclude Include="UserInterface\UIComponent\MockComponent.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\AttachmentTraverserT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverserT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentExT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIHierarchyT.h" />
@@ -204,8 +206,10 @@
     <ClCompile Include="UserInterface\UIComponent\Components\TextAreaT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\TextureSwitcherT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\CoreTraverserT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\MockComponent.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\AttachmentTraverserT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverserT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentExT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIHierarchyT.cpp" />

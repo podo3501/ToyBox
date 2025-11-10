@@ -30,7 +30,7 @@ void PatchTextureLite::SetIndexedSource(size_t index, const vector<Rectangle>& s
 
 bool PatchTextureLite::ForEach(predicate<PatchTextureLite*, size_t> auto&& Each)
 {
-	const auto& components = GetChildComponents();
+	const auto& components = GetChildren();
 	size_t size = components.size();
 	ReturnIfFalse(size >= 3);
 

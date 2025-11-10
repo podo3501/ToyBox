@@ -27,7 +27,7 @@ TextureSwitcher::TextureSwitcher(const TextureSwitcher& o) :
 
 void TextureSwitcher::ReloadDatas() noexcept
 {
-	vector<UIComponent*> componentList = GetChildComponents();
+	vector<UIComponent*> componentList = GetChildren();
 	m_patchTexL = static_cast<PatchTextureLite*>(componentList[0]);
 }
 
@@ -149,7 +149,7 @@ bool TextureSwitcher::ChangeBindKey(TextureResourceBinder* resBinder, const stri
 
 bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	return ranges::all_of(GetChildComponents(), [&size, isForce](const auto& component) {
+	return ranges::all_of(GetChildren(), [&size, isForce](const auto& component) {
 		return component->ChangeSize(size, isForce); });
 }
 

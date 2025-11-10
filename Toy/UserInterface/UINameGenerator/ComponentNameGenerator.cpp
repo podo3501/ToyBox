@@ -53,6 +53,8 @@ bool IsVaildEnumType(T type)
 
 bool ComponentNameGenerator::Remove(const string& name) noexcept
 {
+    if (name.empty()) return true;
+
     auto [baseName, id] = ExtractNameAndId(name);
     if (baseName.empty()) return false;
 

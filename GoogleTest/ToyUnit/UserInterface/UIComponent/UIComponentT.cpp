@@ -3,6 +3,16 @@
 
 namespace UserInterfaceT::UIComponentT
 {
+	TEST_F(UIComponentT, AttachComponent)
+	{
+		//attach 할때 유니크한 이름 생성은 하지 않고 붙인다.
+		auto parent = CreateComponent<MockComponent>();
+		auto child = CreateComponent<MockComponent>();
+
+		parent->AttachComponent(move(child));
+		EXPECT_EQ(parent->GetChildren().size(), 1);
+	}
+
 	TEST_F(UIComponentT, ChangeOrigin)
 	{
 		VerifyTransformChange(

@@ -13,5 +13,4 @@ protected:
 void UIComponentExT::SetUp()
 {
 	BaseModuleT::SetUp();
-
 }

@@ -154,9 +154,6 @@ bool UIComponentEx::RenameRegion(const string& newRegion) noexcept
 		return true;
 
 	UIComponent* parentRoot = c->GetParentRegionRoot();
-	auto Reassign = [&](UIComponent* target, const string& r) {
-		AssignNamesInRegion(target, nameGen, r);
-		};
 
 	if (newRegion == "") // region이 "" 라면 기존 region을 삭제 처리한다.
 		return RemoveAndMergeRegion(c, parentRoot, nameGen, oldRegion);

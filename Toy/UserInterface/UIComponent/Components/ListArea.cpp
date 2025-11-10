@@ -27,7 +27,7 @@ ListArea::ListArea(const ListArea& o) noexcept :
 
 void ListArea::ReloadDatas() noexcept
 {
-	vector<UIComponent*> componentList = GetChildComponents();
+	vector<UIComponent*> componentList = GetChildren();
 	m_renderTex = ComponentCast<RenderTexture*>(componentList[0]);
 	m_bgImage = m_renderTex->GetRenderedComponent();
 	m_prototypeContainer = ComponentCast<TextureSwitcher*>(componentList[1]);

@@ -23,7 +23,7 @@ ScrollBar::ScrollBar(const ScrollBar& other) :
 
 void ScrollBar::ReloadDatas() noexcept
 {
-	vector<UIComponent*> componentList = GetChildComponents();
+	vector<UIComponent*> componentList = GetChildren();
 	m_scrollTrack = ComponentCast<PatchTextureStd3*>(componentList[0]);
 	m_scrollButton = ComponentCast<TextureSwitcher*>(componentList[1]);
 }

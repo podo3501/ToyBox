@@ -256,6 +256,8 @@
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinder.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinder.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureSourceInfo.h" />
+    <ClInclude Include="UserInterface\UIComponentLocator.h" />
+    <ClInclude Include="UserInterface\UIComponentManager.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\Button.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\Container.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\Dialog.h" />
@@ -278,6 +280,10 @@
     <ClInclude Include="UserInterface\UIComponent\Components\TextArea.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h" />
     <ClInclude Include="UserInterface\UIComponent\EnumUtility.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\AttachmentTraverser.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverser.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverser.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\UITraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponent.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentEx.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentFactory.h" />
@@ -312,6 +318,7 @@
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureSourceInfo.cpp" />
+    <ClCompile Include="UserInterface\UIComponentManager.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\Button.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\Container.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\Dialog.cpp" />
@@ -334,6 +341,9 @@
     <ClCompile Include="UserInterface\UIComponent\Components\TextArea.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponent.cpp" />
     <ClCompile Include="UserInterface\UIComponent\EnumUtility.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\AttachmentTraverser.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverser.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverser.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponent.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentEx.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentFactory.cpp" />

@@ -68,7 +68,7 @@ decltype(auto) PatchTexture::GetSourceByType(UIComponent* component, FuncT&& Fun
 
 vector<Rectangle> PatchTexture::GetChildSourceList() const noexcept
 {
-	const auto& components = GetChildComponents();
+	const auto& components = GetChildren();
 	vector<Rectangle> results;
 
 	for (UIComponent* child : components)
@@ -83,7 +83,7 @@ bool PatchTexture::ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept
 	ReturnIfFalse(dirType);
 	ReturnIfFalse(IsBiggerThanSource(*dirType, size, GetChildSourceList()));
 
-	return ApplySizeAndPosition(*dirType, size, GetChildComponents());
+	return ApplySizeAndPosition(*dirType, size, GetChildren());
 }
 
 static void AccumulateSize(DirectionType dir, const XMUINT2& size, XMUINT2& totalSize) noexcept {
@@ -138,7 +138,7 @@ bool PatchTexture::ResizeOrApplyDefault() noexcept
 
 bool PatchTexture::ForEach(predicate<PatchTexture*, size_t> auto&& Each)
 {
-	const auto& components = GetChildComponents();
+	const auto& components = GetChildren();
 	size_t size = components.size();
 	ReturnIfFalse(size == 3);
 

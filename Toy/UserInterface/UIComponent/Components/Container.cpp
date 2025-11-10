@@ -21,7 +21,7 @@ Container::Container(const Container& o) :
 
 void Container::ReloadDatas() noexcept
 {
-	vector<UIComponent*> componentList = GetChildComponents();
+	vector<UIComponent*> componentList = GetChildren();
 	m_textures.emplace(Normal, componentList[0]);		//여기에 순서가 잘못되면 안된다.
 	m_textures.emplace(Hovered, componentList[1]);
 	m_textures.emplace(Pressed, componentList[2]);
@@ -58,7 +58,7 @@ void Container::ClearInteraction() noexcept
 
 bool Container::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	return ranges::all_of(GetChildComponents(), [&size, isForce](const auto& component) {
+	return ranges::all_of(GetChildren(), [&size, isForce](const auto& component) {
 			return component->ChangeSize(size, isForce); });
 }
 

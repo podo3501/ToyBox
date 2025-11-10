@@ -214,6 +214,7 @@
 --UIModule로 바꾸고 나서 생긴 버그들 수정
 --UINameGenerator에서 ComponentID가 인자로 들어가는거 있는데 그거 수정.
 
+@HierarchyTraverser 함수들 보기 좋게 다듬기.
 @새로운 tdd작성법으로 바꾸면서 처음에 만들었던 부분 다시 리뷰 및 수정
 @UIModule을 Locator로 바꾸고 내부는 전역에 사용하는 부분과 노드에 사용하는 부분으로 분리
 @Json을 tdd에서 파일로 쓰는 부분을 DI로 수정하고 메모리에 쓰게끔 수정해서 tdd 속도 및 의존성 줄이기

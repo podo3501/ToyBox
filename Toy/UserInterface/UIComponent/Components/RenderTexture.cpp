@@ -50,7 +50,7 @@ unique_ptr<UIComponent> RenderTexture::CreateClone() const
 
 void RenderTexture::ReloadDatas() noexcept
 {
-	vector<UIComponent*> componentList = GetChildComponents();
+	vector<UIComponent*> componentList = GetChildren();
 	m_component = componentList[0];
 }
 

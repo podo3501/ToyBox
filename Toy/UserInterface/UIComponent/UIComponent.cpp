@@ -236,7 +236,7 @@ UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
 	return m_children[index].get();
 }
 
-vector<UIComponent*> UIComponent::GetChildComponents() const noexcept
+vector<UIComponent*> UIComponent::GetChildren() const noexcept
 {
 	vector<UIComponent*> componentList;
 	ranges::transform(m_children, back_inserter(componentList), [](const auto& child) {
@@ -249,7 +249,7 @@ vector<UIComponent*> UIComponent::GetChildComponents() const noexcept
 UIComponent* UIComponent::GetSiblingComponent(StateFlag::Type flag) const noexcept
 {
 	if (!m_parent) return {};
-	auto components = m_parent->GetChildComponents();
+	auto components = m_parent->GetChildren();
 	
 	auto find = ranges::find_if(components, [flag](auto& component) {
 		return component->HasStateFlag(flag);
@@ -258,6 +258,20 @@ UIComponent* UIComponent::GetSiblingComponent(StateFlag::Type flag) const noexce
 		return nullptr;
 
 	return *find;
+}
+
+unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+{
+	if (!HasStateFlag(StateFlag::Attach))
+		return move(child);
+
+	child->SetParent(this);
+	child->m_transform.ChangeRelativePosition(
+		m_layout.GetSize(), relativePos);
+	m_children.emplace_back(move(child));
+	UpdatePositionsManually(true);
+
+	return nullptr;
 }
 
 

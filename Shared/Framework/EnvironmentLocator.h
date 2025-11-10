@@ -18,12 +18,6 @@ inline std::unique_ptr<Environment> InitializeEnvironment(
 
 //EnvironmentLocator::GetService() 해서 호출하는게 싫어서 간단하게 한 것이라 이 함수들은 편의를 
 //위해서 만든거라 굳이 신경쓰지 않아도 됨.
-template <typename R>
-decltype(auto) EnvCall(R(Environment::* getter)() const) noexcept 
-{
-    return (EnvironmentLocator::GetService()->*getter)();
-}
-
 template <typename Fn, typename... Args>
 decltype(auto) EnvCall(Fn&& fn, Args&&... args) noexcept
 {

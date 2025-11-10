@@ -102,8 +102,14 @@
     <ClCompile Include="Internal\MockRenderer.cpp">
       <Filter>Internal</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\CoreTraverserT.cpp">
-      <Filter>UserInterface\UIComponent</Filter>
+    <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverserT.cpp">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Traverser\AttachmentTraverserT.cpp">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.cpp">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,8 +220,14 @@
     <ClInclude Include="Internal\MockRenderer.h">
       <Filter>Internal</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\CoreTraverserT.h">
-      <Filter>UserInterface\UIComponent</Filter>
+    <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverserT.h">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Traverser\AttachmentTraverserT.h">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.h">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +266,9 @@
     </Filter>
     <Filter Include="Internal\Stubs">
       <UniqueIdentifier>{91d63998-6795-40bd-9ead-795877765793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserInterface\UIComponent\Traverser">
+      <UniqueIdentifier>{f921c4bb-ee80-4854-947c-4c345555df35}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

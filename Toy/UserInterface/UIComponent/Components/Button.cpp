@@ -16,7 +16,7 @@ Button::Button(const Button& o) :
 
 void Button::ReloadDatas() noexcept
 {
-	vector<UIComponent*> componentList = GetChildComponents();
+	vector<UIComponent*> componentList = GetChildren();
 	m_container = componentList[0];
 }
 

@@ -29,7 +29,6 @@ protected:
 	//상속되어지는 함수는 구현한다.
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	bool ChangePosition(size_t index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
-	vector<UIComponent*> GetChildComponents() const noexcept;
 	UIComponent* GetChildComponent(size_t index) const noexcept;
 	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;
 	inline void SetRenderTraversal(RenderTraversal traversal) noexcept { m_renderTraversal = traversal; }
@@ -82,6 +81,13 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 		if (!m_componentEx) m_componentEx.emplace(this);
 		return *m_componentEx;
 	}
+
+	void SetName(const string& name) noexcept { m_name = name; }
+	void SetRegion(const string& region) noexcept { m_region = region; }
+
+	vector<UIComponent*> GetChildren() const noexcept;
+	inline UIComponent* GetParent() noexcept { return m_parent; }
+	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
 	
 private:
 	void UnlinkAndRefresh() noexcept;
