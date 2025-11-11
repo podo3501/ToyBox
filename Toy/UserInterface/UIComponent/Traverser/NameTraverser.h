@@ -7,7 +7,11 @@ class NameTraverser : private HierarchyTraverser
 {
 public:
 	NameTraverser(UINameGenerator* nameGen);
+	unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
+		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
+	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* c) noexcept;
 	UIComponent* FindComponent(UIComponent* c, const string& name) noexcept;
+	UIComponent* FindRegionComponent(UIComponent* c, const string& region) noexcept;
 	bool Rename(UIComponent* c, const string& name) noexcept;
 	bool RenameRegion(UIComponent* component, const string& region) noexcept;
 

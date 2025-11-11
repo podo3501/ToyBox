@@ -87,15 +87,16 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 
 	vector<UIComponent*> GetChildren() const noexcept;
 	inline UIComponent* GetParent() noexcept { return m_parent; }
-	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
-	
+	unique_ptr<UIComponent> Attach(unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
+	pair<unique_ptr<UIComponent>, UIComponent*> Detach() noexcept;
+	inline RenderTraversal GetRenderSearchType() const noexcept { return m_renderTraversal; }
+
 private:
 	void UnlinkAndRefresh() noexcept;
 	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}) noexcept;
 	bool RecursivePositionUpdate(const XMINT2& position = {}) noexcept;
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
-	inline RenderTraversal GetRenderSearchType() const noexcept { return m_renderTraversal; }
 
 	string m_name;
 	UILayout m_layout;

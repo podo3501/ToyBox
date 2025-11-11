@@ -2,6 +2,7 @@
 #include "Toy/UserInterface/UIComponent/UILayout.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/UIComponent/UIComponentEx.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 class UIComponentStub : public UIComponent
 {
@@ -56,5 +57,13 @@ ComponentType* AttachMockComponent(UIComponent* root, const ComponentDesc& compD
 {
 	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
 	UIEx(root).AttachComponent(move(comp), compDesc.position);
+	return compPtr;
+}
+
+template<typename ComponentType>
+ComponentType* AttachMockComponenT(UIComponent* root, const ComponentDesc& compDesc = mock_defaults::mockDesc)
+{
+	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
+	UITraverser::AttachComponent(root, move(comp), compDesc.position);
 	return compPtr;
 }

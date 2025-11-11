@@ -105,11 +105,14 @@
     <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverserT.cpp">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Traverser\AttachmentTraverserT.cpp">
+    <ClCompile Include="UserInterface\UIComponent\Traverser\BaseTraverserT.cpp">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.cpp">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\UIComponentManagerT.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,11 +226,14 @@
     <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverserT.h">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Traverser\AttachmentTraverserT.h">
+    <ClInclude Include="UserInterface\UIComponent\Traverser\BaseTraverserT.h">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.h">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIComponentManagerT.h">
+      <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

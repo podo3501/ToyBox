@@ -10,7 +10,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 	TEST_F(HierarchyTraverserT, GetRegionRoot_Empty) //자기 Region name이 존재 하지 않을때
 	{
 		auto [mOwner, main] = CreateMockComponent<MockComponent>();
-		auto component = AttachMockComponent<MockComponent>(main);
+		auto component = AttachMockComponenT<MockComponent>(main);
 
 		EXPECT_EQ(main, m_traverser.GetRegionRoot(component));
 	}
@@ -18,7 +18,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 	TEST_F(HierarchyTraverserT, GetRegionRoot_Exist) //자기 Region name이 존재 할때
 	{
 		auto [mOwner, main] = CreateMockComponent<MockComponent>();
-		auto component = AttachMockComponent<MockComponent>(main);
+		auto component = AttachMockComponenT<MockComponent>(main);
 		RenameRegion(main, "region");
 		
 		EXPECT_EQ(main, m_traverser.GetRegionRoot(component));

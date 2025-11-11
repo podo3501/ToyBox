@@ -4,12 +4,67 @@
 
 namespace UserInterfaceT::UIComponentT::TraverserT
 {
+	TEST_F(NameTraverserT, AttachComponent)
+	{
+		auto component = CreateComponent<MockComponent>();
+		EXPECT_EQ(AttachComponent(m_main, move(component)), nullptr); //attach가 잘 되면 nullptr을 리턴, 잘못되면 move한 component를 리턴한다.
+	}
+
+	TEST_F(NameTraverserT, AttachComponent_CloneRegion)
+	{
+		auto [owner, child] = CreateMockComponent<MockComponent>();
+		AttachComponent(m_main, move(owner));
+		RenameRegion(child, "Region");
+
+		auto [cloneOwner, clone] = GetPtrs(child->Clone());
+		AttachComponent(m_main, move(cloneOwner));
+
+		EXPECT_EQ(clone->GetRegion(), "Region_1"); //Region 컴포넌트를 Clone 하면 Region에 _1 이 붙어서 생성된다.
+	}
+
+	TEST_F(NameTraverserT, DetachComponent)
+	{
+		auto [owner, component] = CreateMockComponent<MockComponent>();
+		AttachComponent(m_main, move(owner));
+
+		auto [detach, parent] = DetachComponent(component);
+		EXPECT_TRUE(*detach == *component);
+		EXPECT_TRUE(*parent == *m_main); //어디서 떨어졌는지 부모 컴포넌트를 알려준다.
+	}
+
+	TEST_F(NameTraverserT, DetachComponent_CheckRegion)
+	{
+		auto component = AttachMockComponent<MockComponent>(m_main);
+		UIEx(component).RenameRegion("Region");
+
+		DetachComponent(component);
+		auto nameGen = UIManager::GetNameGenerator();
+		EXPECT_TRUE(nameGen->IsUnusedRegion("Region")); //지우고 나서 사용할 수 있는지 확인
+	}
+
 	TEST_F(NameTraverserT, FindComponent) //자신의 Region에서만 찾는것
+	{
+		auto component = AttachMockComponenT<MockComponent>(m_main);
+		RenameRegion(component, "MainRegion");
+
+		EXPECT_EQ(FindComponent(m_main, "Unknown"), m_main);
+		EXPECT_EQ(FindComponent(component, "Unknown"), component);
+	}
+
+	TEST_F(NameTraverserT, FindRegionComponent) //모든 노드를 돌면서 Region을 찾는것
 	{
 		RenameRegion(m_main, "MainRegion");
 
-		//auto find = UIEx(m_main).FindComponent("Unknown");
-		//EXPECT_EQ(m_main, find);
+		EXPECT_EQ(FindRegionComponent(m_main, "MainRegion"), m_main);
+	}
+
+	TEST_F(NameTraverserT, FindRegionComponent_EmptyRegion)
+	{
+		RenameRegion(m_main, "");
+		auto component = AttachMockComponenT<MockComponent>(m_main);
+
+		auto find = UIEx(component).FindRegionComponent("");
+		EXPECT_EQ(m_main, find);
 	}
 
 	TEST_F(NameTraverserT, Rename)
@@ -96,9 +151,3 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		EXPECT_TRUE(nameGen->IsUnusedRegion("MainRegion"));
 	}
 }
-
-//locator + namespace + 일반 클래스 조합으로 해서 
-//UIEx(m_main).AttachComponent(move(parentOwner));
-//이런 형태가 아니라 UITraverser::AttachComponent(m_main, move(parentOwner));
-//이렇게 한다. 그리고 using을 사용하면 UITraverser를 안써도 되니까 cpp 쪽 코드에 지저분함이
-//없어지겠지? 단점은 만들고 나면 namespace에서 연결을 해 줘야 하는 정도일듯.

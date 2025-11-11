@@ -239,9 +239,13 @@ UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
 vector<UIComponent*> UIComponent::GetChildren() const noexcept
 {
 	vector<UIComponent*> componentList;
-	ranges::transform(m_children, back_inserter(componentList), [](const auto& child) {
-		return child.get();
-		});
+	componentList.reserve(m_children.size());
+
+	for (const auto& child : m_children)
+	{
+		if (child)
+			componentList.push_back(child.get());
+	}
 
 	return componentList;
 }
@@ -260,7 +264,7 @@ UIComponent* UIComponent::GetSiblingComponent(StateFlag::Type flag) const noexce
 	return *find;
 }
 
-unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+unique_ptr<UIComponent> UIComponent::Attach(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
 	if (!HasStateFlag(StateFlag::Attach))
 		return move(child);
@@ -273,5 +277,25 @@ unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> chi
 
 	return nullptr;
 }
+
+pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::Detach() noexcept
+{
+	if (!m_parent || !m_parent->HasStateFlag(StateFlag::Detach))
+		return {};
+
+	auto& children = m_parent->m_children;
+	auto it = std::ranges::find_if(children, [this](auto& c) { return c.get() == this; });
+	if (it == children.end())
+		return {};
+
+	auto detached = move(*it);
+	UIComponent* parent = m_parent;
+
+	children.erase(it);
+	detached->UnlinkAndRefresh();
+
+	return { move(detached), parent };
+}
+
 
 

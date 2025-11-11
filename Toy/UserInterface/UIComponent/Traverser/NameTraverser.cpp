@@ -9,18 +9,92 @@ NameTraverser::NameTraverser(UINameGenerator* nameGen) :
 	m_nameGen{ nameGen }
 {}
 
+unique_ptr<UIComponent> NameTraverser::AttachComponent(UIComponent* parent,
+	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+{
+	if (!parent->HasStateFlag(StateFlag::Attach))
+		return move(child);
+
+	bool success = ForEachChildWithRegion(child.get(), GetMyRegion(parent),
+		[this](const string& region, UIComponent* component, bool isNewRegion) {
+			const string& name = component->GetName().empty() ? EnumToString<ComponentID>(component->GetTypeID()) : component->GetName();
+			auto namesOpt = m_nameGen->MakeNameOf(region, name, isNewRegion);
+			if (!namesOpt) return false;
+			const auto& [newRegion, newName] = *namesOpt;
+
+			if (isNewRegion) component->SetRegion(newRegion);
+			component->SetName(newName);
+			return true;
+		});
+
+	if (!success)
+		return move(child);
+
+	return parent->Attach(move(child), relativePos);
+}
+
+pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UIComponent* c) noexcept
+{
+	UIComponent* parent = c->GetParent();
+	if (!parent || !parent->HasStateFlag(StateFlag::Detach)) return {};
+
+	bool allRemoved = ForEachChildWithRegion(c, parent->GetMyRegion(),
+		[this](const string& region, UIComponent* component, bool isNewRegion) {
+			if (m_nameGen->IsUnusedRegion(region)) //region이 없는 경우는 detach 하다가 부모 노드에서 region을 지운 경우이다.
+				return true;
+
+			if (isNewRegion) //노드가 새로운 region이면 
+				return m_nameGen->RemoveRegion(region);
+			return m_nameGen->RemoveName(region, component->GetName());
+		});
+
+	if (!allRemoved)
+		return {};
+
+	return c->Detach();
+}
+
 UIComponent* NameTraverser::FindComponent(UIComponent* c, const string& name) noexcept
 {
 	UIComponent* root = GetRegionRoot(c);
-	//if (!root) root = c->GetRoot(); //Region이 없을 경우 root가 region root가 되고 ""가 region name이다.
-	//const string& region = root->GetRegion();
-	//UIComponent* foundComponent = nullptr;
-	return nullptr;
+	const string& region = root->GetRegion();
+	UIComponent* find = nullptr;
+
+	ForEachChildBool(root, [this, &find, &name, &region](UIComponent* component) {
+		const string& curRegion = component->GetRegion();
+		if (!curRegion.empty() && region != curRegion) return TraverseResult::Stop; //Region 루트가 아닌 새로운 region이 나왔을때 
+
+		if (component->GetName() == name)
+		{
+			find = component;
+			return TraverseResult::Stop;
+		}
+
+		return TraverseResult::Continue;
+		});
+
+	return find;
+}
+
+UIComponent* NameTraverser::FindRegionComponent(UIComponent* c, const string& region) noexcept
+{
+	UIComponent* find{ nullptr };
+
+	ForEachChildBool(GetRoot(c), [&find, &region](UIComponent* c) {
+		if (c->GetRegion() == region)
+		{
+			find = c;
+			return TraverseResult::Stop;
+		}
+		return TraverseResult::Continue;
+		});
+
+	return find;
 }
 
 bool NameTraverser::Rename(UIComponent* c, const string& name) noexcept
 {
-	const auto& region = c->GetMyRegion();
+	const auto& region = GetMyRegion(c);
 	if (!m_nameGen->IsUnusedName(region, name)) return false;
 
 	ReturnIfFalse(m_nameGen->RemoveName(region, c->GetName()));

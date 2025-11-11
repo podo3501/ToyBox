@@ -23,12 +23,13 @@ protected:
     virtual void TearDown() override {};
     void VerifyTransformChange(function<void()> action, ChangeExpect expect) noexcept;
 
-    unique_ptr<MockComponent> m_main{ nullptr };
+    MockComponent* m_main{ nullptr };
     MockComponent* m_parent{ nullptr };
     MockComponent* m_child{ nullptr };
 
 private:
     bool Has(ChangeExpect v, ChangeExpect f) noexcept;
+    unique_ptr<MockComponent> m_owner;
 };
 
 ///////////////////////////////////////////////////////////////
@@ -36,8 +37,8 @@ private:
 void UIComponentT::SetUp()
 {
     UILayout layout{ {800, 600}, Origin::LeftTop };
-    tie(m_main, std::ignore) = CreateMockComponent<MockComponent>(layout);
-    m_parent = AttachMockComponent<MockComponent>(m_main.get(), mock_defaults::parentDesc);
+    tie(m_owner, m_main) = CreateMockComponent<MockComponent>(layout);
+    m_parent = AttachMockComponent<MockComponent>(m_main, mock_defaults::parentDesc);
     m_child = AttachMockComponent<MockComponent>(m_parent, mock_defaults::childDesc);
 }
 
@@ -53,7 +54,7 @@ void UIComponentT::VerifyTransformChange(function<void()> action, ChangeExpect e
     const XMINT2 preParentRel = m_parent->GetRelativePosition();
     const XMINT2 preChildRel = m_child->GetRelativePosition();
 
-    ExecuteAndUpdate(m_main.get(), [this, &action] { action(); });
+    ExecuteAndUpdate(m_main, [this, &action] { action(); });
 
     if (Has(expect, ChangeExpect::ParentLeftTopChanged))
         EXPECT_NE(preParentLeftTop, m_parent->GetLeftTop());

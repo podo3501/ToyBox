@@ -1,16 +1,41 @@
 #include "pch.h"
 #include "UIComponentT.h"
+#include "MockComponent.h"
+#include "Internal/MockRenderer.h"
+#include "../TextureResourceBinder/MockTextureResourceBinder.h"
+
+class MockBehaviorComponenT : public UIComponentStub
+{
+public:
+	MockBehaviorComponenT()
+	{
+		//기본 리턴이 false 이기 때문에 리턴을 하지 않으면 실패했다고 간주한다.
+		ON_CALL(*this, ImplementBindSourceInfo(testing::_, testing::_)).WillByDefault(testing::Return(true));
+		ON_CALL(*this, ImplementUpdate(testing::_)).WillByDefault(testing::Return(true));
+	}
+
+	MOCK_METHOD(bool, ImplementBindSourceInfo, (TextureResourceBinder*, ITextureController*), (noexcept)); //파일을 메모리에서 불러와서 키값과 매칭시키는 함수
+	MOCK_METHOD(bool, ImplementUpdate, (const DX::StepTimer&), (noexcept)); //업데이트 하면서 좌표를 계산
+	MOCK_METHOD(void, ImplementRender, (ITextureRender*), (const)); //화면에 보여주는 부분
+};
 
 namespace UserInterfaceT::UIComponentT
 {
-	TEST_F(UIComponentT, AttachComponent)
+	TEST_F(UIComponentT, Attach)
 	{
 		//attach 할때 유니크한 이름 생성은 하지 않고 붙인다.
 		auto parent = CreateComponent<MockComponent>();
 		auto child = CreateComponent<MockComponent>();
 
-		parent->AttachComponent(move(child));
+		parent->Attach(move(child));
 		EXPECT_EQ(parent->GetChildren().size(), 1);
+	}
+
+	TEST_F(UIComponentT, Detach)
+	{
+		auto [detach, parent] = m_child->Detach();
+		EXPECT_TRUE(*detach == *m_child);
+		EXPECT_TRUE(*parent == *m_parent); //어디서 떨어졌는지 부모 컴포넌트를 알려준다.
 	}
 
 	TEST_F(UIComponentT, ChangeOrigin)
@@ -59,6 +84,25 @@ namespace UserInterfaceT::UIComponentT
 			[this] { m_parent->ChangeSize({ 200, 200 }); },
 			ChangeExpect::ParentSizeChanged
 		);
+	}
+
+	TEST_F(UIComponentT, RenderPipeline) //셋팅부터 렌더링까지
+	{
+		auto component = AttachMockComponent<MockBehaviorComponenT>(m_main);
+		testing::InSequence seq;
+		EXPECT_CALL(*component, ImplementBindSourceInfo(testing::_, testing::_)).Times(1);
+		EXPECT_CALL(*component, ImplementUpdate(testing::_)).Times(1);
+		EXPECT_CALL(*component, ImplementRender(testing::_)).Times(1);
+
+		MockRenderer renderer;
+		MockTextureResourceBinder resBinder;
+		component->BindTextureSourceInfo( &resBinder, renderer.GetTextureController());
+
+		DX::StepTimer timer{};
+		component->ProcessUpdate(timer);
+
+		MockTextureRender render;
+		component->ProcessRender(&render);
 	}
 
 	TEST_F(UIComponentT, StateFlag_Attach)

@@ -12,8 +12,10 @@ protected:
 	virtual void TearDown() override {};
 
 	unique_ptr<UIComponentManager> m_componentManager;
-	unique_ptr<UIComponent> m_owner;
 	UIComponent* m_main{ nullptr };
+
+private:
+	unique_ptr<UIComponent> m_owner;
 };
 
 void NameTraverserT::SetUp()
