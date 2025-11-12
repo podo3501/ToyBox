@@ -86,6 +86,11 @@ namespace UserInterfaceT::UIComponentT
 		);
 	}
 
+	TEST_F(UIComponentT, GetRoot)
+	{
+		//EXPECT_EQ(m_child->GetRoot(), m_main); //Attach 할때 Root를 저장시킨다.
+	}
+
 	TEST_F(UIComponentT, RenderPipeline) //셋팅부터 렌더링까지
 	{
 		auto component = AttachMockComponent<MockBehaviorComponenT>(m_main);

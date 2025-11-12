@@ -11,7 +11,7 @@ public:
 	~UIHierarchy() = default;
 	UIHierarchy() = default;
 
-	UIComponent* GetRoot() const noexcept;
+	//UIComponent* GetRoot() const noexcept;
 	UIComponent* GetRegionRoot() const noexcept;
 	UIComponent* GetParentRegionRoot() const noexcept;
 	const string& GetMyRegion() const noexcept;

@@ -16,6 +16,7 @@ public:
 	bool RenameRegion(UIComponent* component, const string& region) noexcept;
 
 private:
+	UINameGenerator* GetNameGenerator(UIComponent* c) noexcept;
 	void AssignNamesInRegion(UIComponent* component, const string& region) noexcept;
 	bool RemoveAndMergeRegion(UIComponent* c, UIComponent* parentRoot, const string& oldRegion) noexcept;
 	bool ReplaceAndMergeRegion(UIComponent* c, UIComponent* parentRoot, const string& oldRegion, const string& newRegion) noexcept;

@@ -90,6 +90,8 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	unique_ptr<UIComponent> Attach(unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> Detach() noexcept;
 	inline RenderTraversal GetRenderSearchType() const noexcept { return m_renderTraversal; }
+	inline UIComponent* GetRoot() noexcept { return m_root; }
+	void PropagateRoot(UIComponent* root);
 
 private:
 	void UnlinkAndRefresh() noexcept;
@@ -98,6 +100,7 @@ private:
 	UITransform& GetTransform(UIComponent* component);
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 
+	UIComponent* m_root{ nullptr };
 	string m_name;
 	UILayout m_layout;
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.

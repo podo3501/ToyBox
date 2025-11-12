@@ -111,8 +111,11 @@
     <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.cpp">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\UIComponentManagerT.cpp">
-      <Filter>UserInterface\UIComponent</Filter>
+    <ClCompile Include="UserInterface\UIComponentManagerT.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIModul2T.cpp">
+      <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,8 +235,11 @@
     <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.h">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\UIComponentManagerT.h">
-      <Filter>UserInterface\UIComponent</Filter>
+    <ClInclude Include="UserInterface\UIComponentManagerT.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIModul2T.h">
+      <Filter>UserInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

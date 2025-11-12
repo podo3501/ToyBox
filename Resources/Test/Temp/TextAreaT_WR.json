@@ -1,9 +1,4 @@
 {
-    "BindKeys": [
-        "Hangle",
-        "English"
-    ],
-    "Text": "<Hangle>테스트<Red>빨강색</Red></Hangle><br><English>Test<Blue>Blue</Blue></English>",
     "Name": "",
     "Layout": {
         "Size": {
@@ -25,5 +20,10 @@
     "Region": "",
     "StateFlag": 15,
     "RenderSearch": 0,
-    "Children": null
+    "Children": null,
+    "BindKeys": [
+        "Hangle",
+        "English"
+    ],
+    "Text": "<Hangle>테스트<Red>빨강색</Red></Hangle><br><English>Test<Blue>Blue</Blue></English>"
 }

@@ -38,8 +38,8 @@ void UIComponentT::SetUp()
 {
     UILayout layout{ {800, 600}, Origin::LeftTop };
     tie(m_owner, m_main) = CreateMockComponent<MockComponent>(layout);
-    m_parent = AttachMockComponent<MockComponent>(m_main, mock_defaults::parentDesc);
-    m_child = AttachMockComponent<MockComponent>(m_parent, mock_defaults::childDesc);
+    m_parent = AttachMockComponentDirect<MockComponent>(m_main, mock_defaults::parentDesc);
+    m_child = AttachMockComponentDirect<MockComponent>(m_parent, mock_defaults::childDesc);
 }
 
 bool UIComponentT::Has(ChangeExpect v, ChangeExpect f) noexcept

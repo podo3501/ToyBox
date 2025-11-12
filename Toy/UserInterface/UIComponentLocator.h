@@ -4,10 +4,3 @@
 #include "UINameGenerator/UINameGenerator.h"
 
 using UIComponentLocator = Locator<UIComponentManager>;
-
-namespace UIManager
-{
-	inline UINameGenerator* GetNameGenerator() noexcept {
-		return UIComponentLocator::GetService()->GetNameGenerator();
-	}
-}

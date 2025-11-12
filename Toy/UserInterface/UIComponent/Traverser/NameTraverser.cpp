@@ -2,8 +2,8 @@
 #include "NameTraverser.h"
 #include "../UIComponent.h"
 #include "UserInterface/UIComponentLocator.h"
-
-using namespace UIManager;
+#include "UserInterface/UIModul2.h"
+#include "UserInterface/UIComponent/Components/Panel.h"
 
 NameTraverser::NameTraverser(UINameGenerator* nameGen) :
 	m_nameGen{ nameGen }
@@ -15,10 +15,13 @@ unique_ptr<UIComponent> NameTraverser::AttachComponent(UIComponent* parent,
 	if (!parent->HasStateFlag(StateFlag::Attach))
 		return move(child);
 
+	UINameGenerator* nameGen = GetNameGenerator(parent);
+	if (!nameGen) return move(child);
+
 	bool success = ForEachChildWithRegion(child.get(), GetMyRegion(parent),
-		[this](const string& region, UIComponent* component, bool isNewRegion) {
+		[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
 			const string& name = component->GetName().empty() ? EnumToString<ComponentID>(component->GetTypeID()) : component->GetName();
-			auto namesOpt = m_nameGen->MakeNameOf(region, name, isNewRegion);
+			auto namesOpt = nameGen->MakeNameOf(region, name, isNewRegion);
 			if (!namesOpt) return false;
 			const auto& [newRegion, newName] = *namesOpt;
 
@@ -163,4 +166,13 @@ bool NameTraverser::ReplaceAndMergeRegion(UIComponent* c, UIComponent* parentRoo
 	}
 
 	return true;
+}
+
+UINameGenerator* NameTraverser::GetNameGenerator(UIComponent* c) noexcept
+{
+	Panel* panel = ComponentCast<Panel*>(c->GetRoot());
+	if (!panel) return nullptr;
+
+	auto uiModule = panel->GetUIModul2();
+	return uiModule ? uiModule->GetNameGenerator() : nullptr;
 }

@@ -67,3 +67,12 @@ ComponentType* AttachMockComponenT(UIComponent* root, const ComponentDesc& compD
 	UITraverser::AttachComponent(root, move(comp), compDesc.position);
 	return compPtr;
 }
+
+template<typename ComponentType>
+ComponentType* AttachMockComponentDirect(UIComponent* root, const ComponentDesc& compDesc = mock_defaults::mockDesc)
+{
+	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
+	root->Attach(move(comp), compDesc.position);
+	return compPtr;
+}
+

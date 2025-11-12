@@ -7,10 +7,12 @@
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
+	m_root{ this },
 	m_layout{ XMUINT2{}, Origin::LeftTop }
 {}
 
 UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
+	m_root{ this },
 	m_name{ name },
 	m_layout{ layout }
 {}
@@ -18,6 +20,7 @@ UIComponent::UIComponent(const string& name, const UILayout& layout) noexcept :
 //상속받은 곳에서만 복사생성자를 호출할 수 있다.
 UIComponent::UIComponent(const UIComponent& other)
 {
+	m_root = other.m_root;
 	m_name = other.m_name;
 	m_layout = other.m_layout;
 	m_region = other.m_region;
@@ -45,6 +48,7 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 {
 	if (GetTypeID() != o.GetTypeID()) return false;
 
+	ReturnIfFalse(EqualComponent(m_root, o.m_root));
 	ReturnIfFalse(tie(m_name, m_layout, m_region, m_stateFlag, m_transform, m_renderTraversal) ==
 		tie(o.m_name, o.m_layout, o.m_region, o.m_stateFlag, o.m_transform, o.m_renderTraversal));
 	ReturnIfFalse(EqualComponent(m_parent, o.m_parent));
@@ -56,6 +60,7 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 
 void UIComponent::UnlinkAndRefresh() noexcept
 {
+	m_root = this;
 	m_parent = nullptr;
 	m_transform.Clear();
 	UpdatePositionsManually();
@@ -270,6 +275,7 @@ unique_ptr<UIComponent> UIComponent::Attach(unique_ptr<UIComponent> child, const
 		return move(child);
 
 	child->SetParent(this);
+	child->PropagateRoot(m_root);
 	child->m_transform.ChangeRelativePosition(
 		m_layout.GetSize(), relativePos);
 	m_children.emplace_back(move(child));
@@ -297,5 +303,11 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::Detach() noexcept
 	return { move(detached), parent };
 }
 
+void UIComponent::PropagateRoot(UIComponent* root)
+{
+	m_root = root;
+	for (auto& c : m_children)
+		c->PropagateRoot(root);
+}
 
 

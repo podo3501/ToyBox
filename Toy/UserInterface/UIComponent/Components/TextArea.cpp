@@ -129,8 +129,8 @@ void TextArea::ImplementRender(ITextureRender* render) const
 
 void TextArea::ProcessIO(SerializerIO& serializer)
 {
+	UIComponent::ProcessIO(serializer);
+
 	serializer.Process("BindKeys", m_bindKeys);
 	serializer.Process("Text", m_text);
-
-	UIComponent::ProcessIO(serializer);
 }

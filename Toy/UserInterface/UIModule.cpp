@@ -227,6 +227,7 @@ bool UIModule::Read(const wstring& filename) noexcept
 {
 	const wstring& curFilename = !filename.empty() ? filename : m_filename;
 	SerializerIO::ReadJsonFromFile(curFilename, *this);
+	GetMainPanel()->PropagateRoot(GetMainPanel()); //모든 컴포넌트들에 root를 지정.
 	m_filename = curFilename;
 
 	return true;

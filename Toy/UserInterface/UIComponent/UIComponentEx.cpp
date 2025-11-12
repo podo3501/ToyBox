@@ -39,13 +39,7 @@ unique_ptr<UIComponent> UIComponentEx::AttachComponent(
 			return child;
 	}
 
-	child->SetParent(m_component);
-	child->m_transform.ChangeRelativePosition(
-		m_component->m_layout.GetSize(), relativePos);
-	m_component->m_children.emplace_back(move(child));
-	m_component->UpdatePositionsManually(true);
-
-	return nullptr;
+	return m_component->Attach(move(child), relativePos);
 }
 
 unique_ptr<UIComponent> UIComponentEx::AttachComponent(const string& region, const string& name,

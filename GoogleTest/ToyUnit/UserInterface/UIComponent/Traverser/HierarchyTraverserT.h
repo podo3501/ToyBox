@@ -1,8 +1,9 @@
 #pragma once
+#include "UserInterface/UIModul2T.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/HierarchyTraverser.h"
 
-class HierarchyTraverserT : public testing::Test
+class HierarchyTraverserT : public UIModul2T
 {
 protected:
 	virtual void SetUp() override;
@@ -14,6 +15,8 @@ protected:
 
 void HierarchyTraverserT::SetUp()
 {
+	UIModul2T::SetUp();
+
 	m_componentManager = make_unique<UIComponentManager>();
 	Locator<UIComponentManager>::Provide(m_componentManager.get());
 }

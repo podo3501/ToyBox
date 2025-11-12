@@ -4,18 +4,15 @@
 #include "Shared/SerializerIO/SerializerIO.h"
 
 Panel::~Panel() = default;
-Panel::Panel() : 
-    m_uiModule{ nullptr }
-{};
+Panel::Panel()
+{}
 
 Panel::Panel(const Panel& other) :
-    UIComponent{ other },
-    m_uiModule{ nullptr }
+    UIComponent{ other }
 {}
 
 Panel::Panel(const string& name, const UILayout& layout) noexcept :
-    UIComponent(name, layout),
-    m_uiModule{ nullptr }
+    UIComponent(name, layout)
 {}
 
 unique_ptr<UIComponent> Panel::CreateClone() const

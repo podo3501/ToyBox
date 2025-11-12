@@ -293,6 +293,7 @@
     <ClInclude Include="UserInterface\UIComponent\UITransform.h" />
     <ClInclude Include="UserInterface\UIComponent\UIType.h" />
     <ClInclude Include="UserInterface\UIComponent\UIUtility.h" />
+    <ClInclude Include="UserInterface\UIModul2.h" />
     <ClInclude Include="UserInterface\UIModule.h" />
     <ClInclude Include="UserInterface\UINameGenerator\AutoNamer.h" />
     <ClInclude Include="UserInterface\UINameGenerator\ComponentNameGenerator.h" />
@@ -354,6 +355,7 @@
     <ClCompile Include="UserInterface\UIComponent\UITransform.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIType.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIUtility.cpp" />
+    <ClCompile Include="UserInterface\UIModul2.cpp" />
     <ClCompile Include="UserInterface\UIModule.cpp" />
     <ClCompile Include="UserInterface\UINameGenerator\AutoNamer.cpp" />
     <ClCompile Include="UserInterface\UINameGenerator\ComponentNameGenerator.cpp" />

@@ -14,6 +14,7 @@ bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 
 	unique_ptr<T> read;
 	ReturnIfFalse(SerializerIO::ReadJsonFromFile(filename, read));
+	read->PropagateRoot(read.get());
 
 	if (resBinder && texController)
 		read->BindTextureSourceInfo(resBinder, texController);

@@ -144,6 +144,7 @@
     <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
+    <ClInclude Include="UserInterface\UIComponentManagerT.h" />
     <ClInclude Include="UserInterface\UIComponent\ComponentHelper.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ComponentT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ContainerT.h" />
@@ -166,9 +167,9 @@
     <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverserT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentExT.h" />
-    <ClInclude Include="UserInterface\UIComponent\UIComponentManagerT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIHierarchyT.h" />
+    <ClInclude Include="UserInterface\UIModul2T.h" />
     <ClInclude Include="UserInterface\UIModuleT.h" />
     <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h" />
   </ItemGroup>
@@ -190,6 +191,7 @@
     <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
+    <ClCompile Include="UserInterface\UIComponentManagerT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\ComponentHelper.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\ComponentT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\ContainerT.cpp" />
@@ -212,9 +214,9 @@
     <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverserT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentExT.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\UIComponentManagerT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIHierarchyT.cpp" />
+    <ClCompile Include="UserInterface\UIModul2T.cpp" />
     <ClCompile Include="UserInterface\UIModuleT.cpp" />
     <ClCompile Include="UserInterface\UINameGenerator\UINameGeneratorT.cpp" />
   </ItemGroup>

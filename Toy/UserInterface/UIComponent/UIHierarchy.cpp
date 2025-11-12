@@ -14,14 +14,14 @@ UIComponent* UIHierarchy<UIComponent>::GetThis() const noexcept
 	return static_cast<UIComponent*>(hierarchy);
 }
 
-UIComponent* UIHierarchy<UIComponent>::GetRoot() const noexcept
-{
-	UIComponent* current = GetThis();
-	while (current->m_parent != nullptr)
-		current = current->m_parent;
-
-	return current;
-}
+//UIComponent* UIHierarchy<UIComponent>::GetRoot() const noexcept
+//{
+//	UIComponent* current = GetThis();
+//	while (current->m_parent != nullptr)
+//		current = current->m_parent;
+//
+//	return current;
+//}
 
 UIComponent* UIHierarchy<UIComponent>::GetRegionRoot() const noexcept
 {
