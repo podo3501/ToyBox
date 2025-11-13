@@ -5,6 +5,7 @@
 #include "Shared/System/Public/IInputManager.h"
 #include "Locator/SceneLocator.h"
 #include "Locator/EventDispatcherLocator.h"
+#include "UserInterface/UIComponentLocator.h"
 #include "Scenes/Test/ComponentTestScene.h"
 #include "Scenes/Test/TestScene1.h"
 #include "Scenes/Test/TestScene2.h"
@@ -36,6 +37,8 @@ bool GameLoop::InitializeDerived()
 {
     m_inputManager = CreateInputManager(GetWindowHandle());
     Locator<IInputManager>::Provide(m_inputManager.get());
+    m_uiManager = make_unique<UIComponentManager>();
+    Locator<UIComponentManager>::Provide(m_uiManager.get());
     m_sceneManager = CreateSceneManager();
     SceneLocator::Provide(m_sceneManager.get());
     m_eventDispatcherManager = CreateEventDispatcherManager();

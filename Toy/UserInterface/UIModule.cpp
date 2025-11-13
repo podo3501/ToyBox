@@ -241,24 +241,24 @@ bool UIModule::EnableToolMode(bool enable)
 	return panel->EnableToolMode(enable);
 }
 
-UIComponent* UIModule::FindComponent(const string& name) const noexcept
-{
-	auto* panel = GetMainPanel();
-	if(!panel) return nullptr;
-
-	return UIEx(panel).FindComponent(name);
-}
-
-UIComponent* UIModule::FindComponentInRegion(const string& regionName, const string& name) const noexcept
-{
-	auto* panel = GetMainPanel();
-	if (!panel) return nullptr;
-
-	UIComponent* regionRoot = UIEx(panel).FindRegionComponent(regionName);
-	if (!regionRoot) return nullptr;
-
-	return UIEx(regionRoot).FindComponent(name);
-}
+//UIComponent* UIModule::FindComponent(const string& name) const noexcept
+//{
+//	auto* panel = GetMainPanel();
+//	if(!panel) return nullptr;
+//
+//	return UIEx(panel).FindComponent(name);
+//}
+//
+//UIComponent* UIModule::FindComponentInRegion(const string& regionName, const string& name) const noexcept
+//{
+//	auto* panel = GetMainPanel();
+//	if (!panel) return nullptr;
+//
+//	UIComponent* regionRoot = UIEx(panel).FindRegionComponent(regionName);
+//	if (!regionRoot) return nullptr;
+//
+//	return UIEx(regionRoot).FindComponent(name);
+//}
 
 UIComponent* UIModule::GetMainPanel() const noexcept 
 { 

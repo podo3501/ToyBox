@@ -303,7 +303,7 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::Detach() noexcept
 	return { move(detached), parent };
 }
 
-void UIComponent::PropagateRoot(UIComponent* root)
+void UIComponent::PropagateRoot(UIComponent* root) noexcept
 {
 	m_root = root;
 	for (auto& c : m_children)

@@ -4,7 +4,11 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "UserInterface/UIModule.h"
+#include "UserInterface/UIModul2.h"
+#include "UserInterface/UIComponentLocator.h"
+#include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "UserInterface/UIComponent/UIUtility.h"
+#include "UserInterface/UIComponent/Components/Panel.h"
 #include "UserInterface/UIComponent/Components/ListArea.h"
 #include "UserInterface/UIComponent/Components/Button.h"
 #include "UserInterface/UIComponent/Components/TextArea.h"
@@ -12,6 +16,8 @@
 #include "UserInterface/UIComponent/Components/SampleComponent.h"
 #include "UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
+
+using namespace UITraverser;
 
 ComponentTestScene::ComponentTestScene(IRenderer* renderer) :
 	Scene(renderer)
@@ -21,7 +27,7 @@ bool ComponentTestScene::Enter()
 {
     IRenderer* renderer = GetRenderer();
     UILayout layout{ GetSizeFromRectangle(GetRectResolution()) };
-    m_uiModule = CreateUIModule(layout, "Main", renderer, L"UI/SampleTexture/SampleTextureBinder.json");
+    m_uiModule = CreateUIModulE("ComponentTest", layout, "Main", renderer, L"UI/SampleTexture/SampleTextureBinder.json");
     m_uiModule->AddRenderer();
     renderer->LoadTextureBinder(m_uiModule->GetTexResBinder());
 
@@ -30,7 +36,7 @@ bool ComponentTestScene::Enter()
 
 bool ComponentTestScene::Leave()
 {
-	return true;
+    return ReleaseUIModulE("ComponentTest");
 }
 
 bool ComponentTestScene::LoadResources()
@@ -44,8 +50,8 @@ bool ComponentTestScene::LoadResources()
     AttachComponentToPanel(CreateSampleListArea({ {200, 170}, Origin::Center }), { 600, 200 });
     ReturnIfFalse(m_uiModule->BindTextureResources());
 
-    ListArea* list = UIEx(m_uiModule->GetMainPanel()).FindComponent<ListArea*>("ListArea");
-    MakeSampleListAreaData(GetRenderer()->GetTextureController(), m_uiModule->GetTexResBinder(), list, 13);
+    ListArea* list = FindComponent<ListArea*>(m_uiModule->GetMainPanel(), "ListArea");
+    MakeSampleListAreaDatA(GetRenderer()->GetTextureController(), m_uiModule->GetTexResBinder(), list, 13);
 
     return true;
 }
@@ -53,9 +59,7 @@ bool ComponentTestScene::LoadResources()
 bool ComponentTestScene::AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept
 {
     if (!component) return false;
-
-    UIComponent* main = m_uiModule->GetMainPanel();
-    UIEx(main).AttachComponent(move(component), position);
+    AttachComponent(m_uiModule->GetMainPanel(), move(component), position);
 
     return true;
 }

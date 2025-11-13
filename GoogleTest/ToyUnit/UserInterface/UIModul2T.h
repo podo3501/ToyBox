@@ -1,9 +1,7 @@
 #pragma once
 #include "UIComponentManagerT.h"
-#include "Shared/Framework/EnvironmentLocator.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Toy/UserInterface/UIComponent/UILayout.h"
-#include "Toy/UserInterface/UIComponent/UIType.h"
+#include "Shared/System/StepTimer.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIModul2.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
@@ -12,11 +10,15 @@ class UIModul2T : public UIComponentManagerT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
+	virtual void TearDown() override;
 	virtual void RegisterBinderTextures(TextureResourceBinder* resBinder) {};
-	inline wstring GetTempDir() const noexcept { return L"../Resources/Test/Temp/"; }
+	void SimulateMouse(const XMINT2& pos, InputState state) noexcept;
+	void SimulateMouse(int x, int y, InputState state) noexcept;
+	void SimulateMouse(const XMINT2& pos, int wheelValue) noexcept;
+	void SimulateMouse(int x, int y, int wheelValue) noexcept;
+	void SimulateClick(const XMINT2& startPos) noexcept;
+	void SimulateDrag(const XMINT2& startPos, const XMINT2& endPos) noexcept;
 
-	unique_ptr<Environment> m_environment;
 	UIModul2* m_uiModule{ nullptr };
 	Panel* m_main{ nullptr };
 };
@@ -25,11 +27,53 @@ inline void UIModul2T::SetUp()
 {
 	UIComponentManagerT::SetUp();
 
-	m_environment = InitializeEnvironment(L"", { 800.f, 600.f });
-
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
-	m_uiModule = m_componentManager->CreateUIModule(layout, "Main", m_renderer.get());
+	m_uiModule = CreateUIModulE("Demo", layout, "Main", m_renderer.get());
 
 	RegisterBinderTextures(m_uiModule->GetTexResBinder());
 	m_main = m_uiModule->GetMainPanel();
+}
+
+inline void UIModul2T::TearDown()
+{
+	m_main = nullptr;
+	m_uiModule = nullptr;
+	ReleaseUIModulE("Demo");
+}
+
+inline void UIModul2T::SimulateMouse(const XMINT2& pos, InputState state) noexcept
+{
+	SimulateMouse(pos.x, pos.y, state);
+}
+
+inline void UIModul2T::SimulateMouse(int x, int y, InputState state) noexcept
+{
+	DX::StepTimer timer;
+	m_input->SetMouseState(x, y, state);
+	m_uiModule->Update(timer);
+}
+
+inline void UIModul2T::SimulateMouse(const XMINT2& pos, int wheelValue) noexcept
+{
+	SimulateMouse(pos.x, pos.y, wheelValue);
+}
+
+inline void UIModul2T::SimulateMouse(int x, int y, int wheelValue) noexcept
+{
+	DX::StepTimer timer;
+	m_input->SetMouseState(x, y, InputState::Up);
+	m_input->SetMouseWheelValue(wheelValue);
+	m_uiModule->Update(timer);
+}
+
+inline void UIModul2T::SimulateClick(const XMINT2& startPos) noexcept
+{
+	SimulateDrag(startPos, startPos);
+}
+
+inline void UIModul2T::SimulateDrag(const XMINT2& startPos, const XMINT2& endPos) noexcept
+{
+	SimulateMouse(startPos, InputState::Pressed);
+	SimulateMouse(endPos, InputState::Held);
+	SimulateMouse(endPos, InputState::Released);
 }

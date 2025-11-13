@@ -9,14 +9,10 @@ protected:
 	virtual void SetUp() override;
 	virtual void TearDown() override {};
 
-	unique_ptr<UIComponentManager> m_componentManager;
 	HierarchyTraverser m_traverser;
 };
 
 void HierarchyTraverserT::SetUp()
 {
 	UIModul2T::SetUp();
-
-	m_componentManager = make_unique<UIComponentManager>();
-	Locator<UIComponentManager>::Provide(m_componentManager.get());
 }

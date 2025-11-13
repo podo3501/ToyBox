@@ -2,6 +2,7 @@
 #include "../Scene.h"
 
 class UIComponent;
+class UIModul2;
 class TestScene1 : public Scene
 {
 public:
@@ -15,5 +16,6 @@ public:
 	virtual void Update(const DX::StepTimer& timer) override;
 
 private:
-	unique_ptr<UIModule> m_uiModule;
+	//unique_ptr<UIModule> m_uiModule;
+	UIModul2* m_uiModule{ nullptr };
 };

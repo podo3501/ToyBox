@@ -4,6 +4,8 @@
 #include "Locator/SceneLocator.h"
 #include "Locator/EventDispatcherLocator.h"
 #include "UserInterface/UIModule.h"
+#include "UserInterface/UIModul2.h"
+#include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "TestScene2.h"
 
 TestScene1::~TestScene1() = default;
@@ -13,7 +15,7 @@ TestScene1::TestScene1(IRenderer* renderer) :
 
 bool TestScene1::Enter()
 {
-	m_uiModule = CreateUIModule(L"/Scene/Test/TestScene1.json",
+	m_uiModule = CreateUIModulE("Test1", L"/Scene/Test/TestScene1.json",
 		GetRenderer(), L"UI/SampleTexture/SampleTextureBinder.json");
 	m_uiModule->AddRenderer();
 
@@ -33,8 +35,8 @@ bool TestScene1::Leave()
 {
 	auto eventDispatcher = EventDispatcherLocator::GetService();
 	eventDispatcher->Clear();
-
-	return true;
+	
+	return ReleaseUIModulE("Test1");
 }
 
 void TestScene1::Update(const DX::StepTimer& timer)

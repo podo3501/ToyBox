@@ -91,7 +91,8 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	pair<unique_ptr<UIComponent>, UIComponent*> Detach() noexcept;
 	inline RenderTraversal GetRenderSearchType() const noexcept { return m_renderTraversal; }
 	inline UIComponent* GetRoot() noexcept { return m_root; }
-	void PropagateRoot(UIComponent* root);
+	void PropagateRoot(UIComponent* root) noexcept;
+	void PropagateRoot() noexcept { PropagateRoot(this); }
 
 private:
 	void UnlinkAndRefresh() noexcept;

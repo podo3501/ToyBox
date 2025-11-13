@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "NameTraverserT.h"
+#include "../MockComponent.h"
 #include "Shared/Utils/StlExt.h"
 
 namespace UserInterfaceT::UIComponentT::TraverserT
@@ -38,7 +39,8 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		UIEx(component).RenameRegion("Region");
 
 		DetachComponent(component);
-		auto nameGen = UIManager::GetNameGenerator();
+
+		auto nameGen = m_uiModule->GetNameGenerator();
 		EXPECT_TRUE(nameGen->IsUnusedRegion("Region")); //지우고 나서 사용할 수 있는지 확인
 	}
 
@@ -47,14 +49,13 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		auto component = AttachMockComponenT<MockComponent>(m_main);
 		RenameRegion(component, "MainRegion");
 
-		EXPECT_EQ(FindComponent(m_main, "Unknown"), m_main);
+		EXPECT_EQ(FindComponent(m_main, "Main"), m_main);
 		EXPECT_EQ(FindComponent(component, "Unknown"), component);
 	}
 
 	TEST_F(NameTraverserT, FindRegionComponent) //모든 노드를 돌면서 Region을 찾는것
 	{
 		RenameRegion(m_main, "MainRegion");
-
 		EXPECT_EQ(FindRegionComponent(m_main, "MainRegion"), m_main);
 	}
 
@@ -96,6 +97,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 	//Region 통합 테스트는 상위 region이 "" 일때와 값이 있을때 2가지만 확인하면 된다.
 	TEST_F(NameTraverserT, RenameRegion_MergeRegion1)
 	{
+		Rename(m_main, "Unknown");
 		auto [owner, component] = GetPtrs(CreateComponent<MockComponent>());
 		AttachComponent(m_main, move(owner));
 
@@ -108,6 +110,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 
 	TEST_F(NameTraverserT, RenameRegion_MergeRegion2)
 	{
+		Rename(m_main, "Unknown");
 		RenameRegion(m_main, "MainRegion");
 		auto [owner, component] = GetPtrs(CreateComponent<MockComponent>());
 		AttachComponent(m_main, move(owner));
@@ -142,7 +145,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		AttachComponent(m_main, move(owner));
 		RenameRegion(m_main, "MainRegion");
 		RenameRegion(component, "ComponentRegion");
-		auto nameGen = UIManager::GetNameGenerator();
+		auto nameGen = m_uiModule->GetNameGenerator();
 
 		RenameRegion(component, "");
 		EXPECT_TRUE(nameGen->IsUnusedRegion("ComponentRegion"));

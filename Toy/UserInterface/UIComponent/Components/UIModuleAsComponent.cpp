@@ -1,32 +1,33 @@
 #include "pch.h"
 #include "UIModuleAsComponent.h"
-#include "../../UIModule.h"
+#include "../../UIModul2.h"
+#include "Panel.h"
 
 UIModuleAsComponent::~UIModuleAsComponent() = default;
 UIModuleAsComponent::UIModuleAsComponent() = default;
 
 unique_ptr<UIComponent> UIModuleAsComponent::CreateClone() const { return nullptr; }
 
-bool UIModuleAsComponent::Setup(unique_ptr<UIModule> module) noexcept
+bool UIModuleAsComponent::Setup(UIModul2* modul2) noexcept
 {
-	auto mainPanel = module->GetMainPanel();
+	auto mainPanel = modul2->GetMainPanel();
 	SetSize(mainPanel->GetSize());
 
-	m_module = move(module);
+	m_modul2 = modul2;
 	return true;
 }
 
 bool UIModuleAsComponent::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
-	return m_module->BindTextureResources();
+	return m_modul2->BindTextureResources();
 }
 
 bool UIModuleAsComponent::ImplementUpdate(const DX::StepTimer& timer) noexcept 
 { 
-	return m_module->Update(timer);
+	return m_modul2->Update(timer);
 }
 
 void UIModuleAsComponent::ImplementRender(ITextureRender* render) const
 {
-	m_module->Render(render);
+	m_modul2->Render(render);
 }

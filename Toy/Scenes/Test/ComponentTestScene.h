@@ -2,6 +2,7 @@
 #include "../Scene.h"
 
 class UIComponent;
+class UIModul2;
 class ComponentTestScene : public Scene
 {
 public:
@@ -17,5 +18,6 @@ private:
 	bool LoadResources();
 	bool AttachComponentToPanel(unique_ptr<UIComponent> component, const XMINT2& position) const noexcept;
 
-	unique_ptr<UIModule> m_uiModule;
+	//unique_ptr<UIModule> m_uiModule;
+	UIModul2* m_uiModule{ nullptr };
 };

@@ -7,24 +7,16 @@ struct IToolInputManager;
 struct IInputManager;
 struct IEventDispatcherManager;
 class Window;
-
+class UIComponentManager;
 class UserInterfaceWindow;
 class TextureResBinderWindow;
-
-namespace DX
-{
-	class StepTimer;
-}
-
+class MenuBar;
+namespace DX { class StepTimer; }
 namespace Tool
 {
 	class Dialog;
 	class Config;
 }
-
-class MenuBar;
-
-
 class ToolLoop final : public AppLoop, public IImguiComponent
 {
 public:
@@ -53,6 +45,7 @@ private:
 
 	unique_ptr<IToolInputManager> m_toolInputManager;
 	unique_ptr<IInputManager> m_inputManager;
+	unique_ptr<UIComponentManager> m_uiManager;
 	unique_ptr<IEventDispatcherManager> m_nullEventDispatcher;
 	vector<unique_ptr<UserInterfaceWindow>> m_uiWindows;
 	vector<unique_ptr<TextureResBinderWindow>> m_textureWindows;

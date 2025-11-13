@@ -1,30 +1,20 @@
 #pragma once
-#include "../MockComponent.h"
+#include "UserInterface/UIModul2T.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 using namespace UITraverser;
 
-class NameTraverserT : public testing::Test
+class NameTraverserT : public UIModul2T
 {
 protected:
 	virtual void SetUp() override;
 	virtual void TearDown() override {};
-
-	unique_ptr<UIComponentManager> m_componentManager;
-	UIComponent* m_main{ nullptr };
-
-private:
-	unique_ptr<UIComponent> m_owner;
 };
 
 void NameTraverserT::SetUp()
 {
-	m_componentManager = make_unique<UIComponentManager>();
-	Locator<UIComponentManager>::Provide(m_componentManager.get());
-
-	tie(m_owner, m_main) = CreateMockComponent<MockComponent>();
-	Rename(m_main, "Unknown"); //Attach 할때만 이름이 자동 생성된다.
+	UIModul2T::SetUp();
 }
 
 //함수 이름이 같을때 처리.

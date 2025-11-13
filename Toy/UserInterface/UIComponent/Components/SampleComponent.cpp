@@ -4,6 +4,7 @@
 #include "../UIUtility.h"
 #include "../UIComponent.h"
 #include "../UILayout.h"
+#include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextArea.h"
@@ -11,6 +12,8 @@
 #include "ScrollBar.h"
 #include "TextureSwitcher.h"
 #include "Shared/Utils/StringExt.h"
+
+using namespace UITraverser;
 
 static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 	const XMUINT2& size, const string& bindKey,
@@ -84,6 +87,30 @@ bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBi
 	{
 		auto container = listArea->PrepareContainer();
 		TextArea* textArea = UIEx(container).FindComponent<TextArea*>("ListTextArea");
+		textArea->SetText(L"<English><Black>Test " + IntToWString(idx * 10) + L"</Black></English>");
+	}
+
+	return true;
+}
+
+bool MakeSampleListAreaDatA(ITextureController* texController, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
+{
+	ZoneScopedN("MakeSampleListAreaData");
+
+	//글자가 크기에 안 맞으면 안찍힌다. 
+	vector<wstring> bindKeys{ L"Hangle", L"English" };
+	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
+	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, texController));
+
+	protoTextArea.get()->SetName("ListTextArea");
+	auto prototype = listArea->GetPrototypeContainer();
+	auto failed = prototype->AttachComponentToCenter(move(protoTextArea), { 0, -6 });
+	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
+
+	for (auto idx : views::iota(0, itemCount))
+	{
+		auto container = listArea->PrepareContainer();
+		TextArea* textArea = FindComponent<TextArea*>(container, "ListTextArea");
 		textArea->SetText(L"<English><Black>Test " + IntToWString(idx * 10) + L"</Black></English>");
 	}
 

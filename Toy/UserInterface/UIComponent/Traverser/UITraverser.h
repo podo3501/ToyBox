@@ -2,6 +2,7 @@
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/BaseTraverser.h"
 #include "Toy/UserInterface/UIComponent/Traverser/NameTraverser.h"
+#include "../UIComponent.h" //?!? ComponentCast 이것때문에 여기 있는데 이 인클루드 제거해야 한다.
 
 class UIComponent;
 
@@ -56,4 +57,11 @@ namespace UITraverser
 		const string& region, const string& name) noexcept;
 
 	UIComponent* FindComponent(UIComponent* c, const string& region, const string& name) noexcept;
+
+	template<typename T>
+	T FindComponent(UIComponent* c, const string& name) noexcept
+	{
+		UIComponent* find = FindComponent(c, name);
+		return ComponentCast<T>(find);
+	}
 }

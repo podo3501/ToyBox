@@ -5,9 +5,7 @@
 #include "UserInterface/UIModul2.h"
 #include "UserInterface/UIComponent/Components/Panel.h"
 
-NameTraverser::NameTraverser(UINameGenerator* nameGen) :
-	m_nameGen{ nameGen }
-{}
+NameTraverser::NameTraverser() = default;
 
 unique_ptr<UIComponent> NameTraverser::AttachComponent(UIComponent* parent,
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
@@ -41,14 +39,17 @@ pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UICom
 	UIComponent* parent = c->GetParent();
 	if (!parent || !parent->HasStateFlag(StateFlag::Detach)) return {};
 
+	UINameGenerator* nameGen = GetNameGenerator(c);
+	if (!nameGen) return {};
+
 	bool allRemoved = ForEachChildWithRegion(c, parent->GetMyRegion(),
-		[this](const string& region, UIComponent* component, bool isNewRegion) {
-			if (m_nameGen->IsUnusedRegion(region)) //region이 없는 경우는 detach 하다가 부모 노드에서 region을 지운 경우이다.
+		[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
+			if (nameGen->IsUnusedRegion(region)) //region이 없는 경우는 detach 하다가 부모 노드에서 region을 지운 경우이다.
 				return true;
 
 			if (isNewRegion) //노드가 새로운 region이면 
-				return m_nameGen->RemoveRegion(region);
-			return m_nameGen->RemoveName(region, component->GetName());
+				return nameGen->RemoveRegion(region);
+			return nameGen->RemoveName(region, component->GetName());
 		});
 
 	if (!allRemoved)
@@ -97,11 +98,14 @@ UIComponent* NameTraverser::FindRegionComponent(UIComponent* c, const string& re
 
 bool NameTraverser::Rename(UIComponent* c, const string& name) noexcept
 {
-	const auto& region = GetMyRegion(c);
-	if (!m_nameGen->IsUnusedName(region, name)) return false;
+	UINameGenerator* nameGen = GetNameGenerator(c);
+	if (!nameGen) return false;
 
-	ReturnIfFalse(m_nameGen->RemoveName(region, c->GetName()));
-	auto namesOpt = m_nameGen->MakeNameOf(region, name);
+	const auto& region = GetMyRegion(c);
+	if (!nameGen->IsUnusedName(region, name)) return false;
+
+	ReturnIfFalse(nameGen->RemoveName(region, c->GetName()));
+	auto namesOpt = nameGen->MakeNameOf(region, name);
 	if (!namesOpt) return false;
 	
 	c->SetName(namesOpt->second);
@@ -110,59 +114,64 @@ bool NameTraverser::Rename(UIComponent* c, const string& name) noexcept
 
 bool NameTraverser::RenameRegion(UIComponent* c, const string& newRegion) noexcept
 {
+	UINameGenerator* nameGen = GetNameGenerator(c);
+	if (!nameGen) return false;
+
 	const string oldRegion = c->GetRegion();
 	if (oldRegion == newRegion)
 		return true;
 
 	UIComponent* parentRoot = GetParentRegionRoot(c);
 	if (newRegion == "") // region이 "" 라면 기존 region을 삭제 처리한다.
-		return RemoveAndMergeRegion(c, parentRoot, oldRegion);
+		return RemoveAndMergeRegion(nameGen, c, parentRoot, oldRegion);
 
 	//새 region 이름이 이미 존재하면 중복 처리
-	if (!m_nameGen->IsUnusedRegion(newRegion))
+	if (!nameGen->IsUnusedRegion(newRegion))
 		return false;
 
-	return ReplaceAndMergeRegion(c, parentRoot, oldRegion, newRegion);
+	return ReplaceAndMergeRegion(nameGen, c, parentRoot, oldRegion, newRegion);
 }
 
-void NameTraverser::AssignNamesInRegion(UIComponent* component, const string& region) noexcept
+void NameTraverser::AssignNamesInRegion(UINameGenerator* nameGen, 
+	UIComponent* component, const string& region) noexcept
 {
-	ForEachChildInSameRegion(component, [this, &region, component](UIComponent* curComponent) {
-		auto namesOpt = m_nameGen->MakeNameOf(region, curComponent->GetName());
+	ForEachChildInSameRegion(component, [nameGen, &region, component](UIComponent* curComponent) {
+		auto namesOpt = nameGen->MakeNameOf(region, curComponent->GetName());
 		curComponent->SetName(namesOpt->second);
 		if (curComponent == component)
 			curComponent->SetRegion(namesOpt->first);
 		});
 }
 
-bool NameTraverser::RemoveAndMergeRegion(UIComponent* c, UIComponent* parentRoot, const string& oldRegion) noexcept
+bool NameTraverser::RemoveAndMergeRegion(UINameGenerator* nameGen, UIComponent* c,
+	UIComponent* parentRoot, const string& oldRegion) noexcept
 {
 	// 기존 region 제거
-	ReturnIfFalse(m_nameGen->RemoveRegion(oldRegion));
+	ReturnIfFalse(nameGen->RemoveRegion(oldRegion));
 	c->SetRegion(""); //region을 삭제한다.
 
 	// root 여부에 따라 재정렬 대상 결정
 	UIComponent* target = (c == parentRoot) ? c : parentRoot;
 	const string& targetRegion = target->GetRegion();
 
-	ReturnIfFalse(m_nameGen->RemoveRegion(targetRegion));
-	AssignNamesInRegion(target, targetRegion);
+	ReturnIfFalse(nameGen->RemoveRegion(targetRegion));
+	AssignNamesInRegion(nameGen, target, targetRegion);
 	return true;
 }
 
-bool NameTraverser::ReplaceAndMergeRegion(UIComponent* c, UIComponent* parentRoot, 
-	const string& oldRegion, const string& newRegion) noexcept
+bool NameTraverser::ReplaceAndMergeRegion(UINameGenerator* nameGen, UIComponent* c,
+	UIComponent* parentRoot, const string& oldRegion, const string& newRegion) noexcept
 {
 	//기존 region을 제거하고 새 region 재할당
-	ReturnIfFalse(m_nameGen->RemoveRegion(oldRegion));
-	AssignNamesInRegion(c, newRegion);
+	ReturnIfFalse(nameGen->RemoveRegion(oldRegion));
+	AssignNamesInRegion(nameGen, c, newRegion);
 
 	//이전에 region이 없었던 경우 상위도 갱신
 	if (oldRegion == "" && c != parentRoot)
 	{
 		string parentRegion = parentRoot->GetRegion();
-		ReturnIfFalse(m_nameGen->RemoveRegion(parentRegion));
-		AssignNamesInRegion(parentRoot, parentRegion);
+		ReturnIfFalse(nameGen->RemoveRegion(parentRegion));
+		AssignNamesInRegion(nameGen, parentRoot, parentRegion);
 	}
 
 	return true;

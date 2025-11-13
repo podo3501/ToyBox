@@ -32,7 +32,7 @@ public:
 	void ProcessIO(SerializerIO& serializer);
 	bool Write(const wstring& filename = L"") noexcept;
 	bool EnableToolMode(bool enable);
-	UIComponent* FindComponent(const string& name) const noexcept;
+	//UIComponent* FindComponent(const string& name) const noexcept;
 	UIComponent* GetMainPanel() const noexcept;
 	const vector<unique_ptr<UIComponent>>& GetChildren() const noexcept;
 	inline IRenderer* GetRenderer() const noexcept { return m_renderer; }
@@ -49,7 +49,7 @@ private:
 	void ProcessCaptureComponent(const MouseState& mouseState) noexcept;
 	void CaptureComponent(const MouseState& mouseState) noexcept;
 	void ProcessMouseWheel(int wheelValue) noexcept;
-	UIComponent* FindComponentInRegion(const string& regionName, const string& name) const noexcept;
+	//UIComponent* FindComponentInRegion(const string& regionName, const string& name) const noexcept;
 
 	unique_ptr<UINameGenerator> m_generator;
 	vector<unique_ptr<UIComponent>> m_children;	//children이지만 panel만 들어가 있다.

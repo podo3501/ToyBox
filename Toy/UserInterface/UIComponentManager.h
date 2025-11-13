@@ -10,16 +10,18 @@ class UIComponentManager
 public:
 	~UIComponentManager();
 	UIComponentManager();
-
+	//?!? UI를 로딩하고 Release 해야 두번 로딩이 일어나지 않는다 그러기 위해서는 레퍼런스 카운터를 달아서 몇번 로딩되었는지 체크해서 지워야 한다.
+	UIModul2* CreateUIModule(const string& moduleName, const UILayout& layout,
+		const string& mainUIName, IRenderer* renderer, const wstring& srcBinderFilename = L"");
+	UIModul2* CreateUIModule(const string& moduleName, const wstring& filename,
+		IRenderer* renderer, const wstring& srcBinderFilename = L"");
+	bool ReleaseUIModule(const string& moduleName) noexcept;
+	
 	NameTraverser* GetNameTraverser() { return m_nameTraverser.get(); }
 	BaseTraverser* GetBaseTraverser() { return m_baseTraverser.get(); }
-
-	UIModul2* CreateUIModule(const UILayout& layout, const string& mainUIName,
-		IRenderer* renderer, const wstring& srcBinderFilename = L"");
 
 private:
 	unique_ptr<BaseTraverser> m_baseTraverser;
 	unique_ptr<NameTraverser> m_nameTraverser;
-
-	unique_ptr<UIModul2> m_uiModule; //지금은 하나이지만 나중에 이게 많아질 수 있다 그때 map으로 교체해야한다.
+	unordered_map<string, unique_ptr<UIModul2>> m_uiModules;
 };

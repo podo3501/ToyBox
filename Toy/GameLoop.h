@@ -4,6 +4,7 @@
 struct IInputManager;
 struct ISceneManager;
 struct IEventDispatcherManager;
+class UIComponentManager;
 class UIComponent;
 class GameLoop final : public AppLoop
 {
@@ -23,6 +24,7 @@ private:
 
 	IRenderer* m_renderer;
 	unique_ptr<IInputManager> m_inputManager;
+	unique_ptr<UIComponentManager> m_uiManager;
 	unique_ptr<ISceneManager> m_sceneManager;
 	unique_ptr<IEventDispatcherManager> m_eventDispatcherManager;
 };

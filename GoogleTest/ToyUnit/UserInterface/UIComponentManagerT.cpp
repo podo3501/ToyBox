@@ -3,10 +3,12 @@
 
 void UIComponentManagerT::SetUp()
 {
+	m_environment = InitializeEnvironment(L"", { 800.f, 600.f });
+
 	m_input = make_unique<MockInputManager>();
 	InputLocator::Provide(m_input.get());
 
-	unique_ptr<MockRenderer> m_renderer = make_unique<MockRenderer>();
+	m_renderer = make_unique<MockRenderer>();
 	RegisterRenderTextures(m_renderer.get());
 
 	m_componentManager = make_unique<UIComponentManager>();

@@ -6,18 +6,43 @@
 #include "UIComponent/Traverser/BaseTraverser.h"
 #include "UIComponent/Traverser/NameTraverser.h"
 #include "UIComponent/UILayout.h"
+#include "Shared/Utils/StlExt.h"
 
 UIComponentManager::~UIComponentManager() = default;
 UIComponentManager::UIComponentManager() :
 	m_baseTraverser{ make_unique<BaseTraverser>() },
-	m_nameTraverser{ make_unique<NameTraverser>()) }
+	m_nameTraverser{ make_unique<NameTraverser>() }
 {}
 
-UIModul2* UIComponentManager::CreateUIModule(const UILayout& layout, const string& mainUIName,
+UIModul2* UIComponentManager::CreateUIModule(const string& moduleName, const UILayout& layout, 
+	const string& mainUIName, IRenderer* renderer, const wstring& srcBinderFilename)
+{
+	if (m_uiModules.find(moduleName) != m_uiModules.end()) return nullptr;
+
+	auto [owner, module] = GetPtrs(make_unique<UIModul2>());
+	if (!owner->SetupMainComponent(layout, mainUIName, renderer, srcBinderFilename)) return nullptr;
+	m_uiModules.insert({ moduleName, move(owner) });
+
+	return module;
+}
+
+UIModul2* UIComponentManager::CreateUIModule(const string& moduleName, const wstring& filename,
 	IRenderer* renderer, const wstring& srcBinderFilename)
 {
-	m_uiModule = make_unique<UIModul2>();
-	if (!m_uiModule->SetupMainComponent(layout, mainUIName, renderer, srcBinderFilename)) return nullptr;
+	if (m_uiModules.find(moduleName) != m_uiModules.end()) return nullptr;
 
-	return m_uiModule.get();
+	auto [owner, module] = GetPtrs(make_unique<UIModul2>());
+	if (!owner->SetupMainComponent(filename, renderer, srcBinderFilename)) return nullptr;
+	m_uiModules.insert({ moduleName, move(owner) });
+
+	return module;
+}
+
+bool UIComponentManager::ReleaseUIModule(const string& moduleName) noexcept
+{
+	auto it = m_uiModules.find(moduleName);
+	if (it == m_uiModules.end()) return false;
+
+	m_uiModules.erase(it);
+	return true;
 }
