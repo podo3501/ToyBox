@@ -3,14 +3,19 @@
 #include "IComponent.h"
 #include "UILayout.h"
 #include "UITransform.h"
-#include "UIComponentEx.h"
-#include "UIHierarchy.h"
+//#include "UIComponentEx.h"
+//#include "UIHierarchy.h"
+#include "UIType.h"
 
+struct IMouseEventReceiver;
 class SerializerIO;
+class TextureResourceBinder;
 namespace DX { class StepTimer; }
 
-class UIComponent : public IComponent, private UIHierarchy<UIComponent>
+class UIComponent : public IComponent
 {
+	friend class DerivedTraverser;
+
 protected:
 	UIComponent();	//이 클래스는 단독으로 만들 수 없다. 상속 받은 클래스만이 생성 가능
 	UIComponent(const string& name, const UILayout& layout) noexcept;
@@ -44,7 +49,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual ComponentID GetTypeID() const noexcept = 0;
 	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept { return nullptr; }
 	virtual bool operator==(const UIComponent& other) const noexcept;
-	virtual void ProcessRender(ITextureRender* render) override final;
+	virtual void ProcessRender(ITextureRender* texRender) override final;
 	virtual void ProcessIO(SerializerIO& serializer);
 	unique_ptr<UIComponent> Clone() const;
 
@@ -76,19 +81,19 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	inline const string& GetRegion() const noexcept { return m_region; } //현재 이 컴포넌트의 region값
 	string GetMyRegion() const noexcept; //자기가 속해있는 region값
 
-	inline UIComponentEx& GetUIComponentEx() noexcept
-	{
-		if (!m_componentEx) m_componentEx.emplace(this);
-		return *m_componentEx;
-	}
+	//inline UIComponentEx& GetUIComponentEx() noexcept
+	//{
+	//	if (!m_componentEx) m_componentEx.emplace(this);
+	//	return *m_componentEx;
+	//}
 
 	void SetName(const string& name) noexcept { m_name = name; }
 	void SetRegion(const string& region) noexcept { m_region = region; }
 
 	vector<UIComponent*> GetChildren() const noexcept;
 	inline UIComponent* GetParent() noexcept { return m_parent; }
-	unique_ptr<UIComponent> Attach(unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
-	pair<unique_ptr<UIComponent>, UIComponent*> Detach() noexcept;
+	unique_ptr<UIComponent> AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
+	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
 	inline RenderTraversal GetRenderSearchType() const noexcept { return m_renderTraversal; }
 	inline UIComponent* GetRoot() noexcept { return m_root; }
 	void PropagateRoot(UIComponent* root) noexcept;
@@ -105,24 +110,26 @@ private:
 	string m_name;
 	UILayout m_layout;
 	UITransform m_transform; //이 Component가 이동되어야 하는 곳. 부모가 가져야될 데이터이나 프로그램적으로는 자기 자신이 가지는게 코드가 깔끔하다.
+	UIComponent* m_parent{ nullptr };
+	vector<unique_ptr<UIComponent>> m_children;
 	StateFlag::Type m_stateFlag{ StateFlag::Default };
 	string m_region; //UI에서 네임스페이스 역할을 한다. FindRegionComponent로 찾을 수 있다.
 	RenderTraversal m_renderTraversal{ RenderTraversal::Inherited }; //이건 mode이기 때문에 flag와 성격이 맞지 않아서 따로 만듦. 지금은 2개뿐이라 flag에 넣어도 되긴한데, 추후 확장성을 고려해서 일단 이렇게 놔두기로 하자.
 
 	bool m_toolMode{ false };
-	optional<UIComponentEx> m_componentEx; //optional로 선언하면 포인터가 아닌데도 바로 초기화 하지 않는다.
+	//optional<UIComponentEx> m_componentEx; //optional로 선언하면 포인터가 아닌데도 바로 초기화 하지 않는다.
 
-	friend class UIComponentEx;
-	friend class UIHierarchy;
+	//friend class UIComponentEx;
+	//friend class UIHierarchy;
 };
 
-inline UIComponentEx& UIEx(UIComponent* component) { return component->GetUIComponentEx(); }
-
-template<typename Component> requires derived_from<Component, UIComponent> //UIComponent에서 상속 받은 애들만 가능
-inline UIComponentEx& UIEx(const unique_ptr<Component>& component)
-{ 
-	return component->GetUIComponentEx(); 
-}
+//inline UIComponentEx& UIEx(UIComponent* component) { return component->GetUIComponentEx(); }
+//
+//template<typename Component> requires derived_from<Component, UIComponent> //UIComponent에서 상속 받은 애들만 가능
+//inline UIComponentEx& UIEx(const unique_ptr<Component>& component)
+//{ 
+//	return component->GetUIComponentEx(); 
+//}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -157,3 +164,17 @@ bool CompareDerived(const unique_ptr<L>& lhs, const unique_ptr<R>& rhs)
 	Assert(result);
 	return result;
 }
+
+//Setup함수가 있어야 하며 인자가 일치 해야 한다. Args는 암묵적 캐스팅이 되지 않는다.
+template<typename T, typename... Args>
+unique_ptr<T> CreateComponent(Args&&... args)
+{
+	auto obj = make_unique<T>();
+	return obj && obj->Setup(forward<Args>(args)...) ? move(obj) : nullptr;
+}
+
+//public 함수들끼리 조합이 가능하면 여기서 처리한다.
+bool ChangeSizeX(UIComponent* component, uint32_t value) noexcept;
+bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept;
+bool ChangeSizeY(UIComponent* component, uint32_t value) noexcept;
+bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept;

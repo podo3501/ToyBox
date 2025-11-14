@@ -275,6 +275,9 @@
     <ClInclude Include="UserInterface\UIModul2.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverser.h">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -455,6 +458,9 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UIModul2.cpp">
       <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverser.cpp">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

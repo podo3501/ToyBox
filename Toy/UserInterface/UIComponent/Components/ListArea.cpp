@@ -5,6 +5,7 @@
 #include "TextureSwitcher.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/StlExt.h"
+#include "../Traverser/UITraverser.h"
 
 ListArea::~ListArea() = default;
 ListArea::ListArea() noexcept :
@@ -63,24 +64,24 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 	SetLayout(layout);
 	
 	m_bgImage = bgImage.get();
-	UIEx(m_bgImage).Rename("Background Image");
+	m_bgImage->SetName("Background Image");
 	m_bgImage->SetStateFlag(StateFlag::LockPosOnResize, true);
 
 	auto renderTex = CreateComponent<RenderTexture>(UILayout{ layout.GetSize() }, move(bgImage));
 	m_renderTex = renderTex.get();
-	UIEx(this).AttachComponent(move(renderTex), {});
+	AttachComponent(move(renderTex), {});
 
 	m_prototypeContainer = switcher.get();
-	UIEx(m_prototypeContainer).Rename("Prototype Container");
-	UIEx(m_prototypeContainer).RenameRegion("ListContainer");
+	m_prototypeContainer->SetName("Prototype Container");
+	m_prototypeContainer->SetRegion("ListContainer");
 	m_prototypeContainer->SetVisible(false); //Prototype를 만드는 컨테이너이기 때문에 안보이게 셋팅.
-	UIEx(this).AttachComponent(move(switcher), {});
+	AttachComponent(move(switcher), {});
 
 	m_scrollBar = scrollBar.get();
 	m_scrollBar->ChangeOrigin(Origin::RightTop);
 	m_scrollBar->SetStateFlag(StateFlag::Render, false);
 	m_scrollBar->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
-	UIEx(this).AttachComponent(move(scrollBar), { static_cast<int32_t>(layout.GetSize().x), 0 });
+	AttachComponent(move(scrollBar), { static_cast<int32_t>(layout.GetSize().x), 0 });
 
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요
 
@@ -95,7 +96,7 @@ bool ListArea::Setup(unique_ptr<UIComponent> bgImage, unique_ptr<TextureSwitcher
 bool ListArea::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	if (GetSize() == XMUINT2{})
-		return ChangeSize(UIEx(this).GetChildrenBoundsSize());
+		return ChangeSize(UITraverser::GetChildrenBoundsSize(this));
 
 	return ChangeSize(GetSize(), true);
 }
@@ -167,7 +168,7 @@ bool ListArea::ResizeContainerForScrollbar() noexcept
 //UIComponent* ListArea::PrepareContainer()
 //{
 //	auto [cloneContainer, cloneContainerPtr] = GetPtrs(m_prototypeContainer->Clone());
-//	UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
+//	UITraverser::AttachComponen(move(cloneContainer), {});
 //
 //	const auto& containerHeight = GetContainerHeight();
 //	cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
@@ -187,7 +188,7 @@ UIComponent* ListArea::PrepareContainer()
 	auto [cloneContainer, cloneContainerPtr] = GetPtrs(m_prototypeContainer->Clone());
 	{
 		ZoneScopedN("AttachComponent");
-		UIEx(m_bgImage).AttachComponent(move(cloneContainer), {});
+		UITraverser::AttachComponent(m_bgImage, move(cloneContainer), {});
 	}
 
 	const auto& containerHeight = GetContainerHeight();
@@ -222,7 +223,7 @@ bool ListArea::RemoveContainer(unsigned int idx) noexcept
 	auto container = GetContainer(idx);
 	if (!container) return false;
 	
-	auto [detach, _] = UIEx(container).DetachComponent();
+	auto [detach, _] = UITraverser::DetachComponent(container);
 	if (!detach) return false;
 	m_containers.erase(m_containers.begin() + idx);
 
@@ -233,7 +234,7 @@ bool ListArea::RemoveContainer(unsigned int idx) noexcept
 void ListArea::ClearContainers() noexcept
 {
 	for (auto container : m_containers)
-		UIEx(container).DetachComponent();
+		UITraverser::DetachComponent(container);
 	m_containers.clear();
 	
 	UpdateScrollBar();

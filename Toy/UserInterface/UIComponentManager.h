@@ -2,6 +2,7 @@
 
 struct IRenderer;
 class BaseTraverser;
+class DerivedTraverser;
 class NameTraverser;
 class UILayout;
 class UIModul2;
@@ -17,11 +18,13 @@ public:
 		IRenderer* renderer, const wstring& srcBinderFilename = L"");
 	bool ReleaseUIModule(const string& moduleName) noexcept;
 	
-	NameTraverser* GetNameTraverser() { return m_nameTraverser.get(); }
-	BaseTraverser* GetBaseTraverser() { return m_baseTraverser.get(); }
+	BaseTraverser* GetBaseTraverser() noexcept { return m_baseTraverser.get(); }
+	DerivedTraverser* GetDerivedTraverser() noexcept { return m_derivedTraverser.get(); }
+	NameTraverser* GetNameTraverser() noexcept { return m_nameTraverser.get(); }
 
 private:
 	unique_ptr<BaseTraverser> m_baseTraverser;
+	unique_ptr<DerivedTraverser> m_derivedTraverser;
 	unique_ptr<NameTraverser> m_nameTraverser;
 	unordered_map<string, unique_ptr<UIModul2>> m_uiModules;
 };

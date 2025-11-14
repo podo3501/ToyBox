@@ -2,6 +2,7 @@
 #include "FloatingComponent.h"
 #include "IRenderer.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/TextArea.h"
@@ -10,6 +11,8 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
 #include "Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
+
+using namespace UITraverser;
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, TextureResourceBinder* resBinder, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
@@ -37,14 +40,14 @@ bool FloatingComponent::IsComponent() const noexcept
 
 unique_ptr<UIComponent> FloatingComponent::GetComponent() noexcept
 {
-	auto[component, _] = UIEx(m_component).DetachComponent();
+	auto [component, _] = m_component->DetachComponent();
 	Clear();
 	return move(component);
 }
 
 void FloatingComponent::SetComponent(unique_ptr<UIComponent> component) noexcept
 {
-	LoadComponentInternal(move(component), UIEx(component).GetChildrenBoundsSize());
+	LoadComponentInternal(move(component), GetChildrenBoundsSize(component.get()));
 }
 
 bool FloatingComponent::Excute()
@@ -139,5 +142,5 @@ bool FloatingComponent::LoadComponent(unique_ptr<UIComponent> component)
 
 bool FloatingComponent::ComponentToFloating(unique_ptr<UIComponent>&& component)
 {
-	return LoadComponentInternal(move(component), UIEx(component).GetChildrenBoundsSize());
+	return LoadComponentInternal(move(component), GetChildrenBoundsSize(component.get()));
 }

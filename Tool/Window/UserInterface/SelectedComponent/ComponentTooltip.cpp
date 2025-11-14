@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "ComponentTooltip.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Window/Utils/Common.h"
+
+using namespace UITraverser;
 
 ComponentTooltip::~ComponentTooltip() = default;
 ComponentTooltip::ComponentTooltip(UIComponent* panel) :
@@ -19,7 +22,7 @@ void ComponentTooltip::Render(const ImGuiWindow* window)
 {
 	const ImVec2& windowMousePos = GetWindowIGMousePos(window);
 
-	vector<UIComponent*> componentList = UIEx(m_panel).PickComponents(ImVec2ToXMINT2(windowMousePos));
+	vector<UIComponent*> componentList = PickComponents(m_panel, ImVec2ToXMINT2(windowMousePos));
 	if (componentList.empty()) return;
 
 	const ImVec2& padding = ImGui::GetStyle().WindowPadding;

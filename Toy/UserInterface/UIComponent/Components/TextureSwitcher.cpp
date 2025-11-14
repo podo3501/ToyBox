@@ -4,6 +4,7 @@
 #include "Shared/Utils/StlExt.h"
 #include "Locator/EventDispatcherLocator.h"
 #include "PatchTexture/PatchTextureLite/PatchTextureLite.h"
+#include "../../UIComponent/Traverser/UITraverser.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/SerializerIO/KeyConverter.h"
 
@@ -81,7 +82,7 @@ bool TextureSwitcher::Setup(const UILayout& layout, TextureSlice texSlice,
 	SetLayout(layout);
 	unique_ptr<PatchTextureLite> pTexL = nullptr;
 	tie(pTexL, m_patchTexL) = GetPtrs(CreatePatchTextureLite(texSlice, layout.GetSize()));
-	UIEx(this).AttachComponent(move(pTexL), {});
+	AttachComponent(move(pTexL), {});
 	m_stateKeys = stateKeys;
 
 	return true;
@@ -156,7 +157,7 @@ bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size, bool isForce) noe
 unique_ptr<UIComponent> TextureSwitcher::AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
 	auto center = m_patchTexL->GetCenterComponent();
-	return UIEx(center).AttachComponent(move(child), relativePos);
+	return UITraverser::AttachComponent(center, move(child), relativePos);
 }
 
 string TextureSwitcher::GetBindKey() const noexcept

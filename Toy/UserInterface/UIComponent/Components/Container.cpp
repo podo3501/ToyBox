@@ -65,7 +65,7 @@ bool Container::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
 void Container::AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept
 {
 	m_textures.emplace(state, component.get());
-	UIEx(this).AttachComponent(move(component), {});
+	UIComponent::AttachComponent(move(component), {});
 }
 
 inline static void SetActiveStateFlag(bool condition, UIComponent* component) noexcept

@@ -121,7 +121,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	{
 		auto dispatcher = make_unique<MockEventDispatcherManager>();
 		EventDispatcherLocator::Provide(dispatcher.get()); //디스패쳐 등록해서 활성화 시킴
-		UIEx(m_component).Rename("Switcher");
+		m_component->SetName("Switcher");
 		EXPECT_CALL(*dispatcher, Dispatch("", "Switcher", UIEvent::Clicked)).Times(1);
 
 		m_component->OnRelease(true);

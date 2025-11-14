@@ -1,8 +1,8 @@
 #pragma once
-#include "UserInterface/BaseModuleT.h"
+#include "../TextureResourceBinder/MockTextureResourceBinder.h"
 #include "Toy/UserInterface/CommandHistory/TextureResource/TexResCommandHistory.h"
 
-class TexResCommandHistoryT : public BaseModuleT
+class TexResCommandHistoryT : public ::testing::Test
 {
 protected:
 	virtual void SetUp() override;
@@ -12,11 +12,11 @@ protected:
 	void VerifyUndoRedo(Action&& action);
 
 	unique_ptr<TexResCommandHistory> m_command;
+	unique_ptr<MockTextureResourceBinder> m_resBinder;
 };
 
 void TexResCommandHistoryT::SetUp()
 {
-	BaseModuleT::SetUp();
-
-	m_command = make_unique<TexResCommandHistory>(m_uiModule->GetTexResBinder());
+	m_resBinder = make_unique<MockTextureResourceBinder>();
+	m_command = make_unique<TexResCommandHistory>(m_resBinder.get());
 }

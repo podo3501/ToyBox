@@ -27,13 +27,13 @@ namespace UserInterfaceT::UIComponentT
 		auto parent = CreateComponent<MockComponent>();
 		auto child = CreateComponent<MockComponent>();
 
-		parent->Attach(move(child));
+		parent->AttachComponent(move(child));
 		EXPECT_EQ(parent->GetChildren().size(), 1);
 	}
 
 	TEST_F(UIComponentT, Detach)
 	{
-		auto [detach, parent] = m_child->Detach();
+		auto [detach, parent] = m_child->DetachComponent();
 		EXPECT_TRUE(*detach == *m_child);
 		EXPECT_TRUE(*parent == *m_parent); //어디서 떨어졌는지 부모 컴포넌트를 알려준다.
 	}
@@ -93,7 +93,9 @@ namespace UserInterfaceT::UIComponentT
 
 	TEST_F(UIComponentT, RenderPipeline) //셋팅부터 렌더링까지
 	{
-		auto component = AttachMockComponent<MockBehaviorComponenT>(m_main);
+		auto [owner, component] = CreateMockComponent<MockBehaviorComponenT>();
+		m_main->AttachComponent(move(owner));
+
 		testing::InSequence seq;
 		EXPECT_CALL(*component, ImplementBindSourceInfo(testing::_, testing::_)).Times(1);
 		EXPECT_CALL(*component, ImplementUpdate(testing::_)).Times(1);
@@ -114,7 +116,7 @@ namespace UserInterfaceT::UIComponentT
 	{
 		m_main->SetStateFlag(StateFlag::Attach, false);	//attach 불가
 		auto [owner, _] = CreateMockComponent<MockComponent>();
-		unique_ptr<UIComponent> result = UIEx(m_main).AttachComponent(move(owner));
+		unique_ptr<UIComponent> result = m_main->AttachComponent(move(owner));
 
 		EXPECT_NE(result, nullptr); //attach가 안되면 nullptr 값이 아니다.
 	}
@@ -122,9 +124,9 @@ namespace UserInterfaceT::UIComponentT
 	TEST_F(UIComponentT, StateFlag_Detach)
 	{
 		auto [owner, component] = CreateMockComponent<MockComponent>();
-		UIEx(m_main).AttachComponent(move(owner));
+		m_main->AttachComponent(move(owner));
 		m_main->SetStateFlag(StateFlag::Detach, false);
-		auto [detach, detachPtr] = UIEx(component).DetachComponent();
+		auto [detach, detachPtr] = component->DetachComponent();
 
 		EXPECT_EQ(detach, nullptr); //detach가 안되면 nullptr이 반환된다.
 		EXPECT_EQ(detachPtr, nullptr);

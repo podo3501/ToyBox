@@ -56,14 +56,6 @@ template<typename ComponentType>
 ComponentType* AttachMockComponent(UIComponent* root, const ComponentDesc& compDesc = mock_defaults::mockDesc)
 {
 	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
-	UIEx(root).AttachComponent(move(comp), compDesc.position);
-	return compPtr;
-}
-
-template<typename ComponentType>
-ComponentType* AttachMockComponenT(UIComponent* root, const ComponentDesc& compDesc = mock_defaults::mockDesc)
-{
-	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
 	UITraverser::AttachComponent(root, move(comp), compDesc.position);
 	return compPtr;
 }
@@ -72,7 +64,7 @@ template<typename ComponentType>
 ComponentType* AttachMockComponentDirect(UIComponent* root, const ComponentDesc& compDesc = mock_defaults::mockDesc)
 {
 	auto [comp, compPtr] = CreateMockComponent<ComponentType>(compDesc.layout);
-	root->Attach(move(comp), compDesc.position);
+	root->AttachComponent(move(comp), compDesc.position);
 	return compPtr;
 }
 

@@ -4,6 +4,7 @@
 #include "UIModul2.h"
 #include "UINameGenerator/UINameGenerator.h"
 #include "UIComponent/Traverser/BaseTraverser.h"
+#include "UIComponent/Traverser/DerivedTraverser.h"
 #include "UIComponent/Traverser/NameTraverser.h"
 #include "UIComponent/UILayout.h"
 #include "Shared/Utils/StlExt.h"
@@ -11,6 +12,7 @@
 UIComponentManager::~UIComponentManager() = default;
 UIComponentManager::UIComponentManager() :
 	m_baseTraverser{ make_unique<BaseTraverser>() },
+	m_derivedTraverser{ make_unique<DerivedTraverser>() },
 	m_nameTraverser{ make_unique<NameTraverser>() }
 {}
 

@@ -26,7 +26,7 @@ bool PatchTextureLite9::Setup(const XMUINT2& size)
 	{
 		auto tex = CreateComponent<PatchTextureLite3>(XMUINT2{}, DirectionType::Horizontal);
 		if (auto flag = stateFlags[idx]; flag) tex->SetStateFlag(*flag, true);
-		UIEx(this).AttachComponent(move(tex), {});
+		AttachComponent(move(tex), {});
 	}
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 

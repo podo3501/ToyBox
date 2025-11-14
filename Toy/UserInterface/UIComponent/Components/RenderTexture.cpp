@@ -2,6 +2,7 @@
 #include "RenderTexture.h"
 #include "IRenderer.h"
 #include "Locator/InputLocator.h"
+#include "../../UIComponent/Traverser/UITraverser.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 
@@ -76,7 +77,7 @@ bool RenderTexture::ImplementBindSourceInfo(TextureResourceBinder*, ITextureCont
 	Release(); //데이터가 존재하면 지운다.
 
 	if (GetSize() == XMUINT2{})
-		SetSize(UIEx(this).GetChildrenBoundsSize());
+		SetSize(UITraverser::GetChildrenBoundsSize(this));
 	
 	size_t index{ 0 };
 	UpdatePositionsManually(true);
@@ -100,7 +101,7 @@ bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent> compon
 {
 	SetLayout(layout);
 	m_component = component.get();
-	UIEx(this).AttachComponent(move(component), {});
+	AttachComponent(move(component), {});
 
 	return true;
 }

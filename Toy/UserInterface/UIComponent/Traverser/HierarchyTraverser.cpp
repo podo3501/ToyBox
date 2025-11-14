@@ -87,6 +87,19 @@ void HierarchyTraverser::ForEachRenderChildDFS(UIComponent* c, function<Traverse
 		ForEachRenderChildDFS(child, Func);
 }
 
+bool HierarchyTraverser::ForEachChildPostUntilFail(
+	const function<bool(UIComponent*)>& Func) noexcept
+{
+	for (auto& child : m_children)
+		if (child && !child->ForEachChildPostUntilFail(Func))
+			return false;
+
+	if (!Func(GetThis()))
+		return false;
+
+	return true;
+}
+
 void HierarchyTraverser::ForEachChildToRender(UIComponent* c, function<TraverseResult(UIComponent*)> Func) noexcept
 {
 	RenderTraversal traversal = c->GetRenderSearchType();

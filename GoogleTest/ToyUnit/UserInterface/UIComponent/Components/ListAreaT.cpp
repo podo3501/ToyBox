@@ -1,16 +1,19 @@
 #include "pch.h"
 #include "ListAreaT.h"
 #include "../ComponentHelper.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 #include "Shared/Utils/GeometryExt.h"
 
+using namespace UITraverser;
+
 void ListAreaT::MakeTestPrototype()
 {
 	auto prototype = m_component->GetPrototypeContainer();
 	auto texture = CreateComponent<PatchTextureStd1>("One32");
-	UIEx(texture).Rename("Test");
+	texture->SetName("Test");
 	prototype->AttachComponentToCenter(move(texture), {});
 }
 
@@ -42,7 +45,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		MakeTestData(1);
 		auto container = m_component->GetContainer(0);
 
-		EXPECT_TRUE(UIEx(container).FindComponent<PatchTextureStd1*>("Test"));
+		EXPECT_TRUE(FindComponent<PatchTextureStd1*>(container, "Test"));
 	}
 
 	TEST_F(ListAreaT, GetContainerCount)
@@ -62,7 +65,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		MakeTestPrototype(); // 여기에 기본이 되는 것을 만든다.
 
 		auto container = m_component->PrepareContainer(); // 컨테이너 하나를 준비하면 프로토타입과 같은 것이 준비된다.
-		EXPECT_TRUE(UIEx(container).FindComponent<PatchTextureStd1*>("Test"));
+		EXPECT_TRUE(FindComponent<PatchTextureStd1*>(container, "Test"));
 	}
 
 	TEST_F(ListAreaT, RemoveContainer)

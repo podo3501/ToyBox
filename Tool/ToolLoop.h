@@ -38,7 +38,6 @@ protected:
 
 private:
 	IRenderer* m_renderer;
-
 	unique_ptr<Tool::Config> m_config;
 	unique_ptr<MenuBar> m_menuBar;
 	ImTextureID m_textureID{};

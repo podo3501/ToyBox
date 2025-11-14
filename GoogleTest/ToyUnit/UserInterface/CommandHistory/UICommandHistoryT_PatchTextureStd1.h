@@ -1,12 +1,14 @@
 #pragma once
-#include "UserInterface/BaseModuleT.h"
+#include "UserInterface/UIModul2T.h"
 #include "UserInterface/TextureResourceBinder/MockTextureResourceBinder.h"
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/UIType.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 
-class UICommandHistoryT_PatchTextureStd1 : public BaseModuleT
+using namespace UITraverser;
+class UICommandHistoryT_PatchTextureStd1 : public UIModul2T
 {
 protected:
 	virtual void SetUp() override;
@@ -23,13 +25,13 @@ protected:
 
 void UICommandHistoryT_PatchTextureStd1::SetUp()
 {
-	BaseModuleT::SetUp();
+	UIModul2T::SetUp();
 
 	m_command = make_unique<UICommandHistory>();
 	unique_ptr<PatchTextureStd1> owner;
 	tie(owner, m_component) = GetPtrs(CreateComponent<PatchTextureStd1>("One32"));
 	
-	UIEx(m_main).AttachComponent(move(owner));
+	AttachComponent(m_main, move(owner));
 	m_uiModule->BindTextureResources();
 }
 

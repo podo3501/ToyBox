@@ -27,7 +27,7 @@ bool PatchTextureStd9::Setup(const UILayout& layout, const string& bindKey)
 	{
 		auto tex3 = CreateComponent<PatchTextureStd3>(DirectionType::Horizontal, bindKey, idx);
 		if (auto flag = stateFlags[idx]; flag) tex3->SetStateFlag(*flag, true);
-		UIEx(this).AttachComponent(move(tex3), {});
+		AttachComponent(move(tex3), {});
 	}
 	SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 

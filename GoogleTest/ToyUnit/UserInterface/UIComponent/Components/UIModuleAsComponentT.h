@@ -16,7 +16,6 @@ void UIModuleAsComponentT::SetUp()
 {
 	UIModul2T::SetUp();
 
-	//m_component = CreateComponent<UIModuleAsComponent>(m_uiModule->Clone());
 	m_component = CreateComponent<UIModuleAsComponent>(m_uiModule);
 }
 

@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "UICommandRegistry.h"
 #include "IRenderer.h"
-#include "../../UIModule.h"
+#include "../../UIComponent/Traverser/UITraverser.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTexture.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "../../UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd9.h"
 #include "../../UIComponent/Components/TextureSwitcher.h"
 #include "../../UIComponent/Components/TextArea.h"
+
+using namespace UITraverser;
 
 AttachComponentCommand::AttachComponentCommand(UIComponent* parent,
 	unique_ptr<UIComponent> component, const XMINT2& relativePos) noexcept :
@@ -21,13 +23,13 @@ AttachComponentCommand::AttachComponentCommand(UIComponent* parent,
 bool AttachComponentCommand::Execute()
 {
 	m_detach = m_attach.get();
-	m_failureResult = UIEx(m_parent).AttachComponent(move(m_attach), m_pos);
+	m_failureResult = AttachComponent(m_parent, move(m_attach), m_pos);
 	return m_failureResult == nullptr;
 }
 
 bool AttachComponentCommand::Undo()
 {
-	if (auto [detach, parent] = UIEx(m_detach).DetachComponent(); detach)
+	if (auto [detach, parent] = DetachComponent(m_detach); detach)
 	{
 		m_attach = move(detach);
 		return true;
@@ -37,7 +39,7 @@ bool AttachComponentCommand::Undo()
 
 bool AttachComponentCommand::Redo()
 {
-	m_failureResult = UIEx(m_parent).AttachComponent(move(m_attach), m_pos);
+	m_failureResult = AttachComponent(m_parent, move(m_attach), m_pos);
 	return m_failureResult == nullptr;
 }
 
@@ -59,7 +61,7 @@ DetachComponentCommand::DetachComponentCommand(UIComponent* detach) noexcept :
 bool DetachComponentCommand::Execute()
 {
 	XMINT2 pos = m_detach->GetRelativePosition();
-	auto [component, parent] = UIEx(m_detach).DetachComponent();
+	auto [component, parent] = DetachComponent(m_detach);
 	if (!component) return false;
 
 	m_position = pos;
@@ -74,7 +76,7 @@ bool DetachComponentCommand::Execute()
 bool DetachComponentCommand::Undo()
 {
 	UIComponent* detach = m_component.get();
-	auto resultComponent = UIEx(m_parent).AttachComponent(move(m_component), m_position);
+	auto resultComponent = AttachComponent(m_parent, move(m_component), m_position);
 	if (resultComponent) return false;
 
 	m_detach = detach;
@@ -83,7 +85,7 @@ bool DetachComponentCommand::Undo()
 
 bool DetachComponentCommand::Redo()
 {
-	auto [component, parent] = UIEx(m_detach).DetachComponent();
+	auto [component, parent] = DetachComponent(m_detach);
 	if (!component) return false;
 
 	m_component = move(component);
@@ -153,12 +155,12 @@ RenameRegionCommand::RenameRegionCommand(UIComponent* component, const string& r
 bool RenameRegionCommand::Execute()
 {
 	m_record.previous = GetTarget()->GetRegion();
-	UIEx(GetTarget()).RenameRegion(m_record.current);
+	RenameRegion(GetTarget(), m_record.current);
 	return true;
 }
 
-bool RenameRegionCommand::Undo() { UIEx(GetTarget()).RenameRegion(m_record.previous); return true; }
-bool RenameRegionCommand::Redo() { UIEx(GetTarget()).RenameRegion(m_record.current); return true; }
+bool RenameRegionCommand::Undo() { RenameRegion(GetTarget(), m_record.previous); return true; }
+bool RenameRegionCommand::Redo() { RenameRegion(GetTarget(), m_record.current); return true; }
 
 //////////////////////////////////////////////////////////////////
 
@@ -169,11 +171,11 @@ RenameCommand::RenameCommand(UIComponent* component, const string& name) noexcep
 bool RenameCommand::Execute()
 {
 	m_record.previous = GetTarget()->GetName();
-	return UIEx(GetTarget()).Rename(m_record.current);
+	return Rename(GetTarget(), m_record.current);
 }
 
-bool RenameCommand::Undo() { return UIEx(GetTarget()).Rename(m_record.previous); }
-bool RenameCommand::Redo() { return UIEx(GetTarget()).Rename(m_record.current); }
+bool RenameCommand::Undo() { return Rename(GetTarget(), m_record.previous); }
+bool RenameCommand::Redo() { return Rename(GetTarget(), m_record.current); }
 
 //////////////////////////////////////////////////////////////////
 

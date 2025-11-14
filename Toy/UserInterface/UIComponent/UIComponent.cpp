@@ -4,6 +4,9 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "../SerializerIO/ClassSerializeIO.h"
+#include "Traverser/UITraverser.h"
+
+using namespace UITraverser;
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -73,17 +76,17 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 	return clone;
 }
 
-bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
-{
-	auto forEachResult = ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
-		bool result = component->ImplementBindSourceInfo(resBinder, texController);
-		AssertMsg(result, "Failed to load texture");
-		return result;
-		});
-	ReturnIfFalse(forEachResult);
-	ReturnIfFalse(UpdatePositionsManually());
-	return true;
-}
+//bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
+//{
+//	auto forEachResult = UITraverser::ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
+//		bool result = component->ImplementBindSourceInfo(resBinder, texController);
+//		AssertMsg(result, "Failed to load texture");
+//		return result;
+//		});
+//	ReturnIfFalse(forEachResult);
+//	ReturnIfFalse(UpdatePositionsManually());
+//	return true;
+//}
 
 UITransform& UIComponent::GetTransform(UIComponent* component)
 {
@@ -127,17 +130,22 @@ bool UIComponent::ProcessUpdate(const DX::StepTimer& timer) noexcept
 	return RecursiveUpdate(timer);
 }
 
-void UIComponent::ProcessRender(ITextureRender* render)
-{
-	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
-	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
-	ForEachChildToRender([render](UIComponent* component) {
-		component->ImplementRender(render);
+//void UIComponent::ProcessRender(ITextureRender* render)
+//{
+//	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
+//	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
+//	ForEachChildToRender([render](UIComponent* component) {
+//		component->ImplementRender(render);
+//
+//		return (component->GetTypeID() != ComponentID::RenderTexture)
+//			? TraverseResult::Continue 
+//			: TraverseResult::ChildrenSkip; //RenderTexture이면 자식들은 랜더하지 않는다. RenderTexture에 랜더링 됐기 때문에.
+//		});
+//}
 
-		return (component->GetTypeID() != ComponentID::RenderTexture)
-			? TraverseResult::Continue 
-			: TraverseResult::ChildrenSkip; //RenderTexture이면 자식들은 랜더하지 않는다. RenderTexture에 랜더링 됐기 때문에.
-		});
+void UIComponent::ProcessRender(ITextureRender* texRender)
+{
+	Render(this, texRender);
 }
 
 void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept
@@ -269,7 +277,7 @@ UIComponent* UIComponent::GetSiblingComponent(StateFlag::Type flag) const noexce
 	return *find;
 }
 
-unique_ptr<UIComponent> UIComponent::Attach(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
+unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
 	if (!HasStateFlag(StateFlag::Attach))
 		return move(child);
@@ -284,7 +292,7 @@ unique_ptr<UIComponent> UIComponent::Attach(unique_ptr<UIComponent> child, const
 	return nullptr;
 }
 
-pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::Detach() noexcept
+pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexcept
 {
 	if (!m_parent || !m_parent->HasStateFlag(StateFlag::Detach))
 		return {};
@@ -310,4 +318,7 @@ void UIComponent::PropagateRoot(UIComponent* root) noexcept
 		c->PropagateRoot(root);
 }
 
-
+bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ v, c->GetSize().y }); }
+bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeX(c, s.x); }
+bool ChangeSizeY(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ c->GetSize().x, v }); }
+bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeY(c, s.y); }

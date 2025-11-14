@@ -30,6 +30,7 @@ public:
 
 	inline UINameGenerator* GetNameGenerator() const noexcept { return m_nameGen.get(); }
 	inline TextureResourceBinder* GetTexResBinder() const noexcept { return m_resBinder.get(); }
+	inline const wstring& GetFilename() const noexcept { return m_filename; }
 	Panel* GetMainPanel() const noexcept;
 
 private:

@@ -31,5 +31,3 @@ private:
     UIModule* m_uiModule{ nullptr };
     UIModul2* m_uiModul2{ nullptr };
 };
-
-//unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer);

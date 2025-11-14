@@ -13,25 +13,25 @@ unique_ptr<UIComponent> NameTraverser::AttachComponent(UIComponent* parent,
 	if (!parent->HasStateFlag(StateFlag::Attach))
 		return move(child);
 
-	UINameGenerator* nameGen = GetNameGenerator(parent);
-	if (!nameGen) return move(child);
+	if (UINameGenerator* nameGen = GetNameGenerator(parent))
+	{
+		bool success = ForEachChildWithRegion(child.get(), GetMyRegion(parent),
+			[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
+				const string& name = component->GetName().empty() ? EnumToString<ComponentID>(component->GetTypeID()) : component->GetName();
+				auto namesOpt = nameGen->MakeNameOf(region, name, isNewRegion);
+				if (!namesOpt) return false;
+				const auto& [newRegion, newName] = *namesOpt;
 
-	bool success = ForEachChildWithRegion(child.get(), GetMyRegion(parent),
-		[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
-			const string& name = component->GetName().empty() ? EnumToString<ComponentID>(component->GetTypeID()) : component->GetName();
-			auto namesOpt = nameGen->MakeNameOf(region, name, isNewRegion);
-			if (!namesOpt) return false;
-			const auto& [newRegion, newName] = *namesOpt;
+				if (isNewRegion) component->SetRegion(newRegion);
+				component->SetName(newName);
+				return true;
+			});
 
-			if (isNewRegion) component->SetRegion(newRegion);
-			component->SetName(newName);
-			return true;
-		});
+		if (!success)
+			return move(child);
+	}
 
-	if (!success)
-		return move(child);
-
-	return parent->Attach(move(child), relativePos);
+	return parent->AttachComponent(move(child), relativePos);
 }
 
 pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UIComponent* c) noexcept
@@ -39,23 +39,23 @@ pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UICom
 	UIComponent* parent = c->GetParent();
 	if (!parent || !parent->HasStateFlag(StateFlag::Detach)) return {};
 
-	UINameGenerator* nameGen = GetNameGenerator(c);
-	if (!nameGen) return {};
+	if (UINameGenerator* nameGen = GetNameGenerator(parent))
+	{
+		bool allRemoved = ForEachChildWithRegion(c, parent->GetMyRegion(),
+			[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
+				if (nameGen->IsUnusedRegion(region)) //region이 없는 경우는 detach 하다가 부모 노드에서 region을 지운 경우이다.
+					return true;
 
-	bool allRemoved = ForEachChildWithRegion(c, parent->GetMyRegion(),
-		[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
-			if (nameGen->IsUnusedRegion(region)) //region이 없는 경우는 detach 하다가 부모 노드에서 region을 지운 경우이다.
-				return true;
+				if (isNewRegion) //노드가 새로운 region이면 
+					return nameGen->RemoveRegion(region);
+				return nameGen->RemoveName(region, component->GetName());
+			});
 
-			if (isNewRegion) //노드가 새로운 region이면 
-				return nameGen->RemoveRegion(region);
-			return nameGen->RemoveName(region, component->GetName());
-		});
+		if (!allRemoved)
+			return {};
+	}
 
-	if (!allRemoved)
-		return {};
-
-	return c->Detach();
+	return c->DetachComponent();
 }
 
 UIComponent* NameTraverser::FindComponent(UIComponent* c, const string& name) noexcept

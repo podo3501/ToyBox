@@ -8,8 +8,8 @@
 class InputManager : public IToolInputManager 
 {
 public:
-    ~InputManager() = default;
-    InputManager() = default;
+    ~InputManager();
+    InputManager();
     void Initialize(HWND hwnd);
 
     virtual void SetMouseStartOffset(const XMINT2& offset) noexcept override;

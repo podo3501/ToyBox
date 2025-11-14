@@ -3,10 +3,7 @@
 
 void ComponentT::SetUp()
 {
-	m_environment = InitializeEnvironment(L"", { 800.f, 600.f });
-
-	m_renderer = make_unique<MockRenderer>();
-	RegisterRenderTextures(m_renderer.get());
+	UIComponentManagerT::SetUp();
 
 	m_resBinder = make_unique<MockTextureResourceBinder>();
 	RegisterBinderTextures(m_resBinder.get());
@@ -15,11 +12,4 @@ void ComponentT::SetUp()
 	
 	m_nullEventDispatcher = CreateNullEventDispatcherManager();
 	EventDispatcherLocator::Provide(m_nullEventDispatcher.get());
-}
-
-void ComponentT::RegisterRenderTextures(MockRenderer* renderer)
-{
-	renderer->RegisterMockTextureInfos({
-		{ L"Texture512.png", 0, {512, 512} }
-		});
 }

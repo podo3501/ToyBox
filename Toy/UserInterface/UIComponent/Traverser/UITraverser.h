@@ -1,27 +1,32 @@
 #pragma once
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/BaseTraverser.h"
+#include "Toy/UserInterface/UIComponent/Traverser/DerivedTraverser.h"
 #include "Toy/UserInterface/UIComponent/Traverser/NameTraverser.h"
 #include "../UIComponent.h" //?!? ComponentCast 이것때문에 여기 있는데 이 인클루드 제거해야 한다.
 
 class UIComponent;
 
-template <typename Fn, typename... Args>
-decltype(auto) BaseCall(Fn&& fn, Args&&... args) noexcept
-{
-	auto traverser = UIComponentLocator::GetService()->GetBaseTraverser();
-	return std::invoke(std::forward<Fn>(fn), traverser, std::forward<Args>(args)...);
-}
-
-template <typename Fn, typename... Args>
-decltype(auto) NameCall(Fn&& fn, Args&&... args) noexcept
-{
-	auto traverser = UIComponentLocator::GetService()->GetNameTraverser();
-	return std::invoke(std::forward<Fn>(fn), traverser, std::forward<Args>(args)...);
-}
-
 namespace UITraverser
 {
+	inline BaseTraverser* GetBaseTraverser() noexcept { return UIComponentLocator::GetService()->GetBaseTraverser(); }
+	template <typename Fn, typename... Args>
+	decltype(auto) BaseCall(Fn&& fn, Args&&... args) noexcept {
+		return std::invoke(std::forward<Fn>(fn), GetBaseTraverser(), std::forward<Args>(args)...);
+	}
+
+	inline DerivedTraverser* GetDerivedTraverser() noexcept { return UIComponentLocator::GetService()->GetDerivedTraverser(); }
+	template <typename Fn, typename... Args>
+	decltype(auto) DerivedCall(Fn&& fn, Args&&... args) noexcept {
+		return std::invoke(std::forward<Fn>(fn), GetDerivedTraverser(), std::forward<Args>(args)...);
+	}
+
+	inline NameTraverser* GetNameTraverser() noexcept { return UIComponentLocator::GetService()->GetNameTraverser(); }
+	template <typename Fn, typename... Args>
+	decltype(auto) NameCall(Fn&& fn, Args&&... args) noexcept {
+		return std::invoke(std::forward<Fn>(fn), GetNameTraverser(), std::forward<Args>(args)...);
+	}
+
 	inline unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept {
 		return NameCall(&NameTraverser::AttachComponent, parent, move(child), relativePos);
@@ -49,6 +54,9 @@ namespace UITraverser
 	}
 	inline bool RenameRegion(UIComponent* c, const string& region) noexcept {
 		return NameCall(&NameTraverser::RenameRegion, c, region);
+	}
+	inline void Render(UIComponent* c, ITextureRender* render) noexcept {
+		return DerivedCall(&DerivedTraverser::Render, c, render);
 	}
 
 	unique_ptr<UIComponent> AttachComponent(UIComponent* c, const string& region, const string& name,

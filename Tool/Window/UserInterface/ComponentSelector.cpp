@@ -5,10 +5,13 @@
 #include "SelectedComponent/EditWindowFactory.h"
 #include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Shared/Utils/StlExt.h"
 #include "../Dialog.h"
 #include "Window/Utils/Common.h"
+
+using namespace UITraverser;
 
 ComponentSelector::~ComponentSelector() = default;
 ComponentSelector::ComponentSelector(IRenderer* renderer, TextureResourceBinder* resBinder, 
@@ -55,7 +58,7 @@ void ComponentSelector::SelectComponent(IToolInputManager* input) noexcept
 
 	static vector<UIComponent*> preComponentList{ nullptr };
 	const XMINT2& pos = input->GetPosition();
-	vector<UIComponent*> componentList = UIEx(m_mainComponent).PickComponents(pos);
+	vector<UIComponent*> componentList = PickComponents(m_mainComponent, pos);
 	if (componentList.empty()) return;
 
 	if (preComponentList == componentList)

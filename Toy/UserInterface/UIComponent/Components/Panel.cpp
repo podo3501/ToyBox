@@ -30,13 +30,3 @@ void Panel::ProcessIO(SerializerIO& serializer)
 {
     UIComponent::ProcessIO(serializer);
 }
-
-//unique_ptr<UIComponent> CreateRootPanel(const string& name, const UILayout& layout, IRenderer* renderer)
-//{
-//    auto panel = CreateComponent<Panel>(layout);
-//    if (!UIEx(panel).Rename(name)) return nullptr;
-//    if (!UIEx(panel).RenameRegion("MainRegionEntry")) return nullptr;
-//    renderer->AddRenderComponent(panel.get());
-//
-//    return panel;
-//}

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ScrollBar.h"
+#include "../../UIComponent/Traverser/UITraverser.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextureSwitcher.h"
 #include "Shared/SerializerIO/SerializerIO.h"
@@ -58,10 +59,10 @@ bool ScrollBar::Setup(const UILayout& layout,
 	SetLayout(layout);
 
 	m_scrollTrack = scrollTrack.get();
-	UIEx(this).AttachComponent(move(scrollTrack), {});
+	AttachComponent(move(scrollTrack), {});
 
 	m_scrollButton = scrollButton.get();
-	UIEx(this).AttachComponent(move(scrollButton), {});
+	AttachComponent(move(scrollButton), {});
 
 	DirectionType dirType = m_scrollTrack->GetDirectionType();
 	StateFlag::Type flag = (dirType == DirectionType::Vertical) ? StateFlag::X_SizeLocked : StateFlag::Y_SizeLocked;
@@ -78,7 +79,7 @@ bool ScrollBar::Setup(unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<Textu
 bool ScrollBar::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	if (GetSize() == XMUINT2{})
-		SetSize(UIEx(this).GetChildrenBoundsSize());
+		SetSize(UITraverser::GetChildrenBoundsSize(this));
 
 	SetScrollContainerSize(0.5f);	//±âº»°ª
 	return true;

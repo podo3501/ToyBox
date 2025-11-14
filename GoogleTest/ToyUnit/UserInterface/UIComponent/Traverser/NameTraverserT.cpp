@@ -36,7 +36,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 	TEST_F(NameTraverserT, DetachComponent_CheckRegion)
 	{
 		auto component = AttachMockComponent<MockComponent>(m_main);
-		UIEx(component).RenameRegion("Region");
+		component->SetRegion("Region");
 
 		DetachComponent(component);
 
@@ -46,7 +46,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 
 	TEST_F(NameTraverserT, FindComponent) //자신의 Region에서만 찾는것
 	{
-		auto component = AttachMockComponenT<MockComponent>(m_main);
+		auto component = AttachMockComponent<MockComponent>(m_main);
 		RenameRegion(component, "MainRegion");
 
 		EXPECT_EQ(FindComponent(m_main, "Main"), m_main);
@@ -62,9 +62,9 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 	TEST_F(NameTraverserT, FindRegionComponent_EmptyRegion)
 	{
 		RenameRegion(m_main, "");
-		auto component = AttachMockComponenT<MockComponent>(m_main);
+		auto component = AttachMockComponent<MockComponent>(m_main);
 
-		auto find = UIEx(component).FindRegionComponent("");
+		auto find = FindRegionComponent(component, "");
 		EXPECT_EQ(m_main, find);
 	}
 

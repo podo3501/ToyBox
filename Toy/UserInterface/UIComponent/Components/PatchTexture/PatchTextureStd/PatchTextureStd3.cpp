@@ -46,7 +46,7 @@ bool PatchTextureStd3::Setup(const UILayout& layout, DirectionType dirType, cons
         size_t childSrcIdx = sourceIndex * 3 + idx;
         auto tex1 = CreateComponent<PatchTextureStd1>(bindKey, childSrcIdx);
         if (auto flag = stateFlags[idx]; flag) tex1->SetStateFlag(*flag, true);
-        UIEx(this).AttachComponent(move(tex1), {});
+        AttachComponent(move(tex1), {});
     }
     SetStateFlag(StateFlag::Attach | StateFlag::Detach, false);
 
