@@ -29,7 +29,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 
 		unique_ptr<Container> read;
 		EXPECT_TRUE(SerializerIO::ReadJsonFromFile(filename, read));
-		read->BindTextureSourceInfo(GetResBinder(), GetTextureController()); //실제 로드하면서 PatchTextureLite 설정이 완료된다.
+		BindTextureSourceInfo(read.get(), GetResBinder(), GetTextureController()); //실제 로드하면서 PatchTextureLite 설정이 완료된다.
 
 		EXPECT_TRUE(CompareDerived(m_component, read));
 	}

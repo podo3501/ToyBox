@@ -3,8 +3,6 @@
 #include "IComponent.h"
 #include "UILayout.h"
 #include "UITransform.h"
-//#include "UIComponentEx.h"
-//#include "UIHierarchy.h"
 #include "UIType.h"
 
 struct IMouseEventReceiver;
@@ -35,7 +33,6 @@ protected:
 	bool EqualComponent(const UIComponent* lhs, const UIComponent* rhs) const noexcept;
 	bool ChangePosition(size_t index, const XMUINT2& size, const XMINT2& relativePos) noexcept;
 	UIComponent* GetChildComponent(size_t index) const noexcept;
-	UIComponent* GetSiblingComponent(StateFlag::Type flag) const noexcept;
 	inline void SetRenderTraversal(RenderTraversal traversal) noexcept { m_renderTraversal = traversal; }
 	inline void ApplySize(const XMUINT2& size) noexcept { m_layout.Set(size); } //?!? SetSize와 같은 역할이다.
 	inline bool GetToolMode() const noexcept { return m_toolMode; }
@@ -53,7 +50,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual void ProcessIO(SerializerIO& serializer);
 	unique_ptr<UIComponent> Clone() const;
 
-	bool BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept;
+	//bool BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept;
 	bool ChangeSize(const XMUINT2& size, bool isForce = false) noexcept; //isForce는 크기가 변함이 없더라도 끝까지 실행시킨다.
 	inline bool ChangeSize(uint32_t x, uint32_t y, bool isForce = false) noexcept { return ChangeSize({ x, y }, isForce); }
 	bool UpdatePositionsManually(bool root = false) noexcept;
@@ -79,13 +76,6 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	inline bool HasStateFlag(StateFlag::Type flag) const noexcept { return BitEnum::Has(m_stateFlag, flag); }
 	void SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept;
 	inline const string& GetRegion() const noexcept { return m_region; } //현재 이 컴포넌트의 region값
-	string GetMyRegion() const noexcept; //자기가 속해있는 region값
-
-	//inline UIComponentEx& GetUIComponentEx() noexcept
-	//{
-	//	if (!m_componentEx) m_componentEx.emplace(this);
-	//	return *m_componentEx;
-	//}
 
 	void SetName(const string& name) noexcept { m_name = name; }
 	void SetRegion(const string& region) noexcept { m_region = region; }
@@ -96,8 +86,7 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent() noexcept;
 	inline RenderTraversal GetRenderSearchType() const noexcept { return m_renderTraversal; }
 	inline UIComponent* GetRoot() noexcept { return m_root; }
-	void PropagateRoot(UIComponent* root) noexcept;
-	void PropagateRoot() noexcept { PropagateRoot(this); }
+	void PropagateRoot() noexcept; //자신이 root일때 자신을 root라고 밑에 노드에게 전파
 
 private:
 	void UnlinkAndRefresh() noexcept;
@@ -117,19 +106,7 @@ private:
 	RenderTraversal m_renderTraversal{ RenderTraversal::Inherited }; //이건 mode이기 때문에 flag와 성격이 맞지 않아서 따로 만듦. 지금은 2개뿐이라 flag에 넣어도 되긴한데, 추후 확장성을 고려해서 일단 이렇게 놔두기로 하자.
 
 	bool m_toolMode{ false };
-	//optional<UIComponentEx> m_componentEx; //optional로 선언하면 포인터가 아닌데도 바로 초기화 하지 않는다.
-
-	//friend class UIComponentEx;
-	//friend class UIHierarchy;
 };
-
-//inline UIComponentEx& UIEx(UIComponent* component) { return component->GetUIComponentEx(); }
-//
-//template<typename Component> requires derived_from<Component, UIComponent> //UIComponent에서 상속 받은 애들만 가능
-//inline UIComponentEx& UIEx(const unique_ptr<Component>& component)
-//{ 
-//	return component->GetUIComponentEx(); 
-//}
 
 //////////////////////////////////////////////////////////////////////////
 

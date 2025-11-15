@@ -1,5 +1,5 @@
 #pragma once
-#include "UserInterface/UIModul2T.h"
+#include "UserInterface/UIModuleT.h"
 #include "UserInterface/TextureResourceBinder/MockTextureResourceBinder.h"
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
@@ -8,7 +8,7 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 
 using namespace UITraverser;
-class UICommandHistoryT_PatchTextureStd1 : public UIModul2T
+class UICommandHistoryT_PatchTextureStd1 : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
@@ -25,7 +25,7 @@ protected:
 
 void UICommandHistoryT_PatchTextureStd1::SetUp()
 {
-	UIModul2T::SetUp();
+	UIModuleT::SetUp();
 
 	m_command = make_unique<UICommandHistory>();
 	unique_ptr<PatchTextureStd1> owner;

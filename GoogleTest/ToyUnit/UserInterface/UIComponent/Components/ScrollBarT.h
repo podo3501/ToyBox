@@ -1,6 +1,7 @@
 #pragma once
 #include "ComponentT.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
@@ -25,7 +26,8 @@ void ScrollBarT::SetUp()
 	DirectionType dirType{ DirectionType::Vertical };
 
 	m_component = CreateSampleScrollBar({}, DirectionType::Vertical, "Track", "Button", &m_button);
-	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+
 	m_component->UpdateScrollView(50, 200); //보여줄 데이터가 화면영역보다 많아야 스크롤바가 생긴다.
 	m_component->SetPositionRatio(0.5f); //중간으로 버튼을 이동힌다.
 	m_component->UpdatePositionsManually();

@@ -1,7 +1,10 @@
 #pragma once
 #include "ComponentT.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+
+using namespace UITraverser;
 
 class ListAreaT : public ComponentT
 {
@@ -21,7 +24,7 @@ void ListAreaT::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateSampleListArea({}, "BackImage", "ListBackground", "Track", "Button", &m_scrollBar);
-	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
+	BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
 }
 
 void ListAreaT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

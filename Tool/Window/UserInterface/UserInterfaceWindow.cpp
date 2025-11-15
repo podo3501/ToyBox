@@ -3,12 +3,12 @@
 #include "Window/Utils/Common.h"
 #include "ComponentController.h"
 #include "Toy/Locator/InputLocator.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "Toy/UserInterface/UIModule.h"
-#include "Toy/UserInterface/UIModul2.h"
 #include "Shared/System/StepTimer.h"
 
 int UserInterfaceWindow::m_uiWindowIndex = 0;
@@ -38,14 +38,14 @@ ImVec2 UserInterfaceWindow::GetPanelSize() const noexcept
 	return XMUINT2ToImVec2(main->GetSize());
 }
 
-bool UserInterfaceWindow::SetupProperty(UIModul2* uiModule)
+bool UserInterfaceWindow::SetupProperty(UIModule* uiModule)
 {
 	m_controller = make_unique<ComponentController>(m_renderer, uiModule->GetTexResBinder(),
 		uiModule->GetMainPanel(), GetName());
 
 	unique_ptr<UIModuleAsComponent> asComponent = CreateComponent<UIModuleAsComponent>(uiModule);
 	m_mainRenderTexture = CreateComponent<RenderTexture>(move(asComponent));
-	ReturnIfFalse(m_mainRenderTexture->BindTextureSourceInfo(nullptr, m_renderer->GetTextureController())); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
+	ReturnIfFalse(UITraverser::BindTextureSourceInfo(m_mainRenderTexture.get(), nullptr, m_renderer->GetTextureController())); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
 
 	ToggleToolMode();
 	m_isOpen = true;
@@ -55,27 +55,27 @@ bool UserInterfaceWindow::SetupProperty(UIModul2* uiModule)
 
 bool UserInterfaceWindow::CreateScene(const XMUINT2& size)
 {
-	UIModul2* module = CreateUIModulE(GetName(), UILayout(size, Origin::LeftTop),
+	UIModule* module = CreateUIModulE(GetName(), UILayout(size, Origin::LeftTop),
 		"Main", m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
 	return SetupProperty(module);
 }
 
 bool UserInterfaceWindow::CreateScene(const wstring& filename)
 {
-	UIModul2* module = CreateUIModulE(GetName(), filename,
+	UIModule* module = CreateUIModulE(GetName(), filename,
 		m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
 	return SetupProperty(module);
 }
 
 bool UserInterfaceWindow::SaveScene(const wstring& filename)
 {
-	UIModul2* module = GetUIModule();
+	UIModule* module = GetUIModule();
 	return module->Write(filename);
 }
 
 wstring UserInterfaceWindow::GetSaveFilename() const noexcept
 {
-	UIModul2* module = GetUIModule();
+	UIModule* module = GetUIModule();
 	return module->GetFilename();
 }
 
@@ -85,7 +85,7 @@ void UserInterfaceWindow::ChangeWindowSize(const ImVec2& size)
 	m_mainRenderTexture->ChangeSize(uint2Size);
 }
 
-UIModul2* UserInterfaceWindow::GetUIModule() const noexcept
+UIModule* UserInterfaceWindow::GetUIModule() const noexcept
 {
 	UIComponent* component = m_mainRenderTexture->GetRenderedComponent();
 	UIModuleAsComponent* asComponent = ComponentCast<UIModuleAsComponent*>(component);

@@ -4,7 +4,6 @@
 #include "Locator/SceneLocator.h"
 #include "Locator/EventDispatcherLocator.h"
 #include "UserInterface/UIModule.h"
-#include "UserInterface/UIModul2.h"
 #include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "TestScene1.h"
 

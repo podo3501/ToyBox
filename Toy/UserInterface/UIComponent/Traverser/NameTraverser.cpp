@@ -2,7 +2,7 @@
 #include "NameTraverser.h"
 #include "../UIComponent.h"
 #include "UserInterface/UIComponentLocator.h"
-#include "UserInterface/UIModul2.h"
+#include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponent/Components/Panel.h"
 
 NameTraverser::NameTraverser() = default;
@@ -41,7 +41,7 @@ pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UICom
 
 	if (UINameGenerator* nameGen = GetNameGenerator(parent))
 	{
-		bool allRemoved = ForEachChildWithRegion(c, parent->GetMyRegion(),
+		bool allRemoved = ForEachChildWithRegion(c, GetMyRegion(parent),
 			[nameGen](const string& region, UIComponent* component, bool isNewRegion) {
 				if (nameGen->IsUnusedRegion(region)) //region이 없는 경우는 detach 하다가 부모 노드에서 region을 지운 경우이다.
 					return true;
@@ -182,6 +182,6 @@ UINameGenerator* NameTraverser::GetNameGenerator(UIComponent* c) noexcept
 	Panel* panel = ComponentCast<Panel*>(c->GetRoot());
 	if (!panel) return nullptr;
 
-	auto uiModule = panel->GetUIModul2();
+	auto uiModule = panel->GetUIModule();
 	return uiModule ? uiModule->GetNameGenerator() : nullptr;
 }

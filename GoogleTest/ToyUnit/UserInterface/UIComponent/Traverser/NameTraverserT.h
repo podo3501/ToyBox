@@ -1,11 +1,11 @@
 #pragma once
-#include "UserInterface/UIModul2T.h"
+#include "UserInterface/UIModuleT.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 using namespace UITraverser;
 
-class NameTraverserT : public UIModul2T
+class NameTraverserT : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
@@ -14,7 +14,7 @@ protected:
 
 void NameTraverserT::SetUp()
 {
-	UIModul2T::SetUp();
+	UIModuleT::SetUp();
 }
 
 //함수 이름이 같을때 처리.

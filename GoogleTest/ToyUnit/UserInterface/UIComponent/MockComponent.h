@@ -1,7 +1,6 @@
 #pragma once
 #include "Toy/UserInterface/UIComponent/UILayout.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
-#include "Toy/UserInterface/UIComponent/UIComponentEx.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 class UIComponentStub : public UIComponent

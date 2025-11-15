@@ -1,6 +1,7 @@
 #pragma once
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/System/StepTimer.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 
 struct ITextureController;
@@ -14,10 +15,10 @@ bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 
 	unique_ptr<T> read;
 	ReturnIfFalse(SerializerIO::ReadJsonFromFile(filename, read));
-	read->PropagateRoot(read.get());
+	read->PropagateRoot();
 
 	if (resBinder && texController)
-		read->BindTextureSourceInfo(resBinder, texController);
+		UITraverser::BindTextureSourceInfo(read.get(), resBinder, texController);
 
 	return CompareDerived(component, read);
 }

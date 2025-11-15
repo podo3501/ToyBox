@@ -14,7 +14,6 @@ class RenderTexture;
 class TextureResourceBinder;
 class ComponentController;
 class UIModule;
-class UIModul2;
 
 class UserInterfaceWindow : public InnerWindow
 {
@@ -34,12 +33,12 @@ public:
     inline bool IsOpen() const noexcept { return m_isOpen; }
 
 private:
-    bool SetupProperty(UIModul2* uiModule);
+    bool SetupProperty(UIModule* uiModule);
     void ToggleToolMode() noexcept;
     void CheckActiveUpdate(IToolInputManager* toolInput) noexcept;
     void CheckWindowMoved(IToolInputManager* toolInput) noexcept;
     void CheckWindowResized(IToolInputManager* toolInput);
-    UIModul2* GetUIModule() const noexcept;
+    UIModule* GetUIModule() const noexcept;
     inline ImVec2 GetPanelSize() const noexcept;
 
     void SetupWindowAppearing() noexcept;

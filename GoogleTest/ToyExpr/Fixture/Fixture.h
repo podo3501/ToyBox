@@ -3,9 +3,10 @@
 
 class Window;
 class Environment;
-class UIComponent;
+class UIComponentManager;
 class UIModule;
 class TextureResourceBinder;
+class Panel;
 struct IRenderer;
 struct IComponent;
 
@@ -24,6 +25,7 @@ protected:
 	unique_ptr<Environment> m_environment;
 	unique_ptr<IRenderer> m_renderer;
 	DX::StepTimer m_timer;
-	unique_ptr<UIModule> m_uiModule;
-	UIComponent* m_main;
+	unique_ptr<UIComponentManager> m_uiManager;
+	UIModule* m_uiModule{ nullptr };
+	Panel* m_main{ nullptr };
 };

@@ -1,9 +1,9 @@
 #pragma once
-#include "UserInterface/UIModul2T.h"
+#include "UserInterface/UIModuleT.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/HierarchyTraverser.h"
 
-class HierarchyTraverserT : public UIModul2T
+class HierarchyTraverserT : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
@@ -14,5 +14,5 @@ protected:
 
 void HierarchyTraverserT::SetUp()
 {
-	UIModul2T::SetUp();
+	UIModuleT::SetUp();
 }

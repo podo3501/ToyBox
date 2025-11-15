@@ -17,12 +17,31 @@ void DerivedTraverser::Render(UIComponent* c, ITextureRender* render)
 
 bool DerivedTraverser::BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder, ITextureController* texController) noexcept
 {
-	auto forEachResult = ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
+	auto forEachResult = ForEachChildPostUntilFail(c, [resBinder, texController](UIComponent* component) {
 		bool result = component->ImplementBindSourceInfo(resBinder, texController);
 		AssertMsg(result, "Failed to load texture");
 		return result;
 		});
 	ReturnIfFalse(forEachResult);
-	ReturnIfFalse(UpdatePositionsManually());
+	ReturnIfFalse(c->UpdatePositionsManually());
 	return true;
+}
+
+void DerivedTraverser::PropagateRoot(UIComponent* c, UIComponent* root) noexcept
+{
+	ForEachChild(c, [root](UIComponent* component) { 
+		component->m_root = root; 
+		});
+}
+
+bool DerivedTraverser::EnableToolMode(UIComponent* c, bool enable) noexcept
+{
+	auto modeFunc = enable ? &UIComponent::EnterToolMode : &UIComponent::ExitToolMode;
+	return ForEachChildPostUntilFail(c, [enable, modeFunc](UIComponent* component) {
+		if (component->m_toolMode == enable) return true;
+
+		component->m_toolMode = enable;
+		ReturnIfFalse((component->*modeFunc)());
+		return true;
+		});
 }

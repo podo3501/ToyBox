@@ -3,11 +3,12 @@
 #include "MockComponent.h"
 #include "Internal/MockRenderer.h"
 #include "../TextureResourceBinder/MockTextureResourceBinder.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
-class MockBehaviorComponenT : public UIComponentStub
+class MockBehaviorComponent : public UIComponentStub
 {
 public:
-	MockBehaviorComponenT()
+	MockBehaviorComponent()
 	{
 		//기본 리턴이 false 이기 때문에 리턴을 하지 않으면 실패했다고 간주한다.
 		ON_CALL(*this, ImplementBindSourceInfo(testing::_, testing::_)).WillByDefault(testing::Return(true));
@@ -93,7 +94,7 @@ namespace UserInterfaceT::UIComponentT
 
 	TEST_F(UIComponentT, RenderPipeline) //셋팅부터 렌더링까지
 	{
-		auto [owner, component] = CreateMockComponent<MockBehaviorComponenT>();
+		auto [owner, component] = CreateMockComponent<MockBehaviorComponent>();
 		m_main->AttachComponent(move(owner));
 
 		testing::InSequence seq;
@@ -103,7 +104,7 @@ namespace UserInterfaceT::UIComponentT
 
 		MockRenderer renderer;
 		MockTextureResourceBinder resBinder;
-		component->BindTextureSourceInfo( &resBinder, renderer.GetTextureController());
+		UITraverser::BindTextureSourceInfo(component, &resBinder, renderer.GetTextureController());
 
 		DX::StepTimer timer{};
 		component->ProcessUpdate(timer);

@@ -1,7 +1,10 @@
 #pragma once
 #include "ComponentT.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/Container.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
+
+using namespace UITraverser;
 
 class ContainerT : public ComponentT
 {
@@ -23,7 +26,7 @@ void ContainerT::SetUp()
 	componentList[InteractState::Pressed] = CreateComponent<PatchTextureStd1>("Button32_Pressed");
 
 	m_component = CreateComponent<Container>(UILayout{}, move(componentList));
-	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
+	BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
 }
 
 void ContainerT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

@@ -58,7 +58,13 @@ namespace UITraverser
 	inline void Render(UIComponent* c, ITextureRender* render) noexcept {
 		return DerivedCall(&DerivedTraverser::Render, c, render);
 	}
-
+	inline bool BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder, ITextureController* texController) noexcept {
+		return DerivedCall(&DerivedTraverser::BindTextureSourceInfo, c, resBinder, texController);
+	}
+	inline void PropagateRoot(UIComponent* c, UIComponent* root) noexcept {
+		return DerivedCall(&DerivedTraverser::PropagateRoot, c, root);
+	}
+	
 	unique_ptr<UIComponent> AttachComponent(UIComponent* c, const string& region, const string& name,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* c, 

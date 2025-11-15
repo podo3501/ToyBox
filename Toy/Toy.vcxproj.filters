@@ -92,16 +92,10 @@
     <ClInclude Include="UserInterface\UIComponent\UIComponent.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\UIComponentEx.h">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\UIComponentFactory.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\UIHelperClass.h">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\UIHierarchy.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\UILayout.h">
@@ -166,9 +160,6 @@
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd.h">
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIModule.h">
-      <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
@@ -272,7 +263,7 @@
     <ClInclude Include="UserInterface\UIComponent\Traverser\UITraverser.h">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIModul2.h">
+    <ClInclude Include="UserInterface\UIModule.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverser.h">
@@ -315,16 +306,10 @@
     <ClCompile Include="UserInterface\UIComponent\UIComponent.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\UIComponentEx.cpp">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\UIComponentFactory.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\UIHelperClass.cpp">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\UIHierarchy.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\UILayout.cpp">
@@ -390,9 +375,6 @@
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd.cpp">
       <Filter>UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIModule.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponent.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
@@ -456,7 +438,7 @@
     <ClCompile Include="UserInterface\UIComponent\Traverser\UITraverser.cpp">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIModul2.cpp">
+    <ClCompile Include="UserInterface\UIModule.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverser.cpp">

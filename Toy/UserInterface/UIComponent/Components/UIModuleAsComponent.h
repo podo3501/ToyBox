@@ -1,7 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 
-class UIModul2;
+class UIModule;
 class UIModuleAsComponent : public UIComponent
 {
 public:
@@ -10,8 +10,8 @@ public:
 
 	static ComponentID GetTypeStatic() { return ComponentID::UIModuleAsComponent; }
 	virtual ComponentID GetTypeID() const noexcept override { return GetTypeStatic(); }
-	bool Setup(UIModul2* modul2) noexcept;
-	inline UIModul2* GetUIModule() const noexcept { return m_modul2; }
+	bool Setup(UIModule* module) noexcept;
+	inline UIModule* GetUIModule() const noexcept { return m_module; }
 
 protected:
 	virtual unique_ptr<UIComponent> CreateClone() const override;
@@ -20,5 +20,5 @@ protected:
 	virtual void ImplementRender(ITextureRender* render) const override;
 
 private:
-	UIModul2* m_modul2{ nullptr };
+	UIModule* m_module{ nullptr };
 };

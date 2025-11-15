@@ -2,7 +2,7 @@
 #include "../Scene.h"
 
 class UIComponent;
-class UIModul2;
+class UIModule;
 class TestScene1 : public Scene
 {
 public:
@@ -17,5 +17,5 @@ public:
 
 private:
 	//unique_ptr<UIModule> m_uiModule;
-	UIModul2* m_uiModule{ nullptr };
+	UIModule* m_uiModule{ nullptr };
 };

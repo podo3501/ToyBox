@@ -76,18 +76,6 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 	return clone;
 }
 
-//bool UIComponent::BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
-//{
-//	auto forEachResult = UITraverser::ForEachChildPostUntilFail([resBinder, texController](UIComponent* component) {
-//		bool result = component->ImplementBindSourceInfo(resBinder, texController);
-//		AssertMsg(result, "Failed to load texture");
-//		return result;
-//		});
-//	ReturnIfFalse(forEachResult);
-//	ReturnIfFalse(UpdatePositionsManually());
-//	return true;
-//}
-
 UITransform& UIComponent::GetTransform(UIComponent* component)
 {
 	return component->m_transform;
@@ -130,19 +118,6 @@ bool UIComponent::ProcessUpdate(const DX::StepTimer& timer) noexcept
 	return RecursiveUpdate(timer);
 }
 
-//void UIComponent::ProcessRender(ITextureRender* render)
-//{
-//	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
-//	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
-//	ForEachChildToRender([render](UIComponent* component) {
-//		component->ImplementRender(render);
-//
-//		return (component->GetTypeID() != ComponentID::RenderTexture)
-//			? TraverseResult::Continue 
-//			: TraverseResult::ChildrenSkip; //RenderTexture이면 자식들은 랜더하지 않는다. RenderTexture에 랜더링 됐기 때문에.
-//		});
-//}
-
 void UIComponent::ProcessRender(ITextureRender* texRender)
 {
 	Render(this, texRender);
@@ -184,12 +159,6 @@ bool UIComponent::ChangePosition(size_t index, const XMUINT2& size, const XMINT2
 	if (index >= m_children.size()) return false;
 	GetTransform(m_children[index].get()).ChangeRelativePosition(size, relativePos);
 	return true;
-}
-
-string UIComponent::GetMyRegion() const noexcept
-{
-	UIComponent* regionRoot = GetRegionRoot();
-	return regionRoot->GetRegion();
 }
 
 bool UIComponent::EnableToolMode(bool enable) noexcept
@@ -263,27 +232,13 @@ vector<UIComponent*> UIComponent::GetChildren() const noexcept
 	return componentList;
 }
 
-UIComponent* UIComponent::GetSiblingComponent(StateFlag::Type flag) const noexcept
-{
-	if (!m_parent) return {};
-	auto components = m_parent->GetChildren();
-	
-	auto find = ranges::find_if(components, [flag](auto& component) {
-		return component->HasStateFlag(flag);
-		});
-	if (find == components.end())
-		return nullptr;
-
-	return *find;
-}
-
 unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
 	if (!HasStateFlag(StateFlag::Attach))
 		return move(child);
 
+	UITraverser::PropagateRoot(child.get(), m_root);
 	child->SetParent(this);
-	child->PropagateRoot(m_root);
 	child->m_transform.ChangeRelativePosition(
 		m_layout.GetSize(), relativePos);
 	m_children.emplace_back(move(child));
@@ -311,11 +266,9 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexc
 	return { move(detached), parent };
 }
 
-void UIComponent::PropagateRoot(UIComponent* root) noexcept
-{
-	m_root = root;
-	for (auto& c : m_children)
-		c->PropagateRoot(root);
+void UIComponent::PropagateRoot() noexcept
+{ 
+	UITraverser::PropagateRoot(this, this);
 }
 
 bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ v, c->GetSize().y }); }

@@ -1,9 +1,9 @@
 #pragma once
 //#include "UserInterface/BaseModuleT.h"
-#include "UserInterface/UIModul2T.h"
+#include "UserInterface/UIModuleT.h"
 #include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
 
-class UIModuleAsComponentT : public UIModul2T
+class UIModuleAsComponentT : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
@@ -14,7 +14,7 @@ protected:
 
 void UIModuleAsComponentT::SetUp()
 {
-	UIModul2T::SetUp();
+	UIModuleT::SetUp();
 
 	m_component = CreateComponent<UIModuleAsComponent>(m_uiModule);
 }

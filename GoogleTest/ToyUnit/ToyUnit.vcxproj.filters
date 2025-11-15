@@ -18,17 +18,8 @@
     <ClCompile Include="UserInterface\CommandHistory\TexResCommandHistoryT.cpp">
       <Filter>UserInterface\CommandHistory</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIModuleT.cpp">
-      <Filter>UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UINameGenerator\UINameGeneratorT.cpp">
       <Filter>UserInterface\UINameGenerator</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\UIComponentExT.cpp">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\BaseModuleT.cpp">
-      <Filter>UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.cpp">
       <Filter>UserInterface\CommandHistory</Filter>
@@ -87,9 +78,6 @@
     <ClCompile Include="System\EventDispatcherManagerT.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\UIHierarchyT.cpp">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\ComponentHelper.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
@@ -114,8 +102,11 @@
     <ClCompile Include="UserInterface\UIComponentManagerT.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIModul2T.cpp">
+    <ClCompile Include="UserInterface\UIModuleT.cpp">
       <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverserT.cpp">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,17 +127,8 @@
     <ClInclude Include="UserInterface\CommandHistory\TexResCommandHistoryT.h">
       <Filter>UserInterface\CommandHistory</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIModuleT.h">
-      <Filter>UserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h">
       <Filter>UserInterface\UINameGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\UIComponentExT.h">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\BaseModuleT.h">
-      <Filter>UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.h">
       <Filter>UserInterface\CommandHistory</Filter>
@@ -205,9 +187,6 @@
     <ClInclude Include="System\EventDispatcherManagerT.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\UIHierarchyT.h">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\ComponentHelper.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
@@ -238,8 +217,11 @@
     <ClInclude Include="UserInterface\UIComponentManagerT.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIModul2T.h">
+    <ClInclude Include="UserInterface\UIModuleT.h">
       <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverserT.h">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

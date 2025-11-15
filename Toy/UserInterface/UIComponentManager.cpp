@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "UIComponentManager.h"
 #include "IRenderer.h"
-#include "UIModul2.h"
+#include "UIModule.h"
 #include "UINameGenerator/UINameGenerator.h"
 #include "UIComponent/Traverser/BaseTraverser.h"
 #include "UIComponent/Traverser/DerivedTraverser.h"
@@ -16,24 +16,24 @@ UIComponentManager::UIComponentManager() :
 	m_nameTraverser{ make_unique<NameTraverser>() }
 {}
 
-UIModul2* UIComponentManager::CreateUIModule(const string& moduleName, const UILayout& layout, 
+UIModule* UIComponentManager::CreateUIModule(const string& moduleName, const UILayout& layout, 
 	const string& mainUIName, IRenderer* renderer, const wstring& srcBinderFilename)
 {
 	if (m_uiModules.find(moduleName) != m_uiModules.end()) return nullptr;
 
-	auto [owner, module] = GetPtrs(make_unique<UIModul2>());
+	auto [owner, module] = GetPtrs(make_unique<UIModule>());
 	if (!owner->SetupMainComponent(layout, mainUIName, renderer, srcBinderFilename)) return nullptr;
 	m_uiModules.insert({ moduleName, move(owner) });
 
 	return module;
 }
 
-UIModul2* UIComponentManager::CreateUIModule(const string& moduleName, const wstring& filename,
+UIModule* UIComponentManager::CreateUIModule(const string& moduleName, const wstring& filename,
 	IRenderer* renderer, const wstring& srcBinderFilename)
 {
 	if (m_uiModules.find(moduleName) != m_uiModules.end()) return nullptr;
 
-	auto [owner, module] = GetPtrs(make_unique<UIModul2>());
+	auto [owner, module] = GetPtrs(make_unique<UIModule>());
 	if (!owner->SetupMainComponent(filename, renderer, srcBinderFilename)) return nullptr;
 	m_uiModules.insert({ moduleName, move(owner) });
 

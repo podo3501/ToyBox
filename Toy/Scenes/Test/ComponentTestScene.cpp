@@ -4,7 +4,6 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "UserInterface/UIModule.h"
-#include "UserInterface/UIModul2.h"
 #include "UserInterface/UIComponentLocator.h"
 #include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "UserInterface/UIComponent/UIUtility.h"

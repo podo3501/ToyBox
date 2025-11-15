@@ -138,7 +138,6 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="System\EventDispatcherManagerT.h" />
     <ClInclude Include="System\SceneManagerT.h" />
-    <ClInclude Include="UserInterface\BaseModuleT.h" />
     <ClInclude Include="UserInterface\CommandHistory\TexResCommandHistoryT.h" />
     <ClInclude Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h" />
@@ -164,12 +163,10 @@
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.h" />
     <ClInclude Include="UserInterface\UIComponent\MockComponent.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\BaseTraverserT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverserT.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverserT.h" />
-    <ClInclude Include="UserInterface\UIComponent\UIComponentExT.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
-    <ClInclude Include="UserInterface\UIComponent\UIHierarchyT.h" />
-    <ClInclude Include="UserInterface\UIModul2T.h" />
     <ClInclude Include="UserInterface\UIModuleT.h" />
     <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h" />
   </ItemGroup>
@@ -185,7 +182,6 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="System\EventDispatcherManagerT.cpp" />
     <ClCompile Include="System\SceneManagerT.cpp" />
-    <ClCompile Include="UserInterface\BaseModuleT.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\TexResCommandHistoryT.cpp" />
     <ClCompile Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp" />
@@ -211,12 +207,10 @@
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\MockComponent.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\BaseTraverserT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverserT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverserT.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\UIComponentExT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\UIHierarchyT.cpp" />
-    <ClCompile Include="UserInterface\UIModul2T.cpp" />
     <ClCompile Include="UserInterface\UIModuleT.cpp" />
     <ClCompile Include="UserInterface\UINameGenerator\UINameGeneratorT.cpp" />
   </ItemGroup>

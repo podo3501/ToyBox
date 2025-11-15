@@ -1,6 +1,7 @@
 #pragma once
 #include "ComponentT.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 
 //마우스를 사용해 상태변경은 UIModule에서 하기 때문에 관련 event 및 callback 테스트는 UIModule에서.
@@ -19,7 +20,7 @@ void TextureSwitcherT::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateComponent<TextureSwitcher>(TextureSlice::One, GetStateKeyMap("Button32"));
-	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
 }
 
 void TextureSwitcherT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

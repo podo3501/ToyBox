@@ -49,3 +49,9 @@ vector<IMouseEventReceiver*> BaseTraverser::PickMouseReceivers(UIComponent* c, c
 	ranges::reverse(findList); //앞으로 넣어주는 것보다 push_back 하고 reverse 하는게 더 빠르다. vector가 단순 배열이라 캐쉬가 좋기 때문에 이걸로 한다.	 
 	return findList;
 }
+
+string BaseTraverser::GetMyRegion(UIComponent* c) const noexcept
+{
+	UIComponent* regionRoot = GetRegionRoot(c);
+	return regionRoot->GetRegion();
+}

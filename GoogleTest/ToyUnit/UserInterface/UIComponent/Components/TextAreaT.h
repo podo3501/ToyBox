@@ -1,5 +1,6 @@
 #pragma once
 #include "ComponentT.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/TextArea.h"
 
 class TextAreaT : public ComponentT
@@ -20,7 +21,7 @@ void TextAreaT::SetUp()
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	wstring text = L"<Hangle>테스트<Red>빨강색</Red></Hangle><br><English>Test<Blue>Blue</Blue></English>";
 	m_component = CreateComponent<TextArea>(text, bindKeys);
-	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
 }
 
 void TextAreaT::RegisterRenderTextures(MockRenderer* renderer)

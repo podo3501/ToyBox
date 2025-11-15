@@ -76,7 +76,7 @@ bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBi
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, texController));
+	ReturnIfFalse(BindTextureSourceInfo(protoTextArea.get(), rb, texController));
 	
 	protoTextArea->SetName("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
@@ -100,7 +100,7 @@ bool MakeSampleListAreaDatA(ITextureController* texController, TextureResourceBi
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	ReturnIfFalse(protoTextArea->BindTextureSourceInfo(rb, texController));
+	ReturnIfFalse(BindTextureSourceInfo(protoTextArea.get(), rb, texController));
 
 	protoTextArea.get()->SetName("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();

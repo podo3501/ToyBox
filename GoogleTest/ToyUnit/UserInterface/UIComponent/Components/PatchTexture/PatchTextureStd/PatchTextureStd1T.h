@@ -1,5 +1,6 @@
 #pragma once
 #include "UserInterface/UIComponent/Components/ComponentT.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 
 class PatchTextureStd1T : public ComponentT
@@ -19,7 +20,7 @@ void PatchTextureStd1T::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateComponent<PatchTextureStd1>("One32");
-	m_component->BindTextureSourceInfo(GetResBinder(), GetTextureController());
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
 }
 
 void PatchTextureStd1T::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

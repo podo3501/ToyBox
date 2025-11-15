@@ -4,7 +4,6 @@
 struct IRenderer;
 class SerializerIO;
 class UIModule;
-class UIModul2;
 
 class Panel : public UIComponent
 {
@@ -19,9 +18,7 @@ public:
 
     bool Setup(const UILayout& layout = {});
     void SetUIModule(UIModule* uiModule) noexcept { m_uiModule = uiModule; }
-    void SetUIModul2(UIModul2* uiModul2) noexcept { m_uiModul2 = uiModul2; }
     inline UIModule* GetUIModule() const noexcept { return m_uiModule; }
-    inline UIModul2* GetUIModul2() const noexcept { return m_uiModul2; }
 
 protected:
     Panel(const Panel& other);
@@ -29,5 +26,4 @@ protected:
 
 private:
     UIModule* m_uiModule{ nullptr };
-    UIModul2* m_uiModul2{ nullptr };
 };

@@ -6,13 +6,13 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
+#include "Toy/UserInterface/UIComponentManager.h"
 #include "Toy/UserInterface/UIModule.h"
 
 Fixture::~Fixture() = default;
 Fixture::Fixture() :
 	m_main{ nullptr }
-{
-}
+{}
 
 void Fixture::SetUp()
 {
@@ -27,7 +27,10 @@ void Fixture::SetUp()
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
-	m_uiModule = CreateUIModule(layout, "Main", m_renderer.get(), srcBinderFilename);
+
+	m_uiManager = make_unique<UIComponentManager>();
+	m_uiModule = m_uiManager->CreateUIModule("Demo", layout, "Main", m_renderer.get(), srcBinderFilename);
+
 	m_uiModule->AddRenderer();
 	m_main = m_uiModule->GetMainPanel();
 
