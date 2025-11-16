@@ -29,8 +29,9 @@ bool DerivedTraverser::BindTextureSourceInfo(UIComponent* c, TextureResourceBind
 
 void DerivedTraverser::PropagateRoot(UIComponent* c, UIComponent* root) noexcept
 {
-	ForEachChild(c, [root](UIComponent* component) { 
-		component->m_root = root; 
+	UIComponent* realRoot = root->m_root;
+	ForEachChild(c, [realRoot](UIComponent* component) {
+		component->m_root = realRoot;
 		});
 }
 

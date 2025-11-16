@@ -4,6 +4,7 @@
 #include "UserInterface/UIComponentLocator.h"
 #include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponent/Components/Panel.h"
+#include "UITraverser.h"
 
 NameTraverser::NameTraverser() = default;
 
@@ -31,6 +32,7 @@ unique_ptr<UIComponent> NameTraverser::AttachComponent(UIComponent* parent,
 			return move(child);
 	}
 
+	UITraverser::PropagateRoot(child.get(), parent);
 	return parent->AttachComponent(move(child), relativePos);
 }
 

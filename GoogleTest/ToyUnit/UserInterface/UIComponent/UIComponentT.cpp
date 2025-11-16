@@ -71,7 +71,9 @@ namespace UserInterfaceT::UIComponentT
 	TEST_F(UIComponentT, ChangeSize_LeftTop) //LeftTop 일때 변환
 	{
 		VerifyTransformChange(
-			[this] { m_parent->ChangeSize({ 200, 200 }); },
+			[this] { 
+				m_parent->ChangeSize({ 200, 200 }); 
+			},
 			ChangeExpect::ParentSizeChanged |
 			ChangeExpect::ChildRelativeChanged
 		);

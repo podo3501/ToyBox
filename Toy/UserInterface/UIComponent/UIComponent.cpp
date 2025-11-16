@@ -237,7 +237,6 @@ unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> chi
 	if (!HasStateFlag(StateFlag::Attach))
 		return move(child);
 
-	UITraverser::PropagateRoot(child.get(), m_root);
 	child->SetParent(this);
 	child->m_transform.ChangeRelativePosition(
 		m_layout.GetSize(), relativePos);

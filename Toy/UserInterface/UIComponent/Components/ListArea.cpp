@@ -69,19 +69,19 @@ bool ListArea::Setup(const UILayout& layout, unique_ptr<UIComponent> bgImage,
 
 	auto renderTex = CreateComponent<RenderTexture>(UILayout{ layout.GetSize() }, move(bgImage));
 	m_renderTex = renderTex.get();
-	AttachComponent(move(renderTex), {});
+	UITraverser::AttachComponent(this, move(renderTex), {});
 
 	m_prototypeContainer = switcher.get();
 	m_prototypeContainer->SetName("Prototype Container");
 	m_prototypeContainer->SetRegion("ListContainer");
 	m_prototypeContainer->SetVisible(false); //Prototype를 만드는 컨테이너이기 때문에 안보이게 셋팅.
-	AttachComponent(move(switcher), {});
+	UITraverser::AttachComponent(this, move(switcher), {});
 
 	m_scrollBar = scrollBar.get();
 	m_scrollBar->ChangeOrigin(Origin::RightTop);
 	m_scrollBar->SetStateFlag(StateFlag::Render, false);
 	m_scrollBar->AddScrollChangedCB([this](float ratio) { OnScrollChangedCB(ratio); });
-	AttachComponent(move(scrollBar), { static_cast<int32_t>(layout.GetSize().x), 0 });
+	UITraverser::AttachComponent(this, move(scrollBar), { static_cast<int32_t>(layout.GetSize().x), 0 });
 
 	//자식들은 attach detach가 되는데 prototype은 자식이지만 detach가 안 되어야 한다. 셋팅필요
 
