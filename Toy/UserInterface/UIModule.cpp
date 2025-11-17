@@ -191,7 +191,7 @@ bool UIModule::Read(const wstring& filename) noexcept
 
 bool UIModule::EnableToolMode(bool enable) noexcept
 {
-	return m_mainPanel->EnableToolMode(enable);
+	return UITraverser::EnableToolMode(m_mainPanel.get(), enable);
 }
 
 Panel* UIModule::GetMainPanel() const noexcept { return m_mainPanel.get(); }

@@ -161,22 +161,6 @@ bool UIComponent::ChangePosition(size_t index, const XMUINT2& size, const XMINT2
 	return true;
 }
 
-bool UIComponent::EnableToolMode(bool enable) noexcept
-{
-	bool result = ranges::all_of(m_children, [enable](auto& child) {
-		return child->EnableToolMode(enable);
-		});
-	ReturnIfFalse(result);
-
-	if (m_toolMode != enable)
-	{
-		m_toolMode = enable;
-		ReturnIfFalse((enable) ? EnterToolMode() : ExitToolMode());
-	}
-
-	return true;
-}
-
 void UIComponent::ProcessIO(SerializerIO& serializer)
 {
 	serializer.Process("Name", m_name);

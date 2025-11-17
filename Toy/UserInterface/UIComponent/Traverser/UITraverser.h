@@ -64,6 +64,9 @@ namespace UITraverser
 	inline void PropagateRoot(UIComponent* c, UIComponent* root) noexcept {
 		return DerivedCall(&DerivedTraverser::PropagateRoot, c, root);
 	}
+	inline bool EnableToolMode(UIComponent* c, bool enable) noexcept {
+		return DerivedCall(&DerivedTraverser::EnableToolMode, c, enable);
+	}
 	
 	unique_ptr<UIComponent> AttachComponent(UIComponent* c, const string& region, const string& name,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;

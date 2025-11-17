@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "UserInterface/UIModuleT.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
@@ -17,7 +17,7 @@ void NameTraverserT::SetUp()
 	UIModuleT::SetUp();
 }
 
-//ÇÔ¼ö ÀÌ¸§ÀÌ °°À»¶§ Ã³¸®.
+//í•¨ìˆ˜ ì´ë¦„ì´ ê°™ì„ë•Œ ì²˜ë¦¬.
 //inline bool RenameRegion() noexcept {
 //	return BaseCall(static_cast<bool(BaseTraverser::*)() noexcept>(&BaseTraverser::RenameRegion));
 //}

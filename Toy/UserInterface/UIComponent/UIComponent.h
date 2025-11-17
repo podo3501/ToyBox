@@ -63,7 +63,6 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	bool ChangeRelativePosition(const XMINT2& relativePos) noexcept;
 	inline void ChangeOrigin(const Origin& origin) noexcept { m_layout.Set(origin); }
 	inline void SetSize(const XMUINT2& size) { m_layout.Set(size); }
-	bool EnableToolMode(bool enable) noexcept;
 
 	inline void SetLayout(const UILayout& layout) noexcept { m_layout = layout; }
 	inline const string& GetName() const noexcept { return m_name; }

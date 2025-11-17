@@ -41,7 +41,6 @@ void UIComponentT::SetUp()
     m_parent = AttachMockComponentDirect<MockComponent>(m_main, mock_defaults::parentDesc);
     m_child = AttachMockComponentDirect<MockComponent>(m_parent, mock_defaults::childDesc);
     m_main->UpdatePositionsManually();
-    //m_main->PropagateRoot();
 }
 
 bool UIComponentT::Has(ChangeExpect v, ChangeExpect f) noexcept
