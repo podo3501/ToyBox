@@ -37,7 +37,7 @@ bool GameLoop::InitializeDerived()
 {
     m_inputManager = CreateInputManager(GetWindowHandle());
     Locator<IInputManager>::Provide(m_inputManager.get());
-    m_uiManager = make_unique<UIComponentManager>();
+    m_uiManager = make_unique<UIComponentManager>(m_renderer);
     Locator<UIComponentManager>::Provide(m_uiManager.get());
     m_sceneManager = CreateSceneManager();
     SceneLocator::Provide(m_sceneManager.get());
@@ -49,8 +49,8 @@ bool GameLoop::InitializeDerived()
 
 bool GameLoop::DoPrepare()
 {
-    //m_sceneManager->Transition(make_unique<ComponentTestScene>(m_renderer));
-    m_sceneManager->Transition(make_unique<TestScene1>(m_renderer));
+    m_sceneManager->Transition(make_unique<ComponentTestScene>(m_renderer));
+    //m_sceneManager->Transition(make_unique<TestScene1>(m_renderer));
 
     return true;
 }

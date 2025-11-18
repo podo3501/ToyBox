@@ -28,7 +28,7 @@ inline void UIModuleT::SetUp()
 	UIComponentManagerT::SetUp();
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
-	m_uiModule = CreateUIModulE("Demo", layout, "Main", m_renderer.get());
+	m_uiModule = CreateUIModule("Demo", layout, "Main");
 
 	RegisterBinderTextures(m_uiModule->GetTexResBinder());
 	m_main = m_uiModule->GetMainPanel();
@@ -38,7 +38,7 @@ inline void UIModuleT::TearDown()
 {
 	m_main = nullptr;
 	m_uiModule = nullptr;
-	ReleaseUIModulE("Demo");
+	ReleaseUIModule("Demo");
 }
 
 inline void UIModuleT::SimulateMouse(const XMINT2& pos, InputState state) noexcept

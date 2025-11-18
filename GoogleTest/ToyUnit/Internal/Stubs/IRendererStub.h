@@ -44,6 +44,8 @@ public:
     virtual ~IRendererStub() {};
 
     virtual bool Initialize() override { return true; }
+
+    virtual void SetComponentRenderer(function<void(IComponent*, ITextureRender*)> rendererFn) noexcept override {}
     virtual void AddRenderComponent(IComponent* component) override {}
     virtual void RemoveRenderComponent(IComponent* component) override {}
 

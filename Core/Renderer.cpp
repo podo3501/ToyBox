@@ -213,9 +213,12 @@ void Renderer::Draw()
 
     m_spriteBatch->Begin(commandList);
 
-    ranges::for_each(m_components, [renderer = m_texRepository.get()](auto compInfo) {
-            compInfo->ProcessRender(renderer);
-         });
+    if (m_componentRenderer)
+    {
+        ranges::for_each(m_components, [this, renderer = m_texRepository.get()](auto compInfo) {
+            m_componentRenderer(compInfo, renderer);
+            });
+    }
     
     m_spriteBatch->End();
 
@@ -304,6 +307,11 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 #pragma endregion
 
 ITextureController* Renderer::GetTextureController() const noexcept { return m_texRepository.get(); }
+
+void Renderer::SetComponentRenderer(function<void(IComponent*, ITextureRender*)> rendererFn) noexcept
+{
+    m_componentRenderer = rendererFn;
+}
 
 void Renderer::AddRenderComponent(IComponent* component)
 {

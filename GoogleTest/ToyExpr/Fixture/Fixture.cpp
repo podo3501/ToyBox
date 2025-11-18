@@ -28,8 +28,8 @@ void Fixture::SetUp()
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
 
-	m_uiManager = make_unique<UIComponentManager>();
-	m_uiModule = m_uiManager->CreateUIModule("Demo", layout, "Main", m_renderer.get(), srcBinderFilename);
+	m_uiManager = make_unique<UIComponentManager>(m_renderer.get());
+	m_uiModule = m_uiManager->CreateUIModule("Demo", layout, "Main", srcBinderFilename);
 
 	m_uiModule->AddRenderer();
 	m_main = m_uiModule->GetMainPanel();

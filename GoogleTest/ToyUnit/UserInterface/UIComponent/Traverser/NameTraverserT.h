@@ -2,6 +2,7 @@
 #include "UserInterface/UIModuleT.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+#include "Toy/UserInterface/UIComponent/Components/Panel.h"
 
 using namespace UITraverser;
 
@@ -10,6 +11,8 @@ class NameTraverserT : public UIModuleT
 protected:
 	virtual void SetUp() override;
 	virtual void TearDown() override {};
+
+	NameTraverser m_traverser;
 };
 
 void NameTraverserT::SetUp()

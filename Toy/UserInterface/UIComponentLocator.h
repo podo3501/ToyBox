@@ -5,19 +5,17 @@
 
 using UIComponentLocator = Locator<UIComponentManager>;
 
-inline UIModule* CreateUIModulE(const string& moduleName, const UILayout& layout, 
-	const string& mainUIName, IRenderer* renderer, const wstring& srcBinderFilename = L"")
+inline UIModule* CreateUIModule(const string& moduleName, const UILayout& layout, const string& mainUIName, const wstring& srcBinderFilename = L"")
 {
-	return UIComponentLocator::GetService()->CreateUIModule(moduleName, layout, mainUIName, renderer, srcBinderFilename);
+	return UIComponentLocator::GetService()->CreateUIModule(moduleName, layout, mainUIName, srcBinderFilename);
 }
 
-inline UIModule* CreateUIModulE(const string& moduleName, const wstring& filename, 
-	IRenderer* renderer, const wstring& srcBinderFilename = L"")
+inline UIModule* CreateUIModule(const string& moduleName, const wstring& filename, const wstring& srcBinderFilename = L"")
 {
-	return UIComponentLocator::GetService()->CreateUIModule(moduleName, filename, renderer, srcBinderFilename);
+	return UIComponentLocator::GetService()->CreateUIModule(moduleName, filename, srcBinderFilename);
 }
 
-inline bool ReleaseUIModulE(const string& moduleName) noexcept
+inline bool ReleaseUIModule(const string& moduleName) noexcept
 {
 	return UIComponentLocator::GetService()->ReleaseUIModule(moduleName);
 }

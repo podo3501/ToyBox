@@ -15,7 +15,7 @@ int UserInterfaceWindow::m_uiWindowIndex = 0;
 UserInterfaceWindow::~UserInterfaceWindow()
 {
 	InputLocator::Provide(m_inputManager); //null input으로 종료되면 다음에 창을 열때 문제가 된다.
-	ReleaseUIModulE(GetName());
+	ReleaseUIModule(GetName());
 	m_renderer->RemoveImguiComponent(this);
 }
 
@@ -55,15 +55,14 @@ bool UserInterfaceWindow::SetupProperty(UIModule* uiModule)
 
 bool UserInterfaceWindow::CreateScene(const XMUINT2& size)
 {
-	UIModule* module = CreateUIModulE(GetName(), UILayout(size, Origin::LeftTop),
-		"Main", m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
+	UIModule* module = CreateUIModule(GetName(), UILayout(size, Origin::LeftTop),
+		"Main", L"UI/SampleTexture/SampleTextureBinder.json");
 	return SetupProperty(module);
 }
 
 bool UserInterfaceWindow::CreateScene(const wstring& filename)
 {
-	UIModule* module = CreateUIModulE(GetName(), filename,
-		m_renderer, L"UI/SampleTexture/SampleTextureBinder.json");
+	UIModule* module = CreateUIModule(GetName(), filename, L"UI/SampleTexture/SampleTextureBinder.json");
 	return SetupProperty(module);
 }
 

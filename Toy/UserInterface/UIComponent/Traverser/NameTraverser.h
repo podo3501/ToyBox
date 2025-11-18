@@ -22,4 +22,10 @@ private:
 		UIComponent* parentRoot, const string& oldRegion) noexcept;
 	bool ReplaceAndMergeRegion(UINameGenerator* nameGen, UIComponent* c, 
 		UIComponent* parentRoot, const string& oldRegion, const string& newRegion) noexcept;
+	string GetMyRegion(UIComponent* c) const noexcept;
+	UIComponent* GetRegionRoot(UIComponent* c) const noexcept;
+	UIComponent* GetParentRegionRoot(UIComponent* c) const noexcept;
+
+	bool ForEachChildWithRegion(UIComponent* c, const string& parentRegion, const function<bool(const string&, UIComponent*, bool)>& Func) noexcept;
+	void ForEachChildInSameRegion(UIComponent* c, const function<void(UIComponent*)>& Func) noexcept;
 };

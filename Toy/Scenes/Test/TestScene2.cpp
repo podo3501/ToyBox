@@ -13,8 +13,7 @@ TestScene2::TestScene2(IRenderer* renderer) :
 
 bool TestScene2::Enter()
 {
-	m_uiModule = CreateUIModulE("Test2", L"/Scene/Test/TestScene2.json",
-		GetRenderer(), L"UI/SampleTexture/SampleTextureBinder.json");
+	m_uiModule = CreateUIModule("Test2", L"/Scene/Test/TestScene2.json", L"UI/SampleTexture/SampleTextureBinder.json");
 	m_uiModule->AddRenderer();
 
 	auto scene = SceneLocator::GetService();
@@ -32,7 +31,7 @@ bool TestScene2::Leave()
 	auto eventDispatcher = EventDispatcherLocator::GetService();
 	eventDispatcher->Clear();
 
-	return ReleaseUIModulE("Test2");
+	return ReleaseUIModule("Test2");
 }
 
 void TestScene2::Update(const DX::StepTimer& timer)

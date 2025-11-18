@@ -249,11 +249,6 @@ pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexc
 	return { move(detached), parent };
 }
 
-void UIComponent::PropagateRoot() noexcept
-{ 
-	UITraverser::PropagateRoot(this, this);
-}
-
 bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ v, c->GetSize().y }); }
 bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeX(c, s.x); }
 bool ChangeSizeY(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ c->GetSize().x, v }); }

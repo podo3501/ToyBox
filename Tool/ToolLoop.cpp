@@ -46,7 +46,7 @@ bool ToolLoop::InitializeDerived()
     m_inputManager = CreateInputManager(hWnd);
     InputLocator::Provide(m_inputManager.get());
 
-    m_uiManager = make_unique<UIComponentManager>();
+    m_uiManager = make_unique<UIComponentManager>(m_renderer);
     UIComponentLocator::Provide(m_uiManager.get());
 
     m_nullEventDispatcher = CreateNullEventDispatcherManager();

@@ -14,8 +14,7 @@ TestScene1::TestScene1(IRenderer* renderer) :
 
 bool TestScene1::Enter()
 {
-	m_uiModule = CreateUIModulE("Test1", L"/Scene/Test/TestScene1.json",
-		GetRenderer(), L"UI/SampleTexture/SampleTextureBinder.json");
+	m_uiModule = CreateUIModule("Test1", L"/Scene/Test/TestScene1.json", L"UI/SampleTexture/SampleTextureBinder.json");
 	m_uiModule->AddRenderer();
 
 	//씬이 시작될때 등록하고 씬이 나갈때 해제한다.
@@ -35,7 +34,7 @@ bool TestScene1::Leave()
 	auto eventDispatcher = EventDispatcherLocator::GetService();
 	eventDispatcher->Clear();
 	
-	return ReleaseUIModulE("Test1");
+	return ReleaseUIModule("Test1");
 }
 
 void TestScene1::Update(const DX::StepTimer& timer)

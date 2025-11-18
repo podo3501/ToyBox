@@ -4,6 +4,7 @@
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 
+using namespace UITraverser;
 struct ITextureController;
 class MockTextureResourceBinder;
 
@@ -15,10 +16,10 @@ bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 
 	unique_ptr<T> read;
 	ReturnIfFalse(SerializerIO::ReadJsonFromFile(filename, read));
-	read->PropagateRoot();
+	PropagateRoot(read.get());
 
 	if (resBinder && texController)
-		UITraverser::BindTextureSourceInfo(read.get(), resBinder, texController);
+		BindTextureSourceInfo(read.get(), resBinder, texController);
 
 	return CompareDerived(component, read);
 }

@@ -63,6 +63,7 @@ public:
 
     virtual bool Initialize() = 0;
 
+    virtual void SetComponentRenderer(function<void(IComponent*, ITextureRender*)> rendererFn) noexcept = 0;
     virtual void AddRenderComponent(IComponent* component) = 0;
     virtual void RemoveRenderComponent(IComponent* component) = 0;
 

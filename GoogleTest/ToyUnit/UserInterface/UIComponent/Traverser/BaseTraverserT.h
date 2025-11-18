@@ -1,5 +1,6 @@
 #pragma once
 #include "../MockComponent.h"
+#include "Internal/MockRenderer.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 
 class BaseTraverserT : public testing::Test
@@ -15,6 +16,7 @@ private:
 
 void BaseTraverserT::SetUp()
 {
-	m_componentManager = make_unique<UIComponentManager>();
+	MockRenderer renderer;
+	m_componentManager = make_unique<UIComponentManager>(&renderer);
 	Locator<UIComponentManager>::Provide(m_componentManager.get());
 }

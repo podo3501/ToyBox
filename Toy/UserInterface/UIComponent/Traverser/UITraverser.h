@@ -81,4 +81,7 @@ namespace UITraverser
 		UIComponent* find = FindComponent(c, name);
 		return ComponentCast<T>(find);
 	}
+
+	void PropagateRoot(UIComponent* c) noexcept; //자신이 root일때 자신을 root라고 밑에 노드에게 전파
+	void Render(IComponent* c, ITextureRender* render) noexcept;
 }
