@@ -12,11 +12,7 @@
 
 using namespace UITraverser;
 
-UIModule::~UIModule()
-{
-	Assert(m_mainPanel);//panel은 꼭 만들어져야 한다.
-	m_renderer->RemoveRenderComponent(m_mainPanel.get());
-}
+UIModule::~UIModule() = default;
 UIModule::UIModule() :
 	m_nameGen{ make_unique<UINameGenerator>() }
 {}
@@ -52,11 +48,6 @@ bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, 
 	return true;
 }
 
-void UIModule::AddRenderer() noexcept
-{
-	m_renderer->AddRenderComponent(m_mainPanel.get());
-}
-
 bool UIModule::BindTextureResources() noexcept
 {
 	ReturnIfFalse(m_resBinder);
@@ -73,7 +64,7 @@ bool UIModule::Update(const DX::StepTimer& timer) noexcept
 
 void UIModule::Render(ITextureRender* render) const
 {
-	m_mainPanel->ProcessRender(render);
+	UITraverser::Render(m_mainPanel.get(), render);
 }
 
 void UIModule::UpdateMouseState() noexcept

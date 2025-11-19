@@ -2,6 +2,7 @@
 #include "ContainerT.h"
 #include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 namespace UserInterfaceT::UIComponentT::ComponentT
 {
@@ -19,7 +20,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source)))
 			.Times(1);
 
-		m_component->ProcessRender(&render);
+		UITraverser::Render(m_component.get(), &render);
 	}
 
 	TEST_F(ContainerT, WriteAndRead)

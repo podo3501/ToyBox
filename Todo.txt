@@ -217,6 +217,8 @@
 --새로운 tdd작성법으로 바꾸면서 처음에 만들었던 부분 다시 리뷰 및 수정
 --UIModule을 Locator로 바꾸고 내부는 전역에 사용하는 부분과 노드에 사용하는 부분으로 분리
 
+@코어에서 UIComponentManager로 render를 날라면 이 매니져는 UIModule 리스트를 가지고 있으니까 
+   각자 render를 날려주면 내부에서 Traverser가 랜더링을 하는 식으로 수정.
 @tdd에서 traverser에 uimodule을 안쓰고 테스트 하는걸로 수정.
 @툴에서 작업환경을 멀티로 할지 단일로 할지 생각해봐야 겠다.
 @HierarchyTraverser 함수들 보기 좋게 다듬기.

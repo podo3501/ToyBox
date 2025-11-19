@@ -81,12 +81,12 @@ float MockTextureController::GetLineSpacing(size_t index) const noexcept
 }
 
 //렌더 텍스쳐를 만들었다고 가정하고 가짜 렌더텍스쳐 인덱스를 리턴해준다.
-bool MockTextureController::CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
+bool MockTextureController::CreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
 {
 	size_t index = m_texTable->GetSize();
 	wstring key = L"RenderTexture_" + to_wstring(index);
 
-	ReturnIfFalse(m_texTable->AddTextureInfo(key, index, {} ));
+	ReturnIfFalse(m_texTable->AddTextureInfo(key, index, {}));
 
 	outIndex = index;
 	return true;

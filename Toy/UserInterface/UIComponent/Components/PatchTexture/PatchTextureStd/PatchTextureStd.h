@@ -14,7 +14,7 @@ protected:
 	using PatchTexture::PatchTexture;
 	PatchTextureStd();
 	PatchTextureStd(const PatchTextureStd& other) noexcept;
-	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
+	virtual bool BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& info, size_t sourceIndex) noexcept;
 };
 

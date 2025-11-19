@@ -40,8 +40,8 @@ public:
 	virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
 	virtual float GetLineSpacing(size_t index) const noexcept override;
 
-	//Texture
-	virtual bool CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override;
+	//Texture	
+	virtual bool CreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override;
 
 private:
 	MockTextureTable* m_texTable{ nullptr };
@@ -63,7 +63,6 @@ public:
 	~MockRenderer();
 	MockRenderer();
 
-	MOCK_METHOD(void, AddRenderComponent, (IComponent* component), (override));
 	virtual bool LoadTextureBinder(ITextureBinder* textureBinder) override;
 	virtual ITextureController* GetTextureController() const noexcept override;
 	bool RegisterMockTextureInfo(const wstring& filename, size_t index, const XMUINT2& size) noexcept;

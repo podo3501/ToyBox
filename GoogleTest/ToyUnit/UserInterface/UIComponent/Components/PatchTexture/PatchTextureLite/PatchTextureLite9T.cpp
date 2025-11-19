@@ -2,6 +2,9 @@
 #include "PatchTextureLite9T.h"
 #include "UserInterface/UIComponent/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+
+using namespace UITraverser;
 
 namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 {
@@ -78,7 +81,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 		EXPECT_CALL(render, Render(0, destLeftBottom, ::testing::Pointee(srcLeftBottom))).Times(1);
 		EXPECT_CALL(render, Render(0, destRightBottom, ::testing::Pointee(srcRightBottom))).Times(1);
 
-		m_component->UpdatePositionsManually();
-		m_component->ProcessRender(&render);
+		UpdatePositionsManually(m_component.get());
+		Render(m_component.get(), &render);
 	}
 }

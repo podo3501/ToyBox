@@ -31,9 +31,4 @@ namespace UITraverser
 	}
 
 	void PropagateRoot(UIComponent* c) noexcept { PropagateRoot(c, c); }
-
-	void Render(IComponent* c, ITextureRender* render) noexcept 
-	{
-		Render(static_cast<UIComponent*>(c), render);
-	}
 }

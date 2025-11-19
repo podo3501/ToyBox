@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "TextureRenderTarget.h"
-#include "Public/IComponent.h"
 #include "External/DeviceResources.h"
 #include "Utils/Common.h"
 
@@ -9,10 +8,11 @@ constexpr FLOAT ClearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 TextureRenderTarget::~TextureRenderTarget()
 {}
 
-TextureRenderTarget::TextureRenderTarget(DX::DeviceResources* deviceResources, DescriptorHeap* descHeap) :
+TextureRenderTarget::TextureRenderTarget(function<void(size_t index, ITextureRender*)> rendererFn, 
+    DX::DeviceResources* deviceResources, DescriptorHeap* descHeap) :
+    m_textureRenderer{ rendererFn },
     TextureResource{ deviceResources->GetD3DDevice(), descHeap },
-    m_deviceResources{ deviceResources },
-    m_component{ nullptr }
+    m_deviceResources{ deviceResources }
 {
     m_rtvDescriptor = make_unique<DescriptorHeap>(m_device,
         D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
@@ -43,10 +43,8 @@ void TextureRenderTarget::CreateRtvAndSrv(ID3D12Resource* resource)
     CreateShaderResourceView(m_device, resource, m_srvDescriptors->GetCpuHandle(GetIndex()));
 }
 
-bool TextureRenderTarget::Create(DXGI_FORMAT texFormat, 
-    const XMUINT2& size, const XMINT2& pos, size_t offset, IComponent* component)
+bool TextureRenderTarget::Create(DXGI_FORMAT texFormat, const XMUINT2& size, const XMINT2& pos, size_t offset)
 {
-    m_component = component;
     SetIndex(offset);
     m_position = pos;
     return CreateTextureResource(texFormat, size);
@@ -87,9 +85,6 @@ bool TextureRenderTarget::CreateTextureResource(DXGI_FORMAT texFormat, const XMU
 
 void TextureRenderTarget::Render(ID3D12GraphicsCommandList* commandList, ITextureRender* renderer, SpriteBatch* sprite)
 {
-    if (m_component == nullptr)
-        return;
-
     //속도를 위해서 필요한 부분을 제외한 다른 부분은 잘라낸다.
     //D3D12_RECT scissorRect{};
     //scissorRect.left = 0;
@@ -112,7 +107,7 @@ void TextureRenderTarget::Render(ID3D12GraphicsCommandList* commandList, ITextur
     XMMATRIX transform = XMMatrixTranslation(-static_cast<float>(m_position.x), -static_cast<float>(m_position.y), 0.0f);
 
     sprite->Begin(commandList, SpriteSortMode_Deferred, transform);
-    m_component->ProcessRender(renderer);
+    m_textureRenderer(GetIndex(), renderer);
     sprite->End();
 
     TransitionResource(commandList, m_texResource.Get(),

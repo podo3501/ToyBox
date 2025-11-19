@@ -3,8 +3,11 @@
 #include "IRenderer.h"
 #include "Locator/InputLocator.h"
 #include "../../UIComponent/Traverser/UITraverser.h"
+#include "../../UIComponentLocator.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/SerializerIO/SerializerIO.h"
+
+using namespace UITraverser;
 
 RenderTexture::~RenderTexture() 
 { 
@@ -29,6 +32,9 @@ void RenderTexture::Release() noexcept
 {
 	if (m_texController && m_index)
 	{
+		auto componentManager = UIComponentLocator::GetService();
+		componentManager->ReleaseRenderTexture(*m_index);
+
 		m_texController->ReleaseTexture(*m_index);
 		m_texController = nullptr;
 		m_gfxOffset = {};
@@ -44,6 +50,7 @@ void RenderTexture::AddRef() const noexcept
 
 unique_ptr<UIComponent> RenderTexture::CreateClone() const
 {
+	//?!? 클론했을때 AddRef/Release 를 하는데 새로운 텍스쳐를 만들어야 하지 않을까 생각든다. 이렇게 하면 하나의 텍스쳐를 공유하게 될텐데 그러면 나중에 렌더링된 Component가 텍스쳐에 그려져서 2개가 똑같이 나올꺼 같다. 의심됨.
 	auto clone = unique_ptr<RenderTexture>(new RenderTexture(*this));
 	clone->AddRef();
 	return clone;
@@ -65,14 +72,14 @@ bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 	return true;
 }
 
-void RenderTexture::ImplementPositionUpdated() noexcept
+void RenderTexture::PositionUpdated() noexcept //UIComponentManager에서 렌더하기 전에 전체를 돌면서 LeftTop을 Core에 셋팅하면 될듯.  그리고 이 함수는 지우고 Update 하는 함수를 통합할수 있는지 확인하자.
 {
 	if (m_texController && m_index)
 		m_texController->ModifyRenderTexturePosition(*m_index, GetLeftTop());
 }
 
 //?!? rendertexture를 등록하는 것을 bind를 통해서 넣으면 텍스쳐 관리를 한군데에 몰아서 할 수 있을꺼 같은데.
-bool RenderTexture::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController* texController) noexcept
+bool RenderTexture::BindSourceInfo(TextureResourceBinder*, ITextureController* texController) noexcept
 {
 	Release(); //데이터가 존재하면 지운다.
 
@@ -80,8 +87,10 @@ bool RenderTexture::ImplementBindSourceInfo(TextureResourceBinder*, ITextureCont
 		SetSize(UITraverser::GetChildrenBoundsSize(this));
 	
 	size_t index{ 0 };
-	UpdatePositionsManually(true);
-	ReturnIfFalse(texController->CreateRenderTexture(m_component, GetArea(), index, &m_gfxOffset));
+	UpdatePositionsManually(this, true);
+
+	auto componentManager = UIComponentLocator::GetService();
+	ReturnIfFalse(componentManager->CreateRenderTexture(m_component, GetArea(), index, &m_gfxOffset));
 
 	m_index = index;
 	m_texController = texController;
@@ -112,7 +121,7 @@ bool RenderTexture::Setup(unique_ptr<UIComponent> component) noexcept
 	return Setup(layout, move(component));
 }
 
-void RenderTexture::ImplementRender(ITextureRender* render) const
+void RenderTexture::Render(ITextureRender* render) const
 {
 	if (m_texController && m_index)
 		m_texController->ModifyRenderTexturePosition(*m_index, GetLeftTop()); //?!? 좌표가 바뀌면 RenderTexture 안에 좌표가 갱신이 되지 않아서 이상해진다. update에 넣고 싶은데 툴에서는 update가 돌지 않는다.

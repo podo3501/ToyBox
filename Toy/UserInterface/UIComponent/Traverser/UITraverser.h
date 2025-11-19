@@ -67,6 +67,9 @@ namespace UITraverser
 	inline bool EnableToolMode(UIComponent* c, bool enable) noexcept {
 		return DerivedCall(&DerivedTraverser::EnableToolMode, c, enable);
 	}
+	inline bool UpdatePositionsManually(UIComponent* c, bool isRoot = false) noexcept {
+		return DerivedCall(&DerivedTraverser::UpdatePositionsManually, c, isRoot);
+	}
 	
 	unique_ptr<UIComponent> AttachComponent(UIComponent* c, const string& region, const string& name,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept;
@@ -83,5 +86,4 @@ namespace UITraverser
 	}
 
 	void PropagateRoot(UIComponent* c) noexcept; //자신이 root일때 자신을 root라고 밑에 노드에게 전파
-	void Render(IComponent* c, ITextureRender* render) noexcept;
 }

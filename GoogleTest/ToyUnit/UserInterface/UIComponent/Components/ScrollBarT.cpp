@@ -2,6 +2,9 @@
 #include "ScrollBarT.h"
 #include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+
+using namespace UITraverser;
 
 namespace UserInterfaceT::UIComponentT::ComponentT
 {
@@ -59,8 +62,8 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_CALL(render, Render(0, destTrackBottom, ::testing::Pointee(srcTrackBottom))).Times(1);
 		EXPECT_CALL(render, Render(0, destButtonBottom, ::testing::Pointee(srcButtonBottom))).Times(1);
 
-		m_component->UpdatePositionsManually();
-		m_component->ProcessRender(&render);
+		UpdatePositionsManually(m_component.get());
+		Render(m_component.get(), &render);
 	}
 
 	TEST_F(ScrollBarT, RestoreDefault)

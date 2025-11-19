@@ -7,6 +7,8 @@
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 
+using namespace UITraverser;
+
 class ScrollBarT : public ComponentT
 {
 protected:
@@ -26,11 +28,11 @@ void ScrollBarT::SetUp()
 	DirectionType dirType{ DirectionType::Vertical };
 
 	m_component = CreateSampleScrollBar({}, DirectionType::Vertical, "Track", "Button", &m_button);
-	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+	BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
 
 	m_component->UpdateScrollView(50, 200); //보여줄 데이터가 화면영역보다 많아야 스크롤바가 생긴다.
 	m_component->SetPositionRatio(0.5f); //중간으로 버튼을 이동힌다.
-	m_component->UpdatePositionsManually();
+	UpdatePositionsManually(m_component.get());
 }
 
 void ScrollBarT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

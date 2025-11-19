@@ -76,9 +76,6 @@
     <ClInclude Include="Public\d3dx12.h">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="Public\IComponent.h">
-      <Filter>Public</Filter>
-    </ClInclude>
     <ClInclude Include="Public\IRenderer.h">
       <Filter>Public</Filter>
     </ClInclude>

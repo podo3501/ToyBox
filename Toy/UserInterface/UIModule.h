@@ -20,7 +20,6 @@ public:
 	bool SetupMainComponent(const UILayout& layout, const string& name,
 		IRenderer* renderer, const wstring& srcBinderFilename);
 	bool SetupMainComponent(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename);
-	void AddRenderer() noexcept;
 	bool BindTextureResources() noexcept;
 	bool Update(const DX::StepTimer& timer) noexcept;
 	void Render(ITextureRender* render) const;

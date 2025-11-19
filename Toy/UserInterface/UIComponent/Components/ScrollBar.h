@@ -33,7 +33,7 @@ public:
 protected:
 	ScrollBar(const ScrollBar& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
+	virtual bool BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept;
 

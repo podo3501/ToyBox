@@ -4,7 +4,10 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/Utils/GeometryExt.h"
+
+using namespace UITraverser;
 
 void ListAreaT::MakeTestPrototype()
 {
@@ -98,8 +101,8 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_CALL(render, Render(0, destTrackBottom, ::testing::Pointee(srcTrackBottom))).Times(1);
 		EXPECT_CALL(render, Render(0, destButtonBottom, ::testing::Pointee(srcButtonBottom))).Times(1);
 
-		m_component->UpdatePositionsManually();
-		m_component->ProcessRender(&render);
+		UpdatePositionsManually(m_component.get());
+		Render(m_component.get(), &render);
 	}
 
 	TEST_F(ListAreaT, ScrollBarVisible_ChangeSize)

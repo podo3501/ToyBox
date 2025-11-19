@@ -1,13 +1,14 @@
 #include "pch.h"
 #include "DerivedTraverser.h"
 #include "../UIComponent.h"
+#include "Shared/Utils/GeometryExt.h"
 
 void DerivedTraverser::Render(UIComponent* c, ITextureRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
 	//가장 밑에 레벨이 가장 위에 올라오는데 DFS(Depth First Search)이면 가장 밑에 있는게 가장 나중에 그려지지 않게 된다.
 	ForEachChildToRender(c, [render](UIComponent* component) {
-		component->ImplementRender(render);
+		component->Render(render);
 
 		return (component->GetTypeID() != ComponentID::RenderTexture)
 			? TraverseResult::Continue
@@ -18,12 +19,12 @@ void DerivedTraverser::Render(UIComponent* c, ITextureRender* render)
 bool DerivedTraverser::BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder, ITextureController* texController) noexcept
 {
 	auto forEachResult = ForEachChildPostUntilFail(c, [resBinder, texController](UIComponent* component) {
-		bool result = component->ImplementBindSourceInfo(resBinder, texController);
+		bool result = component->BindSourceInfo(resBinder, texController);
 		AssertMsg(result, "Failed to load texture");
 		return result;
 		});
 	ReturnIfFalse(forEachResult);
-	ReturnIfFalse(c->UpdatePositionsManually());
+	ReturnIfFalse(UpdatePositionsManually(c));
 	return true;
 }
 
@@ -44,5 +45,22 @@ bool DerivedTraverser::EnableToolMode(UIComponent* c, bool enable) noexcept
 		component->m_toolMode = enable;
 		ReturnIfFalse((component->*modeFunc)());
 		return true;
+		});
+}
+
+bool DerivedTraverser::UpdatePositionsManually(UIComponent* c, bool isRoot) noexcept
+{
+	UIComponent* component = (isRoot) ? c->GetRoot() : c;
+	return RecursivePositionUpdate(component);
+}
+
+bool DerivedTraverser::RecursivePositionUpdate(UIComponent* c, const XMINT2& position) noexcept
+{
+	const auto& startPos = c->GetTransform().GetUpdatedPosition(c->m_layout, position);
+	c->PositionUpdated();
+
+	return ranges::all_of(c->GetChildren(), [this, &startPos](auto& child) {
+		auto childStartPos = startPos + child->GetTransform().GetRelativePosition();
+		return RecursivePositionUpdate(child, childStartPos);
 		});
 }

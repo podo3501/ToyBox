@@ -19,7 +19,8 @@ struct ITextureControllerStub : public ITextureController
     virtual float GetLineSpacing(size_t index) const noexcept override { return 0.f; }
 
     //Texture
-    virtual bool CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override { return true; }
+    virtual void SetTextureRenderer(function<void(size_t index, ITextureRender*)> rendererFn) noexcept override {}
+    virtual bool CreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override { return true; }
     virtual optional<vector<Rectangle>> GetTextureAreaList(size_t index, const UINT32& bgColor) override { return nullopt; }
     virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& leftTop) noexcept override {}
     virtual bool ModifyRenderTextureSize(size_t index, const XMUINT2& size) override { return true; }
@@ -45,10 +46,7 @@ public:
 
     virtual bool Initialize() override { return true; }
 
-    virtual void SetComponentRenderer(function<void(IComponent*, ITextureRender*)> rendererFn) noexcept override {}
-    virtual void AddRenderComponent(IComponent* component) override {}
-    virtual void RemoveRenderComponent(IComponent* component) override {}
-
+    virtual void SetComponentRenderer(function<void(ITextureRender*)> rendererFn) noexcept override {}
     virtual void AddImguiComponent(IImguiComponent* item) override {}
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept override {}
 

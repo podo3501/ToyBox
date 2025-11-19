@@ -61,12 +61,12 @@ auto ExecuteAndUpdate(UIComponent* component, Func&& func) noexcept
 {
 	if constexpr (is_void_v<decltype(func())>) {
 		func();
-		component->UpdatePositionsManually(true);
+		UpdatePositionsManually(component, true);
 	}
 	else
 	{
 		auto result = func();
-		component->UpdatePositionsManually(true);
+		UpdatePositionsManually(component, true);
 		return result;
 	}
 }

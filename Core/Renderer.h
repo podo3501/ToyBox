@@ -47,10 +47,7 @@ public:
     // Initialization and management
     virtual bool Initialize() override;
 
-    virtual void SetComponentRenderer(function<void(IComponent*, ITextureRender*)> rendererFn) noexcept override;
-    virtual void AddRenderComponent(IComponent* component) override;
-    virtual void RemoveRenderComponent(IComponent* component) override;
-
+    virtual void SetComponentRenderer(function<void(ITextureRender*)> rendererFn) noexcept override;
     virtual void AddImguiComponent(IImguiComponent* item) override;
     virtual void RemoveImguiComponent(IImguiComponent* comp) noexcept override;
 
@@ -84,6 +81,5 @@ private:
     unique_ptr<SpriteBatch> m_spriteBatch;
     unique_ptr<TextureRepository> m_texRepository;
 
-    function<void(IComponent*, ITextureRender*)> m_componentRenderer;
-    vector<IComponent*> m_components;
+    function<void(ITextureRender*)> m_componentRenderer;
 };

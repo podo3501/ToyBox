@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Renderer.h"
-#include "Public/IComponent.h"
 #include "Public/ITextureBinder.h"
 #include "TextureRepository/TextureRepository.h"
 #include "TextureRepository/TextureRenderTarget.h"
@@ -213,13 +212,9 @@ void Renderer::Draw()
 
     m_spriteBatch->Begin(commandList);
 
-    if (m_componentRenderer)
-    {
-        ranges::for_each(m_components, [this, renderer = m_texRepository.get()](auto compInfo) {
-            m_componentRenderer(compInfo, renderer);
-            });
-    }
-    
+    if(m_componentRenderer) 
+        m_componentRenderer(m_texRepository.get());
+
     m_spriteBatch->End();
 
     //imgui들을 렌더링 한다.
@@ -308,20 +303,9 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 
 ITextureController* Renderer::GetTextureController() const noexcept { return m_texRepository.get(); }
 
-void Renderer::SetComponentRenderer(function<void(IComponent*, ITextureRender*)> rendererFn) noexcept
+void Renderer::SetComponentRenderer(function<void(ITextureRender*)> rendererFn) noexcept
 {
     m_componentRenderer = rendererFn;
-}
-
-void Renderer::AddRenderComponent(IComponent* component)
-{
-    m_components.emplace_back(component);
-}
-
-void Renderer::RemoveRenderComponent(IComponent* component)
-{
-    erase_if(m_components, [component](auto curComponent) { 
-        return curComponent == component; });
 }
 
 void Renderer::AddImguiComponent(IImguiComponent* comp) { m_imgui->AddComponent(comp); }

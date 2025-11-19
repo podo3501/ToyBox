@@ -30,8 +30,6 @@ void Fixture::SetUp()
 
 	m_uiManager = make_unique<UIComponentManager>(m_renderer.get());
 	m_uiModule = m_uiManager->CreateUIModule("Demo", layout, "Main", srcBinderFilename);
-
-	m_uiModule->AddRenderer();
 	m_main = m_uiModule->GetMainPanel();
 
 	TracyStartupProfiler();

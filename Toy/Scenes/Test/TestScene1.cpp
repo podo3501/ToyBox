@@ -15,7 +15,6 @@ TestScene1::TestScene1(IRenderer* renderer) :
 bool TestScene1::Enter()
 {
 	m_uiModule = CreateUIModule("Test1", L"/Scene/Test/TestScene1.json", L"UI/SampleTexture/SampleTextureBinder.json");
-	m_uiModule->AddRenderer();
 
 	//씬이 시작될때 등록하고 씬이 나갈때 해제한다.
 	//여기서 하면 씬 이름까지 넣어줘야 한다.

@@ -67,7 +67,7 @@ bool PatchTextureStd1::Setup(const UILayout& layout, const string& bindKey, size
 	return true;
 }
 
-bool PatchTextureStd1::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
+bool PatchTextureStd1::BindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
 {
 	if (m_bindKey.empty()) return false; 
 	auto sourceInfoRef = resBinder->GetTextureSourceInfo(m_bindKey);

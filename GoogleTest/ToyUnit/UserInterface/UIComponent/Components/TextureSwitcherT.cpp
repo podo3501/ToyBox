@@ -3,6 +3,7 @@
 #include "../ComponentHelper.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
 #include "Toy/Locator/EventDispatcherLocator.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/System/Public/IInputManager.h"
 
@@ -136,7 +137,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		MockTextureRender render;
 		EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source))).Times(1);
 
-		m_component->ProcessRender(&render);
+		UITraverser::Render(m_component.get(), &render);
 	}
 
 	TEST_F(TextureSwitcherT, WriteAndRead)

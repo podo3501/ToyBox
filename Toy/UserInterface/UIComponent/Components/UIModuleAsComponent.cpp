@@ -17,7 +17,7 @@ bool UIModuleAsComponent::Setup(UIModule* module) noexcept
 	return true;
 }
 
-bool UIModuleAsComponent::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
+bool UIModuleAsComponent::BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	return m_module->BindTextureResources();
 }
@@ -27,7 +27,7 @@ bool UIModuleAsComponent::ImplementUpdate(const DX::StepTimer& timer) noexcept
 	return m_module->Update(timer);
 }
 
-void UIModuleAsComponent::ImplementRender(ITextureRender* render) const
+void UIModuleAsComponent::Render(ITextureRender* render) const
 {
 	m_module->Render(render);
 }

@@ -4,6 +4,7 @@
 #include "Internal/MockInputManager.h"
 #include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/System/StepTimer.h"
 
 class MockReceiverComponent : public UIComponentStub, public IMouseEventReceiver
@@ -11,7 +12,7 @@ class MockReceiverComponent : public UIComponentStub, public IMouseEventReceiver
 public:
 	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept override { return this; }
 	MOCK_METHOD(void, OnHover, (), (noexcept));
-	MOCK_METHOD(void, ImplementRender, (ITextureRender*), (const));
+	MOCK_METHOD(void, Render, (ITextureRender*), (const));
 };
 
 namespace UserInterfaceT::UIComponentT::ComponentT
@@ -26,7 +27,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_EQ(m_component->GetSize(), XMUINT2(800, 600)); //uiModule 사이즈를 초기값으로 가진다.
 	}
 
-	TEST_F(UIModuleAsComponentT, ImplementRender)
+	TEST_F(UIModuleAsComponentT, Render)
 	{
 		//모듈에 컴포넌트 하나를 붙인다.
 		auto module = m_component->GetUIModule();
@@ -34,10 +35,10 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		auto child = AttachMockComponent<MockReceiverComponent>(mainPanel);
 
 		//마우스를 올리고 hover 되는지 확인.
-		EXPECT_CALL(*child, ImplementRender(testing::_)).Times(1);
+		EXPECT_CALL(*child, Render(testing::_)).Times(1);
 
 		MockTextureRender render;
-		m_component->ProcessRender(&render);
+		UITraverser::Render(m_component.get(), &render);
 	}
 
 	TEST_F(UIModuleAsComponentT, ImplementUpdate)

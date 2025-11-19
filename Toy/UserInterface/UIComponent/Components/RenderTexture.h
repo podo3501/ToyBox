@@ -22,10 +22,10 @@ public:
 protected:
 	RenderTexture(const RenderTexture& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
-	virtual void ImplementPositionUpdated() noexcept override;
+	virtual bool BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
+	virtual void PositionUpdated() noexcept override;
 	virtual bool ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept override;
-	virtual void ImplementRender(ITextureRender* render) const override;
+	virtual void Render(ITextureRender* render) const override;
 
 private:
 	void AddRef() const noexcept;

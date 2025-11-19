@@ -22,7 +22,8 @@ public:
     virtual bool LoadFont(const wstring& filename, size_t& outIndex) override;
 
     //ITextureController
-    virtual bool CreateRenderTexture(IComponent* component, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override;
+    virtual void SetTextureRenderer(function<void(size_t index, ITextureRender*)> rendererFn) noexcept override;
+    virtual bool CreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override;
     virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
     virtual float GetLineSpacing(size_t index) const noexcept override;
     virtual optional<vector<Rectangle>> GetTextureAreaList(size_t index, const UINT32& bgColor) override;
@@ -52,6 +53,7 @@ private:
     ResourceUploadBatch* m_upload;
     SpriteBatch* m_sprite;
 
+    function<void(size_t index, ITextureRender*)> m_textureRenderer;
     array<unique_ptr<TextureResource>, MAX_DESC> m_texResources;
     array<int, MAX_DESC> m_refCount{};
     vector<size_t> m_freeDescIndices; //해제되고나서 재활용될 인덱스 모음

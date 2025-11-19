@@ -13,7 +13,7 @@ public:
 		SetRenderTraversal(traversal);
 	}
 
-	MOCK_METHOD(void, ImplementRender, (ITextureRender*), (const));
+	MOCK_METHOD(void, Render, (ITextureRender*), (const));
 };
 
 class MockRenderBFS : public MockRenderTraversal

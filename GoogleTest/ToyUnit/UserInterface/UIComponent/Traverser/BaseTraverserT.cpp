@@ -32,7 +32,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		UILayout parentLayout{ {50, 50}, Origin::LeftTop };
 		auto [owner, child] = CreateMockComponent<MockComponent>(childLayout);
 		auto parent = CreateComponent<RenderTexture>(parentLayout, move(owner));
-		parent->UpdatePositionsManually();
+		UpdatePositionsManually(parent.get());
 
 		EXPECT_EQ(PickComponents(parent.get(), {45, 45}).size(), 2); //RenderTexture 안쪽이니까 2개가 있어야 한다.
 		EXPECT_EQ(PickComponents(parent.get(), { 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.
@@ -44,7 +44,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		UILayout parentLayout{ {50, 50}, Origin::LeftTop };
 		auto [owner, child] = CreateMockComponent<MockReceiverComponenT>(childLayout);
 		auto parent = CreateComponent<RenderTexture>(parentLayout, move(owner));
-		parent->UpdatePositionsManually();
+		UpdatePositionsManually(parent.get());
 
 		EXPECT_EQ(PickMouseReceivers(parent.get(), { 45, 45 }).size(), 1); //RenderTexture 안쪽이니까 1개가 있어야 한다.
 		EXPECT_EQ(PickMouseReceivers(parent.get(), { 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.

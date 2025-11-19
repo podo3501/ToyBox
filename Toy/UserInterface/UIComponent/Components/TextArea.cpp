@@ -100,7 +100,7 @@ bool TextArea::Setup(const UILayout& layout, const wstring& text, const vector<w
 	return true;
 }
 
-bool TextArea::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
+bool TextArea::BindSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
 {
 	for (const auto& bindKey : m_bindKeys)
 	{
@@ -118,7 +118,7 @@ bool TextArea::ImplementBindSourceInfo(TextureResourceBinder* resBinder, ITextur
 	return ArrangeText(m_text);
 }
 
-void TextArea::ImplementRender(ITextureRender* render) const
+void TextArea::Render(ITextureRender* render) const
 {
 	const auto& leftTop = XMINT2ToVector2(GetLeftTop());
 	for (const auto& word : m_lines)

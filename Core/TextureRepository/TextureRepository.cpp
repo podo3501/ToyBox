@@ -61,22 +61,26 @@ bool TextureRepository::LoadTexture(const wstring& filename, size_t& outIndex, X
         });
 }
 
-bool TextureRepository::CreateRenderTexture(IComponent* component, 
-    const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
+void TextureRepository::SetTextureRenderer(function<void(size_t index, ITextureRender*)> rendererFn) noexcept
 {
-    auto renderTex = make_unique<TextureRenderTarget>(m_deviceResources, m_descHeap);
+    m_textureRenderer = rendererFn;
+}
+
+bool TextureRepository::CreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
+{
+    auto renderTex = make_unique<TextureRenderTarget>(m_textureRenderer, m_deviceResources, m_descHeap);
 
     auto format = m_deviceResources->GetBackBufferFormat();
     XMUINT2 size{ static_cast<uint32_t>(targetRect.width), static_cast<uint32_t>(targetRect.height) };
     XMINT2 position{ targetRect.x, targetRect.y };
     auto offset = AllocateDescriptor();
-    if (!renderTex->Create(format, size, position, offset, component))
+    if (!renderTex->Create(format, size, position, offset))
     {
         ReleaseDescriptor(offset);
         return false;
     }
     outIndex = renderTex->GetIndex();
-    if(outGfxMemOffset) *outGfxMemOffset = renderTex->GetGraphicMemoryOffset();
+    if (outGfxMemOffset) *outGfxMemOffset = renderTex->GetGraphicMemoryOffset();
     m_texResources[offset] = move(renderTex);
 
     return true;

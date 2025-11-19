@@ -27,7 +27,7 @@ bool ComponentTestScene::Enter()
     IRenderer* renderer = GetRenderer();
     UILayout layout{ GetSizeFromRectangle(GetRectResolution()) };
     m_uiModule = CreateUIModule("ComponentTest", layout, "Main", L"UI/SampleTexture/SampleTextureBinder.json");
-    m_uiModule->AddRenderer();
+    //m_uiModule->AddRenderer();
     renderer->LoadTextureBinder(m_uiModule->GetTexResBinder());
 
     return LoadResources();

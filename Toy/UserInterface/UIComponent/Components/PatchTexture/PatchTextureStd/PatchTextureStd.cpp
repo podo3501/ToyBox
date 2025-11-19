@@ -17,7 +17,7 @@ const string& PatchTextureStd::GetBindKey() const noexcept
 	return child->GetBindKey();
 }
 
-bool PatchTextureStd::ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
+bool PatchTextureStd::BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	return ResizeOrApplyDefault();
 }

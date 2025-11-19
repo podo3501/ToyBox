@@ -14,7 +14,6 @@ TestScene2::TestScene2(IRenderer* renderer) :
 bool TestScene2::Enter()
 {
 	m_uiModule = CreateUIModule("Test2", L"/Scene/Test/TestScene2.json", L"UI/SampleTexture/SampleTextureBinder.json");
-	m_uiModule->AddRenderer();
 
 	auto scene = SceneLocator::GetService();
 	auto eventDispatcher = EventDispatcherLocator::GetService();

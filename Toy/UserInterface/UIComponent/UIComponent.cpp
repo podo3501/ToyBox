@@ -66,7 +66,7 @@ void UIComponent::UnlinkAndRefresh() noexcept
 	m_root = this;
 	m_parent = nullptr;
 	m_transform.Clear();
-	UpdatePositionsManually();
+	UpdatePositionsManually(this);
 }
 
 unique_ptr<UIComponent> UIComponent::Clone() const 
@@ -79,23 +79,6 @@ unique_ptr<UIComponent> UIComponent::Clone() const
 UITransform& UIComponent::GetTransform(UIComponent* component)
 {
 	return component->m_transform;
-}
-
-bool UIComponent::UpdatePositionsManually(bool root) noexcept
-{
-	UIComponent* component = (root) ? GetRoot() : this;
-	return component->RecursivePositionUpdate();
-}
-
-bool UIComponent::RecursivePositionUpdate(const XMINT2& position) noexcept
-{
-	const auto& startPos = GetTransform(this).GetUpdatedPosition(m_layout, position);
-	ImplementPositionUpdated();
-
-	return ranges::all_of(m_children, [this, &startPos](auto& child) {
-		auto childStartPos = startPos + GetTransform(child.get()).GetRelativePosition();
-		return child->RecursivePositionUpdate(childStartPos);
-		});
 }
 
 bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position) noexcept
@@ -116,11 +99,6 @@ bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& posi
 bool UIComponent::ProcessUpdate(const DX::StepTimer& timer) noexcept
 {
 	return RecursiveUpdate(timer);
-}
-
-void UIComponent::ProcessRender(ITextureRender* texRender)
-{
-	Render(this, texRender);
 }
 
 void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept
@@ -225,7 +203,7 @@ unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> chi
 	child->m_transform.ChangeRelativePosition(
 		m_layout.GetSize(), relativePos);
 	m_children.emplace_back(move(child));
-	UpdatePositionsManually(true);
+	UpdatePositionsManually(this, true);
 
 	return nullptr;
 }

@@ -1,16 +1,17 @@
 #pragma once
 
-#include "IComponent.h"
 #include "UILayout.h"
 #include "UITransform.h"
 #include "UIType.h"
 
 struct IMouseEventReceiver;
+struct ITextureController;
+struct ITextureRender;
 class SerializerIO;
 class TextureResourceBinder;
 namespace DX { class StepTimer; }
 
-class UIComponent : public IComponent
+class UIComponent
 {
 	friend class DerivedTraverser;
 
@@ -20,10 +21,10 @@ protected:
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
-	virtual bool ImplementBindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept { return true; } //Binder에서 키값으로 source 얻어올때
-	virtual void ImplementPositionUpdated() noexcept {}; //위치값 업데이트 할때 컴포넌트에서 추가로 설정할게 있다면
+	virtual bool BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept { return true; } //Binder에서 키값으로 source 얻어올때
+	virtual void PositionUpdated() noexcept {}; //위치값 업데이트 할때 컴포넌트에서 추가로 설정할게 있다면
 	virtual bool ImplementUpdate(const DX::StepTimer&) noexcept { return true; }
-	virtual void ImplementRender(ITextureRender*) const {};
+	virtual void Render(ITextureRender*) const {};
 	virtual bool ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept; //사이즈 바꾸면 child의 위치를 바꿔야 한다.
 	virtual bool ImplementChangeSize(const XMUINT2&, bool) noexcept { return true; } //사이즈 바꿀때
 	virtual bool EnterToolMode() noexcept { return true;	}
@@ -46,14 +47,11 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 	virtual ComponentID GetTypeID() const noexcept = 0;
 	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept { return nullptr; }
 	virtual bool operator==(const UIComponent& other) const noexcept;
-	virtual void ProcessRender(ITextureRender* texRender) override final;
 	virtual void ProcessIO(SerializerIO& serializer);
 	unique_ptr<UIComponent> Clone() const;
 
-	//bool BindTextureSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept;
 	bool ChangeSize(const XMUINT2& size, bool isForce = false) noexcept; //isForce는 크기가 변함이 없더라도 끝까지 실행시킨다.
 	inline bool ChangeSize(uint32_t x, uint32_t y, bool isForce = false) noexcept { return ChangeSize({ x, y }, isForce); }
-	bool UpdatePositionsManually(bool root = false) noexcept;
 	bool ProcessUpdate(const DX::StepTimer& timer) noexcept;
 	
 	inline const XMINT2& GetLeftTop() const noexcept { return m_transform.GetAbsolutePosition(); }
@@ -89,8 +87,9 @@ public: //이 클래스의 public 함수는 왠만하면 늘리지 않도록 하자.
 private:
 	void UnlinkAndRefresh() noexcept;
 	bool RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position = {}) noexcept;
-	bool RecursivePositionUpdate(const XMINT2& position = {}) noexcept;
+	//bool RecursivePositionUpdate(const XMINT2& position = {}) noexcept;
 	UITransform& GetTransform(UIComponent* component);
+	UITransform& GetTransform() noexcept { return m_transform; }
 	inline void SetParent(UIComponent* component) noexcept { m_parent = component; }
 
 	UIComponent* m_root{ nullptr };
