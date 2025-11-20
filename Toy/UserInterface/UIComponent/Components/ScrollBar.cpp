@@ -6,6 +6,8 @@
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 
+using namespace UITraverser;
+
 ScrollBar::~ScrollBar() = default;
 ScrollBar::ScrollBar() :
 	m_scrollTrack{ nullptr },
@@ -79,7 +81,7 @@ bool ScrollBar::Setup(unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<Textu
 bool ScrollBar::BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	if (GetSize() == XMUINT2{})
-		SetSize(UITraverser::GetChildrenBoundsSize(this));
+		SetSize(GetChildrenBoundsSize(this));
 
 	SetScrollContainerSize(0.5f);	//기본값
 	return true;
@@ -132,7 +134,7 @@ bool ScrollBar::OnWheel(int wheelValue) noexcept
 	return true;
 }
 
-bool ScrollBar::ImplementUpdate(const DX::StepTimer& timer) noexcept
+bool ScrollBar::Update(const DX::StepTimer& timer) noexcept
 {
 	if (!m_bounded.ValidateRange(m_wheelValue, timer)) return true;
 	m_wheelValue = 0;	//?!? wheelValue가 휠이 움직일때만 들어오기 때문에 0으로 부득이하게 초기화했다. 나중에 m_bounded를 수정해야 겠다.
@@ -161,15 +163,15 @@ ReturnType ScrollBar::GetMaxScrollRange() const noexcept
 }
 
 //이 함수는 세로만 적용돼 있다.
-bool ScrollBar::ImplementChangeSize(const XMUINT2& newSize, bool isForce) noexcept
+bool ScrollBar::ChangeSize(const XMUINT2& newSize, bool isForce) noexcept
 {
 	float sizeRatio = static_cast<float>(newSize.y) / static_cast<float>(m_scrollTrack->GetSize().y);
-	ReturnIfFalse(m_scrollTrack->ChangeSize(newSize, isForce));
+	ReturnIfFalse(UITraverser::ChangeSize(m_scrollTrack, newSize, isForce));
 
 	//크기가 바뀌면 상대적으로 버튼 크기가 정해지기 때문에 조정되어야 한다.
 	uint32_t btnHeight = static_cast<uint32_t>(static_cast<float>(m_scrollButton->GetSize().y) * sizeRatio);
 	auto btnSize = XMUINT2{ newSize.x, btnHeight };
-	m_scrollButton->ChangeSize(btnSize, isForce);
+	UITraverser::ChangeSize(m_scrollButton, btnSize, isForce);
 
 	return true;
 }
@@ -204,7 +206,7 @@ void ScrollBar::SetScrollContainerSize(float ratio) noexcept
 	case DirectionType::Vertical: ratioSize.y = static_cast<uint32_t>(area.height * ratio); break;
 	}
 
-	m_scrollButton->ChangeSize(ratioSize);
+	UITraverser::ChangeSize(m_scrollButton, ratioSize);
 }
 
 void ScrollBar::ApplyScrollButtonPosition(float positionRatio) noexcept

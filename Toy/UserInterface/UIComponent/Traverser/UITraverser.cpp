@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "UITraverser.h"
-#include "../UIComponent.h"
 
 namespace UITraverser
 {
@@ -31,4 +30,9 @@ namespace UITraverser
 	}
 
 	void PropagateRoot(UIComponent* c) noexcept { PropagateRoot(c, c); }
+	bool ChangeSize(UIComponent* c, uint32_t x, uint32_t y, bool isForce) noexcept { return ChangeSize(c, { x, y }, isForce); }
+	bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept { return ChangeSize(c, { v, c->GetSize().y }); }
+	bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeX(c, s.x); }
+	bool ChangeSizeY(UIComponent* c, uint32_t v) noexcept { return ChangeSize(c, { c->GetSize().x, v }); }
+	bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeY(c, s.y); }
 }

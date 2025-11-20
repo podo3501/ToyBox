@@ -11,6 +11,8 @@
 #include "Toy/UserInterface/UIModule.h"
 #include "Shared/System/StepTimer.h"
 
+using namespace UITraverser;
+
 int UserInterfaceWindow::m_uiWindowIndex = 0;
 UserInterfaceWindow::~UserInterfaceWindow()
 {
@@ -45,7 +47,7 @@ bool UserInterfaceWindow::SetupProperty(UIModule* uiModule)
 
 	unique_ptr<UIModuleAsComponent> asComponent = CreateComponent<UIModuleAsComponent>(uiModule);
 	m_mainRenderTexture = CreateComponent<RenderTexture>(move(asComponent));
-	ReturnIfFalse(UITraverser::BindTextureSourceInfo(m_mainRenderTexture.get(), nullptr, m_renderer->GetTextureController())); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
+	ReturnIfFalse(BindTextureSourceInfo(m_mainRenderTexture.get(), nullptr, m_renderer->GetTextureController())); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
 
 	ToggleToolMode();
 	m_isOpen = true;
@@ -81,7 +83,7 @@ wstring UserInterfaceWindow::GetSaveFilename() const noexcept
 void UserInterfaceWindow::ChangeWindowSize(const ImVec2& size)
 {
 	const XMUINT2& uint2Size = ImVec2ToXMUINT2(size);
-	m_mainRenderTexture->ChangeSize(uint2Size);
+	ChangeSize(m_mainRenderTexture.get(), uint2Size);
 }
 
 UIModule* UserInterfaceWindow::GetUIModule() const noexcept
@@ -147,7 +149,7 @@ void UserInterfaceWindow::Update(const DX::StepTimer& timer)
 	CheckActiveUpdate(toolInput);
 		
 	m_controller->Update();
-	m_mainRenderTexture->ProcessUpdate(timer);
+	UITraverser::Update(m_mainRenderTexture.get(), timer);
 
 	if (float elapsedTime = static_cast<float>(timer.GetElapsedSeconds()); elapsedTime)
 		m_fps = 1.0f / elapsedTime;

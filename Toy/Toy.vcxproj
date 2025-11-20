@@ -286,6 +286,7 @@
     <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\UITraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponent.h" />
+    <ClInclude Include="UserInterface\UIComponent\UIComponent.hpp" />
     <ClInclude Include="UserInterface\UIComponent\UIComponentFactory.h" />
     <ClInclude Include="UserInterface\UIComponent\UIHelperClass.h" />
     <ClInclude Include="UserInterface\UIComponent\UILayout.h" />

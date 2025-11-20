@@ -24,7 +24,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 	TEST_F(PatchTextureLite3T_Horizontal, ChangeSize_Bigger)
 	{
 		InitializeBindSourceInfo();
-		m_component->ChangeSize({ 80, 80 });
+		ChangeSize(m_component.get(), { 80, 80 });
 
 		auto centerComponent = m_component->GetCenterComponent();
 		EXPECT_EQ(centerComponent->GetSize(), XMUINT2(36, 80)); // 80 - (22 * 2) = 36, 왼쪽 오른쪽 사각형 x길이는 변하지 않는다.
@@ -55,11 +55,11 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 		EXPECT_EQ(m_component->GetTextureSlice(), TextureSlice::ThreeH);
 	}
 
-	TEST_F(PatchTextureLite3T_Horizontal, ProcessRender)
+	TEST_F(PatchTextureLite3T_Horizontal, Render)
 	{
 		InitializeBindSourceInfo();
 		m_component->ChangeOrigin(Origin::Center);
-		m_component->ChangeSize({ 80, 80 }); //source 좌표와 동일해서 사이즈를 조정했다.
+		ChangeSize(m_component.get(), { 80, 80 }); //source 좌표와 동일해서 사이즈를 조정했다.
 
 		//화면에 그려지는 부분
 		RECT destLeft{ -40, -40, -18, 40 };

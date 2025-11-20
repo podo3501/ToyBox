@@ -8,6 +8,7 @@
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
 #include "UserInterface/SerializerIO/KeyConverter.h"
 
+using namespace UITraverser;
 using enum InteractState;
 
 TextureSwitcher::~TextureSwitcher() = default;
@@ -148,10 +149,10 @@ bool TextureSwitcher::ChangeBindKey(TextureResourceBinder* resBinder, const stri
 	return FitToTextureSource();
 }
 
-bool TextureSwitcher::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
+bool TextureSwitcher::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
 	return ranges::all_of(GetChildren(), [&size, isForce](const auto& component) {
-		return component->ChangeSize(size, isForce); });
+		return UITraverser::ChangeSize(component, size, isForce); });
 }
 
 unique_ptr<UIComponent> TextureSwitcher::AttachComponentToCenter(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept

@@ -11,7 +11,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_TRUE(TestClone(m_component));
 	}
 
-	TEST_F(ContainerT, ProcessRender)
+	TEST_F(ContainerT, Render)
 	{
 		RECT dest{ 0, 0, 30, 30 }; //CotainerT의 area가 아니라 Normal Component의 area이다.
 		RECT source{ 0, 0, 30, 30 };

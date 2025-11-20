@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "HierarchyTraverserT.h"
 #include "../MockComponent.h"
-#include "Toy/UserInterface/UIComponent/Components/Panel.h"
-#include "Toy/UserInterface/UIModule.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 class MockRenderTraversal : public UIComponentStub
 {
@@ -40,9 +37,9 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 	TEST_F(HierarchyTraverserT, ForEachChildToRender_BFS)
 	{
 		auto [owner, node0] = CreateMockComponent<MockRenderBFS>();
-		auto node1 = AttachMockComponent<MockRenderTraversal>(node0);
-		auto node3 = AttachMockComponent<MockRenderTraversal>(node0);
-		auto node2 = AttachMockComponent<MockRenderTraversal>(node1);
+		auto node1 = AttachMockComponentDirect<MockRenderTraversal>(node0);
+		auto node3 = AttachMockComponentDirect<MockRenderTraversal>(node0);
+		auto node2 = AttachMockComponentDirect<MockRenderTraversal>(node1);
 
 		vector<UIComponent*> visitOrder;
 		auto Func = [&](UIComponent* c) -> TraverseResult {
@@ -58,9 +55,9 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 	TEST_F(HierarchyTraverserT, ForEachChildToRender_DFS)
 	{
 		auto [owner, node0] = CreateMockComponent<MockRenderDFS>();
-		auto node1 = AttachMockComponent<MockRenderTraversal>(node0);
-		auto node3 = AttachMockComponent<MockRenderTraversal>(node0);
-		auto node2 = AttachMockComponent<MockRenderTraversal>(node1);
+		auto node1 = AttachMockComponentDirect<MockRenderTraversal>(node0);
+		auto node3 = AttachMockComponentDirect<MockRenderTraversal>(node0);
+		auto node2 = AttachMockComponentDirect<MockRenderTraversal>(node1);
 
 		vector<UIComponent*> visitOrder;
 		auto Func = [&](UIComponent* c) -> TraverseResult {

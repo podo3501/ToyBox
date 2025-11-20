@@ -68,7 +68,7 @@ bool DetachComponentCommand::Execute()
 	m_component = move(component); //원본은 저장하고 클론은 밖으로 
 	m_parent = parent;
 
-	m_result = { m_component->Clone(), parent };
+	m_result = { Clone(m_component.get()), parent };
 
 	return true;
 }
@@ -90,7 +90,7 @@ bool DetachComponentCommand::Redo()
 
 	m_component = move(component);
 	//if(!CompareUniquePtr(m_result.first, m_component)) //Undo, Redo를 계속하면 m_result에 값이 있어서 소멸자가 호출된다. 그래서 texture의 reference count가 꼬이게 된다.
-	m_result = { m_component->Clone(), parent };
+	m_result = { Clone(m_component.get()), parent };
 
 	return m_result.first != nullptr;
 }
@@ -134,11 +134,11 @@ SetSizeCommand::SetSizeCommand(UIComponent* component, const XMUINT2& size) noex
 bool SetSizeCommand::Execute()
 {
 	m_record.previous = GetTarget()->GetSize();
-	return GetTarget()->ChangeSize(m_record.current);
+	return ChangeSize(GetTarget(), m_record.current);
 }
 
-bool SetSizeCommand::Undo() { return GetTarget()->ChangeSize(m_record.previous); }
-bool SetSizeCommand::Redo() { return GetTarget()->ChangeSize(m_record.current); }
+bool SetSizeCommand::Undo() { return ChangeSize(GetTarget(), m_record.previous); }
+bool SetSizeCommand::Redo() { return ChangeSize(GetTarget(), m_record.current); }
 
 void SetSizeCommand::PostMerge(unique_ptr<UICommand> other) noexcept
 {
@@ -224,7 +224,7 @@ bool FitToTextureSourceCommand::Execute()
 		});
 }
 
-bool FitToTextureSourceCommand::Undo() { return WithTarget([this](auto* t) { return t->ChangeSize(m_size); }); }
+bool FitToTextureSourceCommand::Undo() { return WithTarget([this](auto* t) { return ChangeSize(t, m_size); }); }
 bool FitToTextureSourceCommand::Redo() { return WithTarget([](auto* t) { return t->FitToTextureSource(); }); }
 
 //////////////////////////////////////////////////////////////////
@@ -265,7 +265,7 @@ bool ChangeBindKeyCommand::Execute()
 bool ChangeBindKeyCommand::Undo() {
 	return WithTarget([this](auto* t) { 
 		ReturnIfFalse(t->ChangeBindKey(m_resBinder, m_record.previous));
-		return t->ChangeSize(m_prevSize);
+		return ChangeSize(t, m_prevSize);
 		}); 
 }
 bool ChangeBindKeyCommand::Redo() { return WithTarget([this](auto* t) { return t->ChangeBindKey(m_resBinder, m_record.current); }); }

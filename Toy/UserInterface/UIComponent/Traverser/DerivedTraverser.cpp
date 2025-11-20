@@ -3,6 +3,23 @@
 #include "../UIComponent.h"
 #include "Shared/Utils/GeometryExt.h"
 
+bool DerivedTraverser::BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder, ITextureController* texController) noexcept
+{
+	auto forEachResult = ForEachChildPostUntilFail(c, [resBinder, texController](UIComponent* component) {
+		bool result = component->BindSourceInfo(resBinder, texController);
+		AssertMsg(result, "Failed to load texture");
+		return result;
+		});
+	ReturnIfFalse(forEachResult);
+	ReturnIfFalse(UpdatePositionsManually(c));
+	return true;
+}
+
+bool DerivedTraverser::Update(UIComponent* c, const DX::StepTimer& timer) noexcept
+{
+	return RecursiveUpdate(c, timer);
+}
+
 void DerivedTraverser::Render(UIComponent* c, ITextureRender* render)
 {
 	//9방향 이미지는 같은 레벨인데 9방향 이미지 위에 다른 이미지를 올렸을 경우 BFS가 아니면 밑에 이미지가 올라온다.
@@ -16,16 +33,30 @@ void DerivedTraverser::Render(UIComponent* c, ITextureRender* render)
 		});
 }
 
-bool DerivedTraverser::BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder, ITextureController* texController) noexcept
+unique_ptr<UIComponent> DerivedTraverser::Clone(UIComponent* c)
 {
-	auto forEachResult = ForEachChildPostUntilFail(c, [resBinder, texController](UIComponent* component) {
-		bool result = component->BindSourceInfo(resBinder, texController);
-		AssertMsg(result, "Failed to load texture");
-		return result;
-		});
-	ReturnIfFalse(forEachResult);
-	ReturnIfFalse(UpdatePositionsManually(c));
-	return true;
+	auto clone = c->Clone();
+	UpdatePositionsManually(clone.get());
+	return clone;
+}
+//크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
+bool DerivedTraverser::ChangeSize(UIComponent* c, const XMUINT2& size, bool isForce) noexcept
+{
+	XMUINT2 lockedSize{ size };
+	const auto& preSize = c->GetSize();
+	if (c->HasStateFlag(StateFlag::X_SizeLocked)) lockedSize.x = preSize.x;
+	if (c->HasStateFlag(StateFlag::Y_SizeLocked)) lockedSize.y = preSize.y;
+
+	if (!isForce && lockedSize == preSize) return true;
+
+	ReturnIfFalse(c->ResizeAndAdjustPos(size));
+	return c->ChangeSize(lockedSize, isForce);
+}
+
+bool DerivedTraverser::UpdatePositionsManually(UIComponent* c, bool isRoot) noexcept
+{
+	UIComponent* component = (isRoot) ? c->GetRoot() : c;
+	return RecursivePositionUpdate(component);
 }
 
 void DerivedTraverser::PropagateRoot(UIComponent* c, UIComponent* root) noexcept
@@ -48,19 +79,24 @@ bool DerivedTraverser::EnableToolMode(UIComponent* c, bool enable) noexcept
 		});
 }
 
-bool DerivedTraverser::UpdatePositionsManually(UIComponent* c, bool isRoot) noexcept
-{
-	UIComponent* component = (isRoot) ? c->GetRoot() : c;
-	return RecursivePositionUpdate(component);
-}
-
 bool DerivedTraverser::RecursivePositionUpdate(UIComponent* c, const XMINT2& position) noexcept
 {
 	const auto& startPos = c->GetTransform().GetUpdatedPosition(c->m_layout, position);
-	c->PositionUpdated();
-
 	return ranges::all_of(c->GetChildren(), [this, &startPos](auto& child) {
 		auto childStartPos = startPos + child->GetTransform().GetRelativePosition();
 		return RecursivePositionUpdate(child, childStartPos);
+		});
+}
+
+bool DerivedTraverser::RecursiveUpdate(UIComponent* c, const DX::StepTimer& timer, const XMINT2& position) noexcept
+{
+	if (!c->HasStateFlag(StateFlag::Update)) return true;
+
+	const auto& startPos = c->GetTransform().GetUpdatedPosition(c->m_layout, position);
+	ReturnIfFalse(c->Update(timer));
+
+	return ranges::all_of(c->GetChildren(), [this, &timer, &startPos](auto& child) {
+		auto childStartPos = startPos + child->GetTransform().GetRelativePosition();
+		return RecursiveUpdate(child, timer, childStartPos);
 		});
 }

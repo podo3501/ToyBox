@@ -15,9 +15,9 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		return DirectX::XMVector4Equal(arg, expected); 
 	}
 
-	TEST_F(TextAreaT, ProcessRender)
+	TEST_F(TextAreaT, Render)
 	{
-		m_component->ChangeSize(100, 150);
+		ChangeSize(m_component.get(), 100, 150);
 
 		//MockTextureController::MeasureText นื MockTextureController::GetLineSpacing ยüฐํ. 
 		MockTextureRender render;

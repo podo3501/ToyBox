@@ -216,23 +216,24 @@
 --껏다 킬때 툴에서 마우스 때문에 뻑나는거 수정
 --새로운 tdd작성법으로 바꾸면서 처음에 만들었던 부분 다시 리뷰 및 수정
 --UIModule을 Locator로 바꾸고 내부는 전역에 사용하는 부분과 노드에 사용하는 부분으로 분리
-
-@코어에서 UIComponentManager로 render를 날라면 이 매니져는 UIModule 리스트를 가지고 있으니까 
+--코어에서 UIComponentManager로 render를 날라면 이 매니져는 UIModule 리스트를 가지고 있으니까 
    각자 render를 날려주면 내부에서 Traverser가 랜더링을 하는 식으로 수정.
-@tdd에서 traverser에 uimodule을 안쓰고 테스트 하는걸로 수정.
-@툴에서 작업환경을 멀티로 할지 단일로 할지 생각해봐야 겠다.
-@HierarchyTraverser 함수들 보기 좋게 다듬기.
-@Json을 tdd에서 파일로 쓰는 부분을 DI로 수정하고 메모리에 쓰게끔 수정해서 tdd 속도 및 의존성 줄이기
-@UIComponent에 RecursiveUpdate를 수정. RecursivePositionUpdate와 합칠수 있으면 좋다. 
+--UIComponent 리팩토링
+--Include 정리
+--tdd에서 traverser에 uimodule을 안쓰고 테스트 하는걸로 수정.
+--HierarchyTraverser 함수들 보기 좋게 다듬기.
+--UIComponent에 RecursiveUpdate를 수정. RecursivePositionUpdate와 합칠수 있으면 좋다. 
+--알아먹기 쉽도록 테스트 코드 재작성
+    테스트 코드를 딱 봤을때 코드를 분석하고 있으면 안된다. 그만큼 심플하고 간단하게. 20줄이 안넘도록
+    컴포넌트T 이름으로 파일명을 정하고, 이것들은 큰 흐름만 테스트 한다.
 
+@툴에서 작업환경을 멀티로 할지 단일로 할지 생각해봐야 겠다.
+@Json을 tdd에서 파일로 쓰는 부분을 DI로 수정하고 메모리에 쓰게끔 수정해서 tdd 속도 및 의존성 줄이기
 @TextureResourceBinder가 로딩할때 원소 갯수만큼 돌면서 텍스쳐를 로딩하는데 엔진에서 중복로딩하면 인덱스 넘겨주기
     때문에 괜찮았는데, 이렇게 많이 로딩 되면 안된다. 텍스쳐를 저장하는 공간을 두고 로딩할때 이 텍스쳐만 로딩하게끔 수정
     해야겠다. 마지막 원소가 사라지면 텍스트도 사라지고 이런식이 되어야 할 것같다. 
 @wstring filename = L"Test/Data/RWSourceBinderTest.json"; 이것처럼 tdd에서 세이브 되는 데이터는 한곳으로 모으자.
-@알아먹기 쉽도록 테스트 코드 재작성
-    테스트 코드를 딱 봤을때 코드를 분석하고 있으면 안된다. 그만큼 심플하고 간단하게. 20줄이 안넘도록
-    컴포넌트T 이름으로 파일명을 정하고, 이것들은 큰 흐름만 테스트 한다.
-    상위 클래스인 UIComponent를 테스트 한다. 
+
     
 @Component에서 이벤트 받아서 사운드 출력되게끔.
 @Stub 폴더 정리. include 폴더 없앨지 고민

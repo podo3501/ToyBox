@@ -4,6 +4,8 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
+using namespace UITraverser;
+
 namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 {
 	TEST_F(PatchTextureLite1T, BindSourceInfo)
@@ -40,17 +42,17 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 		EXPECT_EQ(m_component->GetTextureSlice(), TextureSlice::One);
 	}
 
-	TEST_F(PatchTextureLite1T, ProcessRender)
+	TEST_F(PatchTextureLite1T, Render)
 	{
 		RECT dest{ 0, 0, 20, 20 };
 		RECT source{ 0, 0, 10, 10 };
-		m_component->ChangeSize({ 20, 20 }); //dest의 크기
+		ChangeSize(m_component.get(), { 20, 20 }); //dest의 크기
 		m_component->BindSourceInfo(0, { { 0, 0, 10, 10 } }); //texture index, source의 좌표
 
 		MockTextureRender render;
 		EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source)))
 			.Times(1);
 
-		UITraverser::Render(m_component.get(), &render);
+		Render(m_component.get(), &render);
 	}
 }

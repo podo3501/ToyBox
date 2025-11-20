@@ -3,7 +3,7 @@
 
 class UIComponent;
 class UINameGenerator;
-class NameTraverser : private HierarchyTraverser //Traverser은 상태값을 가질 수 없다.
+class NameTraverser : private HierarchyTraverser //이름관련. Traverser은 멤벼변수를 가질 수 없다.
 {
 public:
 	NameTraverser();

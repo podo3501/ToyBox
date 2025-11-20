@@ -28,7 +28,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		m_component->OnWheel(-1); //휠을 내린다. 그럼 0.5보다 큰값이 예상된다.
 
 		DX::StepTimer timer = GetTickTimer();
-		m_component->ProcessUpdate(timer);
+		Update(m_component.get(), timer);
 	}
 
 	TEST_F(ScrollBarT, OnPressCB_MouseDrag)
@@ -43,9 +43,9 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		SimulateDrag(m_component.get(), startPos, endPos);
 	}
 
-	TEST_F(ScrollBarT, ProcessRender)
+	TEST_F(ScrollBarT, Render)
 	{
-		m_component->ChangeSize({ 20, 100 });
+		ChangeSize(m_component.get(), { 20, 100 });
 
 		//화면에 그려지는 부분
 		RECT destTrackBottom{ 0, 95, 20, 100 };

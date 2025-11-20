@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "ComponentHelper.h"
-#include "Shared/System/Input/InputManager.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 
 DX::StepTimer GetTickTimer() noexcept

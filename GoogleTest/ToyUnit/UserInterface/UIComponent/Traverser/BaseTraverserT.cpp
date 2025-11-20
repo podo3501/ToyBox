@@ -19,11 +19,11 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 	TEST_F(BaseTraverserT, GetChildrenBoundsSize)
 	{
 		auto main = CreateComponent<MockComponent>();
-		main->ChangeSize(10, 10);
+		ChangeSize(main.get(), 10, 10);
 		ComponentDesc desc(XMINT2{ 5, 5 }, UILayout({ 10, 10 })); //크기는 10, 10, 위치는 5, 5 에 attach 한다.
 		auto component = AttachMockComponent<MockComponent>(main.get(), desc);
 
-		EXPECT_EQ(GetChildrenBoundsSize(main.get()), XMUINT2(15, 15));
+		EXPECT_EQ(m_traverser.GetChildrenBoundsSize(main.get()), XMUINT2(15, 15));
 	}
 
 	TEST_F(BaseTraverserT, PickComponents)
@@ -34,8 +34,8 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		auto parent = CreateComponent<RenderTexture>(parentLayout, move(owner));
 		UpdatePositionsManually(parent.get());
 
-		EXPECT_EQ(PickComponents(parent.get(), {45, 45}).size(), 2); //RenderTexture 안쪽이니까 2개가 있어야 한다.
-		EXPECT_EQ(PickComponents(parent.get(), { 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.
+		EXPECT_EQ(m_traverser.PickComponents(parent.get(), {45, 45}).size(), 2); //RenderTexture 안쪽이니까 2개가 있어야 한다.
+		EXPECT_EQ(m_traverser.PickComponents(parent.get(), { 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.
 	}
 
 	TEST_F(BaseTraverserT, PickMouseReceivers)
@@ -46,8 +46,8 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		auto parent = CreateComponent<RenderTexture>(parentLayout, move(owner));
 		UpdatePositionsManually(parent.get());
 
-		EXPECT_EQ(PickMouseReceivers(parent.get(), { 45, 45 }).size(), 1); //RenderTexture 안쪽이니까 1개가 있어야 한다.
-		EXPECT_EQ(PickMouseReceivers(parent.get(), { 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.
+		EXPECT_EQ(m_traverser.PickMouseReceivers(parent.get(), { 45, 45 }).size(), 1); //RenderTexture 안쪽이니까 1개가 있어야 한다.
+		EXPECT_EQ(m_traverser.PickMouseReceivers(parent.get(), { 65, 65 }).size(), 0); //RenderTexture 바깥이니까 아무것도 없어야 한다.
 	}
 }
 

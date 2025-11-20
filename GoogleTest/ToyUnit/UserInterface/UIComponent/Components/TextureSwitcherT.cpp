@@ -1,11 +1,8 @@
 #include "pch.h"
 #include "TextureSwitcherT.h"
 #include "../ComponentHelper.h"
-#include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite.h"
-#include "Toy/Locator/EventDispatcherLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Shared/System/Public/IInputManager.h"
 
 class MockEventDispatcherManager : public IEventDispatcherManager
 {
@@ -78,7 +75,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	TEST_F(TextureSwitcherT, FitToTextureSource)
 	{
 		auto preSize = m_component->GetSize();
-		m_component->ChangeSize({ 10, 10 });
+		ChangeSize(m_component.get(), { 10, 10 });
 
 		m_component->FitToTextureSource();
 		EXPECT_EQ(m_component->GetSize(), preSize);
@@ -129,7 +126,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_EQ(m_component->GetState(), InteractState::Normal);
 	}
 
-	TEST_F(TextureSwitcherT, ProcessRender)
+	TEST_F(TextureSwitcherT, Render)
 	{
 		RECT dest = RectangleToRect(m_component->GetArea());
 		RECT source{ 0, 0, 30, 30 };

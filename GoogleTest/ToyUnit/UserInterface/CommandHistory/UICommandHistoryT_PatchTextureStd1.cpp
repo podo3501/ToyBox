@@ -1,15 +1,18 @@
 #include "pch.h"
 #include "UICommandHistoryT_PatchTextureStd1.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+
+using namespace UITraverser;
 
 template<typename Action>
 void UICommandHistoryT_PatchTextureStd1::VerifyUndoRedo(Action&& action, PatchTextureStd1* component)
 {
 	PatchTextureStd1* curComponent = component ? component : m_component;
 
-	auto before = m_main->Clone();
+	auto before = Clone(m_main);
 	action(m_command.get(), curComponent);
 
-	auto after = m_main->Clone();
+	auto after = Clone(m_main);
 	EXPECT_NE(*before, *after);
 
 	m_command->Undo();
@@ -67,7 +70,7 @@ namespace UserInterfaceT::CommandHistoryT
 
 	TEST_F(UICommandHistoryT_PatchTextureStd1, FitToTextureSource)
 	{
-		m_component->ChangeSize({ 10, 10 });
+		ChangeSize(m_component, { 10, 10 });
 
 		VerifyUndoRedo([](UICommandHistory* c, auto comp) {
 			c->FitToTextureSource(comp);

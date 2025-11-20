@@ -3,7 +3,7 @@
 #include "../UIComponent.h"
 #include "Shared/Utils/GeometryExt.h"
 
-XMUINT2 BaseTraverser::GetChildrenBoundsSize(UIComponent* c) const noexcept
+XMUINT2 BaseTraverser::GetChildrenBoundsSize(UIComponent* c) noexcept
 {
 	Rectangle totalArea{ c->GetArea() }; //초기값을 지정하지 않으면 0, 0 부터 시작하는 큰 사각형이 union된다.
 	ForEachChildConst(c, [&totalArea](const UIComponent* child) {

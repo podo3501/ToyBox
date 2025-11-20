@@ -7,6 +7,8 @@
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/System/StepTimer.h"
 
+using namespace UITraverser;
+
 class MockReceiverComponent : public UIComponentStub, public IMouseEventReceiver
 {
 public:
@@ -38,10 +40,10 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_CALL(*child, Render(testing::_)).Times(1);
 
 		MockTextureRender render;
-		UITraverser::Render(m_component.get(), &render);
+		Render(m_component.get(), &render);
 	}
 
-	TEST_F(UIModuleAsComponentT, ImplementUpdate)
+	TEST_F(UIModuleAsComponentT, Update)
 	{
 		//모듈에 컴포넌트 하나를 붙인다.
 		auto module = m_component->GetUIModule();
@@ -58,7 +60,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		input->SetMouseState(child->GetLeftTop(), InputState::Up);
 
 		DX::StepTimer timer;
-		m_component->ProcessUpdate(timer);
+		Update(m_component.get(), timer);
 	}
 
 	//UIModule에 위치값을 셋팅하는거 만들어서 그 위치에서 render 되는지 확인해야한다.

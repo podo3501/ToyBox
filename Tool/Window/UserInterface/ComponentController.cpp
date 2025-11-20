@@ -3,10 +3,13 @@
 #include "FloatingComponent.h"
 #include "ComponentSelector.h"
 #include "Toy/Locator/InputLocator.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Window/Dialog.h"
 #include "Window/Utils/Common.h"
+
+using namespace UITraverser;
 
 ComponentController::~ComponentController() = default;
 ComponentController::ComponentController(IRenderer* renderer, 	TextureResourceBinder* resBinder, 
@@ -92,7 +95,7 @@ bool ComponentController::CheckCloneComponent(IToolInputManager* input) noexcept
 	UIComponent* component = m_selector->GetComponent();
 	if (!component) return false;
 
-	auto clone = component->Clone();
+	auto clone = Clone(component);
 	if(!clone)
 	{
 		Tool::Dialog::ShowInfoDialog(DialogType::Alert, "Cannot be cloned. Could it be a component that cannot be detached?");

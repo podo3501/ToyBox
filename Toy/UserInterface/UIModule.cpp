@@ -59,7 +59,7 @@ bool UIModule::BindTextureResources() noexcept
 bool UIModule::Update(const DX::StepTimer& timer) noexcept
 {
 	UpdateMouseState();
-	return m_mainPanel->ProcessUpdate(timer);
+	return UITraverser::Update(m_mainPanel.get(), timer);
 }
 
 void UIModule::Render(ITextureRender* render) const

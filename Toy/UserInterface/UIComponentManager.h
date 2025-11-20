@@ -1,6 +1,7 @@
 #pragma once
 
 struct IRenderer;
+struct ITextureController;
 struct ITextureRender;
 class BaseTraverser;
 class DerivedTraverser;
@@ -31,6 +32,7 @@ private:
 	void RenderTextureComponent(size_t index, ITextureRender* render);
 
 	IRenderer* m_renderer{ nullptr };
+	ITextureController* m_texController{ nullptr };
 	unique_ptr<BaseTraverser> m_baseTraverser;
 	unique_ptr<DerivedTraverser> m_derivedTraverser;
 	unique_ptr<NameTraverser> m_nameTraverser;

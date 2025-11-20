@@ -1,10 +1,12 @@
 ﻿#include "pch.h"
 #include "Container.h"
 #include "Locator/InputLocator.h"
+#include "../Traverser/UITraverser.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
 
+using namespace UITraverser;
 using enum InteractState;
 
 Container::~Container() = default;
@@ -56,10 +58,10 @@ void Container::ClearInteraction() noexcept
 		SetState(InteractState::Normal);
 }
 
-bool Container::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
+bool Container::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
 	return ranges::all_of(GetChildren(), [&size, isForce](const auto& component) {
-			return component->ChangeSize(size, isForce); });
+			return UITraverser::ChangeSize(component, size, isForce); });
 }
 
 void Container::AttachComponent(InteractState state, unique_ptr<UIComponent>&& component) noexcept

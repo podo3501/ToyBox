@@ -5,6 +5,8 @@
 #include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
+using namespace UITraverser;
+
 namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 {
 	TEST_F(PatchTextureStd1T, ChangeBindKey)
@@ -21,7 +23,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 	TEST_F(PatchTextureStd1T, FitToTextureSource)
 	{
 		auto preSize = m_component->GetSize();
-		m_component->ChangeSize({ 10, 10 });
+		ChangeSize(m_component.get(), { 10, 10 });
 		
 		m_component->FitToTextureSource();
 		EXPECT_EQ(m_component->GetSize(), preSize);
@@ -38,7 +40,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 		EXPECT_EQ(m_component->GetTextureSlice(), TextureSlice::One);
 	}
 
-	TEST_F(PatchTextureStd1T, ProcessRender)
+	TEST_F(PatchTextureStd1T, Render)
 	{
 		RECT dest = RectangleToRect(m_component->GetArea());
 		RECT source = RectangleToRect(m_component->GetSource());
@@ -47,7 +49,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 		EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source)))
 			.Times(1);
 
-		UITraverser::Render(m_component.get(), &render);
+		Render(m_component.get(), &render);
 	}
 
 	TEST_F(PatchTextureStd1T, WriteAndRead)

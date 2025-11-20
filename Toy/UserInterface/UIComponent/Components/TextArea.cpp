@@ -86,7 +86,7 @@ bool TextArea::SetText(const wstring& text)
 	return true;
 }
 
-bool TextArea::ImplementChangeSize(const XMUINT2&, bool) noexcept
+bool TextArea::ChangeSize(const XMUINT2&, bool) noexcept
 {
 	return ArrangeText(m_text);
 }

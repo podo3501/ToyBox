@@ -16,9 +16,9 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_TRUE(TestClone(m_component));
 	}
 
-	TEST_F(RenderTextureT, ProcessRender)
+	TEST_F(RenderTextureT, Render)
 	{
-		m_component->ChangeSize({ 100, 100 });
+		ChangeSize(m_component.get(), { 100, 100 });
 
 		size_t texIndex = 1; //새로 생성된 텍스쳐라 인덱스가 생성됨.
 		RECT dest{ 0, 0, 100, 100 }; //사이즈 크기만큼.

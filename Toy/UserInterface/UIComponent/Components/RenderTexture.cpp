@@ -72,12 +72,6 @@ bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 	return true;
 }
 
-void RenderTexture::PositionUpdated() noexcept //UIComponentManager에서 렌더하기 전에 전체를 돌면서 LeftTop을 Core에 셋팅하면 될듯.  그리고 이 함수는 지우고 Update 하는 함수를 통합할수 있는지 확인하자.
-{
-	if (m_texController && m_index)
-		m_texController->ModifyRenderTexturePosition(*m_index, GetLeftTop());
-}
-
 //?!? rendertexture를 등록하는 것을 bind를 통해서 넣으면 텍스쳐 관리를 한군데에 몰아서 할 수 있을꺼 같은데.
 bool RenderTexture::BindSourceInfo(TextureResourceBinder*, ITextureController* texController) noexcept
 {
@@ -98,9 +92,9 @@ bool RenderTexture::BindSourceInfo(TextureResourceBinder*, ITextureController* t
 	return true;
 }
 
-bool RenderTexture::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
+bool RenderTexture::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	ReturnIfFalse(m_component->ChangeSize(size, isForce));
+	ReturnIfFalse(UITraverser::ChangeSize(m_component, size, isForce));
 	ReturnIfFalse(m_texController->ModifyRenderTextureSize(*m_index, size));
 
 	return true;

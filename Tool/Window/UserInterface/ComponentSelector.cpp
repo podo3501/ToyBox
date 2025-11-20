@@ -4,7 +4,6 @@
 #include "SelectedComponent/ComponentTooltip.h"
 #include "SelectedComponent/EditWindowFactory.h"
 #include "Toy/Locator/InputLocator.h"
-#include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Shared/Utils/StlExt.h"

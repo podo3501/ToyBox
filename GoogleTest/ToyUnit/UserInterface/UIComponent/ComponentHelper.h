@@ -2,7 +2,6 @@
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/System/StepTimer.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
-#include "Toy/UserInterface/UIComponent/UIComponent.h"
 
 using namespace UITraverser;
 struct ITextureController;
@@ -27,7 +26,7 @@ bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 template <typename T>
 bool TestClone(unique_ptr<T>& component)
 {
-	auto clone = component->Clone();
+	auto clone = Clone(component.get());
 	return CompareDerived(component, clone);
 }
 

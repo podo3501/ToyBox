@@ -1,11 +1,14 @@
 #include "pch.h"
 #include "PatchTexture.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "UserInterface/UIComponent/UIUtility.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite1.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite3.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
+
+using namespace UITraverser;
 
 PatchTexture::~PatchTexture() = default;
 PatchTexture::PatchTexture() = default;
@@ -28,7 +31,7 @@ UIComponent* PatchTexture::GetCenterComponent() noexcept
 bool PatchTexture::ApplyStretchSize(const vector<XMUINT2>& sizes) noexcept
 {
 	bool result = ForEach([&sizes](PatchTexture* tex, size_t index) {
-		return tex->ChangeSize(sizes[index]);
+		return UITraverser::ChangeSize(tex, sizes[index]);
 		});
 	return result;
 }
@@ -47,7 +50,7 @@ bool PatchTexture::ApplySizeAndPosition(DirectionType dirType, const XMUINT2& si
 	const vector<XMUINT2>& sizes = StretchSize(dirType, size, components);
 	ReturnIfFalse(ApplyStretchSize(sizes));
 	ReturnIfFalse(ApplyPositions(dirType, size, sizes));
-	ApplySize(size);
+	SetSize(size);
 
 	return true;
 }
@@ -77,7 +80,7 @@ vector<Rectangle> PatchTexture::GetChildSourceList() const noexcept
 	return results;
 }
 
-bool PatchTexture::ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept
+bool PatchTexture::ResizeAndAdjustPos(const XMUINT2& size) noexcept
 {
 	auto dirType = TextureSliceToDirType(*m_texSlice);
 	ReturnIfFalse(dirType);
@@ -133,7 +136,7 @@ bool PatchTexture::ResizeOrApplyDefault() noexcept
 	if (GetSize() == XMUINT2{})
 		return ArrangeTextures();
 
-	return ChangeSize(GetSize(), true);
+	return UITraverser::ChangeSize(this, GetSize(), true);
 }
 
 bool PatchTexture::ForEach(predicate<PatchTexture*, size_t> auto&& Each)

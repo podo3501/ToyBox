@@ -17,7 +17,7 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		AttachComponent(m_main, move(owner));
 		RenameRegion(child, "Region");
 
-		auto [cloneOwner, clone] = GetPtrs(child->Clone());
+		auto [cloneOwner, clone] = GetPtrs(Clone(child));
 		AttachComponent(m_main, move(cloneOwner));
 
 		EXPECT_EQ(clone->GetRegion(), "Region_1"); //Region 컴포넌트를 Clone 하면 Region에 _1 이 붙어서 생성된다.

@@ -1,74 +1,81 @@
 #pragma once
+#include "../UIComponent.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/BaseTraverser.h"
 #include "Toy/UserInterface/UIComponent/Traverser/DerivedTraverser.h"
 #include "Toy/UserInterface/UIComponent/Traverser/NameTraverser.h"
-#include "../UIComponent.h" //?!? ComponentCast 이것때문에 여기 있는데 이 인클루드 제거해야 한다.
 
 class UIComponent;
 
 namespace UITraverser
 {
+	template<typename TraverserType, TraverserType* (*Getter)()>
+	struct TraverserCaller {
+		template<typename Ret, typename... Args, typename... CallArgs>
+		static Ret Call(Ret(TraverserType::* fn)(Args...), CallArgs&&... args) noexcept {
+			return (Getter()->*fn)(std::forward<CallArgs>(args)...);
+		}
+	};
+
 	inline BaseTraverser* GetBaseTraverser() noexcept { return UIComponentLocator::GetService()->GetBaseTraverser(); }
-	template <typename Fn, typename... Args>
-	decltype(auto) BaseCall(Fn&& fn, Args&&... args) noexcept {
-		return std::invoke(std::forward<Fn>(fn), GetBaseTraverser(), std::forward<Args>(args)...);
-	}
-
 	inline DerivedTraverser* GetDerivedTraverser() noexcept { return UIComponentLocator::GetService()->GetDerivedTraverser(); }
-	template <typename Fn, typename... Args>
-	decltype(auto) DerivedCall(Fn&& fn, Args&&... args) noexcept {
-		return std::invoke(std::forward<Fn>(fn), GetDerivedTraverser(), std::forward<Args>(args)...);
-	}
-
 	inline NameTraverser* GetNameTraverser() noexcept { return UIComponentLocator::GetService()->GetNameTraverser(); }
-	template <typename Fn, typename... Args>
-	decltype(auto) NameCall(Fn&& fn, Args&&... args) noexcept {
-		return std::invoke(std::forward<Fn>(fn), GetNameTraverser(), std::forward<Args>(args)...);
-	}
+
+	using Base = TraverserCaller<BaseTraverser, GetBaseTraverser>;
+	using Derived = TraverserCaller<DerivedTraverser, GetDerivedTraverser>;
+	using Name = TraverserCaller<NameTraverser, GetNameTraverser>;
 
 	inline unique_ptr<UIComponent> AttachComponent(UIComponent* parent,
 		unique_ptr<UIComponent> child, const XMINT2& relativePos = {}) noexcept {
-		return NameCall(&NameTraverser::AttachComponent, parent, move(child), relativePos);
+		return Name::Call(&NameTraverser::AttachComponent, parent, std::move(child), relativePos);
 	}
 	inline pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* c) noexcept {
-		return NameCall(&NameTraverser::DetachComponent, c);
+		return Name::Call(&NameTraverser::DetachComponent, c);
 	}
 	inline UIComponent* FindComponent(UIComponent* c, const string& name) noexcept {
-		return NameCall(&NameTraverser::FindComponent, c, name);
+		return Name::Call(&NameTraverser::FindComponent, c, name);
 	}
 	inline UIComponent* FindRegionComponent(UIComponent* c, const string& region) noexcept {
-		return NameCall(&NameTraverser::FindRegionComponent, c, region);
+		return Name::Call(&NameTraverser::FindRegionComponent, c, region);
 	}
 	inline XMUINT2 GetChildrenBoundsSize(UIComponent* c) noexcept {
-		return BaseCall(&BaseTraverser::GetChildrenBoundsSize, c);
+		return Base::Call(&BaseTraverser::GetChildrenBoundsSize, c);
 	}
 	inline vector<UIComponent*> PickComponents(UIComponent* c, const XMINT2& pos) noexcept {
-		return BaseCall(&BaseTraverser::PickComponents, c, pos);
+		return Base::Call(&BaseTraverser::PickComponents, c, pos);
 	}
 	inline vector<IMouseEventReceiver*> PickMouseReceivers(UIComponent* c, const XMINT2& pos) noexcept {
-		return BaseCall(&BaseTraverser::PickMouseReceivers, c, pos);
+		return Base::Call(&BaseTraverser::PickMouseReceivers, c, pos);
 	}
 	inline bool Rename(UIComponent* c, const string& name) noexcept {
-		return NameCall(&NameTraverser::Rename, c, name);
+		return Name::Call(&NameTraverser::Rename, c, name);
 	}
 	inline bool RenameRegion(UIComponent* c, const string& region) noexcept {
-		return NameCall(&NameTraverser::RenameRegion, c, region);
+		return Name::Call(&NameTraverser::RenameRegion, c, region);
 	}
 	inline void Render(UIComponent* c, ITextureRender* render) noexcept {
-		return DerivedCall(&DerivedTraverser::Render, c, render);
+		return Derived::Call(&DerivedTraverser::Render, c, render);
 	}
 	inline bool BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder, ITextureController* texController) noexcept {
-		return DerivedCall(&DerivedTraverser::BindTextureSourceInfo, c, resBinder, texController);
+		return Derived::Call(&DerivedTraverser::BindTextureSourceInfo, c, resBinder, texController);
 	}
 	inline void PropagateRoot(UIComponent* c, UIComponent* root) noexcept {
-		return DerivedCall(&DerivedTraverser::PropagateRoot, c, root);
+		return Derived::Call(&DerivedTraverser::PropagateRoot, c, root);
 	}
 	inline bool EnableToolMode(UIComponent* c, bool enable) noexcept {
-		return DerivedCall(&DerivedTraverser::EnableToolMode, c, enable);
+		return Derived::Call(&DerivedTraverser::EnableToolMode, c, enable);
 	}
 	inline bool UpdatePositionsManually(UIComponent* c, bool isRoot = false) noexcept {
-		return DerivedCall(&DerivedTraverser::UpdatePositionsManually, c, isRoot);
+		return Derived::Call(&DerivedTraverser::UpdatePositionsManually, c, isRoot);
+	}
+	inline bool Update(UIComponent* c, const DX::StepTimer& timer) noexcept {
+		return Derived::Call(&DerivedTraverser::Update, c, timer);
+	}
+	inline bool ChangeSize(UIComponent* c, const XMUINT2& size, bool isForce = false) noexcept {
+		return Derived::Call(&DerivedTraverser::ChangeSize, c, size, isForce);
+	}
+	inline unique_ptr<UIComponent> Clone(UIComponent* c) noexcept {
+		return Derived::Call(&DerivedTraverser::Clone, c);
 	}
 	
 	unique_ptr<UIComponent> AttachComponent(UIComponent* c, const string& region, const string& name,
@@ -86,4 +93,9 @@ namespace UITraverser
 	}
 
 	void PropagateRoot(UIComponent* c) noexcept; //자신이 root일때 자신을 root라고 밑에 노드에게 전파
+	bool ChangeSize(UIComponent* c, uint32_t x, uint32_t y, bool isForce = false) noexcept;
+	bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept;
+	bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept;
+	bool ChangeSizeY(UIComponent* c, uint32_t v) noexcept;
+	bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept;
 }

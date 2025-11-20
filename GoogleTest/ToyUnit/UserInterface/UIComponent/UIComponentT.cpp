@@ -11,11 +11,11 @@ public:
 	{
 		//기본 리턴이 false 이기 때문에 리턴을 하지 않으면 실패했다고 간주한다.
 		ON_CALL(*this, BindSourceInfo(testing::_, testing::_)).WillByDefault(testing::Return(true));
-		ON_CALL(*this, ImplementUpdate(testing::_)).WillByDefault(testing::Return(true));
+		ON_CALL(*this, Update(testing::_)).WillByDefault(testing::Return(true));
 	}
 
 	MOCK_METHOD(bool, BindSourceInfo, (TextureResourceBinder*, ITextureController*), (noexcept)); //파일을 메모리에서 불러와서 키값과 매칭시키는 함수
-	MOCK_METHOD(bool, ImplementUpdate, (const DX::StepTimer&), (noexcept)); //업데이트 하면서 좌표를 계산
+	MOCK_METHOD(bool, Update, (const DX::StepTimer&), (noexcept)); //업데이트 하면서 좌표를 계산
 	MOCK_METHOD(void, Render, (ITextureRender*), (const)); //화면에 보여주는 부분
 };
 
@@ -60,7 +60,7 @@ namespace UserInterfaceT::UIComponentT
 		m_parent->ChangeOrigin(Origin::Center);
 
 		VerifyTransformChange(
-			[this] { m_parent->ChangeSize({ 200, 200 }); },
+			[this] { ChangeSize(m_parent, { 200, 200 }); },
 			ChangeExpect::ParentLeftTopChanged |
 			ChangeExpect::ParentSizeChanged |
 			ChangeExpect::ChildRelativeChanged
@@ -71,7 +71,7 @@ namespace UserInterfaceT::UIComponentT
 	{
 		VerifyTransformChange(
 			[this] { 
-				m_parent->ChangeSize({ 200, 200 }); 
+				ChangeSize(m_parent, { 200, 200 });
 			},
 			ChangeExpect::ParentSizeChanged |
 			ChangeExpect::ChildRelativeChanged
@@ -83,7 +83,7 @@ namespace UserInterfaceT::UIComponentT
 		m_parent->SetStateFlag(StateFlag::LockPosOnResize, true);
 
 		VerifyTransformChange(
-			[this] { m_parent->ChangeSize({ 200, 200 }); },
+			[this] { ChangeSize(m_parent, { 200, 200 }); },
 			ChangeExpect::ParentSizeChanged
 		);
 	}
@@ -100,7 +100,7 @@ namespace UserInterfaceT::UIComponentT
 
 		testing::InSequence seq;
 		EXPECT_CALL(*component, BindSourceInfo(testing::_, testing::_)).Times(1);
-		EXPECT_CALL(*component, ImplementUpdate(testing::_)).Times(1);
+		EXPECT_CALL(*component, Update(testing::_)).Times(1);
 		EXPECT_CALL(*component, Render(testing::_)).Times(1);
 
 		MockRenderer renderer;
@@ -108,7 +108,7 @@ namespace UserInterfaceT::UIComponentT
 		BindTextureSourceInfo(component, &resBinder, renderer.GetTextureController());
 
 		DX::StepTimer timer{};
-		component->ProcessUpdate(timer);
+		Update(component, timer);
 
 		MockTextureRender render;
 		Render(component, &render);
@@ -136,10 +136,10 @@ namespace UserInterfaceT::UIComponentT
 
 	TEST_F(UIComponentT, StateFlag_SizeLocked)
 	{
-		m_main->ChangeSize(10, 10);
+		ChangeSize(m_main, 10, 10);
 		m_main->SetStateFlag(StateFlag::X_SizeLocked, true);
 		m_main->SetStateFlag(StateFlag::Y_SizeLocked, true);
-		m_main->ChangeSize(20, 20);
+		ChangeSize(m_main, 20, 20);
 
 		EXPECT_EQ(m_main->GetSize(), XMUINT2(10, 10));
 	}

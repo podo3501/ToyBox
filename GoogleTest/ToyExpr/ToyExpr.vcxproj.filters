@@ -4,10 +4,10 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Utility\Client.cpp">
-      <Filter>Utility</Filter>
+      <Filter>ThirdParty\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Utility\Core.cpp">
-      <Filter>Utility</Filter>
+      <Filter>ThirdParty\Utility</Filter>
     </ClCompile>
     <ClCompile Include="CodeLab\CPP.cpp">
       <Filter>CodeLab</Filter>
@@ -42,9 +42,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Utility">
-      <UniqueIdentifier>{19bf971a-b062-4824-ac01-9d5dfef17688}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CodeLab">
       <UniqueIdentifier>{53c43b35-8083-430c-9608-86a93ad10dfa}</UniqueIdentifier>
     </Filter>
@@ -56,6 +53,9 @@
     </Filter>
     <Filter Include="Fixture">
       <UniqueIdentifier>{6d06ef55-3c7a-457e-abf2-f26e6f51d34c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\Utility">
+      <UniqueIdentifier>{19bf971a-b062-4824-ac01-9d5dfef17688}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

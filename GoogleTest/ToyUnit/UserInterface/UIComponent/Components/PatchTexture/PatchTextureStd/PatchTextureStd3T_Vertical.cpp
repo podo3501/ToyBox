@@ -10,7 +10,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 {
 	TEST_F(PatchTextureStd3T_Vertical, ChangeSize_Bigger)
 	{
-		m_component->ChangeSize({ 80, 80 });
+		ChangeSize(m_component.get(), { 80, 80 });
 		auto centerComponent = m_component->GetCenterComponent();
 		EXPECT_EQ(centerComponent->GetSize(), XMUINT2(80, 36)); // 80 - (22 * 2) = 36, 위쪽 아래쪽 사각형 y길이는 변하지 않는다.
 	}
@@ -30,7 +30,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 	TEST_F(PatchTextureStd3T_Vertical, FitToTextureSource)
 	{
 		auto preSize = m_component->GetSize();
-		m_component->ChangeSize({ 60, 60 });
+		ChangeSize(m_component.get(), { 60, 60 });
 
 		m_component->FitToTextureSource();
 		EXPECT_EQ(m_component->GetSize(), preSize);
@@ -47,10 +47,10 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 		EXPECT_EQ(m_component->GetTextureSlice(), TextureSlice::ThreeV);
 	}
 
-	TEST_F(PatchTextureStd3T_Vertical, ProcessRender)
+	TEST_F(PatchTextureStd3T_Vertical, Render)
 	{
 		m_component->ChangeOrigin(Origin::Center);
-		m_component->ChangeSize({ 80, 80 }); //source 좌표와 동일해서 사이즈를 조정했다.
+		ChangeSize(m_component.get(), { 80, 80 }); //source 좌표와 동일해서 사이즈를 조정했다.
 
 		//화면에 그려지는 부분
 		RECT destTop{ -40, -40,  40, -18 };

@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "NameTraverser.h"
-#include "../UIComponent.h"
-#include "UserInterface/UIComponentLocator.h"
 #include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponent/Components/Panel.h"
 #include "UITraverser.h"
@@ -33,7 +31,12 @@ unique_ptr<UIComponent> NameTraverser::AttachComponent(UIComponent* parent,
 	}
 
 	UITraverser::PropagateRoot(child.get(), parent);
-	return parent->AttachComponent(move(child), relativePos);
+	auto resChild = parent->AttachComponent(move(child), relativePos);
+	if (resChild != nullptr) //attach가 되지 못했다면
+		return resChild;
+
+	UITraverser::UpdatePositionsManually(parent, true);
+	return nullptr;
 }
 
 pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UIComponent* c) noexcept
@@ -56,8 +59,12 @@ pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UICom
 		if (!allRemoved)
 			return {};
 	}
+	
+	auto [resDetached, resParent] = c->DetachComponent();
+	if (!resDetached) return {};
 
-	return c->DetachComponent();
+	UITraverser::UpdatePositionsManually(resDetached.get());
+	return { move(resDetached), resParent };
 }
 
 UIComponent* NameTraverser::FindComponent(UIComponent* c, const string& name) noexcept

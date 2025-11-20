@@ -1,12 +1,8 @@
 ﻿#include "pch.h"
 #include "UIComponent.h"
 #include "Shared/Utils/StlExt.h"
-#include "Shared/Utils/GeometryExt.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "../SerializerIO/ClassSerializeIO.h"
-#include "Traverser/UITraverser.h"
-
-using namespace UITraverser;
 
 UIComponent::~UIComponent() = default;
 UIComponent::UIComponent() :
@@ -61,44 +57,50 @@ bool UIComponent::operator==(const UIComponent& o) const noexcept
 	return true;
 }
 
-void UIComponent::UnlinkAndRefresh() noexcept
+void UIComponent::Unlink() noexcept
 {
 	m_root = this;
 	m_parent = nullptr;
 	m_transform.Clear();
-	UpdatePositionsManually(this);
 }
 
 unique_ptr<UIComponent> UIComponent::Clone() const 
 { 
 	auto clone = CreateClone();
-	clone->UnlinkAndRefresh(); //Clone의 root는 위치값을 초기화 시켜준다.
+	clone->Unlink();
 	return clone;
 }
 
-UITransform& UIComponent::GetTransform(UIComponent* component)
+unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {
-	return component->m_transform;
+	if (!HasStateFlag(StateFlag::Attach))
+		return move(child);
+
+	child->SetParent(this);
+	child->m_transform.ChangeRelativePosition(
+		m_layout.GetSize(), relativePos);
+	m_children.emplace_back(move(child));
+
+	return nullptr;
 }
 
-bool UIComponent::RecursiveUpdate(const DX::StepTimer& timer, const XMINT2& position) noexcept
+pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexcept
 {
-	if (!HasStateFlag(StateFlag::Update)) return true;
+	if (!m_parent || !m_parent->HasStateFlag(StateFlag::Detach))
+		return {};
 
-	const auto& startPos = GetTransform(this).GetUpdatedPosition(m_layout, position);
-	ReturnIfFalse(ImplementUpdate(timer));
-	
-	bool result = ranges::all_of(m_children, [this, &timer, &startPos](auto& child) {
-		auto childStartPos = startPos + GetTransform(child.get()).GetRelativePosition();
-		return child->RecursiveUpdate(timer, childStartPos);
-		});
-	
-	return result;
-}
+	auto& children = m_parent->m_children;
+	auto it = std::ranges::find_if(children, [this](auto& c) { return c.get() == this; });
+	if (it == children.end())
+		return {};
 
-bool UIComponent::ProcessUpdate(const DX::StepTimer& timer) noexcept
-{
-	return RecursiveUpdate(timer);
+	auto detached = move(*it);
+	UIComponent* parent = m_parent;
+
+	children.erase(it);
+	detached->Unlink();
+
+	return { move(detached), parent };
 }
 
 void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexcept
@@ -108,34 +110,27 @@ void UIComponent::SetChildrenStateFlag(StateFlag::Type flag, bool enabled) noexc
 		});
 }
 
-bool UIComponent::ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept
+bool UIComponent::ResizeAndAdjustPos(const XMUINT2& size) noexcept
 {
 	ranges::for_each(m_children, [this, &size](auto& child) {
-		GetTransform(child.get()).AdjustPosition(size, HasStateFlag(StateFlag::LockPosOnResize));
+		child->GetTransform().AdjustPosition(size, HasStateFlag(StateFlag::LockPosOnResize));
 		});
 
-	ApplySize(size);
+	SetSize(size);
 	return true;
-}
-
-//크기를 바꾸면 이 컴포넌트의 자식들의 위치값도 바꿔준다.
-bool UIComponent::ChangeSize(const XMUINT2& size, bool isForce) noexcept
-{
-	XMUINT2 lockedSize{ size };
-	const auto& preSize = GetSize();
-	if (HasStateFlag(StateFlag::X_SizeLocked)) lockedSize.x = preSize.x;
-	if (HasStateFlag(StateFlag::Y_SizeLocked)) lockedSize.y = preSize.y;
-
-	if (!isForce && lockedSize == preSize) return true;
-
-	ReturnIfFalse(ImplementResizeAndAdjustPos(size));
-	return ImplementChangeSize(lockedSize, isForce);
 }
 
 bool UIComponent::ChangePosition(size_t index, const XMUINT2& size, const XMINT2& relativePos) noexcept
 {
 	if (index >= m_children.size()) return false;
-	GetTransform(m_children[index].get()).ChangeRelativePosition(size, relativePos);
+	m_children[index]->GetTransform().ChangeRelativePosition(size, relativePos);
+	return true;
+}
+
+bool UIComponent::ChangeRelativePosition(const XMINT2& relativePos) noexcept
+{
+	if (!m_parent) return false;
+	m_transform.ChangeRelativePosition(m_parent->GetSize(), relativePos);
 	return true;
 }
 
@@ -155,23 +150,11 @@ void UIComponent::ProcessIO(SerializerIO& serializer)
 		});
 }
 
-bool UIComponent::ChangeRelativePosition(const XMINT2& relativePos) noexcept
-{
-	if (!m_parent) return false;
-	m_transform.ChangeRelativePosition(m_parent->GetSize(), relativePos);
-	return true;
-}
-
 Rectangle UIComponent::GetArea() const noexcept
 {
 	const XMINT2& curLeftTop = GetLeftTop();
 	const XMUINT2& curSize = GetSize();
 	return Rectangle(curLeftTop.x, curLeftTop.y, curSize.x, curSize.y);
-}
-   
-const XMUINT2& UIComponent::GetSize() const noexcept
-{
-	return m_layout.GetSize();
 }
 
 UIComponent* UIComponent::GetChildComponent(size_t index) const noexcept
@@ -193,41 +176,3 @@ vector<UIComponent*> UIComponent::GetChildren() const noexcept
 
 	return componentList;
 }
-
-unique_ptr<UIComponent> UIComponent::AttachComponent(unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
-{
-	if (!HasStateFlag(StateFlag::Attach))
-		return move(child);
-
-	child->SetParent(this);
-	child->m_transform.ChangeRelativePosition(
-		m_layout.GetSize(), relativePos);
-	m_children.emplace_back(move(child));
-	UpdatePositionsManually(this, true);
-
-	return nullptr;
-}
-
-pair<unique_ptr<UIComponent>, UIComponent*> UIComponent::DetachComponent() noexcept
-{
-	if (!m_parent || !m_parent->HasStateFlag(StateFlag::Detach))
-		return {};
-
-	auto& children = m_parent->m_children;
-	auto it = std::ranges::find_if(children, [this](auto& c) { return c.get() == this; });
-	if (it == children.end())
-		return {};
-
-	auto detached = move(*it);
-	UIComponent* parent = m_parent;
-
-	children.erase(it);
-	detached->UnlinkAndRefresh();
-
-	return { move(detached), parent };
-}
-
-bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ v, c->GetSize().y }); }
-bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeX(c, s.x); }
-bool ChangeSizeY(UIComponent* c, uint32_t v) noexcept { return c->ChangeSize({ c->GetSize().x, v }); }
-bool ChangeSizeY(UIComponent* c, const XMUINT2& s) noexcept { return ChangeSizeY(c, s.y); }

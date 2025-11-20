@@ -7,6 +7,8 @@
 #include "Shared/Utils/StlExt.h"
 #include "../Traverser/UITraverser.h"
 
+using namespace UITraverser;
+
 ListArea::~ListArea() = default;
 ListArea::ListArea() noexcept :
 	m_prototypeContainer{ nullptr },
@@ -96,9 +98,9 @@ bool ListArea::Setup(unique_ptr<UIComponent> bgImage, unique_ptr<TextureSwitcher
 bool ListArea::BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
 {
 	if (GetSize() == XMUINT2{})
-		return ChangeSize(UITraverser::GetChildrenBoundsSize(this));
+		return UITraverser::ChangeSize(this, GetChildrenBoundsSize(this));
 
-	return ChangeSize(GetSize(), true);
+	return UITraverser::ChangeSize(this, GetSize(), true);
 }
 
 void ListArea::OnMove(const XMINT2& pos) noexcept
@@ -119,11 +121,11 @@ bool ListArea::ChangeScrollBarSizeAndPos(const XMUINT2& size) noexcept
 	return m_scrollBar->ChangeRelativePosition(pos);
 }
 
-bool ListArea::ImplementChangeSize(const XMUINT2& size, bool isForce) noexcept
+bool ListArea::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
 	ReturnIfFalse(ChangeSizeX(m_prototypeContainer, size));
 	ReturnIfFalse(ChangeScrollBarSizeAndPos(size));
-	ReturnIfFalse(m_renderTex->ChangeSize(size, isForce));
+	ReturnIfFalse(UITraverser::ChangeSize(m_renderTex, size, isForce));
 	UpdateScrollBar();
 
 	return true;
@@ -161,31 +163,15 @@ bool ListArea::ResizeContainerForScrollbar() noexcept
 {
 	XMUINT2 usableSize(GetUsableContentSize());
 	for (auto container : m_containers)
-		ReturnIfFalse(container->ChangeSize(usableSize));
+		ReturnIfFalse(UITraverser::ChangeSize(container, usableSize));
 	return  true;
 }
-
-//UIComponent* ListArea::PrepareContainer()
-//{
-//	auto [cloneContainer, cloneContainerPtr] = GetPtrs(m_prototypeContainer->Clone());
-//	UITraverser::AttachComponen(move(cloneContainer), {});
-//
-//	const auto& containerHeight = GetContainerHeight();
-//	cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
-//	cloneContainerPtr->ChangeRelativePosition({ 0, containerHeight });
-//	if (!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
-//	m_containers.emplace_back(cloneContainerPtr);
-//
-//	if (!UpdateScrollBar()) return nullptr;
-//
-//	return cloneContainerPtr;
-//}
 
 UIComponent* ListArea::PrepareContainer()
 {
 	ZoneScoped;
 
-	auto [cloneContainer, cloneContainerPtr] = GetPtrs(m_prototypeContainer->Clone());
+	auto [cloneContainer, cloneContainerPtr] = GetPtrs(UITraverser::Clone(m_prototypeContainer));
 	{
 		ZoneScopedN("AttachComponent");
 		UITraverser::AttachComponent(m_bgImage, move(cloneContainer), {});
@@ -196,7 +182,7 @@ UIComponent* ListArea::PrepareContainer()
 		ZoneScopedN("SetInitialState");
 		cloneContainerPtr->SetStateFlag(StateFlag::Active, m_containerActiveFlag);
 		cloneContainerPtr->ChangeRelativePosition({ 0, containerHeight });
-		if (!cloneContainerPtr->ChangeSize(GetUsableContentSize())) return nullptr;
+		if (!UITraverser::ChangeSize(cloneContainerPtr, GetUsableContentSize())) return nullptr;
 	}
 	
 	{

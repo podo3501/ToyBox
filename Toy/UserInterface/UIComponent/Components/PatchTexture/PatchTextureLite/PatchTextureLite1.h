@@ -24,7 +24,7 @@ protected:
 	PatchTextureLite1(const PatchTextureLite1& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
 	virtual void Render(ITextureRender* render) const override { m_coord.Render(render); }
-	virtual bool ImplementResizeAndAdjustPos(const XMUINT2& size) noexcept override { return UIComponent::ImplementResizeAndAdjustPos(size); }
+	virtual bool ResizeAndAdjustPos(const XMUINT2& size) noexcept override { return UIComponent::ResizeAndAdjustPos(size); }
 
 private:
 	PatchTextureCoord m_coord;

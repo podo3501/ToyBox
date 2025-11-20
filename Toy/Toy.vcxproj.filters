@@ -269,6 +269,9 @@
     <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverser.h">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\UIComponent.hpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

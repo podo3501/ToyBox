@@ -13,14 +13,14 @@
 UIComponentManager::~UIComponentManager() = default;
 UIComponentManager::UIComponentManager(IRenderer* renderer, bool isTool) :
 	m_renderer{ renderer },
+	m_texController{ renderer->GetTextureController() },
 	m_baseTraverser{ make_unique<BaseTraverser>() },
 	m_derivedTraverser{ make_unique<DerivedTraverser>() },
 	m_nameTraverser{ make_unique<NameTraverser>() }
 {
 	if(!isTool) //툴은 RenderTexture에 그리기 때문에 렌더와 연결하지 않는다.
 		m_renderer->SetComponentRenderer([this](ITextureRender* r) { this->RenderComponent(r); });
-	auto texController = m_renderer->GetTextureController();
-	texController->SetTextureRenderer([this](size_t index, ITextureRender* r) { 
+	m_texController->SetTextureRenderer([this](size_t index, ITextureRender* r) {
 		this->RenderTextureComponent(index, r); });
 }
 
@@ -60,9 +60,7 @@ bool UIComponentManager::ReleaseUIModule(const string& moduleName) noexcept
 bool UIComponentManager::CreateRenderTexture(UIComponent* c, const Rectangle& targetRect,
 	size_t& outIndex, UINT64* outGfxMemOffset)
 {
-	auto texController = m_renderer->GetTextureController();
-	ReturnIfFalse(texController->CreateRenderTexture(targetRect, outIndex, outGfxMemOffset));
-
+	ReturnIfFalse(m_texController->CreateRenderTexture(targetRect, outIndex, outGfxMemOffset));
 	auto [_, inserted] = m_renderTextures.insert({ outIndex, c });
 	return inserted;
 }
@@ -89,5 +87,7 @@ void UIComponentManager::RenderTextureComponent(size_t index, ITextureRender* re
 	if (it == m_renderTextures.end()) 
 		Assert(false);
 
-	UITraverser::Render(it->second, render);
+	auto component = it->second;
+	m_texController->ModifyRenderTexturePosition(index, component->GetLeftTop());
+	UITraverser::Render(component, render);
 }

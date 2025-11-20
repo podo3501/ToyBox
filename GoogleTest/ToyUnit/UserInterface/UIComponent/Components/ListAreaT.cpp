@@ -76,9 +76,9 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		EXPECT_EQ(m_component->GetContainerCount(), 1);
 	}
 
-	TEST_F(ListAreaT, ProcessRender)
+	TEST_F(ListAreaT, Render)
 	{
-		m_component->ChangeSize({ 150, 50 });
+		ChangeSize(m_component.get(), { 150, 50 });
 		MakeTestData(3); //스크롤 바가 나타난다.
 
 		size_t texIndex = 1; //새로 생성된 텍스쳐라 인덱스가 생성됨.
@@ -108,7 +108,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	TEST_F(ListAreaT, ScrollBarVisible_ChangeSize)
 	{
 		MakeTestData(3);
-		m_component->ChangeSize(200, 200); //사이즈가 커지면 스크롤바는 보이지 않게 된다.
+		ChangeSize(m_component.get(), 200, 200); //사이즈가 커지면 스크롤바는 보이지 않게 된다.
 
 		EXPECT_FALSE(m_scrollBar->IsVisible());
 	}

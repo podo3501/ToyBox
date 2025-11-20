@@ -22,7 +22,7 @@ bool UIModuleAsComponent::BindSourceInfo(TextureResourceBinder*, ITextureControl
 	return m_module->BindTextureResources();
 }
 
-bool UIModuleAsComponent::ImplementUpdate(const DX::StepTimer& timer) noexcept 
+bool UIModuleAsComponent::Update(const DX::StepTimer& timer) noexcept
 { 
 	return m_module->Update(timer);
 }
