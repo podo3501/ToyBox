@@ -95,7 +95,7 @@ bool ListArea::Setup(unique_ptr<UIComponent> bgImage, unique_ptr<TextureSwitcher
 	return Setup({}, move(bgImage), move(switcher), move(scrollBar));
 }
 
-bool ListArea::BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
+bool ListArea::BindSourceInfo(TextureResourceBinder*) noexcept
 {
 	if (GetSize() == XMUINT2{})
 		return UITraverser::ChangeSize(this, GetChildrenBoundsSize(this));

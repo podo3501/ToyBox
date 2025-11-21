@@ -17,7 +17,7 @@ bool UIModuleAsComponent::Setup(UIModule* module) noexcept
 	return true;
 }
 
-bool UIModuleAsComponent::BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
+bool UIModuleAsComponent::BindSourceInfo(TextureResourceBinder*) noexcept
 {
 	return m_module->BindTextureResources();
 }

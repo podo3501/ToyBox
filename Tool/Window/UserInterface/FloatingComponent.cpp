@@ -56,6 +56,7 @@ bool FloatingComponent::Excute()
 
 	auto result{ true };
 	static const vector<wstring> fontKeys{ L"Hangle", L"English" };
+	auto texController = m_renderer->GetTextureController();
 
 	using enum MakeComponent;
 	switch (m_currentAction.value())
@@ -66,7 +67,7 @@ bool FloatingComponent::Excute()
 	case MTextureSwitcher1: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 32, 32 }, Origin::LeftTop }, TextureSlice::One, GetStateKeyMap("ExitButton1"))); break;
 	case MTextureSwitcher3: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 100, 48 }, Origin::LeftTop }, TextureSlice::ThreeH, GetStateKeyMap("ScrollButton3_H"))); break;
 	case MTextureSwitcher9: result = LoadComponent(CreateComponent<TextureSwitcher>(UILayout{ { 100, 100 }, Origin::LeftTop }, TextureSlice::Nine, GetStateKeyMap("ListBackground9"))); break;
-	case MTextArea: result = LoadComponent(CreateComponent<TextArea>(UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
+	case MTextArea: result = LoadComponent(CreateComponent<TextArea>(texController, UILayout{ { 200, 30 }, Origin::LeftTop }, L"<English><White>Test text.</White></English>", fontKeys)); break;
 	case MListArea: result = LoadComponent(CreateSampleListArea({ { 200, 170 }, Origin::LeftTop })); break;
 	}
 	m_currentAction.reset(); // 상태 초기화
@@ -129,7 +130,7 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 	ReturnIfFalse(component);
 	m_component = component.get();
 	ReturnIfFalse(m_renderTex = CreateComponent<RenderTexture>(UILayout{ size, Origin::LeftTop }, move(component)));
-	ReturnIfFalse(BindTextureSourceInfo(m_renderTex.get(), m_resBinder, m_renderer->GetTextureController()));
+	ReturnIfFalse(BindTextureSourceInfo(m_renderTex.get(), m_resBinder));
 	ReturnIfFalse(EnableToolMode(m_renderTex.get(), true));
 
 	return true;

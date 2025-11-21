@@ -6,7 +6,7 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
-#include "Toy/UserInterface/UIComponentManager.h"
+#include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIModule.h"
 
 Fixture::~Fixture() = default;
@@ -29,6 +29,8 @@ void Fixture::SetUp()
 	wstring srcBinderFilename = L"UI/SampleTexture/SampleTextureBinder.json";
 
 	m_uiManager = make_unique<UIComponentManager>(m_renderer.get());
+	UIComponentLocator::Provide(m_uiManager.get());
+
 	m_uiModule = m_uiManager->CreateUIModule("Demo", layout, "Main", srcBinderFilename);
 	m_main = m_uiModule->GetMainPanel();
 
@@ -43,4 +45,9 @@ void Fixture::TearDown()
 TextureResourceBinder* Fixture::GetResBinder() const noexcept
 { 
 	return m_uiModule->GetTexResBinder(); 
+}
+
+ITextureController* Fixture::GetTextureController() noexcept
+{
+	return m_renderer->GetTextureController();
 }

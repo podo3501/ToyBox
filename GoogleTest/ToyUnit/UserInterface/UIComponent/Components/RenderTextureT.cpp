@@ -2,6 +2,7 @@
 #include "RenderTextureT.h"
 #include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Shared/Utils/StlExt.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 namespace UserInterfaceT::UIComponentT::ComponentT
@@ -14,6 +15,15 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	TEST_F(RenderTextureT, Clone)
 	{
 		EXPECT_TRUE(TestClone(m_component));
+	}
+
+	TEST_F(RenderTextureT, Clone_NewTexture) //내부적으로 사용하는 텍스쳐는 새로 만들어지는가?
+	{
+		auto texController = static_cast<MockTextureController*>(GetTextureController());
+		EXPECT_CALL(*texController, CreateRenderTexture(testing::_, testing::_, testing::_)).Times(1);
+
+		auto clone = Clone(m_component.get());
+		UITraverser::BindTextureSourceInfo(clone.get(), GetResBinder()); //바인딩 할때 CreateRenderTexture를 한다.
 	}
 
 	TEST_F(RenderTextureT, Render)

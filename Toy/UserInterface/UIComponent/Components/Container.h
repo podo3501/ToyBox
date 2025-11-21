@@ -22,7 +22,7 @@ public:
 protected:
 	Container(const Container& o);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
+	virtual bool BindSourceInfo(TextureResourceBinder*) noexcept override;
 	virtual bool ChangeSize(const XMUINT2& size, bool isForce) noexcept;
 
 private:

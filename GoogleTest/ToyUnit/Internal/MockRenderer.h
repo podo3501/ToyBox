@@ -39,11 +39,12 @@ public:
 	//Text°ü·Ã
 	virtual Rectangle MeasureText(size_t index, const wstring& text, const Vector2& position) override;
 	virtual float GetLineSpacing(size_t index) const noexcept override;
-
 	//Texture	
-	virtual bool CreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset) override;
+	MOCK_METHOD(bool, CreateRenderTexture, (const Rectangle&, size_t&, UINT64*), (override));
 
 private:
+	bool DoCreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset);
+
 	MockTextureTable* m_texTable{ nullptr };
 };
 

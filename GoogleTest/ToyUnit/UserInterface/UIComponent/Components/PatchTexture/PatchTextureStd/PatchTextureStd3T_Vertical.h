@@ -20,7 +20,7 @@ void PatchTextureStd3T_Vertical::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateComponent<PatchTextureStd3>(DirectionType::Vertical, "ThreeV48");
-	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 
 void PatchTextureStd3T_Vertical::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

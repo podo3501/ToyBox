@@ -39,8 +39,7 @@ bool EditSourceTexture::LoadTextureFromFile(const wstring& filename)
     auto sourceInfo = m_textureLoader->GetSourceInfo(filename);
     ReturnIfFalse(sourceInfo);
 
-    unique_ptr<PatchTextureStd1> texture = make_unique<PatchTextureStd1>();
-    texture->SetSourceInfo(*sourceInfo, m_renderer->GetTextureController());
+    unique_ptr<PatchTextureStd1> texture = CreateComponent<PatchTextureStd1>(*sourceInfo, m_renderer->GetTextureController());
     AddTexture(move(texture));
 
     return true;

@@ -20,7 +20,7 @@ void TextureSwitcherT::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateComponent<TextureSwitcher>(TextureSlice::One, GetStateKeyMap("Button32"));
-	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 
 void TextureSwitcherT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

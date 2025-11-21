@@ -1,14 +1,15 @@
 #pragma once
 #include "Shared/System/StepTimer.h"
 
+struct IRenderer;
+struct IComponent;
+struct ITextureController;
 class Window;
 class Environment;
 class UIComponentManager;
 class UIModule;
 class TextureResourceBinder;
 class Panel;
-struct IRenderer;
-struct IComponent;
 
 class Fixture : public ::testing::Test
 {
@@ -20,6 +21,7 @@ protected:
 	void SetUp() override;
 	void TearDown() override;
 	TextureResourceBinder* GetResBinder() const noexcept;
+	ITextureController* GetTextureController() noexcept;
 
 	unique_ptr<Window> m_window;
 	unique_ptr<Environment> m_environment;

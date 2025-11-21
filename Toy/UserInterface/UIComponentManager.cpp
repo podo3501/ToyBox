@@ -71,6 +71,7 @@ bool UIComponentManager::ReleaseRenderTexture(size_t index) noexcept
 	auto it = m_renderTextures.find(index);
 	if (it == m_renderTextures.end()) return false;
 
+	m_texController->ReleaseTexture(index);
 	m_renderTextures.erase(it);
 	return true;
 }

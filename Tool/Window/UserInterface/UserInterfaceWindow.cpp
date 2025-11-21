@@ -47,7 +47,7 @@ bool UserInterfaceWindow::SetupProperty(UIModule* uiModule)
 
 	unique_ptr<UIModuleAsComponent> asComponent = CreateComponent<UIModuleAsComponent>(uiModule);
 	m_mainRenderTexture = CreateComponent<RenderTexture>(move(asComponent));
-	ReturnIfFalse(BindTextureSourceInfo(m_mainRenderTexture.get(), nullptr, m_renderer->GetTextureController())); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
+	ReturnIfFalse(BindTextureSourceInfo(m_mainRenderTexture.get(), nullptr)); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
 
 	ToggleToolMode();
 	m_isOpen = true;

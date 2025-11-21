@@ -46,7 +46,7 @@ bool Container::operator==(const UIComponent& rhs) const noexcept
 	return CompareAssoc(m_textures, o->m_textures);
 }
 
-bool Container::BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
+bool Container::BindSourceInfo(TextureResourceBinder*) noexcept
 {
 	SetState(Normal);
 	return true;

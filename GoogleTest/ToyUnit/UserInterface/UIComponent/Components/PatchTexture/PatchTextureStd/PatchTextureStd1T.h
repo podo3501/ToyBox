@@ -20,7 +20,7 @@ void PatchTextureStd1T::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateComponent<PatchTextureStd1>("One32");
-	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 
 void PatchTextureStd1T::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

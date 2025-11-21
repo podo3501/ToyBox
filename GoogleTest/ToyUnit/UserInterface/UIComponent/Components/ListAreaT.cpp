@@ -124,7 +124,6 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	
 	TEST_F(ListAreaT, WriteAndRead)
 	{
-		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"ListAreaT_WR.json",
-			GetResBinder(), GetTextureController()));
+		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"ListAreaT_WR.json", GetResBinder()));
 	}
 }

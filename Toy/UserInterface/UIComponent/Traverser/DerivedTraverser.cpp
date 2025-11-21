@@ -3,10 +3,10 @@
 #include "../UIComponent.h"
 #include "Shared/Utils/GeometryExt.h"
 
-bool DerivedTraverser::BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder, ITextureController* texController) noexcept
+bool DerivedTraverser::BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder) noexcept
 {
-	auto forEachResult = ForEachChildPostUntilFail(c, [resBinder, texController](UIComponent* component) {
-		bool result = component->BindSourceInfo(resBinder, texController);
+	auto forEachResult = ForEachChildPostUntilFail(c, [resBinder](UIComponent* component) {
+		bool result = component->BindSourceInfo(resBinder);
 		AssertMsg(result, "Failed to load texture");
 		return result;
 		});

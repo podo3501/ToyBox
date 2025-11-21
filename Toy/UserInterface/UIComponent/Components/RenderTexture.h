@@ -22,18 +22,16 @@ public:
 protected:
 	RenderTexture(const RenderTexture& other);
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
+	virtual bool BindSourceInfo(TextureResourceBinder*) noexcept override;
 	virtual bool ChangeSize(const XMUINT2& size, bool isForce) noexcept override;
 	virtual void Render(ITextureRender* render) const override;
 
 private:
-	void AddRef() const noexcept;
+	bool CreateComponentTexture();
 	void Release() noexcept;
 	void ReloadDatas() noexcept;
 
 	UIComponent* m_component;
-	ITextureController* m_texController;
-
 	optional<size_t> m_index;
 	UINT64 m_gfxOffset{};
 };

@@ -36,7 +36,6 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		auto mainPanel = module->GetMainPanel();
 		auto child = AttachMockComponent<MockReceiverComponent>(mainPanel);
 
-		//마우스를 올리고 hover 되는지 확인.
 		EXPECT_CALL(*child, Render(testing::_)).Times(1);
 
 		MockTextureRender render;
@@ -53,14 +52,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 		//마우스를 올리고 hover 되는지 확인.
 		EXPECT_CALL(*child, OnHover()).Times(1);
 
-		//마우스 셋팅 및 위치시키기 
-		//?!? Helper를 쓰면 마우스나 이런거 될꺼 같다.
-		auto input = make_unique<MockInputManager>();
-		InputLocator::Provide(input.get());
-		input->SetMouseState(child->GetLeftTop(), InputState::Up);
-
-		DX::StepTimer timer;
-		Update(m_component.get(), timer);
+		SimulateMouse(child->GetLeftTop(), InputState::Up); //마우스 셋팅 및 위치시키기 
 	}
 
 	//UIModule에 위치값을 셋팅하는거 만들어서 그 위치에서 render 되는지 확인해야한다.

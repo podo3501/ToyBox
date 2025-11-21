@@ -52,10 +52,14 @@ bool MockTextureLoad::LoadFont(const wstring& filename, size_t& outIndex)
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-
 MockTextureController::MockTextureController(MockTextureTable* texTable) :
 	m_texTable{ texTable }
-{}
+{
+	ON_CALL(*this, CreateRenderTexture(testing::_, testing::_, testing::_))
+		.WillByDefault([this](const Rectangle& r, size_t& i, UINT64* o) {
+		return this->DoCreateRenderTexture(r, i, o);
+			});
+}
 
 Rectangle MockTextureController::MeasureText(size_t index, const wstring& text, const Vector2& position)
 {
@@ -81,7 +85,7 @@ float MockTextureController::GetLineSpacing(size_t index) const noexcept
 }
 
 //렌더 텍스쳐를 만들었다고 가정하고 가짜 렌더텍스쳐 인덱스를 리턴해준다.
-bool MockTextureController::CreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
+bool MockTextureController::DoCreateRenderTexture(const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset)
 {
 	size_t index = m_texTable->GetSize();
 	wstring key = L"RenderTexture_" + to_wstring(index);

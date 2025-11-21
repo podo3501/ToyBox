@@ -139,7 +139,6 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 
 	TEST_F(TextureSwitcherT, WriteAndRead)
 	{
-		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"TextureSwitcherT_WR.json", 
-			GetResBinder(), GetTextureController()));
+		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"TextureSwitcherT_WR.json", GetResBinder()));
 	}
 }

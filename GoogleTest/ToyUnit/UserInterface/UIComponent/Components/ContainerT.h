@@ -26,7 +26,7 @@ void ContainerT::SetUp()
 	componentList[InteractState::Pressed] = CreateComponent<PatchTextureStd1>("Button32_Pressed");
 
 	m_component = CreateComponent<Container>(UILayout{}, move(componentList));
-	BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+	BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 
 void ContainerT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

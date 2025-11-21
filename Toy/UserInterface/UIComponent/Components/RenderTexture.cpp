@@ -15,14 +15,12 @@ RenderTexture::~RenderTexture()
 }
 
 RenderTexture::RenderTexture() :
-	m_component{ nullptr },
-	m_texController{ nullptr }
+	m_component{ nullptr }
 {}
 
 RenderTexture::RenderTexture(const RenderTexture& o) :
 	UIComponent{ o },
 	m_component{ nullptr },
-	m_texController{ o.m_texController },
 	m_index{ o.m_index }
 {
 	ReloadDatas();
@@ -30,30 +28,18 @@ RenderTexture::RenderTexture(const RenderTexture& o) :
 
 void RenderTexture::Release() noexcept
 {
-	if (m_texController && m_index)
-	{
-		auto componentManager = UIComponentLocator::GetService();
-		componentManager->ReleaseRenderTexture(*m_index);
+	if (!m_index) return;
+	
+	auto componentManager = UIComponentLocator::GetService();
+	componentManager->ReleaseRenderTexture(*m_index);
 
-		m_texController->ReleaseTexture(*m_index);
-		m_texController = nullptr;
-		m_gfxOffset = {};
-		m_index = nullopt;
-	}
-}
-
-void RenderTexture::AddRef() const noexcept
-{
-	if (m_texController && m_index)
-		m_texController->AddRef(*m_index);
+	m_gfxOffset = {};
+	m_index = nullopt;
 }
 
 unique_ptr<UIComponent> RenderTexture::CreateClone() const
 {
-	//?!? 클론했을때 AddRef/Release 를 하는데 새로운 텍스쳐를 만들어야 하지 않을까 생각든다. 이렇게 하면 하나의 텍스쳐를 공유하게 될텐데 그러면 나중에 렌더링된 Component가 텍스쳐에 그려져서 2개가 똑같이 나올꺼 같다. 의심됨.
-	auto clone = unique_ptr<RenderTexture>(new RenderTexture(*this));
-	clone->AddRef();
-	return clone;
+	return unique_ptr<RenderTexture>(new RenderTexture(*this));
 }
 
 void RenderTexture::ReloadDatas() noexcept
@@ -73,31 +59,29 @@ bool RenderTexture::operator==(const UIComponent& rhs) const noexcept
 }
 
 //?!? rendertexture를 등록하는 것을 bind를 통해서 넣으면 텍스쳐 관리를 한군데에 몰아서 할 수 있을꺼 같은데.
-bool RenderTexture::BindSourceInfo(TextureResourceBinder*, ITextureController* texController) noexcept
+bool RenderTexture::BindSourceInfo(TextureResourceBinder*) noexcept
 {
-	Release(); //데이터가 존재하면 지운다.
-
 	if (GetSize() == XMUINT2{})
 		SetSize(UITraverser::GetChildrenBoundsSize(this));
 	
+	return CreateComponentTexture();
+}
+
+bool RenderTexture::CreateComponentTexture()
+{
 	size_t index{ 0 };
 	UpdatePositionsManually(this, true);
 
 	auto componentManager = UIComponentLocator::GetService();
 	ReturnIfFalse(componentManager->CreateRenderTexture(m_component, GetArea(), index, &m_gfxOffset));
-
 	m_index = index;
-	m_texController = texController;
 
 	return true;
 }
 
 bool RenderTexture::ChangeSize(const XMUINT2& size, bool isForce) noexcept
 {
-	ReturnIfFalse(UITraverser::ChangeSize(m_component, size, isForce));
-	ReturnIfFalse(m_texController->ModifyRenderTextureSize(*m_index, size));
-
-	return true;
+	return UITraverser::ChangeSize(m_component, size, isForce);
 }
 
 bool RenderTexture::Setup(const UILayout& layout, unique_ptr<UIComponent> component) noexcept
@@ -117,9 +101,6 @@ bool RenderTexture::Setup(unique_ptr<UIComponent> component) noexcept
 
 void RenderTexture::Render(ITextureRender* render) const
 {
-	if (m_texController && m_index)
-		m_texController->ModifyRenderTexturePosition(*m_index, GetLeftTop()); //?!? 좌표가 바뀌면 RenderTexture 안에 좌표가 갱신이 되지 않아서 이상해진다. update에 넣고 싶은데 툴에서는 update가 돌지 않는다.
-
 	const auto& size = GetSize();
 	RECT source{ 0, 0, static_cast<long>(size.x), static_cast<long>(size.y) };
 	render->Render(m_index.value(), GetArea(), &source);

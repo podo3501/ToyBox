@@ -20,7 +20,7 @@ void PatchTextureStd9T::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateComponent<PatchTextureStd9>("Nine48");
-	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 
 void PatchTextureStd9T::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

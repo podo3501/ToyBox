@@ -78,7 +78,7 @@ bool ScrollBar::Setup(unique_ptr<PatchTextureStd3> scrollTrack, unique_ptr<Textu
 	return Setup({}, move(scrollTrack), move(scrollButton));
 }
 
-bool ScrollBar::BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept
+bool ScrollBar::BindSourceInfo(TextureResourceBinder*) noexcept
 {
 	if (GetSize() == XMUINT2{})
 		SetSize(GetChildrenBoundsSize(this));

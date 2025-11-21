@@ -19,7 +19,9 @@ namespace UITraverser
 
 	inline BaseTraverser* GetBaseTraverser() noexcept { return UIComponentLocator::GetService()->GetBaseTraverser(); }
 	inline DerivedTraverser* GetDerivedTraverser() noexcept { return UIComponentLocator::GetService()->GetDerivedTraverser(); }
-	inline NameTraverser* GetNameTraverser() noexcept { return UIComponentLocator::GetService()->GetNameTraverser(); }
+	inline NameTraverser* GetNameTraverser() noexcept { 
+		return UIComponentLocator::GetService()->GetNameTraverser(); 
+	}
 
 	using Base = TraverserCaller<BaseTraverser, GetBaseTraverser>;
 	using Derived = TraverserCaller<DerivedTraverser, GetDerivedTraverser>;
@@ -56,8 +58,8 @@ namespace UITraverser
 	inline void Render(UIComponent* c, ITextureRender* render) noexcept {
 		return Derived::Call(&DerivedTraverser::Render, c, render);
 	}
-	inline bool BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder, ITextureController* texController) noexcept {
-		return Derived::Call(&DerivedTraverser::BindTextureSourceInfo, c, resBinder, texController);
+	inline bool BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder) noexcept {
+		return Derived::Call(&DerivedTraverser::BindTextureSourceInfo, c, resBinder);
 	}
 	inline void PropagateRoot(UIComponent* c, UIComponent* root) noexcept {
 		return Derived::Call(&DerivedTraverser::PropagateRoot, c, root);

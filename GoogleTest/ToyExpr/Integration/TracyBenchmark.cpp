@@ -13,6 +13,6 @@ namespace Integration
 	{
 		auto [listArea, listAreaPtr] = GetPtrs(CreateSampleListArea({}));
 		UITraverser::AttachComponent(m_main, move(listArea), { 400, 300 });
-		MakeSampleListAreaData(m_renderer->GetTextureController(), GetResBinder(), listAreaPtr, 20);
+		MakeSampleListAreaData(GetTextureController(), GetResBinder(), listAreaPtr, 20);
 	}
 }

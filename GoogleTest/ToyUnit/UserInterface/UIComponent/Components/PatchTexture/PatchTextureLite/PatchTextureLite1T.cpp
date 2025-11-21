@@ -12,7 +12,6 @@ namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
 	{
 		//SetIndexedSource와 다른점은 Bind는 바로 쓰는 느낌이고, SetIndexedSource는 정보만 일단 넣는느낌.
 		//3과 9일때 차이가 난다. 그리고 크기가 없다면 기본 크기(source크기)를 셋팅해 준다.
-		//?!?SetIndextedSource와 비슷해서 리팩토링 해야할듯
 		Rectangle source{ 0, 0, 10, 10 };
 		m_component->BindSourceInfo(0, { source });
 		EXPECT_EQ(m_component->GetSource(), source);

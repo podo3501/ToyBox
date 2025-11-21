@@ -69,7 +69,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	TEST_F(ScrollBarT, RestoreDefault)
 	{
 		auto newScrollBar = CreateSampleScrollBar({}, DirectionType::Vertical, "Track", "Button");
-		UITraverser::BindTextureSourceInfo(newScrollBar.get(), GetResBinder(), GetTextureController());
+		UITraverser::BindTextureSourceInfo(newScrollBar.get(), GetResBinder());
 
 		m_component->RestoreDefault(); //초기값으로 셋팅한다.
 		EXPECT_TRUE(CompareDerived(m_component, newScrollBar));
@@ -78,8 +78,6 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 	TEST_F(ScrollBarT, WriteAndRead)
 	{
 		m_component->RestoreDefault(); //처음 셋팅과 같이 만든후 테스트 한다.
-
-		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"ScrollBarT_WR.json",
-			GetResBinder(), GetTextureController()));
+		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"ScrollBarT_WR.json", GetResBinder()));
 	}
 }

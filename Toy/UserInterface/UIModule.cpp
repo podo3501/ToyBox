@@ -51,7 +51,7 @@ bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, 
 bool UIModule::BindTextureResources() noexcept
 {
 	ReturnIfFalse(m_resBinder);
-	ReturnIfFalse(BindTextureSourceInfo(m_mainPanel.get(), m_resBinder.get(), m_renderer->GetTextureController()));
+	ReturnIfFalse(BindTextureSourceInfo(m_mainPanel.get(), m_resBinder.get()));
 
 	return true;
 }

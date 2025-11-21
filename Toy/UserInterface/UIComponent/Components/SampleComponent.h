@@ -21,4 +21,3 @@ unique_ptr<ListArea> CreateSampleListArea(const UILayout& layout,
 	ScrollBar** outScrollBar = nullptr);
 
 bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBinder* rb, ListArea* listArea, int itemCount);
-bool MakeSampleListAreaDatA(ITextureController* texController, TextureResourceBinder* rb, ListArea* listArea, int itemCount);

@@ -130,7 +130,7 @@ bool TextureSwitcher::SetupDefaults() noexcept
 	return true;
 }
 
-bool TextureSwitcher::BindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
+bool TextureSwitcher::BindSourceInfo(TextureResourceBinder* resBinder) noexcept
 {
 	for (const auto& pair : m_stateKeys)
 		ReturnIfFalse(SetSourceInfo(resBinder, pair.first, pair.second));	

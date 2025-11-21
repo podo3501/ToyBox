@@ -20,9 +20,9 @@ public:
 	UIModule* CreateUIModule(const string& moduleName, const wstring& filename, const wstring& srcBinderFilename = L"");
 	bool ReleaseUIModule(const string& moduleName) noexcept;
 	
-	BaseTraverser* GetBaseTraverser() noexcept { return m_baseTraverser.get(); }
-	DerivedTraverser* GetDerivedTraverser() noexcept { return m_derivedTraverser.get(); }
-	NameTraverser* GetNameTraverser() noexcept { return m_nameTraverser.get(); }
+	inline BaseTraverser* GetBaseTraverser() noexcept { return m_baseTraverser.get(); }
+	inline DerivedTraverser* GetDerivedTraverser() noexcept { return m_derivedTraverser.get(); }
+	inline NameTraverser* GetNameTraverser() noexcept { return m_nameTraverser.get(); }
 
 	bool CreateRenderTexture(UIComponent* c, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset);
 	bool ReleaseRenderTexture(size_t index) noexcept;

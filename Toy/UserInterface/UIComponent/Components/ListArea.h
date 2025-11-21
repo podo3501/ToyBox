@@ -37,7 +37,7 @@ public:
 protected:
 	ListArea(const ListArea& o) noexcept;
 	virtual unique_ptr<UIComponent> CreateClone() const override;
-	virtual bool BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept override;
+	virtual bool BindSourceInfo(TextureResourceBinder*) noexcept override;
 	virtual bool ChangeSize(const XMUINT2& size, bool isForce) noexcept;
 	virtual bool EnterToolMode() noexcept override;
 	virtual bool ExitToolMode() noexcept override;

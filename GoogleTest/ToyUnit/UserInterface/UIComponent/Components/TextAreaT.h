@@ -20,8 +20,8 @@ void TextAreaT::SetUp()
 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	wstring text = L"<Hangle>테스트<Red>빨강색</Red></Hangle><br><English>Test<Blue>Blue</Blue></English>";
-	m_component = CreateComponent<TextArea>(text, bindKeys);
-	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+	m_component = CreateComponent<TextArea>(GetTextureController(), text, bindKeys);
+	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 
 void TextAreaT::RegisterRenderTextures(MockRenderer* renderer)

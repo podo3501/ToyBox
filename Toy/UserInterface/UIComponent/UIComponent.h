@@ -21,7 +21,7 @@ protected:
 	UIComponent(const UIComponent& other);
 
 	virtual unique_ptr<UIComponent> CreateClone() const = 0;
-	virtual bool BindSourceInfo(TextureResourceBinder*, ITextureController*) noexcept { return true; } //Binder에서 키값으로 source 얻어올때
+	virtual bool BindSourceInfo(TextureResourceBinder*) noexcept { return true; } //Binder에서 키값으로 source 얻어올때
 	virtual bool Update(const DX::StepTimer&) noexcept { return true; }
 	virtual void Render(ITextureRender*) const {};
 	virtual bool ResizeAndAdjustPos(const XMUINT2& size) noexcept; //사이즈 바꾸면 child의 위치를 바꿔야 한다.

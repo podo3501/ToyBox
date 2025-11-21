@@ -7,8 +7,7 @@
 
 PatchTextureStd1::~PatchTextureStd1() = default;
 PatchTextureStd1::PatchTextureStd1() : 
-	PatchTextureStd{ TextureSlice::One },
-	m_texController{ nullptr }
+	PatchTextureStd{ TextureSlice::One }
 {
 	m_coord.SetOwner(this);
 }
@@ -41,7 +40,7 @@ bool PatchTextureStd1::operator==(const UIComponent& rhs) const noexcept
 	return result;
 }
 
-bool PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
+bool PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo) noexcept
 {
 	if (!sourceInfo.GetIndex()) return false; //여기서 리턴되는 건 m_renderer->LoadTextureBinder(resBinder); 이걸 안한 문제일 가능성이 높다.
 
@@ -49,7 +48,6 @@ bool PatchTextureStd1::SetSourceInfo(const TextureSourceInfo& sourceInfo, ITextu
 	m_coord.SetIndexedSource(*sourceInfo.GetIndex(), { sourceInfo.GetSource(m_sourceIndex) });
 	if (auto gfxOffset = sourceInfo.GetGfxOffset(); gfxOffset)
 		m_gfxOffset = *gfxOffset;
-	m_texController = texController;
 
 	if (GetSize() == XMUINT2{}) //사이즈가 없다면 source 사이즈로 초기화 한다.
 		ReturnIfFalse(FitToTextureSource());
@@ -67,21 +65,29 @@ bool PatchTextureStd1::Setup(const UILayout& layout, const string& bindKey, size
 	return true;
 }
 
-bool PatchTextureStd1::BindSourceInfo(TextureResourceBinder* resBinder, ITextureController*) noexcept
+bool PatchTextureStd1::Setup(const TextureSourceInfo& sourceInfo, ITextureController* texController) noexcept
+{
+	ReturnIfFalse(SetSourceInfo(sourceInfo));
+	m_texController = texController;
+
+	return true;
+}
+
+bool PatchTextureStd1::BindSourceInfo(TextureResourceBinder* resBinder) noexcept
 {
 	if (m_bindKey.empty()) return false; 
 	auto sourceInfoRef = resBinder->GetTextureSourceInfo(m_bindKey);
 	ReturnIfFalse(sourceInfoRef);
 
 	const auto& srcInfo = sourceInfoRef->get();
-	return SetSourceInfo(srcInfo, nullptr);
+	return SetSourceInfo(srcInfo);
 }
 
 bool PatchTextureStd1::ChangeBindKeyWithIndex(const string& key, const TextureSourceInfo& sourceInfo, size_t sourceIndex) noexcept
 {
 	m_bindKey = key;
 	m_sourceIndex = sourceIndex;
-	return SetSourceInfo(sourceInfo, nullptr);
+	return SetSourceInfo(sourceInfo);
 }
 
 static inline UINT32 PackRGBA(UINT8 r, UINT8 g, UINT8 b, UINT8 a)

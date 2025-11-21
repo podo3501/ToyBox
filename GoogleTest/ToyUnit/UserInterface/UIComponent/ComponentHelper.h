@@ -9,7 +9,7 @@ class MockTextureResourceBinder;
 
 template <typename T>
 bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
-	MockTextureResourceBinder* resBinder = nullptr, ITextureController* texController = nullptr)
+	MockTextureResourceBinder* resBinder = nullptr)
 {
 	ReturnIfFalse(SerializerIO::WriteJsonToFile(component, filename));
 
@@ -17,8 +17,8 @@ bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 	ReturnIfFalse(SerializerIO::ReadJsonFromFile(filename, read));
 	PropagateRoot(read.get());
 
-	if (resBinder && texController)
-		BindTextureSourceInfo(read.get(), resBinder, texController);
+	if (resBinder)
+		BindTextureSourceInfo(read.get(), resBinder);
 
 	return CompareDerived(component, read);
 }

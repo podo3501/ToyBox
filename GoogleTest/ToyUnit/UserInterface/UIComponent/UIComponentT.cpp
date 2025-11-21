@@ -10,11 +10,11 @@ public:
 	MockBehaviorComponent()
 	{
 		//기본 리턴이 false 이기 때문에 리턴을 하지 않으면 실패했다고 간주한다.
-		ON_CALL(*this, BindSourceInfo(testing::_, testing::_)).WillByDefault(testing::Return(true));
+		ON_CALL(*this, BindSourceInfo(testing::_)).WillByDefault(testing::Return(true));
 		ON_CALL(*this, Update(testing::_)).WillByDefault(testing::Return(true));
 	}
 
-	MOCK_METHOD(bool, BindSourceInfo, (TextureResourceBinder*, ITextureController*), (noexcept)); //파일을 메모리에서 불러와서 키값과 매칭시키는 함수
+	MOCK_METHOD(bool, BindSourceInfo, (TextureResourceBinder*), (noexcept)); //파일을 메모리에서 불러와서 키값과 매칭시키는 함수
 	MOCK_METHOD(bool, Update, (const DX::StepTimer&), (noexcept)); //업데이트 하면서 좌표를 계산
 	MOCK_METHOD(void, Render, (ITextureRender*), (const)); //화면에 보여주는 부분
 };
@@ -99,13 +99,13 @@ namespace UserInterfaceT::UIComponentT
 		m_main->AttachComponent(move(owner));
 
 		testing::InSequence seq;
-		EXPECT_CALL(*component, BindSourceInfo(testing::_, testing::_)).Times(1);
+		EXPECT_CALL(*component, BindSourceInfo(testing::_)).Times(1);
 		EXPECT_CALL(*component, Update(testing::_)).Times(1);
 		EXPECT_CALL(*component, Render(testing::_)).Times(1);
 
 		MockRenderer renderer;
 		MockTextureResourceBinder resBinder;
-		BindTextureSourceInfo(component, &resBinder, renderer.GetTextureController());
+		BindTextureSourceInfo(component, &resBinder);
 
 		DX::StepTimer timer{};
 		Update(component, timer);

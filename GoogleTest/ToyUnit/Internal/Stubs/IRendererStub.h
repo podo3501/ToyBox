@@ -1,3 +1,4 @@
+#pragma once
 #include "IRenderer.h"
 
 struct ITextureLoadStub : public ITextureLoad

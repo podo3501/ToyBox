@@ -72,34 +72,10 @@ bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBi
 
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
-	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	ReturnIfFalse(BindTextureSourceInfo(protoTextArea.get(), rb, texController));
+	auto protoTextArea = CreateComponent<TextArea>(texController, UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
+	ReturnIfFalse(BindTextureSourceInfo(protoTextArea.get(), rb));
 	
 	protoTextArea->SetName("ListTextArea");
-	auto prototype = listArea->GetPrototypeContainer();
-	auto failed = prototype->AttachComponentToCenter(move(protoTextArea), { 0, -6 });
-	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.
-
-	for (auto idx : views::iota(0, itemCount))
-	{
-		auto container = listArea->PrepareContainer();
-		TextArea* textArea = FindComponent<TextArea*>(container, "ListTextArea");
-		textArea->SetText(L"<English><Black>Test " + IntToWString(idx * 10) + L"</Black></English>");
-	}
-
-	return true;
-}
-
-bool MakeSampleListAreaDatA(ITextureController* texController, TextureResourceBinder* rb, ListArea* listArea, int itemCount)
-{
-	ZoneScopedN("MakeSampleListAreaData");
-
-	//글자가 크기에 안 맞으면 안찍힌다. 
-	vector<wstring> bindKeys{ L"Hangle", L"English" };
-	auto protoTextArea = CreateComponent<TextArea>(UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	ReturnIfFalse(BindTextureSourceInfo(protoTextArea.get(), rb, texController));
-
-	protoTextArea.get()->SetName("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
 	auto failed = prototype->AttachComponentToCenter(move(protoTextArea), { 0, -6 });
 	if (failed) return false; //실패하면 Component가 반환된다. attach는 nullptr이 나와야 잘 붙은 것이다.

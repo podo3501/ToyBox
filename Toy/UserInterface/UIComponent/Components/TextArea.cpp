@@ -1,18 +1,16 @@
 #include "pch.h"
 #include "TextArea.h"
 #include "../../TextureResourceBinder/TextureResourceBinder.h"
+#include "../../UIComponentLocator.h"
+#include "../UIUtility.h"
 #include "IRenderer.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "../UIUtility.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 
 //한글폰트와 영문폰트는 각각 한개만 로딩하기로 한다.
 //중간에 볼드나 밑줄같은 것은 지원하지 않고 크기도 고정으로 한다.
 TextArea::~TextArea() = default;
-TextArea::TextArea() :
-	m_texController{ nullptr }
-{}
-
+TextArea::TextArea() = default;
 TextArea::TextArea(const TextArea& other) :
 	UIComponent{ other },
 	m_text{ other.m_text },
@@ -91,8 +89,9 @@ bool TextArea::ChangeSize(const XMUINT2&, bool) noexcept
 	return ArrangeText(m_text);
 }
 
-bool TextArea::Setup(const UILayout& layout, const wstring& text, const vector<wstring> bindKeys) noexcept
+bool TextArea::Setup(ITextureController* texController, const UILayout& layout, const wstring& text, const vector<wstring> bindKeys) noexcept
 {
+	m_texController = texController;
 	SetLayout(layout);
 	m_text = text;
 	m_bindKeys = bindKeys;
@@ -100,7 +99,7 @@ bool TextArea::Setup(const UILayout& layout, const wstring& text, const vector<w
 	return true;
 }
 
-bool TextArea::BindSourceInfo(TextureResourceBinder* resBinder, ITextureController* texController) noexcept
+bool TextArea::BindSourceInfo(TextureResourceBinder* resBinder) noexcept
 {
 	for (const auto& bindKey : m_bindKeys)
 	{
@@ -113,7 +112,6 @@ bool TextArea::BindSourceInfo(TextureResourceBinder* resBinder, ITextureControll
 
 		m_font.emplace(bindKey, *curIndex);
 	}
-	m_texController = texController;
 
 	return ArrangeText(m_text);
 }

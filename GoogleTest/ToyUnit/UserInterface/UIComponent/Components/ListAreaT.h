@@ -24,7 +24,7 @@ void ListAreaT::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateSampleListArea({}, "BackImage", "ListBackground", "Track", "Button", &m_scrollBar);
-	BindTextureSourceInfo(m_component.get(), GetResBinder(), GetTextureController());
+	BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 
 void ListAreaT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)
