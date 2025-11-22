@@ -16,7 +16,6 @@ public:
     bool operator==(const UINameGenerator& other) const noexcept;
     unique_ptr<UINameGenerator> Clone() const;
 
-    //?!? 두 함수 패턴이 비슷하니 클래스를 만들어서 처리하면 될 것 같다.
     optional<string> MakeRegionOf(const string& region) noexcept;
     bool RemoveRegion(const string& region) noexcept;
     bool IsUnusedRegion(string_view region) noexcept;

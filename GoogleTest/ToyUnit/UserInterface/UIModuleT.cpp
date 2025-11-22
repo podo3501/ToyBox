@@ -3,10 +3,10 @@
 #include "UIComponent/MockComponent.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 
-class MockInpuT : public UIComponentStub, public IMouseEventReceiver
+class MockInput : public UIComponentStub, public IMouseEventReceiver
 {
 public:
-	explicit MockInpuT(InputResult pressResult)
+	explicit MockInput(InputResult pressResult)
 	{
 		ON_CALL(*this, OnPress(testing::_)).WillByDefault(testing::Return(pressResult));
 		ON_CALL(*this, OnWheel(testing::_)).WillByDefault(testing::Return(true));
@@ -22,16 +22,16 @@ public:
 	MOCK_METHOD(bool, OnWheel, (int wheelValue), (noexcept));
 };
 
-class MockInputPropagate : public MockInpuT //Propagate를 리턴
+class MockInputPropagate : public MockInput //Propagate를 리턴
 {
 public:
-	MockInputPropagate() : MockInpuT(InputResult::Propagate) {}
+	MockInputPropagate() : MockInput(InputResult::Propagate) {}
 };
 
-class MockInputConsume : public MockInpuT //Consumed를 리턴
+class MockInputConsume : public MockInput //Consumed를 리턴
 {
 public:
-	MockInputConsume() : MockInpuT(InputResult::Consumed) {}
+	MockInputConsume() : MockInput(InputResult::Consumed) {}
 };
 
 namespace UserInterfaceT

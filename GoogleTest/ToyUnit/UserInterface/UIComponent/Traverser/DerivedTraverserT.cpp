@@ -22,14 +22,14 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 {
 	TEST_F(DerivedTraverserT, EnableToolMode_false)
 	{
-		auto [owner, parent] = CreateMockComponent<MockToolMode>();
-		auto child = AttachMockComponentDirect<MockToolMode>(parent);
+		auto [owner, parent] = CreateMockComponent<testing::NiceMock<MockToolMode>>();
+		auto child = AttachMockComponentDirect<testing::NiceMock<MockToolMode>>(parent);
+		m_traverser.EnableToolMode(parent, true); //초기값이 false 이기 때문에 먼저 true 해주고 false를 해야 한다.
 
 		testing::InSequence seq;
 		EXPECT_CALL(*child, ExitToolMode()).Times(1);
 		EXPECT_CALL(*parent, ExitToolMode()).Times(1);
 		
-		m_traverser.EnableToolMode(parent, true); //초기값이 false 이기 때문에 먼저 true 해주고 false를 해야 한다.
 		m_traverser.EnableToolMode(parent, false);
 	}
 

@@ -15,10 +15,16 @@ TextArea::TextArea(const TextArea& other) :
 	UIComponent{ other },
 	m_text{ other.m_text },
 	m_bindKeys{ other.m_bindKeys },
-	m_texController{ other.m_texController },
 	m_font{ other.m_font },
 	m_lines{ other.m_lines }
-{}
+{
+	ReloadDatas();
+}
+
+void TextArea::ReloadDatas() noexcept
+{
+	m_texController = GetTextureController();
+}
 
 unique_ptr<UIComponent> TextArea::CreateClone() const
 {
@@ -131,4 +137,7 @@ void TextArea::ProcessIO(SerializerIO& serializer)
 
 	serializer.Process("BindKeys", m_bindKeys);
 	serializer.Process("Text", m_text);
+
+	if (serializer.IsWrite()) return;
+	ReloadDatas();
 }

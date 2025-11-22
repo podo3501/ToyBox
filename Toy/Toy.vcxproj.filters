@@ -272,6 +272,12 @@
     <ClInclude Include="UserInterface\UIComponent\UIComponent.hpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
+    <ClInclude Include="UserInterface\MouseEventRouter.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\Traversers.h">
+      <Filter>UserInterface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -446,6 +452,12 @@
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverser.cpp">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\MouseEventRouter.cpp">
+      <Filter>UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface\Traversers.cpp">
+      <Filter>UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -8,7 +8,6 @@ class RenderTextureT : public ComponentT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) override;
 
 	unique_ptr<RenderTexture> m_component;

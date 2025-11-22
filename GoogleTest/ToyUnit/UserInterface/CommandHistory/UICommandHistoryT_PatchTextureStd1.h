@@ -12,7 +12,6 @@ class UICommandHistoryT_PatchTextureStd1 : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 	virtual void RegisterBinderTextures(TextureResourceBinder* resBinder) override;
 
 	template<typename Action>

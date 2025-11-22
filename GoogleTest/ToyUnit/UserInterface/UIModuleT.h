@@ -39,6 +39,8 @@ inline void UIModuleT::TearDown()
 	m_main = nullptr;
 	m_uiModule = nullptr;
 	ReleaseUIModule("Demo");
+
+	UIComponentManagerT::TearDown();
 }
 
 inline void UIModuleT::SimulateMouse(const XMINT2& pos, InputState state) noexcept

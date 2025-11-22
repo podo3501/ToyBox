@@ -102,7 +102,7 @@ MockRenderer::~MockRenderer() {}
 MockRenderer::MockRenderer() :
 	m_mockTextureTable(make_unique<MockTextureTable>()),
 	m_mockTextureLoad(make_unique<MockTextureLoad>(m_mockTextureTable.get())),
-	m_mockTextureController(make_unique<MockTextureController>(m_mockTextureTable.get()))
+	m_mockTextureController(make_unique<testing::NiceMock<MockTextureController>>(m_mockTextureTable.get()))
 {}
 
 bool MockRenderer::RegisterMockTextureInfo(const wstring& filename, size_t index, const XMUINT2& size) noexcept

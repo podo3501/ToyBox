@@ -24,7 +24,7 @@ bool UINameGenerator::operator==(const UINameGenerator& other) const noexcept
     return true;
 }
 
-unique_ptr<UINameGenerator> UINameGenerator::Clone() const //?!? 이 함수 필요 없을꺼 같은데??
+unique_ptr<UINameGenerator> UINameGenerator::Clone() const
 {
     return unique_ptr<UINameGenerator>(new UINameGenerator(*this));
 }

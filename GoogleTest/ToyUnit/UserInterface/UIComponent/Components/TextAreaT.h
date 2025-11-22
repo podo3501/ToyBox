@@ -7,7 +7,6 @@ class TextAreaT : public ComponentT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 	virtual void RegisterRenderTextures(MockRenderer* renderer) override;
 	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) override;
 	

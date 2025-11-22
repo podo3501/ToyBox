@@ -10,7 +10,6 @@ class NameTraverserT : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 
 	NameTraverser m_traverser;
 };

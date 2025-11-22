@@ -2,6 +2,7 @@
 #include "UIComponentManager.h"
 #include "IRenderer.h"
 #include "UIModule.h"
+#include "Traversers.h"
 #include "UINameGenerator/UINameGenerator.h"
 #include "UIComponent/Traverser/BaseTraverser.h"
 #include "UIComponent/Traverser/DerivedTraverser.h"
@@ -13,10 +14,8 @@
 UIComponentManager::~UIComponentManager() = default;
 UIComponentManager::UIComponentManager(IRenderer* renderer, bool isTool) :
 	m_renderer{ renderer },
-	m_texController{ renderer->GetTextureController() },
-	m_baseTraverser{ make_unique<BaseTraverser>() },
-	m_derivedTraverser{ make_unique<DerivedTraverser>() },
-	m_nameTraverser{ make_unique<NameTraverser>() }
+	m_traversers{ make_unique<Traversers>() },
+	m_texController{ renderer->GetTextureController() }
 {
 	if(!isTool) //툴은 RenderTexture에 그리기 때문에 렌더와 연결하지 않는다.
 		m_renderer->SetComponentRenderer([this](ITextureRender* r) { this->RenderComponent(r); });

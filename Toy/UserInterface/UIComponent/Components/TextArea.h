@@ -29,6 +29,7 @@ protected:
 	virtual bool ChangeSize(const XMUINT2& size, bool isForce) noexcept;
 
 private:
+	void ReloadDatas() noexcept;
 	bool ArrangeText(const wstring& text);
 
 	ITextureController* m_texController{ nullptr };

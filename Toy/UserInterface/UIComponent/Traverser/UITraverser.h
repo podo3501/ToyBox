@@ -1,6 +1,7 @@
 #pragma once
 #include "../UIComponent.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
+#include "Toy/UserInterface/Traversers.h"
 #include "Toy/UserInterface/UIComponent/Traverser/BaseTraverser.h"
 #include "Toy/UserInterface/UIComponent/Traverser/DerivedTraverser.h"
 #include "Toy/UserInterface/UIComponent/Traverser/NameTraverser.h"
@@ -17,11 +18,10 @@ namespace UITraverser
 		}
 	};
 
-	inline BaseTraverser* GetBaseTraverser() noexcept { return UIComponentLocator::GetService()->GetBaseTraverser(); }
-	inline DerivedTraverser* GetDerivedTraverser() noexcept { return UIComponentLocator::GetService()->GetDerivedTraverser(); }
-	inline NameTraverser* GetNameTraverser() noexcept { 
-		return UIComponentLocator::GetService()->GetNameTraverser(); 
-	}
+	inline Traversers* GetTraversers() noexcept { return UIComponentLocator::GetService()->GetTraversers(); }
+	inline BaseTraverser* GetBaseTraverser() noexcept { return GetTraversers()->GetBaseTraverser(); }
+	inline DerivedTraverser* GetDerivedTraverser() noexcept { return GetTraversers()->GetDerivedTraverser(); }
+	inline NameTraverser* GetNameTraverser() noexcept { return GetTraversers()->GetNameTraverser(); }
 
 	using Base = TraverserCaller<BaseTraverser, GetBaseTraverser>;
 	using Derived = TraverserCaller<DerivedTraverser, GetDerivedTraverser>;

@@ -6,7 +6,6 @@ class PatchTextureLite1T : public ComponentT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 	virtual void RegisterRenderTextures(MockRenderer* renderer) override {}; //텍스쳐 정보 필요없음.
 	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) override {}; //바인드 정보 필요없음.
 

@@ -36,9 +36,10 @@ namespace SystemT
 		sceneManager->Transition(move(scene1));
 		sceneManager->Update(timer);
 
+		EXPECT_CALL(*scene1Ptr, Update(testing::_)).Times(1);
 		EXPECT_CALL(*scene1Ptr, Leave()).Times(1);
 		EXPECT_CALL(*scene2Ptr, Enter()).Times(1);
-		sceneManager->Transition(move(scene2));
+		sceneManager->Transition(move(scene2)); 
 		sceneManager->Update(timer);
 	}
 }

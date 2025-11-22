@@ -9,7 +9,6 @@ class ComponentT : public UIComponentManagerT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) = 0;
 
 	inline MockTextureResourceBinder* GetResBinder() const noexcept { return m_resBinder.get(); }

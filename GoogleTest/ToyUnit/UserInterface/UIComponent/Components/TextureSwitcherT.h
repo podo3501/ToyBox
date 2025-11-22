@@ -9,7 +9,6 @@ class TextureSwitcherT : public ComponentT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) override;
 
 	unique_ptr<TextureSwitcher> m_component;

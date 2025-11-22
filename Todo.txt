@@ -228,12 +228,10 @@
     컴포넌트T 이름으로 파일명을 정하고, 이것들은 큰 흐름만 테스트 한다.
 --ITextureController가 Component에 있는데 이를 찾아서 Setup할때 넣는 걸로 한다.
 --RenderTexture를 클론했을때 RenderTexture 안에 사용되는 텍스쳐는 새로 만들어야 한다.
+--tdd warning 찾아서 없애기
 
 @툴에서 작업환경을 멀티로 할지 단일로 할지 생각해봐야 겠다.
 @Json을 tdd에서 파일로 쓰는 부분을 DI로 수정하고 메모리에 쓰게끔 수정해서 tdd 속도 및 의존성 줄이기
-@TextureResourceBinder가 로딩할때 원소 갯수만큼 돌면서 텍스쳐를 로딩하는데 엔진에서 중복로딩하면 인덱스 넘겨주기
-    때문에 괜찮았는데, 이렇게 많이 로딩 되면 안된다. 텍스쳐를 저장하는 공간을 두고 로딩할때 이 텍스쳐만 로딩하게끔 수정
-    해야겠다. 마지막 원소가 사라지면 텍스트도 사라지고 이런식이 되어야 할 것같다. 
 @wstring filename = L"Test/Data/RWSourceBinderTest.json"; 이것처럼 tdd에서 세이브 되는 데이터는 한곳으로 모으자.
 
 @Component에서 이벤트 받아서 사운드 출력되게끔.

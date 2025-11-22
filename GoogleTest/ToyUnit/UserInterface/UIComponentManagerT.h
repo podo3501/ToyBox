@@ -9,7 +9,6 @@ class UIComponentManagerT : public ::testing::Test
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 	virtual void RegisterRenderTextures(MockRenderer* renderer);
 	inline ITextureController* GetTextureController() const noexcept { return m_renderer->GetTextureController(); }
 	inline wstring GetTempDir() const noexcept { return L"../Resources/Test/Temp/"; }

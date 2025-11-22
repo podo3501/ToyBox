@@ -40,10 +40,8 @@ public:
     virtual optional<vector<Rectangle>> GetTextureAreaList(size_t index, const UINT32& bgColor) = 0;
     virtual void ModifyRenderTexturePosition(size_t index, const XMINT2& leftTop) noexcept = 0;
     virtual bool ModifyRenderTextureSize(size_t index, const XMUINT2& size) = 0;
-
-    //?!? 밑에 두 함수는 RenderTexture에서 쓰긴 한데.. 없애고 싶긴하다.
     virtual void ReleaseTexture(size_t idx) noexcept = 0; 
-    virtual void AddRef(size_t index) noexcept = 0;
+    virtual void AddRef(size_t index) noexcept = 0; //현재는 쓰이지 않지만, 리소스를 공유해야할때 쓰는 함수이다.
 };
 
 //Imgui ui 만들때 사용

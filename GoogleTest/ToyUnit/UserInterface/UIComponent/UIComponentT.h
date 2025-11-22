@@ -1,4 +1,5 @@
 #pragma once
+#include "UserInterface/UIComponentManagerT.h"
 #include "MockComponent.h"
 #include "ComponentHelper.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
@@ -19,11 +20,10 @@ inline ChangeExpect operator|(ChangeExpect a, ChangeExpect b) noexcept
 	return static_cast<ChangeExpect>(static_cast<int>(a) | static_cast<int>(b));
 }
 
-class UIComponentT : public ::testing::Test
+class UIComponentT : public UIComponentManagerT
 {
 protected:
 	virtual void SetUp() override;
-    virtual void TearDown() override {};
     void VerifyTransformChange(function<void()> action, ChangeExpect expect) noexcept;
 
     MockComponent* m_main{ nullptr };
@@ -39,6 +39,8 @@ private:
 
 void UIComponentT::SetUp()
 {
+    UIComponentManagerT::SetUp();
+
     UILayout layout{ {800, 600}, Origin::LeftTop };
     tie(m_owner, m_main) = CreateMockComponent<MockComponent>(layout);
     m_parent = AttachMockComponentDirect<MockComponent>(m_main, mock_defaults::parentDesc);

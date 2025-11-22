@@ -1,11 +1,9 @@
 #pragma once
 #include "Toy/UserInterface/UIComponent/Traverser/BaseTraverser.h"
+#include "UserInterface/UIComponentManagerT.h"
 
-class BaseTraverserT : public testing::Test
+class BaseTraverserT : public UIComponentManagerT
 {
 protected:
-	virtual void SetUp() override {};
-	virtual void TearDown() override {};
-
 	BaseTraverser m_traverser;
 };

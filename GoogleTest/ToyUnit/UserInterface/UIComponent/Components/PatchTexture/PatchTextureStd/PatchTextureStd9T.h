@@ -7,7 +7,6 @@ class PatchTextureStd9T : public ComponentT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) override;
 
 	unique_ptr<PatchTextureStd9> m_component;

@@ -7,7 +7,6 @@ class UIModuleAsComponentT : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void TearDown() override {};
 
 	unique_ptr<UIModuleAsComponent> m_component;
 };
