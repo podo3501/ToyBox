@@ -4,6 +4,7 @@
 struct IRenderer;
 struct IComponent;
 struct ITextureController;
+struct IJsonStorage;
 class Window;
 class Environment;
 class UIComponentManager;
@@ -25,6 +26,7 @@ protected:
 
 	unique_ptr<Window> m_window;
 	unique_ptr<Environment> m_environment;
+	unique_ptr<IJsonStorage> m_jsonStorage;
 	unique_ptr<IRenderer> m_renderer;
 	DX::StepTimer m_timer;
 	unique_ptr<UIComponentManager> m_uiManager;

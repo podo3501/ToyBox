@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "Shared/Framework/EnvironmentLocator.h"
-#include "Toy/UserInterface/UIComponent/UIUtility.h"
-#include "Toy/UserInterface/UIComponent/UIComponent.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/StlTypeExt.hpp"
 #include "Shared/Utils/StlExt.h"
+#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
+#include "Toy/UserInterface/UIComponent/UIUtility.h"
+#include "Toy/UserInterface/UIComponent/UIComponent.h"
 
 namespace Utility
 {
@@ -86,6 +87,7 @@ namespace Utility
 	TEST(Client, JsonParser)
 	{
 		unique_ptr<Environment> environment = InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
+		auto storage = InitializeJsonStorage(StorageType::File);
 
 		UserComponent wData(true);
 		const auto& serializeTestFilename = L"Test/Data/JsonSerializeTest.json";

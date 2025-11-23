@@ -1,13 +1,13 @@
 #pragma once
 #include "Shared/System/StepTimer.h"
 
-class Window;
-class MouseTracker;
-class Environment;
 struct IRenderer;
 struct IImguiItem;
 struct ITextureController;
-struct abc;
+struct IJsonStorage;
+class Window;
+class MouseTracker;
+class Environment;
 
 class AppLoop
 {
@@ -41,6 +41,7 @@ private:
     unique_ptr<Window> m_window;
     unique_ptr<IRenderer> m_renderer;
     unique_ptr<Environment> m_environment;
+    unique_ptr<IJsonStorage> m_jsonStorage;
     DX::StepTimer m_timer;
 };
 

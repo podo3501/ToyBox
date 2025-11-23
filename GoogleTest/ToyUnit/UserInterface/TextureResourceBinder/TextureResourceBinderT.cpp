@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TextureResourceBinderT.h"
+#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/UIComponent/UIHelperClass.h"
 
 namespace UserInterfaceT::TextureResourceBinderT
@@ -63,6 +64,7 @@ namespace UserInterfaceT::TextureResourceBinderT
 
 	TEST_F(TextureResourceBinderT, WriteRead)
 	{
+		auto storage = InitializeJsonStorage(StorageType::Memory);
 		wstring filename = L"Test/Data/RWSourceBinderTest.json";
 		EXPECT_TRUE(m_resBinder->Save(filename));
 

@@ -2,6 +2,7 @@
 #include "ContainerT.h"
 #include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
+#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 namespace UserInterfaceT::UIComponentT::ComponentT
@@ -25,6 +26,7 @@ namespace UserInterfaceT::UIComponentT::ComponentT
 
 	TEST_F(ContainerT, WriteAndRead)
 	{
+		auto storage = InitializeJsonStorage(StorageType::Memory);
 		wstring filename = GetTempDir() + L"TextureSwitcherT_WR.json";
 		EXPECT_TRUE(SerializerIO::WriteJsonToFile(m_component, filename));
 

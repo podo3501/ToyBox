@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "UINameGeneratorT.h"
-#include "Toy/UserInterface/UIComponent/UIType.h"
 #include "Shared/Utils/StlExt.h"
 #include "Shared/SerializerIO/SerializerIO.h"
+#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
+#include "Toy/UserInterface/UIComponent/UIType.h"
 
 namespace UserInterfaceT::UINameGeneratorT
 {
@@ -75,6 +76,7 @@ namespace UserInterfaceT::UINameGeneratorT
 
 	TEST_F(UINameGeneratorT, WriteAndRead)
 	{
+		auto storage = InitializeJsonStorage(StorageType::Memory);
 		const wstring filename = GetTempDir() + L"UINameGeneratorT_WR.json";
 		EXPECT_TRUE(SerializerIO::WriteJsonToFile(m_nameGen, filename));
 

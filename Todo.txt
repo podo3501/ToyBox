@@ -229,11 +229,10 @@
 --ITextureController가 Component에 있는데 이를 찾아서 Setup할때 넣는 걸로 한다.
 --RenderTexture를 클론했을때 RenderTexture 안에 사용되는 텍스쳐는 새로 만들어야 한다.
 --tdd warning 찾아서 없애기
+--Json을 tdd에서 파일로 쓰는 부분을 DI로 수정하고 메모리에 쓰게끔 수정해서 tdd 속도 및 의존성 줄이기
+--wstring filename = L"Test/Data/RWSourceBinderTest.json"; 이것처럼 tdd에서 세이브 되는 데이터는 한곳으로 모으자.
 
 @툴에서 작업환경을 멀티로 할지 단일로 할지 생각해봐야 겠다.
-@Json을 tdd에서 파일로 쓰는 부분을 DI로 수정하고 메모리에 쓰게끔 수정해서 tdd 속도 및 의존성 줄이기
-@wstring filename = L"Test/Data/RWSourceBinderTest.json"; 이것처럼 tdd에서 세이브 되는 데이터는 한곳으로 모으자.
-
 @Component에서 이벤트 받아서 사운드 출력되게끔.
 @IME로 한글 입력되게
 @인트로 화면 만들기

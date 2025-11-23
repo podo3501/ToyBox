@@ -86,6 +86,18 @@
     <ClInclude Include="Framework\EnvironmentLocator.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="SerializerIO\Storage\IJsonStorage.h">
+      <Filter>SerializerIO\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\Storage\JsonStorageLocator.h">
+      <Filter>SerializerIO\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\Storage\FileStorage.h">
+      <Filter>SerializerIO\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializerIO\Storage\MemoryStorage.h">
+      <Filter>SerializerIO\Storage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -137,6 +149,12 @@
     <ClCompile Include="System\Input\InputManager.cpp">
       <Filter>System\Input</Filter>
     </ClCompile>
+    <ClCompile Include="SerializerIO\Storage\FileStorage.cpp">
+      <Filter>SerializerIO\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializerIO\Storage\MemoryStorage.cpp">
+      <Filter>SerializerIO\Storage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -171,6 +189,9 @@
     </Filter>
     <Filter Include="System\Input">
       <UniqueIdentifier>{94771c7d-10b2-4979-b871-e3940786ece1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SerializerIO\Storage">
+      <UniqueIdentifier>{c64a7941-9810-432c-8f04-eef733ba5b29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 #include "Core/Public/IRenderer.h"
 #include "Utils/Profiler.h"
 #include "EnvironmentLocator.h"
+#include "../SerializerIO/Storage/JsonStorageLocator.h"
 #include "Window/Window.h"
 #include "Window/WindowProcedure.h"
 
@@ -18,6 +19,7 @@ AppLoop::AppLoop(unique_ptr<Window> window, unique_ptr<IRenderer> renderer, cons
     TracyStartupProfiler();
 
     m_environment = InitializeEnvironment(resPath, resolution);
+    m_jsonStorage = InitializeJsonStorage(StorageType::File);
 }
 
 bool AppLoop::Initialize()

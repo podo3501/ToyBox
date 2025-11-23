@@ -33,6 +33,11 @@ void BoundedValue::Reset() noexcept
 	m_previous = 0;
 }
 
+void BoundedValue::SetValue(int value) noexcept
+{
+	m_target += (value * m_unit);
+}
+
 void BoundedValue::SetBounds(int min, int max, int unit) noexcept
 {
 	m_min = min;
@@ -40,9 +45,8 @@ void BoundedValue::SetBounds(int min, int max, int unit) noexcept
 	m_unit = unit;
 }
 
-int BoundedValue::ValidateRange(int value, const DX::StepTimer& timer) noexcept
+int BoundedValue::UpdateLerpedValue(const DX::StepTimer& timer) noexcept
 {
-	m_target += (value * m_unit);
 	m_target = clamp(m_target, m_min, m_max);
 
 	m_current = GetMovementController(MovementType::Lerp, m_current, m_target, 30.f * timer.GetElapsedSeconds());

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UIModuleT.h"
 #include "UIComponent/MockComponent.h"
+#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 
 class MockInput : public UIComponentStub, public IMouseEventReceiver
@@ -121,6 +122,7 @@ namespace UserInterfaceT
 
 	TEST_F(UIModuleT, WriteAndRead)
 	{
+		auto storage = InitializeJsonStorage(StorageType::Memory);
 		const wstring filename = GetTempDir() + L"UIModuleT_WR.json";
 		EXPECT_TRUE(m_uiModule->Write(filename));
 

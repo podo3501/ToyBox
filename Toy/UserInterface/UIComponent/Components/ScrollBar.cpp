@@ -130,14 +130,13 @@ void ScrollBar::OnRelease(bool) noexcept
 
 bool ScrollBar::OnWheel(int wheelValue) noexcept
 {
-	m_wheelValue = wheelValue;
+	m_bounded.SetValue(wheelValue);
 	return true;
 }
 
 bool ScrollBar::Update(const DX::StepTimer& timer) noexcept
 {
-	if (!m_bounded.ValidateRange(m_wheelValue, timer)) return true;
-	m_wheelValue = 0;	//?!? wheelValue가 휠이 움직일때만 들어오기 때문에 0으로 부득이하게 초기화했다. 나중에 m_bounded를 수정해야 겠다.
+	if (!m_bounded.UpdateLerpedValue(timer)) return true;
 
 	auto posRatio = m_bounded.GetPositionRatio();
 	ApplyScrollButtonPosition(posRatio);

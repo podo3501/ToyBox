@@ -1,15 +1,12 @@
 #include "pch.h"
 #include "SerializerIO.h"
-#include "Shared/Framework/EnvironmentLocator.h"
-#include <fstream>
+#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 
 SerializerIO::~SerializerIO() = default;
 SerializerIO::SerializerIO() noexcept :
 m_wCurrent{ &m_write },
 m_rCurrent{ &m_read }
-{
-    int a = 1;
-}
+{}
 
 SerializerIO::SerializerIO(nlohmann::ordered_json& write) noexcept { m_wCurrent = &write; }
 SerializerIO::SerializerIO(const nlohmann::json& read) noexcept { m_rCurrent = const_cast<nlohmann::json*>(&read); }
@@ -24,14 +21,11 @@ inline static bool IsJsonFile(const wstring& filename) { return filesystem::path
 bool SerializerIO::Write(const wstring& filename)
 {
     ReturnIfFalse(IsJsonFile(filename));
-
-    ofstream file(GetResourceFullFilename(filename));
-    if (!file.is_open())
+    auto file = GetJsonStorage()->OpenWrite(filename);
+    if (!file)
         return false;
-    
     auto& json = GetWrite();
-    file << json.dump(4);
-    file.close();
+    (*file) <<  json.dump(4);
 
     return true;
 }
@@ -39,12 +33,9 @@ bool SerializerIO::Write(const wstring& filename)
 bool SerializerIO::Read(const wstring& filename)
 {
     ReturnIfFalse(IsJsonFile(filename));
-
-    ifstream file(GetResourceFullFilename(filename));
-    if (!file.is_open())
+    auto file = GetJsonStorage()->OpenRead(filename);
+    if (!file)
         return false;
-
-    (*m_rCurrent) = nlohmann::json::parse(file);
-
+    (*m_rCurrent) = nlohmann::json::parse(*file);
     return true;
 }

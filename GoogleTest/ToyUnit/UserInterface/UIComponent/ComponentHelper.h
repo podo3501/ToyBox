@@ -1,5 +1,6 @@
 #pragma once
 #include "Shared/SerializerIO/SerializerIO.h"
+#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Shared/System/StepTimer.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
@@ -11,6 +12,7 @@ template <typename T>
 bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 	MockTextureResourceBinder* resBinder = nullptr)
 {
+	auto storage = InitializeJsonStorage(StorageType::Memory);
 	ReturnIfFalse(SerializerIO::WriteJsonToFile(component, filename));
 
 	unique_ptr<T> read;
