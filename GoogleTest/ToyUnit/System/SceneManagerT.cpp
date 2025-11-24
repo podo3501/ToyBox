@@ -21,7 +21,7 @@ private:
 	SceneID m_sceneID{ SceneID::Unknown };
 };
 
-namespace SystemT
+namespace D::System
 {
 	TEST_F(SceneManagerT, Transition)
 	{

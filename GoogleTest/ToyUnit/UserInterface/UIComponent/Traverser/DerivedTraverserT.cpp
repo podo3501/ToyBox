@@ -18,7 +18,7 @@ public:
 	MOCK_METHOD(bool, ExitToolMode, (), (noexcept));
 };
 
-namespace UserInterfaceT::UIComponentT::TraverserT
+namespace D::UserInterface::UIComponent::Traverser
 {
 	TEST_F(DerivedTraverserT, EnableToolMode_false)
 	{

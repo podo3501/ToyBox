@@ -6,7 +6,7 @@
 
 using namespace UITraverser;
 
-namespace UserInterfaceT::UIComponentT::ComponentT
+namespace D::UserInterface::UIComponent::Component
 {
 	TEST_F(ScrollBarT, Clone)
 	{

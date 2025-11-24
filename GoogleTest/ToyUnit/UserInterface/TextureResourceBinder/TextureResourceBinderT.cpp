@@ -3,7 +3,7 @@
 #include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/UIComponent/UIHelperClass.h"
 
-namespace UserInterfaceT::TextureResourceBinderT
+namespace D::UserInterface::TextureResourceBinder
 {
 	TEST_F(TextureResourceBinderT, ComputeSliceRects)
 	{
@@ -68,7 +68,7 @@ namespace UserInterfaceT::TextureResourceBinderT
 		wstring filename = L"Test/Data/RWSourceBinderTest.json";
 		EXPECT_TRUE(m_resBinder->Save(filename));
 
-		unique_ptr<TextureResourceBinder> read = make_unique<TextureResourceBinder>();
+		unique_ptr<::TextureResourceBinder> read = make_unique<::TextureResourceBinder>();
 		EXPECT_TRUE(read->Load(filename));
 
 		EXPECT_TRUE(*m_resBinder == *read);

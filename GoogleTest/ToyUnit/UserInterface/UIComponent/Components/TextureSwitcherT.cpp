@@ -20,7 +20,7 @@ public:
 	MOCK_METHOD(void, Clear, (), (noexcept, override));
 };
 
-namespace UserInterfaceT::UIComponentT::ComponentT
+namespace D::UserInterface::UIComponent::Component
 {
 	TEST_F(TextureSwitcherT, ChangeBindKey)
 	{

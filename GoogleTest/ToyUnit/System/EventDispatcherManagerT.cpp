@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "EventDispatcherManagerT.h"
 
-namespace SystemT
+namespace D::System
 {
 	TEST_F(EventDispatcherManagerT, Dispatch)
 	{

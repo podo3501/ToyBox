@@ -5,7 +5,7 @@
 #include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
-namespace UserInterfaceT::UIComponentT::ComponentT
+namespace D::UserInterface::UIComponent::Component
 {
 	TEST_F(ContainerT, Clone)
 	{

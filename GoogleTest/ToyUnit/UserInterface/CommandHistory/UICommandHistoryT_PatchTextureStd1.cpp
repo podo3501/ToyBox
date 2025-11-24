@@ -22,7 +22,7 @@ void UICommandHistoryT_PatchTextureStd1::VerifyUndoRedo(Action&& action, PatchTe
 	EXPECT_EQ(*m_main, *after);
 }
 
-namespace UserInterfaceT::CommandHistoryT
+namespace D::UserInterface::CommandHistory
 {
 	TEST_F(UICommandHistoryT_PatchTextureStd1, AttachComponent)
 	{

@@ -5,7 +5,7 @@
 #include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/UIComponent/UIType.h"
 
-namespace UserInterfaceT::UINameGeneratorT
+namespace D::UserInterface::UINameGenerator
 {
 	TEST_F(UINameGeneratorT, Clone)
 	{
@@ -78,10 +78,10 @@ namespace UserInterfaceT::UINameGeneratorT
 	{
 		auto storage = InitializeJsonStorage(StorageType::Memory);
 		const wstring filename = GetTempDir() + L"UINameGeneratorT_WR.json";
-		EXPECT_TRUE(SerializerIO::WriteJsonToFile(m_nameGen, filename));
+		EXPECT_TRUE(::SerializerIO::WriteJsonToFile(m_nameGen, filename));
 
-		unique_ptr<UINameGenerator> read;
-		EXPECT_TRUE(SerializerIO::ReadJsonFromFile(filename, read));
+		unique_ptr<::UINameGenerator> read;
+		EXPECT_TRUE(::SerializerIO::ReadJsonFromFile(filename, read));
 
 		EXPECT_TRUE(Compare(m_nameGen, read));
 	}

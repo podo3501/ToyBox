@@ -35,7 +35,7 @@ public:
 	MockInputConsume() : MockInput(InputResult::Consumed) {}
 };
 
-namespace UserInterfaceT
+namespace D::UserInterface
 {
 	TEST_F(UIModuleT, UpdateMouseState_ComponentCaptured) //클릭했을때 캡쳐해서 그 컴포넌트를 위주로 실행한다.
 	{

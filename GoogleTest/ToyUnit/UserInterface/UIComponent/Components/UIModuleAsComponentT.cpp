@@ -17,7 +17,7 @@ public:
 	MOCK_METHOD(void, Render, (ITextureRender*), (const));
 };
 
-namespace UserInterfaceT::UIComponentT::ComponentT
+namespace D::UserInterface::UIComponent::Component
 {
 	TEST_F(UIModuleAsComponentT, GetUIModule)
 	{

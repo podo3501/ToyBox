@@ -14,7 +14,7 @@ public:
 	bool Setup() noexcept { return true; } //CreateComponent 할때 필요한 함수.
 };
 
-namespace UserInterfaceT::UIComponentT::TraverserT
+namespace D::UserInterface::UIComponent::Traverser
 {
 	TEST_F(BaseTraverserT, GetChildrenBoundsSize)
 	{

@@ -21,10 +21,10 @@ mock이 포함되어 있지 않아서이다. 그리고 main을 작성해 준다.
 1. 빈 프로젝트 GoogletTestLib 만들기
 2. google test GitHub에서 다운받아서 cc파일 두개 추가
 3. include 폴더 디렉토리 설정하기
-4. 컴파일 되는지 확인
+4. 컴파일 되는지 확인 <-- 여기까지는 lib 만들기.
 5. 새프로젝트 만들기 해서 google test 프로젝트로 프로젝트 만들기
 6. NuGet에서 설치되어 있는 기본 gtest를 삭제
-6. GoogletTestLib을 참조로 연결
+6. GoogletTestLib을 참조로 연결(#pragma comment(lib, "GoogleTestLib_Debug.lib") 지금은 이렇게 붙였다.)
 7. main함수 작성
 
 google test 프로젝트로 만들면 config 파일이 자동적으로 생기는데 Nuget에서 google test를 지우면 config

@@ -3,7 +3,7 @@
 #include "../MockComponent.h"
 #include "Shared/Utils/StlExt.h"
 
-namespace UserInterfaceT::UIComponentT::TraverserT
+namespace D::UserInterface::UIComponent::Traverser
 {
 	TEST_F(NameTraverserT, AttachComponent)
 	{

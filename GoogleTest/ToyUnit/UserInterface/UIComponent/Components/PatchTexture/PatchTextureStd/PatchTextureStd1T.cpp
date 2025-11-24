@@ -7,7 +7,7 @@
 
 using namespace UITraverser;
 
-namespace UserInterfaceT::UIComponentT::ComponentT::PatchTextureT
+namespace D::UserInterface::UIComponent::Component::PatchTexture
 {
 	TEST_F(PatchTextureStd1T, ChangeBindKey)
 	{

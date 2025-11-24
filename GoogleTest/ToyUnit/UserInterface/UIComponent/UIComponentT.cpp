@@ -19,7 +19,7 @@ public:
 	MOCK_METHOD(void, Render, (ITextureRender*), (const)); //화면에 보여주는 부분
 };
 
-namespace UserInterfaceT::UIComponentT
+namespace D::UserInterface::UIComponent
 {
 	TEST_F(UIComponentT, Attach)
 	{
@@ -118,7 +118,7 @@ namespace UserInterfaceT::UIComponentT
 	{
 		m_main->SetStateFlag(StateFlag::Attach, false);	//attach 불가
 		auto [owner, _] = CreateMockComponent<MockComponent>();
-		unique_ptr<UIComponent> result = m_main->AttachComponent(move(owner));
+		unique_ptr<::UIComponent> result = m_main->AttachComponent(move(owner));
 
 		EXPECT_NE(result, nullptr); //attach가 안되면 nullptr 값이 아니다.
 	}

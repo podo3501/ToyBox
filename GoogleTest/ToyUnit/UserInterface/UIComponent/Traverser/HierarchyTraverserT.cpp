@@ -32,7 +32,7 @@ public:
 
 using namespace UITraverser;
 
-namespace UserInterfaceT::UIComponentT::TraverserT
+namespace D::UserInterface::UIComponent::Traverser
 {
 	TEST_F(HierarchyTraverserT, ForEachChildToRender_BFS)
 	{
@@ -41,8 +41,8 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		auto node3 = AttachMockComponentDirect<MockRenderTraversal>(node0);
 		auto node2 = AttachMockComponentDirect<MockRenderTraversal>(node1);
 
-		vector<UIComponent*> visitOrder;
-		auto Func = [&](UIComponent* c) -> TraverseResult {
+		vector<::UIComponent*> visitOrder;
+		auto Func = [&](::UIComponent* c) -> TraverseResult {
 			visitOrder.push_back(c);
 			return TraverseResult::Continue;
 			};
@@ -59,8 +59,8 @@ namespace UserInterfaceT::UIComponentT::TraverserT
 		auto node3 = AttachMockComponentDirect<MockRenderTraversal>(node0);
 		auto node2 = AttachMockComponentDirect<MockRenderTraversal>(node1);
 
-		vector<UIComponent*> visitOrder;
-		auto Func = [&](UIComponent* c) -> TraverseResult {
+		vector<::UIComponent*> visitOrder;
+		auto Func = [&](::UIComponent* c) -> TraverseResult {
 			visitOrder.push_back(c);
 			return TraverseResult::Continue;
 			};

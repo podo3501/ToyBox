@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="SerializerIO\SerializerIOT.cpp">
+      <Filter>SerializerIO</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="SerializerIO\SerializerIOT.h">
+      <Filter>SerializerIO</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="SerializerIO">
+      <UniqueIdentifier>{12010a2c-c236-4d6b-903a-81db2a84c991}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

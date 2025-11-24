@@ -25,7 +25,7 @@ void ListAreaT::MakeTestData(int itemCount)
 		m_component->PrepareContainer();
 }
 
-namespace UserInterfaceT::UIComponentT::ComponentT
+namespace D::UserInterface::UIComponent::Component
 {
 	TEST_F(ListAreaT, ClearContainers)
 	{

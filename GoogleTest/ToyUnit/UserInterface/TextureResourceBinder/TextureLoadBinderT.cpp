@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TextureLoadBinderT.h"
 
-namespace UserInterfaceT::TextureResourceBinderT
+namespace D::UserInterface::TextureResourceBinder
 {
 	TEST_F(TextureLoadBinderT, LoadTexture)
 	{

@@ -20,7 +20,7 @@ void TexResCommandHistoryT::VerifyUndoRedo(Action&& action)
 	EXPECT_EQ(*binder, *after);
 }
 
-namespace UserInterfaceT::CommandHistoryT
+namespace D::UserInterface::CommandHistory
 {
 	TEST_F(TexResCommandHistoryT, AddFontKey)
 	{
