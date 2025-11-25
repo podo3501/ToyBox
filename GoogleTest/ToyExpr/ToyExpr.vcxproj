@@ -126,6 +126,7 @@
     <ClInclude Include="Fixture\FixtureSuite.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="ThirdParty\SDL3_Audio.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CodeLab\CPP.cpp" />
@@ -142,6 +143,7 @@
     </ClCompile>
     <ClCompile Include="ThirdParty\DirectXTK12.cpp" />
     <ClCompile Include="ThirdParty\SDL3.cpp" />
+    <ClCompile Include="ThirdParty\SDL3_Audio.cpp" />
     <ClCompile Include="Utility\Client.cpp" />
     <ClCompile Include="Utility\Core.cpp" />
   </ItemGroup>

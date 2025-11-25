@@ -3,10 +3,15 @@
 
 namespace ThirdParty
 {
-	TEST(SDL3, Initialize)
-	{
-        if (!SDL_Init(SDL_INIT_AUDIO))
+    TEST(SDL3, Initialize)
+    {
+        //if (!SDL_Init(SDL_INIT_AUDIO))
+        //    return;
+
+        if (!SDL_InitSubSystem(SDL_INIT_AUDIO))
             return;
+
+        bool isInit = SDL_WasInit(SDL_INIT_AUDIO) & SDL_INIT_AUDIO;
 
         // WAV ·Îµå
         SDL_AudioSpec spec{};
@@ -43,6 +48,7 @@ namespace ThirdParty
 
         SDL_DestroyAudioStream(stream);
         SDL_free(wavData);
+        SDL_QuitSubSystem(SDL_INIT_AUDIO);
         SDL_Quit();
 	}
 }

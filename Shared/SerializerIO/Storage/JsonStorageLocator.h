@@ -20,5 +20,5 @@ inline std::unique_ptr<IJsonStorage> InitializeJsonStorage(StorageType storageTy
 	case StorageType::Memory: storage = std::make_unique<MemoryStorage>(); break;
 	}
 	JsonStorageLocator::Provide(storage.get());
-	return storage;
+	return move(storage);
 }

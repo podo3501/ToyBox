@@ -1,41 +1,24 @@
 #include "pch.h"
 #include "SerializerIOT.h"
-#include "Shared/Framework/EnvironmentLocator.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/StlTypeExt.hpp"
 #include "Shared/Utils/StlExt.h"
-#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
 
 class JPData
 {
 public:
-	JPData() :
-		position{}
-	{
-	}
-
-	JPData(float x, float y) :
-		position{ x, y }
-	{
-	}
-
-	JPData(Vector2 pos) :
-		position(pos)
-	{
-	}
+	JPData() : position{} {}
+	JPData(float x, float y) : position{ x, y } {}
+	JPData(Vector2 pos) : position(pos) {}
 
 	bool operator==(const JPData& other) const noexcept
 	{
 		if (position != other.position) return false;
-
 		return true;
 	}
 
-	void ProcessIO(SerializerIO& serializer)
-	{
-		serializer.Process("Position", position);
-	}
+	void ProcessIO(SerializerIO& serializer) { serializer.Process("Position", position); }
 
 private:
 	Vector2 position;
@@ -44,60 +27,110 @@ private:
 class UserComponent
 {
 public:
-	UserComponent(bool insertData)
-	{
-		if (!insertData) return;
-
-		m_data.emplace_back(JPData(0.1f, 0.1f));
-		m_uptrData.emplace_back(make_unique<JPData>(0.3f, 0.3f));
-		m_mapData.emplace("1", make_unique<JPData>(0.4f, 0.4f));
-		m_svmapData.emplace("2", make_unique<JPData>(0.5f, 0.5f));
-
-		m_layout.Set({ 50, 100 }, Origin::Center);
-	}
+	virtual ~UserComponent() = default;
+	UserComponent() = default;
 
 	bool operator==(const UserComponent& other) const noexcept
 	{
-		if (m_data != other.m_data) return false;
 		if (m_layout != other.m_layout) return false;
-		ReturnIfFalse(CompareSeq(m_uptrData, other.m_uptrData));
 		ReturnIfFalse(CompareAssoc(m_mapData, other.m_mapData));
 		ReturnIfFalse(CompareUnorderedAssoc(m_svmapData, other.m_svmapData));
+		if (m_data != other.m_data) return false;
+		ReturnIfFalse(CompareSeq(m_uptrData, other.m_uptrData));
 
 		return true;
 	}
 
-	void ProcessIO(SerializerIO& serializer)
-	{
-		serializer.Process("Data", m_data);
-		serializer.Process("UPtrData", m_uptrData);
-		serializer.Process("MapData", m_mapData);
-		serializer.Process("SVMapData", m_svmapData);
-		serializer.Process("Layout", m_layout);
-	}
+	virtual void ProcessIO(SerializerIO& serializer) = 0;
 
-private:
-	vector<JPData> m_data;
-	vector<unique_ptr<JPData>> m_uptrData;
+	UILayout m_layout;
 	map<string, unique_ptr<JPData>> m_mapData;
 	unordered_svmap<string, unique_ptr<JPData>> m_svmapData;
-	UILayout m_layout;
+	vector<JPData> m_data;
+	vector<unique_ptr<JPData>> m_uptrData;
 };
+
+class LayoutData : public UserComponent
+{
+public:
+	virtual void ProcessIO(SerializerIO& serializer) override { serializer.Process("LayoutData", m_layout); }
+};
+
+class MapData : public UserComponent
+{
+public:
+	virtual void ProcessIO(SerializerIO& serializer) override { serializer.Process("MapData", m_mapData); }
+};
+
+class SvmapData : public UserComponent
+{
+public:
+	virtual void ProcessIO(SerializerIO& serializer) override { serializer.Process("SvmapData", m_svmapData); }
+};
+
+class VectorData : public UserComponent
+{
+public:
+	virtual void ProcessIO(SerializerIO& serializer) override { serializer.Process("VectorData", m_data); }
+};
+
+class VectorUniqueData : public UserComponent
+{
+public:
+	virtual void ProcessIO(SerializerIO& serializer) override { serializer.Process("VectorUniqueData", m_uptrData); }
+};
+
+template<typename T>
+bool SerializerIOT::TestSerialization(T& inputData)
+{
+	const auto& serializeTestFilename = GetTempDir() + L"JsonSerializeTest.json";
+	ReturnIfFalse(::SerializerIO::WriteJsonToFile(inputData, serializeTestFilename));
+
+	T outputData;
+	ReturnIfFalse(::SerializerIO::ReadJsonFromFile(serializeTestFilename, outputData));
+
+	return inputData == outputData;
+}
 
 namespace D::SerializerIO
 {
-	TEST_F(SerializerIOT, Process)
+	TEST_F(SerializerIOT, Process_Layout)
 	{
-		unique_ptr<Environment> environment = InitializeEnvironment(L"../Resources/", { 800.f, 600.f });
-		auto storage = InitializeJsonStorage(StorageType::Memory);
+		LayoutData wData;
+		wData.m_layout.Set({ 50, 100 }, Origin::Center);
 
-		UserComponent wData(true);
-		const auto& serializeTestFilename = L"Test/Data/JsonSerializeTest.json";
-		EXPECT_TRUE(::SerializerIO::WriteJsonToFile(wData, serializeTestFilename));
+		EXPECT_TRUE(TestSerialization(wData));
+	}
 
-		UserComponent rData(false);
-		EXPECT_TRUE(::SerializerIO::ReadJsonFromFile(serializeTestFilename, rData));
+	TEST_F(SerializerIOT, Process_MapData)
+	{
+		MapData wData;
+		wData.m_mapData.emplace("1", make_unique<JPData>(0.4f, 0.4f));
 
-		EXPECT_TRUE(wData == rData);
+		EXPECT_TRUE(TestSerialization(wData));
+	}
+
+	TEST_F(SerializerIOT, Process_SvmapMap)
+	{
+		SvmapData wData;
+		wData.m_svmapData.emplace("2", make_unique<JPData>(0.5f, 0.5f));
+
+		EXPECT_TRUE(TestSerialization(wData));
+	}
+
+	TEST_F(SerializerIOT, Process_VectorData)
+	{
+		VectorData wData;
+		wData.m_data.emplace_back(JPData(0.1f, 0.1f));
+
+		EXPECT_TRUE(TestSerialization(wData));
+	}
+
+	TEST_F(SerializerIOT, Process_VectorUniqueData)
+	{
+		VectorUniqueData wData;
+		wData.m_uptrData.emplace_back(make_unique<JPData>(0.3f, 0.3f));
+
+		EXPECT_TRUE(TestSerialization(wData));
 	}
 }
