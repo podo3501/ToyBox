@@ -3,7 +3,11 @@
 
 namespace ThirdParty
 {
-    TEST(SDL3, Initialize)
+    TEST(SDL3, Playing_Ogg)
+    {
+        
+    }
+    TEST(SDL3, Playing_Wav)
     {
         //if (!SDL_Init(SDL_INIT_AUDIO))
         //    return;

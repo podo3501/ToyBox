@@ -17,25 +17,4 @@ namespace ThirdParty
         input->Update();
         MouseState mouseState = input->GetMouseState();
     }
-
-    TEST(DirectXTK12, Sound)
-    {
-        unique_ptr<IAudioManager> audioManager = CreateAudioManager(L"../Resources/");
-        AudioLocator::Provide(audioManager.get());
-
-        auto audio = AudioLocator::GetService();
-        audio->LoadWavFile("click1", L"UI/Sound/click1.wav", 4);
-        audio->LoadWavFile("click1", L"UI/Sound/click1.wav", 4);
-
-        audio->SetVolume("click1", 0.0f); // 테스트 이기 때문에 소리 안나게 설정.
-        audio->Play("click1");
-        while (audio->IsPlaying("click1"))
-        {
-            audio->Update();
-            this_thread::sleep_for(chrono::milliseconds(1));
-        }
-
-        audio->Unload("click1");
-        audio->Unload("click1");
-    }
 }

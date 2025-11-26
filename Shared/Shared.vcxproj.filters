@@ -71,7 +71,7 @@
     <ClInclude Include="Utils\Memory.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="System\Audio\AudioManager.h">
+    <ClInclude Include="System\Audio\SDLAudioManager.h">
       <Filter>System\Audio</Filter>
     </ClInclude>
     <ClInclude Include="System\Public\IAudioManager.h">
@@ -97,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="SerializerIO\Storage\MemoryStorage.h">
       <Filter>SerializerIO\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Audio\AudioBuffer.h">
+      <Filter>System\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -143,7 +146,7 @@
     <ClCompile Include="Framework\Initializer\GoogleTest.cpp">
       <Filter>Framework\Initializer</Filter>
     </ClCompile>
-    <ClCompile Include="System\Audio\AudioManager.cpp">
+    <ClCompile Include="System\Audio\SDLAudioManager.cpp">
       <Filter>System\Audio</Filter>
     </ClCompile>
     <ClCompile Include="System\Input\InputManager.cpp">
@@ -154,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="SerializerIO\Storage\MemoryStorage.cpp">
       <Filter>SerializerIO\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Audio\AudioBuffer.cpp">
+      <Filter>System\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
