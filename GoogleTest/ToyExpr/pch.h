@@ -140,9 +140,5 @@ using namespace DirectX::SimpleMath;
 #pragma comment(lib, "Setupapi.lib")
 #pragma comment(lib, "Version.lib")
 #pragma comment(lib, "imm32.lib")
-
-#ifdef _DEBUG
-#pragma comment(lib, "SDL3_Debug.lib")
-#else
-#pragma comment(lib, "SDL3_Release.lib")
-#endif
+#pragma comment(lib, "SDL3-static.lib")
+#pragma comment(lib, "SDL3_mixer-static.lib")

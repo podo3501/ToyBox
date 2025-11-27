@@ -5,12 +5,14 @@
     <ClCompile Include="SerializerIO\SerializerIOT.cpp">
       <Filter>SerializerIO</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="SerializerIO\SerializerIOT.h">
       <Filter>SerializerIO</Filter>
     </ClInclude>
+    <ClInclude Include="Main.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SerializerIO">

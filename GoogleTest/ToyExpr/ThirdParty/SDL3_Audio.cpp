@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SDL3_Audio.h"
 
-namespace ThirdParty
+namespace ThirdParty2
 {
 	TEST_F(SDL3_Audio, LoadWav)
 	{
@@ -30,7 +30,7 @@ namespace ThirdParty
 		while (m_audioManager->GetPlayState(GetWavFilename()) == PlayState::Playing)
 			m_audioManager->Update();
 	}
-
+	
 	TEST_F(SDL3_Audio, Playing_Sounds)
 	{
 		string sound1 = "../Resources/Sound/Wav/test1.wav";

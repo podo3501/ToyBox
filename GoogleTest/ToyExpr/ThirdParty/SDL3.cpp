@@ -1,12 +1,50 @@
 #include "pch.h"
 #include "SDL3/SDL.h"
+#include "SDL3_mixer/SDL_mixer.h"
 
 namespace ThirdParty
 {
     TEST(SDL3, Playing_Ogg)
     {
+        if (!SDL_Init(SDL_INIT_AUDIO))
+            return;
+
+        if (!MIX_Init())
+            return;
+
+        MIX_Mixer* mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+        if (!mixer) 
+            return;
         
+        MIX_Audio* audio = MIX_LoadAudio(mixer, "../Resources/Sound/Ogg/mouseclick1.ogg", false);
+        if (!audio)
+            return;
+
+        MIX_Audio* audio2 = MIX_LoadAudio(mixer, "../Resources/Sound/Ogg/hope_it_will.ogg", false);
+        if (!audio2)
+            return;
+
+        MIX_Track* track = MIX_CreateTrack(mixer);
+        MIX_SetTrackAudio(track, audio);
+
+        MIX_Track* track2 = MIX_CreateTrack(mixer);
+        MIX_SetTrackAudio(track2, audio2);
+        MIX_SetTrackGain(track2, 0.7f);
+
+        SDL_PropertiesID options;
+        options = SDL_CreateProperties();
+        SDL_SetNumberProperty(options, MIX_PROP_PLAY_LOOPS_NUMBER, -1);
+        MIX_PlayTrack(track, options);
+        MIX_PlayTrack(track2, options);
+        SDL_Delay(10000);
+
+        if (track2) MIX_DestroyTrack(track2);
+        if (track) MIX_DestroyTrack(track);
+        if (mixer) MIX_DestroyMixer(mixer);
+        MIX_Quit();
+        SDL_Quit();
     }
+
     TEST(SDL3, Playing_Wav)
     {
         //if (!SDL_Init(SDL_INIT_AUDIO))

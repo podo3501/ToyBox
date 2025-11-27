@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="5" failures="0" disabled="0" errors="0" time="0.001" timestamp="2025-11-27T07:31:18.382" name="AllTests">
-  <testsuite name="SerializerIOT" tests="5" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-11-27T07:31:18.382">
-    <testcase name="Process_Layout" status="run" result="completed" time="0" timestamp="2025-11-27T07:31:18.382" classname="SerializerIOT" />
-    <testcase name="Process_MapData" status="run" result="completed" time="0" timestamp="2025-11-27T07:31:18.382" classname="SerializerIOT" />
-    <testcase name="Process_SvmapMap" status="run" result="completed" time="0" timestamp="2025-11-27T07:31:18.383" classname="SerializerIOT" />
-    <testcase name="Process_VectorData" status="run" result="completed" time="0" timestamp="2025-11-27T07:31:18.383" classname="SerializerIOT" />
-    <testcase name="Process_VectorUniqueData" status="run" result="completed" time="0" timestamp="2025-11-27T07:31:18.383" classname="SerializerIOT" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="10.087" timestamp="2025-11-27T22:03:42.095" name="AllTests">
+  <testsuite name="SDL3" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="10.086" timestamp="2025-11-27T22:03:42.095">
+    <testcase name="Playing_Ogg" status="run" result="completed" time="10.086" timestamp="2025-11-27T22:03:42.095" classname="SDL3" />
   </testsuite>
 </testsuites>

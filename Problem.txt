@@ -313,3 +313,28 @@ tracy::ShutdownProfiler();
  정상동작 안하는 경우가 있는데, 이것은 ODR 위반이다. tdd에서 주로 mock할때 클래스 이름을 똑같이 사용하는
  경우가 빈번한데, 이때 발생하기 쉽다. 따라서 tdd에서도 mock 클래스를 만들때 이름이 겹치지 않도록 주의가
  요구된다.
+
+ 깃헙에서 최신 SDL3을 다운받는다. verify 된걸로 받는다. 추후에 stable 버전이 나오면 그것을 받아야 한다.
+최신 SDL3를 받아서 cmake로 솔루션 파일을 만든다. 릴리즈로 빌드 시키고 그걸 가지고 install 해야 한다. mixer가 아직 정식이 아니기 때문에 install 하지 않으면 연결이 안되는 듯 하다.
+cmake -S . -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="D:/ProgrammingStudy/ToyBox/ThirdParty/SDL3"
+cmake --build build --config Release
+cmake --install build
+깃헙에서 최신 SDL3_mixer를 다운받는다. verify 된걸로 받는다. 추후에 stable 버전이 나오면 그것을 받아야 한다.
+/external 폴더로 들어가서 download.sh를 실행시켜서 ogg 및 관련 파일을 다운로드 한다.
+cmake -S . -B build -DCMAKE_PREFIX_PATH="D:/ProgrammingStudy/ToyBox/ThirdParty/SDL3" -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DSDLMIXER_VENDORED=ON
+-DSDLMIXER_VENDORED=ON 이 옵션은 ogg 같은 것을 쓴다면 on 기존에 ogg가 프로젝트에 붙어 있다면 OFF를 해서 기존의 것과 연결해야 한다.
+-DBUILD_SHARED_LIBS=OFF SDL3가 lib만 쓴다면 이 옵션을 걸어주어야 한다.
+프로젝트가 생성되면 Release로 빌드한다.
+include 폴더에 SDL_mixer.h 를 카피해 준다.
+lib폴더에 빌드하고 나온 SDL3_mixer-static.lib를 카피해 준다.
+순서
+1. 깃헙에서든 어디든 SDL3를 다운받는다.
+2. cmake -S . -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="D:/ProgrammingStudy/ToyBox/ThirdParty/SDL3"
+3. cmake --build build --config Release
+4. cmake --install build
+5. 깃헙에서든 어디든 SDL3_mixer를 다운받는다.
+6. /external 폴더로 들어가서 download.sh를 실행(ogg 및 관련 파일을 다운로드 한다)
+7. cmake -S . -B build -DCMAKE_PREFIX_PATH="D:/ProgrammingStudy/ToyBox/ThirdParty/SDL3" -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DSDLMIXER_VENDORED=ON
+8. .sin 을 열어서 Release 빌드.
+9. install 하고 생긴 폴더인 SDL3/include 폴더에 SDL_mixer.h 를 카피.
+10. lib폴더에 빌드하고 나온 SDL3_mixer-static.lib를 카피.
