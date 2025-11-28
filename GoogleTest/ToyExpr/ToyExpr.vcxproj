@@ -127,6 +127,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ThirdParty\SDL3_Audio.h" />
+    <ClInclude Include="ThirdParty\SDL3_AudioManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CodeLab\CPP.cpp" />
@@ -142,8 +143,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ThirdParty\DirectXTK12.cpp" />
-    <ClCompile Include="ThirdParty\SDL3.cpp" />
     <ClCompile Include="ThirdParty\SDL3_Audio.cpp" />
+    <ClCompile Include="ThirdParty\SDL3_AudioManager.cpp" />
     <ClCompile Include="Utility\Client.cpp" />
     <ClCompile Include="Utility\Core.cpp" />
   </ItemGroup>

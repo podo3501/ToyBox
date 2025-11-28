@@ -2,11 +2,11 @@
 #include "SDL3/SDL_audio.h"
 
 enum class AudioGroupID;
-class AudioBuffer
+class EffectSoundBuffer
 {
 public:
-	AudioBuffer();
-	bool loadFromFile(const string& filename, AudioGroupID groupID);
+	EffectSoundBuffer();
+	bool LoadFromFile(const string& filename, AudioGroupID groupID, float volume);
 	bool SetVolume(float volume);
 	void Play();
 	bool IsPlaying() const noexcept;

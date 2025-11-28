@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SDLAudioManager.h"
-#include "AudioBuffer.h"
+#include "EffectSound.h"
+#include "NormalSound.h"
 #include "SDL3/SDL_init.h"
 
 struct AudioGroup
@@ -9,13 +10,15 @@ struct AudioGroup
 };
 
 SDLAudioManager::~SDLAudioManager() { SDL_QuitSubSystem(SDL_INIT_AUDIO); }
-SDLAudioManager::SDLAudioManager() = default;
+SDLAudioManager::SDLAudioManager() :
+	m_effectSound{ make_unique<EffectSound>() },
+	m_normalSound{ make_unique<NormalSound>() }
+{}
+
 bool SDLAudioManager::Initialize()
 {
-	bool isInit = SDL_WasInit(SDL_INIT_AUDIO) & SDL_INIT_AUDIO;
-	if (isInit) return true;
-
-	ReturnIfFalse(SDL_InitSubSystem(SDL_INIT_AUDIO));
+	ReturnIfFalse(m_effectSound->Initialize());
+	ReturnIfFalse(m_normalSound->Initialize());
 	CreateAudioGroup();
 	return true;
 }
@@ -26,22 +29,28 @@ void SDLAudioManager::CreateAudioGroup() noexcept
 		m_audioGroups[static_cast<AudioGroupID>(id)] = make_unique<AudioGroup>();
 }
 
-bool SDLAudioManager::LoadWav(const string& filename, AudioGroupID groupID)
+static bool IsWav(const string& filename)
 {
-	AudioBuffer buffer;
-	ReturnIfFalse(buffer.loadFromFile(filename, groupID));
+	string lower = filename;
+	ranges::transform(lower, lower.begin(), [](unsigned char c) { return tolower(c); });
 
-	m_audioBuffers.insert({ filename, move(buffer) });
-	return true;
+	return lower.ends_with(".wav");
+}
+
+bool SDLAudioManager::LoadSound(const string& filename, AudioGroupID groupID)
+{
+	if (IsWav(filename))
+		return m_effectSound->LoadWav(filename, groupID, GetVolume(groupID));
+	else
+		return m_normalSound->LoadSound(filename, groupID, GetVolume(groupID));
 }
 
 bool SDLAudioManager::Unload(const string& filename) noexcept
 {
-	auto it = m_audioBuffers.find(filename);
-	if (it == m_audioBuffers.end()) return false;
+	bool esUnload = m_effectSound->Unload(filename);
+	if (esUnload) return true;
 
-	m_audioBuffers.erase(it);
-	return true;
+	return m_normalSound->Unload(filename);
 }
 
 void SDLAudioManager::SetVolume(AudioGroupID groupID, float volume) noexcept
@@ -49,13 +58,8 @@ void SDLAudioManager::SetVolume(AudioGroupID groupID, float volume) noexcept
 	auto& audioGroup = m_audioGroups[groupID];
 	audioGroup->volume = volume;
 
-	for (auto& buffer : m_audioBuffers | views::values)
-	{
-		if (!buffer.IsPlaying()) continue;
-		if (buffer.GetGroupID() != groupID) continue;
-
-		buffer.SetVolume(volume);
-	}
+	m_effectSound->SetVolume(groupID, volume);
+	m_normalSound->SetVolume(groupID, volume);
 }
 
 float SDLAudioManager::GetVolume(AudioGroupID groupID) const noexcept
@@ -69,30 +73,23 @@ float SDLAudioManager::GetVolume(AudioGroupID groupID) const noexcept
 
 bool SDLAudioManager::Play(const string& filename)
 {
-	auto it = m_audioBuffers.find(filename);
-	if (it == m_audioBuffers.end()) return false;
+	bool esPlay = m_effectSound->Play(filename);
+	if (esPlay) return true;
 
-	auto& buffer = it->second;
-	ReturnIfFalse(buffer.SetVolume(GetVolume(buffer.GetGroupID())));
-	buffer.Play();
-	return true;
+	return m_normalSound->Play(filename);
 }
 
 PlayState SDLAudioManager::GetPlayState(const string& filename)
 {
-	auto it = m_audioBuffers.find(filename);
-	if (it == m_audioBuffers.end()) return PlayState::NotLoaded;
+	PlayState esState = m_effectSound->GetPlayState(filename);
+	if (esState != PlayState::NotLoaded) return esState;
 
-	return it->second.IsPlaying() ? PlayState::Playing : PlayState::Stopped;
+	return m_normalSound->GetPlayState(filename);
 }
 
 void SDLAudioManager::Update() noexcept
 {
-	for (auto& buffer : m_audioBuffers | views::values)
-	{
-		if (!buffer.IsPlaying()) continue;
-		buffer.Update();
-	}
+	m_effectSound->Update();
 }
 
 unique_ptr<IAudioManager> CreateAudioManager()

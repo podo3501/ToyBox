@@ -23,7 +23,7 @@ struct IAudioManager
 {
 	virtual ~IAudioManager() = default;
 	virtual bool Initialize() = 0;
-	virtual bool LoadWav(const string& filename, AudioGroupID groupID) = 0;
+	virtual bool LoadSound(const string& filename, AudioGroupID groupID) = 0;
 	virtual bool Unload(const string& filename) noexcept = 0;
 	virtual void SetVolume(AudioGroupID groupID, float volume) noexcept = 0;
 	virtual bool Play(const string& filename) = 0;

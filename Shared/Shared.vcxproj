@@ -37,7 +37,10 @@
     <ClInclude Include="SerializerIO\Storage\MemoryStorage.h" />
     <ClInclude Include="SerializerIO\Traits\Traits.h" />
     <ClInclude Include="SerializerIO\Traits\TraitsHelper.hpp" />
-    <ClInclude Include="System\Audio\AudioBuffer.h" />
+    <ClInclude Include="System\Audio\EffectSoundBuffer.h" />
+    <ClInclude Include="System\Audio\EffectSound.h" />
+    <ClInclude Include="System\Audio\NormalSound.h" />
+    <ClInclude Include="System\Audio\NormalSoundBuffer.h" />
     <ClInclude Include="System\Audio\SDLAudioManager.h" />
     <ClInclude Include="System\Input\InputManager.h" />
     <ClInclude Include="System\Public\IAudioManager.h" />
@@ -71,7 +74,10 @@
     <ClCompile Include="SerializerIO\Storage\FileStorage.cpp" />
     <ClCompile Include="SerializerIO\Storage\MemoryStorage.cpp" />
     <ClCompile Include="SerializerIO\Traits\Traits.cpp" />
-    <ClCompile Include="System\Audio\AudioBuffer.cpp" />
+    <ClCompile Include="System\Audio\EffectSoundBuffer.cpp" />
+    <ClCompile Include="System\Audio\EffectSound.cpp" />
+    <ClCompile Include="System\Audio\NormalSound.cpp" />
+    <ClCompile Include="System\Audio\NormalSoundBuffer.cpp" />
     <ClCompile Include="System\Audio\SDLAudioManager.cpp" />
     <ClCompile Include="System\Input\InputManager.cpp" />
     <ClCompile Include="Utils\GeometryExt.cpp" />

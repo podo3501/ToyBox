@@ -1,13 +1,13 @@
 #include "pch.h"
-#include "AudioBuffer.h"
+#include "EffectSoundBuffer.h"
 #include "../Public/IAudioManager.h"
 
-AudioBuffer::AudioBuffer() :
+EffectSoundBuffer::EffectSoundBuffer() :
 	m_data{ nullptr, [](Uint8* p) { SDL_free(p); } },
 	m_groupID{ AudioGroupID::None }
 {}
 
-bool AudioBuffer::loadFromFile(const string& filename, AudioGroupID groupID)
+bool EffectSoundBuffer::LoadFromFile(const string& filename, AudioGroupID groupID, float volume)
 {
 	Uint8* rawData = nullptr;
 	ReturnIfFalse(SDL_LoadWAV(filename.c_str(), &m_spec, &rawData, &m_length));
@@ -22,15 +22,16 @@ bool AudioBuffer::loadFromFile(const string& filename, AudioGroupID groupID)
 	}
 
 	m_groupID = groupID;
+	SetVolume(volume);
 	return true;
 }
 
-bool AudioBuffer::SetVolume(float volume)
+bool EffectSoundBuffer::SetVolume(float volume)
 {
 	return SDL_SetAudioStreamGain(m_stream, volume);
 }
 
-void AudioBuffer::Play()
+void EffectSoundBuffer::Play()
 {
 	PushChunk();
 
@@ -40,12 +41,12 @@ void AudioBuffer::Play()
 	}
 }
 
-bool AudioBuffer::IsPlaying() const noexcept
+bool EffectSoundBuffer::IsPlaying() const noexcept
 {
 	return m_resumed;
 }
 
-void AudioBuffer::Update()
+void EffectSoundBuffer::Update()
 {
 	if (m_offset >= m_length)
 	{
@@ -56,17 +57,17 @@ void AudioBuffer::Update()
 	PushChunk();
 }
 
-void AudioBuffer::ResetPlay() noexcept
+void EffectSoundBuffer::ResetPlay() noexcept
 {
 	m_offset = 0;
 	m_resumed = false;
 }
 
-void AudioBuffer::PushChunk()
+void EffectSoundBuffer::PushChunk()
 {
 	Uint32 chunk = std::min(512u, m_length - m_offset);
 	SDL_PutAudioStreamData(m_stream, m_data.get() + m_offset, chunk);
 	m_offset += chunk;
 }
 
-AudioGroupID AudioBuffer::GetGroupID() const noexcept { return m_groupID; }
+AudioGroupID EffectSoundBuffer::GetGroupID() const noexcept { return m_groupID; }

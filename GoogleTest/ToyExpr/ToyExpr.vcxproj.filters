@@ -15,7 +15,7 @@
     <ClCompile Include="CodeLab\Pattern.cpp">
       <Filter>CodeLab</Filter>
     </ClCompile>
-    <ClCompile Include="ThirdParty\SDL3.cpp">
+    <ClCompile Include="ThirdParty\SDL3_Audio.cpp">
       <Filter>ThirdParty</Filter>
     </ClCompile>
     <ClCompile Include="Integration\Application.cpp">
@@ -30,7 +30,7 @@
     <ClCompile Include="ThirdParty\DirectXTK12.cpp">
       <Filter>ThirdParty</Filter>
     </ClCompile>
-    <ClCompile Include="ThirdParty\SDL3_Audio.cpp">
+    <ClCompile Include="ThirdParty\SDL3_AudioManager.cpp">
       <Filter>ThirdParty</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,6 +42,9 @@
     </ClInclude>
     <ClInclude Include="Fixture\FixtureSuite.h">
       <Filter>Fixture</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\SDL3_AudioManager.h">
+      <Filter>ThirdParty</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\SDL3_Audio.h">
       <Filter>ThirdParty</Filter>

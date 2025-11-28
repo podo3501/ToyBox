@@ -98,7 +98,16 @@
     <ClInclude Include="SerializerIO\Storage\MemoryStorage.h">
       <Filter>SerializerIO\Storage</Filter>
     </ClInclude>
-    <ClInclude Include="System\Audio\AudioBuffer.h">
+    <ClInclude Include="System\Audio\EffectSoundBuffer.h">
+      <Filter>System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Audio\EffectSound.h">
+      <Filter>System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Audio\NormalSound.h">
+      <Filter>System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Audio\NormalSoundBuffer.h">
       <Filter>System\Audio</Filter>
     </ClInclude>
   </ItemGroup>
@@ -158,7 +167,16 @@
     <ClCompile Include="SerializerIO\Storage\MemoryStorage.cpp">
       <Filter>SerializerIO\Storage</Filter>
     </ClCompile>
-    <ClCompile Include="System\Audio\AudioBuffer.cpp">
+    <ClCompile Include="System\Audio\EffectSoundBuffer.cpp">
+      <Filter>System\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Audio\EffectSound.cpp">
+      <Filter>System\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Audio\NormalSound.cpp">
+      <Filter>System\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Audio\NormalSoundBuffer.cpp">
       <Filter>System\Audio</Filter>
     </ClCompile>
   </ItemGroup>
