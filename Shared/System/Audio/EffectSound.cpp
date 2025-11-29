@@ -1,16 +1,18 @@
 #include "pch.h"
 #include "EffectSound.h"
 #include "EffectSoundBuffer.h"
-#include "../Public/IAudioManager.h"
+#include "../Public/AudioTypes.h"
 #include "SDL3/SDL_init.h"
 
-EffectSound::~EffectSound() = default;
+EffectSound::~EffectSound()
+{
+	m_effectSoundBuffers.clear();
+	SDL_QuitSubSystem(SDL_INIT_AUDIO);
+}
 EffectSound::EffectSound() = default;
+
 bool EffectSound::Initialize()
 {
-	bool isInit = SDL_WasInit(SDL_INIT_AUDIO) & SDL_INIT_AUDIO;
-	if (isInit) return true;
-
 	return SDL_InitSubSystem(SDL_INIT_AUDIO);
 }
 

@@ -22,6 +22,7 @@ void SDL3_AudioManager::SetUp()
 
 void SDL3_AudioManager::TearDown()
 {
+	m_audioManager.reset();
 	SDL_Quit();
 }
 

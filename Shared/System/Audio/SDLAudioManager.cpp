@@ -9,7 +9,12 @@ struct AudioGroup
 	float volume{ 1.f };
 };
 
-SDLAudioManager::~SDLAudioManager() { SDL_QuitSubSystem(SDL_INIT_AUDIO); }
+SDLAudioManager::~SDLAudioManager() 
+{ 
+	m_normalSound.reset();
+	m_effectSound.reset();
+	SDL_Quit();
+}
 SDLAudioManager::SDLAudioManager() :
 	m_effectSound{ make_unique<EffectSound>() },
 	m_normalSound{ make_unique<NormalSound>() }
@@ -17,6 +22,10 @@ SDLAudioManager::SDLAudioManager() :
 
 bool SDLAudioManager::Initialize()
 {
+	bool isInit = SDL_WasInit(SDL_INIT_AUDIO) & SDL_INIT_AUDIO;
+	if (isInit) return true;
+
+	ReturnIfFalse(SDL_Init(SDL_INIT_AUDIO));
 	ReturnIfFalse(m_effectSound->Initialize());
 	ReturnIfFalse(m_normalSound->Initialize());
 	CreateAudioGroup();

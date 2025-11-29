@@ -43,6 +43,7 @@
     <ClInclude Include="System\Audio\NormalSoundBuffer.h" />
     <ClInclude Include="System\Audio\SDLAudioManager.h" />
     <ClInclude Include="System\Input\InputManager.h" />
+    <ClInclude Include="System\Public\AudioTypes.h" />
     <ClInclude Include="System\Public\IAudioManager.h" />
     <ClInclude Include="System\Public\IInputManager.h" />
     <ClInclude Include="System\StepTimer.h" />

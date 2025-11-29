@@ -110,6 +110,9 @@
     <ClInclude Include="System\Audio\NormalSoundBuffer.h">
       <Filter>System\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="System\Public\AudioTypes.h">
+      <Filter>System\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -216,6 +219,9 @@
     </Filter>
     <Filter Include="SerializerIO\Storage">
       <UniqueIdentifier>{c64a7941-9810-432c-8f04-eef733ba5b29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{f9805421-23e1-48e8-b12f-166e780eef9e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

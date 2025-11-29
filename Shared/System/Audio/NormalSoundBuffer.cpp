@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "NormalSoundBuffer.h"
-#include "../Public/IAudioManager.h"
+#include "../Public/AudioTypes.h"
 #include "SDL3_mixer/SDL_mixer.h"
 
 NormalSoundBuffer::~NormalSoundBuffer()
 {
-	if (m_audio) MIX_DestroyAudio(m_audio);
 	if (m_track) MIX_DestroyTrack(m_track);
+	if (m_audio) MIX_DestroyAudio(m_audio);
 }
 
 NormalSoundBuffer::NormalSoundBuffer(MIX_Mixer* mixer) :
@@ -26,7 +26,7 @@ bool NormalSoundBuffer::LoadFromFile(const string& filename, AudioGroupID groupI
 	SetVolume(volume);
 
 	m_options = SDL_CreateProperties();
-	SDL_SetNumberProperty(m_options, MIX_PROP_PLAY_LOOPS_NUMBER, 1);
+	SDL_SetNumberProperty(m_options, MIX_PROP_PLAY_LOOPS_NUMBER, 0);
 	return true;
 }
 

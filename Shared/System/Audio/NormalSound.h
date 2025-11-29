@@ -17,7 +17,7 @@ public:
 	void SetVolume(AudioGroupID groupID, float volume) noexcept;
 
 private:
+	unordered_map<string, unique_ptr<NormalSoundBuffer>> m_normalSoundBuffers;
 	bool m_init{ false };
 	MIX_Mixer* m_mixer{ nullptr };
-	unordered_map<string, NormalSoundBuffer> m_normalSoundBuffers;
 };
