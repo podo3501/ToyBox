@@ -48,6 +48,7 @@
     <ClInclude Include="System\Public\IInputManager.h" />
     <ClInclude Include="System\StepTimer.h" />
     <ClInclude Include="Utils\Common.h" />
+    <ClInclude Include="Utils\EnumHelpers.h" />
     <ClInclude Include="Utils\GeometryExt.h" />
     <ClInclude Include="Utils\Memory.h" />
     <ClInclude Include="Utils\Profiler.h" />
@@ -81,6 +82,7 @@
     <ClCompile Include="System\Audio\NormalSoundBuffer.cpp" />
     <ClCompile Include="System\Audio\SDLAudioManager.cpp" />
     <ClCompile Include="System\Input\InputManager.cpp" />
+    <ClCompile Include="Utils\EnumHelpers.cpp" />
     <ClCompile Include="Utils\GeometryExt.cpp" />
     <ClCompile Include="Utils\Profiler.cpp" />
     <ClCompile Include="Utils\StlExt.cpp" />

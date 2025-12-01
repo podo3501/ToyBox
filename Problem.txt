@@ -338,3 +338,10 @@ lib폴더에 빌드하고 나온 SDL3_mixer-static.lib를 카피해 준다.
 8. .sin 을 열어서 Release 빌드.
 9. install 하고 생긴 폴더인 SDL3/include 폴더에 SDL_mixer.h 를 카피.
 10. lib폴더에 빌드하고 나온 SDL3_mixer-static.lib를 카피.
+
+파이선 exe 만드는 법.
+PyInstaller 설치
+pip install pyinstaller
+EXE 만들기
+pyinstaller --onefile 파일명.py
+dist 폴더에 exe가 생성됨.

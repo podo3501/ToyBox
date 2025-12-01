@@ -33,6 +33,9 @@
     <ClCompile Include="ThirdParty\SDL3_AudioManager.cpp">
       <Filter>ThirdParty</Filter>
     </ClCompile>
+    <ClCompile Include="ThirdParty\SoundTableReaderT.cpp">
+      <Filter>ThirdParty</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -47,6 +50,9 @@
       <Filter>ThirdParty</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\SDL3_Audio.h">
+      <Filter>ThirdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\SoundTableReaderT.h">
       <Filter>ThirdParty</Filter>
     </ClInclude>
   </ItemGroup>

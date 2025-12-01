@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToyExpr", "GoogleTest\ToyEx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToyShared", "GoogleTest\ToyShared\ToyShared.vcxproj", "{F8CF8DF3-2459-423E-B660-44CD4C177506}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "SoundTableConverter", "SoundTableConverter\SoundTableConverter.pyproj", "{21B4755D-CE45-4103-8F24-C3334F95F478}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +183,14 @@ Global
 		{F8CF8DF3-2459-423E-B660-44CD4C177506}.Release|x64.Build.0 = Release|x64
 		{F8CF8DF3-2459-423E-B660-44CD4C177506}.Release|x86.ActiveCfg = Release|Win32
 		{F8CF8DF3-2459-423E-B660-44CD4C177506}.Release|x86.Build.0 = Release|Win32
+		{21B4755D-CE45-4103-8F24-C3334F95F478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21B4755D-CE45-4103-8F24-C3334F95F478}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{21B4755D-CE45-4103-8F24-C3334F95F478}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{21B4755D-CE45-4103-8F24-C3334F95F478}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{21B4755D-CE45-4103-8F24-C3334F95F478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21B4755D-CE45-4103-8F24-C3334F95F478}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{21B4755D-CE45-4103-8F24-C3334F95F478}.Release|x64.ActiveCfg = Release|Any CPU
+		{21B4755D-CE45-4103-8F24-C3334F95F478}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

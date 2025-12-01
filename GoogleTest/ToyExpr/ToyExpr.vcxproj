@@ -128,6 +128,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="ThirdParty\SDL3_Audio.h" />
     <ClInclude Include="ThirdParty\SDL3_AudioManager.h" />
+    <ClInclude Include="ThirdParty\SoundTableReaderT.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CodeLab\CPP.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="ThirdParty\DirectXTK12.cpp" />
     <ClCompile Include="ThirdParty\SDL3_Audio.cpp" />
     <ClCompile Include="ThirdParty\SDL3_AudioManager.cpp" />
+    <ClCompile Include="ThirdParty\SoundTableReaderT.cpp" />
     <ClCompile Include="Utility\Client.cpp" />
     <ClCompile Include="Utility\Core.cpp" />
   </ItemGroup>

@@ -110,9 +110,6 @@
     <ClInclude Include="UserInterface\UIComponent\UIUtility.h">
       <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\EnumUtility.h">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureBinderHelper.h">
       <Filter>UserInterface\TextureResourceBinder</Filter>
     </ClInclude>
@@ -331,9 +328,6 @@
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\UIUtility.cpp">
-      <Filter>UserInterface\UIComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\EnumUtility.cpp">
       <Filter>UserInterface\UIComponent</Filter>
     </ClCompile>
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureBinderHelper.cpp">

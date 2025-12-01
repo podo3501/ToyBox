@@ -1,5 +1,5 @@
 #pragma once
-#include "EnumUtility.h"
+#include "Shared/Utils/EnumHelpers.h"
 
 enum class ComponentID : int
 {

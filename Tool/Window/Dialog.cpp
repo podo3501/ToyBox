@@ -2,7 +2,7 @@
 #include "Dialog.h"
 #include <shobjidl.h>
 #include <wrl/wrappers/corewrappers.h>
-#include "Toy/UserInterface/UIComponent/EnumUtility.h"
+#include "Shared/Utils/EnumHelpers.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 
 template<>

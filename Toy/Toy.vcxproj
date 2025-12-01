@@ -280,7 +280,6 @@
     <ClInclude Include="UserInterface\UIComponent\Components\ScrollBar.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\TextArea.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponent.h" />
-    <ClInclude Include="UserInterface\UIComponent\EnumUtility.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\BaseTraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverser.h" />
@@ -343,7 +342,6 @@
     <ClCompile Include="UserInterface\UIComponent\Components\ScrollBar.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\TextArea.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponent.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\EnumUtility.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\BaseTraverser.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverser.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverser.cpp" />
