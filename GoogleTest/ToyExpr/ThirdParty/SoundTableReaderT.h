@@ -1,4 +1,5 @@
 #pragma once
+#include "Shared/System/Audio/SoundTableReader.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 
@@ -9,6 +10,7 @@ protected:
 
 	unique_ptr<Environment> m_environment;
 	unique_ptr<IJsonStorage> m_jsonStorage;
+	SoundTableReader m_reader;
 };
 
 void SoundTableReaderT::SetUp()

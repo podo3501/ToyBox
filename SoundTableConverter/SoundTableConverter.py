@@ -29,8 +29,8 @@ def csv_to_json(csv_path, json_path):
 
             sound_dict[key] = entry
 
-    # 최상위 키 "SoundEntry"로 감싸기
-    final_json = {"Entries": sound_dict}
+    # 최상위 키 "SoundInfo"로 감싸기
+    final_json = {"Infos": sound_dict}
 
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(final_json, f, ensure_ascii=False, indent=4)

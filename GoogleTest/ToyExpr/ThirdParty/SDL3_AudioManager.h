@@ -1,5 +1,6 @@
 #pragma once
 #include "Shared/System/Public/IAudioManager.h"
+#include "Shared/System/Audio/ISoundTableReader.h"
 #include "SDL3/SDL_Init.h"
 
 class SDL3_AudioManager : public ::testing::Test
@@ -15,7 +16,8 @@ protected:
 
 void SDL3_AudioManager::SetUp()
 {
-	m_audioManager = CreateAudioManager();
+	auto soundReader = CreateSoundTableReader();
+	m_audioManager = CreateAudioManager(move(soundReader));
 	m_audioManager->Initialize();
 	//m_audioManager->SetVolume(AudioGroupID::Master, 0.f);
 }

@@ -37,11 +37,15 @@
     <ClInclude Include="SerializerIO\Storage\MemoryStorage.h" />
     <ClInclude Include="SerializerIO\Traits\Traits.h" />
     <ClInclude Include="SerializerIO\Traits\TraitsHelper.hpp" />
+    <ClInclude Include="System\Audio\AudioTypeHelpers.h" />
     <ClInclude Include="System\Audio\EffectSoundBuffer.h" />
     <ClInclude Include="System\Audio\EffectSound.h" />
+    <ClInclude Include="System\Audio\ISoundTableReader.h" />
     <ClInclude Include="System\Audio\NormalSound.h" />
     <ClInclude Include="System\Audio\NormalSoundBuffer.h" />
     <ClInclude Include="System\Audio\SDLAudioManager.h" />
+    <ClInclude Include="System\Audio\SoundTableReader.h" />
+    <ClInclude Include="System\Audio\SoundTraits.h" />
     <ClInclude Include="System\Input\InputManager.h" />
     <ClInclude Include="System\Public\AudioTypes.h" />
     <ClInclude Include="System\Public\IAudioManager.h" />
@@ -81,6 +85,8 @@
     <ClCompile Include="System\Audio\NormalSound.cpp" />
     <ClCompile Include="System\Audio\NormalSoundBuffer.cpp" />
     <ClCompile Include="System\Audio\SDLAudioManager.cpp" />
+    <ClCompile Include="System\Audio\SoundTableReader.cpp" />
+    <ClCompile Include="System\Audio\SoundTraits.cpp" />
     <ClCompile Include="System\Input\InputManager.cpp" />
     <ClCompile Include="Utils\EnumHelpers.cpp" />
     <ClCompile Include="Utils\GeometryExt.cpp" />

@@ -5,7 +5,8 @@ namespace ThirdParty
 {
 	TEST_F(SDL3_AudioManager, LoadSound_Ogg)
 	{
-		EXPECT_TRUE(m_audioManager->LoadSound(GetOggFilename(), AudioGroupID::BGM));
+		//EXPECT_TRUE(m_audioManager->LoadSound(GetOggFilename(), AudioGroupID::BGM));
+		EXPECT_TRUE(m_audioManager->LoadSound("TestOgg_01", AudioGroupID::BGM));
 	}
 
 	TEST_F(SDL3_AudioManager, LoadSound_Wav)

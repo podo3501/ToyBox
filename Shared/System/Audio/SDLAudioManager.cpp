@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SDLAudioManager.h"
+#include "ISoundTableReader.h"
 #include "EffectSound.h"
 #include "NormalSound.h"
 #include "SDL3/SDL_init.h"
@@ -13,9 +14,12 @@ SDLAudioManager::~SDLAudioManager()
 { 
 	m_normalSound.reset();
 	m_effectSound.reset();
+	m_reader.reset();
 	SDL_Quit();
 }
-SDLAudioManager::SDLAudioManager() :
+
+SDLAudioManager::SDLAudioManager(unique_ptr<ISoundTableReader> soundReader) :
+	m_reader{ move(soundReader) },
 	m_effectSound{ make_unique<EffectSound>() },
 	m_normalSound{ make_unique<NormalSound>() }
 {}
@@ -52,6 +56,21 @@ bool SDLAudioManager::LoadSound(const string& filename, AudioGroupID groupID)
 		return m_effectSound->LoadWav(filename, groupID, GetVolume(groupID));
 	else
 		return m_normalSound->LoadSound(filename, groupID, GetVolume(groupID));
+}
+
+bool SDLAudioManager::LoadSound(const string& index)
+{
+	auto info = m_reader->GetInfo(index);
+	if (!info) return false;
+
+	const auto& filename = info->filename;
+	auto groupID = info->groupID;
+	auto volume = GetVolume(groupID);
+
+	if (IsWav(filename))
+		return m_effectSound->LoadWav(filename, groupID, volume);
+	else
+		return m_normalSound->LoadSound(filename, groupID, volume);
 }
 
 bool SDLAudioManager::Unload(const string& filename) noexcept
@@ -101,7 +120,7 @@ void SDLAudioManager::Update() noexcept
 	m_effectSound->Update();
 }
 
-unique_ptr<IAudioManager> CreateAudioManager()
+unique_ptr<IAudioManager> CreateAudioManager(unique_ptr<ISoundTableReader> soundReader)
 {
-	return make_unique<SDLAudioManager>();
+	return make_unique<SDLAudioManager>(move(soundReader));
 }

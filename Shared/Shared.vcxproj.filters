@@ -116,6 +116,18 @@
     <ClInclude Include="Utils\EnumHelpers.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="System\Audio\SoundTableReader.h">
+      <Filter>System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Audio\SoundTraits.h">
+      <Filter>System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Audio\AudioTypeHelpers.h">
+      <Filter>System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Audio\ISoundTableReader.h">
+      <Filter>System\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -187,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="Utils\EnumHelpers.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Audio\SoundTableReader.cpp">
+      <Filter>System\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Audio\SoundTraits.cpp">
+      <Filter>System\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
