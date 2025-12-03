@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "Environment.h"
+#include "Utils/StringExt.h"
 
-Environment::Environment(const wstring& resourcePath, const Vector2& resolution) :
+Environment::Environment(const wstring& resourcePathW, const Vector2& resolution) :
 	m_fontPath{ L"UI/Font/" },
-	m_resourcePath{ resourcePath },
+	m_resourcePathW{ resourcePathW },
+	m_resourcePath{ WStringToString(resourcePathW) },
 	m_resolution{ resolution }
 {}
 
@@ -13,12 +15,23 @@ Rectangle Environment::GetRectResolution() const noexcept
 	return rect;
 }
 
-wstring Environment::GetResourceFullFilename(const wstring& filename) const noexcept
+wstring Environment::GetResourceFullFilenameW(const wstring& filename) const noexcept
 {
 	if (filesystem::path(filename).is_absolute())
 		return filename;
 
-	if (filename.find(m_resourcePath) == std::wstring::npos)
+	if (filename.find(m_resourcePathW) == std::wstring::npos)
+		return m_resourcePathW + filename;
+
+	return filename;
+}
+
+string Environment::GetResourceFullFilename(const string& filename) const noexcept
+{
+	if (filesystem::path(filename).is_absolute())
+		return filename;
+
+	if (filename.find(m_resourcePath) == std::string::npos)
 		return m_resourcePath + filename;
 
 	return filename;
@@ -35,7 +48,7 @@ wstring Environment::GetRelativePath(const wstring& fullPath) const noexcept
 	if (fullPath.empty()) return {};
 
 	filesystem::path full = filesystem::absolute(fullPath);
-	filesystem::path base = filesystem::absolute(m_resourcePath);
+	filesystem::path base = filesystem::absolute(m_resourcePathW);
 
 	wstring relativePath = fullPath;
 	if (full.wstring().find(base.wstring()) != wstring::npos)

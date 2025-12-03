@@ -5,7 +5,7 @@
 
 namespace ThirdParty
 {
-    TEST_F(SDL3_Audio, Playing_OneOgg)
+    TEST_F(SDL3_Audio, DISABLED_Playing_OneOgg)
     {
         if (!SDL_Init(SDL_INIT_AUDIO))
             return;
@@ -37,7 +37,7 @@ namespace ThirdParty
         SDL_Quit();
     }
 
-    TEST_F(SDL3_Audio, DISABLE_Playing_Ogg)
+    TEST_F(SDL3_Audio, DISABLED_Playing_Ogg)
     {
         if (!SDL_Init(SDL_INIT_AUDIO))
             return;

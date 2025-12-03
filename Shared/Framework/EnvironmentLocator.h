@@ -33,7 +33,9 @@ inline const std::wstring& GetResourceFontPath() noexcept { return EnvCall(&Envi
 inline const DirectX::SimpleMath::Vector2& GetResolution() noexcept { return EnvCall(&Environment::GetResolution); }
 inline DirectX::SimpleMath::Rectangle GetRectResolution() noexcept { return EnvCall(&Environment::GetRectResolution); }
 
-inline std::wstring GetResourceFullFilename(const std::wstring& filename) noexcept { 
+inline std::wstring GetResourceFullFilenameW(const std::wstring& filename) noexcept { 
+    return EnvCall(&Environment::GetResourceFullFilenameW, filename); }
+inline std::string GetResourceFullFilename(const std::string& filename) noexcept {
     return EnvCall(&Environment::GetResourceFullFilename, filename); }
 inline std::wstring GetRelativePath(const std::wstring& fullPath) noexcept {
     return EnvCall(&Environment::GetRelativePath, fullPath);

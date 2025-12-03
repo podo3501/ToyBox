@@ -5,7 +5,7 @@
 
 unique_ptr<ostream> FileStorage::OpenWrite(const wstring& filename)
 {
-    auto path = GetResourceFullFilename(filename);
+    auto path = GetResourceFullFilenameW(filename);
     auto file = make_unique<ofstream>(path);
     if (!file->is_open())
         return nullptr;
@@ -14,7 +14,7 @@ unique_ptr<ostream> FileStorage::OpenWrite(const wstring& filename)
 
 unique_ptr<istream> FileStorage::OpenRead(const wstring& filename)
 {
-    auto path = GetResourceFullFilename(filename);
+    auto path = GetResourceFullFilenameW(filename);
     auto file = make_unique<ifstream>(path);
     if (!file->is_open())
         return nullptr;

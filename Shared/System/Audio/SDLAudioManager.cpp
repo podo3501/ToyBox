@@ -4,6 +4,7 @@
 #include "EffectSound.h"
 #include "NormalSound.h"
 #include "SDL3/SDL_init.h"
+#include "Shared/Framework/EnvironmentLocator.h"
 
 struct AudioGroup
 {
@@ -50,20 +51,12 @@ static bool IsWav(const string& filename)
 	return lower.ends_with(".wav");
 }
 
-bool SDLAudioManager::LoadSound(const string& filename, AudioGroupID groupID)
-{
-	if (IsWav(filename))
-		return m_effectSound->LoadWav(filename, groupID, GetVolume(groupID));
-	else
-		return m_normalSound->LoadSound(filename, groupID, GetVolume(groupID));
-}
-
 bool SDLAudioManager::LoadSound(const string& index)
 {
 	auto info = m_reader->GetInfo(index);
 	if (!info) return false;
 
-	const auto& filename = info->filename;
+	const auto& filename = GetResourceFullFilename(info->filename);
 	auto groupID = info->groupID;
 	auto volume = GetVolume(groupID);
 
@@ -73,12 +66,12 @@ bool SDLAudioManager::LoadSound(const string& index)
 		return m_normalSound->LoadSound(filename, groupID, volume);
 }
 
-bool SDLAudioManager::Unload(const string& filename) noexcept
+bool SDLAudioManager::Unload(const string& index) noexcept
 {
-	bool esUnload = m_effectSound->Unload(filename);
-	if (esUnload) return true;
+	const auto filename = GetFullFilename(index);
+	if (filename.empty()) return false;
 
-	return m_normalSound->Unload(filename);
+	return m_effectSound->Unload(filename) || m_normalSound->Unload(filename);
 }
 
 void SDLAudioManager::SetVolume(AudioGroupID groupID, float volume) noexcept
@@ -99,20 +92,31 @@ float SDLAudioManager::GetVolume(AudioGroupID groupID) const noexcept
 	return std::clamp(volume, 0.f, 1.f);
 }
 
-bool SDLAudioManager::Play(const string& filename)
+bool SDLAudioManager::Play(const string& index)
 {
-	bool esPlay = m_effectSound->Play(filename);
-	if (esPlay) return true;
+	const auto filename = GetFullFilename(index);
+	if (filename.empty()) return false;
 
-	return m_normalSound->Play(filename);
+	return m_effectSound->Play(filename) || m_normalSound->Play(filename);
 }
 
-PlayState SDLAudioManager::GetPlayState(const string& filename)
+PlayState SDLAudioManager::GetPlayState(const string& index)
 {
+	const auto filename = GetFullFilename(index);
+    if (filename.empty()) return PlayState::NotLoaded;
+
 	PlayState esState = m_effectSound->GetPlayState(filename);
 	if (esState != PlayState::NotLoaded) return esState;
 
 	return m_normalSound->GetPlayState(filename);
+}
+
+string SDLAudioManager::GetFullFilename(const string& index) const noexcept
+{
+	auto info = m_reader->GetInfo(index);
+	if (!info) return "";
+
+	return GetResourceFullFilename(info->filename);
 }
 
 void SDLAudioManager::Update() noexcept

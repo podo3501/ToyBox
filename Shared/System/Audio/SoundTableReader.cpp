@@ -22,7 +22,7 @@ SoundTableReader::SoundTableReader() = default;
 
 bool SoundTableReader::Read(const wstring& filename)
 {
-	auto fullFilename = GetResourceFullFilename(filename);
+	auto fullFilename = GetResourceFullFilenameW(filename);
 	return SerializerIO::ReadJsonFromFile(fullFilename, *this);
 }
 
