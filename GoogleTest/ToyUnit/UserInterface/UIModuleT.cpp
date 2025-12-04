@@ -9,13 +9,14 @@ class MockInput : public UIComponentStub, public IMouseEventReceiver
 public:
 	explicit MockInput(InputResult pressResult)
 	{
+		ON_CALL(*this, OnHover()).WillByDefault(testing::Return(pressResult));
 		ON_CALL(*this, OnPress(testing::_)).WillByDefault(testing::Return(pressResult));
 		ON_CALL(*this, OnWheel(testing::_)).WillByDefault(testing::Return(true));
 	}
 	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept override { return this; }
 
 	MOCK_METHOD(void, OnNormal, (), (noexcept));
-	MOCK_METHOD(void, OnHover, (), (noexcept));
+	MOCK_METHOD(InputResult, OnHover, (), (noexcept));
 	MOCK_METHOD(void, OnMove, (const XMINT2& pos), (noexcept));
 	MOCK_METHOD(InputResult, OnPress, (const XMINT2& pos), (noexcept));
 	MOCK_METHOD(void, OnHold, (const XMINT2& pos, bool inside), (noexcept));
@@ -57,8 +58,8 @@ namespace D::UserInterface
 	{
 		auto comp = AttachMockComponent<MockInputPropagate>(m_main);
 
-		EXPECT_CALL(*comp, OnHover()).Times(3); //UpdateMouseState 불릴때마다 호출
 		EXPECT_CALL(*comp, OnMove(testing::_)).Times(3);
+		EXPECT_CALL(*comp, OnHover()).Times(3); //UpdateMouseState 불릴때마다 호출
 		testing::InSequence seq;
 		EXPECT_CALL(*comp, OnPress(testing::_)).Times(1);
 		EXPECT_CALL(*comp, OnHold(testing::_, true)).Times(1);
@@ -72,8 +73,8 @@ namespace D::UserInterface
 		auto comp = AttachMockComponent<MockInputPropagate>(m_main);
 
 		testing::InSequence seq; //호출순서 검증
-		EXPECT_CALL(*comp, OnHover()).Times(1); //안에 있을때만 불리기 때문에 한번
 		EXPECT_CALL(*comp, OnMove(testing::_)).Times(1);
+		EXPECT_CALL(*comp, OnHover()).Times(1); //안에 있을때만 불리기 때문에 한번
 		EXPECT_CALL(*comp, OnPress(testing::_)).Times(1);
 		EXPECT_CALL(*comp, OnNormal()).Times(1); //영역 밖으로 나오면서 호출을 한번 한다.
 		EXPECT_CALL(*comp, OnHold(testing::_, false)).Times(1);

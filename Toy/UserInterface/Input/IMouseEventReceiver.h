@@ -12,7 +12,7 @@ struct IMouseEventReceiver
 {
 	virtual ~IMouseEventReceiver() = default;
 	virtual void OnNormal() noexcept {}
-	virtual void OnHover() noexcept {}
+	virtual InputResult OnHover() noexcept { return InputResult::None; } //밑에 컴포넌트까지 이벤트를 넘겨주지 않는다. 예를들면 OnHover 사운드가 중복해서 날 수 있다.
 	virtual void OnMove(const DirectX::XMINT2& pos) noexcept { pos; }
 	virtual InputResult OnPress(const DirectX::XMINT2& pos) noexcept { pos; return InputResult::None; }
 	virtual void OnHold(const DirectX::XMINT2& pos, bool inside) noexcept { pos; inside; }

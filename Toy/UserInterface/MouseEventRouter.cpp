@@ -20,10 +20,12 @@ void MouseEventRouter::UpdateMouseState() noexcept
 
 void MouseEventRouter::UpdateHoverState(vector<IMouseEventReceiver*> receivers, const XMINT2& pos) noexcept
 {
+	vector<IMouseEventReceiver*> hoveredReceivers;
 	for (auto& receiver : receivers)
 	{
-		receiver->OnHover(); //일단 다 호출하고나서
+		hoveredReceivers.push_back(receiver);
 		receiver->OnMove(pos);
+		if (receiver->OnHover() == InputResult::Consumed) break;
 	}
 
 	for (auto& prevComp : m_hoveredReceivers)
@@ -32,7 +34,7 @@ void MouseEventRouter::UpdateHoverState(vector<IMouseEventReceiver*> receivers, 
 			prevComp->OnNormal(); //영역이 아닌 애들은 OnNormal 호출
 	}
 
-	m_hoveredReceivers = receivers;
+	m_hoveredReceivers = hoveredReceivers;
 }
 
 void MouseEventRouter::ProcessCaptureComponent(const MouseState& mouseState) noexcept

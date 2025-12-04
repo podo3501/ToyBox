@@ -19,7 +19,7 @@ public:
 	virtual void ProcessIO(SerializerIO& serializer) override;
 	//IMouseEventReceiver
 	virtual void OnNormal() noexcept override;
-	virtual void OnHover() noexcept override;
+	virtual InputResult OnHover() noexcept override;
 	virtual InputResult OnPress(const XMINT2& pos) noexcept override;
 	virtual void OnHold(const XMINT2& pos, bool inside) noexcept override;
 	virtual void OnRelease(bool inside) noexcept override;

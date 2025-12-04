@@ -13,7 +13,7 @@ class MockReceiverComponent : public UIComponentStub, public IMouseEventReceiver
 {
 public:
 	virtual IMouseEventReceiver* AsMouseEventReceiver() noexcept override { return this; }
-	MOCK_METHOD(void, OnHover, (), (noexcept));
+	MOCK_METHOD(InputResult, OnHover, (), (noexcept));
 	MOCK_METHOD(void, Render, (ITextureRender*), (const));
 };
 

@@ -51,9 +51,10 @@ void TextureSwitcher::OnNormal() noexcept
 	ChangeState(InteractState::Normal);
 }
 
-void TextureSwitcher::OnHover() noexcept 
+InputResult TextureSwitcher::OnHover() noexcept
 { 
 	ChangeState(InteractState::Hovered);
+	return InputResult::Propagate;
 }
 
 InputResult TextureSwitcher::OnPress(const XMINT2&) noexcept 
