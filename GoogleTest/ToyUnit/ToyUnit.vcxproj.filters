@@ -108,6 +108,9 @@
     <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverserT.cpp">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
+    <ClCompile Include="Internal\MockAudioManager.cpp">
+      <Filter>Internal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -222,6 +225,12 @@
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverserT.h">
       <Filter>UserInterface\UIComponent\Traverser</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\Stubs\IAudioManagerStub.h">
+      <Filter>Internal\Stubs</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\MockAudioManager.h">
+      <Filter>Internal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

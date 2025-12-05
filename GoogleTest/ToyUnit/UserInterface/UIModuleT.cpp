@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UIModuleT.h"
 #include "UIComponent/MockComponent.h"
+#include "Internal/MockAudioManager.h"
 #include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
 
@@ -82,6 +83,18 @@ namespace D::UserInterface
 
 		XMINT2 outsidePos{ 0, 0 };
 		SimulateDrag(comp->GetLeftTop(), outsidePos);
+	}
+
+	TEST_F(UIModuleT, UpdateMouseState_HoverSound)
+	{
+		//unique_ptr<IAudioManager> audioManager;
+		//audioManager = make_unique<MockAudioManager>();
+
+		//ComponentDesc desc{ 10, 10, UILayout({ 50, 50 }) };
+		//auto parent = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(m_main, desc);
+		//auto child = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(parent, desc);
+
+		//EXPECT_CALL(*audioManager, OnNormal()).Times(1);
 	}
 
 	TEST_F(UIModuleT, UpdateMouseState_MouseHover)

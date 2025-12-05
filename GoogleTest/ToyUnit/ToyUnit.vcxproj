@@ -130,8 +130,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Internal\MockAudioManager.h" />
     <ClInclude Include="Internal\MockInputManager.h" />
     <ClInclude Include="Internal\MockRenderer.h" />
+    <ClInclude Include="Internal\Stubs\IAudioManagerStub.h" />
     <ClInclude Include="Internal\Stubs\IInputManagerStub.h" />
     <ClInclude Include="Internal\Stubs\IRendererStub.h" />
     <ClInclude Include="pch.h" />
@@ -171,6 +173,7 @@
     <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Internal\MockAudioManager.cpp" />
     <ClCompile Include="Internal\MockInputManager.cpp" />
     <ClCompile Include="Internal\MockRenderer.cpp" />
     <ClCompile Include="pch.cpp">
