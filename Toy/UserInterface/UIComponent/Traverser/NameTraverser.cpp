@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "NameTraverser.h"
+#include "DerivedTraverser.h"
 #include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponent/Components/Panel.h"
-#include "UITraverser.h"
+#include "UserInterface/UINameGenerator/UINameGenerator.h"
 
 NameTraverser::NameTraverser() = default;
 
@@ -30,12 +31,13 @@ unique_ptr<UIComponent> NameTraverser::AttachComponent(UIComponent* parent,
 			return move(child);
 	}
 
-	UITraverser::PropagateRoot(child.get(), parent);
+	DerivedTraverser derivedTraverser;
+	derivedTraverser.PropagateRoot(child.get(), parent);
 	auto resChild = parent->AttachComponent(move(child), relativePos);
 	if (resChild != nullptr) //attach가 되지 못했다면
 		return resChild;
 
-	UITraverser::UpdatePositionsManually(parent, true);
+	derivedTraverser.UpdatePositionsManually(parent, true);
 	return nullptr;
 }
 
@@ -63,7 +65,8 @@ pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UICom
 	auto [resDetached, resParent] = c->DetachComponent();
 	if (!resDetached) return {};
 
-	UITraverser::UpdatePositionsManually(resDetached.get());
+	DerivedTraverser derivedTraverser;
+	derivedTraverser.UpdatePositionsManually(resDetached.get());
 	return { move(resDetached), resParent };
 }
 

@@ -73,7 +73,8 @@ bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBi
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateComponent<TextArea>(texController, UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	ReturnIfFalse(BindTextureSourceInfo(protoTextArea.get(), rb));
+	auto derivedTraverser = UITraverser::GetDerivedTraverser();
+	ReturnIfFalse(derivedTraverser->BindTextureSourceInfo(protoTextArea.get(), rb));
 	
 	protoTextArea->SetName("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();

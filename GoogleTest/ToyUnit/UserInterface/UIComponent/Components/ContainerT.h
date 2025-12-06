@@ -1,10 +1,7 @@
 #pragma once
 #include "ComponentT.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/Container.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
-
-using namespace UITraverser;
 
 class ContainerT : public ComponentT
 {

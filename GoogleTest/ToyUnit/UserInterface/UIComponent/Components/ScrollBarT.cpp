@@ -2,9 +2,6 @@
 #include "ScrollBarT.h"
 #include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
-
-using namespace UITraverser;
 
 namespace D::UserInterface::UIComponent::Component
 {
@@ -69,7 +66,7 @@ namespace D::UserInterface::UIComponent::Component
 	TEST_F(ScrollBarT, RestoreDefault)
 	{
 		auto newScrollBar = CreateSampleScrollBar({}, DirectionType::Vertical, "Track", "Button");
-		UITraverser::BindTextureSourceInfo(newScrollBar.get(), GetResBinder());
+		BindTextureSourceInfo(newScrollBar.get(), GetResBinder());
 
 		m_component->RestoreDefault(); //초기값으로 셋팅한다.
 		EXPECT_TRUE(CompareDerived(m_component, newScrollBar));

@@ -1,10 +1,7 @@
 #pragma once
 #include "ComponentT.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
-
-using namespace UITraverser;
 
 class ListAreaT : public ComponentT
 {

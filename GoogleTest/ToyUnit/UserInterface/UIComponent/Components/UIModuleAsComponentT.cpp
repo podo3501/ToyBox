@@ -4,10 +4,7 @@
 #include "Internal/MockInputManager.h"
 #include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/System/StepTimer.h"
-
-using namespace UITraverser;
 
 class MockReceiverComponent : public UIComponentStub, public IMouseEventReceiver
 {

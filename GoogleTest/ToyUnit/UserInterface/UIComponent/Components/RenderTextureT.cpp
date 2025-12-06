@@ -3,7 +3,6 @@
 #include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 namespace D::UserInterface::UIComponent::Component
 {
@@ -23,7 +22,7 @@ namespace D::UserInterface::UIComponent::Component
 		EXPECT_CALL(*texController, CreateRenderTexture(testing::_, testing::_, testing::_)).Times(1);
 
 		auto clone = Clone(m_component.get());
-		UITraverser::BindTextureSourceInfo(clone.get(), GetResBinder()); //바인딩 할때 CreateRenderTexture를 한다.
+		BindTextureSourceInfo(clone.get(), GetResBinder()); //바인딩 할때 CreateRenderTexture를 한다.
 	}
 
 	TEST_F(RenderTextureT, Render)
@@ -37,7 +36,7 @@ namespace D::UserInterface::UIComponent::Component
 		MockTextureRender render;
 		EXPECT_CALL(render, Render(texIndex, dest, ::testing::Pointee(source))).Times(1);
 
-		UITraverser::Render(m_component.get(), &render);
+		Render(m_component.get(), &render);
 	}
 
 	TEST_F(RenderTextureT, WriteAndRead)

@@ -6,6 +6,7 @@ class NameTraverser;
 struct Traversers
 {
 public:
+	~Traversers();
 	Traversers();
 
 	inline BaseTraverser* GetBaseTraverser() const noexcept { return m_baseTraverser.get(); }

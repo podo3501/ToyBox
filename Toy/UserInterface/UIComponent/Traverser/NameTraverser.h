@@ -11,6 +11,8 @@ public:
 		unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept;
 	pair<unique_ptr<UIComponent>, UIComponent*> DetachComponent(UIComponent* c) noexcept;
 	UIComponent* FindComponent(UIComponent* c, const string& name) noexcept;
+	template<typename T>
+	T FindComponent(UIComponent* c, const string& name) noexcept { return ComponentCast<T>(FindComponent(c, name)); }
 	UIComponent* FindRegionComponent(UIComponent* c, const string& region) noexcept;
 	bool Rename(UIComponent* c, const string& name) noexcept;
 	bool RenameRegion(UIComponent* component, const string& region) noexcept;

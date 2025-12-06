@@ -4,10 +4,7 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/Utils/GeometryExt.h"
-
-using namespace UITraverser;
 
 void ListAreaT::MakeTestPrototype()
 {
@@ -45,7 +42,7 @@ namespace D::UserInterface::UIComponent::Component
 		MakeTestData(1);
 		auto container = m_component->GetContainer(0);
 
-		EXPECT_TRUE(FindComponent<PatchTextureStd1*>(container, "Test"));
+		EXPECT_TRUE(m_nameTraverser.FindComponent<PatchTextureStd1*>(container, "Test"));
 	}
 
 	TEST_F(ListAreaT, GetContainerCount)
@@ -62,10 +59,11 @@ namespace D::UserInterface::UIComponent::Component
 
 	TEST_F(ListAreaT, PrepareContainer) //리스트에 컴포넌트 추가해서 값 넣는 방법
 	{
+		NameTraverser nameTraverser;
 		MakeTestPrototype(); // 여기에 기본이 되는 것을 만든다.
 
 		auto container = m_component->PrepareContainer(); // 컨테이너 하나를 준비하면 프로토타입과 같은 것이 준비된다.
-		EXPECT_TRUE(FindComponent<PatchTextureStd1*>(container, "Test"));
+		EXPECT_TRUE(nameTraverser.FindComponent<PatchTextureStd1*>(container, "Test"));
 	}
 
 	TEST_F(ListAreaT, RemoveContainer)
@@ -78,7 +76,7 @@ namespace D::UserInterface::UIComponent::Component
 
 	TEST_F(ListAreaT, Render)
 	{
-		ChangeSize(m_component.get(), { 150, 50 });
+		m_derivedTraverser.ChangeSize(m_component.get(), { 150, 50 });
 		MakeTestData(3); //스크롤 바가 나타난다.
 
 		size_t texIndex = 1; //새로 생성된 텍스쳐라 인덱스가 생성됨.
@@ -101,14 +99,14 @@ namespace D::UserInterface::UIComponent::Component
 		EXPECT_CALL(render, Render(0, destTrackBottom, ::testing::Pointee(srcTrackBottom))).Times(1);
 		EXPECT_CALL(render, Render(0, destButtonBottom, ::testing::Pointee(srcButtonBottom))).Times(1);
 
-		UpdatePositionsManually(m_component.get());
+		m_derivedTraverser.UpdatePositionsManually(m_component.get());
 		Render(m_component.get(), &render);
 	}
 
 	TEST_F(ListAreaT, ScrollBarVisible_ChangeSize)
 	{
 		MakeTestData(3);
-		ChangeSize(m_component.get(), 200, 200); //사이즈가 커지면 스크롤바는 보이지 않게 된다.
+		m_derivedTraverser.ChangeSize(m_component.get(), { 200, 200 }); //사이즈가 커지면 스크롤바는 보이지 않게 된다.
 
 		EXPECT_FALSE(m_scrollBar->IsVisible());
 	}

@@ -55,23 +55,11 @@ namespace UITraverser
 	inline bool RenameRegion(UIComponent* c, const string& region) noexcept {
 		return Name::Call(&NameTraverser::RenameRegion, c, region);
 	}
-	inline void Render(UIComponent* c, ITextureRender* render) noexcept {
-		return Derived::Call(&DerivedTraverser::Render, c, render);
-	}
-	inline bool BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder) noexcept {
-		return Derived::Call(&DerivedTraverser::BindTextureSourceInfo, c, resBinder);
-	}
-	inline void PropagateRoot(UIComponent* c, UIComponent* root) noexcept {
-		return Derived::Call(&DerivedTraverser::PropagateRoot, c, root);
-	}
-	inline bool EnableToolMode(UIComponent* c, bool enable) noexcept {
-		return Derived::Call(&DerivedTraverser::EnableToolMode, c, enable);
-	}
+	//inline void PropagateRoot(UIComponent* c, UIComponent* root) noexcept {
+	//	return Derived::Call(&DerivedTraverser::PropagateRoot, c, root);
+	//}
 	inline bool UpdatePositionsManually(UIComponent* c, bool isRoot = false) noexcept {
 		return Derived::Call(&DerivedTraverser::UpdatePositionsManually, c, isRoot);
-	}
-	inline bool Update(UIComponent* c, const DX::StepTimer& timer) noexcept {
-		return Derived::Call(&DerivedTraverser::Update, c, timer);
 	}
 	inline bool ChangeSize(UIComponent* c, const XMUINT2& size, bool isForce = false) noexcept {
 		return Derived::Call(&DerivedTraverser::ChangeSize, c, size, isForce);
@@ -94,7 +82,7 @@ namespace UITraverser
 		return ComponentCast<T>(find);
 	}
 
-	void PropagateRoot(UIComponent* c) noexcept; //자신이 root일때 자신을 root라고 밑에 노드에게 전파
+	//void PropagateRoot(UIComponent* c) noexcept; //자신이 root일때 자신을 root라고 밑에 노드에게 전파
 	bool ChangeSize(UIComponent* c, uint32_t x, uint32_t y, bool isForce = false) noexcept;
 	bool ChangeSizeX(UIComponent* c, uint32_t v) noexcept;
 	bool ChangeSizeX(UIComponent* c, const XMUINT2& s) noexcept;

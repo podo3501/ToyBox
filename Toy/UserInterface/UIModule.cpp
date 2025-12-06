@@ -2,15 +2,16 @@
 #include "UIModule.h"
 #include "MouseEventRouter.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "UIComponent/Traverser/UITraverser.h"
+#include "UIComponent/Traverser/DerivedTraverser.h"
+#include "UIComponent/Traverser/NameTraverser.h"
+#include "UINameGenerator/UINameGenerator.h"
 #include "UIComponent/Components/Panel.h"
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/Utils/StlExt.h"
 
-using namespace UITraverser;
-
 UIModule::~UIModule() = default;
-UIModule::UIModule() :
+UIModule::UIModule(Traversers* traversers) :
+	m_traversers{ traversers },
 	m_nameGen{ make_unique<UINameGenerator>() },
 	m_mouseEventRouter{ make_unique<MouseEventRouter>() }
 {}
@@ -33,7 +34,7 @@ bool UIModule::SetupMainComponent(const UILayout& layout, const string& name,
 	m_mainPanel = CreateComponent<Panel>(layout);
 	m_mainPanel->SetUIModule(this);
 	m_mouseEventRouter->SetComponent(m_mainPanel.get());
-	return Rename(m_mainPanel.get(), name);
+	return GetNameTraverser()->Rename(m_mainPanel.get(), name);
 }
 
 bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename)
@@ -50,7 +51,7 @@ bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, 
 bool UIModule::BindTextureResources() noexcept
 {
 	ReturnIfFalse(m_resBinder);
-	ReturnIfFalse(BindTextureSourceInfo(m_mainPanel.get(), m_resBinder.get()));
+	ReturnIfFalse(GetDerivedTraverser()->BindTextureSourceInfo(m_mainPanel.get(), m_resBinder.get()));
 
 	return true;
 }
@@ -58,12 +59,12 @@ bool UIModule::BindTextureResources() noexcept
 bool UIModule::Update(const DX::StepTimer& timer) noexcept
 {
 	m_mouseEventRouter->UpdateMouseState();
-	return UITraverser::Update(m_mainPanel.get(), timer);
+	return GetDerivedTraverser()->Update(m_mainPanel.get(), timer);
 }
 
 void UIModule::Render(ITextureRender* render) const
 {
-	UITraverser::Render(m_mainPanel.get(), render);
+	GetDerivedTraverser()->Render(m_mainPanel.get(), render);
 }
 
 void UIModule::ReloadDatas() noexcept
@@ -93,7 +94,7 @@ bool UIModule::Read(const wstring& filename) noexcept
 {
 	const wstring& curFilename = !filename.empty() ? filename : m_filename;
 	SerializerIO::ReadJsonFromFile(curFilename, *this);
-	PropagateRoot(m_mainPanel.get()); //모든 컴포넌트들에 root를 지정.
+	GetDerivedTraverser()->PropagateRoot(m_mainPanel.get(), m_mainPanel.get()); //모든 컴포넌트들에 root를 지정.
 	m_mouseEventRouter->SetComponent(m_mainPanel.get());
 	m_filename = curFilename;
 
@@ -102,7 +103,7 @@ bool UIModule::Read(const wstring& filename) noexcept
 
 bool UIModule::EnableToolMode(bool enable) noexcept
 {
-	return UITraverser::EnableToolMode(m_mainPanel.get(), enable);
+	return GetDerivedTraverser()->EnableToolMode(m_mainPanel.get(), enable);
 }
 
 Panel* UIModule::GetMainPanel() const noexcept { return m_mainPanel.get(); }

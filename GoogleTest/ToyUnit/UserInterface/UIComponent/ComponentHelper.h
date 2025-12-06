@@ -2,9 +2,11 @@
 #include "Shared/SerializerIO/SerializerIO.h"
 #include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Shared/System/StepTimer.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+//#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+#include "Toy/UserInterface/UIComponent/Traverser/DerivedTraverser.h"
 
-using namespace UITraverser;
+//using namespace UITraverser;
+struct IMouseEventReceiver;
 struct ITextureController;
 class MockTextureResourceBinder;
 
@@ -17,10 +19,11 @@ bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 
 	unique_ptr<T> read;
 	ReturnIfFalse(SerializerIO::ReadJsonFromFile(filename, read));
-	PropagateRoot(read.get());
+	DerivedTraverser derivedTraverser;
+	derivedTraverser.PropagateRoot(read.get());
 
 	if (resBinder)
-		BindTextureSourceInfo(read.get(), resBinder);
+		derivedTraverser.BindTextureSourceInfo(read.get(), resBinder);
 
 	return CompareDerived(component, read);
 }
@@ -28,7 +31,8 @@ bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 template <typename T>
 bool TestClone(unique_ptr<T>& component)
 {
-	auto clone = Clone(component.get());
+	DerivedTraverser derivedTraverser;
+	auto clone = derivedTraverser.Clone(component.get());
 	return CompareDerived(component, clone);
 }
 
@@ -60,14 +64,15 @@ auto RenderLogger(const wstring& label = L"")
 template <typename Func>
 auto ExecuteAndUpdate(UIComponent* component, Func&& func) noexcept
 {
+	DerivedTraverser derivedTraverser;
 	if constexpr (is_void_v<decltype(func())>) {
 		func();
-		UpdatePositionsManually(component, true);
+		derivedTraverser.UpdatePositionsManually(component, true);
 	}
 	else
 	{
 		auto result = func();
-		UpdatePositionsManually(component, true);
+		derivedTraverser.UpdatePositionsManually(component, true);
 		return result;
 	}
 }

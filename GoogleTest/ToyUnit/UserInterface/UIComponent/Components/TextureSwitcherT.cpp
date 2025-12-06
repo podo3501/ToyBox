@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "TextureSwitcherT.h"
 #include "../ComponentHelper.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/Utils/GeometryExt.h"
 
 class MockEventDispatcherManager : public IEventDispatcherManager
@@ -134,7 +133,7 @@ namespace D::UserInterface::UIComponent::Component
 		MockTextureRender render;
 		EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source))).Times(1);
 
-		UITraverser::Render(m_component.get(), &render);
+		Render(m_component.get(), &render);
 	}
 
 	TEST_F(TextureSwitcherT, WriteAndRead)

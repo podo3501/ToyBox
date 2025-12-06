@@ -4,6 +4,7 @@
 #include "UIComponent/Traverser/DerivedTraverser.h"
 #include "UIComponent/Traverser/NameTraverser.h"
 
+Traversers::~Traversers() = default;
 Traversers::Traversers() :
 	m_baseTraverser{ make_unique<BaseTraverser>() },
 	m_derivedTraverser{ make_unique<DerivedTraverser>() },

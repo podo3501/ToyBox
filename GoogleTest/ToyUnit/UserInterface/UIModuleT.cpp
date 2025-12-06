@@ -140,7 +140,7 @@ namespace D::UserInterface
 		const wstring filename = GetTempDir() + L"UIModuleT_WR.json";
 		EXPECT_TRUE(m_uiModule->Write(filename));
 
-		auto read = make_unique<UIModule>();
+		auto read = make_unique<UIModule>(m_componentManager->GetTraversers());
 		EXPECT_TRUE(read->SetupMainComponent(filename, m_renderer.get(), L""));
 		EXPECT_TRUE(read->BindTextureResources());
 

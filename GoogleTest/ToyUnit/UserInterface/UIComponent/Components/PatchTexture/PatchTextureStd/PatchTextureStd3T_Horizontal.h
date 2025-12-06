@@ -1,6 +1,5 @@
 #pragma once
 #include "UserInterface/UIComponent/Components/ComponentT.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 
 class PatchTextureStd3T_Horizontal : public ComponentT
@@ -19,7 +18,7 @@ void PatchTextureStd3T_Horizontal::SetUp()
 	ComponentT::SetUp();
 
 	m_component = CreateComponent<PatchTextureStd3>(DirectionType::Horizontal, "ThreeH48");
-	UITraverser::BindTextureSourceInfo(m_component.get(), GetResBinder());
+	BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 
 void PatchTextureStd3T_Horizontal::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

@@ -130,8 +130,10 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 	ReturnIfFalse(component);
 	m_component = component.get();
 	ReturnIfFalse(m_renderTex = CreateComponent<RenderTexture>(UILayout{ size, Origin::LeftTop }, move(component)));
-	ReturnIfFalse(BindTextureSourceInfo(m_renderTex.get(), m_resBinder));
-	ReturnIfFalse(EnableToolMode(m_renderTex.get(), true));
+
+	auto derivedTraverser = UITraverser::GetDerivedTraverser();
+	ReturnIfFalse(derivedTraverser->BindTextureSourceInfo(m_renderTex.get(), m_resBinder));
+	ReturnIfFalse(derivedTraverser->EnableToolMode(m_renderTex.get(), true));
 
 	return true;
 }

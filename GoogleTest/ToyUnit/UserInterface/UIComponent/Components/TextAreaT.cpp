@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "TextAreaT.h"
 #include "../ComponentHelper.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 
 namespace D::UserInterface::UIComponent::Component
 {
@@ -27,7 +26,7 @@ namespace D::UserInterface::UIComponent::Component
 		EXPECT_CALL(render, DrawString(1, wstring(L"Test"), Vector2{ 0.f, 25.f }, ColorEq(Colors::Black))).Times(1);
 		EXPECT_CALL(render, DrawString(1, wstring(L"Blue"), Vector2{ 40.f, 25.f }, ColorEq(Colors::Blue))).Times(1);
 
-		UITraverser::Render(m_component.get(), &render);
+		Render(m_component.get(), &render);
 	}
 
 	TEST_F(TextAreaT, WriteAndRead)
