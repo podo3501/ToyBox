@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "SampleComponent.h"
 #include "../UIUtility.h"
-#include "UserInterface/UIComponent/Traverser/UITraverser.h"
+#include "UserInterface/UIComponent/Traverser/DerivedTraverser.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextArea.h"
