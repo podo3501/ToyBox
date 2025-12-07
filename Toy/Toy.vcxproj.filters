@@ -272,8 +272,8 @@
     <ClInclude Include="UserInterface\MouseEventRouter.h">
       <Filter>UserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface\Traversers.h">
-      <Filter>UserInterface</Filter>
+    <ClInclude Include="UserInterface\UIComponent\Traverser\UIDetailTraverser.h">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -450,8 +450,8 @@
     <ClCompile Include="UserInterface\MouseEventRouter.cpp">
       <Filter>UserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\Traversers.cpp">
-      <Filter>UserInterface</Filter>
+    <ClCompile Include="UserInterface\UIComponent\Traverser\UIDetailTraverser.cpp">
+      <Filter>UserInterface\UIComponent\Traverser</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

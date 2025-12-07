@@ -4,7 +4,10 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/Utils/GeometryExt.h"
+
+using namespace UITraverser;
 
 void ListAreaT::MakeTestPrototype()
 {
@@ -42,7 +45,7 @@ namespace D::UserInterface::UIComponent::Component
 		MakeTestData(1);
 		auto container = m_component->GetContainer(0);
 
-		EXPECT_TRUE(m_nameTraverser.FindComponent<PatchTextureStd1*>(container, "Test"));
+		EXPECT_TRUE(FindComponent<PatchTextureStd1*>(container, "Test"));
 	}
 
 	TEST_F(ListAreaT, GetContainerCount)
@@ -59,11 +62,10 @@ namespace D::UserInterface::UIComponent::Component
 
 	TEST_F(ListAreaT, PrepareContainer) //리스트에 컴포넌트 추가해서 값 넣는 방법
 	{
-		NameTraverser nameTraverser;
 		MakeTestPrototype(); // 여기에 기본이 되는 것을 만든다.
 
 		auto container = m_component->PrepareContainer(); // 컨테이너 하나를 준비하면 프로토타입과 같은 것이 준비된다.
-		EXPECT_TRUE(nameTraverser.FindComponent<PatchTextureStd1*>(container, "Test"));
+		EXPECT_TRUE(FindComponent<PatchTextureStd1*>(container, "Test"));
 	}
 
 	TEST_F(ListAreaT, RemoveContainer)

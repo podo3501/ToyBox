@@ -3,6 +3,9 @@
 #include "../UIComponent.h"
 #include "Shared/Utils/GeometryExt.h"
 
+DerivedTraverser::~DerivedTraverser() = default;
+DerivedTraverser::DerivedTraverser() = default;
+
 bool DerivedTraverser::BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder) noexcept
 {
 	auto forEachResult = ForEachChildPostUntilFail(c, [resBinder](UIComponent* component) {

@@ -4,7 +4,7 @@
 #include "Locator/SceneLocator.h"
 #include "Locator/EventDispatcherLocator.h"
 #include "UserInterface/UIModule.h"
-#include "UserInterface/UIComponent/Traverser/UITraverser.h"
+#include "UserInterface/UIComponentLocator.h"
 #include "TestScene1.h"
 
 TestScene2::TestScene2(IRenderer* renderer) :

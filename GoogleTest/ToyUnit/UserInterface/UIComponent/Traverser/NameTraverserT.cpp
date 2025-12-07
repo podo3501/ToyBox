@@ -2,6 +2,9 @@
 #include "NameTraverserT.h"
 #include "../MockComponent.h"
 #include "Shared/Utils/StlExt.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+
+using namespace UITraverser;
 
 namespace D::UserInterface::UIComponent::Traverser
 {

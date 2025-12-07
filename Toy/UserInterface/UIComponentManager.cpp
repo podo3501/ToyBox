@@ -2,7 +2,6 @@
 #include "UIComponentManager.h"
 #include "IRenderer.h"
 #include "UIModule.h"
-#include "Traversers.h"
 #include "UIComponent/UIComponent.h"
 #include "UIComponent/Traverser/DerivedTraverser.h"
 #include "Shared/Utils/StlExt.h"
@@ -10,7 +9,6 @@
 UIComponentManager::~UIComponentManager() = default;
 UIComponentManager::UIComponentManager(IRenderer* renderer, bool isTool) :
 	m_renderer{ renderer },
-	m_traversers{ make_unique<Traversers>() },
 	m_texController{ renderer->GetTextureController() }
 {
 	if(!isTool) //툴은 RenderTexture에 그리기 때문에 렌더와 연결하지 않는다.
@@ -24,7 +22,7 @@ UIModule* UIComponentManager::CreateUIModule(const string& moduleName, const UIL
 {
 	if (m_uiModules.find(moduleName) != m_uiModules.end()) return nullptr;
 
-	auto [owner, module] = GetPtrs(make_unique<UIModule>(m_traversers.get()));
+	auto [owner, module] = GetPtrs(make_unique<UIModule>());
 	if (!owner->SetupMainComponent(layout, mainUIName, m_renderer, srcBinderFilename)) return nullptr;
 	m_uiModules.insert({ moduleName, move(owner) });
 
@@ -36,7 +34,7 @@ UIModule* UIComponentManager::CreateUIModule(const string& moduleName,
 {
 	if (m_uiModules.find(moduleName) != m_uiModules.end()) return nullptr;
 
-	auto [owner, module] = GetPtrs(make_unique<UIModule>(m_traversers.get()));
+	auto [owner, module] = GetPtrs(make_unique<UIModule>());
 	if (!owner->SetupMainComponent(filename, m_renderer, srcBinderFilename)) return nullptr;
 	m_uiModules.insert({ moduleName, move(owner) });
 
@@ -86,6 +84,6 @@ void UIComponentManager::RenderTextureComponent(size_t index, ITextureRender* re
 	auto component = it->second;
 	m_texController->ModifyRenderTexturePosition(index, component->GetLeftTop());
 
-	auto derivedTraverser = m_traversers->GetDerivedTraverser();
-	derivedTraverser->Render(component, render);
+	DerivedTraverser derivedTraverser;
+	derivedTraverser.Render(component, render);
 }

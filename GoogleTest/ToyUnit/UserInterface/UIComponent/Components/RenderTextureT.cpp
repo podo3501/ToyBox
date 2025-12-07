@@ -3,6 +3,9 @@
 #include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+
+using namespace UITraverser;
 
 namespace D::UserInterface::UIComponent::Component
 {

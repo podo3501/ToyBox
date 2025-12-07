@@ -8,6 +8,9 @@ namespace DX { class StepTimer; }
 class DerivedTraverser : private HierarchyTraverser //UIComponent 상속되는 virtual 함수 및 private 멤버변수
 {
 public:
+	~DerivedTraverser();
+	DerivedTraverser();
+
 	bool BindTextureSourceInfo(UIComponent* c, TextureResourceBinder* resBinder) noexcept;
 	bool Update(UIComponent* c, const DX::StepTimer& timer) noexcept;
 	void Render(UIComponent* c, ITextureRender* render);

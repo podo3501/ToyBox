@@ -3,7 +3,6 @@
 struct IRenderer;
 struct ITextureController;
 struct ITextureRender;
-struct Traversers;
 class UILayout;
 class UIModule;
 class UIComponent;
@@ -19,8 +18,6 @@ public:
 	bool ReleaseUIModule(const string& moduleName) noexcept;
 	bool CreateRenderTexture(UIComponent* c, const Rectangle& targetRect, size_t& outIndex, UINT64* outGfxMemOffset);
 	bool ReleaseRenderTexture(size_t index) noexcept;
-
-	inline Traversers* GetTraversers() const noexcept { return m_traversers.get(); }
 	inline ITextureController* GetTextureController() const noexcept { return m_texController; }
 
 private:
@@ -28,7 +25,6 @@ private:
 	void RenderTextureComponent(size_t index, ITextureRender* render);
 
 	IRenderer* m_renderer{ nullptr };
-	unique_ptr<Traversers> m_traversers;
 	ITextureController* m_texController{ nullptr };
 	map<size_t, UIComponent*> m_renderTextures; //module보다 늦게 삭제되어야 한다.
 	unordered_map<string, unique_ptr<UIModule>> m_uiModules;

@@ -4,6 +4,7 @@
 #include "ComponentController.h"
 #include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+#include "Toy/UserInterface/UIComponent/Traverser/DerivedTraverser.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
@@ -47,8 +48,8 @@ bool UserInterfaceWindow::SetupProperty(UIModule* uiModule)
 
 	unique_ptr<UIModuleAsComponent> asComponent = CreateComponent<UIModuleAsComponent>(uiModule);
 	m_mainRenderTexture = CreateComponent<RenderTexture>(move(asComponent));
-	auto derivedTraverser = UITraverser::GetDerivedTraverser();
-	ReturnIfFalse(derivedTraverser->BindTextureSourceInfo(m_mainRenderTexture.get(), nullptr)); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
+	DerivedTraverser derivedTraverser;
+	ReturnIfFalse(derivedTraverser.BindTextureSourceInfo(m_mainRenderTexture.get(), nullptr)); //모듈안에 resBinder가 있기 때문에 이것은 nullptr로 한다.
 
 	ToggleToolMode();
 	m_isOpen = true;
@@ -151,8 +152,8 @@ void UserInterfaceWindow::Update(const DX::StepTimer& timer)
 		
 	m_controller->Update();
 
-	auto derivedTraverser = UITraverser::GetDerivedTraverser();
-	derivedTraverser->Update(m_mainRenderTexture.get(), timer);
+	DerivedTraverser derivedTraverser;
+	derivedTraverser.Update(m_mainRenderTexture.get(), timer);
 
 	if (float elapsedTime = static_cast<float>(timer.GetElapsedSeconds()); elapsedTime)
 		m_fps = 1.0f / elapsedTime;

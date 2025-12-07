@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "TextAreaT.h"
 #include "../ComponentHelper.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
+
+using namespace UITraverser;
 
 namespace D::UserInterface::UIComponent::Component
 {

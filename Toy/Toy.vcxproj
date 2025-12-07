@@ -284,6 +284,7 @@
     <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverser.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\UIDetailTraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\Traverser\UITraverser.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponent.h" />
     <ClInclude Include="UserInterface\UIComponent\UIComponent.hpp" />
@@ -298,7 +299,6 @@
     <ClInclude Include="UserInterface\UINameGenerator\ComponentNameGenerator.h" />
     <ClInclude Include="UserInterface\UINameGenerator\UINameGenerator.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="UserInterface\Traversers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scenes\Test\ComponentTestScene.cpp" />
@@ -346,6 +346,7 @@
     <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverser.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverser.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverser.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\UIDetailTraverser.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Traverser\UITraverser.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponent.cpp" />
     <ClCompile Include="UserInterface\UIComponent\UIComponentFactory.cpp" />
@@ -365,7 +366,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="UserInterface\Traversers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.vcxproj">

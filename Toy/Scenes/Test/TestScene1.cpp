@@ -4,7 +4,7 @@
 #include "Locator/SceneLocator.h"
 #include "Locator/EventDispatcherLocator.h"
 #include "UserInterface/UIModule.h"
-#include "UserInterface/UIComponent/Traverser/UITraverser.h"
+#include "UserInterface/UIComponentLocator.h"
 #include "TestScene2.h"
 
 TestScene1::~TestScene1() = default;

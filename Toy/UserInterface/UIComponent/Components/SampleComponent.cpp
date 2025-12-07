@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "SampleComponent.h"
 #include "../UIUtility.h"
+#include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "UserInterface/UIComponent/Traverser/DerivedTraverser.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
@@ -9,8 +10,6 @@
 #include "ScrollBar.h"
 #include "TextureSwitcher.h"
 #include "Shared/Utils/StringExt.h"
-
-using namespace UITraverser;
 
 static map<InteractState, unique_ptr<UIComponent>> GetComponentKeyMap(
 	const XMUINT2& size, const string& bindKey,
@@ -73,8 +72,8 @@ bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBi
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateComponent<TextArea>(texController, UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	auto derivedTraverser = UITraverser::GetDerivedTraverser();
-	ReturnIfFalse(derivedTraverser->BindTextureSourceInfo(protoTextArea.get(), rb));
+	DerivedTraverser derivedTraverser;
+	ReturnIfFalse(derivedTraverser.BindTextureSourceInfo(protoTextArea.get(), rb));
 	
 	protoTextArea->SetName("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();
@@ -84,7 +83,7 @@ bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBi
 	for (auto idx : views::iota(0, itemCount))
 	{
 		auto container = listArea->PrepareContainer();
-		TextArea* textArea = FindComponent<TextArea*>(container, "ListTextArea");
+		TextArea* textArea = UITraverser::FindComponent<TextArea*>(container, "ListTextArea");
 		textArea->SetText(L"<English><Black>Test " + IntToWString(idx * 10) + L"</Black></English>");
 	}
 

@@ -1,10 +1,10 @@
 #pragma once
-#include "Traversers.h"
 
 struct IRenderer;
 struct ITextureRender;
 class TextureResourceBinder;
 class UINameGenerator;
+class DerivedTraverser;
 class Panel;
 class UILayout;
 class MouseEventRouter;
@@ -14,8 +14,7 @@ class UIModule
 {
 public:
 	~UIModule();
-	UIModule() = delete;
-	UIModule(Traversers* traversers);
+	UIModule();
 	bool operator==(const UIModule& other) const noexcept;
 
 	bool SetupMainComponent(const UILayout& layout, const string& name,
@@ -36,14 +35,11 @@ public:
 private:
 	void ReloadDatas() noexcept;
 	bool Read(const wstring& filename = L"") noexcept;
-	inline DerivedTraverser* GetDerivedTraverser() const noexcept { return m_traversers->GetDerivedTraverser(); }
-	inline BaseTraverser* GetBaseTraverser() const noexcept { return m_traversers->GetBaseTraverser(); }
-	inline NameTraverser* GetNameTraverser() const noexcept { return m_traversers->GetNameTraverser(); }
 
 	IRenderer* m_renderer{ nullptr };
-	Traversers* m_traversers{ nullptr };
 	unique_ptr<TextureResourceBinder> m_resBinder;
 	unique_ptr<UINameGenerator> m_nameGen;
+	unique_ptr<DerivedTraverser> m_derivedTraverser;
 	unique_ptr<Panel> m_mainPanel;
 	wstring m_filename;
 	unique_ptr<MouseEventRouter> m_mouseEventRouter;
