@@ -4,11 +4,10 @@
 #include "Shared/Utils/StlExt.h"
 #include "Locator/EventDispatcherLocator.h"
 #include "PatchTexture/PatchTextureLite/PatchTextureLite.h"
-#include "../../UIComponent/Traverser/UITraverser.h"
-#include "../../TextureResourceBinder/TextureResourceBinder.h"
+#include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "UserInterface/SerializerIO/KeyConverter.h"
+#include "../../TextureResourceBinder/TextureResourceBinder.h"
 
-using namespace UITraverser;
 using enum InteractState;
 
 TextureSwitcher::~TextureSwitcher() = default;

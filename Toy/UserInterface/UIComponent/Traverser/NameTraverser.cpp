@@ -6,7 +6,6 @@
 #include "UserInterface/UINameGenerator/UINameGenerator.h"
 
 NameTraverser::NameTraverser() = default;
-
 unique_ptr<UIComponent> NameTraverser::AttachComponent(UIComponent* parent,
 	unique_ptr<UIComponent> child, const XMINT2& relativePos) noexcept
 {

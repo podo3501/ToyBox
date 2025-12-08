@@ -1,7 +1,6 @@
 #pragma once
 #include "ComponentT.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"

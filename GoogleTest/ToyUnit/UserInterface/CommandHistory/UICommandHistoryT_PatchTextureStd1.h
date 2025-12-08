@@ -2,12 +2,10 @@
 #include "UserInterface/UIModuleT.h"
 #include "UserInterface/TextureResourceBinder/MockTextureResourceBinder.h"
 #include "Shared/Utils/StlExt.h"
-#include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/UIType.h"
+#include "Toy/UserInterface/CommandHistory/UserInterface/UICommandHistory.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 
-using namespace UITraverser;
 class UICommandHistoryT_PatchTextureStd1 : public UIModuleT
 {
 protected:

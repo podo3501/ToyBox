@@ -6,7 +6,6 @@
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/Utils/StlExt.h"
 
-using namespace UITraverser;
 using enum InteractState;
 
 Container::~Container() = default;

@@ -3,7 +3,7 @@
 #include "IRenderer.h"
 #include "UIModule.h"
 #include "UIComponent/UIComponent.h"
-#include "UIComponent/Traverser/DerivedTraverser.h"
+#include "UIComponent/Traverser/UIDetailTraverser.h"
 #include "Shared/Utils/StlExt.h"
 
 UIComponentManager::~UIComponentManager() = default;
@@ -84,6 +84,5 @@ void UIComponentManager::RenderTextureComponent(size_t index, ITextureRender* re
 	auto component = it->second;
 	m_texController->ModifyRenderTexturePosition(index, component->GetLeftTop());
 
-	DerivedTraverser derivedTraverser;
-	derivedTraverser.Render(component, render);
+	UIDetailTraverser::Render(component, render);
 }

@@ -2,7 +2,7 @@
 #include "UIModule.h"
 #include "MouseEventRouter.h"
 #include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
-#include "UIComponent/Traverser/DerivedTraverser.h"
+#include "UIComponent/Traverser/UIDetailTraverser.h"
 #include "UIComponent/Traverser/UITraverser.h"
 #include "UINameGenerator/UINameGenerator.h"
 #include "UIComponent/Components/Panel.h"
@@ -10,11 +10,11 @@
 #include "Shared/Utils/StlExt.h"
 
 using namespace UITraverser;
+using namespace UIDetailTraverser;
 
 UIModule::~UIModule() = default;
 UIModule::UIModule() :
 	m_nameGen{ make_unique<UINameGenerator>() },
-	m_derivedTraverser{ make_unique<DerivedTraverser>() },
 	m_mouseEventRouter{ make_unique<MouseEventRouter>() }
 {}
 
@@ -53,7 +53,7 @@ bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, 
 bool UIModule::BindTextureResources() noexcept
 {
 	ReturnIfFalse(m_resBinder);
-	ReturnIfFalse(m_derivedTraverser->BindTextureSourceInfo(m_mainPanel.get(), m_resBinder.get()));
+	ReturnIfFalse(BindTextureSourceInfo(m_mainPanel.get(), m_resBinder.get()));
 
 	return true;
 }
@@ -61,12 +61,12 @@ bool UIModule::BindTextureResources() noexcept
 bool UIModule::Update(const DX::StepTimer& timer) noexcept
 {
 	m_mouseEventRouter->UpdateMouseState();
-	return m_derivedTraverser->Update(m_mainPanel.get(), timer);
+	return UIDetailTraverser::Update(m_mainPanel.get(), timer);
 }
 
 void UIModule::Render(ITextureRender* render) const
 {
-	m_derivedTraverser->Render(m_mainPanel.get(), render);
+	UIDetailTraverser::Render(m_mainPanel.get(), render);
 }
 
 void UIModule::ReloadDatas() noexcept
@@ -96,7 +96,7 @@ bool UIModule::Read(const wstring& filename) noexcept
 {
 	const wstring& curFilename = !filename.empty() ? filename : m_filename;
 	SerializerIO::ReadJsonFromFile(curFilename, *this);
-	m_derivedTraverser->PropagateRoot(m_mainPanel.get(), m_mainPanel.get()); //모든 컴포넌트들에 root를 지정.
+	PropagateRoot(m_mainPanel.get()); //모든 컴포넌트들에 root를 지정.
 	m_mouseEventRouter->SetComponent(m_mainPanel.get());
 	m_filename = curFilename;
 
@@ -105,7 +105,7 @@ bool UIModule::Read(const wstring& filename) noexcept
 
 bool UIModule::EnableToolMode(bool enable) noexcept
 {
-	return m_derivedTraverser->EnableToolMode(m_mainPanel.get(), enable);
+	return UIDetailTraverser::EnableToolMode(m_mainPanel.get(), enable);
 }
 
 Panel* UIModule::GetMainPanel() const noexcept { return m_mainPanel.get(); }

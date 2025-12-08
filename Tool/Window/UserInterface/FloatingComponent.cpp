@@ -3,7 +3,7 @@
 #include "IRenderer.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
-#include "Toy/UserInterface/UIComponent/Traverser/DerivedTraverser.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UIDetailTraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/TextArea.h"
@@ -14,6 +14,7 @@
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 
 using namespace UITraverser;
+using namespace UIDetailTraverser;
 
 FloatingComponent::FloatingComponent(IRenderer* renderer, TextureResourceBinder* resBinder, const string& mainWndName) noexcept :
 	m_renderer{ renderer },
@@ -131,10 +132,8 @@ bool FloatingComponent::LoadComponentInternal(unique_ptr<UIComponent>&& componen
 	ReturnIfFalse(component);
 	m_component = component.get();
 	ReturnIfFalse(m_renderTex = CreateComponent<RenderTexture>(UILayout{ size, Origin::LeftTop }, move(component)));
-
-	DerivedTraverser derivedTraverser;
-	ReturnIfFalse(derivedTraverser.BindTextureSourceInfo(m_renderTex.get(), m_resBinder));
-	ReturnIfFalse(derivedTraverser.EnableToolMode(m_renderTex.get(), true));
+	ReturnIfFalse(BindTextureSourceInfo(m_renderTex.get(), m_resBinder));
+	ReturnIfFalse(EnableToolMode(m_renderTex.get(), true));
 
 	return true;
 }

@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "UIComponentManagerT.h"
-#include "Toy/UserInterface/UIComponent/Traverser/DerivedTraverser.h"
 
-DerivedTraverser g_derivedTraverser;
 void UIComponentManagerT::SetUp()
 {
 	m_environment = InitializeEnvironment(L"", { 800.f, 600.f });
@@ -22,19 +20,4 @@ void UIComponentManagerT::RegisterRenderTextures(MockRenderer* renderer)
 	renderer->RegisterMockTextureInfos({
 		{ L"Texture512.png", 0, {512, 512} }
 		});
-}
-
-void UIComponentManagerT::BindTextureSourceInfo(UIComponent* component, TextureResourceBinder* resBinder)
-{
-	g_derivedTraverser.BindTextureSourceInfo(component, resBinder);
-}
-
-void UIComponentManagerT::Update(UIComponent* component, DX::StepTimer& timer)
-{
-	g_derivedTraverser.Update(component, timer);
-}
-
-void UIComponentManagerT::Render(UIComponent* component, ITextureRender* render)
-{
-	g_derivedTraverser.Render(component, render);
 }

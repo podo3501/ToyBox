@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "DerivedTraverserT.h"
 #include "../MockComponent.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
-
-using namespace UITraverser;
 
 class MockToolMode : public UIComponentStub
 {
@@ -22,27 +19,18 @@ namespace D::UserInterface::UIComponent::Traverser
 {
 	TEST_F(DerivedTraverserT, EnableToolMode_false)
 	{
-		auto [owner, parent] = CreateMockComponent<testing::NiceMock<MockToolMode>>();
-		auto child = AttachMockComponentDirect<testing::NiceMock<MockToolMode>>(parent);
-		m_traverser.EnableToolMode(parent, true); //초기값이 false 이기 때문에 먼저 true 해주고 false를 해야 한다.
-
-		testing::InSequence seq;
-		EXPECT_CALL(*child, ExitToolMode()).Times(1);
-		EXPECT_CALL(*parent, ExitToolMode()).Times(1);
+		auto [owner, component] = CreateMockComponent<testing::NiceMock<MockToolMode>>();
+		m_traverser.EnableToolMode(component, true); //초기값이 false 이기 때문에 먼저 true 해주고 false를 해야 한다.
+		EXPECT_CALL(*component, ExitToolMode()).Times(1);
 		
-		m_traverser.EnableToolMode(parent, false);
+		m_traverser.EnableToolMode(component, false);
 	}
 
 	TEST_F(DerivedTraverserT, EnableToolMode_true)
 	{
-		auto [owner, parent] = CreateMockComponent<MockToolMode>();
-		auto child = AttachMockComponentDirect<MockToolMode>(parent);
+		auto [owner, component] = CreateMockComponent<MockToolMode>();
+		EXPECT_CALL(*component, EnterToolMode()).Times(1);
 
-		//툴 모드를 호출하면 모든 컴포넌트에 ToolMode 함수가 호출
-		testing::InSequence seq;
-		EXPECT_CALL(*child, EnterToolMode()).Times(1);
-		EXPECT_CALL(*parent, EnterToolMode()).Times(1);
-
-		m_traverser.EnableToolMode(parent, true);
+		m_traverser.EnableToolMode(component, true);
 	}
 }

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ScrollBar.h"
-#include "../../UIComponent/Traverser/UITraverser.h"
+#include "UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextureSwitcher.h"
 #include "Shared/SerializerIO/SerializerIO.h"

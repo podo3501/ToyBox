@@ -30,8 +30,6 @@ public:
 //¦¢    ¦¦¦¡ node2
 //¦¦¦¡ node3
 
-using namespace UITraverser;
-
 namespace D::UserInterface::UIComponent::Traverser
 {
 	TEST_F(HierarchyTraverserT, ForEachChildToRender_BFS)

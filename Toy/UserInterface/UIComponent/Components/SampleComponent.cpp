@@ -2,7 +2,7 @@
 #include "SampleComponent.h"
 #include "../UIUtility.h"
 #include "UserInterface/UIComponent/Traverser/UITraverser.h"
-#include "UserInterface/UIComponent/Traverser/DerivedTraverser.h"
+#include "UserInterface/UIComponent/Traverser/UIDetailTraverser.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "TextArea.h"
@@ -72,8 +72,7 @@ bool MakeSampleListAreaData(ITextureController* texController, TextureResourceBi
 	//글자가 크기에 안 맞으면 안찍힌다. 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	auto protoTextArea = CreateComponent<TextArea>(texController, UILayout{ {200, 30}, Origin::LeftTop }, L"", bindKeys);
-	DerivedTraverser derivedTraverser;
-	ReturnIfFalse(derivedTraverser.BindTextureSourceInfo(protoTextArea.get(), rb));
+	ReturnIfFalse(UIDetailTraverser::BindTextureSourceInfo(protoTextArea.get(), rb));
 	
 	protoTextArea->SetName("ListTextArea");
 	auto prototype = listArea->GetPrototypeContainer();

@@ -4,9 +4,6 @@
 #include "Internal/MockRenderer.h"
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "Toy/Locator/EventDispatcherLocator.h"
-#include "Toy/UserInterface/UIComponent/Traverser/BaseTraverser.h"
-#include "Toy/UserInterface/UIComponent/Traverser/DerivedTraverser.h"
-#include "Toy/UserInterface/UIComponent/Traverser/NameTraverser.h"
 
 class ComponentT : public UIComponentManagerT
 {
@@ -16,10 +13,6 @@ protected:
 
 	inline MockTextureResourceBinder* GetResBinder() const noexcept { return m_resBinder.get(); }
 	inline wstring GetTempDir() const noexcept { return L"../Resources/Test/Temp/"; }
-
-	BaseTraverser m_baseTraverser;
-	DerivedTraverser m_derivedTraverser;
-	NameTraverser m_nameTraverser;
 
 private:
 	unique_ptr<MockTextureResourceBinder> m_resBinder;

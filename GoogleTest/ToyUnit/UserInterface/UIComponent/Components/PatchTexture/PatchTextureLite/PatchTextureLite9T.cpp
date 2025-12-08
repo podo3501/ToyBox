@@ -2,9 +2,6 @@
 #include "PatchTextureLite9T.h"
 #include "UserInterface/UIComponent/ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
-
-using namespace UITraverser;
 
 namespace D::UserInterface::UIComponent::Component::PatchTexture
 {

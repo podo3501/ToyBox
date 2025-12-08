@@ -2,9 +2,6 @@
 #include "UserInterface/UIComponentManagerT.h"
 #include "MockComponent.h"
 #include "ComponentHelper.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
-
-using namespace UITraverser;
 
 enum class ChangeExpect
 {

@@ -4,7 +4,6 @@ struct IRenderer;
 struct ITextureRender;
 class TextureResourceBinder;
 class UINameGenerator;
-class DerivedTraverser;
 class Panel;
 class UILayout;
 class MouseEventRouter;
@@ -39,7 +38,6 @@ private:
 	IRenderer* m_renderer{ nullptr };
 	unique_ptr<TextureResourceBinder> m_resBinder;
 	unique_ptr<UINameGenerator> m_nameGen;
-	unique_ptr<DerivedTraverser> m_derivedTraverser;
 	unique_ptr<Panel> m_mainPanel;
 	wstring m_filename;
 	unique_ptr<MouseEventRouter> m_mouseEventRouter;

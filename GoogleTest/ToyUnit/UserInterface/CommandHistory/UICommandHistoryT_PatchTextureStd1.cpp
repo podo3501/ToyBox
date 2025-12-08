@@ -1,8 +1,5 @@
 #include "pch.h"
 #include "UICommandHistoryT_PatchTextureStd1.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
-
-using namespace UITraverser;
 
 template<typename Action>
 void UICommandHistoryT_PatchTextureStd1::VerifyUndoRedo(Action&& action, PatchTextureStd1* component)

@@ -4,10 +4,7 @@
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Shared/Utils/GeometryExt.h"
-
-using namespace UITraverser;
 
 void ListAreaT::MakeTestPrototype()
 {
@@ -78,7 +75,7 @@ namespace D::UserInterface::UIComponent::Component
 
 	TEST_F(ListAreaT, Render)
 	{
-		m_derivedTraverser.ChangeSize(m_component.get(), { 150, 50 });
+		ChangeSize(m_component.get(), { 150, 50 });
 		MakeTestData(3); //스크롤 바가 나타난다.
 
 		size_t texIndex = 1; //새로 생성된 텍스쳐라 인덱스가 생성됨.
@@ -101,14 +98,14 @@ namespace D::UserInterface::UIComponent::Component
 		EXPECT_CALL(render, Render(0, destTrackBottom, ::testing::Pointee(srcTrackBottom))).Times(1);
 		EXPECT_CALL(render, Render(0, destButtonBottom, ::testing::Pointee(srcButtonBottom))).Times(1);
 
-		m_derivedTraverser.UpdatePositionsManually(m_component.get());
+		UpdatePositionsManually(m_component.get());
 		Render(m_component.get(), &render);
 	}
 
 	TEST_F(ListAreaT, ScrollBarVisible_ChangeSize)
 	{
 		MakeTestData(3);
-		m_derivedTraverser.ChangeSize(m_component.get(), { 200, 200 }); //사이즈가 커지면 스크롤바는 보이지 않게 된다.
+		ChangeSize(m_component.get(), { 200, 200 }); //사이즈가 커지면 스크롤바는 보이지 않게 된다.
 
 		EXPECT_FALSE(m_scrollBar->IsVisible());
 	}

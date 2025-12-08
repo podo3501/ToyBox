@@ -2,9 +2,6 @@
 #include "TextureSwitcherT.h"
 #include "../ComponentHelper.h"
 #include "Shared/Utils/GeometryExt.h"
-#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
-
-using namespace UITraverser;
 
 class MockEventDispatcherManager : public IEventDispatcherManager
 {
