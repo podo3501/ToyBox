@@ -1,5 +1,6 @@
 #pragma once
 #include "UIComponentManagerT.h"
+#include "UserInterface/TextureResourceBinder/MockTextureResourceBinder.h"
 #include "Shared/Utils/GeometryExt.h"
 #include "Shared/System/StepTimer.h"
 #include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
@@ -20,6 +21,7 @@ protected:
 	void SimulateDrag(const XMINT2& startPos, const XMINT2& endPos) noexcept;
 
 	UIModule* m_uiModule{ nullptr };
+	MockTextureResourceBinder* m_resBindeR{ nullptr };
 	Panel* m_main{ nullptr };
 };
 
@@ -28,7 +30,10 @@ inline void UIModuleT::SetUp()
 	UIComponentManagerT::SetUp();
 
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
-	m_uiModule = CreateUIModule("Demo", layout, "Main");
+
+	unique_ptr<MockTextureResourceBinder> resBinder = make_unique<MockTextureResourceBinder>();
+	m_resBindeR = resBinder.get();
+	m_uiModule = CreateUIModule("Demo", layout, "Main", move(resBinder));
 
 	RegisterBinderTextures(m_uiModule->GetTexResBinder());
 	m_main = m_uiModule->GetMainPanel();

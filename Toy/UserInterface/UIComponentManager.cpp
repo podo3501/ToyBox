@@ -2,6 +2,7 @@
 #include "UIComponentManager.h"
 #include "IRenderer.h"
 #include "UIModule.h"
+#include "TextureResourceBinder/TextureResourceBinder.h"
 #include "UIComponent/UIComponent.h"
 #include "UIComponent/Traverser/UIDetailTraverser.h"
 #include "Shared/Utils/StlExt.h"
@@ -17,25 +18,25 @@ UIComponentManager::UIComponentManager(IRenderer* renderer, bool isTool) :
 		this->RenderTextureComponent(index, r); });
 }
 
-UIModule* UIComponentManager::CreateUIModule(const string& moduleName, const UILayout& layout, 
-	const string& mainUIName, const wstring& srcBinderFilename)
+UIModule* UIComponentManager::CreateUIModule(const string& moduleName, const UILayout& layout,
+	const string& mainUIName, unique_ptr<TextureResourceBinder> resBinder)
 {
 	if (m_uiModules.find(moduleName) != m_uiModules.end()) return nullptr;
 
 	auto [owner, module] = GetPtrs(make_unique<UIModule>());
-	if (!owner->SetupMainComponent(layout, mainUIName, m_renderer, srcBinderFilename)) return nullptr;
+	if (!owner->SetupMainComponent(layout, mainUIName, move(resBinder))) return nullptr;
 	m_uiModules.insert({ moduleName, move(owner) });
 
 	return module;
 }
 
-UIModule* UIComponentManager::CreateUIModule(const string& moduleName, 
-	const wstring& filename, const wstring& srcBinderFilename)
+UIModule* UIComponentManager::CreateUIModule(const string& moduleName,
+	const wstring& filename, unique_ptr<TextureResourceBinder> resBinder)
 {
 	if (m_uiModules.find(moduleName) != m_uiModules.end()) return nullptr;
 
 	auto [owner, module] = GetPtrs(make_unique<UIModule>());
-	if (!owner->SetupMainComponent(filename, m_renderer, srcBinderFilename)) return nullptr;
+	if (!owner->SetupMainComponent(filename, move(resBinder))) return nullptr;
 	m_uiModules.insert({ moduleName, move(owner) });
 
 	return module;

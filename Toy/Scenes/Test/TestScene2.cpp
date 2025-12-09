@@ -5,6 +5,7 @@
 #include "Locator/EventDispatcherLocator.h"
 #include "UserInterface/UIModule.h"
 #include "UserInterface/UIComponentLocator.h"
+#include "UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "TestScene1.h"
 
 TestScene2::TestScene2(IRenderer* renderer) :
@@ -13,7 +14,8 @@ TestScene2::TestScene2(IRenderer* renderer) :
 
 bool TestScene2::Enter()
 {
-	m_uiModule = CreateUIModule("Test2", L"/Scene/Test/TestScene2.json", L"UI/SampleTexture/SampleTextureBinder.json");
+	auto texResBinder = CreateTextureResourceBinder(L"UI/SampleTexture/SampleTextureBinder.json", GetRenderer());
+	m_uiModule = CreateUIModule("Test2", L"/Scene/Test/TestScene2.json", move(texResBinder));
 
 	auto scene = SceneLocator::GetService();
 	auto eventDispatcher = EventDispatcherLocator::GetService();

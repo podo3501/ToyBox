@@ -16,9 +16,8 @@ public:
 	UIModule();
 	bool operator==(const UIModule& other) const noexcept;
 
-	bool SetupMainComponent(const UILayout& layout, const string& name,
-		IRenderer* renderer, const wstring& srcBinderFilename);
-	bool SetupMainComponent(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename);
+	bool SetupMainComponent(const UILayout& layout, const string& name, unique_ptr<TextureResourceBinder> resBinder);
+	bool SetupMainComponent(const wstring& filename, unique_ptr<TextureResourceBinder> resBinder);
 	bool BindTextureResources() noexcept;
 	bool Update(const DX::StepTimer& timer) noexcept;
 	void Render(ITextureRender* render) const;
@@ -35,7 +34,6 @@ private:
 	void ReloadDatas() noexcept;
 	bool Read(const wstring& filename = L"") noexcept;
 
-	IRenderer* m_renderer{ nullptr };
 	unique_ptr<TextureResourceBinder> m_resBinder;
 	unique_ptr<UINameGenerator> m_nameGen;
 	unique_ptr<Panel> m_mainPanel;

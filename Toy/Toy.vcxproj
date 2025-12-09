@@ -320,6 +320,7 @@
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinder.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureSourceInfo.cpp" />
+    <ClCompile Include="UserInterface\UIComponentLocator.cpp" />
     <ClCompile Include="UserInterface\UIComponentManager.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\Button.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\Container.cpp" />

@@ -87,13 +87,13 @@ namespace D::UserInterface
 
 	TEST_F(UIModuleT, UpdateMouseState_HoverSound)
 	{
-		//unique_ptr<IAudioManager> audioManager;
-		//audioManager = make_unique<MockAudioManager>();
+		unique_ptr<IAudioManager> audioManager;
+		audioManager = make_unique<MockAudioManager>();
 
-		//ComponentDesc desc{ 10, 10, UILayout({ 50, 50 }) };
-		//auto parent = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(m_main, desc);
-		//auto child = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(parent, desc);
+		ComponentDesc desc{ 10, 10, UILayout({ 50, 50 }) };
+		auto component = AttachMockComponent<testing::NiceMock<MockInputPropagate>>(m_main, desc);
 
+		
 		//EXPECT_CALL(*audioManager, OnNormal()).Times(1);
 	}
 
@@ -141,7 +141,8 @@ namespace D::UserInterface
 		EXPECT_TRUE(m_uiModule->Write(filename));
 
 		auto read = make_unique<UIModule>();
-		EXPECT_TRUE(read->SetupMainComponent(filename, m_renderer.get(), L""));
+		auto texResBinder = CreateTextureResourceBinder(L"", m_renderer.get());
+		EXPECT_TRUE(read->SetupMainComponent(filename, move(texResBinder)));
 		EXPECT_TRUE(read->BindTextureResources());
 
 		EXPECT_TRUE(*m_uiModule == *read);

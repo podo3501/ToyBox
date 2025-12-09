@@ -7,6 +7,7 @@
 #include "Shared/Framework/EnvironmentLocator.h"
 #include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 #include "Toy/UserInterface/UIComponent/UIComponent.h"
+#include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIComponentLocator.h"
 #include "Toy/UserInterface/UIModule.h"
 
@@ -33,7 +34,8 @@ void Fixture::SetUp()
 	m_uiManager = make_unique<UIComponentManager>(m_renderer.get());
 	UIComponentLocator::Provide(m_uiManager.get());
 
-	m_uiModule = m_uiManager->CreateUIModule("Demo", layout, "Main", srcBinderFilename);
+	auto texResBinder = CreateTextureResourceBinder(srcBinderFilename, m_renderer.get());
+	m_uiModule = m_uiManager->CreateUIModule("Demo", layout, "Main", move(texResBinder));
 	m_main = m_uiModule->GetMainPanel();
 
 	TracyStartupProfiler();

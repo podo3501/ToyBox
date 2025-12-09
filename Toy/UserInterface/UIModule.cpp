@@ -26,24 +26,18 @@ bool UIModule::operator==(const UIModule& other) const noexcept
 	return true;
 }
 
-bool UIModule::SetupMainComponent(const UILayout& layout, const string& name,
-	IRenderer* renderer, const wstring& srcBinderFilename)
+bool UIModule::SetupMainComponent(const UILayout& layout, const string& name, unique_ptr<TextureResourceBinder> resBinder)
 {
-	m_resBinder = CreateTextureResourceBinder(srcBinderFilename, renderer);
-	ReturnIfFalse(m_resBinder);
-	m_renderer = renderer;
-
+	m_resBinder = move(resBinder);
 	m_mainPanel = CreateComponent<Panel>(layout);
 	m_mainPanel->SetUIModule(this);
 	m_mouseEventRouter->SetComponent(m_mainPanel.get());
 	return Rename(m_mainPanel.get(), name);
 }
 
-bool UIModule::SetupMainComponent(const wstring& filename, IRenderer* renderer, const wstring& srcBinderFilename)
+bool UIModule::SetupMainComponent(const wstring& filename, unique_ptr<TextureResourceBinder> resBinder)
 {
-	m_resBinder = CreateTextureResourceBinder(srcBinderFilename, renderer);
-	m_renderer = renderer;
-
+	m_resBinder = move(resBinder);
 	ReturnIfFalse(Read(filename));
 	ReturnIfFalse(BindTextureResources());
 

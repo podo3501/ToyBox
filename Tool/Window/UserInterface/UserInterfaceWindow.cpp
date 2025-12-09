@@ -9,6 +9,7 @@
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/UIComponent/Components/UIModuleAsComponent.h"
 #include "Toy/UserInterface/UIComponent/Components/Panel.h"
+#include "Toy/UserInterface/TextureResourceBinder/TextureResourceBinder.h"
 #include "Toy/UserInterface/UIModule.h"
 #include "Shared/System/StepTimer.h"
 
@@ -59,14 +60,15 @@ bool UserInterfaceWindow::SetupProperty(UIModule* uiModule)
 
 bool UserInterfaceWindow::CreateScene(const XMUINT2& size)
 {
-	UIModule* module = CreateUIModule(GetName(), UILayout(size, Origin::LeftTop),
-		"Main", L"UI/SampleTexture/SampleTextureBinder.json");
+	auto texResBinder = CreateTextureResourceBinder(L"UI/SampleTexture/SampleTextureBinder.json", m_renderer);
+	UIModule* module = CreateUIModule(GetName(), UILayout(size, Origin::LeftTop), "Main", move(texResBinder));
 	return SetupProperty(module);
 }
 
 bool UserInterfaceWindow::CreateScene(const wstring& filename)
 {
-	UIModule* module = CreateUIModule(GetName(), filename, L"UI/SampleTexture/SampleTextureBinder.json");
+	auto texResBinder = CreateTextureResourceBinder(L"UI/SampleTexture/SampleTextureBinder.json", m_renderer);
+	UIModule* module = CreateUIModule(GetName(), filename, move(texResBinder));
 	return SetupProperty(module);
 }
 
