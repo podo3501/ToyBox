@@ -233,6 +233,7 @@
 --wstring filename = L"Test/Data/RWSourceBinderTest.json"; 이것처럼 tdd에서 세이브 되는 데이터는 한곳으로 모으자.
 
 @ComponentT가 UIModuleT를 상속받아서 테스트 하도록 수정.
+    Compare와 CompareDerived를 하나로 합치는 거 생각.
 @audio manager 만들기
 @툴에서 작업환경을 멀티로 할지 단일로 할지 생각해봐야 겠다.
 @Component에서 이벤트 받아서 사운드 출력되게끔.

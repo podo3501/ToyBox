@@ -12,7 +12,9 @@ class UIModuleT : public UIComponentManagerT
 protected:
 	virtual void SetUp() override;
 	virtual void TearDown() override;
-	virtual void RegisterBinderTextures(TextureResourceBinder* resBinder) {};
+	//virtual void RegisterBinderTextures(TextureResourceBinder* resBinder) {};
+	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) {};
+	MockTextureResourceBinder* GetResBinder() { return m_resBinder; }
 	void SimulateMouse(const XMINT2& pos, InputState state) noexcept;
 	void SimulateMouse(int x, int y, InputState state) noexcept;
 	void SimulateMouse(const XMINT2& pos, int wheelValue) noexcept;
@@ -21,7 +23,7 @@ protected:
 	void SimulateDrag(const XMINT2& startPos, const XMINT2& endPos) noexcept;
 
 	UIModule* m_uiModule{ nullptr };
-	MockTextureResourceBinder* m_resBindeR{ nullptr };
+	MockTextureResourceBinder* m_resBinder{ nullptr };
 	Panel* m_main{ nullptr };
 };
 
@@ -32,10 +34,12 @@ inline void UIModuleT::SetUp()
 	UILayout layout{ GetSizeFromRectangle(GetRectResolution()), Origin::LeftTop };
 
 	unique_ptr<MockTextureResourceBinder> resBinder = make_unique<MockTextureResourceBinder>();
-	m_resBindeR = resBinder.get();
+	m_resBinder = resBinder.get();
 	m_uiModule = CreateUIModule("Demo", layout, "Main", move(resBinder));
 
-	RegisterBinderTextures(m_uiModule->GetTexResBinder());
+	RegisterBinderTextures(m_resBinder);
+	m_renderer->LoadTextureBinder(m_resBinder);
+
 	m_main = m_uiModule->GetMainPanel();
 }
 

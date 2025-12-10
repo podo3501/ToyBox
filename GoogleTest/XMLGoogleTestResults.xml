@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="5" failures="0" disabled="0" errors="0" time="0.001" timestamp="2025-12-08T13:19:31.309" name="AllTests">
-  <testsuite name="SerializerIOT" tests="5" failures="0" disabled="0" skipped="0" errors="0" time="0.001" timestamp="2025-12-08T13:19:31.309">
-    <testcase name="Process_Layout" status="run" result="completed" time="0" timestamp="2025-12-08T13:19:31.309" classname="SerializerIOT" />
-    <testcase name="Process_MapData" status="run" result="completed" time="0" timestamp="2025-12-08T13:19:31.309" classname="SerializerIOT" />
-    <testcase name="Process_SvmapMap" status="run" result="completed" time="0" timestamp="2025-12-08T13:19:31.310" classname="SerializerIOT" />
-    <testcase name="Process_VectorData" status="run" result="completed" time="0" timestamp="2025-12-08T13:19:31.310" classname="SerializerIOT" />
-    <testcase name="Process_VectorUniqueData" status="run" result="completed" time="0" timestamp="2025-12-08T13:19:31.310" classname="SerializerIOT" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.002" timestamp="2025-12-10T19:29:52.991" name="AllTests">
+  <testsuite name="TextureSwitcherT" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.002" timestamp="2025-12-10T19:29:52.991">
+    <testcase name="WriteAndRead" status="run" result="completed" time="0.002" timestamp="2025-12-10T19:29:52.991" classname="TextureSwitcherT" />
   </testsuite>
 </testsuites>

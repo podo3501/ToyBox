@@ -1,24 +1,26 @@
 #pragma once
-#include "ComponentT.h"
+#include "UserInterface/UIModuleT.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 
 //마우스를 사용해 상태변경은 UIModule에서 하기 때문에 관련 event 및 callback 테스트는 UIModule에서.
-class TextureSwitcherT : public ComponentT
+class TextureSwitcherT : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
 	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) override;
 
-	unique_ptr<TextureSwitcher> m_component;
+	TextureSwitcher* m_component{ nullptr };
 };
 
 void TextureSwitcherT::SetUp()
 {
-	ComponentT::SetUp();
+	UIModuleT::SetUp();
 
-	m_component = CreateComponent<TextureSwitcher>(TextureSlice::One, GetStateKeyMap("Button32"));
-	BindTextureSourceInfo(m_component.get(), GetResBinder());
+	auto component = CreateComponent<TextureSwitcher>(TextureSlice::One, GetStateKeyMap("Button32"));
+	m_component = component.get();
+	AttachComponent(m_main, move(component));
+	m_uiModule->BindTextureResources();
 }
 
 void TextureSwitcherT::RegisterBinderTextures(MockTextureResourceBinder* resBinder)

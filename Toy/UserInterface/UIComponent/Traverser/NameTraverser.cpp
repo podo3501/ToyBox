@@ -65,6 +65,7 @@ pair<unique_ptr<UIComponent>, UIComponent*> NameTraverser::DetachComponent(UICom
 	if (!resDetached) return {};
 
 	DerivedTraverser derivedTraverser;
+	derivedTraverser.PropagateRoot(resDetached.get(), resDetached.get());
 	derivedTraverser.UpdatePositionsManually(resDetached.get());
 	return { move(resDetached), resParent };
 }

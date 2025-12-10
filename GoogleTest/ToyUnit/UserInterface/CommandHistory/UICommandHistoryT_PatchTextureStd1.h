@@ -10,7 +10,7 @@ class UICommandHistoryT_PatchTextureStd1 : public UIModuleT
 {
 protected:
 	virtual void SetUp() override;
-	virtual void RegisterBinderTextures(TextureResourceBinder* resBinder) override;
+	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) override;
 
 	template<typename Action>
 	void VerifyUndoRedo(Action&& action, PatchTextureStd1* component = nullptr);
@@ -32,13 +32,10 @@ void UICommandHistoryT_PatchTextureStd1::SetUp()
 	m_uiModule->BindTextureResources();
 }
 
-void UICommandHistoryT_PatchTextureStd1::RegisterBinderTextures(TextureResourceBinder* resBinder)
+void UICommandHistoryT_PatchTextureStd1::RegisterBinderTextures(MockTextureResourceBinder* resBinder)
 {
 	AddMockTextureKeys(resBinder, {
 		{ "One32", { L"Texture512.png", TextureSlice::One, { { 0, 0, 32, 32 } } } },
 		{ "One48", { L"Texture512.png", TextureSlice::One, { { 0, 0, 48, 48 } } } }
 		});
-
-	//uiModule내에서 resBinder가 생성되는데 그때는 키값 같은 데이터가 없어서 실제 텍스쳐와 Binding을 하지 않았다.
-	m_renderer->LoadTextureBinder(resBinder); 
 }

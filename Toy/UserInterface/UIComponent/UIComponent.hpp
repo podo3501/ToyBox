@@ -16,7 +16,7 @@ TargetType ComponentCast(UIComponent* component)
 
 //파생 vs 부모, 부모 vs 파생, 파생 vs 파생 비교 할 수 있게끔 헬퍼 함수.
 template<typename L, typename R>
-bool CompareDerived(const unique_ptr<L>& lhs, const unique_ptr<R>& rhs)
+bool CompareDerived(const L* lhs, const R* rhs)
 {
 	static_assert(std::is_base_of_v<UIComponent, L>, "CompareDerived: L은 UIComponent 파생이어야 함");
 	static_assert(std::is_base_of_v<UIComponent, R>, "CompareDerived: R은 UIComponent 파생이어야 함");
@@ -30,6 +30,12 @@ bool CompareDerived(const unique_ptr<L>& lhs, const unique_ptr<R>& rhs)
 		static_cast<const UIComponent&>(*rhs);
 	Assert(result);
 	return result;
+}
+
+template<typename L, typename R>
+bool CompareDerived(const unique_ptr<L>& lhs, const unique_ptr<R>& rhs)
+{
+	return CompareDerived(lhs.get(), rhs.get());
 }
 
 //Setup함수가 있어야 하며 인자가 일치 해야 한다. Args는 암묵적 캐스팅이 되지 않는다.
