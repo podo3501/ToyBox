@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "ListAreaT.h"
-#include "../ComponentHelper.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
-#include "Shared/Utils/GeometryExt.h"
 
 void ListAreaT::MakeTestPrototype()
 {

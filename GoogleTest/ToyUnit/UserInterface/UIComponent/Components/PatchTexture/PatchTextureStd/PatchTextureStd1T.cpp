@@ -1,8 +1,5 @@
 #include "pch.h"
 #include "PatchTextureStd1T.h"
-#include "UserInterface/UIComponent/ComponentHelper.h"
-#include "Shared/Utils/GeometryExt.h"
-#include "Shared/Utils/StlExt.h"
 
 namespace D::UserInterface::UIComponent::Component::PatchTexture
 {

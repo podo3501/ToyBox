@@ -27,9 +27,6 @@
     <ClCompile Include="System\SceneManagerT.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface\UIComponent\Components\ComponentT.cpp">
-      <Filter>UserInterface\UIComponent\Components</Filter>
-    </ClCompile>
     <ClCompile Include="UserInterface\UIComponent\Components\ContainerT.cpp">
       <Filter>UserInterface\UIComponent\Components</Filter>
     </ClCompile>
@@ -111,6 +108,9 @@
     <ClCompile Include="Internal\MockAudioManager.cpp">
       <Filter>Internal</Filter>
     </ClCompile>
+    <ClCompile Include="UserInterface\UIComponent\ComponentFixture.cpp">
+      <Filter>UserInterface\UIComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -138,9 +138,6 @@
     </ClInclude>
     <ClInclude Include="System\SceneManagerT.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface\UIComponent\Components\ComponentT.h">
-      <Filter>UserInterface\UIComponent\Components</Filter>
     </ClInclude>
     <ClInclude Include="UserInterface\UIComponent\Components\ContainerT.h">
       <Filter>UserInterface\UIComponent\Components</Filter>
@@ -231,6 +228,9 @@
     </ClInclude>
     <ClInclude Include="Internal\MockAudioManager.h">
       <Filter>Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface\UIComponent\ComponentFixture.h">
+      <Filter>UserInterface\UIComponent</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

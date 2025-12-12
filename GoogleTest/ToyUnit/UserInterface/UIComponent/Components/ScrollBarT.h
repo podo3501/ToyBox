@@ -1,12 +1,12 @@
 #pragma once
-#include "ComponentT.h"
+#include "../ComponentFixture.h"
 #include "Toy/UserInterface/UIComponent/UIUtility.h"
 #include "Toy/UserInterface/UIComponent/Components/ScrollBar.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 #include "Toy/UserInterface/UIComponent/Components/TextureSwitcher.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
 
-class ScrollBarT : public ComponentT
+class ScrollBarT : public ComponentFixture
 {
 protected:
 	virtual void SetUp() override;
@@ -18,7 +18,7 @@ protected:
 
 void ScrollBarT::SetUp()
 {
-	ComponentT::SetUp();
+	ComponentFixture::SetUp();
 
 	UILayout layout{};
 	DirectionType dirType{ DirectionType::Vertical };

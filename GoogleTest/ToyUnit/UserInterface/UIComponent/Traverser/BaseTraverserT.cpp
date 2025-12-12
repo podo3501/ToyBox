@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "BaseTraverserT.h"
 #include "../MockComponent.h"
+#include "Toy/UserInterface/UIComponent/Traverser/UITraverser.h"
 #include "Toy/UserInterface/UIComponent/Components/RenderTexture.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
+
+using namespace UITraverser;
 
 class MockReceiverComponenT : public UIComponentStub, public IMouseEventReceiver
 {

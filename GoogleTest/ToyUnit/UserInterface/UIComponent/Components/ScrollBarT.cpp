@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "ScrollBarT.h"
-#include "../ComponentHelper.h"
-#include "Shared/Utils/GeometryExt.h"
 
 namespace D::UserInterface::UIComponent::Component
 {

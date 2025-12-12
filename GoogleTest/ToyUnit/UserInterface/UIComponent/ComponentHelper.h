@@ -9,7 +9,6 @@
 using namespace UITraverser;
 using namespace UIDetailTraverser;
 struct IMouseEventReceiver;
-struct ITextureController;
 class MockTextureResourceBinder;
 
 template <typename T>
@@ -30,36 +29,10 @@ bool TestWriteAndRead(unique_ptr<T>& component, const wstring& filename,
 }
 
 template <typename T>
-bool TestWriteAndRead(T* component, const wstring& filename,
-	MockTextureResourceBinder* resBinder = nullptr)
-{
-	auto [detach, _] = DetachComponent(component);
-	T* curComponent = ComponentCast<T*>(detach.get());
-	auto storage = InitializeJsonStorage(StorageType::Memory);
-	ReturnIfFalse(SerializerIO::WriteJsonToFile(curComponent, filename));
-
-	unique_ptr<T> read;
-	ReturnIfFalse(SerializerIO::ReadJsonFromFile(filename, read));
-	PropagateRoot(read.get());
-	if (resBinder)
-		BindTextureSourceInfo(read.get(), resBinder);
-
-	return CompareDerived(detach, read);
-}
-
-template <typename T>
 bool TestClone(unique_ptr<T>& component)
 {
 	auto clone = Clone(component.get());
 	return CompareDerived(component, clone);
-}
-
-template <typename T>
-bool TestClone(T* component)
-{
-	auto [detach, _] = component->DetachComponent();
-	auto clone = Clone(detach.get());
-	return CompareDerived(detach, clone);
 }
 
 //사용법 EXPECT_CALL(render, Render(testing::_, testing::_, testing::_)).WillRepeatedly(RenderLogger(L"테스트"));

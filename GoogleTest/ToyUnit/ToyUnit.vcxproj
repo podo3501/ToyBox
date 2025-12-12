@@ -146,8 +146,8 @@
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
     <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
     <ClInclude Include="UserInterface\UIComponentManagerT.h" />
+    <ClInclude Include="UserInterface\UIComponent\ComponentFixture.h" />
     <ClInclude Include="UserInterface\UIComponent\ComponentHelper.h" />
-    <ClInclude Include="UserInterface\UIComponent\Components\ComponentT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ContainerT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\ListAreaT.h" />
     <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1T.h" />
@@ -191,8 +191,8 @@
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
     <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
     <ClCompile Include="UserInterface\UIComponentManagerT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\ComponentFixture.cpp" />
     <ClCompile Include="UserInterface\UIComponent\ComponentHelper.cpp" />
-    <ClCompile Include="UserInterface\UIComponent\Components\ComponentT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\ContainerT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\ListAreaT.cpp" />
     <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1T.cpp" />

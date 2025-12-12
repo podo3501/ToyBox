@@ -1,8 +1,5 @@
 #include "pch.h"
 #include "TextureSwitcherT.h"
-#include "../ComponentHelper.h"
-#include "Shared/Utils/GeometryExt.h"
-#include "Toy/Locator/EventDispatcherLocator.h"
 
 class MockEventDispatcherManager : public IEventDispatcherManager
 {
@@ -75,7 +72,7 @@ namespace D::UserInterface::UIComponent::Component
 	TEST_F(TextureSwitcherT, FitToTextureSource)
 	{
 		auto preSize = m_component->GetSize();
-		ChangeSize(m_component, { 10, 10 });
+		ChangeSize(m_component.get(), {10, 10});
 
 		m_component->FitToTextureSource();
 		EXPECT_EQ(m_component->GetSize(), preSize);
@@ -134,7 +131,7 @@ namespace D::UserInterface::UIComponent::Component
 		MockTextureRender render;
 		EXPECT_CALL(render, Render(0, dest, ::testing::Pointee(source))).Times(1);
 
-		Render(m_component, &render);
+		Render(m_component.get(), &render);
 	}
 
 	TEST_F(TextureSwitcherT, WriteAndRead)

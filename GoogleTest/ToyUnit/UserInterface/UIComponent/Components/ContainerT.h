@@ -1,9 +1,9 @@
 #pragma once
-#include "ComponentT.h"
+#include "../ComponentFixture.h"
 #include "Toy/UserInterface/UIComponent/Components/Container.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 
-class ContainerT : public ComponentT
+class ContainerT : public ComponentFixture
 {
 protected:
 	virtual void SetUp() override;
@@ -14,7 +14,7 @@ protected:
 
 void ContainerT::SetUp()
 {
-	ComponentT::SetUp();
+	ComponentFixture::SetUp();
 
 	map<InteractState, unique_ptr<UIComponent>> componentList;
 	componentList[InteractState::Normal] = CreateComponent<PatchTextureStd1>("Button32_Normal");

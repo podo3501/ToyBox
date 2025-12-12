@@ -1,10 +1,7 @@
 #include "pch.h"
 #include "UIModuleAsComponentT.h"
 #include "../MockComponent.h"
-#include "Internal/MockInputManager.h"
-#include "Toy/Locator/InputLocator.h"
 #include "Toy/UserInterface/Input/IMouseEventReceiver.h"
-#include "Shared/System/StepTimer.h"
 
 class MockReceiverComponent : public UIComponentStub, public IMouseEventReceiver
 {

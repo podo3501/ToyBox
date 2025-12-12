@@ -1,8 +1,7 @@
 #pragma once
 #include "Toy/UserInterface/UIComponent/Traverser/BaseTraverser.h"
-#include "UserInterface/UIComponentManagerT.h"
 
-class BaseTraverserT : public UIComponentManagerT
+class BaseTraverserT : public ::testing::Test
 {
 protected:
 	BaseTraverser m_traverser;

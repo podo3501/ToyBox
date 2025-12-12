@@ -1,8 +1,8 @@
 #pragma once
-#include "UserInterface/UIComponent/Components/ComponentT.h"
+#include "UserInterface/UIComponent/ComponentFixture.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd1.h"
 
-class PatchTextureStd1T : public ComponentT
+class PatchTextureStd1T : public ComponentFixture
 {
 protected:
 	virtual void SetUp() override;
@@ -15,7 +15,7 @@ protected:
 
 void PatchTextureStd1T::SetUp()
 {
-	ComponentT::SetUp();
+	ComponentFixture::SetUp();
 
 	m_component = CreateComponent<PatchTextureStd1>("One32");
 	BindTextureSourceInfo(m_component.get(), GetResBinder());

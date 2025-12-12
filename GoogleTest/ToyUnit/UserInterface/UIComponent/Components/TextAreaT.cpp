@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "TextAreaT.h"
-#include "../ComponentHelper.h"
 
 namespace D::UserInterface::UIComponent::Component
 {

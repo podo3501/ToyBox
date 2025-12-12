@@ -1,8 +1,8 @@
 #pragma once
-#include "UserInterface/UIComponent/Components/ComponentT.h"
+#include "UserInterface/UIComponent/ComponentFixture.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite9.h"
 
-class PatchTextureLite9T : public ComponentT
+class PatchTextureLite9T : public ComponentFixture
 {
 protected:
 	virtual void SetUp() override;
@@ -15,7 +15,7 @@ protected:
 
 void PatchTextureLite9T::SetUp()
 {
-	ComponentT::SetUp();
+	ComponentFixture::SetUp();
 
 	XMUINT2 size{ 48, 48 };
 	m_component = CreateComponent<PatchTextureLite9>(size);

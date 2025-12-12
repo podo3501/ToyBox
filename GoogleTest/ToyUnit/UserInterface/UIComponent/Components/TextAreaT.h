@@ -1,24 +1,29 @@
 #pragma once
-#include "ComponentT.h"
+#include "../ComponentFixture.h"
 #include "Toy/UserInterface/UIComponent/Components/TextArea.h"
+#include "Toy/UserInterface/UIComponentLocator.h"
 
-class TextAreaT : public ComponentT
+class TextAreaT : public ComponentFixture
 {
 protected:
 	virtual void SetUp() override;
 	virtual void RegisterRenderTextures(MockRenderer* renderer) override;
 	virtual void RegisterBinderTextures(MockTextureResourceBinder* resBinder) override;
 	
+	unique_ptr<UIComponentManager> m_componentManager;
 	unique_ptr<TextArea> m_component;
 };
 
 void TextAreaT::SetUp()
 {
-	ComponentT::SetUp();
+	ComponentFixture::SetUp();
+
+	m_componentManager = make_unique<UIComponentManager>(GetRenderer());
+	UIComponentLocator::Provide(m_componentManager.get());
 
 	vector<wstring> bindKeys{ L"Hangle", L"English" };
 	wstring text = L"<Hangle>테스트<Red>빨강색</Red></Hangle><br><English>Test<Blue>Blue</Blue></English>";
-	m_component = CreateComponent<TextArea>(GetTextureController(), text, bindKeys);
+	m_component = CreateComponent<TextArea>(GetRenderer()->GetTextureController(), text, bindKeys);
 	BindTextureSourceInfo(m_component.get(), GetResBinder());
 }
 

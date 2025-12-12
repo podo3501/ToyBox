@@ -1,8 +1,5 @@
 #include "pch.h"
 #include "ContainerT.h"
-#include "../ComponentHelper.h"
-#include "Shared/Utils/GeometryExt.h"
-#include "Shared/SerializerIO/Storage/JsonStorageLocator.h"
 
 namespace D::UserInterface::UIComponent::Component
 {
@@ -25,14 +22,6 @@ namespace D::UserInterface::UIComponent::Component
 
 	TEST_F(ContainerT, WriteAndRead)
 	{
-		auto storage = InitializeJsonStorage(StorageType::Memory);
-		wstring filename = GetTempDir() + L"TextureSwitcherT_WR.json";
-		EXPECT_TRUE(SerializerIO::WriteJsonToFile(m_component, filename));
-
-		unique_ptr<Container> read;
-		EXPECT_TRUE(SerializerIO::ReadJsonFromFile(filename, read));
-		BindTextureSourceInfo(read.get(), GetResBinder()); //실제 로드하면서 PatchTextureLite 설정이 완료된다.
-
-		EXPECT_TRUE(CompareDerived(m_component, read));
+		EXPECT_TRUE(TestWriteAndRead(m_component, GetTempDir() + L"ContainerT_WR.json", GetResBinder()));
 	}
 }

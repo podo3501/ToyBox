@@ -1,8 +1,5 @@
 #include "pch.h"
 #include "RenderTextureT.h"
-#include "../ComponentHelper.h"
-#include "Shared/Utils/GeometryExt.h"
-#include "Shared/Utils/StlExt.h"
 
 namespace D::UserInterface::UIComponent::Component
 {
@@ -18,7 +15,7 @@ namespace D::UserInterface::UIComponent::Component
 
 	TEST_F(RenderTextureT, Clone_NewTexture) //내부적으로 사용하는 텍스쳐는 새로 만들어지는가?
 	{
-		auto texController = static_cast<MockTextureController*>(GetTextureController());
+		auto texController = static_cast<MockTextureController*>(GetRenderer()->GetTextureController());
 		EXPECT_CALL(*texController, CreateRenderTexture(testing::_, testing::_, testing::_)).Times(1);
 
 		auto clone = Clone(m_component.get());

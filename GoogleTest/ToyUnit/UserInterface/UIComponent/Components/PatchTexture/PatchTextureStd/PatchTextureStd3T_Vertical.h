@@ -1,8 +1,8 @@
 #pragma once
-#include "UserInterface/UIComponent/Components/ComponentT.h"
+#include "UserInterface/UIComponent/ComponentFixture.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureStd/PatchTextureStd3.h"
 
-class PatchTextureStd3T_Vertical : public ComponentT
+class PatchTextureStd3T_Vertical : public ComponentFixture
 {
 protected:
 	virtual void SetUp() override;
@@ -15,7 +15,7 @@ protected:
 
 void PatchTextureStd3T_Vertical::SetUp()
 {
-	ComponentT::SetUp();
+	ComponentFixture::SetUp();
 
 	m_component = CreateComponent<PatchTextureStd3>(DirectionType::Vertical, "ThreeV48");
 	BindTextureSourceInfo(m_component.get(), GetResBinder());

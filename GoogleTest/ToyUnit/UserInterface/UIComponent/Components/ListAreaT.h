@@ -1,9 +1,10 @@
 #pragma once
-#include "ComponentT.h"
+#include "../ComponentFixture.h"
 #include "Toy/UserInterface/UIComponent/Components/ListArea.h"
 #include "Toy/UserInterface/UIComponent/Components/SampleComponent.h"
+#include "Toy/UserInterface/UIComponentLocator.h"
 
-class ListAreaT : public ComponentT
+class ListAreaT : public ComponentFixture
 {
 protected:
 	virtual void SetUp() override;
@@ -11,13 +12,17 @@ protected:
 	void MakeTestPrototype();
 	void MakeTestData(int itemCount);
 
+	unique_ptr<UIComponentManager> m_componentManager;
 	unique_ptr<ListArea> m_component;
 	ScrollBar* m_scrollBar{ nullptr };
 };
 
 void ListAreaT::SetUp()
 {
-	ComponentT::SetUp();
+	ComponentFixture::SetUp();
+
+	m_componentManager = make_unique<UIComponentManager>(GetRenderer());
+	UIComponentLocator::Provide(m_componentManager.get());
 
 	m_component = CreateSampleListArea({}, "BackImage", "ListBackground", "Track", "Button", &m_scrollBar);
 	BindTextureSourceInfo(m_component.get(), GetResBinder());

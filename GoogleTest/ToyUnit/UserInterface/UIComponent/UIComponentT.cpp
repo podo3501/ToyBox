@@ -1,8 +1,5 @@
 #include "pch.h"
 #include "UIComponentT.h"
-#include "MockComponent.h"
-#include "Internal/MockRenderer.h"
-#include "../TextureResourceBinder/MockTextureResourceBinder.h"
 
 class MockBehaviorComponent : public UIComponentStub
 {

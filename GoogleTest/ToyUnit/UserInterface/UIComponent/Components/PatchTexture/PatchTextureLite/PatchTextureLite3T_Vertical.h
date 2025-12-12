@@ -1,8 +1,8 @@
 #pragma once
-#include "UserInterface/UIComponent/Components/ComponentT.h"
+#include "UserInterface/UIComponent/ComponentFixture.h"
 #include "Toy/UserInterface/UIComponent/Components/PatchTexture/PatchTextureLite/PatchTextureLite3.h"
 
-class PatchTextureLite3T_Vertical : public ComponentT
+class PatchTextureLite3T_Vertical : public ComponentFixture
 {
 protected:
 	virtual void SetUp() override;
@@ -15,7 +15,7 @@ protected:
 
 void PatchTextureLite3T_Vertical::SetUp()
 {
-	ComponentT::SetUp();
+	ComponentFixture::SetUp();
 
 	XMUINT2 size{ 48, 48 };
 	m_component = CreateComponent<PatchTextureLite3>(size, DirectionType::Vertical);
