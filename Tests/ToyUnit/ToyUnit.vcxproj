@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6af974ed-793d-4358-8050-718db6d37275}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>D:\ProgrammingStudy\ToyBox\gmock.1.11.0\lib\native\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Tests\x64\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>D:\ProgrammingStudy\ToyBox\gmock.1.11.0\lib\native\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Tests\x64\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\ProgrammingStudy\ToyBox\gmock.1.11.0\lib\native\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Tests\x64\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\ProgrammingStudy\ToyBox\gmock.1.11.0\lib\native\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)Tests\x64\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>UNICODE;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(SolutionDir)Core\Public;$(SolutionDir)ThirdParty\Include;$(SolutionDir)ThirdParty\SDL3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\Libs;$(SolutionDir)ThirdParty\SDL3\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>UNICODE;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(SolutionDir)Core\Public;$(SolutionDir)ThirdParty\Include;$(SolutionDir)ThirdParty\SDL3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\Libs;$(SolutionDir)ThirdParty\SDL3\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>UNICODE;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(SolutionDir)Core\Public;$(SolutionDir)ThirdParty\Include;$(SolutionDir)ThirdParty\SDL3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\Libs;$(SolutionDir)ThirdParty\SDL3\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>UNICODE;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(SolutionDir)Core\Public;$(SolutionDir)ThirdParty\Include;$(SolutionDir)ThirdParty\SDL3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalLibraryDirectories>$(SolutionDir)ThirdParty\Libs;$(SolutionDir)ThirdParty\SDL3\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Internal\MockAudioManager.h" />
+    <ClInclude Include="Internal\MockInputManager.h" />
+    <ClInclude Include="Internal\MockRenderer.h" />
+    <ClInclude Include="Internal\MockSoundTableReader.h" />
+    <ClInclude Include="Internal\Stubs\IAudioManagerStub.h" />
+    <ClInclude Include="Internal\Stubs\IInputManagerStub.h" />
+    <ClInclude Include="Internal\Stubs\IRendererStub.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="System\EventDispatcherManagerT.h" />
+    <ClInclude Include="System\SceneManagerT.h" />
+    <ClInclude Include="UserInterface\CommandHistory\TexResCommandHistoryT.h" />
+    <ClInclude Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.h" />
+    <ClInclude Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.h" />
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.h" />
+    <ClInclude Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.h" />
+    <ClInclude Include="UserInterface\UIComponentManagerT.h" />
+    <ClInclude Include="UserInterface\UIComponent\ComponentFixture.h" />
+    <ClInclude Include="UserInterface\UIComponent\ComponentHelper.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\ContainerT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\ListAreaT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1T.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite9T.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd1T.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3T_Horizontal.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3T_Vertical.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd9T.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\RenderTextureT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\ScrollBarT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\TextAreaT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\TextureSwitcherT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.h" />
+    <ClInclude Include="UserInterface\UIComponent\MockComponent.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\BaseTraverserT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\DerivedTraverserT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.h" />
+    <ClInclude Include="UserInterface\UIComponent\Traverser\NameTraverserT.h" />
+    <ClInclude Include="UserInterface\UIComponent\UIComponentT.h" />
+    <ClInclude Include="UserInterface\UIModuleT.h" />
+    <ClInclude Include="UserInterface\UINameGenerator\UINameGeneratorT.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Internal\MockAudioManager.cpp" />
+    <ClCompile Include="Internal\MockInputManager.cpp" />
+    <ClCompile Include="Internal\MockRenderer.cpp" />
+    <ClCompile Include="Internal\MockSoundTableReader.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="System\EventDispatcherManagerT.cpp" />
+    <ClCompile Include="System\SceneManagerT.cpp" />
+    <ClCompile Include="UserInterface\CommandHistory\TexResCommandHistoryT.cpp" />
+    <ClCompile Include="UserInterface\CommandHistory\UICommandHistoryT_PatchTextureStd1.cpp" />
+    <ClCompile Include="UserInterface\TextureResourceBinder\MockTextureResourceBinder.cpp" />
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureLoadBinderT.cpp" />
+    <ClCompile Include="UserInterface\TextureResourceBinder\TextureResourceBinderT.cpp" />
+    <ClCompile Include="UserInterface\UIComponentManagerT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\ComponentFixture.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\ComponentHelper.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\ContainerT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\ListAreaT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite1T.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3T_Horizontal.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite3T_Vertical.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureLite\PatchTextureLite9T.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd1T.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3T_Horizontal.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd3T_Vertical.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\PatchTexture\PatchTextureStd\PatchTextureStd9T.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\RenderTextureT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\ScrollBarT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\TextAreaT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\TextureSwitcherT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Components\UIModuleAsComponentT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\MockComponent.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\BaseTraverserT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\DerivedTraverserT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\HierarchyTraverserT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\Traverser\NameTraverserT.cpp" />
+    <ClCompile Include="UserInterface\UIComponent\UIComponentT.cpp" />
+    <ClCompile Include="UserInterface\UIModuleT.cpp" />
+    <ClCompile Include="UserInterface\UINameGenerator\UINameGeneratorT.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.vcxproj">
+      <Project>{60e13bba-4299-40f7-8fc1-c9e1928486f4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\Shared.vcxproj">
+      <Project>{a9d428f9-8ced-42b2-ad67-3e2a3e8c08ff}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Toy\Toy.vcxproj">
+      <Project>{ce88cfb8-f480-4ead-b13e-d54c92e8fde8}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
